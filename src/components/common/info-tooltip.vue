@@ -20,12 +20,7 @@ export default defineComponent({
 </script>
 
 <template lang="pug">
-q-icon.q-ml-xs(
-  color="body"
-  name="fas fa-info-circle"
-  size="15px"
-  v-if="tooltip"
-)
+q-icon.q-ml-xs(color="body" name="fas fa-info-circle" size="15px" v-if="tooltip")
   q-tooltip {{tooltip}}
 </template>
 

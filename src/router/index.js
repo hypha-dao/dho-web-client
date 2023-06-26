@@ -36,7 +36,8 @@ export default function ({ store }) {
 
   Router.beforeEach((to, from, next) => {
     const isAuthenticated = localStorage.getItem('autoLogin')
-    const isMember = Boolean(localStorage.getItem('isMember'))
+    const isMember = localStorage.getItem('isMember')
+    const memberType = localStorage.getItem('memberType')
     const daoName = to.params.dhoname
     // Temporal redirection for hypha explorer page
     if (to.name && to.name === 'root') {
@@ -48,14 +49,17 @@ export default function ({ store }) {
         next({ path: `/${daoName}/login` })
       } else {
         if (to.matched.some(record => record.meta.requiresAuthMember)) {
-          if (isMember) {
+          if (isMember === 'false') {
             return
           } else {
             next()
           }
         } else {
           // To fix scrolling top when changing query params
-          const element = document.getElementById('multi-dho-scroll-area').children[0]
+          if (isMember !== 'false' && memberType !== undefined) {
+            next()
+          }
+          const element = document.getElementById('multi-dho-scroll-area')?.children[0]
           if (element !== null) {
             scrollPositions[from.name] = element.scrollTop
           }

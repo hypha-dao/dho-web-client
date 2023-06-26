@@ -52,11 +52,5 @@ export default {
 
 <template lang="pug">
 .assignment-radio
-  button-radio.q-py-xs.q-px-xs(
-    :title="title(assignment)"
-    :subtitle="subtitle(assignment)"
-    :description="description(assignment)"
-    :selected="selected"
-    @click="$emit('click')"
-  )
+  button-radio.q-py-xs.q-px-xs(:title="title(assignment)" :subtitle="subtitle(assignment)" :description="description(assignment)" :selected="selected" @click="$emit('click')")
 </template>

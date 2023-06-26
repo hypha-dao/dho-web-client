@@ -107,7 +107,7 @@ const routes = [
               },
               props: true,
               requiresAuth: true,
-              // requiresAuthMember: true,
+              requiresAuthMember: true,
               title: 'Create Proposal'
             },
             component: () => import('pages/proposals/ProposalCreate.vue')

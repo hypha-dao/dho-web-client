@@ -123,63 +123,27 @@ export default defineComponent({
 </script>
 
 <template lang="pug">
-q-card.widget(
-  :class="{...widgetClass, 'q-py-xl': !noPadding, 'q-px-xxl': !noPadding}"
-  flat
-)
-  q-card-section.q-pa-none(
-    :class="titleClass"
-    :style="{height: titleHeight}"
-    v-if="bar"
-  )
+q-card.widget(:class="{...widgetClass, 'q-py-xl': !noPadding, 'q-px-xxl': !noPadding}" flat="flat")
+  q-card-section.q-pa-none(:class="titleClass" :style="{height: titleHeight}" v-if="bar")
     img(:src="titleImage")
     .text-bold.q-px-sm(:class="textClass") {{title}}
   q-card-section.q-pa-none.full-height
     .row.items-center
       .col
-        .h-h4(
-          :class="textClass"
-          v-if="title && !bar"
-        ) {{title}}
+        .h-h4(:class="textClass" v-if="title && !bar") {{title}}
       .col-auto(v-if="editable && !modalState")
-        edit-controls(
-          :savable="savable"
-          @onCancel="$emit('onCancel')"
-          @onEdit="$emit('onEdit')"
-          @onSave="save"
-          ref="controls"
-          v-if="!submitting"
-        )
+        edit-controls(:savable="savable" @onCancel="$emit('onCancel')" @onEdit="$emit('onEdit')" @onSave="save" ref="controls" v-if="!submitting")
     .row
       .h-b3.text-italic.text-body(v-if="subtitle && !bar") {{subtitle}}
     .q-pt-sm(v-if="title || subtitle")
     slot
-  q-card-actions(
-    v-if="more"
-    vertical
-  )
+  q-card-actions(v-if="more" vertical="vertical")
     q-separator
-    q-btn.q-mx-lg(
-      @click="$emit('more-clicked')"
-      flat
-      no-caps
-      text-color="primary"
-    ) More
-
+    q-btn.q-mx-lg(@click="$emit('more-clicked')" flat="flat" no-caps="no-caps" text-color="primary") {{ $t('common.widget-editable.more') }}
   q-inner-loading.rounded-top(:showing="submitting")
-    loading-spinner(
-      color="primary"
-      size="68px"
-    )
+    loading-spinner(color="primary" size="68px")
   .row.full-width.justify-end.q-mt-xxs(v-if="modalState")
-    edit-controls(
-      :savable="savable"
-      @onCancel="$emit('onCancel')"
-      @onEdit="$emit('onEdit')"
-      @onSave="save"
-      ref="controls"
-      v-if="!submitting"
-    )
+    edit-controls(:savable="savable" @onCancel="$emit('onCancel')" @onEdit="$emit('onEdit')" @onSave="save" ref="controls" v-if="!submitting")
 </template>
 
 <style lang="stylus" scoped>

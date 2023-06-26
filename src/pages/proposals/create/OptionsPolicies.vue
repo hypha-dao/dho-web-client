@@ -56,25 +56,15 @@ export default {
   section(v-if="isLoading")
     .row.justify-center.q-my-md
       loading-spinner(color="primary" size="40px")
-
   section(v-else)
     div(v-if="hasPolicies")
-      .h-h4.q-pt-xl Choose a parent policy
+      .h-h4.q-pt-xl {{ $t('pages.proposals.create.optionspolicies.chooseAParentPolicy') }}
         .row.full-width.q-mt-xs
           .col-6.q-pr-xxs
-            q-select.q-mt-xs(
-              :options="filteredPolicies(policies)"
-              dense
-              dropdown-icon="fas fa-chevron-down"
-              hide-bottom-space
-              options-dense
-              outlined
-              rounded
-              v-model="policy"
-            )
+            q-select.q-mt-xs(:options="filteredPolicies(policies)" dense="dense" dropdown-icon="fas fa-chevron-down" hide-bottom-space="hide-bottom-space" options-dense="options-dense" outlined="outlined" rounded="rounded" v-model="policy")
+    .row.justify-center(v-else)
+      .q-py-sm.q-mt-sm.text-center.full-width {{ $t('pages.proposals.create.optionspolicies.noPoliciesExistYet') }}
 
-    div(v-else).row.justify-center
-      .q-py-sm.q-mt-sm.text-center.full-width No policies exist yet.
 </template>
 
 <style lang="stylus" scoped>

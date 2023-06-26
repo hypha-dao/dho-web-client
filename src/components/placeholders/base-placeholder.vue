@@ -33,11 +33,11 @@ export default {
 widget(:title="title")
   .column.justify-center.items-center.q-mt-md
     .q-mt-sm(v-if="compact")
-    q-icon(:name="icon" color="disabled" :size="iconSize" ).q-mb-md
+    q-icon.q-mb-md(:name="icon" color="disabled" :size="iconSize")
     .h-b1.text-disabled.q-mb-md {{subtitle}}
     .row.justify-between.q-mt-xs.q-gutter-sm
       .col-auto(v-for="button in actionButtons")
-        q-btn.h-btn1.q-px-lg(:disable="button.disable" :color="button.color || 'primary'" unelevated noCaps rounded :label="button.label" @click="button.onClick" ).action-button
+        q-btn.h-btn1.q-px-lg.action-button(:disable="button.disable" :color="button.color || 'primary'" unelevated="unelevated" noCaps="noCaps" rounded="rounded" :label="button.label" @click="button.onClick")
         q-tooltip(v-if="button.disable") {{button.disableTooltip}}
 
 </template>

@@ -49,32 +49,14 @@ export default {
 
 <template lang="pug">
 .list(ref="scrollContainer")
-  q-infinite-scroll(
-    @load="onLoad"
-    :offset="250"
-    :scroll-target="$refs.scrollContainer"
-    ref="scroll"
-  ).full-width
+  q-infinite-scroll.full-width(@load="onLoad" :offset="250" :scroll-target="$refs.scrollContainer" ref="scroll")
     .row.q-col-gutter-md.q-mr-md
-      .template.col-4(
-        v-for="(asset,index) in assetList"
-        :class="{ 'col-6': $q.screen.md, 'full-width': $q.screen.sm }"
-        ).flex.justify-center
-        asset-card(
-          :key="asset.docId"
-          :asset="asset"
-          :isMobile="isMobile"
-          :ownerStyles="ownerStyles"
-          :bordered="bordered",
-          :memberBadges="memberBadges"
-          :currentElectionIndex="currentElectionIndex"
-        )
+      .template.col-4.flex.justify-center(v-for="(asset,index) in assetList" :class="{ 'col-6': $q.screen.md, 'full-width': $q.screen.sm }")
+        asset-card(:key="asset.docId" :asset="asset" :isMobile="isMobile" :ownerStyles="ownerStyles" :bordered="bordered" :memberBadges="memberBadges" :currentElectionIndex="currentElectionIndex")
       .col-4(:class="{ 'col-6': $q.screen.md, 'full-width': $q.screen.sm }")
         create-badge-widget(v-if="assetList && this.$route.params.type === 'badge'")
     template(v-slot:loading)
       .row.justify-center.q-my-md
-        loading-spinner(
-          color="primary"
-          size="40px"
-        )
+        loading-spinner(color="primary" size="40px")
+
 </template>

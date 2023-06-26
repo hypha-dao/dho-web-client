@@ -19,20 +19,14 @@ export default {
 </script>
 
 <template lang="pug">
-widget.sticky.bg-white.rounded.full-width.q-pa-md.q-mb-md(
-  :textColor="'black'"
-  :title="'Explore by:'"
-)
+widget.sticky.bg-white.rounded.full-width.q-pa-md.q-mb-md(:textColor="'black'" :title="'Explore by:'")
   .select-option(@click="$emit('change', EXPLORE_BY.DAOS)")
-    .select-option-label DAOs
-    .select-option-dot(
-      :class="{selected: this.type === EXPLORE_BY.DAOS}"
-    )
+    .select-option-label {{ $t('common.explore-by-widget.daos') }}
+    .select-option-dot(:class="{selected: this.type === EXPLORE_BY.DAOS}")
   .select-option(@click="$emit('change', EXPLORE_BY.ECOSYSTEMS)")
-    .select-option-label Ecosystems
-    .select-option-dot(
-      :class="{selected: this.type === EXPLORE_BY.ECOSYSTEMS}"
-    )
+    .select-option-label {{ $t('common.explore-by-widget.ecosystems') }}
+    .select-option-dot(:class="{selected: this.type === EXPLORE_BY.ECOSYSTEMS}")
+
 </template>
 
 <styles lang="stylus">

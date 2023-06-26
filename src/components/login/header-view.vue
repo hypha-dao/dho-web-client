@@ -28,15 +28,10 @@ export default {
 
 <template lang="pug">
 .full-width
-    .row.justify-between.q-mb-md
-      //- .hypha-logo.cursor-pointer(@click="$emit('logoClick')")
-      ipfs-image-viewer(
-        :ipfsCid="logo"
-        showDefault
-        :defaultLabel="daoName"
-        :size="height/1.5 + 'px'"
-      )
-      .h-th-subtitle {{ daoName }}
+  .row.justify-between.q-mb-md
+    ipfs-image-viewer(:ipfsCid="logo" showDefault="showDefault" :defaultLabel="daoName" :size="height/1.5 + 'px'")
+    .h-th-subtitle {{ daoName }}
+
 </template>
 
 <style lang="stylus" scoped>

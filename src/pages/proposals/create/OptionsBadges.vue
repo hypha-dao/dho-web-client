@@ -54,26 +54,15 @@ export default {
   section(v-if="isLoading")
     .row.justify-center.q-my-md
       loading-spinner(color="primary" size="40px")
-
   section(v-else)
     div(v-if="hasBadges")
-      .h-h4.q-pt-xl Choose a badge
+      .h-h4.q-pt-xl {{ $t('pages.proposals.create.optionsbadges.chooseABadge') }}
         .row.full-width.q-mt-xs
           .col-6.q-pr-xxs
-            q-select.q-mt-xs(
-              :options="badges"
-              dense
-              dropdown-icon="fas fa-chevron-down"
-              hide-bottom-space
-              options-dense
-              outlined
-              rounded
-              v-model="badge"
-            )
-
-    div(v-else).row.justify-center
-      .q-py-sm.q-mt-sm.text-center.full-width No archetypes exist yet.
-      q-btn.text-xs.q-pa-none.q-ma-none.text-weight-900.text-secondary.text-underline(flat padding="0px" no-caps @click="$emit('changeOption','archetype')") Please create them here.
+            q-select.q-mt-xs(:options="badges" dense="dense" dropdown-icon="fas fa-chevron-down" hide-bottom-space="hide-bottom-space" options-dense="options-dense" outlined="outlined" rounded="rounded" v-model="badge")
+    .row.justify-center(v-else)
+      .q-py-sm.q-mt-sm.text-center.full-width {{ $t('pages.proposals.create.optionsbadges.noArchetypesExistYet') }}
+      q-btn.text-xs.q-pa-none.q-ma-none.text-weight-900.text-secondary.text-underline(flat="flat" padding="0px" no-caps="no-caps" @click="$emit('changeOption','archetype')") {{ $t('pages.proposals.create.optionsbadges.pleaseCreateThemHere') }}
 
 </template>
 

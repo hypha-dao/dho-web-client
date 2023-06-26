@@ -23,23 +23,32 @@ export default {
       .h-h5.text-bold {{ announcement.title }}
     div(v-if="!isMember")
       .row.items-center.q-my-md
-        .h-b2 We are currently reviewing your application. Please check back at a later time.
+        .h-b2 {{ $t('navigation.sidebar-news.weAreCurrently') }}
     div(v-if="isMember")
       .row.items-center.q-my-md
         .h-b2(v-html="announcement.message")
   div(v-else)
-    .row()
+    .row
       .h-h5.text-bold Welcome to {{ daoName && daoName.trim().replace(/^\w/, (c) => c.toUpperCase()) }}.
     div(v-if="!isMember")
       .row.items-center.q-my-md
-        .h-b2 We are currently reviewing your application. Please check back at a later time.
+        .h-b2 {{ $t('navigation.sidebar-news.weAreCurrently1') }}
     div(v-if="isMember")
       .row.items-center.q-my-md
-        .h-b2 Nice to see you here. Go take a look around. This DAO is here to help you govern your decentralized organization, reduce coordination cost and build your vision and purpose.
+        .h-b2 {{ $t('navigation.sidebar-news.niceToSee') }}
       .row.items-center.q-my-md
-        .h-b2 You can vote for <router-link :to="`/${daoName}/proposals`">proposals</router-link>, search for <router-link :to="`/${daoName}/members`">members</router-link> and find out what makes your <router-link :to="`/${daoName}/organization`">organization</router-link> tick.
+        .h-b2 {{ $t('navigation.sidebar-news.youCanVoteFor') }}
+          router-link(:to="`/${daoName}/proposals`") {{ $t('navigation.sidebar-news.proposals') }}
+          | {{ $t('navigation.sidebar-news.searchFor') }}
+          router-link(:to="`/${daoName}/members`") {{ $t('navigation.sidebar-news.members') }}
+          | {{ $t('navigation.sidebar-news.andFindOut') }}
+          router-link(:to="`/${daoName}/organization`") {{ $t('navigation.sidebar-news.organization') }}
+          | {{ $t('navigation.sidebar-news.tick') }}
       .row.items-center.q-my-md
-        .h-b2 Be sure to complete your <router-link :to="`/${daoName}/@${username}`">profile</router-link> and have fun co-creating new and exciting things with your DAO and each-other.
+        .h-b2 {{ $t('navigation.sidebar-news.beSureTo') }}
+          router-link(:to="`/${daoName}/@${username}`") {{ $t('navigation.sidebar-news.profile') }}
+          | {{ $t('navigation.sidebar-news.andHaveFun') }}
+
 </template>
 
 <style lang="stylus" scoped>

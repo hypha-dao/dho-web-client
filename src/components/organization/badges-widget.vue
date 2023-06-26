@@ -41,12 +41,12 @@ export default {
 </script>
 
 <template lang="pug">
-widget(title="Badges" :more="!fromProfile" :morePosition="isMobile? 'bottom' : 'top'" @more-clicked="$router.push({ path: `/${$route.params.dhoname}/organization/assets/badge` })"
-  tooltip="Badges assigned to members recognise certain skills or achievements and/or confirm a status level. These badges serve as a digital proof following a vote.").full-width
+widget.full-width(:title="$t('organization.badges-widget.badges')" :more="!fromProfile" :morePosition="isMobile? 'bottom' : 'top'" @more-clicked="$router.push({ path: `/${$route.params.dhoname}/organization/assets/badge` })" tooltip="Badges assigned to members recognise certain skills or achievements and/or confirm a status level. These badges serve as a digital proof following a vote.")
   .q-mt-xs
   .row(v-if="!badges ||badges.length === 0")
     empty-widget-label(sectionTitle="badges")
   .row(v-else v-for="badge in badges")
-      .col-12
-          badge-card(v-bind="badge" :compact="compact" @click.native="onClick(badge.docId)")
+    .col-12
+      badge-card(v-bind="badge" :compact="compact" @click.native="onClick(badge.docId)")
+
 </template>

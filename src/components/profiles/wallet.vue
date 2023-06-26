@@ -121,12 +121,5 @@ export default {
 </script>
 
 <template lang="pug">
-wallet-base(
-  :daoLogo="daoSettings.logo"
-  @buy-seeds="onBuySeeds"
-  @buy-hypha="onBuyHypha"
-  @redeem-husd="onRedeemHusd"
-  @set-redeem="$emit('set-redeem')"
-  v-bind="{ canRedeem, loading, more, username, wallet, pegToken, usingSeeds, noTitle }"
-)
+wallet-base(:daoLogo="daoSettings.logo" @buy-seeds="onBuySeeds" @buy-hypha="onBuyHypha" @redeem-husd="onRedeemHusd" @set-redeem="$emit('set-redeem')" v-bind="{ canRedeem, loading, more, username, wallet, pegToken, usingSeeds, noTitle }")
 </template>

@@ -106,350 +106,178 @@ export default {
 </script>
 
 <template lang="pug">
-widget(title='Community' titleImage='/svg/vote.svg' :bar='true').q-pa-none.full-width
-  p.text-sm.text-h-gray.leading-loose.q-mt-md Do you want to expand your DAO sense making to your DAO community members (token holders)? You can involve them in your DAO by activating the Community Voting feature. It will allow core members to publish proposals that will be voted by community. We also provide you with different voting system, your classic one based on HVOICE or a Delegate / Upvote system. This last one will allow the creation of an Election process where representative will be etc.. etc..
-
+widget.q-pa-none.full-width(title="Community" titleImage="/svg/vote.svg" :bar="true")
+  p.text-sm.text-h-gray.leading-loose.q-mt-md {{ $t('dao.settings-community.doYouWantToExpand') }}
   .row.justify-end
     .row.items-center
-      .h-h4 Activate Community Voting
-      q-toggle(:disable="!isAdmin" color="primary" keep-color v-model="form.communityVotingEnabled")
-        q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
-
+      .h-h4 {{ $t('dao.settings-community.activateCommunityVoting') }}
+      q-toggle(:disable="!isAdmin" color="primary" keep-color="keep-color" v-model="form.communityVotingEnabled")
+        q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") {{ $t('dao.settings-community.onlyDaoAdminsCanChange') }}
   section.full-width.q-mt-xl.q-pt-xl(v-if="form.communityVotingEnabled")
     .row.full-width.justify-between.items-cente
-      .h-h4 Community Voting Method
-
-    p.text-sm.text-h-gray.leading-loose.q-mt-md The Classic method allows all DAO community members to vote on community proposals using their HVOICE. The UpVote method allows the election of delegates who will have incremental voting power. This means that HVOICE, only for community layer, will be replaced by a fixed voting power: Click here to discover more about Upvote Method
-
+      .h-h4 {{ $t('dao.settings-community.communityVotingMethod') }}
+    p.text-sm.text-h-gray.leading-loose.q-mt-md {{ $t('dao.settings-community.theClassicMethodAllowsAll') }}
     .row.q-mt-xl
       .col-6
-        label.h-label Community Voting Method
+        label.h-label {{ $t('dao.settings-community.communityVotingMethod') }}
         .row.q-py-sm
           .col-4.q-pr-sm
-            q-btn.full-width.q-px-xl.rounded-border.text-bold(
-              :disable="!isAdmin"
-              :color="form.communityVotingMethod === 'CLASSIC' ? 'primary' : 'internal-bg'  "
-              :text-color="form.communityVotingMethod === 'CLASSIC' ? 'white' : 'primary'  "
-              @click="form.communityVotingMethod = 'CLASSIC'"
-              label="Classic"
-              no-caps
-              rounded
-              unelevated
-            )
-            q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
+            q-btn.full-width.q-px-xl.rounded-border.text-bold(:disable="!isAdmin" :color="form.communityVotingMethod === 'CLASSIC' ? 'primary' : 'internal-bg'  " :text-color="form.communityVotingMethod === 'CLASSIC' ? 'white' : 'primary'  " @click="form.communityVotingMethod = 'CLASSIC'" label="Classic" no-caps="no-caps" rounded="rounded" unelevated="unelevated")
+            q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") {{ $t('dao.settings-community.onlyDaoAdminsCanChange') }}
           .col-4.q-pl-sm
-            q-btn.full-width.q-px-xl.rounded-border.text-bold(
-              :disable="!isAdmin"
-              :color="form.communityVotingMethod === 'UPVOTE' ? 'primary' : 'internal-bg'  "
-              :text-color="form.communityVotingMethod === 'UPVOTE' ? 'white' : 'primary'  "
-              @click="form.communityVotingMethod = 'UPVOTE'"
-              label="Upvote"
-              no-caps
-              rounded
-              unelevated
-            )
-            q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
+            q-btn.full-width.q-px-xl.rounded-border.text-bold(:disable="!isAdmin" :color="form.communityVotingMethod === 'UPVOTE' ? 'primary' : 'internal-bg'  " :text-color="form.communityVotingMethod === 'UPVOTE' ? 'white' : 'primary'  " @click="form.communityVotingMethod = 'UPVOTE'" label="Upvote" no-caps="no-caps" rounded="rounded" unelevated="unelevated")
+            q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") {{ $t('dao.settings-community.onlyDaoAdminsCanChange') }}
       .col-6.bg-secondary.rounded-full.row.justify-center.items-center(v-if="form.communityVotingMethod === votingMethods.UPVOTE")
-        q-btn.q-px-xl.rounded-border.text-bold.q-mr-xs(
-          :disable="!isAdmin"
-          @click="$emit('import')"
-          color="white"
-          label="Import EDEN election from EOS"
-          no-caps
-          rounded
-          text-color="primary"
-          unelevated
-        )
-
-    section(id="UPVOTE" v-if="form.communityVotingEnabled && form.communityVotingMethod === votingMethods.UPVOTE")
+        q-btn.q-px-xl.rounded-border.text-bold.q-mr-xs(:disable="!isAdmin" @click="$emit('import')" color="white" label="Import EDEN election from EOS" no-caps="no-caps" rounded="rounded" text-color="primary" unelevated="unelevated")
+    section#UPVOTE(v-if="form.communityVotingEnabled && form.communityVotingMethod === votingMethods.UPVOTE")
       section.full-width.q-mt-xl.q-pt-xl
         .h-h4
           spain.text-secondary.q-mr-md 1
-          span Upvote election Date and Time
+          span {{ $t('dao.settings-community.upvoteElectionDateAndTime') }}
         .row.q-mt-xl
           .col-6
             .row
-              label.h-label Upvote election starting date
-            q-date.q-mt-xs.bg-internal-bg(flat landscape v-model="form.upvoteStartDate")
-
+              label.h-label {{ $t('dao.settings-community.upvoteElectionStartingDate') }}
+            q-date.q-mt-xs.bg-internal-bg(flat="flat" landscape="landscape" v-model="form.upvoteStartDate")
           .col-6
             .row
-              label.h-label Upvote election starting time
-            q-time.q-mt-xs.bg-internal-bg(flat landscape v-model="form.upvoteStartTime")
-
+              label.h-label {{ $t('dao.settings-community.upvoteElectionStartingTime') }}
+            q-time.q-mt-xs.bg-internal-bg(flat="flat" landscape="landscape" v-model="form.upvoteStartTime")
       section.full-width.q-mt-xl.q-pt-xl
         .h-h4
           spain.text-secondary.q-mr-md 2
-          span Upvote election Rounds
-
+          span {{ $t('dao.settings-community.upvoteElectionRounds') }}
         .full-width.q-mt-xl
           template(v-for="(round, index) in form.upvoteRounds")
             .row
               .col-6.row.q-pr-xl
                 .row.items-end.full-width
                   .row.items-center.q-col-gutter-xs
-                    label.h-label Round {{ index + 1 }} - people passing
-                    //- q-icon(name="fas fa-info-circle" size="16px" color="body")
-                    //-   q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle") Is the duration period the vote is active and member can cast one or more votes.
+                    label.h-label {{ $t('dao.settings-community.round') }}
+                      | {{ index + 1 }}
+                      | {{ $t('dao.settings-community.peoplePassing') }}
                   .q-mt-xs.row.full-width
                     .col-7.row.justify-between.q-mr-sm
-                      q-btn.duration-button.text-bold.text-lowercase(
-                        :color="form.upvoteRounds[index].peoplePassing === option.value ? 'primary' : 'internal-bg'"
-                        :disable="!isAdmin"
-                        :key='index'
-                        :text-color="form.upvoteRounds[index].peoplePassing === option.value ? 'white' : 'primary'"
-                        @click="form.upvoteRounds[index].peoplePassing = option.value"
-                        padding="none"
-                        rounded
-                        unelevated
-                        v-for='(option) in peoplePassingOptions'
-                      ) {{ option.label }}
+                      q-btn.duration-button.text-bold.text-lowercase(:color="form.upvoteRounds[index].peoplePassing === option.value ? 'primary' : 'internal-bg'" :disable="!isAdmin" :key="index" :text-color="form.upvoteRounds[index].peoplePassing === option.value ? 'white' : 'primary'" @click="form.upvoteRounds[index].peoplePassing = option.value" padding="none" rounded="rounded" unelevated="unelevated" v-for="(option) in peoplePassingOptions") {{ option.label }}
                     .col-grow
-                      custom-period-input(type="number" :disable="!isAdmin" :isActive="isCustomPeoplePassing(form.upvoteRounds[index].peoplePassing)" @selected="form.upvoteRounds[index].peoplePassing = 0" v-model='form.upvoteRounds[index].peoplePassing')
-                  q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
-
+                      custom-period-input(type="number" :disable="!isAdmin" :isActive="isCustomPeoplePassing(form.upvoteRounds[index].peoplePassing)" @selected="form.upvoteRounds[index].peoplePassing = 0" v-model="form.upvoteRounds[index].peoplePassing")
+                  q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") {{ $t('dao.settings-community.onlyDaoAdminsCanChange') }}
               .col-6.row.q-pr-xl
                 .row.items-end.full-width
                   .row.items-center.q-col-gutter-xs
-                    label.h-label Round {{ index + 1 }} - duration
-                    //- q-icon(name="fas fa-info-circle" size="16px" color="body")
-                      //- q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle") Is the duration period the vote is active and member can cast one or more votes.
+                    label.h-label {{ $t('dao.settings-community.round') }}
+                      | {{ index + 1 }}
+                      | {{ $t('dao.settings-community.duration') }}
                   .q-mt-xs.row.full-width
                     .col-7.row.justify-between.q-mr-sm
-                      q-btn.duration-button.text-bold.text-lowercase(
-                        :color="form.upvoteRounds[index].duration === option.value ? 'primary' : 'internal-bg'"
-                        :disable="!isAdmin"
-                        :key='index'
-                        :text-color="form.upvoteRounds[index].duration === option.value ? 'white' : 'primary'"
-                        @click="form.upvoteRounds[index].duration = option.value"
-                        padding="none"
-                        rounded
-                        unelevated
-                        v-for='(option) in roundsDurationOptions'
-                      ) {{ option.label }}
+                      q-btn.duration-button.text-bold.text-lowercase(:color="form.upvoteRounds[index].duration === option.value ? 'primary' : 'internal-bg'" :disable="!isAdmin" :key="index" :text-color="form.upvoteRounds[index].duration === option.value ? 'white' : 'primary'" @click="form.upvoteRounds[index].duration = option.value" padding="none" rounded="rounded" unelevated="unelevated" v-for="(option) in roundsDurationOptions") {{ option.label }}
                     .col-grow
-                      custom-period-input(:disable="!isAdmin" :isActive="isCustomRoundsDuration(form.upvoteRounds[index].duration)" @selected="form.upvoteRounds[index].duration = 0" v-model='form.upvoteRounds[index].duration')
-                  q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
-
+                      custom-period-input(:disable="!isAdmin" :isActive="isCustomRoundsDuration(form.upvoteRounds[index].duration)" @selected="form.upvoteRounds[index].duration = 0" v-model="form.upvoteRounds[index].duration")
+                  q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") {{ $t('dao.settings-community.onlyDaoAdminsCanChange') }}
             .row.items-center.q-mt-md
               .hr.col
               nav.row.justify-end
-                q-btn(:disable="form.upvoteRounds.length === 1 || !isAdmin" flat color="primary" no-caps padding="none" @click="form.upvoteRounds.splice(index, 1)").text-bold.q-pa-none.q-mr-xs Remove Round -
-                q-btn(:disable="form.upvoteRounds.length === 10 || !isAdmin" v-show="index === form.upvoteRounds.length - 1" flat color="primary" no-caps padding="none" @click="form.upvoteRounds.push({ peoplePassing: 50, duration: 10800 })").text-bold.q-pa-none.q-ml-lg.q-mr-xs Add Round +
-
+                q-btn.text-bold.q-pa-none.q-mr-xs(:disable="form.upvoteRounds.length === 1 || !isAdmin" flat="flat" color="primary" no-caps="no-caps" padding="none" @click="form.upvoteRounds.splice(index, 1)") {{ $t('dao.settings-community.removeRound') }}
+                q-btn.text-bold.q-pa-none.q-ml-lg.q-mr-xs(:disable="form.upvoteRounds.length === 10 || !isAdmin" v-show="index === form.upvoteRounds.length - 1" flat="flat" color="primary" no-caps="no-caps" padding="none" @click="form.upvoteRounds.push({ peoplePassing: 50, duration: 10800 })") {{ $t('dao.settings-community.addRound') }}
         .row.q-mt-xl
           .col-6.row.q-pr-xl
             .row.items-end.full-width
               .row.items-center.q-col-gutter-xs
-                label.h-label Chief Delegate round > How many Chief Delegates ?
-                //- q-icon(name="fas fa-info-circle" size="16px" color="body")
-                //-   q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle") Is the duration period the vote is active and member can cast one or more votes.
+                label.h-label {{ $t('dao.settings-community.chiefDelegateRoundHowManyChiefDelegates') }}
               .q-mt-xs.row.full-width
                 .col-7.row.justify-between.q-mr-sm
-                  q-btn.duration-button.text-bold.text-lowercase(
-                    :color="form.upvoteCheifDelegateCount === option.value ? 'primary' : 'internal-bg'"
-                    :disable="!isAdmin"
-                    :key='index'
-                    :text-color="form.upvoteCheifDelegateCount === option.value ? 'white' : 'primary'"
-                    @click="form.upvoteCheifDelegateCount = option.value"
-                    padding="none"
-                    rounded
-                    unelevated
-                    v-for='(option, index) in delegatesPassingOptions'
-                  ) {{ option.label }}
+                  q-btn.duration-button.text-bold.text-lowercase(:color="form.upvoteCheifDelegateCount === option.value ? 'primary' : 'internal-bg'" :disable="!isAdmin" :key="index" :text-color="form.upvoteCheifDelegateCount === option.value ? 'white' : 'primary'" @click="form.upvoteCheifDelegateCount = option.value" padding="none" rounded="rounded" unelevated="unelevated" v-for="(option, index) in delegatesPassingOptions") {{ option.label }}
                 .col-grow
-                  custom-period-input(type="number" :disable="!isAdmin" :isActive="isCustomDelegates(form.upvoteCheifDelegateCount)" @selected="form.upvoteCheifDelegateCount = 0" v-model='form.upvoteCheifDelegateCount')
-              q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
-
+                  custom-period-input(type="number" :disable="!isAdmin" :isActive="isCustomDelegates(form.upvoteCheifDelegateCount)" @selected="form.upvoteCheifDelegateCount = 0" v-model="form.upvoteCheifDelegateCount")
+              q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") {{ $t('dao.settings-community.onlyDaoAdminsCanChange') }}
           .col-6.row.q-pr-xl
             .row.items-end.full-width
               .row.items-center.q-col-gutter-xs
-                label.h-label Chief Delegates round - duration
-                //- q-icon(name="fas fa-info-circle" size="16px" color="body")
-                  //- q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle") Is the duration period the vote is active and member can cast one or more votes.
+                label.h-label {{ $t('dao.settings-community.chiefDelegatesRoundDuration') }}
               .q-mt-xs.row.full-width
                 .col-7.row.justify-between.q-mr-sm
-                  q-btn.duration-button.text-bold.text-lowercase(
-                    :color="form.upvoteCheifDelegateDuration === option.value ? 'primary' : 'internal-bg'"
-                    :disable="!isAdmin"
-                    :key='index'
-                    :text-color="form.upvoteCheifDelegateDuration === option.value ? 'white' : 'primary'"
-                    @click="form.upvoteCheifDelegateDuration = option.value"
-                    padding="none"
-                    rounded
-                    unelevated
-                    v-for='(option, index) in roundsDurationOptions'
-                  ) {{ option.label }}
+                  q-btn.duration-button.text-bold.text-lowercase(:color="form.upvoteCheifDelegateDuration === option.value ? 'primary' : 'internal-bg'" :disable="!isAdmin" :key="index" :text-color="form.upvoteCheifDelegateDuration === option.value ? 'white' : 'primary'" @click="form.upvoteCheifDelegateDuration = option.value" padding="none" rounded="rounded" unelevated="unelevated" v-for="(option, index) in roundsDurationOptions") {{ option.label }}
                 .col-grow
-                  custom-period-input(:disable="!isAdmin" :isActive="isCustomRoundsDuration(form.upvoteCheifDelegateDuration)" @selected="form.upvoteCheifDelegateDuration = 0" v-model='form.upvoteCheifDelegateDuration')
-              q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
-
+                  custom-period-input(:disable="!isAdmin" :isActive="isCustomRoundsDuration(form.upvoteCheifDelegateDuration)" @selected="form.upvoteCheifDelegateDuration = 0" v-model="form.upvoteCheifDelegateDuration")
+              q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") {{ $t('dao.settings-community.onlyDaoAdminsCanChange') }}
         .hr.q-my-xl
-
         .row
           .col-6.row.q-pr-xl
             .row.items-end.full-width
               .row.items-center.q-col-gutter-xs
-                label.h-label Head Delegate round > Do you want 1 head delegate?
-                //- q-icon(name="fas fa-info-circle" size="16px" color="body")
-                //-   q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle") Is the duration period the vote is active and member can cast one or more votes.
+                label.h-label {{ $t('dao.settings-community.headDelegateRoundDoYouWant') }}
               .q-mt-xs.row.full-width
                 .col-4.q-pr-sm
-                  q-btn.full-width.q-px-xl.rounded-border.text-bold(
-                    :color="form.upvoteHeadDelegateRound ? 'primary' : 'internal-bg'  "
-                    :text-color="form.upvoteHeadDelegateRound ? 'white' : 'primary'  "
-                    @click="form.upvoteHeadDelegateRound = true"
-                    label="Yes"
-                    no-caps
-                    rounded
-                    unelevated
-                  )
+                  q-btn.full-width.q-px-xl.rounded-border.text-bold(:color="form.upvoteHeadDelegateRound ? 'primary' : 'internal-bg'  " :text-color="form.upvoteHeadDelegateRound ? 'white' : 'primary'  " @click="form.upvoteHeadDelegateRound = true" label="Yes" no-caps="no-caps" rounded="rounded" unelevated="unelevated")
                 .col-4.q-pl-sm
-                  q-btn.full-width.q-px-xl.rounded-border.text-bold(
-                    :color="!form.upvoteHeadDelegateRound  ? 'primary' : 'internal-bg'  "
-                    :text-color="!form.upvoteHeadDelegateRound  ? 'white' : 'primary'  "
-                    @click="form.upvoteHeadDelegateRound = false"
-                    label="No"
-                    no-caps
-                    rounded
-                    unelevated
-                  )
-              q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
-
+                  q-btn.full-width.q-px-xl.rounded-border.text-bold(:color="!form.upvoteHeadDelegateRound  ? 'primary' : 'internal-bg'  " :text-color="!form.upvoteHeadDelegateRound  ? 'white' : 'primary'  " @click="form.upvoteHeadDelegateRound = false" label="No" no-caps="no-caps" rounded="rounded" unelevated="unelevated")
+              q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") {{ $t('dao.settings-community.onlyDaoAdminsCanChange') }}
           .col-6.row.q-pr-xl(v-if="form.upvoteHeadDelegateRound")
             .row.items-end.full-width
               .row.items-center.q-col-gutter-xs
-                label.h-label Head Delegates round - duration
-                //- q-icon(name="fas fa-info-circle" size="16px" color="body")
-                  //- q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle") Is the duration period the vote is active and member can cast one or more votes.
+                label.h-label {{ $t('dao.settings-community.headDelegatesRoundDuration') }}
               .q-mt-xs.row.full-width
                 .col-7.row.justify-between.q-mr-sm
-                  q-btn.duration-button.text-bold.text-lowercase(
-                    :color="form.upvoteHeadDelegateDuration === option.value ? 'primary' : 'internal-bg'"
-                    :disable="!isAdmin"
-                    :key='index'
-                    :text-color="form.upvoteHeadDelegateDuration === option.value ? 'white' : 'primary'"
-                    @click="form.upvoteHeadDelegateDuration = option.value"
-                    padding="none"
-                    rounded
-                    unelevated
-                    v-for='(option, index) in roundsDurationOptions'
-                  ) {{ option.label }}
+                  q-btn.duration-button.text-bold.text-lowercase(:color="form.upvoteHeadDelegateDuration === option.value ? 'primary' : 'internal-bg'" :disable="!isAdmin" :key="index" :text-color="form.upvoteHeadDelegateDuration === option.value ? 'white' : 'primary'" @click="form.upvoteHeadDelegateDuration = option.value" padding="none" rounded="rounded" unelevated="unelevated" v-for="(option, index) in roundsDurationOptions") {{ option.label }}
                 .col-grow
-                  custom-period-input(:disable="!isAdmin" :isActive="isCustomRoundsDuration(form.upvoteHeadDelegateDuration)" @selected="form.upvoteHeadDelegateDuration = 0" v-model='form.upvoteHeadDelegateDuration')
-              q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
-
+                  custom-period-input(:disable="!isAdmin" :isActive="isCustomRoundsDuration(form.upvoteHeadDelegateDuration)" @selected="form.upvoteHeadDelegateDuration = 0" v-model="form.upvoteHeadDelegateDuration")
+              q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") {{ $t('dao.settings-community.onlyDaoAdminsCanChange') }}
       section.full-width.q-mt-xl.q-pt-xl
         .h-h4
           spain.text-secondary.q-mr-md 3
-          span Upvote method expiration time
-        p.text-sm.text-h-gray.leading-loose.q-mt-md After the election has been successfully completed, the EDEN voting method will perdure for a specific amount of time. This allows the process of delegation assignment to be renewed. Define here for how long you want your DAO Community Layer voting system to work with an EDEN voting method.
+          span {{ $t('dao.settings-community.upvoteMethodExpirationTime') }}
+        p.text-sm.text-h-gray.leading-loose.q-mt-md {{ $t('dao.settings-community.afterTheElectionHasBeen') }}
         .row
           .col-6.row.q-pr-xl
             .row.items-end.full-width
               .row.items-center.q-col-gutter-xs
-                label.h-label EDEN voting method duration
-                //- q-icon(name="fas fa-info-circle" size="16px" color="body")
-                  //- q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle") Is the duration period the vote is active and member can cast one or more votes.
+                label.h-label {{ $t('dao.settings-community.edenVotingMethod') }}
               .q-mt-xs.row.full-width
                 .col-7.row.justify-between.q-mr-sm
-                  q-btn.duration-button.text-bold.text-lowercase(
-                    :color="form.upvoteDuration === option.value ? 'primary' : 'internal-bg'"
-                    :disable="!isAdmin"
-                    :key='index'
-                    :text-color="form.upvoteDuration === option.value ? 'white' : 'primary'"
-                    @click="form.upvoteDuration = option.value"
-                    padding="none"
-                    rounded
-                    unelevated
-                    v-for='(option, index) in votingDurationOptions'
-                  ) {{ option.label }}
+                  q-btn.duration-button.text-bold.text-lowercase(:color="form.upvoteDuration === option.value ? 'primary' : 'internal-bg'" :disable="!isAdmin" :key="index" :text-color="form.upvoteDuration === option.value ? 'white' : 'primary'" @click="form.upvoteDuration = option.value" padding="none" rounded="rounded" unelevated="unelevated" v-for="(option, index) in votingDurationOptions") {{ option.label }}
                 .col-grow
-                  custom-period-input(:disable="!isAdmin" :isActive="isCustomVotingDuration(form.upvoteDuration)" @selected="form.upvoteDuration = 0" v-model='form.upvoteDuration')
-              q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
-
+                  custom-period-input(:disable="!isAdmin" :isActive="isCustomVotingDuration(form.upvoteDuration)" @selected="form.upvoteDuration = 0" v-model="form.upvoteDuration")
+              q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") {{ $t('dao.settings-community.onlyDaoAdminsCanChange') }}
   .hr.q-my-xl.hr
-
   section.full-width.q-mt-xl.q-pt-xl(v-if="form.communityVotingEnabled")
-    .h-h4 Community Proposals Diligence
-    p.text-sm.text-h-gray.leading-loose.q-mt-md The following section allows you to set a different Unity, Quorum and Duration ONLY for Community Proposals.
+    .h-h4 {{ $t('dao.settings-community.communityProposalsDiligence') }}
+    p.text-sm.text-h-gray.leading-loose.q-mt-md {{ $t('dao.settings-community.theFollowingSectionAllows') }}
     .row.q-mt-xl
       .col-6.q-pr-sm
         .row.items-center.q-col-gutter-xs
-          label.h-label Vote alignment (Unity)
+          label.h-label {{ $t('dao.settings-community.voteAlignment') }}
           q-icon(name="fas fa-info-circle" size="16px" color="body")
-            q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle") Unity is the minimum required percentage of members supporting (voting for, vs voting against) a proposal for it to pass. Make this 100% if you wish to have consensus, or 50% for classical majority-rule democracy, etc
+            q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle") {{ $t('dao.settings-community.unityIsTheMinimumRequired') }}
         .row.full-width.items-center
           .col-7.row.q-mr-sm
-            q-slider(
-              :disable="!isAdmin"
-              :max="100"
-              :min="0"
-              :step="1"
-              color="primary"
-              v-model="form.communityVotingAlignmentPercent"
-            )
+            q-slider(:disable="!isAdmin" :max="100" :min="0" :step="1" color="primary" v-model="form.communityVotingAlignmentPercent")
           .col-grow
-            q-input.rounded-border.q-py-sm(
-              :disable="!isAdmin"
-              :rules="[val => val >= 0 && val <= 100]"
-              dense
-              outlined
-              rounded
-              suffix="%"
-              v-model.number="form.communityVotingAlignmentPercent"
-            )
-          q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
+            q-input.rounded-border.q-py-sm(:disable="!isAdmin" :rules="[val => val >= 0 && val <= 100]" dense="dense" outlined="outlined" rounded="rounded" suffix="%" v-model.number="form.communityVotingAlignmentPercent")
+          q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") {{ $t('dao.settings-community.onlyDaoAdminsCanChange') }}
       .col-6.q-pl-sm
         .row.items-center.q-col-gutter-xs
-          label.h-label Vote quorum
+          label.h-label {{ $t('dao.settings-community.voteQuorum') }}
           q-icon(name="fas fa-info-circle" size="16px" color="body")
-            q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle") Quorum is the minimum required percentage of total members participating in the vote for it to pass.
+            q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle") {{ $t('dao.settings-community.quorumIsTheMinimumRequired') }}
         .row.full-width.items-center
           .col-7.row.q-mr-sm
-            q-slider(
-              :disable="!isAdmin"
-              :max="100"
-              :min="0"
-              :step="1"
-              color="primary"
-              v-model="form.communityVotingQuorumPercent"
-            )
+            q-slider(:disable="!isAdmin" :max="100" :min="0" :step="1" color="primary" v-model="form.communityVotingQuorumPercent")
           .col-grow
-            q-input.rounded-border.q-py-sm(
-              :disable="!isAdmin"
-              :rules="[val => val >= 0 && val <= 100]"
-              dense
-              outlined
-              rounded
-              suffix="%"
-              v-model.number="form.communityVotingQuorumPercent"
-            )
-          q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
-
+            q-input.rounded-border.q-py-sm(:disable="!isAdmin" :rules="[val => val >= 0 && val <= 100]" dense="dense" outlined="outlined" rounded="rounded" suffix="%" v-model.number="form.communityVotingQuorumPercent")
+          q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") {{ $t('dao.settings-community.onlyDaoAdminsCanChange') }}
     .row.q-mt-xl
       .col-6.row.q-pr-sm
         .row.items-end.full-width
           .row.items-center.q-col-gutter-xs
-            label.h-label Vote duration
+            label.h-label {{ $t('dao.settings-community.voteDuration') }}
             q-icon(name="fas fa-info-circle" size="16px" color="body")
-              q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle") Is the duration period the vote is active and member can cast one or more votes.
+              q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle") {{ $t('dao.settings-community.isTheDurationPeriod') }}
           .q-mt-xs.row.full-width
             .col-7.row.justify-between.q-mr-sm
-              q-btn.duration-button.text-bold.text-lowercase(
-                :color="form.communityVotingDurationSec === option.value ? 'primary' : 'internal-bg'"
-                :disable="!isAdmin"
-                :key='index'
-                :text-color="form.communityVotingDurationSec === option.value ? 'white' : 'primary'"
-                @click="form.communityVotingDurationSec = option.value"
-                padding="none"
-                rounded
-                unelevated
-                v-for='(option, index) in voteDurationOptions'
-              ) {{ option.label }}
+              q-btn.duration-button.text-bold.text-lowercase(:color="form.communityVotingDurationSec === option.value ? 'primary' : 'internal-bg'" :disable="!isAdmin" :key="index" :text-color="form.communityVotingDurationSec === option.value ? 'white' : 'primary'" @click="form.communityVotingDurationSec = option.value" padding="none" rounded="rounded" unelevated="unelevated" v-for="(option, index) in voteDurationOptions") {{ option.label }}
             .col-grow
-              custom-period-input(:disable="!isAdmin" :isActive="isCustomVoteDuration(form.communityVotingDurationSec)" @selected="form.communityVotingDurationSec = 0" v-model='form.communityVotingDurationSec')
-          q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
+              custom-period-input(:disable="!isAdmin" :isActive="isCustomVoteDuration(form.communityVotingDurationSec)" @selected="form.communityVotingDurationSec = 0" v-model="form.communityVotingDurationSec")
+          q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") {{ $t('dao.settings-community.onlyDaoAdminsCanChange') }}
 
 </template>
 

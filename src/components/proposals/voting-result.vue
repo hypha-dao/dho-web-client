@@ -29,20 +29,7 @@ export default {
 
 <template lang="pug">
 .voting-result.full-width
-  progress-percentage.q-mb-md(
-    icon="fas fa-vote-yea"
-    title="Unity"
-    :threshold="0.80"
-    :value="unity"
-    :colorConfig="colorConfig"
-    mini
-  )
-  progress-percentage(
-    icon="fas fa-users"
-    title="Quorum"
-    :threshold="0.20"
-    :value="quorum"
-    :colorConfig="colorConfigQuorum"
-    mini
-  )
+  progress-percentage.q-mb-md(icon="fas fa-vote-yea" :title="$t('proposals.voting-result.unity')" :threshold="0.80" :value="unity" :colorConfig="colorConfig" mini="mini")
+  progress-percentage(icon="fas fa-users" :title="$t('proposals.voting-result.quorum')" :threshold="0.20" :value="quorum" :colorConfig="colorConfigQuorum" mini="mini")
+
 </template>

@@ -259,27 +259,25 @@ export default {
 <template lang="pug">
 q-page.page-ecosystem
   ecosystem-info(v-bind="{ data: ecosystem, isAdmin }" @save="_updateEcosystemSettings")
-
   .row.bg-secondary.text-white.rounded-full.q-px-xl.q-py-xs.q-my-md(:style="{'opacity': isBasicInfoAdded ? '1' : '0.3'}")
     .row.full-width.items-center
-        .q-pr-xl
-          .text-lg.text-white.text-bold {{ activeChildrenCount }} Active
-            span.q-pl-xxs.text-weight-500 DAOs
-        .q-px-xl(:style="{'border-left': '1px solid rgba(255, 255, 255, .2)'}")
-          .text-lg.text-white.text-bold {{ inactiveChildrenCount }} Inactive
-            span.q-pl-xxs.text-weight-500 DAOs
-
+      .q-pr-xl
+        .text-lg.text-white.text-bold {{ $t('pages.dho.ecosystem.active', { '1': activeChildrenCount }) }}
+          span.q-pl-xxs.text-weight-500 {{ $t('pages.dho.ecosystem.daos') }}
+      .q-px-xl(:style="{'border-left': '1px solid rgba(255, 255, 255, .2)'}")
+        .text-lg.text-white.text-bold {{ $t('pages.dho.ecosystem.inactive', { '1': inactiveChildrenCount }) }}
+          span.q-pl-xxs.text-weight-500 {{ $t('pages.dho.ecosystem.daos1') }}
   .row
     .col-sm-12.col-md-12.col-lg-9.q-pr-md(ref="scrollContainer")
       widget.full-width(:class="{'no-click': !isBasicInfoAdded }" :style="{'opacity': isBasicInfoAdded ? '1' : '0.3'}")
         .row
           .col-9.q-pr-xl.row.items-center
             .col-auto
-              q-avatar(size="160px" color='primary')
-                img(:src="ipfsy(selectedDao.logo)" v-if="selectedDao.logo").object-cover
+              q-avatar(size="160px" color="primary")
+                img.object-cover(:src="ipfsy(selectedDao.logo)" v-if="selectedDao.logo")
                 span(v-if="!logo") {{selectedDao && selectedDao.title && selectedDao.title[0].toUpperCase()}}
             .col.q-pl-md
-              q-chip.q-ma-none.q-pa-none.text-xxs.q-px-xs.q-py-none.text-uppercase(:color="selectedDaoPlan.isEcosystemActivated ? 'positive' : 'negative'" text-color="white" size='10px') {{ selectedDaoPlan.isEcosystemActivated ? 'Active ' : 'Inactive' }}
+              q-chip.q-ma-none.q-pa-none.text-xxs.q-px-xs.q-py-none.text-uppercase(:color="selectedDaoPlan.isEcosystemActivated ? 'positive' : 'negative'" text-color="white" size="10px") {{ selectedDaoPlan.isEcosystemActivated ? 'Active ' : 'Inactive' }}
               .text-2xl.text-weight-900.text-primary.leading-none.q-mt-sm {{ selectedDao.title }}
               .text-base.text-weight-900.text-secondary.leading-normal {{ ecosystem && ecosystem.name ? ecosystem.name : 'Ecosystem not defined' }}
               .text-xs.text-h-gray.leading-loose.q-mt-xs {{ selectedDao && selectedDao.purpose ? selectedDao.description :  'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,'}}
@@ -288,118 +286,55 @@ q-page.page-ecosystem
               div
                 .row.items-center
                   q-icon.q-py-xs(color="primary" name="fas fa-calendar-alt")
-                  //- .text-xs.text-h-gray.q-px-xs Activation date
                   .text-xs.text-h-gray.q-px-xs {{ selectedDao.createdDate }}
-                  //- {{selectedDao.foundedBy}}
                 .row.items-center
                   q-icon.q-py-xs(color="grey-7" name="fas fa-users")
-                  .text-xs.text-h-gray.q-px-xs 56 Core members
+                  .text-xs.text-h-gray.q-px-xs {{ $t('pages.dho.ecosystem.coreMembers') }}
                 .row.items-center
                   q-icon.q-py-xs(color="grey-7" name="fas fa-users")
-                  .text-xs.text-h-gray.q-px-xs 0 Community members
+                  .text-xs.text-h-gray.q-px-xs {{ $t('pages.dho.ecosystem.communityMembers') }}
               div(v-if="!selectedDaoPlan.isEcosystemActivated")
                 router-link(:to="{ name: 'ecosystem-checkout', params: { type:'ECOSYSTEM', quantity: 1 } }")
-                  q-btn.q-px-xl.rounded-border.text-bold.full-width(
-                    :disable="!isAdmin"
-                    color="primary"
-                    label="Activate"
-                    no-caps
-                    rounded
-                    unelevated
-                  )
-                  q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
+                  q-btn.q-px-xl.rounded-border.text-bold.full-width(:disable="!isAdmin" color="primary" :label="$t('pages.dho.ecosystem.activate')" no-caps="no-caps" rounded="rounded" unelevated="unelevated")
+                  q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") {{ $t('pages.dho.ecosystem.onlyDaoAdmins') }}
               div(v-else)
-                .text-xs.text-weight-900.text-secondary.q-mt-xxs Founded by:
+                .text-xs.text-weight-900.text-secondary.q-mt-xxs {{ $t('pages.dho.ecosystem.foundedBy') }}
                 p {{selectedDao.foundedBy}}
-
       q-infinite-scroll.q-mt-md(@load="onLoad" :offset="250" :scroll-target="$refs.scrollContainer" ref="scroll")
         .row.q-col-gutter-md(:class="{'no-click': !isBasicInfoAdded }" :style="{'opacity':isBasicInfoAdded ? '1' : '0.3'}")
           .col-4(v-for="(dho,index) in dhos" :key="dho.name" :class="{ 'col-6': $q.screen.lt.lg, 'full-width':  view === 'list' || $q.screen.lt.sm}")
-            dho-card.full-width(
-              v-bind="dho"
-              :bubble="ecosystem.logo"
-              :subtitle="ecosystem.name"
-              view="card"
-              ellipsis
-            )
+            dho-card.full-width(v-bind="dho" :bubble="ecosystem.logo" :subtitle="ecosystem.name" view="card" ellipsis="ellipsis")
               template(v-slot:header)
                 header.row.justify-center.items-center
-                  q-chip.q-ma-none.q-pa-none.text-xxs.q-px-xs.q-py-none.text-uppercase(:color="dho.status ==='ACTIVE' ? 'positive' : 'negative'" text-color="white" size='10px') {{ dho.status ==='ACTIVE' ? 'Active' : 'Inactive' }}
+                  q-chip.q-ma-none.q-pa-none.text-xxs.q-px-xs.q-py-none.text-uppercase(:color="dho.status ==='ACTIVE' ? 'positive' : 'negative'" text-color="white" size="10px") {{ dho.status ==='ACTIVE' ? 'Active' : 'Inactive' }}
               template(v-slot:footer)
                 footer.row.justify-center.items-center(v-if="dho.status ==='INACTIVE'")
                   router-link.full-width(:to="{ name: 'ecosystem-checkout', params: { type:'CHILD', quantity: 1, daoId: dho.id, daoName: dho.name } }")
-                    q-btn.q-px-xl.rounded-border.text-bold.full-width(
-                      color="primary"
-                      label="Activate"
-                      no-caps
-                      rounded
-                      unelevated
-                    )
+                    q-btn.q-px-xl.rounded-border.text-bold.full-width(color="primary" :label="$t('pages.dho.ecosystem.activate1')" no-caps="no-caps" rounded="rounded" unelevated="unelevated")
                 footer.full-width.row.items-center(v-else)
                   .col-6.text-center
                     q-icon.q-pb-xs(color="grey-7" name="fas fa-calendar-alt")
-                    .text-grey-7.h-b2.q-pl-xs.q-pr-xxs {{ dho.created.date }},
+                    .text-grey-7.h-b2.q-pl-xs.q-pr-xxs {{ dho.created.date }}
+                      | ,
                     .text-grey-7.h-b2 {{ dho.created.year }}
                   .col-6.text-center(:style="{'border-left': '1px solid #CBCDD1'}")
                     q-icon.q-pb-xs(color="grey-7" name="fas fa-users")
                     .text-grey-7.h-b2.q-px-xs {{ dho.membersCount }}
-                    .text-grey-7.h-b2 Members
-
+                    .text-grey-7.h-b2 {{ $t('pages.dho.ecosystem.members') }}
           .col-4(:class="{ 'col-6': $q.screen.lt.lg }")
-            dho-card.full-width(ellipsis v-bind="{title:'Create new DAO', description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.', logo: '/svg/create-new-dao.svg'}" view="card")
+            dho-card.full-width(ellipsis="ellipsis" v-bind="{title:'Create new DAO', description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.', logo: '/svg/create-new-dao.svg'}" view="card")
               template(v-slot:footer)
                 footer.row.justify-center.items-center
-                  q-btn.q-px-xl.rounded-border.text-bold.full-width(
-                    :disabled="!selectedDaoPlan.isEcosystemActivated || !isAdmin"
-                    @click="onCreateDAO"
-                    color="primary"
-                    label="Create New DAO"
-                    no-caps
-                    rounded
-                    unelevated
-                  )
-                  q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!selectedDaoPlan.isEcosystemActivated") You need to activate anchor DAO before you can create child DAOs.
-                  q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-else-if="!isAdmin") Only DAO admins can change the settings
-
+                  q-btn.q-px-xl.rounded-border.text-bold.full-width(:disabled="!selectedDaoPlan.isEcosystemActivated || !isAdmin" @click="onCreateDAO" color="primary" :label="$t('pages.dho.ecosystem.createNewDao')" no-caps="no-caps" rounded="rounded" unelevated="unelevated")
+                  q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!selectedDaoPlan.isEcosystemActivated") {{ $t('pages.dho.ecosystem.youNeedTo') }}
+                  q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-else-if="!isAdmin") {{ $t('pages.dho.ecosystem.onlyDaoAdmins1') }}
     .col-3(v-if="$q.screen.gt.md" :class="{'no-click': !isBasicInfoAdded }" :style="{'opacity': isBasicInfoAdded ? '1' : '0.3'}")
       .sticky
-        filter-widget(
-          :chipsFiltersLabel="'Proposal types'",
-          :circle.sync="circle",
-          :circleArray.sync="circleArray"
-          :debounce="1000"
-          :defaultOption="1",
-          :filters.sync="filters"
-          :optionArray.sync="optionArray",
-          :showCircle="false",
-          :showToggle="true"
-          :sort.sync="sort",
-          :textFilter.sync="textFilter",
-          :toggle.sync="showApplicants",
-          :toggleDefault="true"
-          :toggleLabel="'Funds Needed'"
-          :view.sync="view",
-          :viewSelectorLabel="'View'",
-          filterTitle="Search DHOs"
-        )
+        filter-widget(:chipsFiltersLabel="'Proposal types'" :circle.sync="circle" :circleArray.sync="circleArray" :debounce="1000" :defaultOption="1" :filters.sync="filters" :optionArray.sync="optionArray" :showCircle="false" :showToggle="true" :sort.sync="sort" :textFilter.sync="textFilter" :toggle.sync="showApplicants" :toggleDefault="true" :toggleLabel="'Funds Needed'" :view.sync="view" :viewSelectorLabel="'View'" filterTitle="Search DHOs")
         create-dho-widget(@create="onCreateDAO")
-
     div(v-else)
       filter-open-button(@open="mobileFilterOpen = true")
-      filter-widget-mobile(
-        :debounce="1000"
-        :defaultOption="1"
-        :optionArray.sync="optionArray"
-        :showCircle="false"
-        :showToggle="false"
-        :showViewSelector="false"
-        @close="mobileFilterOpen = false"
-        @update:sort="updateSort"
-        @update:textFilter="updateDaoName",
-        filterTitle="Search DHOs",
-        v-show="mobileFilterOpen",
-        :style="mobileFilterStyles"
-      )
+      filter-widget-mobile(:debounce="1000" :defaultOption="1" :optionArray.sync="optionArray" :showCircle="false" :showToggle="false" :showViewSelector="false" @close="mobileFilterOpen = false" @update:sort="updateSort" @update:textFilter="updateDaoName" filterTitle="Search DHOs" v-show="mobileFilterOpen" :style="mobileFilterStyles")
 
 </template>
 <style lang="stylus" scoped>

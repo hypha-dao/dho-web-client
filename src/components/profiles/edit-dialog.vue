@@ -98,40 +98,30 @@ export default {
 
 <template lang="pug">
 q-card.edit-dialog.bg-white.relative-position
-  q-btn.save-button.absolute-bottom-right.q-mr-md.q-mb-md(color="primary") Save
+  q-btn.save-button.absolute-bottom-right.q-mr-md.q-mb-md(color="primary") {{ $t('profiles.edit-dialog.save') }}
   .row
     .left.gt-sm
       .avatar.flex.column.justify-center.q-py-md
         .flex.justify-center
-          q-avatar(size="64px").q-my-sm
+          q-avatar.q-my-sm(size="64px")
             // img(src="~/assets/avatar-placeholder.png")
-        .text-center @lukegravdent
+        .text-center {{ $t('profiles.edit-dialog.lukegravdent') }}
       .text-bold.text-grey.q-mt-lg
         q-list
-          q-item(v-for="opt in options"
-            clickable
-            v-ripple
-            :key="opt.section"
-            :class="{ 'text-black': tab === opt.tab }"
-            @click="tab = opt.tab"
-          )
+          q-item(v-for="opt in options" clickable="clickable" v-ripple="v-ripple" :key="opt.section" :class="{ 'text-black': tab === opt.tab }" @click="tab = opt.tab")
             q-item-section {{ opt.section }}
-            q-item-section(avatar)
+            q-item-section(avatar="avatar")
               q-icon(:name="opt.icon")
     .details.col
-      .text-h5.q-ma-lg.q-mt-xl.q-ml-xl Account Settings
+      .text-h5.q-ma-lg.q-mt-xl.q-ml-xl {{ $t('profiles.edit-dialog.accountSettings') }}
       q-scroll-area.scroll
         .q-pa-lg.q-gutter-xl
           template(v-for="opt in options")
             .section.bg-grey-2.q-pa-md(v-if="tab === opt.tab || $q.screen.lt.md")
               .text-h6.q-ml-sm.lt-md {{ opt.section }}
               template(v-for="val in opt.values")
-                q-input.q-ma-lg(
-                  outlined
-                  v-model="val.value"
-                  :label="val.label"
-                  :key="val.label"
-                )
+                q-input.q-ma-lg(outlined="outlined" v-model="val.value" :label="val.label" :key="val.label")
+
 </template>
 
 <style lang="stylus" scoped>

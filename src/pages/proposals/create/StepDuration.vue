@@ -235,71 +235,30 @@ export default {
 widget
   label.h-h4 {{ fields.stepDurationTitle.label }}
   div
-    div.q-mt-md
+    .q-mt-md
       .q-gutter-sm(:class="{ 'row': $q.screen.gt.md }")
         .col.select-date-block.relative
-          label.h-h7 Start date
-          q-input.rounded-border.col.q-mt-xs(
-            dense
-            outlined
-            rounded
-            v-model="startValue"
-          )
+          label.h-h7 {{ $t('pages.proposals.create.stepduration.startDate') }}
+          q-input.rounded-border.col.q-mt-xs(dense="dense" outlined="outlined" rounded="rounded" v-model="startValue")
             template(v-slot:append)
               q-icon(size="xs" name="fa fa-calendar-alt")
-          q-date.bg-internal-bg.calendar.absolute.z-top(
-            :options="datePickerOptions"
-            minimal
-            ref="calendar"
-            v-model="startValue"
-            rounded
-          )
+          q-date.bg-internal-bg.calendar.absolute.z-top(:options="datePickerOptions" minimal="minimal" ref="calendar" v-model="startValue" rounded="rounded")
         .col
-          label.h-h7 Periods
-          q-input.rounded-border.col.q-mt-xs(
-            dense
-            outlined
-            rounded
-            v-model="periodCount"
-          )
+          label.h-h7 {{ $t('pages.proposals.create.stepduration.periods') }}
+          q-input.rounded-border.col.q-mt-xs(dense="dense" outlined="outlined" rounded="rounded" v-model="periodCount")
         .col
-          label.h-h7 End date
-          q-input.rounded-border.col.q-mt-xs(
-            dense
-            filled
-            rounded
-            disable
-            v-model="dateString"
-          )
-
+          label.h-h7 {{ $t('pages.proposals.create.stepduration.endDate') }}
+          q-input.rounded-border.col.q-mt-xs(dense="dense" filled="filled" rounded="rounded" disable="disable" v-model="dateString")
     .row.justify-center(v-if="$apolloData.queries.periods.loading")
       q-spinner-tail(size="md")
-
   .confirm.q-mt-xl(v-if="startIndex >= 0 && endIndex >= 0")
-    .text-negative.h-b2.q-ml-xs.text-center(v-if="periodCount >= MAX_PERIODS") You must select less than {{MAX_PERIODS}} periods (Currently you selected {{periodCount}} periods)
-    .text-negative.h-b2.q-ml-xs.text-center(v-if="periodCount < 0") The start date must not be later than the end date
+    .text-negative.h-b2.q-ml-xs.text-center(v-if="periodCount >= MAX_PERIODS") {{ $t('pages.proposals.create.stepduration.youMustSelect', { '1': MAX_PERIODS, '2': periodCount }) }}
+    .text-negative.h-b2.q-ml-xs.text-center(v-if="periodCount < 0") {{ $t('pages.proposals.create.stepduration.theStartDate') }}
   .next-step.q-mt-xl
     .row.items-center(:class="{'justify-between': !$store.state.proposals.draft.edit, 'justify-end': $store.state.proposals.draft.edit}")
-      nav(v-if="$q.screen.gt.md").row.justify-end.full-width.q-gutter-xs
-        q-btn.h-btn2.q-px-xl(
-          v-if="!disablePrevButton"
-          @click="$emit('prev')"
-          color="primary"
-          label="Back"
-          no-caps
-          outline
-          rounded
-          flat
-        )
-        q-btn.q-px-xl(
-          :disable="nextDisabled"
-          @click="$emit('next')"
-          color="primary"
-          label="Next step"
-          no-caps
-          rounded
-          unelevated
-        )
+      nav.row.justify-end.full-width.q-gutter-xs(v-if="$q.screen.gt.md")
+        q-btn.h-btn2.q-px-xl(v-if="!disablePrevButton" @click="$emit('prev')" color="primary" :label="$t('pages.proposals.create.stepduration.back')" no-caps="no-caps" outline="outline" rounded="rounded" flat="flat")
+        q-btn.q-px-xl(:disable="nextDisabled" @click="$emit('next')" color="primary" :label="$t('pages.proposals.create.stepduration.nextStep')" no-caps="no-caps" rounded="rounded" unelevated="unelevated")
 
 </template>
 

@@ -51,26 +51,27 @@ export default {
 .quick-links.full-width(:style="cssVars")
   .row.q-col-gutter-xs.justify-center-items-center
     .col-6(:class="{ 'col-12': compact, 'flex': !compact }").justify-end
-      q-btn.button-square.items-end(@click.native="$emit('onClick')" :to="isAuthenticated && daoSettings.proposalsCreationEnabled ? { name: 'proposal-create', params: { dhoname: daoSettings.url } } : {}" rounded unelevated :color="isActiveRoute('proposal-create') ? 'primary' : 'internal-bg'" :text-color="isActiveRoute('proposal-create') ? 'internal-bg' : 'primary'" :disabled="!isAuthenticated || !daoSettings.proposalsCreationEnabled")
-        q-tooltip(v-if="!daoSettings.proposalsCreationEnabled") This DAO configured for no proposals allowed
+      q-btn.button-square.items-end(@click.native="$emit('onClick')" :to="isAuthenticated && daoSettings.proposalsCreationEnabled && isMember ? { name: 'proposal-create', params: { dhoname: daoSettings.url } } : {}" rounded unelevated :color="isActiveRoute('proposal-create') ? 'primary' : 'internal-bg'" :text-color="isActiveRoute('proposal-create') ? 'internal-bg' : 'primary'" :disabled="!isAuthenticated || !daoSettings.proposalsCreationEnabled || !isMember")
+        q-tooltip(v-if="!daoSettings.proposalsCreationEnabled") {{ $t('navigation.quick-links.thisDaoConfigured') }}
         .column.items-center
           q-icon.q-pa-xs(size="md" name="fas fa-file-medical")
-          .text-caption.text-no-wrap.text-bold New Proposal
-    .col-6(:class="{ 'col-12': compact, 'flex': !compact }").justify-start
-      q-btn.button-square(@click="changeRoute('profile', {username})" rounded unelevated :color="isActiveRoute('profile') && isUserProfile ? 'primary' : 'internal-bg'" :text-color="isActiveRoute('profile') && isUserProfile ? 'internal-bg' : 'primary'")
+          .text-caption.text-no-wrap.text-bold {{ $t('navigation.quick-links.newProposal') }}
+    .col-6.justify-start(:class="{ 'col-12': compact, 'flex': !compact }")
+      q-btn.button-square(@click="changeRoute('profile', {username})" rounded="rounded" unelevated="unelevated" :color="isActiveRoute('profile') && isUserProfile ? 'primary' : 'internal-bg'" :text-color="isActiveRoute('profile') && isUserProfile ? 'internal-bg' : 'primary'")
         .column.items-center
-          q-icon.q-pa-xs( size="md" name="far fa-user")
-          .text-caption.text-no-wrap.text-bold My Profile
-    .col-6(:class="{ 'col-12': compact, 'flex': !compact }").justify-end
-      q-btn.button-square(@click="changeRoute('wallet',{username})" rounded unelevated :color="isActiveRoute('wallet') ? 'primary' : 'internal-bg'" :text-color="isActiveRoute('wallet') ? 'internal-bg' : 'primary'" :disabled="!isAuthenticated")
+          q-icon.q-pa-xs(size="md" name="far fa-user")
+          .text-caption.text-no-wrap.text-bold {{ $t('navigation.quick-links.myProfile') }}
+    .col-6.justify-end(:class="{ 'col-12': compact, 'flex': !compact }")
+      q-btn.button-square(@click="changeRoute('wallet',{username})" rounded="rounded" unelevated="unelevated" :color="isActiveRoute('wallet') ? 'primary' : 'internal-bg'" :text-color="isActiveRoute('wallet') ? 'internal-bg' : 'primary'" :disabled="!isAuthenticated")
         .column.items-center
           q-icon.q-pa-xs(size="md" name="fas fa-wallet")
-          .text-caption.text-no-wrap.text-bold My Wallet
-    .col-6(:class="{ 'col-12': compact, 'flex': !compact }").justify-start
-      q-btn.button-square(@click="logout" rounded unelevated color="internal-bg")
+          .text-caption.text-no-wrap.text-bold {{ $t('navigation.quick-links.myWallet') }}
+    .col-6.justify-start(:class="{ 'col-12': compact, 'flex': !compact }")
+      q-btn.button-square(@click="logout" rounded="rounded" unelevated="unelevated" color="internal-bg")
         .column.items-center
           q-icon.q-pa-xs(color="primary" size="md" name="fas fa-sign-out-alt")
-          .text-caption.text-no-wrap.text-primary.text-bold Logout
+          .text-caption.text-no-wrap.text-primary.text-bold {{ $t('navigation.quick-links.logout') }}
+
 </template>
 
 <style lang="stylus" scoped>

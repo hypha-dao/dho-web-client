@@ -138,79 +138,31 @@ export default {
 <template lang="pug">
 widget(:class="{ 'disable-step': currentStepName !== 'step-icon' && $q.screen.gt.md }")
   div
-    label.h-h4 Choose an icon
+    label.h-h4 {{ $t('pages.proposals.create.stepicon.chooseAnIcon') }}
     .flex(:class="{ 'no-wrap': $q.screen.gt.md }")
       .full-width(:class="{ 'q-my-xxl': $q.screen.gt.md }")
-        q-input.q-my-md.q-mx-sm.rounded-border(
-          debounce="800"
-          dense
-          outlined
-          placeholder="Search icon for..."
-          rounded
-          v-model="iconSearch"
-        )
+        q-input.q-my-md.q-mx-sm.rounded-border(debounce="800" dense="dense" outlined="outlined" :placeholder="$t('pages.proposals.create.stepicon.searchIconFor')" rounded="rounded" v-model="iconSearch")
           template(v-slot:prepend)
             q-icon(name="fas fa-search" size="xs" color="primary")
       .h-b2.self-center.no-padding.q-mx-sm(:class="{ 'q-my-sm':$q.screen.gt.md }") or
       .row.items-center.q-my-xxl.q-mx-sm(:class="{ 'col-6':$q.screen.gt.md }")
-        q-btn.q-px-xl.rounded-border.text-bold(
-          @click="$refs.ipfsInput.chooseFile()"
-          color="primary"
-          no-caps
-          outline
-          rounded
-          unelevated
-        ) Upload a file
-        input-file-ipfs(
-          @uploadedFile="onImageSelected"
-          image
-          ref="ipfsInput"
-          v-show="false"
-        )
-    div( style="max-height: 500px; overflow: auto;" ref="scrollTargetRef")
+        q-btn.q-px-xl.rounded-border.text-bold(@click="$refs.ipfsInput.chooseFile()" color="primary" no-caps="no-caps" outline="outline" rounded="rounded" unelevated="unelevated") {{ $t('pages.proposals.create.stepicon.uploadAFile') }}
+        input-file-ipfs(@uploadedFile="onImageSelected" image="image" ref="ipfsInput" v-show="false")
+    div(style="max-height: 500px; overflow: auto;" ref="scrollTargetRef")
       q-infinite-scroll(@load="onLoad" :offset="250" :scroll-target="$refs.scrollTargetRef")
         template(v-slot:loading)
-          div(class="row justify-center q-my-md")
+          .row.justify-center.q-my-md
             loading-spinner(color="primary" size="40px")
         .row.full-width.q-col-gutter-sm(v-if="filteredIcons")
           .col-sm-2(v-for="icon in filteredIcons" :key="icon[0]")
-            icon-card.full-width(
-              :name="`${icon[1].type || 'far'}  fa-${icon[0]}`"
-              size="lg"
-              @click="onIconSelected"
-              :background="selectedIcon === `${icon[1].type || 'far'}  fa-${icon[0]}` ? 'bg-primary' : 'bg-grey-3'"
-              :color="selectedIcon === `${icon[1].type || 'far'}  fa-${icon[0]}` ? 'white' : 'primary'"
-            )
-  nav(v-if="$q.screen.gt.md").row.justify-end.q-mt-xl.q-gutter-xs
-    q-btn.h-btn2.q-px-xl(
-      v-if="!disablePrevButton"
-      @click="$emit('prev')"
-      color="primary"
-      label="Back"
-      no-caps
-      outline
-      rounded
-      flat
-    )
-    q-btn.q-px-xl(
-      :disable="!selectedIcon && !selectedImage"
-      @click="$emit('next')"
-      color="primary"
-      label="Next step"
-      no-caps
-      rounded
-      unelevated
-    )
+            icon-card.full-width(:name="`${icon[1].type || 'far'}  fa-${icon[0]}`" size="lg" @click="onIconSelected" :background="selectedIcon === `${icon[1].type || 'far'}  fa-${icon[0]}` ? 'bg-primary' : 'bg-grey-3'" :color="selectedIcon === `${icon[1].type || 'far'}  fa-${icon[0]}` ? 'white' : 'primary'")
+  nav.row.justify-end.q-mt-xl.q-gutter-xs(v-if="$q.screen.gt.md")
+    q-btn.h-btn2.q-px-xl(v-if="!disablePrevButton" @click="$emit('prev')" color="primary" :label="$t('pages.proposals.create.stepicon.back')" no-caps="no-caps" outline="outline" rounded="rounded" flat="flat")
+    q-btn.q-px-xl(:disable="!selectedIcon && !selectedImage" @click="$emit('next')" color="primary" :label="$t('pages.proposals.create.stepicon.nextStep')" no-caps="no-caps" rounded="rounded" unelevated="unelevated")
   template(v-if="$q.screen.lt.md || $q.screen.md")
     q-card(:style="'border-radius: 25px; box-shadow: none; z-index: 7000; position: fixed; bottom: -20px; left: 0; right: 0; box-shadow: 0px 0px 26px 0px rgba(0, 0, 41, 0.2);'")
-      creation-stepper(
-        :activeStepIndex="stepIndex"
-        :steps="steps"
-        :nextDisabled="nextDisabled"
-        @publish="$emit('publish')"
-        @save="$emit('save')"
-        @next="$emit('next')"
-      )
+      creation-stepper(:activeStepIndex="stepIndex" :steps="steps" :nextDisabled="nextDisabled" @publish="$emit('publish')" @save="$emit('save')" @next="$emit('next')")
+
 </template>
 
 <style lang="stylus" scoped>

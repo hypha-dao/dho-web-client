@@ -94,24 +94,21 @@ export default {
 </script>
 
 <template lang="pug">
-  widget.bg-internal-bg.q-my-xxs.cursor-pointer(noPadding)
-    .row.items-center.content(:style="cssVars")
-      .col
-        .row.flex.items-center
-          q-btn.no-pointer-events(
-            round unelevated :icon="iconDetails.name" color="primary" text-color="white" size="14px" :ripple="false"
-            v-if="iconDetails && iconDetails.type === 'icon'"
-          )
-          q-avatar(size="lg" v-else-if="iconDetails && iconDetails.type === 'img'")
-              img.icon-img(:src="iconDetails.name")
-          ipfs-image-viewer(size="lg", :ipfsCid="iconDetails.cid" v-else-if="iconDetails && iconDetails.type === 'ipfs'")
-          .h-h5.q-ml-xl(:class="{ 'q-ml-md': !compact, 'h-h7': compact }") {{title}}
-      .col(v-if="!compact")
-        .h-b2.text-weight-thin.text-body  {{description.substr(0,150) + (description.length > 150 ? '...' : '')}}
-      .col-3(v-if="!compact")
-        .row.justify-end.q-pr-xl
-          profile-picture.profile-picture(v-for="user in assignments" :key="user.details_assignee_n" :username="user.details_assignee_n" size="2rem")
-          .text-body2.text-weight-bold.text-body(v-if="badgeHoldersNumber")  and others {{badgeHoldersNumber}}
+widget.bg-internal-bg.q-my-xxs.cursor-pointer(noPadding="noPadding")
+  .row.items-center.content(:style="cssVars")
+    .col
+      .row.flex.items-center
+        q-btn.no-pointer-events(round="round" unelevated="unelevated" :icon="iconDetails.name" color="primary" text-color="white" size="14px" :ripple="false" v-if="iconDetails && iconDetails.type === 'icon'")
+        q-avatar(size="lg" v-else-if="iconDetails && iconDetails.type === 'img'")
+          img.icon-img(:src="iconDetails.name")
+        ipfs-image-viewer(size="lg" :ipfsCid="iconDetails.cid" v-else-if="iconDetails && iconDetails.type === 'ipfs'")
+        .h-h5.q-ml-xl(:class="{ 'q-ml-md': !compact, 'h-h7': compact }") {{title}}
+    .col(v-if="!compact")
+      .h-b2.text-weight-thin.text-body  {{description.substr(0,150) + (description.length > 150 ? '...' : '')}}
+    .col-3(v-if="!compact")
+      .row.justify-end.q-pr-xl
+        profile-picture.profile-picture(v-for="user in assignments" :key="user.details_assignee_n" :username="user.details_assignee_n" size="2rem")
+        .text-body2.text-weight-bold.text-body(v-if="badgeHoldersNumber") {{ $t('organization.badge-card.andOthers', { '1': badgeHoldersNumber }) }}
 </template>
 
 <style lang="stylus" scoped>

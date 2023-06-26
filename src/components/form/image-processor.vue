@@ -64,83 +64,25 @@ export default {
   .row.flex.image-container
     .col-10.flex.items-center.text-center.justify-center
       .row
-        croppa(
-          v-model="image"
-          :accept="'image/*'"
-          :file-size-limit="4e6"
-          :width="width || 200"
-          :height="height || 200"
-          :show-remove-button="false"
-          :quality="1"
-          :replace-drop="true"
-          @file-choose="edited = true"
-          placeholder=""
-          prevent-white-space
-          @init="onInit"
-          :class="{ rounded: round }"
-        )
+        croppa(v-model="image" :accept="'image/*'" :file-size-limit="4e6" :width="width || 200" :height="height || 200" :show-remove-button="false" :quality="1" :replace-drop="true" @file-choose="edited = true" placeholder="" prevent-white-space="prevent-white-space" @init="onInit" :class="{ rounded: round }")
     .col-2.column.justify-between.items-end
-      q-btn(
-        icon="fas fa-redo-alt"
-        @click="image.rotate(1)"
-        color="accent"
-        round
-        size="sm"
-      )
-        q-tooltip Rotate +90
-      q-btn(
-        icon="fas fa-undo-alt"
-        @click="image.rotate(-1)"
-        color="accent"
-        round
-        size="sm"
-      )
-        q-tooltip Rotate -90
-      q-btn(
-        icon="fas fa-search-plus"
-        @click="image.zoomIn()"
-        color="accent"
-        round
-        size="sm"
-      )
-        q-tooltip Zoom in
-      q-btn(
-        icon="fas fa-search-minus"
-        @click="image.zoomOut()"
-        color="accent"
-        round
-        size="sm"
-      )
-        q-tooltip Zoom out
-      q-btn(
-        icon="fas fa-arrows-alt-h"
-        @click="image.flipX()"
-        color="accent"
-        round
-        size="sm"
-      )
-        q-tooltip Vertical mirror
-      q-btn(
-        icon="fas fa-arrows-alt-v"
-        @click="image.flipY()"
-        color="accent"
-        round
-        size="sm"
-      )
-        q-tooltip Horizontal mirror
+      q-btn(icon="fas fa-redo-alt" @click="image.rotate(1)" color="accent" round="round" size="sm")
+        q-tooltip {{ $t('form.image-processor.rotate') }}
+      q-btn(icon="fas fa-undo-alt" @click="image.rotate(-1)" color="accent" round="round" size="sm")
+        q-tooltip {{ $t('form.image-processor.rotate1') }}
+      q-btn(icon="fas fa-search-plus" @click="image.zoomIn()" color="accent" round="round" size="sm")
+        q-tooltip {{ $t('form.image-processor.zoomIn') }}
+      q-btn(icon="fas fa-search-minus" @click="image.zoomOut()" color="accent" round="round" size="sm")
+        q-tooltip {{ $t('form.image-processor.zoomOut') }}
+      q-btn(icon="fas fa-arrows-alt-h" @click="image.flipX()" color="accent" round="round" size="sm")
+        q-tooltip {{ $t('form.image-processor.verticalMirror') }}
+      q-btn(icon="fas fa-arrows-alt-v" @click="image.flipY()" color="accent" round="round" size="sm")
+        q-tooltip {{ $t('form.image-processor.horizontalMirror') }}
   q-separator.q-mt-md
   .row.flex.justify-end.q-mt-md
-    q-btn.q-mr-sm(
-      label="Cancel"
-      color="primary"
-      @click="$emit('cancel')"
-      flat
-    )
-    q-btn(
-      label="Reset"
-      color="primary"
-      @click="image.refresh()"
-    )
+    q-btn.q-mr-sm(:label="$t('form.image-processor.cancel')" color="primary" @click="$emit('cancel')" flat="flat")
+    q-btn(:label="$t('form.image-processor.reset')" color="primary" @click="image.refresh()")
+
 </template>
 
 <style lang="stylus" scoped>

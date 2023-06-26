@@ -1,5 +1,5 @@
 <template lang="pug">
-widget.bg-internal-bg.q-my-xxs.cursor-pointer(noPadding)
+widget.bg-internal-bg.q-my-xxs.cursor-pointer(noPadding="noPadding")
   .row.items-center.content(:style="cssVars")
     .col
       .row.flex.items-center
@@ -12,6 +12,7 @@ widget.bg-internal-bg.q-my-xxs.cursor-pointer(noPadding)
           .col(v-for="payment of payments")
             .row.justify-center.h-btn1 {{ getFormatedTokenAmount(parseFloat(payment.details_amount_a.split(' ')[0])) }}
             .row.text-bold.justify-center {{ payment.details_amount_a.split(' ')[1] }}
+
 </template>
 
 <script>
