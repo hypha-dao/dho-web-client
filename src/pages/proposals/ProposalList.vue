@@ -118,7 +118,7 @@ export default {
       textFilter: null,
       sort: 'Sort by last added',
       circle: 'All circles',
-      optionArray: [{ label: 'Sort by last added' }],
+      optionArray: [{ label: this.$t('pages.proposals.proposallist.sortByLastAdded') }],
       circleArray: ['All circles', 'Circle One'],
       pagination: {
         first: 50,
@@ -361,9 +361,9 @@ q-page.page-proposals
     template(v-slot:right)
       .row
         .col-6.q-pa-xxs
-          button-radio.full-height(icon="fas fa-vote-yea" :title="$t('pages.proposals.proposallist.unity')" :subtitle="unityTitle" description="Is the minimum required percentage of members endorsing a proposal for it to pass." opacity="opacity" primary="primary")
+          button-radio.full-height(icon="fas fa-vote-yea" :title="$t('pages.proposals.proposallist.unity')" :subtitle="unityTitle" :description="$t('pages.proposals.proposallist.isTheMinimumRequiredPercentageOfMembers')" opacity="opacity" primary="primary")
         .col-6.q-pa-xxs
-          button-radio.full-height(icon="fas fa-users" :title="$t('pages.proposals.proposallist.quorum')" :subtitle="quorumTitle" description="Is the minimum required percentage of total members participating in the vote for it to pass. " opacity="opacity" primary="primary")
+          button-radio.full-height(icon="fas fa-users" :title="$t('pages.proposals.proposallist.quorum')" :subtitle="quorumTitle" :description="$t('pages.proposals.proposallist.isTheMinimumRequiredPercentageOfTotal')" opacity="opacity" primary="primary")
   .row.q-py-md(v-if="$q.screen.gt.md")
     .col-12.col-lg-9
       base-placeholder.q-mr-sm(:compact="!$q.screen.gt.md" v-if="!filteredStagedProposals.length && !filteredProposals.length && !hasProposals" :title="$t('pages.proposals.proposallist.noProposals')" subtitle="Your organization has not created any proposals yet. You can create a new proposal by clicking the button below." icon="fas fa-file-medical" :actionButtons="[{label: 'Create a new Proposal', color: 'primary', onClick: () => $router.push(`/${this.daoSettings.url}/proposals/create`), disable: !isMember, disableTooltip: 'You must be a member'}]")
@@ -385,10 +385,10 @@ q-page.page-proposals
       q-infinite-scroll.scroll(@load="onLoad" :offset="500" ref="scroll" :initial-index="1" v-if="proposalsCount.active")
         proposal-list(:username="account" :proposals="filteredProposals" :supply="supply" :view="'card'")
     .col-3(v-if="$q.screen.gt.md")
-      filter-widget.sticky(ref="filter" :view.sync="view" :sort.sync="sort" :textFilter.sync="textFilter" :circle.sync="circle" :showCircle="false" :optionArray.sync="optionArray" :circleArray.sync="circleArray" :filters.sync="filters" :toggle.sync="showStagedProposals" :toggleDefault="true" :showToggle="true" :showViewSelector="false" viewSelectorLabel="View" chipsFiltersLabel="Proposal types" filterTitle="Search proposals" toggleLabel="Staging Proposals")
+      filter-widget.sticky(ref="filter" :view.sync="view" :sort.sync="sort" :textFilter.sync="textFilter" :circle.sync="circle" :showCircle="false" :optionArray.sync="optionArray" :circleArray.sync="circleArray" :filters.sync="filters" :toggle.sync="showStagedProposals" :toggleDefault="true" :showToggle="true" :showViewSelector="false" viewSelectorLabel="View" :chipsFiltersLabel="$t('pages.proposals.proposallist.proposalTypes')" :filterTitle="$t('pages.proposals.proposallist.searchProposals')" :toggleLabel="$t('pages.proposals.proposallist.stagingProposals')")
     .row.full-width.q-my-md(v-if="!$q.screen.gt.md")
       filter-open-button(@open="mobileFilterOpen = true")
-      filter-widget-mobile(:view.sync="view" v-show="mobileFilterOpen" @close="mobileFilterOpen = false" :sort.sync="sort" :textFilter.sync="textFilter" :circle.sync="circle" :showCircle="false" :optionArray.sync="optionArray" :circleArray.sync="circleArray" :filters.sync="filters" :toggle.sync="showStagedProposals" :toggleDefault="true" :showToggle="true" :style="mobileFilterStyles" :showViewSelector="false" viewSelectorLabel="View" chipsFiltersLabel="Proposal types" filterTitle="Search proposals" toggleLabel="Staging Proposals")
+      filter-widget-mobile(:view.sync="view" v-show="mobileFilterOpen" @close="mobileFilterOpen = false" :sort.sync="sort" :textFilter.sync="textFilter" :circle.sync="circle" :showCircle="false" :optionArray.sync="optionArray" :circleArray.sync="circleArray" :filters.sync="filters" :toggle.sync="showStagedProposals" :toggleDefault="true" :showToggle="true" :style="mobileFilterStyles" :showViewSelector="false" viewSelectorLabel="View" :chipsFiltersLabel="$t('pages.proposals.proposallist.proposalTypes')" :filterTitle="$t('pages.proposals.proposallist.searchProposals')" :toggleLabel="$t('pages.proposals.proposallist.stagingProposals')")
       .col
         base-placeholder.q-mr-sm(v-if="!filteredProposals.length && !filteredStagedProposals.length && !$apollo.loading" :title="$t('pages.proposals.proposallist.noProposals1')" subtitle="Your organization has not created any proposals yet. You can create a new proposal by clicking the button below." icon="fas fa-file-medical" :actionButtons="[{label: 'Create a new Proposal', color: 'primary', onClick: () => this.handleCreateNewProposal, disable: !isMember, disableTooltip: 'You must be a member'}]")
         .row.justify-center.q-my-md(v-if="!filteredProposals.length && !filteredStagedProposals.length")

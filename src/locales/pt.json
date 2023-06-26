@@ -766,6 +766,30 @@
       "publish": "Publicar",
       "iChangedMyMind": "eu mudei de ideia"
     },
+    "proposal-card-chips": {
+      "poll": "Enquete",
+      "circleBudget": "Orçamento circular",
+      "quest": "Busca",
+      "start": "Começar",
+      "payout": "Pagamento",
+      "circle": "Círculo",
+      "policy": "Política",
+      "genericContribution": "Contribuição Genérica",
+      "role": "Papel",
+      "assignment": "Atribuição",
+      "extension": "Extensão",
+      "ability": "Habilidade",
+      "archetype": " Arquétipo",
+      "badge": "Distintivo",
+      "suspension": "Suspensão",
+      "withdrawn": "Retirado",
+      "accepted": "ACEITARAM",
+      "rejected": "REJEITADO",
+      "voting": "VOTAÇÃO",
+      "active": "ATIVO",
+      "archived": "ARQUIVADO",
+      "suspended": "SUSPENSO"
+    },
     "proposal-view": {
       "s": " 1? ",
       "title": "Título",
@@ -1201,7 +1225,12 @@
         "activeProposals1": "Propostas ativas",
         "proposalHistory": "Histórico da proposta",
         "lookingToMonitor": "Procurando monitorar quantos anos as propostas foram? ",
-        "seeHistory": "Ver histórico >"
+        "seeHistory": "Ver histórico >",
+        "isTheMinimumRequiredPercentageOfMembers": "É a porcentagem mínima exigida de membros endossando uma proposta para que ela seja aprovada.",
+        "isTheMinimumRequiredPercentageOfTotal": "É a porcentagem mínima exigida do total de membros que participam da votação para que ela seja aprovada. ",
+        "searchProposals": "Propostas de pesquisa",
+        "proposalTypes": "Tipos de proposta",
+        "sortByLastAdded": "Classificar por último adicionado"
       },
       "proposalhistory": {
         "noProposals": "Sem Propostas",
@@ -1342,5 +1371,34 @@
       "addToTheTeam": "Adicionar à equipe",
       "daoPublished": "DAO publicado!"
     }
+  },
+  "proposalparsing": {
+    "createdAgo": "Criado {diff} atrás",
+    "closedAgo": "Fechado {diff} atrás",
+    "thisVoteWillCloseIn": "Esta votação será encerrada em {dayStr}{hourStr}:{minStr}:{segStr}",
+    "second": " segundo",
+    "seconds": " segundos",
+    "minutes": " minutos",
+    "minute": " minuto",
+    "hour": " hora",
+    "hours": " horas",
+    "day": " dia",
+    "days": " dias",
+    "dayWithValue": "{days} dia, ",
+    "daysWithValue": "{days} dias, "
+  },
+  "proposalFilter": {
+    "all": "Todos",
+    "ability": "Habilidade",
+    "role": "Papel",
+    "queststart": "Início da missão",
+    "questend": "Fim da missão",
+    "archetype": "Arquétipo",
+    "badge": "Distintivo",
+    "circle": "Círculo",
+    "budget": "Orçamento",
+    "policy": "Política",
+    "genericcontributions": "Contribuições Genéricas",
+    "suspension": "Suspensão"
   }
 }

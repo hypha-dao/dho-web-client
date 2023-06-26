@@ -1,73 +1,74 @@
+import I18n from './i18n'
 export function getProposalChipFilters () {
   return [
     {
-      label: 'All',
+      label: I18n.t('proposalFilter.all'),
       value: 'All',
       enabled: true,
       filter: () => true
     },
     {
-      label: 'Ability',
+      label: I18n.t('proposalFilter.ability'),
       value: 'Assignbadge',
       enabled: false,
       filter: (p) => p.__typename === 'Assignbadge'
     },
     {
-      label: 'Role',
+      label: I18n.t('proposalFilter.role'),
       value: 'Assignment',
       enabled: false,
       filter: (p) => p.__typename === 'Assignment' || p.__typename === 'Edit'
     },
     {
-      label: 'Quest Start',
+      label: I18n.t('proposalFilter.queststart'),
       value: 'Queststart',
       enabled: false,
       filter: (p) => p.__typename === 'Queststart'
     },
     {
-      label: 'Quest End',
+      label: I18n.t('proposalFilter.questend'),
       value: 'Questcomplet',
       enabled: false,
       filter: (p) => p.__typename === 'Questcomplet'
     },
     {
-      label: 'Archetype',
+      label: I18n.t('proposalFilter.archetype'),
       value: 'Role',
       enabled: false,
       filter: (p) => p.__typename === 'Role'
     },
     {
-      label: 'Badge',
+      label: I18n.t('proposalFilter.badge'),
       value: 'Badge',
       enabled: false,
       filter: (p) => p.__typename === 'Badge'
     },
     {
-      label: 'Circle',
+      label: I18n.t('proposalFilter.circle'),
       value: 'Circle',
       enabled: false,
       filter: (p) => p.__typename === 'Circle'
     },
     {
-      label: 'Budget',
+      label: I18n.t('proposalFilter.budget'),
       value: 'Budget',
       enabled: false,
       filter: (p) => p.__typename === 'Budget'
     },
     {
-      label: 'Policy',
+      label: I18n.t('proposalFilter.policy'),
       value: 'Policy',
       enabled: false,
       filter: (p) => p.__typename === 'Policy'
     },
     {
-      label: 'Generic Contributions',
+      label: I18n.t('proposalFilter.genericcontributions'),
       value: 'Payout',
       enabled: false,
       filter: (p) => p.__typename === 'Payout'
     },
     {
-      label: 'Suspension',
+      label: I18n.t('proposalFilter.suspension'),
       value: 'Suspend',
       enabled: false,
       filter: (p) => p.__typename === 'Suspend'

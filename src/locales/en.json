@@ -766,6 +766,30 @@
       "publish": "Publish",
       "iChangedMyMind": "I changed my mind"
     },
+    "proposal-card-chips": {
+      "poll": "Poll",
+      "circleBudget": "Circle Budget",
+      "quest": "Quest",
+      "start": "Start",
+      "payout": "Payout",
+      "circle": "Circle",
+      "policy": "Policy",
+      "genericContribution": "Generic Contribution",
+      "role": "Role",
+      "assignment": "Assignment",
+      "extension": "Extension",
+      "ability": "Ability",
+      "archetype": " Archetype",
+      "badge": "Badge",
+      "suspension": "Suspension",
+      "withdrawn": "Withdrawn",
+      "accepted": "ACCEPTED",
+      "rejected": "REJECTED",
+      "voting": "VOTING",
+      "active": "ACTIVE",
+      "archived": "ARCHIVED",
+      "suspended": "SUSPENDED" 
+    },
     "proposal-view": {
       "s": " 1 ? 's' : ''}` }}",
       "title": "Title",
@@ -1201,7 +1225,12 @@
         "activeProposals1": "Active proposals",
         "proposalHistory": "Proposal history",
         "lookingToMonitor": "Looking to monitor how old proposals went? click here to check all proposal history",
-        "seeHistory": "See history >"
+        "seeHistory": "See history >",
+        "isTheMinimumRequiredPercentageOfMembers": "Is the minimum required percentage of members endorsing a proposal for it to pass.",
+        "isTheMinimumRequiredPercentageOfTotal": "Is the minimum required percentage of total members participating in the vote for it to pass. ",
+        "searchProposals": "Search proposals",
+        "proposalTypes": "Proposal types",
+        "sortByLastAdded": "Sort by last added"
       },
       "proposalhistory": {
         "noProposals": "No Proposals",
@@ -1342,5 +1371,34 @@
       "addToTheTeam": "Add to the team +",
       "daoPublished": "DAO Published!"
     }
+  },
+  "proposalparsing": {
+    "createdAgo": "Created {diff} ago",
+    "closedAgo": "Closed {diff} ago",
+    "thisVoteWillCloseIn": "This vote will close in {dayStr}{hourStr}:{minStr}:{segStr}",
+    "second": " second",
+    "seconds": " seconds",
+    "minutes": " minutes",
+    "minute": " minute",
+    "hour": " hour",
+    "hours": " hours",
+    "day": " day",
+    "days": " days",
+    "dayWithValue": "{days} day, ",
+    "daysWithValue": "{days} days, "
+  },
+  "proposalFilter": {
+    "all": "All",
+    "ability": "Ability",
+    "role": "Role",
+    "queststart": "Quest Start",
+    "questend": "Quest End",
+    "archetype": "Archetype",
+    "badge": "Badge",
+    "circle": "Circle",
+    "budget": "Budget",
+    "policy": "Policy",
+    "genericcontributions": "Generic Contributions",
+    "suspension": "Suspension"
   }
 }

@@ -32,20 +32,20 @@ export default {
       // Type tags
       if (this.type === PROPOSAL_TYPE.POLL) {
         result.push(
-          { color: 'primary', label: 'Poll' }
+          { color: 'primary', label: this.$t('proposals.proposal-card-chips.poll') }
         )
       }
 
       if (this.type === PROPOSAL_TYPE.BUDGET) {
         result.push(
-          { color: 'primary', label: 'Circle Budget' }
+          { color: 'primary', label: this.$t('proposals.proposal-card-chips.circleBudget') }
         )
       }
 
       if (this.type === PROPOSAL_TYPE.QUEST_START) {
         result.push(
-          { color: 'primary', label: 'Quest' },
-          { color: 'primary', outline: true, label: 'Start' },
+          { color: 'primary', label: this.$t('proposals.proposal-card-chips.quest') },
+          { color: 'primary', outline: true, label: this.$t('proposals.proposal-card-chips.start') },
           ...(this.proposal.circles
             ? [
                 ...this.proposal.circles.map(_ => ({
@@ -62,67 +62,67 @@ export default {
 
       if (this.type === PROPOSAL_TYPE.QUEST_PAYOUT) {
         result.push(
-          { color: 'primary', label: 'Quest' },
-          { color: 'primary', outline: true, label: 'Payout' }
+          { color: 'primary', label: this.$t('proposals.proposal-card-chips.quest') },
+          { color: 'primary', outline: true, label: this.$t('proposals.proposal-card-chips.payout') }
         )
       }
 
       if (this.type === PROPOSAL_TYPE.CIRCLE) {
         result.push(
-          { color: 'primary', label: 'Circle' }
+          { color: 'primary', label: this.$t('proposals.proposal-card-chips.circle') }
         )
       }
 
       if (this.type === PROPOSAL_TYPE.POLICY) {
         result.push(
-          { color: 'primary', label: 'Policy' }
+          { color: 'primary', label: this.$t('proposals.proposal-card-chips.policy') }
         )
       }
 
       if (this.type === PROPOSAL_TYPE.PAYOUT) {
         result.push(
-          { color: 'primary', label: 'Generic Contribution' }
+          { color: 'primary', label: this.$t('proposals.proposal-card-chips.genericContribution') }
         )
       }
 
       if (this.type === PROPOSAL_TYPE.ROLE) {
         result.push(...[
-          { color: 'primary', label: 'Role' },
-          { color: 'primary', outline: true, label: 'Assignment' }
+          { color: 'primary', label: this.$t('proposals.proposal-card-chips.role') },
+          { color: 'primary', outline: true, label: this.$t('proposals.proposal-card-chips.assignment') }
         ])
       }
 
       if (this.type === PROPOSAL_TYPE.EDIT) {
         result.push(...[
-          { color: 'primary', label: 'Extension' }
+          { color: 'primary', label: this.$t('proposals.proposal-card-chips.extension') }
         ])
         if (this.originalType) {
           switch (this.originalType) {
             case 'Payout':
               result.push(
-                { color: 'primary', label: 'Generic Contribution' }
+                { color: 'primary', label: this.$t('proposals.proposal-card-chips.genericContribution') }
               )
               break
             case 'Assignment':
               result.push(...[
-                { color: 'primary', label: 'Role' },
-                { color: 'primary', outline: true, label: 'Assignment' }
+                { color: 'primary', label: this.$t('proposals.proposal-card-chips.role') },
+                { color: 'primary', outline: true, label: this.$t('proposals.proposal-card-chips.assignment') }
               ])
               break
             case 'Assignbadge' || 'Assignment Badge':
               result.push(...[
-                { color: 'primary', label: 'Ability' },
-                { color: 'primary', outline: true, label: 'Assignment' }
+                { color: 'primary', label: this.$t('proposals.proposal-card-chips.ability') },
+                { color: 'primary', outline: true, label: this.$t('proposals.proposal-card-chips.assignment') }
               ])
               break
             case 'Role':
               result.push(...[
-                { color: 'primary', label: ' Archetype' }
+                { color: 'primary', label: this.$t('proposals.proposal-card-chips.archetype') }
               ])
               break
             case 'Badge':
               result.push(
-                { color: 'primary', label: 'Badge' }
+                { color: 'primary', label: this.$t('proposals.proposal-card-chips.badge') }
               )
               break
           }
@@ -130,31 +130,31 @@ export default {
       }
       if (this.type === PROPOSAL_TYPE.ABILITY || this.type === PROPOSAL_TYPE.ASSIGNBADGE) {
         result.push(...[
-          { color: 'primary', label: 'Ability' }
+          { color: 'primary', label: this.$t('proposals.proposal-card-chips.ability') }
         ])
       }
 
       if (this.type === 'Role') {
         result.push(...[
-          { color: 'primary', label: ' Archetype' }
+          { color: 'primary', label: this.$t('proposals.proposal-card-chips.archetype') }
         ])
       }
 
       if (this.type === 'Badge') {
         result.push(
-          { color: 'primary', label: 'Badge' }
+          { color: 'primary', label: this.$t('proposals.proposal-card-chips.badge') }
         )
       }
 
       // State tags
       if (this.type === 'Suspend') {
         result.push(...[
-          { color: 'warning', label: 'Suspension' }
+          { color: 'warning', label: this.$t('proposals.proposal-card-chips.suspension') }
         ])
       }
 
       if (this.state === 'withdrawed') {
-        result.push({ color: 'negative', label: 'Withdrawn', text: 'white' })
+        result.push({ color: 'negative', label: this.$t('proposals.proposal-card-chips.withdrawn'), text: 'white' })
       }
 
       if (this.state === 'proposed' && this.showVotingState) {
@@ -162,7 +162,7 @@ export default {
           if (this.accepted) {
             result.push(
               {
-                label: 'ACCEPTED',
+                label: this.$t('proposals.proposal-card-chips.accepted'),
                 color: 'secondary',
                 text: 'white'
               }
@@ -170,7 +170,7 @@ export default {
           } else {
             result.push(
               {
-                label: 'REJECTED',
+                label: this.$t('proposals.proposal-card-chips.rejected'),
                 color: 'negative',
                 text: 'white'
               }
@@ -179,7 +179,7 @@ export default {
         } else {
           result.push(
             {
-              label: 'VOTING',
+              label: this.$t('proposals.proposal-card-chips.voting'),
               color: 'secondary'
             }
           )
@@ -187,7 +187,7 @@ export default {
       } else if (this.state === 'approved' && this.type !== 'Payout') {
         result.push(
           {
-            label: 'ACTIVE',
+            label: this.$t('proposals.proposal-card-chips.active'),
             color: 'positive',
             text: 'white'
           }
@@ -195,7 +195,7 @@ export default {
       } else if (this.state === 'rejected') {
         result.push(
           {
-            label: 'REJECTED',
+            label: this.$t('proposals.proposal-card-chips.rejected'),
             color: 'negative',
             text: 'white'
           }
@@ -203,13 +203,13 @@ export default {
       } else if (this.state === 'archived') {
         result.push(
           {
-            label: 'ARCHIVED',
+            label: this.$t('proposals.proposal-card-chips.archived'),
             color: 'body',
             text: 'white'
           }
         )
       } else if (this.state === 'suspended') {
-        result.push({ color: 'negative', label: 'SUSPENDED', text: 'white' })
+        result.push({ color: 'negative', label: this.$t('proposals.proposal-card-chips.suspended'), text: 'white' })
       }
 
       // Compensation tags
