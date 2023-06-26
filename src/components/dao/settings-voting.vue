@@ -37,11 +37,6 @@ export default {
       ]
 
     }
-  },
-
-  updated () {
-    console.log('SETTINGS VOTING')
-    console.log(JSON.stringify(this.form.votingDurationSec))
   }
 
 }

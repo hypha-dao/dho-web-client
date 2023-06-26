@@ -408,10 +408,6 @@ export default {
     }
   },
 
-  updated () {
-    console.log(JSON.stringify(this.form.votingDurationSec))
-  },
-
   watch: {
     '$route.query.tab': {
       handler: function (tab) {
