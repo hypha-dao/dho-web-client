@@ -26,9 +26,22 @@ export default {
         { title: 'Multiple votes', description: 'Members can vote multiple times during the voting period' },
         { title: 'Voting period', description: 'The default voting period is 1 week' },
         { title: 'Requirements', description: 'Proposals need to have the required percentage of supportive votes (unity) and percentage of all votes (quorum)' }
+      ],
+
+      COMMUNITY_SHOWCASE: [
+        { title: '1 member = 1 vote', description: 'Every member can vote using 1 member 1 vote.' },
+        { title: 'Delegate voice', description: 'Members can give their voice (or voting power) to elected members in a democratic election' },
+        { title: 'Multiple votes', description: 'Members can vote multiple times during the voting period' },
+        { title: 'Voting period', description: 'The default voting period is 1 week' },
+        { title: 'Requirements', description: 'Proposals need to have the required percentage of supportive votes (unity) and percentage of all votes (quorum)' }
       ]
 
     }
+  },
+
+  updated () {
+    console.log('SETTINGS VOTING')
+    console.log(JSON.stringify(this.form.votingDurationSec))
   }
 
 }
@@ -36,7 +49,7 @@ export default {
 
 <template lang="pug">
 .tab
-  widget(title='Core Team voting methods' titleImage='/svg/core-voting.svg' :bar='true').q-pa-none.full-width
+  widget(title='Core Team voting methods' titleImage='/svg/core-voting.svg' bar).q-pa-none.full-width
     template(v-slot:header)
       q-toggle(:disable="!isAdmin" color="secondary" keep-color v-model="form.proposalsCreationEnabled")
 
@@ -99,17 +112,17 @@ export default {
           q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
 
       section.row.q-mt-xl.q-col-gutter-x-md.q-mb-xl(v-show="$q.screen.gt.sm")
-          template(v-for="item in CORE_SHOWCASE")
-            .col-3(:style="{'height': '164px'}")
-              .q-pa-md.bg-internal-bg.rounded-border.full-height
-                p.q-pa-none.q-ma-none {{ item.title }}
-                p.text-sm.text-h-gray.leading-loose.q-mt-sm {{ item.description }}
+        template(v-for="item in CORE_SHOWCASE")
+          .col(:style="{'height': '164px'}")
+            .q-pa-md.bg-internal-bg.rounded-border.full-height
+              p.q-pa-none.q-ma-none {{ item.title }}
+              p.text-sm.text-h-gray.leading-loose.q-mt-sm {{ item.description }}
 
-  widget(title='Community Voting Methods' titleImage='/svg/community-voting.svg' :bar='true').q-pa-none.full-width.q-mt-sm
+  widget(title='Community Voting Methods' titleImage='/svg/community-voting.svg' bar).q-pa-none.full-width.q-mt-sm
     template(v-slot:header)
       q-toggle(:disable="!isAdmin" color="secondary" keep-color v-model="form.communityVotingEnabled")
 
-    p.text-sm.text-h-gray.leading-loose.q-mt-md Every DAO can shape their own voting system, allowing community members to make collective decisions. You can select a template that best suits your needs, or feel free to customize your own voting system.
+    p.text-sm.text-h-gray.leading-loose.q-mt-md Every DAO can shape their own voting system, allowing core team members to make collective decisions. You can select a template that best suits your needs, or feel free to customize your own voting system.
 
     section(v-show="form.communityVotingEnabled")
       .hr
@@ -168,11 +181,11 @@ export default {
           q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
 
       section.row.q-mt-xl.q-col-gutter-x-md.q-mb-xl(v-show="$q.screen.gt.sm")
-          template(v-for="item in CORE_SHOWCASE")
-            .col-3(:style="{'height': '164px'}")
-              .q-pa-md.bg-internal-bg.rounded-border.full-height
-                p.q-pa-none.q-ma-none {{ item.title }}
-                p.text-sm.text-h-gray.leading-loose.q-mt-sm {{ item.description }}
+        template(v-for="item in COMMUNITY_SHOWCASE")
+          .col(:style="{'height': '224px'}")
+            .q-pa-md.bg-internal-bg.rounded-border.full-height
+              p.q-pa-none.q-ma-none {{ item.title }}
+              p.text-sm.text-h-gray.leading-loose.q-mt-sm {{ item.description }}
 
 </template>
 

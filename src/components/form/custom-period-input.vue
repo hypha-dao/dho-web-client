@@ -42,15 +42,12 @@ export default {
     }
   },
 
-  mounted () {
-    this.period = secondsToInterval(this.value).period
-  },
-
   computed: {
+
     valueFormated: {
       get () {
-        if (this.type === 'time' && this.period !== '') { return secondsToInterval(this.value)[this.period] }
-        return 0
+        const period = secondsToInterval(this.value).period
+        return secondsToInterval(this.value)[period]
       },
       set (value) {
         if (this.type === 'time' && this.period !== '') {
@@ -64,6 +61,10 @@ export default {
       }
 
     }
+  },
+
+  mounted () {
+    this.period = secondsToInterval(this.value).period
   }
 
 }

@@ -914,3 +914,82 @@ export const deleteLevel = async function ({ state, rootState }, { data }) {
 
   return this.$api.signTransaction(actions)
 }
+
+export const createRole = async function ({ state, rootState }, { data }) {
+  const actions = [{
+    account: this.$config.contracts.dao,
+    name: 'propose',
+    data: {
+      dao_id: rootState.dao.docId,
+      proposer: rootState.accounts.account,
+      proposal_type: 'role',
+      content_groups: [[
+        { label: 'content_group_label', value: ['string', 'details'] },
+        { label: 'auto_approve', value: ['int64', 1] },
+        { label: 'title', value: ['string', data.name] },
+        { label: 'description', value: ['string', data.description] },
+        { label: 'url', value: ['string', ''] }
+        // { label: 'annual_usd_salary', value: ['asset', `${parseFloat(draft.annualUsdSalary).toFixed(2)} USD`] },
+        // { label: 'fulltime_capacity_x100', value: ['int64', Math.round(parseFloat(draft.roleCapacity) * 100)] },
+        // { label: 'min_deferred_x100', value: ['int64', Math.round(parseFloat(draft.minDeferred))] }
+      ]],
+      publish: true
+    }
+  }]
+
+  return this.$api.signTransaction(actions)
+}
+
+export const deleteRole = async function ({ state, rootState }, id) {
+  const actions = [
+    {
+      account: this.$config.contracts.dao,
+      name: 'delasset',
+      data: {
+        dao_id: rootState.dao.docId,
+        asset_id: id
+      }
+    }
+  ]
+
+  return this.$api.signTransaction(actions)
+}
+
+export const createCircle = async function ({ state, rootState }, { data }) {
+  const actions = [{
+    account: this.$config.contracts.dao,
+    name: 'propose',
+    data: {
+      dao_id: rootState.dao.docId,
+      proposer: rootState.accounts.account,
+      proposal_type: 'circle',
+      content_groups: [[
+        { label: 'content_group_label', value: ['string', 'details'] },
+        { label: 'auto_approve', value: ['int64', 1] },
+        { label: 'title', value: ['string', data.name] },
+        { label: 'description', value: ['string', data.description] },
+        { label: 'name', value: ['string', ''] },
+        { label: 'purpose', value: ['string', ''] },
+        ...(data.circle ? [{ label: 'parent_circle', value: ['int64', data.circle] }] : [])
+      ]],
+      publish: true
+    }
+  }]
+
+  return this.$api.signTransaction(actions)
+}
+
+export const deleteCircle = async function ({ state, rootState }, id) {
+  const actions = [
+    {
+      account: this.$config.contracts.dao,
+      name: 'delasset',
+      data: {
+        dao_id: rootState.dao.docId,
+        asset_id: id
+      }
+    }
+  ]
+
+  return this.$api.signTransaction(actions)
+}

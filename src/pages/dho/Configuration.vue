@@ -1,7 +1,7 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
 
-const cloneDeep = value => JSON.parse(JSON.stringify(value))
+// const cloneDeep = value => JSON.parse(JSON.stringify(value))
 const exist = value => value !== undefined
 
 const settingsMapper = (data) => {
@@ -10,20 +10,21 @@ const settingsMapper = (data) => {
   // upvoteRounds,
   // const [timezoneHours, timezoneMinutes] = new Date().toString().match(/([-+][0-9]+)\s/)[1].match(/.{1,3}/g)
 
-  const { name, purpose, ...form } = data || {}
+  const { name, purpose, url, ...form } = data || {}
 
   return {
     ...form,
     ...(exist(name) ? { daoTitle: name } : {}),
     ...(exist(purpose) ? { daoDescription: purpose } : {}),
+    ...(exist(url) ? { daoUrl: url } : {}),
 
     ...(exist(form.proposalsCreationEnabled) ? { proposalsCreationEnabled: form.proposalsCreationEnabled ? 1 : 0 } : {}),
     // ...(exist(form.membersApplicationEnabled) ? { membersApplicationEnabled: form.membersApplicationEnabled ? 1 : 0 } : {}),
     // ...(exist(form.proposalsCreationEnabled) ? { removableBannersEnabled: form.removableBannersEnabled ? 1 : 0 } : {}),
     // ...(exist(form.multisigEnabled) ? { multisigEnabled: form.multisigEnabled ? 1 : 0 } : {}),
 
-    ...(exist(form.votingAlignmentX100) ? { votingAlignmentX100: form.votingAlignmentPercent } : {}),
-    ...(exist(form.votingQuorumX100) ? { votingQuorumX100: form.votingQuorumPercent } : {}),
+    ...(exist(form.votingAlignmentPercent) ? { votingAlignmentX100: form.votingAlignmentPercent } : {}),
+    ...(exist(form.votingQuorumPercent) ? { votingQuorumX100: form.votingQuorumPercent } : {}),
 
     ...(exist(form.communityVotingEnabled) ? { communityVotingEnabled: form.communityVotingEnabled ? 1 : 0 } : {})
     // ...(exist(form.upvoteHeadDelegateRound) ? { upvoteHeadDelegateRound: form.upvoteHeadDelegateRound ? 1 : 0 } : {})
@@ -61,6 +62,10 @@ const defaultSettings = {
   // periodDurationSec: '',
   votingAlignmentPercent: '',
   votingQuorumPercent: '',
+  communityVotingEnabled: false,
+  communityVotingDurationSec: 604800,
+  communityVotingAlignmentPercent: 20,
+  communityVotingQuorumPercent: 50,
 
   // ECONOMICS FORM
   // utilityTokenMultiplier: 1,
@@ -68,9 +73,6 @@ const defaultSettings = {
   // treasuryTokenMultiplier: 1,
   // voiceTokenDecayPeriod: '',
 
-  // salaries: [{ name: 'Band 1', value: 0 }],
-
-  communityVotingEnabled: false,
   communityVotingMethod: 'CLASSIC',
   upvoteStartDateTime: '',
   upvoteStartDate: '',
@@ -81,13 +83,10 @@ const defaultSettings = {
   upvoteCheifDelegateDuration: 10800,
   upvoteHeadDelegateRound: false,
   upvoteHeadDelegateDuration: 10800,
-  communityVotingDurationSec: 604800,
-  communityVotingAlignmentPercent: 20,
-  communityVotingQuorumPercent: 50,
 
   // COMMUNICATION FORM
-  announcements: [{ title: '', message: '', enabled: false }],
-  alerts: [{ level: 'positive', content: '', enabled: false }],
+  // announcements: [{ title: '', message: '', enabled: false }],
+  // alerts: [{ level: 'positive', content: '', enabled: false }],
 
   // DESIGN FORM
   // general
@@ -148,7 +147,18 @@ export default {
         name: this.daoSettings?.title ? this.daoSettings?.title : defaultSettings.title,
         url: this.daoSettings?.url ? this.daoSettings?.url : defaultSettings.url,
         purpose: this.daoSettings?.description ? this.daoSettings?.description : defaultSettings.description,
+
         proposalsCreationEnabled: this.daoSettings?.proposalsCreationEnabled !== null ? this.daoSettings?.proposalsCreationEnabled : defaultSettings.proposalsCreationEnabled,
+        votingDurationSec: this.daoSettings?.votingDurationSec ? this.daoSettings?.votingDurationSec : defaultSettings.votingDurationSec,
+        periodDurationSec: this.daoSettings?.periodDurationSec ? this.daoSettings?.periodDurationSec : defaultSettings.periodDurationSec,
+        votingAlignmentPercent: this.daoSettings?.votingAlignmentPercent ? this.daoSettings?.votingAlignmentPercent : defaultSettings.votingAlignmentPercent,
+        votingQuorumPercent: this.daoSettings?.votingQuorumPercent ? this.daoSettings?.votingQuorumPercent : defaultSettings.votingQuorumPercent,
+
+        communityVotingEnabled: this.daoSettings?.communityVotingEnabled ? this.daoSettings?.communityVotingEnabled : defaultSettings.communityVotingEnabled,
+        communityVotingDurationSec: this.daoSettings?.communityVotingDurationSec ? this.daoSettings?.communityVotingDurationSec : defaultSettings.communityVotingDurationSec,
+        communityVotingAlignmentPercent: this.daoSettings?.communityVotingAlignmentPercent ? this.daoSettings?.communityVotingAlignmentPercent : defaultSettings.communityVotingAlignmentPercent,
+        communityVotingQuorumPercent: this.daoSettings?.communityVotingQuorumPercent ? this.daoSettings?.communityVotingQuorumPercent : defaultSettings.communityVotingQuorumPercent,
+
         // membersApplicationEnabled: this.daoSettings?.membersApplicationEnabled !== null ? this.daoSettings?.membersApplicationEnabled : defaultSettings.membersApplicationEnabled,
         // removableBannersEnabled: this.daoSettings?.removableBannersEnabled !== null ? this.daoSettings?.removableBannersEnabled : defaultSettings.removableBannersEnabled,
         // multisigEnabled: this.daoSettings?.multisigEnabled !== null ? this.daoSettings?.multisigEnabled : defaultSettings.multisigEnabled,
@@ -159,11 +169,6 @@ export default {
         // roles: this.daoSettings?.roles ? this.daoSettings?.roles : defaultSettings.roles,
         levels: this.daoSettings?.levels ? this.daoSettings?.levels : defaultSettings.levels,
 
-        votingDurationSec: this.daoSettings?.votingDurationSec ? this.daoSettings?.votingDurationSec : defaultSettings.votingDurationSec,
-        periodDurationSec: this.daoSettings?.periodDurationSec ? this.daoSettings?.periodDurationSec : defaultSettings.periodDurationSec,
-        votingAlignmentPercent: this.daoSettings?.votingAlignmentPercent ? this.daoSettings?.votingAlignmentPercent : defaultSettings.votingAlignmentPercent,
-        votingQuorumPercent: this.daoSettings?.votingQuorumPercent ? this.daoSettings?.votingQuorumPercent : defaultSettings.votingQuorumPercent,
-
         // utilityTokenMultiplier: this.daoSettings?.utilityTokenMultiplier ? this.daoSettings?.utilityTokenMultiplier : defaultSettings.utilityTokenMultiplier,
         // voiceTokenMultiplier: this.daoSettings?.voiceTokenMultiplier ? this.daoSettings?.voiceTokenMultiplier : defaultSettings.voiceTokenMultiplier,
         // treasuryTokenMultiplier: this.daoSettings?.treasuryTokenMultiplier ? this.daoSettings?.treasuryTokenMultiplier : defaultSettings.treasuryTokenMultiplier,
@@ -171,7 +176,6 @@ export default {
 
         // salaries: cloneDeep([...(this.daoSettings?.salaries ? this.daoSettings?.salaries : defaultSettings.salaries)]),
 
-        communityVotingEnabled: this.daoSettings?.communityVotingEnabled ? this.daoSettings?.communityVotingEnabled : defaultSettings.communityVotingEnabled,
         // communityVotingMethod: this.daoSettings?.communityVotingMethod ? this.daoSettings?.communityVotingMethod : defaultSettings.communityVotingMethod,
         // upvoteStartDateTime: this.daoSettings?.upvoteStartDateTime ? this.daoSettings?.upvoteStartDateTime : defaultSettings.upvoteStartDateTime,
         // upvoteStartDate: this.daoSettings?.upvoteStartDate ? this.daoSettings?.upvoteStartDate : defaultSettings.upvoteStartDate,
@@ -182,12 +186,6 @@ export default {
         // upvoteCheifDelegateDuration: this.daoSettings?.upvoteCheifDelegateDuration ? this.daoSettings?.upvoteCheifDelegateDuration : defaultSettings.upvoteCheifDelegateDuration,
         // upvoteHeadDelegateRound: this.daoSettings?.upvoteHeadDelegateRound ? this.daoSettings?.upvoteHeadDelegateRound : defaultSettings.upvoteHeadDelegateRound,
         // upvoteHeadDelegateDuration: this.daoSettings?.upvoteHeadDelegateDuration ? this.daoSettings?.upvoteHeadDelegateDuration : defaultSettings.upvoteHeadDelegateDuration,
-        communityVotingDurationSec: this.daoSettings?.communityVotingDurationSec ? this.daoSettings?.communityVotingDurationSec : defaultSettings.communityVotingDurationSec,
-        communityVotingAlignmentPercent: this.daoSettings?.communityVotingAlignmentPercent ? this.daoSettings?.communityVotingAlignmentPercent : defaultSettings.communityVotingAlignmentPercent,
-        communityVotingQuorumPercent: this.daoSettings?.communityVotingQuorumPercent ? this.daoSettings?.communityVotingQuorumPercent : defaultSettings.communityVotingQuorumPercent,
-
-        alerts: cloneDeep([...(this.daoAlerts && this.daoAlerts.length > 0 ? this.daoAlerts : defaultSettings.alerts)]),
-        announcements: cloneDeep([...(this.daoAnnouncements && this.daoAnnouncements.length > 0 ? this.daoAnnouncements : defaultSettings.announcements)]),
 
         extendedLogo: this?.daoSettings?.extendedLogo ? this?.daoSettings?.extendedLogo : defaultSettings.extendedLogo,
         primaryColor: this.daoSettings?.primaryColor ? this.daoSettings?.primaryColor : defaultSettings.primaryColor,
@@ -201,10 +199,10 @@ export default {
       }
 
       this.form = {
-        ...this.initialForm,
+        ...this.initialForm
         // salaries: cloneDeep([...(this.daoSettings?.salaries ? this.daoSettings?.salaries : defaultSettings.salaries)]),
-        alerts: cloneDeep([...(this.daoAlerts && this.daoAlerts.length > 0 ? this.daoAlerts : defaultSettings.alerts)]),
-        announcements: cloneDeep([...(this.daoAnnouncements && this.daoAnnouncements.length > 0 ? this.daoAnnouncements : defaultSettings.announcements)])
+        // alerts: cloneDeep([...(this.daoAlerts && this.daoAlerts.length > 0 ? this.daoAlerts : defaultSettings.alerts)]),
+        // announcements: cloneDeep([...(this.daoAnnouncements && this.daoAnnouncements.length > 0 ? this.daoAnnouncements : defaultSettings.announcements)])
       }
     },
 
@@ -284,12 +282,13 @@ export default {
 
         await this.updateDAOSettings({
           docId: this.selectedDao.docId,
-          data: {
-            ...this.dataForSave
-            // ...(hasURLChanged ? { daoUrl: url } : {})
-          }
-
+          data: { ...this.dataForSave }
         })
+
+        const url = this.dataForSave.daoUrl
+        if (url) {
+          this.$router.push(`/${url}/configuration`)
+        }
 
         // Set inital form to the new form
         this.initialForm = {
@@ -407,6 +406,10 @@ export default {
     } else {
       next()
     }
+  },
+
+  updated () {
+    console.log(JSON.stringify(this.form.votingDurationSec))
   },
 
   watch: {

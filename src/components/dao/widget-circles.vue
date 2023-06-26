@@ -1,9 +1,16 @@
 <script>
+import { mapActions, mapGetters } from 'vuex'
+import gql from 'graphql-tag'
 
 const STATES = Object.freeze({
   WAITING: 'WAITING',
-  CREATING: 'CREATING'
+  CREATING_CIRCLE: 'CREATING_CIRCLE'
 })
+
+const CIRCLE = {
+  name: '',
+  description: ''
+}
 
 export default {
   name: 'widget-circles',
@@ -23,92 +30,207 @@ export default {
     }
   },
 
+  apollo: {
+    circles: {
+      query: gql`
+        query CIRCLES($daoId: Int64!) {
+          queryCircle(
+            filter: { 
+              details_dao_i: { eq: $daoId }, 
+              details_autoApprove_i: { eq: 1 } 
+            }
+          ) {
+            id: docId
+            name: details_title_s
+            description: details_description_s
+          }
+        }`,
+      update: data => data.queryCircle,
+      skip () { return !this.selectedDao?.docId },
+      variables () { return { daoId: this.selectedDao.docId } },
+      subscribeToMore: {
+        document: gql`
+        subscription CIRCLES($daoId: Int64!) {
+            queryCircle(
+              filter: { 
+                details_dao_i: { eq: $daoId }, 
+                details_autoApprove_i: { eq: 1 } 
+              }
+            ) {
+              id: docId
+              name: details_title_s
+              description: details_description_s
+            }
+          }`,
+        skip () { return !this.selectedDao?.docId },
+        variables () { return { daoId: this.selectedDao.docId } },
+        updateQuery: (previousResult, { subscriptionData }) => {
+          if (!subscriptionData.data) {
+            return previousResult
+          }
+          if (!previousResult) {
+            return undefined
+          }
+
+          return subscriptionData.data
+        }
+      }
+    }
+  },
+
   data () {
     return {
       STATES,
-      state: STATES.WAITING
+      state: STATES.WAITING,
+
+      circle: { ...CIRCLE }
     }
   },
 
   methods: {
-    onSave () {}
+    ...mapActions('dao', ['createCircle', 'deleteCircle']),
+
+    async _createCircle () {
+      try {
+        await this.createCircle({ data: { ...this.circle } })
+        this.cirlce = { ...CIRCLE }
+      } catch (e) {
+        const message = e.message || e.cause.message
+        this.showNotification({ message, color: 'red' })
+      }
+
+      this.state = STATES.WAITING
+    },
+
+    async _deleteCircle (id) {
+      try {
+        await this.deleteCircle(id)
+      } catch (e) {
+        const message = e.message || e.cause.message
+        this.showNotification({ message, color: 'red' })
+      }
+
+      this.state = STATES.WAITING
+    }
+  },
+
+  computed: {
+    ...mapGetters('dao', ['selectedDao']),
+
+    hasCircles () { return this.circles && this?.circles.length > 0 },
+    circleCount () { return this.circles ? this.circles?.length : 0 }
   }
 
 }
 </script>
 
 <template lang="pug">
-widget(title='Circles' titleImage='/svg/chart-network.svg' :bar='true').q-pa-none.full-width.q-mt-sm
-    p.text-sm.text-h-gray.leading-loose.q-mt-md Here you can set up your core teams or circles. Circles define the DAO's inner boundaries and domains. Any activity is tied to a single circle (the activity's home base) so that budgets can be maintained through the DAO.
-    .hr.q-my-md
+widget(title='Circles' titleImage='/svg/chart-network.svg' bar).q-pa-none.full-width.q-mt-sm
+  p.text-sm.text-h-gray.leading-loose.q-mt-md Here you can set up your core teams or circles. Circles define the DAO's inner boundaries and domains. Any activity is tied to a single circle (the activity's home base) so that budgets can be maintained through the DAO.
+  .hr.q-my-md
 
-    section
-        header.column.justify-center.text-center.items-center(v-if="state !== STATES.CREATING")
-            p.text-sm.text-h-gray.leading-loose.q-mt-md Feel free to shape your DAO by creating circles or teams that are meaningful to your workflow.
-            q-btn.q-px-xl.text-bold(
-                @click="state = STATES.CREATING"
+  section.q-mt-md
+    header.column.justify-center.text-center.items-center(v-if="!hasCircles && state === STATES.WAITING")
+      p.text-sm.text-h-gray.leading-loose.q-mt-md Feel free to shape your DAO by creating circles or teams that are meaningful to your workflow.
+      q-btn.q-px-xl.text-bold(
+        @click="state = STATES.CREATING_CIRCLE"
+        color="primary"
+        icon="fas fa-plus"
+        label="Create new circle"
+        no-caps
+        rounded
+        unelevated
+        v-if="isAdmin"
+      )
+
+    section(v-if="hasCircles").row.q-col-gutter-md
+      template(v-for="circle in circles")
+        article(:class="['col-'+ Math.min(Math.max(Math.floor(12/circleCount), 3), 12)]")
+          widget(:title="circle.name" shadow bar)
+            template(v-slot:header)
+              q-btn.q-pa-xs.relative-position(
+                icon="fas fa-ellipsis-v"
                 color="primary"
-                icon="fas fa-plus"
-                label="Create new circle"
-                no-caps
-                rounded
-                unelevated
-            )
-
-    section(v-if="state === STATES.CREATING")
-        .full-width
-            label.h-label Circle Name
-            q-input.q-my-xs(
-                :debounce="200"
-                :disable="!isAdmin"
-                bg-color="white"
-                color="accent"
+                flat
                 dense
-                lazy-rules
-                outlined
-                placeholder="Paste the URL address here"
-                ref="name"
-                rounded
-                v-model='form.name'
-            )
-        .full-width.q-mt-sm
-            label.h-label Circle Purpose
-            q-input.q-my-sm(
-                :debounce="200"
-                :disable="!isAdmin"
-                :input-style="{ 'resize': 'none' }"
-                bg-color="white"
-                color="accent"
-                dense
-                lazy-rules
-                maxlength="300"
-                outlined
-                placeholder="Max 140 characters"
-                ref="nickname"
-                rounded
-                rows="3"
-                type="textarea"
-                v-model='form.purpose'
-            )
+                round
+                size="sm"
+                v-if="isAdmin"
+              )
+                q-menu
+                  q-list(dense)
+                    q-item(@click="_deleteCircle(circle.id)" clickable v-close-popup)
+                      q-item-section Delete
 
-        nav.full-width.q-my-xl.row.justify-end
-            q-btn.col-auto.q-px-xl.rounded-border.text-bold.q-mr-xs(
-                @click="state = STATES.WAITING"
-                color="white"
-                label="Cancel"
-                no-caps
-                rounded
-                text-color="primary"
-                unelevated
-            )
-            q-btn.col-auto.q-px-xl.rounded-border.text-bold.q-ml-xs(
-                @click="onSave"
-                color="secondary"
-                label="Done"
-                no-caps
-                rounded
-                unelevated
-            )
+            p.q-pa-none.text-sm.text-h-gray.leading-loose.q-mt-md {{ circle.description }}
+
+    section(v-if="state === STATES.CREATING_CIRCLE")
+      .hr.q-my-md(v-if="hasCircles")
+
+      .full-width
+        label.h-label Circle Name
+        q-input.q-my-xs(
+          :debounce="200"
+          bg-color="white"
+          color="accent"
+          dense
+          lazy-rules
+          outlined
+          placeholder="Type a circle name"
+          ref="name"
+          rounded
+          v-model='circle.name'
+        )
+
+      .full-width.q-mt-md
+        label.h-label Circle Description
+        q-input.q-my-xs(
+          :debounce="200"
+          :input-style="{ 'resize': 'none' }"
+          bg-color="white"
+          color="accent"
+          dense
+          lazy-rules
+          maxlength="300"
+          outlined
+          placeholder="Type a circle description"
+          ref="nickname"
+          rounded
+          rows="3"
+          type="textarea"
+          v-model='circle.description'
+        )
+
+      nav.full-width.q-my-xl.row.justify-end
+        q-btn.col-auto.q-px-xl.rounded-border.text-bold.q-mr-xs(
+            @click="state = STATES.WAITING"
+            color="white"
+            label="Cancel"
+            no-caps
+            rounded
+            text-color="primary"
+            unelevated
+        )
+        q-btn.col-auto.q-px-xl.rounded-border.text-bold.q-ml-xs(
+            @click="_createCircle"
+            color="secondary"
+            label="Done"
+            no-caps
+            rounded
+            unelevated
+        )
+
+    nav.full-width.row.justify-end.q-mt-xl(v-if="hasCircles && state === STATES.WAITING")
+      q-btn.q-px-xl.text-bold(
+        @click="state = STATES.CREATING_CIRCLE"
+        color="primary"
+        icon="fas fa-plus"
+        label="Create new circle"
+        no-caps
+        rounded
+        unelevated
+        v-if="isAdmin"
+      )
 
 </template>
 

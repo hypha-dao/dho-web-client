@@ -12,6 +12,7 @@ const settingsMapper = (settings) => {
     name: settings?.settings_daoName_n,
     title: settings?.settings_daoTitle_s,
     description: settings?.settings_daoDescription_s,
+
     governanceContact: settings?.settings_governanceTokenContract_n,
     pegToken: settings?.settings_pegToken_a?.split(' ')[1],
     pegTokenDecimals: settings?.settings_pegToken_a?.split(' ')[0]?.split('.')[1].length,
@@ -30,13 +31,14 @@ const settingsMapper = (settings) => {
     socialChat: settings?.settings_socialChat_s,
     url: settings?.settings_daoUrl_s,
 
-    proposalsCreationEnabled: Boolean(settings?.settings_proposalsCreationEnabled_i),
     membersApplicationEnabled: Boolean(settings?.settings_membersApplicationEnabled_i),
     removableBannersEnabled: Boolean(settings?.settings_removableBannersEnabled_i),
     registrationEnabled: settings.settings_isHypha_i, // Currently disabled for hypha, TODO: obtain flag from server
     multisigEnabled: Boolean(settings?.settings_multisigEnabled_i),
     cashClaimsEnabled: settings?.settings_claimEnabled_i,
 
+    // VOTING
+    proposalsCreationEnabled: Boolean(settings?.settings_proposalsCreationEnabled_i),
     votingDurationSec: settings?.settings_votingDurationSec_i,
     periodDurationSec: settings?.settings_periodDurationSec_i,
     votingAlignmentPercent: settings?.settings_votingAlignmentX100_i,
@@ -44,6 +46,10 @@ const settingsMapper = (settings) => {
     voiceTokenDecayPeriod: settings?.settings_voiceTokenDecayPeriod_i,
 
     communityVotingEnabled: Boolean(settings?.settings_communityVotingEnabled_i),
+    communityVotingDurationSec: settings?.settings_communityVotingDurationSec_i,
+    communityVotingAlignmentPercent: settings?.settings_communityVotingAlignmentPercent_i,
+    communityVotingQuorumPercent: settings?.settings_communityVotingQuorumPercent_i,
+
     communityVotingMethod: settings?.settings_communityVotingMethod_s,
     upvoteStartDateTime: new Date(settings?.settings_upvoteStartDateTime_s).toLocaleString(),
     upvoteStartDate: new Date(settings?.settings_upvoteStartDateTime_s).toLocaleDateString('en-ZA'),
@@ -54,9 +60,6 @@ const settingsMapper = (settings) => {
     upvoteCheifDelegateDuration: settings?.settings_upvoteCheifDelegateDuration_i,
     upvoteHeadDelegateRound: settings?.settings_upvoteHeadDelegateRound_i,
     upvoteHeadDelegateDuration: settings?.settings_upvoteHeadDelegateDuration_i,
-    communityVotingDurationSec: settings?.settings_communityVotingDurationSec_i,
-    communityVotingAlignmentPercent: settings?.settings_communityVotingAlignmentPercent_i,
-    communityVotingQuorumPercent: settings?.settings_communityVotingQuorumPercent_i,
 
     usesSeeds: Boolean(settings?.settings_usesSeeds_i),
     isHypha: Boolean(settings?.settings_isHypha_i),

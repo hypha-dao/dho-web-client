@@ -25,7 +25,7 @@ export default {
 <template lang="pug">
 .tab
     widget-roles(v-bind="{ form, isAdmin }" @change="data => $emit('change', data)").q-mt-sm
-    //- widget-circles(v-bind="{ form, isAdmin }" @change="data => $emit('change', data)")
+    widget-circles(v-bind="{ form, isAdmin }" @change="data => $emit('change', data)")
 </template>
 
 <style lang="stylus" scoped>
