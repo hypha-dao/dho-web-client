@@ -169,6 +169,8 @@ export default {
         }
         this.$i18n.locale = value
         localStorage.setItem('lang', value)
+        this.languageSettings = false
+        window.location.reload() // solution for updating translations supplied from js
       })
     }
   },

@@ -252,6 +252,12 @@
   },
   "dashboard": {
     "how-it-works": {
+      "readyForVoting": "Ready for voting?",
+      "proposingAPolicy": "Proposing a policy?",
+      "applyingForARole": "Applying for a role?",
+      "creatingANewRole": "Creating a new role?",
+      "creatingABadge": "Creating a badge?",
+      "launchingAQuest": "Launching a quest?",
       "youNeedTo": "You need to both pass quorum (min % of total members participating in the vote) and unity (min % of members endorsing it). Try to find the right level of support before proposing!",
       "createAGeneric": "Create a generic contribution proposal with a descriptive title and clear definition of the policy along with steps to implement the policy..",
       "createARecurring": "Create a recurring activity for an existing role-assignment and describe why you are a good match with as many details as possible.",
@@ -272,6 +278,7 @@
       "documentation": "Documentation"
     },
     "support-widget": {
+      "documentation": "Documentation",
       "needSupport": "Need support?",
       "pleaseReadOur": "Please read our Documentation for more info. If you are stuck with a problem you can also reach out to us on discord in the \"dao-support\" channel."
     }

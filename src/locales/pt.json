@@ -252,6 +252,12 @@
   },
   "dashboard": {
     "how-it-works": {
+      "readyForVoting": "Pronto para votar?",
+      "proposingAPolicy": "Propondo uma política?",
+      "applyingForARole": "Candidatar-se a uma função?",
+      "creatingANewRole": "Criando uma nova função?",
+      "creatingABadge": "Criando um selo?",
+      "launchingAQuest": "Lançando uma missão?",
       "youNeedTo": "Você precisa passar no quórum (mínimo % do total de membros participando da votação) e na unidade (mínimo % dos membros que o endossam). ",
       "createAGeneric": "Crie uma proposta de contribuição genérica com um título descritivo e uma definição clara da política junto com as etapas para implementar a política.",
       "createARecurring": "Crie uma atividade recorrente para uma atribuição de função existente e descreva por que você é uma boa combinação com o máximo de detalhes possível.",
@@ -272,6 +278,7 @@
       "documentation": "Documentação"
     },
     "support-widget": {
+      "documentation": "Documentação",
       "needSupport": "Precisa de suporte?",
       "pleaseReadOur": "Por favor, leia nossa documentação para mais informações. "
     }

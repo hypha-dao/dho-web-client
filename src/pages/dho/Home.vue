@@ -321,7 +321,7 @@ q-page.page-dashboard
     metric-link(:amount="activeBadgesCount || '...'" :link="{ link: 'organization/assets', params: { type: 'badge' } }" :style="{'grid-area': 'badges'}" :title="$t('pages.dho.home.badges')")
     metric-link(:amount="activeMembersCount || '...'" :link="{ link: 'members', params: { } }" :style="{'grid-area': 'members'}" :title="$t('pages.dho.home.members')")
     metric-link(:amount="activeProposalsCount || '...'" :link="{ link: 'proposals', params: { } }" :style="{'grid-area': 'proposals'}" :title="$t('pages.dho.home.proposals')")
-    members(:members="daoMembers || '...'" :style="{'grid-area': 'new'}")
+    members(:title="$t('pages.dho.home.members')" :members="daoMembers || '...'" :style="{'grid-area': 'new'}")
     support-widget(:documentationButtonText="daoSettings.documentationButtonText" :documentationURL="daoSettings.documentationURL" :socialChat="daoSettings.socialChat" :style="{'grid-area': 'support'}")
     how-it-works(:style="{'grid-area': 'how'}")
 

@@ -7,7 +7,14 @@ export default {
   data () {
     return {
       slide: '1',
-      titles: ['Ready for voting?', 'Proposing a policy?', 'Applying for a role?', 'Creating a new role?', 'Creating a badge?', 'Launching a quest?']
+      titles: [
+        this.$t('dashboard.how-it-works.readyForVoting'),
+        this.$t('dashboard.how-it-works.proposingAPolicy'),
+        this.$t('dashboard.how-it-works.applyingForARole'),
+        this.$t('dashboard.how-it-works.creatingANewRole'),
+        this.$t('dashboard.how-it-works.creatingABadge'),
+        this.$t('dashboard.how-it-works.launchingAQuest')
+      ]
     }
   },
   computed: {
