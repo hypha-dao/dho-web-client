@@ -27,8 +27,8 @@ const settingsMapper = (data) => {
     ...(exist(form.proposalsCreationEnabled) ? { removableBannersEnabled: form.removableBannersEnabled ? 1 : 0 } : {}),
     ...(exist(form.multisigEnabled) ? { multisigEnabled: form.multisigEnabled ? 1 : 0 } : {}),
 
-    ...(exist(form.votingAlignmentX100) ? { votingAlignmentX100: form.votingAlignmentPercent } : {}),
-    ...(exist(form.votingQuorumX100) ? { votingQuorumX100: form.votingQuorumPercent } : {}),
+    ...(exist(form.votingAlignmentX100) ? { votingAlignmentX100: form.votingAlignmentX100 } : {}),
+    ...(exist(form.votingQuorumX100) ? { votingQuorumX100: form.votingQuorumX100 } : {}),
 
     ...(exist(form.communityVotingEnabled) ? { communityVotingEnabled: form.communityVotingEnabled ? 1 : 0 } : {}),
     ...(exist(form.upvoteHeadDelegateRound) ? { upvoteHeadDelegateRound: form.upvoteHeadDelegateRound ? 1 : 0 } : {}),
@@ -66,8 +66,8 @@ const defaultSettings = {
   // VOTING FORM
   votingDurationSec: '',
   // periodDurationSec: '',
-  votingAlignmentPercent: '',
-  votingQuorumPercent: '',
+  votingAlignmentX100: '',
+  votingQuorumX100: '',
 
   // ECONOMICS FORM
   // utilityTokenMultiplier: 1,
@@ -193,8 +193,8 @@ export default {
 
         votingDurationSec: this.daoSettings?.votingDurationSec ? this.daoSettings?.votingDurationSec : defaultSettings.votingDurationSec,
         // periodDurationSec: this.daoSettings?.periodDurationSec ? this.daoSettings?.periodDurationSec : defaultSettings.periodDurationSec,
-        votingAlignmentPercent: this.daoSettings?.votingAlignmentPercent ? this.daoSettings?.votingAlignmentPercent : defaultSettings.votingAlignmentPercent,
-        votingQuorumPercent: this.daoSettings?.votingQuorumPercent ? this.daoSettings?.votingQuorumPercent : defaultSettings.votingQuorumPercent,
+        votingAlignmentX100: this.daoSettings?.votingAlignmentPercent ? this.daoSettings?.votingAlignmentPercent : defaultSettings.votingAlignmentX100,
+        votingQuorumX100: this.daoSettings?.votingQuorumPercent ? this.daoSettings?.votingQuorumPercent : defaultSettings.votingQuorumX100,
 
         // utilityTokenMultiplier: this.daoSettings?.utilityTokenMultiplier ? this.daoSettings?.utilityTokenMultiplier : defaultSettings.utilityTokenMultiplier,
         // voiceTokenMultiplier: this.daoSettings?.voiceTokenMultiplier ? this.daoSettings?.voiceTokenMultiplier : defaultSettings.voiceTokenMultiplier,

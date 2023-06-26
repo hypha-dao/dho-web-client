@@ -59,9 +59,9 @@ widget.q-pa-none.full-width(:title="$t('dao.settings-voting.voting')" titleImage
           q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle") {{ $t('dao.settings-voting.unityIsThe') }}
       .row.full-width.items-center
         .col-12.col-md-7.row.q-mr-sm
-          q-slider(:disable="!isAdmin" :max="100" :min="0" :step="1" color="primary" v-model="form.votingAlignmentPercent")
+          q-slider(:disable="!isAdmin" :max="100" :min="0" :step="1" color="primary" v-model="form.votingAlignmentX100")
         .col-grow
-          q-input.rounded-border.q-py-sm(:disable="!isAdmin" :rules="[val => val >= 0 && val <= 100]" dense="dense" outlined="outlined" rounded="rounded" suffix="%" v-model.number="form.votingAlignmentPercent")
+          q-input.rounded-border.q-py-sm(:disable="!isAdmin" :rules="[val => val >= 0 && val <= 100]" dense="dense" outlined="outlined" rounded="rounded" suffix="%" v-model.number="form.votingAlignmentX100")
         q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") {{ $t('dao.settings-voting.onlyDaoAdmins') }}
     .col-12.col-md-6(:class="{'q-mt-md': !$q.screen.gt.sm}")
       .row.items-center.q-col-gutter-xs
@@ -70,9 +70,9 @@ widget.q-pa-none.full-width(:title="$t('dao.settings-voting.voting')" titleImage
           q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle") {{ $t('dao.settings-voting.quorumIsThe') }}
       .row.full-width.items-center
         .col-12.col-md-7.row.q-mr-sm
-          q-slider(:disable="!isAdmin" :max="100" :min="0" :step="1" color="primary" v-model="form.votingQuorumPercent")
+          q-slider(:disable="!isAdmin" :max="100" :min="0" :step="1" color="primary" v-model="form.votingQuorumX100")
         .col-grow
-          q-input.rounded-border.q-py-sm(:disable="!isAdmin" :rules="[val => val >= 0 && val <= 100]" dense="dense" outlined="outlined" rounded="rounded" suffix="%" v-model.number="form.votingQuorumPercent")
+          q-input.rounded-border.q-py-sm(:disable="!isAdmin" :rules="[val => val >= 0 && val <= 100]" dense="dense" outlined="outlined" rounded="rounded" suffix="%" v-model.number="form.votingQuorumX100")
         q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") {{ $t('dao.settings-voting.onlyDaoAdmins1') }}
   .row.q-mt-xl.q-col-gutter-x-md
     .col-12.col-md-6.row
