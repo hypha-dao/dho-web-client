@@ -34,10 +34,10 @@ export default {
       sort: '',
       textFilter: null,
       optionArray: [
-        { label: 'Sort by', disable: true },
-        'Oldest first',
-        'Newest first',
-        'Alphabetically'
+        { label: this.$t('pages.dho.explore.sortBy'), disable: true },
+        this.$t('pages.dho.explore.oldestFirst'),
+        this.$t('pages.dho.explore.newestFirst'),
+        this.$t('pages.dho.explore.alphabetically')
       ],
       showApplicants: false,
       mobileFilterStyles: {
@@ -114,8 +114,8 @@ export default {
 
     banner () {
       return {
-        title: this.daoSettings.exploreTitle || 'Discover the Hypha DAO network',
-        description: this.daoSettings.exploreParagraph || 'Welcome to the global DAO directory! Click on any card to open the DAO and to take a look under the hood. You can learn more about them, apply as a member or simply take a look around.',
+        title: this.daoSettings.exploreTitle || this.$t('pages.dho.explore.discoverTheHyphaDAONetwork'),
+        description: this.daoSettings.exploreParagraph || this.$t('pages.dho.explore.welcomeToTheGlobalDAO'),
         background: ipfsy(this.daoSettings.exploreBackgroundImage),
         color: this.daoSettings.primaryColor,
         pattern: this.daoSettings.pattern,
@@ -134,9 +134,9 @@ export default {
 
     filterPlacehoder () {
       if (this.exploreBy === EXPLORE_BY.DAOS) {
-        return 'Search DHOs'
+        return this.$t('pages.dho.explore.searchDHOs')
       } else if (this.exploreBy === EXPLORE_BY.ECOSYSTEMS) {
-        return 'Search Ecosystems'
+        return this.$t('pages.dho.explore.searchEcosystems')
       }
       return ''
     }

@@ -19,7 +19,7 @@ export default {
 </script>
 
 <template lang="pug">
-widget.sticky.bg-white.rounded.full-width.q-pa-md.q-mb-md(:textColor="'black'" :title="'Explore by:'")
+widget.sticky.bg-white.rounded.full-width.q-pa-md.q-mb-md(:textColor="'black'" :title="$t('common.explore-by-widget.exploreBy')")
   .select-option(@click="$emit('change', EXPLORE_BY.DAOS)")
     .select-option-label {{ $t('common.explore-by-widget.daos') }}
     .select-option-dot(:class="{selected: this.type === EXPLORE_BY.DAOS}")

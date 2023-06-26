@@ -79,7 +79,8 @@
     },
     "explore-by-widget": {
       "daos": "DAOs",
-      "ecosystems": "Ecosystems"
+      "ecosystems": "Ecosystems",
+      "exploreBy": "Explore by:"
     },
     "upvote-delegate-widget": {
       "upvoteDelegates": "Upvote Delegates",
@@ -495,7 +496,8 @@
       "asAGuest": "As a guest you have full access to all content of the DAO. However, you cannot participate in any decision making or apply for any role or receive any contribution.",
       "registerNewAccount": "Register new account",
       "registrationIsTemporarilyDisabled": "Registration is temporarily disabled",
-      "login": "Login"
+      "login": "Login",
+      "welcomeTo": "Welcome to {daoName}"
     },
     "quick-actions": {
       "7432": "2",
@@ -529,7 +531,8 @@
       "tick": " tick.",
       "beSureTo": "Be sure to complete your ",
       "profile": "profile",
-      "andHaveFun": " and have fun co-creating new and exciting things with your DAO and each-other."
+      "andHaveFun": " and have fun co-creating new and exciting things with your DAO and each-other.",
+      "welcomeTo": "Welcome to {daoName}"
     }
   },
   "organization-asset": {
@@ -932,7 +935,15 @@
       },
       "explore": {
         "discoverMore": "Discover More",
-        "members": "Members"
+        "members": "Members",
+        "discoverTheHyphaDAONetwork": "Discover the Hypha DAO network",
+        "welcomeToTheGlobalDAO": "Welcome to the global DAO directory! Click on any card to open the DAO and to take a look under the hood. You can learn more about them, apply as a member or simply take a look around.",
+        "searchDHOs": "Search DHOs",
+        "searchEcosystems": "Search Ecosystems",
+        "sortBy": "Sort by",
+        "oldestFirst": "Oldest first",
+        "newestFirst": "Newest first",
+        "alphabetically": "Alphabetically"
       },
       "finflow": {
         "totalUnclaimedPeriods": "Total unclaimed periods",
