@@ -131,9 +131,14 @@
       "positive": "Positive",
       "negative": "Negative",
       "warning": "Warning",
-      "removeNotification": "Remove notification -"
+      "removeNotification": "Remove notification -",
+      "alerts": "Alerts",
+      "enterYourMessageHere": "Enter your message here"
     },
     "settings-community": {
+      "community": "Community",
+      "classic": "Classic",
+      "upvote": "Upvote",
       "doYouWantToExpand": "Do you want to expand your DAO sense making to your DAO community members (token holders)? You can involve them in your DAO by activating the Community Voting feature. It will allow core members to publish proposals that will be voted by community. We also provide you with different voting system, your classic one based on HVOICE or a Delegate / Upvote system. This last one will allow the creation of an Election process where representative will be etc.. etc..",
       "activateCommunityVoting": "Activate Community Voting",
       "onlyDaoAdminsCanChange": "Only DAO admins can change the settings",
@@ -178,7 +183,17 @@
       "extendedLogo": "Extended Logo",
       "pattern": "Pattern",
       "color": "Color",
-      "opacity": "Opacity"
+      "opacity": "Opacity",
+      "uploadAnImage": "Upload an image (max 3MB)",
+      "title": "Title",
+      "shortParagraph": "Short paragraph",
+      "dashboard": "Dashboard",
+      "proposals": "Proposals",
+      "members": "Members",
+      "organization": "Organization",
+      "explore": "Explore",
+      "max50Characters": "Max 50 characters",
+      "max140Characters": "Max 140 characters"
     },
     "multisig-modal": {
       "multisig": "Multisig",
@@ -250,7 +265,12 @@
       "notEnoughTokens": "Not enough tokens",
       "buyHyphaToken": "Buy Hypha Token",
       "pleaseSelectPlan": "Please select plan and period first.",
-      "billingHistory": "Billing history"
+      "billingHistory": "Billing history",
+      "suspended": "Suspended",
+      "expired": "Expired",
+      "planActive": "Plan active",
+      "renewPlan": "Renew plan ",
+      "activatePlan": "Activate plan"
     }
   },
   "dashboard": {

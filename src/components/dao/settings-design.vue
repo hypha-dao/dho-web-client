@@ -45,7 +45,7 @@ export default {
       banners: [
         {
           key: 'DASHBOARD',
-          label: 'Dashboard',
+          label: this.$t('dao.settings-design.dashboard'),
           image: 'dashboardBackgroundImage',
           title: 'dashboardTitle',
           paragraph: 'dashboardParagraph',
@@ -53,7 +53,7 @@ export default {
         },
         {
           key: 'PROPOSALS',
-          label: 'Proposals',
+          label: this.$t('dao.settings-design.proposals'),
           image: 'proposalsBackgroundImage',
           title: 'proposalsTitle',
           paragraph: 'proposalsParagraph',
@@ -61,7 +61,7 @@ export default {
         },
         {
           key: 'MEMBERS',
-          label: 'Members',
+          label: this.$t('dao.settings-design.members'),
           image: 'membersBackgroundImage',
           title: 'membersTitle',
           paragraph: 'membersParagraph',
@@ -69,7 +69,7 @@ export default {
         },
         {
           key: 'ORGANISATION',
-          label: 'Organisation',
+          label: this.$t('dao.settings-design.organization'),
           image: 'organisationBackgroundImage',
           title: 'organisationTitle',
           paragraph: 'organisationParagraph',
@@ -79,7 +79,7 @@ export default {
           ? [
               {
                 key: 'EXPLORE',
-                label: 'Explore',
+                label: this.$t('dao.settings-design.explore'),
                 image: 'exploreBackgroundImage',
                 title: 'exploreTitle',
                 paragraph: 'exploreParagraph',
@@ -399,7 +399,7 @@ ${backgroundImage
           .row.full-width.items-center.q-mt-sm
             .col
               ipfs-image-viewer.hidden(:ipfsCid="form.logo" @loaded="createBase64(arguments[0], 'logoBase64')")
-              q-btn.full-width.q-px-xl.rounded-border.text-bold(:disable="!isAdmin" @click="$refs.ipfsInput.chooseFile()" color="primary" label="Upload an image (max 3MB)" no-caps="no-caps" outline="outline" rounded="rounded" unelevated="unelevated")
+              q-btn.full-width.q-px-xl.rounded-border.text-bold(:disable="!isAdmin" @click="$refs.ipfsInput.chooseFile()" color="primary" :label="$t('dao.settings-design.uploadAnImage')" no-caps="no-caps" outline="outline" rounded="rounded" unelevated="unelevated")
               input-file-ipfs(@uploadedFile="form.logo = arguments[0]" image="image" ref="ipfsInput" v-show="false")
           q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") {{ $t('dao.settings-design.onlyDaoAdmins') }}
         .row.justify-center.items-center.full-width.q-mt-xl.h-input
@@ -413,7 +413,7 @@ ${backgroundImage
           .row.full-width.items-center.q-mt-sm
             .col
               ipfs-image-viewer.hidden(:ipfsCid="form.extendedLogo" @loaded="createBase64(arguments[0], 'extendedLogoBase64')")
-              q-btn.full-width.q-px-xl.rounded-border.text-bold(:disable="!isAdmin" @click="$refs.extendedLogoInput.chooseFile()" color="primary" label="Upload an image (max 3MB)" no-caps="no-caps" outline="outline" rounded="rounded" unelevated="unelevated")
+              q-btn.full-width.q-px-xl.rounded-border.text-bold(:disable="!isAdmin" @click="$refs.extendedLogoInput.chooseFile()" color="primary" :label="$t('dao.settings-design.uploadAnImage')" no-caps="no-caps" outline="outline" rounded="rounded" unelevated="unelevated")
               input-file-ipfs(@uploadedFile="form.extendedLogo = arguments[0]" image="image" ref="extendedLogoInput" v-show="false")
           q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") {{ $t('dao.settings-design.onlyDaoAdmins') }}
       .col-12.col-md-3
@@ -458,23 +458,23 @@ ${backgroundImage
           label.h-label {{banner.label}}
           .q-mt-sm.row(v-if="!$q.screen.gt.sm")
             q-btn.q-mr-xs(@click="form[banner.image] = null" color="internal-bg" icon="fas fa-trash" padding="12px" rounded="rounded" size="sm" text-color="primary" unelevated="unelevated")
-            q-btn.col.q-px-xl.rounded-border.text-bold(:disable="!isAdmin || banners[index].state === 'UPLOADING'" @click="$refs.bannerImages[index].chooseFile()" color="internal-bg" :label="banners[index].state === 'UPLOADING' ? '...Uploading...' : 'Upload an image (max 3MB)'" no-caps="no-caps" rounded="rounded" text-color="primary" unelevated="unelevated")
+            q-btn.col.q-px-xl.rounded-border.text-bold(:disable="!isAdmin || banners[index].state === 'UPLOADING'" @click="$refs.bannerImages[index].chooseFile()" color="internal-bg" :label="banners[index].state === 'UPLOADING' ? '...Uploading...' : $t('dao.settings-design.uploadAnImage')" no-caps="no-caps" rounded="rounded" text-color="primary" unelevated="unelevated")
             input-file-ipfs(@uploading="banners[index].state = 'UPLOADING'" @uploadedFile="form[banner.image] = arguments[0]; banners[index].state = 'FINISHED'" image="image" ref="bannerImages" v-show="false")
           base-banner.q-mt-sm(:compact="!$q.screen.gt.sm" :title="form[banner.title]" :description="form[banner.paragraph]" :background="ipfsy(form[banner.image])" :pattern="form.patternBase64" :color="form.primaryColor")
             template(#top-right)
               .q-pa-xl.row(v-if="$q.screen.gt.sm")
                 q-btn.q-mr-xs(@click="form[banner.image] = null" color="white" icon="fas fa-trash" padding="12px" rounded="rounded" size="sm" text-color="primary" unelevated="unelevated")
-                q-btn.col.q-px-xl.rounded-border.text-bold(:disable="!isAdmin || banners[index].state === 'UPLOADING'" @click="$refs.bannerImages[index].chooseFile()" color="white" :label="banners[index].state === 'UPLOADING' ? '...Uploading...' : 'Upload an image (max 3MB)'" no-caps="no-caps" rounded="rounded" text-color="primary" unelevated="unelevated")
+                q-btn.col.q-px-xl.rounded-border.text-bold(:disable="!isAdmin || banners[index].state === 'UPLOADING'" @click="$refs.bannerImages[index].chooseFile()" color="white" :label="banners[index].state === 'UPLOADING' ? '...Uploading...' : $t('dao.settings-design.uploadAnImage')" no-caps="no-caps" rounded="rounded" text-color="primary" unelevated="unelevated")
                 input-file-ipfs(@uploading="banners[index].state = 'UPLOADING'" @uploadedFile="form[banner.image] = arguments[0]; banners[index].state = 'FINISHED'" image="image" ref="bannerImages" v-show="false")
             template(#right)
           .row.full-width.justify-between(:class="{'q-mt-sm': $q.screen.gt.sm, 'q-mb-xl': !$q.screen.gt.sm}")
             .col-12.col-md-3(:class="{'q-pr-sm': $q.screen.gt.sm}")
-              label.h-label(v-if="$q.screen.gt.sm") Title
-              q-input.q-my-sm.rounded-border(:debounce="200" :disable="!isAdmin" bg-color="white" color="accent" dense="dense" lazy-rules="lazy-rules" maxlength="50" outlined="outlined" placeholder="Max 50 characters" ref="name" rounded="rounded" v-model="form[banner.title]")
+              label.h-label(v-if="$q.screen.gt.sm") {{ $t('dao.settings-design.title') }}
+              q-input.q-my-sm.rounded-border(:debounce="200" :disable="!isAdmin" bg-color="white" color="accent" dense="dense" lazy-rules="lazy-rules" maxlength="50" outlined="outlined" :placeholder="$t('dao.settings-design.max50Characters')" ref="name" rounded="rounded" v-model="form[banner.title]")
               q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") {{ $t('dao.settings-design.onlyDaoAdmins') }}
             .col-12.col-md-9(:class="{'q-pl-sm': $q.screen.gt.sm}")
-              label.h-label(v-if="$q.screen.gt.sm") Short paragraph
-              q-input.rounded-border(:class="{'q-my-sm': $q.screen.gt.sm}" :debounce="200" :disable="!isAdmin" :input-style="{ 'resize': 'none' }" bg-color="white" color="accent" dense="dense" lazy-rules="lazy-rules" maxlength="300" outlined="outlined" placeholder="Max 140 characters" ref="nickname" rounded="rounded" :rows="$q.screen.gt.sm ? 3 : 6" type="textarea" v-model="form[banner.paragraph]")
+              label.h-label(v-if="$q.screen.gt.sm") {{ $t('dao.settings-design.shortParagraph') }}
+              q-input.rounded-border(:class="{'q-my-sm': $q.screen.gt.sm}" :debounce="200" :disable="!isAdmin" :input-style="{ 'resize': 'none' }" bg-color="white" color="accent" dense="dense" lazy-rules="lazy-rules" maxlength="300" outlined="outlined" placeholder="$t('dao.settings-design.max140Characters')" ref="nickname" rounded="rounded" :rows="$q.screen.gt.sm ? 3 : 6" type="textarea" v-model="form[banner.paragraph]")
               q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") {{ $t('dao.settings-design.onlyDaoAdmins') }}
 
 </template>

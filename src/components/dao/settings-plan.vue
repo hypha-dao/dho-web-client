@@ -76,7 +76,7 @@ export default {
     ...mapGetters('dao', ['selectedDao', 'selectedDaoPlan', 'isFreePlan']),
 
     canActivate () { return this.form.plan !== null && this.form.period !== null },
-    planChipName () { return this.selectedDaoPlan.hasExpired ? 'Suspended' : (this.selectedDaoPlan.isExpiring ? 'Expired' : 'Plan active') },
+    planChipName () { return this.selectedDaoPlan.hasExpired ? this.$t('dao.settings-plan.suspended') : (this.selectedDaoPlan.isExpiring ? this.$t('dao.settings-plan.expired') : this.$t('dao.settings-plan.planActive')) },
     planChipColor () { return this.selectedDaoPlan.hasExpired ? 'negative' : (this.selectedDaoPlan.isExpiring ? 'negative' : 'secondary') },
     hasEnoughTokens () { return Number(this.balances?.[0]?.amount) >= this.tokenAmount },
     PLANS () {
@@ -286,7 +286,7 @@ export default {
                 q-btn.rounded-border.text-bold.q-mr-xs.full-width.full-height(:disable="!canActivate || !hasEnoughTokens" @click="goToHyphaTokenSales" color="primary" :label="$t('dao.settings-plan.buyHyphaToken')" no-caps="no-caps" rounded="rounded" unelevated="unelevated")
                 q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!canActivate") {{ $t('dao.settings-plan.pleaseSelectPlan') }}
               .col-12.col-sm-12.col-md-12.col-lg-6
-                q-btn.rounded-border.text-bold.q-ml-xs.full-width.full-height(:disable="!canActivate || !hasEnoughTokens" :label="(selectedPlan.name === selectedDaoPlan.name) ? 'Renew plan ': 'Activate plan'" @click="openActivateModal" color="secondary" no-caps="no-caps" rounded="rounded" unelevated="unelevated")
+                q-btn.rounded-border.text-bold.q-ml-xs.full-width.full-height(:disable="!canActivate || !hasEnoughTokens" :label="(selectedPlan.name === selectedDaoPlan.name) ? $t('dao.settings-plan.renewPlan') : $t('dao.settings-plan.activatePlan')" @click="openActivateModal" color="secondary" no-caps="no-caps" rounded="rounded" unelevated="unelevated")
   widget.full-width.q-mt-md(:title="$t('dao.settings-plan.billingHistory')")
     .calendar-container.q-mt-lg.row.q-gutter-sm
       template(v-for="(bill, index) in BILLING_HISTORY")

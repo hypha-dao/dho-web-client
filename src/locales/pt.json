@@ -131,9 +131,14 @@
       "positive": "Positivo",
       "negative": "Negativo",
       "warning": "Aviso",
-      "removeNotification": "Remover notificação -"
+      "removeNotification": "Remover notificação -",
+      "alerts": "Alertas",
+      "enterYourMessageHere": "Digite sua mensagem aqui"
     },
     "settings-community": {
+      "community": "Comunidade",
+      "classic": "Clássico",
+      "upvote": "voto positivo",
       "doYouWantToExpand": "Você deseja expandir sua criação de sentido DAO para os membros da comunidade DAO (detentores de token)? ",
       "activateCommunityVoting": "Ativar votação da comunidade",
       "onlyDaoAdminsCanChange": "Somente administradores DAO podem alterar as configurações",
@@ -178,7 +183,17 @@
       "extendedLogo": "logotipo estendido",
       "pattern": "Padrão",
       "color": "Cor",
-      "opacity": "Opacidade"
+      "opacity": "Opacidade",
+      "uploadAnImage": "Carregue uma imagem (máx. 3 MB)",
+      "title": "Título",
+      "shortParagraph": "parágrafo curto",
+      "dashboard": "Painel",
+      "proposals": "Propostas",
+      "members": "Membros",
+      "organization": "Organização",
+      "explore": "Explorar",
+      "max50Characters": "Máximo de 50 caracteres",
+      "max140Characters": "Máximo de 140 caracteres"
     },
     "multisig-modal": {
       "multisig": "Multisig",
@@ -250,7 +265,12 @@
       "notEnoughTokens": "Tokens insuficientes",
       "buyHyphaToken": "Comprar Token Hypha",
       "pleaseSelectPlan": "Selecione primeiro o plano e o período.",
-      "billingHistory": "Histórico de cobrança"
+      "billingHistory": "Histórico de cobrança",
+      "suspended": "suspenso",
+      "expired": "Expirado",
+      "planActive": "Plano ativo",
+      "renewPlan": "renovar plano ",
+      "activatePlan": "ativar plano"
     }
   },
   "dashboard": {
