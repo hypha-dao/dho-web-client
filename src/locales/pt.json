@@ -664,7 +664,10 @@
       "voice": "{1} VOZ",
       "name": "Nome",
       "timeZone": "Fuso horário",
-      "text": "texto"
+      "text": "texto",
+      "applicant": "CANDIDATO",
+      "coreTeam": "EQUIPE PRINCIPAL",
+      "community": "COMUNIDADE"
     },
     "proposal-item": {
       "viewProposal": "Ver proposta",
@@ -1009,7 +1012,15 @@
         "copyInviteLink": "Copiar link de convite",
         "sendALink": "Envie um link para seus amigos para convidá-los a participar deste DAO",
         "daoApplicants": "Candidatos DAO",
-        "daoApplicants1": "Candidatos DAO"
+        "daoApplicants1": "Candidatos DAO",
+        "filterByAccountName": "Filtrar por nome da conta",
+        "sortBy": "Ordenar por",
+        "joinDateDescending": "Data de entrada descendente",
+        "joinDateAscending": "Data de entrada ascendente",
+        "alphabetically": "Em ordem alfabética (A-Z)",
+        "all": "Todos",
+        "coreTeam": "Equipe principal",
+        "communityMembers": "Membros da comunidade"
       },
       "organization": {
         "documentation": "Documentação",
@@ -1400,5 +1411,37 @@
     "policy": "Política",
     "genericcontributions": "Contribuições Genéricas",
     "suspension": "Suspensão"
+  },
+  "routes": {
+    "exploreDAOs": "Explorar DAOs",
+    "findOutMoreAboutHowToSetUp": "Saiba mais sobre como configurar seu próprio DAO e Hypha aqui: https://hypha.earth",
+    "404NotFound": "404 não encontrado",
+    "finflow": "Finflow",
+    "dashboard": "Painel",
+    "explore": "Explorar",
+    "createANewDao": "Criar um novo DHO",
+    "login": "Conecte-se",
+    "members": "Membros",
+    "proposals": "Propostas",
+    "createProposal": "Criar proposta",
+    "proposalHistory": "Histórico da proposta",
+    "proposalDetails": "Detalhes da proposta",
+    "organization": "Organização",
+    "organizationAssets": "Ativos da organização",
+    "organizationBadges": "Emblemas de organização",
+    "organizationRoles": "Funções da organização",
+    "profile": "Perfil",
+    "profileCreation": "Criação de perfil",
+    "wallet": "Carteira",
+    "circles": "círculos",
+    "searchResults": "Procurar Resultados",
+    "search": "Procurar",
+    "support": "Apoiar",
+    "treasury": "Tesouraria",
+    "multiSig": "assinatura múltipla",
+    "configurationSettings": "Definições de configuração",
+    "ecosystemDashboard": "Painel do Ecossistema",
+    "checkout": "Confira",
+    "upvoteElection": "Votar a favor da eleição"
   }
 }

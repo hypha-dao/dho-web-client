@@ -664,7 +664,10 @@
       "voice": "{1} VOICE",
       "name": "Name",
       "timeZone": "Time zone",
-      "text": "text"
+      "text": "text",
+      "applicant": "APPLICANT",
+      "coreTeam": "CORE TEAM",
+      "community": "COMMUNITY"
     },
     "proposal-item": {
       "viewProposal": "View proposal",
@@ -1009,7 +1012,15 @@
         "copyInviteLink": "Copy invite link",
         "sendALink": "Send a link to your friends to invite them to join this DAO",
         "daoApplicants": "DAO Applicants",
-        "daoApplicants1": "DAO Applicants"
+        "daoApplicants1": "DAO Applicants",
+        "filterByAccountName": "Filter by account name",
+        "sortBy": "Sort by",
+        "joinDateDescending": "Join date descending",
+        "joinDateAscending": "Join date ascending",
+        "alphabetically": "Alphabetically (A-Z)",
+        "all": "All",
+        "coreTeam": "Core Team",
+        "communityMembers": "Community members"
       },
       "organization": {
         "documentation": "Documentation",
@@ -1400,5 +1411,37 @@
     "policy": "Policy",
     "genericcontributions": "Generic Contributions",
     "suspension": "Suspension"
+  },
+  "routes": {
+    "exploreDAOs": "Explore DAOs",
+    "findOutMoreAboutHowToSetUp": "Find out more about how to set up your own DAO and Hypha here: https://hypha.earth",
+    "404NotFound": "404 Not Found",
+    "finflow": "Finflow",
+    "dashboard": "Dashboard",
+    "explore": "Explore",
+    "createANewDao": "Create a new DHO",
+    "login": "Login",
+    "members": "Members",
+    "proposals": "Proposals",
+    "createProposal": "Create Proposal",
+    "proposalHistory": "Proposal history",
+    "proposalDetails": "Proposal Details",
+    "organization": "Organization",
+    "organizationAssets": "Organization Assets",
+    "organizationBadges": "Organization Badges",
+    "organizationRoles": "Organization Roles",
+    "profile": "Profile",
+    "profileCreation": "Profile creation",
+    "wallet": "Wallet",
+    "circles": "Circles",
+    "searchResults": "Search results",
+    "search": "Search",
+    "support": "Support",
+    "treasury": "Treasury",
+    "multiSig": "Multi sig",
+    "configurationSettings": "Configuration settings",
+    "ecosystemDashboard": "Ecosystem Dashboard",
+    "checkout": "Checkout",
+    "upvoteElection": "Upvote Election"
   }
 }

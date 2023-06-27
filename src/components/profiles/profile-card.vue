@@ -265,8 +265,8 @@ export default {
 <template lang="pug">
 widget-editable.q-pa-md(:class="{ 'full-width': list, 'cursor-pointer': !editButton && clickable }" :editable="editButton" :savable="savable" @click.native="(!editButton && clickable) ? onClick() : null" @onCancel="cancel" @onEdit="onEdit" @onFail="resetForm" @onSave="save" no-padding="no-padding")
   .flex.justify-center.q-mb-sm(v-if="isCommunityMember || isCoreMember")
-    chips(:tags="[{ outline: false, color: 'secondary', label: 'COMMUNITY' }]" v-if="isCommunityMember" chipSize="sm")
-    chips(:tags="[{ outline: false, color: 'primary', label: 'CORE TEAM' }]" v-if="isCoreMember" chipSize="sm")
+    chips(:tags="[{ outline: false, color: 'secondary', label: $t('profiles.profile-card.community') }]" v-if="isCommunityMember" chipSize="sm")
+    chips(:tags="[{ outline: false, color: 'primary', label: $t('profiles.profile-card.coreTeam') }]" v-if="isCoreMember" chipSize="sm")
   .row.items-arround.flex(v-if="!editable" :style="{ 'height': card ? '324px' : '80px' }")
     .col-auto(:class="{ 'col-12': card, 'q-pr-xl': list}")
       .column.relative(:class="{ 'items-center': card }")
@@ -280,7 +280,7 @@ widget-editable.q-pa-md(:class="{ 'full-width': list, 'cursor-pointer': !editBut
           .absolute.flex.items-center.justify-center.font-lato.text-bold(v-if="badges.length > 1" :style="{'width': '28px', 'height': '28px', 'border-radius': '50%', 'background': '#242F5D', 'color': 'white', 'font-size': '12px', 'border': '1px solid white', 'right': '-20px', 'top': '5px'}") {{ `+ ${badges.length - 1}` }}
     .col.q-mb-xxs(:class="{ 'col-12': card, 'text-center': card, 'q-mt-lg': card  }")
       .column.flex.justify-center.full-height(:class="{ 'items-center': card }")
-        chips(:tags="[{ outline: false, color: 'secondary', label: 'APPLICANT' }]" v-if="isApplicant" chipSize="sm")
+        chips(:tags="[{ outline: false, color: 'secondary', label: $t('profiles.profile-card.applicant') }]" v-if="isApplicant" chipSize="sm")
         .h-h3 {{ title }}
 
           q-tooltip {{title}}
