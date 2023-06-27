@@ -1127,7 +1127,12 @@
     "profiles": {
       "wallet": {
         "notitle": "no-title",
-        "notitle1": "no-title"
+        "notitle1": "no-title",
+        "activity": "activity",
+        "date": "date",
+        "status": "status",
+        "amount": "amount",
+        "claimed": "claimed"
       },
       "profile": {
         "inlinelabel": "inline-label",

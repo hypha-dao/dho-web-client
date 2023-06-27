@@ -1127,7 +1127,12 @@
     "profiles": {
       "wallet": {
         "notitle": "sem título",
-        "notitle1": "sem título"
+        "notitle1": "sem título",
+        "activity": "atividade",
+        "date": "data",
+        "status": "status",
+        "amount": "quantia",
+        "claimed": "reivindicado"
       },
       "profile": {
         "inlinelabel": "rótulo embutido",
