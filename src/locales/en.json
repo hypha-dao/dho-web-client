@@ -546,10 +546,14 @@
     "asset-card": {
       "revoke": "Revoke",
       "seeDetails": "See details",
-      "na": "n/a"
+      "na": "n/a",
+      "apply": "Apply",
+      "applied": "Applied"
     },
     "create-badge-widget": {
-      "newBadgeProposal": "New Badge proposal"
+      "newBadgeProposal": "New Badge proposal",
+      "createYourBadge": "Create your badge",
+      "doYouNeedSpecific": "Do you need specific badge for your DAO core members or for the Community of Token Holders? Create a Badge proposal!"
     }
   },
   "organization": {
@@ -1046,7 +1050,14 @@
       },
       "organizationalassets": {
         "noBadges": "No Badges",
-        "noBadges1": "No Badges"
+        "noBadges1": "No Badges",
+        "yourOrganizationDoesnt": "Your organization doesn't have any badges yet. You can create one by clicking the button below.",
+        "searchBadges": "Search badges",
+        "filterByName": "Filter by name",
+        "createANewBadge": "Create a new badge",
+        "sortByCreateDateAscending": "Sort by create date ascending",
+        "sortByCreateDateDescending": "Sort by create date descending",
+        "sortAlpabetically": "Sort Alphabetically (A-Z)"
       },
       "treasury": {
         "transactionReview": "Transaction Review",

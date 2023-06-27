@@ -99,7 +99,7 @@ export default {
       }
     },
     buttonText () {
-      return this.stylesForOwner ? 'Applied' : 'Apply'
+      return this.stylesForOwner ? this.$t('organization-asset.asset-card.applied') : this.$t('organization-asset.asset-card.apply')
     }
   },
 

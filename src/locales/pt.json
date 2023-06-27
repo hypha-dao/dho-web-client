@@ -546,10 +546,14 @@
     "asset-card": {
       "revoke": "Revogar",
       "seeDetails": "Veja detalhes",
-      "na": "n / D"
+      "na": "n / D",
+      "apply": "Aplicar",
+      "applied": "Aplicado"
     },
     "create-badge-widget": {
-      "newBadgeProposal": "Nova proposta de selo"
+      "newBadgeProposal": "Nova proposta de selo",
+      "createYourBadge": "Crie seu crachá",
+      "doYouNeedSpecific": "Você precisa de um crachá específico para os membros principais do DAO ou para a comunidade de detentores de token? "
     }
   },
   "organization": {
@@ -1046,7 +1050,14 @@
       },
       "organizationalassets": {
         "noBadges": "Sem emblemas",
-        "noBadges1": "Sem emblemas"
+        "noBadges1": "Sem emblemas",
+        "yourOrganizationDoesnt": "Sua organização ainda não tem selos. ",
+        "searchBadges": "Procurar insígnias",
+        "filterByName": "Filtrar por nome",
+        "createANewBadge": "Criar um novo selo",
+        "sortByCreateDateAscending": "Classificar por data de criação ascendente",
+        "sortByCreateDateDescending": "Classificar por data de criação descendente",
+        "sortAlpabetically": "Classificar alfabeticamente (A-Z)"
       },
       "treasury": {
         "transactionReview": "Revisão da transação",
