@@ -1,7 +1,10 @@
 {
   "assignments": {
     "assignment-claim-extend": {
-      "claimAll": "Claim All\n        "
+      "claimAll": "Claim All\n        ",
+      "extendAfter": "Extend after {date}",
+      "extendBefore": "Extend before {date}",
+      "youMustReApply": "You must re-apply"
     },
     "assignment-suspend": {
       "suspend": "SUSPEND",
@@ -698,13 +701,16 @@
       "memo": "memo",
       "eos1": "EOS",
       "address3": "address",
-      "memo1": "memo"
+      "memo1": "memo",
+      "walletAdresses": "Wallet Adresses",
+      "onlyVisibleToYou": "only visible to you"
     },
     "wallet-base": {
       "485": "500.00",
       "4842": "1000.00",
       "wallet": "Wallet",
       "redeemHusd": "Redeem HUSD",
+      "makeAnotherRedemption": "Make another Redemption",
       "redemptionPending": "Redemption pending",
       "requestor": "Requestor",
       "amount": "Amount",
@@ -722,7 +728,8 @@
       "noWalletFound": "No wallet found",
       "pendingRedemptions": "Pending redemptions",
       "details": "Details",
-      "queueHusdRedemption": "Queue HUSD Redemption for Treasury Payout to Configured Wallet"
+      "queueHusdRedemption": "Queue HUSD Redemption for Treasury Payout to Configured Wallet",
+      "redeem": "Redeem"
     },
     "wallet-hypha": {
       "availableBalance": "Available Balance",
@@ -1134,7 +1141,27 @@
         "contributions": "Contributions",
         "quests": "Quests",
         "biography": "Biography",
-        "recentVotes": "Recent votes"
+        "recentVotes": "Recent votes",
+        "noBadgesYesApplyFor": "No Badges yet - apply for a Badge here",
+        "noBadgesToSeeHere": "No badges to see here.",
+        "apply": "Apply",
+        "looksLikeYouDontHaveAnyActiveAssignments": "Looks like you don't have any active assignments. You can browse all Role Archetypes.",
+        "noActiveOrArchivedAssignments": "No active or archived assignments to see here.",
+        "createAssignment": "Create Assignment",
+        "looksLikeYouDontHaveAnyContributions": "Looks like you don't have any contributions yet. You can create a new contribution in the Proposal Creation Wizard.",
+        "noContributionsToSeeHere": "No contributions to see here.",
+        "createContribution": "Create Contribution",
+        "looksLikeYouDontHaveAnyQuests": "Looks like you don't have any quests yet. You can create a new quest in the Proposal Creation Wizard.",
+        "noQuestsToSeeHere": "No quests to see here.",
+        "createQuest": "Create Quest",
+        "writeSomethingAboutYourself": "Write something about yourself and let other users know about your motivation to join.",
+        "looksLikeDidntWrite": "Looks like {username} didn't write anything about their motivation to join this DAO yet.",
+        "writeBiography": "Write biography",
+        "retrievingBio": "Retrieving bio...",
+        "youHaventCast": "You haven't cast any votes yet. Go and take a look at all proposals",
+        "noVotesCastedYet": "No votes casted yet.",
+        "vote": "Vote"
+
       },
       "profile-creation": {
         "profilePicture": "Profile picure",

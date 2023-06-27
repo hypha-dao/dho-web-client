@@ -319,8 +319,8 @@ widget.wallet-base(:more="more" :no-title="noTitle" morePosition="top" :title="$
         .col.q-mr-sm
           q-btn.h-btn1.full-width(color="primary" outline="outline" no-caps="no-caps" unelevated="unelevated" rounded="rounded" :label="'Close'" :loading="submitting" @click="showPayoutModal = false")
         .col
-          q-btn.h-btn1.full-width(v-if="successRedeem" :disable="!form.amount" color="primary" no-caps="no-caps" unelevated="unelevated" rounded="rounded" :label="'Make another Redemption'" :loading="submitting" @click="successRedeem = false, resetForm()")
-          q-btn.h-btn1.full-width(v-else :disable="!form.amount || form.amount <= 0 || form.amount > pegToken.amount" color="primary" no-caps="no-caps" unelevated="unelevated" rounded="rounded" :label="'Redeem HUSD'" :loading="submitting" @click="onRedeemHusd()")
+          q-btn.h-btn1.full-width(v-if="successRedeem" :disable="!form.amount" color="primary" no-caps="no-caps" unelevated="unelevated" rounded="rounded" :label="$t('profiles.wallet-base.makeAnotherRedemption')" :loading="submitting" @click="successRedeem = false, resetForm()")
+          q-btn.h-btn1.full-width(v-else :disable="!form.amount || form.amount <= 0 || form.amount > pegToken.amount" color="primary" no-caps="no-caps" unelevated="unelevated" rounded="rounded" :label="$t('profiles.wallet-base.redeemHusd')" :loading="submitting" @click="onRedeemHusd()")
   .row.justify-center.q-mb-md(v-if="!wallet || wallet.length === 0")
     loading-spinner(v-if="loading" color="primary" size="40px")
     .h-b2(v-else) {{ $t('profiles.wallet-base.noWalletFound') }}
@@ -359,7 +359,7 @@ widget.wallet-base(:more="more" :no-title="noTitle" morePosition="top" :title="$
         .h-b2 {{ dateToStringShort(redemption.date) }}
         .h-b2.text-primary.text-bold.text-underline(@click="showDetailsModal = true, currentDetailsObject = redemption") {{ $t('profiles.wallet-base.details') }}
   .row.q-pt-xxs.q-mt-md(v-if="canRedeem && isOwner")
-    q-btn.h-btn1.full-width(color="primary" no-caps="no-caps" unelevated="unelevated" rounded="rounded" :label="'Redeem '" @click="showPayoutModal = true")
+    q-btn.h-btn1.full-width(color="primary" no-caps="no-caps" unelevated="unelevated" rounded="rounded" :label="$t('profiles.wallet-base.redeem')" @click="showPayoutModal = true")
       q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle") {{ $t('profiles.wallet-base.queueHusdRedemption') }}
 
 </template>

@@ -59,17 +59,15 @@ export default {
     extendable () {
       return this.extend && this.extend.start < this.now && this.extend.end > this.now && this.state !== 'withdrawed' && this.state !== 'suspended'
     },
-
     extendLabel () {
       if (this.extend.start && this.extend.start > this.now) {
-        return `Extend after ${dateToStringShort(this.extend.start, false)}`
+        return this.$t('assignments.assignment-claim-extend.extendAfter', { date: dateToStringShort(this.extend.start, false) })
       }
 
       if (this.extend.end && this.extend.end > this.now) {
-        return `Extend before ${dateToStringShort(this.extend.end, false)}`
+        return this.$t('assignments.assignment-claim-extend.extendBefore', { date: dateToStringShort(this.extend.end, false) })
       }
-
-      return 'You must re-apply'
+      return this.$t('assignments.assignment-claim-extend.youMustReApply')
     }
   }
 }

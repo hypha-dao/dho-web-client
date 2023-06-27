@@ -1,7 +1,10 @@
 {
   "assignments": {
     "assignment-claim-extend": {
-      "claimAll": "Reivindicar tudo\n        "
+      "claimAll": "Reivindicar tudo\n        ",
+      "extendAfter": "Estender após {data}",
+      "extendBefore": "Estender antes de {data}",
+      "youMustReApply": "Você deve se inscrever novamente"
     },
     "assignment-suspend": {
       "suspend": "SUSPENDER",
@@ -698,13 +701,16 @@
       "memo": "memorando",
       "eos1": "EOS",
       "address3": "endereço",
-      "memo1": "memorando"
+      "memo1": "memorando",
+      "walletAdresses": "Endereços de Carteira",
+      "onlyVisibleToYou": "visível apenas para você"
     },
     "wallet-base": {
       "485": "500,00",
       "4842": "1000,00",
       "wallet": "Carteira",
       "redeemHusd": "Resgatar HUSD",
+      "makeAnotherRedemption": "Faça outra redenção",
       "redemptionPending": "Resgate pendente",
       "requestor": "Solicitante",
       "amount": "Quantia",
@@ -722,7 +728,8 @@
       "noWalletFound": "Nenhuma carteira encontrada",
       "pendingRedemptions": "Resgates pendentes",
       "details": "Detalhes",
-      "queueHusdRedemption": "Resgate de HUSD em fila para pagamento do Tesouro para carteira configurada"
+      "queueHusdRedemption": "Resgate de HUSD em fila para pagamento do Tesouro para carteira configurada",
+      "redeem": "Resgatar"
     },
     "wallet-hypha": {
       "availableBalance": "Saldo disponível",
@@ -1134,7 +1141,26 @@
         "contributions": "Contribuições",
         "quests": "Missões",
         "biography": "Biografia",
-        "recentVotes": "votos recentes"
+        "recentVotes": "votos recentes",
+        "noBadgesYesApplyFor": "Ainda não há crachás - solicite um crachá aqui",
+        "noBadgesToSeeHere": "Não há crachás para ver aqui.",
+        "apply": "Aplicar",
+        "looksLikeYouDontHaveAnyActiveAssignments": "Parece que você não tem nenhuma atribuição ativa. ",
+        "noActiveOrArchivedAssignments": "Nenhuma tarefa ativa ou arquivada para ver aqui.",
+        "createAssignment": "Criar atribuição",
+        "looksLikeYouDontHaveAnyContributions": "Parece que você ainda não tem nenhuma contribuição. ",
+        "noContributionsToSeeHere": "Nenhuma contribuição para ver aqui.",
+        "createContribution": "Criar contribuição",
+        "looksLikeYouDontHaveAnyQuests": "Parece que você ainda não tem nenhuma missão. ",
+        "noQuestsToSeeHere": "Nenhuma missão para ver aqui.",
+        "createQuest": "Criar missão",
+        "writeSomethingAboutYourself": "Escreva algo sobre você e deixe outros usuários saberem sobre sua motivação para participar.",
+        "looksLikeDidntWrite": "Parece que {username} ainda não escreveu nada sobre sua motivação para ingressar neste DAO.",
+        "writeBiography": "Escrever biografia",
+        "retrievingBio": "Recuperando bio...",
+        "youHaventCast": "Você ainda não votou. ",
+        "noVotesCastedYet": "Nenhum voto lançado ainda.",
+        "vote": "Voto"
       },
       "profile-creation": {
         "profilePicture": "foto de perfil",
