@@ -121,6 +121,14 @@ query proposalsActiveVote($docId: String!, $user: String, $first: Int!, $offset:
           details_title_s
         }
 
+        votetally {
+          ... on VoteTally {
+            pass_votePower_a
+            fail_votePower_a
+            abstain_votePower_a
+          }
+        }
+        
         cmntsect {
           docId
           comment {
