@@ -492,7 +492,7 @@ q-page.dao-launcher-page
           .row.full-width.justify-between.q-mt-xl
             .col-8(:class="{ 'full-width': !$q.screen.gt.md, 'q-pr-md': $q.screen.gt.md }")
               label.h-label {{ $t('pages.onboarding.name') }}
-                q-input.q-mt-xs.rounded-border(:debounce="200" :rules="[rules.required, rules.min(1), rules.max(20)]" bg-color="white" dense="dense" lazy-rules="ondemand" maxlength="20" outlined="outlined" :placeholder="$('pages.onboarding.max20CharactersExBitcoin')" ref="utilityName" rounded="rounded" v-model="form.utilityName")
+                q-input.q-mt-xs.rounded-border(:debounce="200" :rules="[rules.required, rules.min(1), rules.max(20)]" bg-color="white" dense="dense" lazy-rules="ondemand" maxlength="20" outlined="outlined" :placeholder="$t('pages.onboarding.max20CharactersExBitcoin')" ref="utilityName" rounded="rounded" v-model="form.utilityName")
             .col-4(:class="{ 'full-width': !$q.screen.gt.md, '': $q.screen.gt.md }")
               label.h-label {{ $t('pages.onboarding.symbol') }}
               q-input.q-mt-xs.rounded-border(:debounce="200" :rules="[rules.required, rules.isTokenAvailable]" bg-color="white" dense="dense" lazy-rules="ondemand" mask="AAAAAAAA" maxlength="7" outlined="outlined" :placeholder="$t('pages.onboarding.max7CharactersExBTC')" ref="utilitySymbol" rounded="rounded" v-model="form.utilitySymbol")
@@ -504,7 +504,7 @@ q-page.dao-launcher-page
           .row.full-width.justify-between.q-mt-xl
             .col-8(:class="{ 'full-width': !$q.screen.gt.md, 'q-pr-md': $q.screen.gt.md }")
               label.h-label {{ $t('pages.onboarding.name') }}
-                q-input.q-mt-xs.rounded-border(:debounce="200" :rules="[rules.required, rules.min(1), rules.max(20)]" bg-color="white" dense="dense" lazy-rules="ondemand" maxlength="20" outlined="outlined" :placeholder="$('pages.onboarding.max20CharactersExBitcoin')" ref="utilityName" rounded="rounded" v-model="form.treasuryName")
+                q-input.q-mt-xs.rounded-border(:debounce="200" :rules="[rules.required, rules.min(1), rules.max(20)]" bg-color="white" dense="dense" lazy-rules="ondemand" maxlength="20" outlined="outlined" :placeholder="$t('pages.onboarding.max20CharactersExBitcoin')" ref="utilityName" rounded="rounded" v-model="form.treasuryName")
             .col-4(:class="{ 'full-width': !$q.screen.gt.md, '': $q.screen.gt.md }")
               label.h-label {{ $t('pages.onboarding.symbol') }}
               q-input.q-mt-xs.rounded-border(:debounce="200" :rules="[rules.required, rules.isTokenAvailable]" bg-color="white" dense="dense" lazy-rules="ondemand" mask="AAAAAAAA" maxlength="7" outlined="outlined" :placeholder="$t('pages.onboarding.max7CharactersExBTC')" ref="treasurySymbol" rounded="rounded" v-model="form.treasurySymbol")

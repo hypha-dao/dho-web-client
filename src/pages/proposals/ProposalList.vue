@@ -97,7 +97,7 @@ export default {
         return {
           active: data.queryDao[0].proposalAggregate.count,
           staging: data.queryDao[0].stagingpropAggregate.count,
-          archived: data.queryDao[0].votableAggregate.count
+          archived: data.queryDao[0].passedpropsAggregate.count + data.queryDao[0].failedpropsAggregate.count
         }
       },
       variables () {

@@ -10,5 +10,11 @@ query proposalsCount ($docId: String!) {
     stagingpropAggregate {
       count
     }
+    passedpropsAggregate {
+      count
+    }
+    failedpropsAggregate {
+      count
+    }
   }
 }
