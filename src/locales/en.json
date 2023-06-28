@@ -1628,5 +1628,45 @@
     "selectTheCircleParentOrLeaveItBlank": "Select the circle parent or leave it blank",
     "policyType": "Policy Type",
     "selectThePolicyType": "Select the policy type. If it's root policy leave it blank"
+  },
+  "search": {
+    "results": {
+      "results": "{value} Results",
+      "noResultsFound": "No results found",
+      "resultsTypes": "Results types",
+      "all": "All",
+      "members": "Members",
+      "genericContribution": "Generic Contribution",
+      "roleAssignments": "Role Assignments",
+      "roleArchetypes": "Role Archetypes",
+      "badgeTypes": "Badge Types",
+      "badgeAssignments": "Badge Assignments",
+      "suspensions": "Suspensions",
+      "filterBy": "Filter by",
+      "voting": "Voting",
+      "active": "Active",
+      "archived": "Archived",
+      "suspended": "Suspended",
+      "sortBy": "Sort by",
+      "oldestFirst": "Oldest first",
+      "newestFirst": "Newest first",
+      "alphabetically": "Alphabetically (A-Z)",
+      "result": {
+        "active": "Active",
+        "pendingToClose": "Pending to close",
+        "voting": "Voting",
+        "suspended": "Suspended",
+        "archived": "Archived",
+        "withdrawn": "Withdrawn",
+        "applicant": "Applicant",
+        "genericContribution": "Generic Contribution",
+        "extension": "Extension",
+        "roleAssignment": "Role Assignment",
+        "badgeAssignment": "Badge Assignment",
+        "suspension": "Suspension",
+        "roleArchetype": " Role Archetype",
+        "badge": "Badge"
+      }
+    }
   }
 }
