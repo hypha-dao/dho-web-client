@@ -1,0 +1,1671 @@
+{
+  "assignments": {
+    "assignment-claim-extend": {
+      "claimAll": "Reclamar todo\n        ",
+      "extendAfter": "Extender después de {fecha}",
+      "extendBefore": "Ampliar antes del {fecha}",
+      "youMustReApply": "Debe volver a aplicar"
+    },
+    "assignment-suspend": {
+      "suspend": "SUSPENDER",
+      "thisActionWill": "Esta acción propondrá una suspensión de la asignación de {1}",
+      "pleaseProvideAReason": "Proporcione una razón.",
+      "reason": "Razón",
+      "suspend1": "Suspender\n          ",
+      "suspendingSAssignment": "Suspendiendo la tarea de {1}",
+      "areYouSure": "¿Está seguro de que desea proponer una suspensión de esta asignación?",
+      "reason1": "Razón:",
+      "cancel": "Cancelar",
+      "suspend2": "Suspender"
+    },
+    "assignment-withdraw": {
+      "withdraw": "RETIRAR",
+      "ifYouWithdraw": "\n          Si retira su asignación, se eliminará de la DAO\n          \n        ",
+      "warningThisAction": "ADVERTENCIA: Esta acción es irreversible.",
+      "notes": "notas",
+      "withdraw1": "Retirar\n          ",
+      "withdrawingFromYourAssignment": "Retirarse de su asignación",
+      "areYouSure": "¿Está seguro de que desea retirarse de esta asignación?",
+      "notes1": "Notas:",
+      "warningThisAction1": "ADVERTENCIA: Esta acción es irreversible.",
+      "cancel": "Cancelar",
+      "withdraw2": "Retirar"
+    },
+    "dynamic-commit": {
+      "adjustmentsToYour": "Los ajustes a su asignación no requieren un voto.",
+      "commitment": "COMPROMISO",
+      "chooseBetween": "Elija entre {1}% y {2}%",
+      "multipleAdjustmentsTo": "En el cálculo se incluirán múltiples ajustes a su compromiso.",
+      "deferral": "APLAZAMIENTO",
+      "chooseBetween1": "Elija entre {1}% y {2}%",
+      "thisDeferralRate": "Esta tasa de diferimiento solo se aplica en el momento en que realiza un reclamo.",
+      "confirm": "Confirmar"
+    },
+    "salary": {
+      "compensation": "COMPENSACIÓN",
+      "showTokensFor": "Mostrar tokens para un ciclo lunar completo (aprox. 1 mes)",
+      "commitmentAndDeferral": "COMPROMISO Y APLAZAMIENTO"
+    }
+  },
+  "circles": {
+    "circle-card": {
+      "productCircle": "Círculo de productos",
+      "openProposals": "2 propuestas abiertas",
+      "activeAssignments": "5 asignaciones activas",
+      "more": "2 más",
+      "thisIsThe": "Este es el círculo más genial. ",
+      "lastMonth": "El mes pasado",
+      "husd": "20.000 HUSD",
+      "hypha": "1.345 HIPHA",
+      "hvoice": "45.330 HVOZ",
+      "more1": "Más"
+    }
+  },
+  "common": {
+    "button-card": {
+      "until": "Hasta"
+    },
+    "confirm-action-modal": {
+      "no": "No",
+      "yes": "Sí"
+    },
+    "edit-controls": {
+      "edit": "Editar",
+      "cancel": "Cancelar",
+      "save": "Ahorrar"
+    },
+    "empty-widget-label": {
+      "yourOrganizationDoesnt": "Su organización aún no tiene ningún {1}.",
+      "click": "Hacer clic",
+      "here": "aquí",
+      "toSetThemUp": "para configurarlos."
+    },
+    "explore-by-widget": {
+      "daos": "DAO",
+      "ecosystems": "ecosistemas",
+      "exploreBy": "Explorar por:"
+    },
+    "upvote-delegate-widget": {
+      "upvoteDelegates": "Delegados votados a favor",
+      "electionValidityExpiresIn": "La validez de la elección expira en:",
+      "days": "días",
+      "day": "día",
+      "hours": "horas",
+      "hour": "hora",
+      "mins": "minutos",
+      "min": "min",
+      "headDelegate": "JEFE DELEGADO"
+    },
+    "widget-editable": {
+      "more": "Más"
+    },
+    "widget-more-btn": {
+      "seeMore": "Ver más"
+    },
+    "widget": {
+      "seeAll": "Ver todo",
+      "seeAll1": "Ver todo"
+    }
+  },
+  "contributions": {
+    "payout": {
+      "payout": "Pagar"
+    },
+    "token-multipliers": {
+      "deferredSeeds": "Semillas diferidas",
+      "husd": "HUSD",
+      "hvoice": "HVOICE",
+      "hypha": "HIPHA"
+    }
+  },
+  "dao": {
+    "settings-communication": {
+      "announcements": "Anuncios",
+      "postAnAnnouncement": "Publique un anuncio en todas las secciones para informar a los miembros sobre una actualización importante.",
+      "title": "Título",
+      "message": "Mensaje",
+      "removeAnnouncement": "Eliminar anuncio -",
+      "addMore": "Añadir más",
+      "onlyForHypha": "Solo para Hypha: publique una alerta en todos los DAO para informar a los usuarios sobre una actualización importante.",
+      "alert": "Alerta",
+      "positive": "Positivo",
+      "negative": "Negativo",
+      "warning": "Advertencia",
+      "removeNotification": "Quitar notificación -",
+      "alerts": "Alertas",
+      "enterYourMessageHere": "Introduzca su mensaje aquí"
+    },
+    "settings-community": {
+      "community": "Comunidad",
+      "classic": "Clásico",
+      "upvote": "votar a favor",
+      "doYouWantToExpand": "¿Quiere expandir su sentido de DAO a los miembros de su comunidad de DAO (poseedores de fichas)? ",
+      "activateCommunityVoting": "Activar la votación comunitaria",
+      "onlyDaoAdminsCanChange": "Solo los administradores de DAO pueden cambiar la configuración",
+      "communityVotingMethod": "Método de votación comunitaria",
+      "theClassicMethodAllowsAll": "El método clásico permite que todos los miembros de la comunidad DAO voten sobre las propuestas de la comunidad utilizando su HVOICE. ",
+      "upvoteElectionDateAndTime": "Upvote elección Fecha y hora",
+      "upvoteElectionStartingDate": "Fecha de inicio de las elecciones de votos a favor",
+      "upvoteElectionStartingTime": "Hora de inicio de las elecciones de Upvote",
+      "upvoteElectionRounds": "Rondas electorales de votos a favor",
+      "round": "Redondo",
+      "peoplePassing": "- gente que pasa",
+      "duration": "- duración",
+      "removeRound": "Quitar Ronda -",
+      "addRound": "Agregar ronda",
+      "chiefDelegateRoundHowManyChiefDelegates": "Ronda de Jefes de Delegados > ¿Cuántos Jefes de Delegados?",
+      "chiefDelegatesRoundDuration": "Ronda de Jefes de Delegados - duración",
+      "headDelegateRoundDoYouWant": "Ronda de delegados principales > ¿Quieres 1 delegado principal?",
+      "headDelegatesRoundDuration": "Ronda de Jefes de Delegados - duración",
+      "upvoteMethodExpirationTime": "Tiempo de caducidad del método Upvote",
+      "afterTheElectionHasBeen": "Después de que la elección se haya completado con éxito, el método de votación de EDEN permanecerá durante un período de tiempo específico. ",
+      "edenVotingMethod": "Duración del método de votación EDEN",
+      "communityProposalsDiligence": "Diligencia de Propuestas Comunitarias",
+      "theFollowingSectionAllows": "La siguiente sección le permite establecer una Unidad, Quórum y Duración diferentes SOLAMENTE para las Propuestas de la Comunidad.",
+      "voteAlignment": " Alineación de votos (Unidad)",
+      "unityIsTheMinimumRequired": "La unidad es el porcentaje mínimo requerido de miembros que apoyan (votando a favor o en contra) una propuesta para que se apruebe. ",
+      "voteQuorum": "quórum de votos",
+      "quorumIsTheMinimumRequired": "El quórum es el porcentaje mínimo requerido del total de miembros que participan en la votación para que se apruebe.",
+      "voteDuration": "Duración de la votación",
+      "isTheDurationPeriod": "Es el período de duración en que el voto está activo y el miembro puede emitir uno o más votos."
+    },
+    "settings-design": {
+      "design": "Diseño",
+      "useDesignSettingsToChange": "Use la configuración de diseño para cambiar elementos de marca importantes de su DAO, incluidos los colores, logotipos, patrones, pancartas y fondos. ",
+      "general": "General",
+      "splashpage": "página de bienvenida",
+      "banners": "pancartas",
+      "primaryColor": "Color primario",
+      "onlyDaoAdmins": "Solo los administradores de DAO pueden cambiar la configuración",
+      "secondaryColor": "Color secundario",
+      "textOnColor": "Texto en color",
+      "logo": "Logo",
+      "extendedLogo": "Logotipo extendido",
+      "pattern": "Patrón",
+      "color": "Color",
+      "opacity": "Opacidad",
+      "uploadAnImage": "Sube una imagen (máximo 3 MB)",
+      "title": "Título",
+      "shortParagraph": "Parrafo corto",
+      "dashboard": "Panel",
+      "proposals": "Propuestas",
+      "members": "miembros",
+      "organization": "Organización",
+      "explore": "Explorar",
+      "max50Characters": "50 caracteres como máximo",
+      "max140Characters": "140 caracteres como máximo"
+    },
+    "multisig-modal": {
+      "multisig": "multigrado",
+      "proposal": "propuesta",
+      "doYouWant": "¿Quieres crear multisig?",
+      "doYouWant1": "¿Quieres aprobar los cambios?",
+      "changes": "Cambios",
+      "signers": "firmantes",
+      "cancelMultiSig": "Cancelar firma múltiple",
+      "resetChanges": "Restablecer cambios",
+      "createMultiSig": "Crear múltiples firmas",
+      "deny": "Denegar",
+      "approve": "Aprobar"
+    },
+    "settings-voting": {
+      "voting": "Votación",
+      "useVotingSettings": "Use la configuración de votación para configurar sus parámetros de votación, incluida la unidad (% mínimo de miembros que lo respaldan), quórum (% mínimo del total de miembros que participan en la votación) y duración de la votación (cuánto tiempo está abierta una votación, incluidas las actualizaciones de su voto).",
+      "voteAlignmentUnity": "Alineación de votos (Unidad)",
+      "unityIsThe": "La unidad es el porcentaje mínimo requerido de miembros que apoyan (votando a favor o en contra) una propuesta para que se apruebe. ",
+      "val": "= 0 ",
+      "onlyDaoAdmins": "Solo los administradores de DAO pueden cambiar la configuración",
+      "voteQuorum": "quórum de votos",
+      "quorumIsThe": "El quórum es el porcentaje mínimo requerido del total de miembros que participan en la votación para que se apruebe.",
+      "val1": "= 0 ",
+      "onlyDaoAdmins1": "Solo los administradores de DAO pueden cambiar la configuración",
+      "voteDuration": "Duración de la votación",
+      "isTheDuration": "Es el período de duración en que el voto está activo y el miembro puede emitir uno o más votos.",
+      "onlyDaoAdmins2": "Solo los administradores de DAO pueden cambiar la configuración"
+    },
+    "settings-general": {
+      "general": "General",
+      "useGeneralSettings": "Use la configuración general para configurar algunos parámetros básicos, como un enlace a su espacio de colaboración principal y su DAO, y use el interruptor para habilitar o deshabilitar funciones clave.",
+      "daoName": "nombre DAO",
+      "pasteTheUrl": "Pegue la dirección URL aquí",
+      "onlyDaoAdmins": "Solo los administradores de DAO pueden cambiar la configuración",
+      "customUrl": "URL personalizada",
+      "daohyphaearth": "dao.hifa.tierra/",
+      "typeYourCustom": "Escriba su URL personalizada aquí",
+      "onlyDaoAdmins1": "Solo los administradores de DAO pueden cambiar la configuración",
+      "socialChat": "charla social",
+      "pasteTheUrl1": "Pegue la dirección URL aquí",
+      "onlyDaoAdmins2": "Solo los administradores de DAO pueden cambiar la configuración",
+      "linkToDocumentation": "Enlace a la documentación",
+      "pasteTheUrl2": "Pegue la dirección URL aquí",
+      "onlyDaoAdmins3": "Solo los administradores de DAO pueden cambiar la configuración",
+      "buttonText": "Botón de texto",
+      "documentation": "Documentación",
+      "onlyDaoAdmins4": "Solo los administradores de DAO pueden cambiar la configuración",
+      "proposalsCreation": "Creación de propuestas",
+      "activateOrDeactivate": "Activar o desactivar la creación de propuestas.",
+      "onlyDaoAdmins5": "Solo los administradores de DAO pueden cambiar la configuración",
+      "membersApplication": "Solicitud de miembros",
+      "activateOrDeactivate1": "Activar o desactivar aplicaciones de miembros.",
+      "onlyDaoAdmins6": "Solo los administradores de DAO pueden cambiar la configuración",
+      "removableBanners": "Pancartas removibles",
+      "activateOrDeactivate2": "Activar o desactivar banners removibles.",
+      "onlyDaoAdmins7": "Solo los administradores de DAO pueden cambiar la configuración",
+      "multisigConfiguration": "Configuración multigrado",
+      "activateOrDeactivateMultisig": "Activar o desactivar multisig.",
+      "onlyDaoAdmins8": "Solo los administradores de DAO pueden cambiar la configuración"
+    },
+    "settings-plan": {
+      "selectYourPlan": "selecciona tu plan",
+      "actionRequired": "Acción requerida",
+      "membersMax": "{1} miembros como máximo",
+      "billingPeriod": "Período de facturación",
+      "discount": "¡{1}% de descuento!",
+      "availableBalance": "Saldo disponible",
+      "notEnoughTokens": "No hay suficientes fichas",
+      "buyHyphaToken": "Comprar token Hypha",
+      "pleaseSelectPlan": "Seleccione primero el plan y el período.",
+      "billingHistory": "Historial de facturación",
+      "suspended": "Suspendido",
+      "expired": "Venció",
+      "planActive": "Plan activo",
+      "renewPlan": "Renovar plan ",
+      "activatePlan": "activar plan"
+    }
+  },
+  "dashboard": {
+    "how-it-works": {
+      "readyForVoting": "¿Listo para votar?",
+      "proposingAPolicy": "¿Proponer una política?",
+      "applyingForARole": "¿Aplicar para un puesto?",
+      "creatingANewRole": "¿Creando un nuevo rol?",
+      "creatingABadge": "¿Creando una insignia?",
+      "launchingAQuest": "¿Lanzar una misión?",
+      "youNeedTo": "Debe aprobar tanto el quórum (% mínimo del total de miembros que participan en la votación) como la unidad (% mínimo de miembros que lo respaldan). ",
+      "createAGeneric": "Cree una propuesta de contribución genérica con un título descriptivo y una definición clara de la política junto con los pasos para implementar la política.",
+      "createARecurring": "Cree una actividad recurrente para una asignación de roles existente y describa por qué es una buena combinación con tantos detalles como sea posible.",
+      "createAProposal": "Cree una propuesta para un activo de la organización y elija un arquetipo de función con un nombre descriptivo y una definición clara de la función con responsabilidades.",
+      "createAProposal1": "Cree una propuesta para un activo de la organización y elija un tipo de insignia con un nombre y un reconocimiento claro de aprendizaje o logro de desbloqueo o confirmación de un nivel de estado.",
+      "createAGeneric1": "Cree una propuesta de contribución genérica con un título descriptivo y un desglose claro de hitos y pagos por hito a lo largo de una línea de tiempo."
+    },
+    "news-item": {
+      "posted": "publicado {1}"
+    },
+    "news-widget": {
+      "latestNews": "Últimas noticias"
+    },
+    "organization-banner": {
+      "thePurposeOf": "El propósito de",
+      "hypha": "hifa",
+      "loremIpsumDolor": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+      "documentation": "Documentación"
+    },
+    "support-widget": {
+      "documentation": "Documentación",
+      "needSupport": "¿Necesita ayuda?",
+      "pleaseReadOur": "Por favor lea nuestra Documentación para más información. "
+    }
+  },
+  "ecosystem": {
+    "ecosystem-card": {
+      "daos": "{1} DAO",
+      "coreMembers": "{1} miembros principales",
+      "communityMembers": "{1} miembros de la comunidad"
+    },
+    "ecosystem-info": {
+      "firstStepConfigureYour": "Primer paso: Configura tu",
+      "ecosystem": "Ecosistema",
+      "editEcosystemInformation": "Editar información del ecosistema",
+      "onlyDaoAdmins": "Solo los administradores de DAO pueden cambiar la configuración",
+      "saveEcosystemInformation": "Guardar información del ecosistema",
+      "ecosystemName": "Nombre del ecosistema",
+      "typeNameHere": "Escriba el nombre aquí (máximo 30 caracteres)",
+      "onlyDaoAdmins1": "Solo los administradores de DAO pueden cambiar la configuración",
+      "logo": "Logo",
+      "uploadAnImage": "Sube una imagen (máximo 3 MB)",
+      "showEcosystemOnMarketplace": "Mostrar ecosistema en Marketplace",
+      "findInvestorsWilling": "Encuentre inversores dispuestos a financiar su ecosistema",
+      "onlyDaoAdmins2": "Solo los administradores de DAO pueden cambiar la configuración",
+      "ecosystemDomain": "Dominio del ecosistema",
+      "ecosystemPurpose": "Ecosistema Propósito",
+      "typeADescription": "Escriba una descripción aquí (máximo 300 caracteres)"
+    }
+  },
+  "filters": {
+    "filter-widget": {
+      "filters": "filtros",
+      "saveFilters": "Guardar filtros",
+      "resetFilters": "Restablecer filtros"
+    }
+  },
+  "form": {
+    "custom-period-input": {
+      "customPeriod": "Período personalizado",
+      "typeAnAmount": "Escriba una cantidad",
+      "hours": "horas",
+      "days": "días",
+      "weeks": "semanas",
+      "months": "meses"
+    },
+    "image-processor": {
+      "rotate": "Girar 90",
+      "rotate1": "Girar -90",
+      "zoomIn": "Acercarse",
+      "zoomOut": "Disminuir el zoom",
+      "verticalMirror": "Espejo verticales",
+      "horizontalMirror": "Espejo horizontal",
+      "cancel": "Cancelar",
+      "reset": "Reiniciar"
+    }
+  },
+  "ipfs": {
+    "demo-ipfs-inputs": {
+      "ipfsId": "ID de IPFS: {1}",
+      "previewImage": "Imagen de vista previa",
+      "ipfsId1": "ID de IPFS: {1}",
+      "ipfsFile": "Archivo IPFS",
+      "ipfsId2": "ID de IPFS: {1}",
+      "ipfsFileWith": "Archivo IPFS con botón de descarga"
+    },
+    "input-file-ipfs": {
+      "uploadAFile": "Cargar un archivo"
+    },
+    "ipfs-file-viewer": {
+      "seeAttachedDocument": "Ver documento adjunto"
+    }
+  },
+  "login": {
+    "bottom-section": {
+      "newUser": "¿Nuevo Usuario?",
+      "registerHere": "Registrar aquí\n          ",
+      "registrationIsTemporarilyDisabled": "El registro está temporalmente deshabilitado",
+      "areYouAMember": "¿Es usted miembro?",
+      "loginHere": "Entre aquí",
+      "otherwise": "De lo contrario",
+      "loginWithWallet": "Iniciar sesión con billetera",
+      "newUser1": "¿Nuevo Usuario?",
+      "registerHere1": "Registrar aquí\n        ",
+      "registrationIsTemporarilyDisabled1": "El registro está temporalmente deshabilitado"
+    },
+    "login-view": {
+      "loginTo": "Iniciar sesión en",
+      "your": " su",
+      "account": "cuenta",
+      "loginTo1": "Iniciar sesión en\n          ",
+      "yourAccount": "su cuenta",
+      "youCanEither": "Puede iniciar sesión con su SEEDS Light Wallet (",
+      "downloadHere": "Descarga aquí",
+      "orAnchor": ") O Anchor, una herramienta segura y de código abierto que está disponible para descargar como",
+      "desktopAppFor": "Aplicación de escritorio para Windows y Mac",
+      "andAMobile": "y una aplicación móvil para ambos",
+      "android": "Androide",
+      "and": " y",
+      "nbspios": "",
+      "forMore": ". ",
+      "seeTheseSlidesnbsp": "ver estas diapositivas.",
+      "pleaseLoginWith": "Inicie sesión con una de las billeteras, su clave privada o continúe como invitado. ",
+      "account1": "Cuenta",
+      "account2": "Cuenta",
+      "privateKey": "Llave privada",
+      "privateKey1": "Llave privada",
+      "login": "Acceso",
+      "login1": "{1} Iniciar sesión {2}",
+      "getApp": "Obtener aplicaciones"
+    },
+    "register-user-view": {
+      "account": "Cuenta",
+      "information": "información",
+      "inOrderTo": "Para participar en cualquier toma de decisiones o postularse para cualquier función o recibir cualquier contribución, debe registrarse y convertirse en miembro. ",
+      "pleaseUseThe": "Utilice el formulario guiado para crear una nueva cuenta de SEEDS y registrarse como miembro. ",
+      "accountName": "Nombre de la cuenta\n          ",
+      "charactersAlphanumeric": "12 caracteres, alfanuméricos a-z, 1-5",
+      "phoneNumber": "Número de teléfono",
+      "country": "País",
+      "phoneNumber1": "Número de teléfono",
+      "your": "Su",
+      "verificationCode": "código de verificación",
+      "pleaseCheckYour": "Por favor revise su teléfono para el código de verificación",
+      "verificationCode1": "Código de verificación",
+      "charactersAlphanumeric1": "12 caracteres, alfanuméricos a-z, 1-5",
+      "problemsWithTheCode": "¿Problemas con el código?",
+      "checkYourPhoneNumber": "Verifique su número de teléfono",
+      "welcome": "Bienvenido",
+      "ourAuthenticationMethod": "Nuestro método de autenticación es Anchor, una herramienta segura y de código abierto que está disponible para descargar como ",
+      "desktopAppFor": "Aplicación de escritorio para Windows y Mac",
+      "andAMobile": " y una aplicación móvil para ambos ",
+      "android": "Androide",
+      "and": " y ",
+      "ios": "iOS",
+      "forMore": ".  ",
+      "theseSlides": "estas diapositivas",
+      "areYouAMember": "¿Es usted miembro?",
+      "loginHere": "Entre aquí",
+      "createDao": "Crear DAO"
+    },
+    "register-user-with-captcha-view": {
+      "createNew": "Crear nuevo\n            ",
+      "hyphaAccount": "Cuenta Hypha",
+      "pleaseVerifyYou": "Verifica que no eres un BOT",
+      "proceedWith": "Proceder con\n                ",
+      "hyphaWallet": "Monedero Hypha",
+      "setupHyphaWallet": "Configuración de la billetera Hypha",
+      "scanTheQr": "Escanee el código QR en esta página,",
+      "itContainsThe": " contiene la invitación para crear la cuenta Hypha en su billetera.",
+      "onceTheAccount": " Una vez que la cuenta esté lista,",
+      "youAreSet": " estás listo para el último paso siguiente.",
+      "copyInviteLink": "Copiar enlace de invitación",
+      "loginWith": "Inicia con\n            ",
+      "hyphaWallet1": "Monedero Hypha",
+      "signYourFirstTransaction": "Firma tu primera transacción",
+      "didYouCreate": "¿Ha creado su cuenta Hypha dentro de Hypha Wallet? ",
+      "login": "{1} Iniciar sesión {2}",
+      "getApp": "Obtener aplicaciones",
+      "areYouAMember": "¿Es usted miembro?",
+      "loginHere": "Entre aquí"
+    },
+    "welcome-view": {
+      "youNeedAn": "Necesita una cuenta Hypha para interactuar con Hypha Ecosystem y crear un DAO.",
+      "isonboarding": "{{ ¿está incorporado?  ",
+      "ifThisIs": "Si es tu primera vez aquí,",
+      "clickCreateNew": " haga clic en Crear nueva cuenta Hypha y siga los pasos. ",
+      "ifYouAlready": "Si ya tiene una cuenta Hypha y una billetera Anchor configurada",
+      "clickThe": ", haga clic en el botón de inicio de sesión, valide la transacción con Anchor Wallet e ingrese el DAO.' ",
+      "theDhoDecentralized": "La DHO (Organización Humana Descentralizada) es un marco para construir su organización desde cero de una manera orgánica y participativa y junto con otros.",
+      "createNewHyphaAccount": "Crear nueva cuenta Hypha",
+      "registrationIsTemporarilyDisabled": "El registro está temporalmente deshabilitado",
+      "login": "Acceso",
+      "continueAsAGuest": "Continuar como invitado",
+      "useAnExisting": "Usa una existente\n      ",
+      "blockhainAccount": "cuenta blockchain"
+    }
+  },
+  "navigation": {
+    "alert-message": {
+      "thisIsA": "Esto es un",
+      "versionOfThe": "versión de la nueva plataforma Hypha DAO. ",
+      "ratingMeaning": "calificación, que significa {1}. "
+    },
+    "dho-info": {
+      "moreInfo": "Más información",
+      "votingDuration": "Duración de la votación: {1}",
+      "periodDuration": "Duración del período: {1}",
+      "admins": "administradores"
+    },
+    "guest-menu": {
+      "login": "Acceso",
+      "register": "Registro",
+      "registrationIsTemporarilyDisabled": "El registro está temporalmente deshabilitado",
+      "login1": "Acceso",
+      "register1": "Registro",
+      "help": "Ayuda"
+    },
+    "left-navigation": {
+      "proposals": "Propuestas",
+      "members": "miembros",
+      "organization": "Organización",
+      "explore": "Explorar"
+    },
+    "navigation-header": {
+      "home": "Hogar",
+      "proposals": "Propuestas",
+      "members": "miembros",
+      "organization": "Organización",
+      "circles": "Círculos",
+      "archetypes": "Arquetipos",
+      "badges": "Insignias",
+      "policies": "Políticas",
+      "alliances": "Alianzas",
+      "treasury": "Tesorería",
+      "admin": "Administración"
+    },
+    "non-member-menu": {
+      "becomeMember": "Hazte miembro",
+      "registrationIsTemporarilyDisabled": "El registro está temporalmente deshabilitado"
+    },
+    "profile-sidebar-guest": {
+      "asAGuest": "Como invitado tienes acceso total a todo el contenido de la DAO. ",
+      "registerNewAccount": "Registrar una cuenta nueva",
+      "registrationIsTemporarilyDisabled": "El registro está temporalmente deshabilitado",
+      "login": "Acceso",
+      "welcomeTo": "Bienvenido a {daoName}"
+    },
+    "quick-actions": {
+      "7432": "2",
+      "quickActions": "Acciones rápidas",
+      "completeDraft": "Borrador completo",
+      "youHaveA": "Tiene un borrador de propuesta para completar",
+      "claimPeriods": "Períodos de reclamación",
+      "youHave": "Tienes 2 periodos para reclamar",
+      "adjustCommitment": "Ajustar compromiso",
+      "forASpecific": "Por un período de tiempo específico",
+      "extendAssignment": "Ampliar tarea",
+      "extendYourAssignment": "Extiende tu asignación en 24 días"
+    },
+    "quick-links": {
+      "thisDaoConfigured": "Este DAO configurado para no permitir propuestas",
+      "newProposal": "Nueva propuesta",
+      "myProfile": "Mi perfil",
+      "myWallet": "Mi billetera",
+      "logout": "Cerrar sesión"
+    },
+    "sidebar-news": {
+      "weAreCurrently": "Actualmente estamos revisando su solicitud. ",
+      "weAreCurrently1": "Actualmente estamos revisando su solicitud. ",
+      "niceToSee": "Es bueno verte por aquí. ",
+      "youCanVoteFor": "Puedes votar por ",
+      "proposals": "propuestas",
+      "searchFor": ", buscar ",
+      "members": "miembros",
+      "andFindOut": " y descubre lo que hace que tu ",
+      "organization": "organización",
+      "tick": " garrapata.",
+      "beSureTo": "Asegúrese de completar su ",
+      "profile": "perfil",
+      "andHaveFun": " y diviértanse co-creando cosas nuevas y emocionantes con su DAO y entre ustedes.",
+      "welcomeTo": "Bienvenido a {daoName}"
+    }
+  },
+  "organization-asset": {
+    "asset-card": {
+      "revoke": "Revocar",
+      "seeDetails": "Ver detalles",
+      "na": "n / A",
+      "apply": "Aplicar",
+      "applied": "Aplicado"
+    },
+    "create-badge-widget": {
+      "newBadgeProposal": "Nueva propuesta de insignia",
+      "createYourBadge": "Crea tu insignia",
+      "doYouNeedSpecific": "¿Necesita una insignia específica para los miembros principales de su DAO o para la comunidad de titulares de tokens? "
+    }
+  },
+  "organization": {
+    "archetypes-widget": {
+      "archetypes": "Arquetipos"
+    },
+    "badge-assignments-widget": {
+      "badgeAssignments": "Asignaciones de insignias"
+    },
+    "badge-card": " 150? ",
+    "badges-widget": {
+      "badges": "Insignias"
+    },
+    "circle-card": {
+      "subCircles": "Subcírculos ({1})",
+      "showSubcirclesDetails": "Mostrar detalles de subcírculos",
+      "goToCircle": "ir al círculo",
+      "members": "Miembros ({1})",
+      "members1": "Miembros ({1})",
+      "na": "n / A"
+    },
+    "circles-widget": {
+      "structure": "Estructura",
+      "circleBudgetDistribution": "Distribución del presupuesto del círculo",
+      "total": "TOTAL:",
+      "husd": "HUSD",
+      "hypha": "HIPHA",
+      "budgetBreakdown": "Presupuesto descompuesto"
+    },
+    "create-dho-widget": {
+      "createNewDao": "Crear nuevo DAO",
+      "createNewDao1": "Crear nuevo DAO"
+    },
+    "payout-card": " 150? ",
+    "payouts-widget": {
+      "passedGenericContributions": "Contribuciones genéricas aprobadas"
+    },
+    "policies-widget": {
+      "policies": "Políticas",
+      "seeAll": "Ver todo"
+    },
+    "role-assignment-card": " 150? ",
+    "role-assignments-widget": {
+      "activeRoleAssignments": "Asignaciones de roles activos"
+    },
+    "tokens": {
+      "seeMore": "Ver más",
+      "seeMore1": "Ver más",
+      "issuance": "Emisión"
+    }
+  },
+  "plan": {
+    "chip-plan": {
+      "plan": "{1} plano",
+      "daysLeft": "Días restantes",
+      "daysLeftTo": "Quedan días para renovar tu plan"
+    },
+    "downgrade-pop-up": {
+      "downgradeYourPlan": "Rebaje su plan",
+      "areYouSure": "¿Estás seguro de que quieres bajar de categoría?",
+      "byDowngradingYou": "Al cambiar a una versión anterior, ya no podrá acceder a algunas de las funciones de DAO conectadas a su plan activo. ",
+      "pleaseCheckTerms": "Consulte los Términos y condiciones para obtener más información.",
+      "keepMyPlan": "mantener mi plan",
+      "downgrade": "Degradar"
+    }
+  },
+  "profiles": {
+    "about": {
+      "about": "Acerca de"
+    },
+    "active-assignments": {
+      "userHasNoActivity": "El usuario no tiene actividad",
+      "noActivityMatchingFilter": "Sin filtro de coincidencia de actividad",
+      "userHasNoActivity1": "El usuario no tiene actividad",
+      "noActivityMatchingFilter1": "Sin filtro de coincidencia de actividad"
+    },
+    "contact-info": {
+      "contactInfo": "Datos de contacto",
+      "phone": "Teléfono",
+      "email": "Correo electrónico"
+    },
+    "current-balance": {
+      "currentBalance": "Saldo actual",
+      "loremIpsumDolor": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor"
+    },
+    "edit-dialog": {
+      "save": "Ahorrar",
+      "lukegravdent": "@lukegravdent",
+      "accountSettings": "Configuraciones de la cuenta"
+    },
+    "members-list": {
+      "noMembersAt": "No hay miembros en este momento"
+    },
+    "multi-sig": {
+      "multiSig": "firma múltiple",
+      "clickHereTo": "Haga clic aquí para firmar nuevos PR",
+      "multiSig1": "firma múltiple"
+    },
+    "open-proposals": {
+      "openProposals": "Propuestas Abiertas"
+    },
+    "organizations": {
+      "otherOrganizations": "Otras organizaciones",
+      "seeMore": "Ver más",
+      "organizations": "Organizaciones",
+      "seeMore1": "Ver más"
+    },
+    "past-achievements": {
+      "pastAchievements": "Logros pasados",
+      "youHaveNo": "No tienes logros pasados."
+    },
+    "profile-card": {
+      "voice": "{1} VOZ",
+      "name": "Nombre",
+      "timeZone": "Zona horaria",
+      "text": "texto",
+      "applicant": "SOLICITANTE",
+      "coreTeam": "EQUIPO CENTRAL",
+      "community": "COMUNIDAD"
+    },
+    "proposal-item": {
+      "viewProposal": "Ver propuesta",
+      "viewProposal1": "Ver propuesta"
+    },
+    "transaction-history": {
+      "transactionHistory": "Historial de transacciones"
+    },
+    "voting-history": {
+      "recentVotes": "Votos recientes",
+      "caption": "subtítulo",
+      "noVotesFound": "No se encontraron votos para el usuario"
+    },
+    "wallet-adresses": {
+      "bitcoin": "Bitcoin",
+      "address": "DIRECCIÓN",
+      "btcPayoutsAre": "Los pagos de BTC están actualmente deshabilitados",
+      "ethereum": "Etéreo",
+      "address1": "DIRECCIÓN",
+      "ethPayoutsAre": "Los pagos de ETH están actualmente deshabilitados",
+      "eos": "EOS",
+      "address2": "DIRECCIÓN",
+      "memo": "memorándum",
+      "eos1": "EOS",
+      "address3": "DIRECCIÓN",
+      "memo1": "memorándum",
+      "walletAdresses": "Direcciones de billetera",
+      "onlyVisibleToYou": "solo visible para ti"
+    },
+    "wallet-base": {
+      "485": "500.00",
+      "4842": "1000.00",
+      "wallet": "Billetera",
+      "redeemHusd": "Canjear HUSD",
+      "makeAnotherRedemption": "Haz otra redención",
+      "redemptionPending": "Redención pendiente",
+      "requestor": "Solicitante",
+      "amount": "Cantidad",
+      "redeemHusd1": "Canjear HUSD",
+      "husdAvailable": "HUSD disponible",
+      "amountToRedeem": "Cantidad a canjear",
+      "typeAmount": "Tipo Importe",
+      "maxAvailable": "Máximo disponible",
+      "redeemToAddress": "Canjear a dirección",
+      "redemptionSuccessful": "Redención exitosa!",
+      "daoid": "ID_DAO",
+      "requestor1": "Solicitante",
+      "amount1": "Cantidad",
+      "asSoonAs": "Tan pronto como los tesoreros creen una transacción multisig y ejecuten esta solicitud, recibirá sus fondos directamente en su dirección de HUSD indicada en el paso de vista previa",
+      "noWalletFound": "No se encontró la billetera",
+      "pendingRedemptions": "Redenciones pendientes",
+      "details": "Detalles",
+      "queueHusdRedemption": "Poner en cola el canje de HUSD para el pago del Tesoro a la billetera configurada",
+      "redeem": "Canjear"
+    },
+    "wallet-hypha": {
+      "availableBalance": "Saldo disponible",
+      "notEnoughTokens": "No hay suficientes fichas",
+      "buyHyphaToken": "Comprar token Hypha"
+    }
+  },
+  "proposals": {
+    "version-history": {
+      "versionHistory": "Historial de versiones",
+      "original": "Original",
+      "currentOnVoting": "Actual - en la votación",
+      "rejected": "Rechazado"
+    },
+    "comment-input": {
+      "typeACommentHere": "Escriba un comentario aquí...",
+      "youMustBe": "Debes ser miembro para dejar comentarios"
+    },
+    "comment-item": {
+      "showMore": "mostrar más ({1})",
+      "showLess": "Muestra menos"
+    },
+    "comments-widget": {
+      "comments": "Comentarios"
+    },
+    "creation-stepper": {
+      "saveAsDraft": "Guardar como borrador",
+      "nextStep": "Próximo paso",
+      "publish": "Publicar"
+    },
+    "proposal-card": {
+      "comments": "{1} comentarios"
+    },
+    "proposal-draft": {
+      "continueProposal": "Continuar propuesta",
+      "deleteDraft": "Eliminar borrador"
+    },
+    "proposal-dynamic-popup": {
+      "save": "Ahorrar"
+    },
+    "proposal-staging": {
+      "yourProposalIs": "Tu propuesta está en escena",
+      "publishingYourProposal": "Publicar tu propuesta en staging significa que aún no está en vivo o en cadena. ",
+      "publish": "Publicar",
+      "editProposal": "Editar propuesta"
+    },
+    "proposal-suspended": {
+      "thatMeansThat": "Eso significa que la cesión finalizará y ya no serán posibles las reclamaciones, sin embargo, los períodos cumplidos anteriormente seguirán siendo reclamables.",
+      "publish": "Publicar",
+      "iChangedMyMind": "Cambié de opinión"
+    },
+    "proposal-card-chips": {
+      "poll": "Encuesta",
+      "circleBudget": "Presupuesto circular",
+      "quest": "Búsqueda",
+      "start": "Comenzar",
+      "payout": "Pagar",
+      "circle": "Círculo",
+      "policy": "Política",
+      "genericContribution": "Contribución Genérica",
+      "role": "Role",
+      "assignment": "Asignación",
+      "extension": "Extensión",
+      "ability": "Capacidad",
+      "archetype": " Arquetipo",
+      "badge": "Insignia",
+      "suspension": "Suspensión",
+      "withdrawn": "Retirado",
+      "accepted": "ACEPTADO",
+      "rejected": "RECHAZADO",
+      "voting": "VOTACIÓN",
+      "active": "ACTIVO",
+      "archived": "ARCHIVADO",
+      "suspended": "SUSPENDIDO"
+    },
+    "proposal-view": {
+      "s": " 1? ",
+      "title": "Título",
+      "icon": "Icono",
+      "votingSystem": "Sistema de votación",
+      "commitmentLevel": "nivel de compromiso",
+      "adjustCommitment": "Ajustar compromiso",
+      "edit": "Editar",
+      "deferredAmount": "monto diferido",
+      "adjustDeferred": "Ajustar diferido",
+      "edit1": "Editar",
+      "salaryBand": "Banda salarial",
+      "equivalentPerYear": "{1} equivalente por año",
+      "minDeferredAmount": "Importe mínimo diferido",
+      "roleCapacity": "Capacidad de rol",
+      "compensation": "Compensación",
+      "showCompensationFor": "Mostrar compensación por un período",
+      "deferredAmount1": "monto diferido",
+      "parentCircle": "Círculo de padres",
+      "parentCircle1": "Círculo de padres",
+      "parentPolicy": "Política de padres",
+      "description": "Descripción",
+      "attachedDocuments": "Documentos adjuntos",
+      "createdBy": "Creado por:",
+      "seeProfile": "Ver el perfil"
+    },
+    "quest-progression": {
+      "questProgression": "Progresión de la misión"
+    },
+    "voter-list": {
+      "votes": "Votos"
+    },
+    "voting-option-5-scale": {
+      "hellYa": "Diablos ya",
+      "yes": "Sí",
+      "abstain": "Abstenerse",
+      "hellNo": "diablos no"
+    },
+    "voting-option-yes-no": {
+      "yes": "Sí",
+      "abstain": "Abstenerse",
+      "no": "No"
+    },
+    "voting-result": {
+      "unity": "Unidad",
+      "quorum": "Quórum"
+    },
+    "voting": {
+      "yes": "Sí",
+      "abstain": "Abstenerse",
+      "no": "No",
+      "yes1": "Sí",
+      "no1": "No",
+      "yes2": "Sí",
+      "no2": "No",
+      "voteNow": "Vota ahora",
+      "youCanChange": "Puedes cambiar tu voto",
+      "activate": "Activar",
+      "archive": "Archivo",
+      "apply": "Aplicar",
+      "suspendAssignment": "Suspender tarea\n          ",
+      "invokeASuspension": "Invocar una propuesta de suspensión para esta actividad",
+      "withdrawAssignment": "Retirar asignación"
+    }
+  },
+  "templates": {
+    "templates-modal": {
+      "customizeYourDao": "Personaliza tu DAO",
+      "allTemplatesProposals": "¡Todas las propuestas de Plantillas se han publicado con éxito y ahora están listas para que las voten otros miembros de DAO!",
+      "creatingAndPublishing": "Creación y publicación de todas las propuestas de plantillas. ",
+      "loremIpsumDolor": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ",
+      "publishingProcess": "Proceso de publicación:",
+      "chooseADaoTemplate": "Elija una plantilla DAO",
+      "aDaoTemplate": "Una plantilla DAO es un conjunto de propuestas preempaquetadas. ",
+      "useATemplate": "Usa una plantilla",
+      "startFromScratch": "Empezar desde el principio",
+      "youCanChoose": "Puede elegir personalizar su DAO cuando selecciona esta opción. ",
+      "createYourOwn": "Crea tu propio",
+      "seeDetails": "Ver detalles",
+      "select": "Seleccionar",
+      "roleArchetypes": "Arquetipos de roles ({1})",
+      "moreDetails": "Más detalles",
+      "circles": "Círculos ({1})",
+      "moreDetails1": "Más detalles",
+      "daoPolicies": "Políticas de DAO ({1})",
+      "moreDetails2": "Más detalles",
+      "coreTeamVotingMethod": "Método de votación del equipo central",
+      "unity": "Unidad",
+      "quorum": "Quórum",
+      "communityTeamVotingMethod": "Equipo de la comunidad Método de votación",
+      "unity1": "Unidad",
+      "quorum1": "Quórum",
+      "coreTeamBadges": "Insignias del equipo central ({1})",
+      "moreDetails3": "Más detalles",
+      "communityTeamBadges": "Insignias del equipo de la comunidad ({1})",
+      "moreDetails4": "Más detalles",
+      "title": "Título",
+      "description": "Descripción",
+      "backToTemplates": "volver a las plantillas",
+      "selectThisTemplate": "Seleccione esta plantilla",
+      "goToProposalsDashboard": "Ir al panel de propuestas",
+      "goToOrganizationDashboard": "Ir al panel de la organización"
+    }
+  },
+  "layouts": {
+    "mainlayout": {
+      "hyphaDao": "Hifa DAO"
+    },
+    "multidholayout": {
+      "plan": "{1} plano",
+      "suspended": "suspendido",
+      "actionRequired": "Acción requerida",
+      "reactivateYourDao": "Reactiva tu DAO",
+      "weHaveTemporarily": "Hemos suspendido temporalmente su cuenta DAO. ",
+      "downgradeMeTo": "Bájame al plan gratuito",
+      "renewMyCurrentPlan": "Renovar mi Plan actual",
+      "member": "{1} MIEMBRO"
+    }
+  },
+  "pages": {
+    "dho": {
+      "multisig": {
+        "transactions": "Actas",
+        "developer": "Desarrollador",
+        "note": "nota",
+        "clickOnYourInitials": "Haga clic en sus iniciales ",
+        "toSignATransaction": " para firmar una transacción",
+        "multisigEnablesUs": "Multisig nos permite firmar transacciones de forma segura. ",
+        "doYouReally": "Realmente quieres ",
+        "signThisTransaction": " firmar esta transacción?",
+        "multisigEnablesUs1": "Multisig nos permite firmar transacciones de forma segura. ",
+        "sign": "Firmar",
+        "noTransactionsTo": "Sin transacciones a ",
+        "signAtTheMoment": " firmar en el momento",
+        "multisigEnablesUs2": "Multisig nos permite firmar transacciones de forma segura. "
+      },
+      "circle": {
+        "joinCircle": "Únete al círculo",
+        "budget": "Presupuesto",
+        "subcircles": "Subcírculos",
+        "applicants": "Solicitantes",
+        "members": "miembros"
+      },
+      "circles": {
+        "circles": "Círculos"
+      },
+      "configuration": {
+        "areYouSure": "¿Estás seguro de que quieres irte sin guardar el borrador?",
+        "general": "General",
+        "voting": "Votación",
+        "community": "Comunidad",
+        "communication": "Comunicación",
+        "design": "Diseño",
+        "planManager": "Gerente de Planes",
+        "resetChanges": "Restablecer cambios",
+        "saveChanges": "Guardar cambios",
+        "viewMultisig": "Ver multigrado"
+      },
+      "ecosystem": {
+        "active": "{1} activo",
+        "daos": "DAO",
+        "inactive": "{1} inactivo",
+        "daos1": "DAO",
+        "coreMembers": "56 miembros principales",
+        "communityMembers": "0 miembros de la comunidad",
+        "activate": "Activar",
+        "onlyDaoAdmins": "Solo los administradores de DAO pueden cambiar la configuración",
+        "foundedBy": "Fundado por:",
+        "activate1": "Activar",
+        "members": "miembros",
+        "createNewDao": "Crear nuevo DAO",
+        "youNeedTo": "Debe activar DAO de anclaje antes de poder crear DAO secundarios.",
+        "onlyDaoAdmins1": "Solo los administradores de DAO pueden cambiar la configuración"
+      },
+      "explore": {
+        "discoverMore": "Descubrir más",
+        "members": "miembros",
+        "discoverTheHyphaDAONetwork": "Descubre la red Hypha DAO",
+        "welcomeToTheGlobalDAO": "¡Bienvenido al directorio global de DAO! ",
+        "searchDHOs": "Buscar DHO",
+        "searchEcosystems": "Buscar ecosistemas",
+        "sortBy": "Ordenar por",
+        "oldestFirst": "Los más viejos primero",
+        "newestFirst": "El más reciente primero",
+        "alphabetically": "Alfabéticamente"
+      },
+      "finflow": {
+        "totalUnclaimedPeriods": "Total de períodos no reclamados",
+        "totalUnclaimedUtility": "Utilidad total no reclamada",
+        "totalUnclaimedCash": "Efectivo total no reclamado",
+        "totalUnclaimedVoice": "Voz total no reclamada",
+        "assignments": "Tareas",
+        "exportToCsv": "Exportar a csv"
+      },
+      "home": {
+        "days": "días",
+        "day": "día",
+        "hours": "horas",
+        "hour": "hora",
+        "mins": "minutos",
+        "min": "min",
+        "moreInformationAbout": "Más información sobre las elecciones UpVote",
+        "here": "aquí",
+        "signup": "Inscribirse",
+        "currentstepindex": " 0 ",
+        "goCastYourVote": "¡Ve a emitir tu voto!",
+        "checkResults": "Comprobar resultados",
+        "discoverMore": "Descubrir más",
+        "assignments": "Tareas",
+        "badges": "Insignias",
+        "members": "miembros",
+        "proposals": "Propuestas"
+      },
+      "members": {
+        "becomeAMember": "Hazte miembro",
+        "registrationIsTemporarilyDisabled": "El registro está temporalmente deshabilitado",
+        "copyInviteLink": "Copiar enlace de invitación",
+        "sendALink": "Envía un enlace a tus amigos para invitarlos a unirse a este DAO",
+        "daoApplicants": "Solicitantes de DAO",
+        "daoApplicants1": "Solicitantes de DAO",
+        "filterByAccountName": "Filtrar por nombre de cuenta",
+        "sortBy": "Ordenar por",
+        "joinDateDescending": "Fecha de unión descendente",
+        "joinDateAscending": "Fecha de ingreso ascendente",
+        "alphabetically": "Alfabéticamente (A-Z)",
+        "all": "Todo",
+        "coreTeam": "Equipo central",
+        "communityMembers": "Miembros de la comunidad"
+      },
+      "organization": {
+        "documentation": "Documentación",
+        "activeAssignments": "Asignaciones activas",
+        "payouts": "Pagos",
+        "activeBadges": "Insignias activas",
+        "daoCircles": "Círculos DAO",
+        "archetypes": "Arquetipos",
+        "badges": "Insignias",
+        "daoCircles1": "Círculos DAO",
+        "archetypes1": "Arquetipos",
+        "badges1": "Insignias",
+        "activeAssignments1": "Asignaciones activas",
+        "payouts1": "Pagos",
+        "activeBadges1": "Insignias activas",
+        "activeAssignments2": "Asignaciones activas",
+        "payouts2": "Pagos",
+        "activeBadges2": "Insignias activas",
+        "daoCircles2": "Círculos DAO",
+        "archetypes2": "Arquetipos",
+        "badges2": "Insignias"
+      },
+      "organizationalassets": {
+        "noBadges": "Sin insignias",
+        "noBadges1": "Sin insignias",
+        "yourOrganizationDoesnt": "Su organización aún no tiene ninguna insignia. ",
+        "searchBadges": "Buscar insignias",
+        "filterByName": "Filtrar por nombre",
+        "createANewBadge": "Crear una nueva insignia",
+        "sortByCreateDateAscending": "Ordenar por fecha de creación ascendente",
+        "sortByCreateDateDescending": "Ordenar por fecha de creación descendente",
+        "sortAlpabetically": "Ordenar Alfabéticamente (A-Z)"
+      },
+      "treasury": {
+        "transactionReview": "Revisión de transacciones",
+        "wellDoneMultisigTransaction": "¡Bien hecho! ",
+        "youCanNowFindTheMultisig": "Ahora puede encontrar la solicitud de transacción multisig en el",
+        "other2TreasurersNeeds": "Otros 2 tesoreros necesitan firmarlo,",
+        "theTheTransactionIsReady": "¡entonces la transacción está lista para ser ejecutada!",
+        "anErrorOccurredPlease": "Ocurrió un error, intente nuevamente haciendo clic en el botón a continuación",
+        "itWouldBeCoolIfWeCould": "Sería genial si pudiéramos proporcionar información sobre el eventual error aquí.",
+        "allGoodCreateMultisig": "Todo bien, crea Multisig",
+        "history": "Historia",
+        "allDoneHere": "Todo hecho aquí",
+        "noPendingPayoutRequest": "No hay solicitud de pago pendiente en este momento. ",
+        "open": "abierto",
+        "pending": "pendiente",
+        "signedBy": "Firmado por",
+        "realTokenConversion": "*La conversión de token real ocurrirá cuando los tesoreros ejecuten las transacciones de pago:",
+        "hereYouSeeTheConversion": "Aquí puede ver la conversión del mercado actual de [TOKEN] solo como referencia. ",
+        "endorsed": "respaldado",
+        "helloTreasurerThisMultisig": "¡Hola Tesorero! ",
+        "helloTreasurerSelectTheMultisig": "¡Hola Tesorero! ",
+        "helloTreasurerStartAMultisig": "¡Hola Tesorero! ",
+        "allMultisigTransactionHasBeenSuccessfully": "Todo Multisig. ",
+        "signMultisigTransaction": "Firma Multisig. ",
+        "executeMultisigTransaction": "Ejecutar Multisig. ",
+        "showCompletedTransactions": "Mostrar transacciones completadas",
+        "generateMultisigTransaction": "Generar Miltisig. ",
+        "accountAndPaymentStatus": "Cuenta",
+        "payoutRequests": "Solicitudes de pago",
+        "multisigSignRequests": "Solicitud de firma multisig",
+        "readyToExecute": "Listo para ejecutar"
+      }
+    },
+    "ecosystem": {
+      "ecosystemchekout": {
+        "reviewPurchaseDetails": "Revisar los detalles de la compra",
+        "hypha": "{1} HIPHA",
+        "tokensStaked": "Fichas apostadas:",
+        "hypha1": "{1} HIPHA",
+        "total": "Total",
+        "hypha2": "{1} HIPHA",
+        "tokensStaked1": "Fichas apostadas:",
+        "hypha3": "{1} HIPHA"
+      }
+    },
+    "error404": {
+      "1080": "(404)",
+      "sorryNothingHere": "Lo siento, nada aquí...",
+      "goBack": "Regresa"
+    },
+    "error404dho": {
+      "7348": "404",
+      "daoIsUnderMaintenance": "DAO está en mantenimiento"
+    },
+    "error404page": {
+      "ooops": "Ups",
+      "thisPageDoesnt": "Esta página no existe. Vuelva a intentarlo con una URL diferente.",
+      "backToDashboard": "volver al tablero"
+    },
+    "profiles": {
+      "wallet": {
+        "notitle": "Sin título",
+        "notitle1": "Sin título",
+        "activity": "actividad",
+        "date": "fecha",
+        "status": "estado",
+        "amount": "cantidad",
+        "claimed": "reclamado"
+      },
+      "profile": {
+        "inlinelabel": "etiqueta en línea",
+        "personalInfo": "Información personal",
+        "about": "Acerca de",
+        "myProjects": "Mis proyectos",
+        "votes": "Votos",
+        "badges": "Insignias",
+        "inlinelabel1": "etiqueta en línea",
+        "assignments": "Tareas",
+        "contributions": "Contribuciones",
+        "quests": "Misiones",
+        "biography": "Biografía",
+        "recentVotes": "Votos recientes",
+        "noBadgesYesApplyFor": "Aún no hay insignias: solicite una insignia aquí",
+        "noBadgesToSeeHere": "No hay insignias para ver aquí.",
+        "apply": "Aplicar",
+        "looksLikeYouDontHaveAnyActiveAssignments": "Parece que no tienes ninguna asignación activa. ",
+        "noActiveOrArchivedAssignments": "No hay asignaciones activas o archivadas para ver aquí.",
+        "createAssignment": "Crear tarea",
+        "looksLikeYouDontHaveAnyContributions": "Parece que todavía no tienes ninguna contribución. ",
+        "noContributionsToSeeHere": "No hay contribuciones para ver aquí.",
+        "createContribution": "Crear contribución",
+        "looksLikeYouDontHaveAnyQuests": "Parece que todavía no tienes ninguna misión. ",
+        "noQuestsToSeeHere": "No hay misiones para ver aquí.",
+        "createQuest": "Crear misión",
+        "writeSomethingAboutYourself": "Escribe algo sobre ti y deja que otros usuarios sepan sobre tu motivación para unirse.",
+        "looksLikeDidntWrite": "Parece que {username} aún no escribió nada sobre su motivación para unirse a este DAO.",
+        "writeBiography": "escribir biografia",
+        "retrievingBio": "Recuperando biografía...",
+        "youHaventCast": "Aún no has emitido ningún voto. ",
+        "noVotesCastedYet": "Aún no se han emitido votos.",
+        "vote": "Votar"
+      },
+      "profile-creation": {
+        "profilePicture": "foto de perfil",
+        "makeSureToUpdate": "Asegúrate de actualizar tu perfil una vez que seas miembro. ",
+        "uploadAnImage": "Subir una imagen",
+        "name": "Nombre",
+        "accountName": "Nombre de la cuenta",
+        "location": "Ubicación",
+        "timeZone": "Zona horaria",
+        "tellUsSomethingAbout": "Cuéntanos algo sobre ti",
+        "connectYourPersonalWallet": "Conecta tu billetera personal",
+        "youCanEnterYourOther": "Puede ingresar sus otras direcciones de billetera para futuros canjes de tokens si gana un token canjeable. ",
+        "selectThisAsPreferred": "Seleccione esta como dirección preferida",
+        "yourContactInfo": "Tu información de contacto",
+        "thisInformationIsOnly": "Esta información solo se utiliza para fines internos. ",
+        "selectThisAsPreferredContactMethod": "Seleccione esto como método de contacto preferido"
+      }
+    },
+    "proposals": {
+      "create": {
+        "optionsarchetypes": {
+          "chooseARoleArchetype": "Elige un arquetipo de rol\n        ",
+          "noArchetypesExistYet": "No existen arquetipos todavía.",
+          "pleaseCreateThemHere": "Por favor, créelos aquí."
+        },
+        "optionsassignments": {
+          "chooseARecent": "Elija una asignación reciente para calcular un pago puente"
+        },
+        "optionsbadges": {
+          "chooseABadge": "Elige una insignia\n        ",
+          "noArchetypesExistYet": "No existen arquetipos todavía.",
+          "pleaseCreateThemHere": "Por favor, créelos aquí."
+        },
+        "optionspolicies": {
+          "chooseAParentPolicy": "Elija una política principal\n        ",
+          "noPoliciesExistYet": "No existen políticas todavía."
+        },
+        "stepreview": {
+          "back": "Atrás"
+        },
+        "stepproposaltype": {
+          "completeYourDraftProposal": "Complete su borrador de propuesta",
+          "onetimeContributions": "Contribuciones únicas",
+          "recurringAssignments": "Asignaciones recurrentes",
+          "organizationalAssets": "Activos organizacionales",
+          "onetimeContributions1": "Contribuciones únicas",
+          "recurringAssignments1": "Asignaciones recurrentes",
+          "organizationalAssets1": "Activos organizacionales"
+        },
+        "stepicon": {
+          "chooseAnIcon": "Elige un icono",
+          "searchIconFor": "Icono de búsqueda de...",
+          "uploadAFile": "Cargar un archivo",
+          "back": "Atrás",
+          "nextStep": "Próximo paso"
+        },
+        "stepduration": {
+          "startDate": "Fecha de inicio",
+          "periods": "Períodos",
+          "endDate": "Fecha final",
+          "youMustSelect": "Debe seleccionar menos de {1} períodos (Actualmente seleccionó {2} períodos)",
+          "theStartDate": "La fecha de inicio no debe ser posterior a la fecha de finalización",
+          "back": "Atrás",
+          "nextStep": "Próximo paso"
+        },
+        "optionsquests": {
+          "chooseAQuestType": "Elige un tipo de misión\n      "
+        },
+        "stepdetails": {
+          "titleIsRequired": "¡Se requiere título!",
+          "proposalTitleLengthHasToBeLess": "La longitud del título de la propuesta debe ser menor o igual a {TITLE_MAX_LENGTH} caracteres (su título contiene {longitud} caracteres)",
+          "theDescriptionMustContainLess": "La descripción debe contener menos de {DESCRIPTION_MAX_LENGTH} caracteres (su descripción contiene {longitud} caracteres)",
+          "images": "Imágenes",
+          "pngJpegInApp": "PNG, JPEG. ",
+          "documents": "Documentos",
+          "txtPdfDoc": "txt, pdf, doc. ",
+          "videos": "Vídeos",
+          "mp4MovMax": "MP4, mov. ",
+          "leaveFileHere": "Dejar archivo aquí",
+          "dragAndDrop": "Arrastrar",
+          "orBrowse": "o navegar",
+          "back": "Atrás",
+          "nextStep": "Próximo paso"
+        },
+        "steppayout": {
+          "payout": "Pagar",
+          "pleaseEnterTheUsd": "Ingrese el equivalente en USD y el % de aplazamiento para esta contribución: cuanto más aplace a una fecha posterior, mayor será la bonificación (consulte el cálculo del salario real a continuación o use nuestra calculadora). ",
+          "typeTheAmountOfUsd": "Escriba la cantidad de HUSD",
+          "commitmentMustBeGreater": "El compromiso debe ser mayor o igual que la configuración del rol. ",
+          "defferedMustBeGreater": "Deferred debe ser mayor o igual que la configuración del rol. ",
+          "salaryCompensationForOneYear": "Compensación de salario por un año (${value})",
+          "salaryCompensationForOneYearUsd": "Compensación de salario por un año ( ${value} ) USD",
+          "compensation": "Compensación",
+          "pleaseEnterTheUSD": "Ingrese el equivalente en USD y el % de aplazamiento para esta contribución: cuanto más aplace a una fecha posterior, mayor será la bonificación (consulte el cálculo del salario real a continuación o use nuestra calculadora). ",
+          "compensationForOnePeriod": "Compensación por un período",
+          "compensationForOneCycle": "Compensación por un ciclo",
+          "customCompensation": "Compensación personalizada"
+        }
+      },
+      "proposallist": {
+        "createProposal": "Crear propuesta",
+        "learnMore": "Aprende más",
+        "unity": "Unidad",
+        "quorum": "Quórum",
+        "noProposals": "Sin Propuestas",
+        "oopsNothingCould": "Vaya, no se pudo encontrar nada aquí",
+        "stagingProposals": "Propuestas escénicas",
+        "activeProposals": "Propuestas activas",
+        "noProposals1": "Sin Propuestas",
+        "stagingProposals1": "Propuestas escénicas",
+        "activeProposals1": "Propuestas activas",
+        "proposalHistory": "Historial de propuestas",
+        "lookingToMonitor": "¿Quiere monitorear la antigüedad de las propuestas? ",
+        "seeHistory": "Ver historia >",
+        "isTheMinimumRequiredPercentageOfMembers": "Es el porcentaje mínimo requerido de miembros que respaldan una propuesta para que sea aprobada.",
+        "isTheMinimumRequiredPercentageOfTotal": "Es el porcentaje mínimo requerido del total de miembros que participan en la votación para que se apruebe. ",
+        "searchProposals": "Buscar propuestas",
+        "proposalTypes": "Tipos de propuestas",
+        "sortByLastAdded": "Ordenar por: Último agregado"
+      },
+      "proposalhistory": {
+        "noProposals": "Sin Propuestas",
+        "oopsNothingCould": "Vaya, no se pudo encontrar nada aquí"
+      },
+      "proposalcreate": {
+        "areYouSure": "¿Estás seguro de que quieres irte sin guardar el borrador?",
+        "leaveWithoutSaving": "Salir sin guardar",
+        "saveDraftAndLeave": "Guardar borrador y salir"
+      },
+      "proposaldetail": {
+        "proposalDetails": "Detalles de la propuesta",
+        "yourProposalIs": "Tu propuesta está en escena",
+        "thatMeansYour": "Eso significa que su propuesta aún no se publica en la cadena de bloques. ",
+        "publish": "Publicar",
+        "editProposal": "Editar propuesta",
+        "deleteProposal": "Eliminar propuesta",
+        "publishing": "Publicación",
+        "pleaseWait": "...Espere por favor...",
+        "deleting": "Borrando",
+        "pleaseWait1": "...Espere por favor...",
+        "badgeHolders": "Titulares de credencial",
+        "apply": "Aplicar",
+        "thereAreNo": "Aún no hay titulares",
+        "questCompletion": "Completar misión",
+        "didYouFinish": "¿Terminaste el trabajo y estás listo para crear la propuesta de finalización de la misión? ",
+        "claimYourPayment": "Reclama tu pago",
+        "yourProposalIs1": "Tu propuesta está en escena",
+        "thatMeansYour1": "Eso significa que su propuesta aún no se publica en la cadena de bloques. ",
+        "publish1": "Publicar",
+        "editProposal1": "Editar propuesta",
+        "deleteProposal1": "Eliminar propuesta",
+        "publishing1": "Publicación",
+        "pleaseWait2": "...Espere por favor...",
+        "deleting1": "Borrando",
+        "pleaseWait3": "...Espere por favor...",
+        "badgeHolders1": "Titulares de credencial",
+        "apply1": "Aplicar",
+        "thereAreNo1": "Aún no hay titulares"
+      }
+    },
+    "upvote-election": {
+      "upvoteelection": {
+        "timeLeft": "Tiempo restante:",
+        "days": "días",
+        "day": "día",
+        "hours": "horas",
+        "hour": "hora",
+        "mins": "minutos",
+        "min": "min",
+        "secs": "segundos",
+        "sec": "segundo",
+        "castYourVote": "Emitir su voto",
+        "loremIpsumDolor": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed",
+        "electionProcess": "Proceso de elección"
+      },
+      "steps": {
+        "stepround1": {
+          "voterBadge": "Credencial de votante",
+          "assigned": "Asignado:",
+          "delegates": "delegados",
+          "applicants": "Solicitantes:",
+          "totalVoters": "Total de votantes:",
+          "delegatesApplicants": "Delegados Solicitantes"
+        },
+        "stepheaddelegate": {
+          "voterBadge": "Credencial de votante",
+          "assigned": "Asignado:",
+          "memberInThisRound": "Miembro en esta ronda",
+          "totalVoters": "Total de votantes:",
+          "eligibleForChief": "Elegible para la insignia de Jefe de Delegado"
+        },
+        "stepchiefdelegates": {
+          "voterBadge": "Credencial de votante",
+          "assigned": "Asignado:",
+          "memberInThisRound": "Miembro en esta ronda",
+          "totalVoters": "Total de votantes:",
+          "eligibleForChief": "Elegible para la insignia de Jefe de Delegado"
+        },
+        "stepresult": {
+          "totalVoters": "Total de votantes:",
+          "totalDelegatesApplicants": "Total de delegados solicitantes:",
+          "round1Voters": "Votantes de la Ronda 1:",
+          "chiefDVoters": "Jefe D. Votantes:",
+          "headDVoters": "Jefe D. Votantes:",
+          "headDelegate": "Jefe delegado",
+          "HEADDELEGATE": "JEFE DELEGADO",
+          "chiefDelegates": "Jefes delegados"
+        }
+      }
+    },
+    "support": {
+      "support": {
+        "transactions": "Actas",
+        "whenYouEncounter": "Cuando encuentre un mensaje de error, copie y pegue la transacción en el canal de soporte de DAO.",
+        "transactionLog": "Registro de transacciones",
+        "copyDataReport": "Copie el informe de datos al equipo de soporte",
+        "displayOnBlockExplorer": "Mostrar en el explorador de bloques",
+        "doYouHaveQuestions": "¿Tienes preguntas?",
+        "findOurFull": "Encuentre nuestra documentación completa aquí",
+        "openWiki": "Abrir wiki",
+        "version": "Versión"
+      }
+    },
+    "onboarding": {
+      "goToDashboard": "Ir al panel de control",
+      "optionalStep": "Paso opcional",
+      "inviteMembers": "Invitar a los miembros",
+      "youReInTheEndGame": "¡Estás en el final del juego y listo para invitar miembros a tu DAO! ",
+      "optionalStepTelosAccount": "Paso opcional (se requiere cuenta telos)",
+      "launchTeam": "equipo de lanzamiento",
+      "createATeamOfMembersWithAdmin": "Cree un equipo de miembros con derechos de administrador. ",
+      "createLaunchTeam": "Crear equipo de lanzamiento",
+      "daoIndentity": "Identidad DAO",
+      "youCanAddYourDaoName": "Puede agregar el nombre de su DAO, describir su propósito y agregar un logotipo. ",
+      "name": "Nombre",
+      "logoIcon": "Logotipo / Icono",
+      "purpose": "Objetivo",
+      "theDisplayNameOfYourDao": "El nombre para mostrar de su DAO (máx. 50 caracteres)",
+      "uploadAnImage": "Subir una imagen",
+      "brieflyExplainWhatYourDao": "Explique brevemente de qué se trata su DAO (máx. 300 caracteres)",
+      "nextStep": "Próximo paso",
+      "utilityToken": "ficha de utilidad",
+      "theUtilityTokenThatRepresents": "El token de utilidad que representa valor dentro de la DAO y le permite acceder a ciertos servicios o acciones en la DAO.",
+      "max20CharactersExBitcoin": "20 caracteres como máximo. ",
+      "max7CharactersExBTC": "Max 7 caracteres ej. ",
+      "symbol": "Símbolo",
+      "treasuryToken": "ficha del tesoro",
+      "theTreasuryTokenIsAPromise": "El token de tesorería es una promesa de canjear los tokens ganados por tokens líquidos que se pueden cambiar a moneda fiduciaria en intercambios públicos.",
+      "design": "Diseño",
+      "setUpYourDaoBrand": "Configure la paleta de colores de su marca DAO aquí. ",
+      "primaryColor": "Color primario",
+      "secondaryColor": "Color secundario",
+      "buttonTextColor": "Color del texto del botón",
+      "preview": "Avance",
+      "createATeamOfCoreMembersWithAdmin": "Cree un equipo de miembros principales con capacidad administrativa. ",
+      "telosAccount": "cuenta telos",
+      "addToTheTeam": "Agregar al equipo",
+      "daoPublished": "¡DAO publicado!"
+    }
+  },
+  "proposalparsing": {
+    "createdAgo": "Creado hace {diff}",
+    "closedAgo": "Cerrado hace {diff}",
+    "thisVoteWillCloseIn": "Esta votación se cerrará en {dayStr}{hourStr}:{minStr}:{segStr}",
+    "second": " segundo",
+    "seconds": " segundos",
+    "minutes": " minutos",
+    "minute": " minuto",
+    "hour": " hora",
+    "hours": " horas",
+    "day": " día",
+    "days": " días",
+    "dayWithValue": "{días} día, ",
+    "daysWithValue": "{días} días, "
+  },
+  "proposalFilter": {
+    "all": "Todo",
+    "ability": "Capacidad",
+    "role": "Role",
+    "queststart": "Inicio de la misión",
+    "questend": "Fin de la misión",
+    "archetype": "Arquetipo",
+    "badge": "Insignia",
+    "circle": "Círculo",
+    "budget": "Presupuesto",
+    "policy": "Política",
+    "genericcontributions": "Contribuciones Genéricas",
+    "suspension": "Suspensión"
+  },
+  "routes": {
+    "exploreDAOs": "Explorar DAO",
+    "findOutMoreAboutHowToSetUp": "Obtenga más información sobre cómo configurar su propio DAO e Hypha aquí: https://hypha.earth",
+    "404NotFound": "404 No encontrado",
+    "finflow": "aleta",
+    "dashboard": "Panel",
+    "explore": "Explorar",
+    "createANewDao": "Crear un nuevo DHO",
+    "login": "Acceso",
+    "members": "miembros",
+    "proposals": "Propuestas",
+    "createProposal": "Crear propuesta",
+    "proposalHistory": "Historial de propuestas",
+    "proposalDetails": "Detalles de la propuesta",
+    "organization": "Organización",
+    "organizationAssets": "Activos de la organización",
+    "organizationBadges": "Insignias de organización",
+    "organizationRoles": "Funciones de la organización",
+    "profile": "Perfil",
+    "profileCreation": "Creación de perfil",
+    "wallet": "Billetera",
+    "circles": "Círculos",
+    "searchResults": "Resultados de la búsqueda",
+    "search": "Buscar",
+    "support": "Apoyo",
+    "treasury": "Tesorería",
+    "multiSig": "firma múltiple",
+    "configurationSettings": "Ajustes de configuración",
+    "ecosystemDashboard": "Panel de control del ecosistema",
+    "checkout": "Verificar",
+    "upvoteElection": "Elección de voto a favor"
+  },
+  "proposal-creation": {
+    "creation-process": "Proceso de creación",
+    "steps": {
+      "type": {
+        "label": "Tipo"
+      },
+      "description": {
+        "label": "Detalles",
+        "placeholder": "Indique el motivo de esta contribución. "
+      },
+      "date": {
+        "label": "Duración"
+      },
+      "icon": {
+        "label": "Selección de iconos"
+      },
+      "compensation": {
+        "label": "Compensación"
+      },
+      "review": {
+        "label": "Revisar"
+      }
+    },
+    "description": "Descripción",
+    "title": "Título",
+    "typeTheTitleOfYourProposal": "Escriba el título de su propuesta",
+    "pleaseStateTheReasonForThisContributionTheMore": "Indique el motivo de esta contribución. ",
+    "ability": "Capacidad",
+    "shareTheDetailsOfThisBadgeAssignment": "Comparta los detalles de esta asignación de insignia siguiendo las políticas de esta organización. ",
+    "multiply": "Multiplicar",
+    "abilityDuration": "Duración de la habilidad",
+    "circle": "Círculo",
+    "selectACircleFromTheList": "Seleccione un círculo de la lista",
+    "voiceCoefficient": "Coeficiente de voz",
+    "utilityCoefficient": "Coeficiente de utilidad",
+    "cashCoefficient": "Coeficiente de efectivo",
+    "payout": "Pagar",
+    "compensation": "Compensación",
+    "pleaseEnterTheUSDEquivalentAnd": "Ingrese el equivalente en USD y el % de aplazamiento para esta contribución: cuanto más aplace a una fecha posterior, mayor será la bonificación (consulte el cálculo del salario real a continuación o use nuestra calculadora). ",
+    "typeThePayoutTitle": "Escriba el título del pago",
+    "typeThePayoutDescription": "Escriba la descripción del pago",
+    "attachments": "Archivos adjuntos",
+    "clickToAddFile": "Haga clic para agregar archivo",
+    "totalUSDEquivalent": "Equivalente total en USD",
+    "chooseTheDeferredAmount": "Elige el importe aplazado",
+    "customCompensation": "Compensación personalizada",
+    "cashToken": "ficha de efectivo",
+    "utilityToken": "Ficha de utilidad",
+    "voiceToken": "Ficha de voz",
+    "poll": "Encuesta",
+    "pollOrSenseCheckWithCommunityMembers": "Haga una encuesta o consulte con los miembros de la comunidad para ver qué generará un mayor apoyo sobre otras propuestas. ",
+    "useThisFieldToDetailTheContentOfYourPoll": "Utilice este campo para detallar el contenido de su encuesta",
+    "votingMethod": "método de votación",
+    "selectVotingMethod": "Seleccionar método de votación",
+    "content": "Contenido",
+    "contribution": "Contribución",
+    "shareTheDetailsOfYoutContribution": "Comparta los detalles de su Contribución siguiendo las políticas de esta organización. ",
+    "describeYourProposal": "Describa su propuesta",
+    "chooseYourPayout": "Elige tu pago",
+    "documentation": "Documentación",
+    "quest": "Búsqueda",
+    "aQuestIsA2Step": "Una búsqueda es una propuesta de 2 pasos. ",
+    "createNewQuest": "Crear nueva misión",
+    "typeTheQuestName": "Escribe el nombre de la misión",
+    "describeYourQuest": "Describe tu búsqueda",
+    "duration": "Duración",
+    "type": "Tipo",
+    "selectQuestType": "Seleccionar tipo de misión",
+    "milestone": "Hito",
+    "selectPreviousQuest": "Seleccionar misión anterior",
+    "createNewPoll": "Crear nueva encuesta",
+    "role": "Role",
+    "applyBySelectingARoleArchetype": "Solicite seleccionando un arquetipo de rol (plantilla) y una banda salarial. ",
+    "applyForTheRole": "Solicitar el puesto",
+    "name": "Nombre",
+    "typeTheRoleName": "Escriba el nombre del rol",
+    "typeTheRoleDescription": "Escriba la descripción del rol",
+    "manageYourSalary": "Administra tu sueldo",
+    "fieldsBelowDisplayTheMinimum": "Los campos a continuación muestran el % mínimo de compromiso y el % de tokens HYPHA frente a los tokens HUSD requeridos para este rol, así como la capacidad del rol (cuántas personas se pueden asignar a este rol) y el equivalente en USD.",
+    "chooseYourCommitmentLevel": "Elige tu nivel de compromiso",
+    "badge": "Insignia",
+    "findHereAvailableBadges": "Encuentre aquí insignias disponibles con alcance y características únicas. ",
+    "applyForTheNewAbility": "Aplicar para la nueva habilidad",
+    "typeTheAbilityName": "Escriba el nombre de la habilidad",
+    "tellOtherMembersThereReasons": "Dile a otros miembros las razones por las que quieres aplicar a esta insignia",
+    "theseAreBasicAccountAbilities": "Estas son capacidades de cuenta básicas que un rol de usuario puede cumplir. ",
+    "createNewArchetype": "Crear nuevo arquetipo",
+    "typeTheArchetypeName": "Escriba el nombre del arquetipo",
+    "typeTheArchetypeDescription": "Escriba la descripción del arquetipo",
+    "chooseTheSalaryBand": "Elige la franja salarial",
+    "enterTheRoleCapacity": "Ingrese la capacidad del rol",
+    "maximumNumberOfPeopleForThisRole": "Número máximo de personas para este rol. ",
+    "chooseTheMinimumDeferredAmount": "Elige el monto mínimo a diferir",
+    "minimumRequiredPayedOutAsUtilityToken": "% mínimo requerido pagado como token de utilidad",
+    "badgesGiveCertainRightsAndAccountAbilities": "Las insignias otorgan ciertos derechos y habilidades de cuenta al titular. ",
+    "createNewBadge": "Crear nueva insignia",
+    "typeTheBadgeName": "Escriba el nombre de la insignia",
+    "typeTheBadgeDescription": "Escriba la descripción de la insignia",
+    "tokenMultiplier": "multiplicador de fichas",
+    "badgesProvideAnAdditionalMultiplier": "Las insignias proporcionan un multiplicador adicional además de las ganancias recibidas a través de una actividad en la DAO. ",
+    "circleDefineTheDAOsBoundaries": "Los círculos definen los límites y dominios de la DAO. ",
+    "createNewCircle": "Crear nuevo círculo",
+    "typeTheCircleName": "Escriba el nombre del círculo",
+    "purpose": "Objetivo",
+    "typeTheCircleBudget": "Escriba el presupuesto del círculo",
+    "parentCircle": "Círculo de padres",
+    "selectTheCircleParent": "Seleccione el padre del círculo. ",
+    "budget": "Presupuesto",
+    "requestBudgetAllocation": "Solicitar asignación de Presupuesto para un Círculo específico con esta propuesta. ",
+    "createNewBudget": "Crear nuevo presupuesto",
+    "typeTheBudgetName": "Escriba el nombre del presupuesto",
+    "typeHereTheContentOfYourBadge": "Escriba aquí el contenido de su presupuesto",
+    "policy": "Política",
+    "policiesCreateRulesThatDAOMembers": "Las políticas crean reglas que los miembros de DAO deben seguir. ",
+    "createNewPolicy": "Crear nueva política",
+    "typeThePolicyName": "Escriba el nombre de la política",
+    "typeHereTheContentOfYourPolicy": "Escriba aquí el contenido de su póliza",
+    "selectTheCircleParentOrLeaveItBlank": "Seleccione el padre del círculo o déjelo en blanco",
+    "policyType": "Tipo de póliza",
+    "selectThePolicyType": "Selecciona el tipo de póliza. "
+  },
+  "search": {
+    "results": {
+      "results": "{valor} Resultados",
+      "noResultsFound": "No se han encontrado resultados",
+      "resultsTypes": "Tipos de resultados",
+      "all": "Todo",
+      "members": "miembros",
+      "genericContribution": "Contribución Genérica",
+      "roleAssignments": "Asignaciones de funciones",
+      "roleArchetypes": "Arquetipos de roles",
+      "badgeTypes": "Tipos de insignias",
+      "badgeAssignments": "Asignaciones de insignias",
+      "suspensions": "suspensiones",
+      "filterBy": "Filtrado por",
+      "voting": "Votación",
+      "active": "Activo",
+      "archived": "Archivado",
+      "suspended": "Suspendido",
+      "sortBy": "Ordenar por",
+      "oldestFirst": "Los más viejos primero",
+      "newestFirst": "El más reciente primero",
+      "alphabetically": "Alfabéticamente (A-Z)",
+      "result": {
+        "active": "Activo",
+        "pendingToClose": "Pendiente de cerrar",
+        "voting": "Votación",
+        "suspended": "Suspendido",
+        "archived": "Archivado",
+        "withdrawn": "Retirado",
+        "applicant": "Solicitante",
+        "genericContribution": "Contribución Genérica",
+        "extension": "Extensión",
+        "roleAssignment": "Asignación de roles",
+        "badgeAssignment": "Asignación de insignias",
+        "suspension": "Suspensión",
+        "roleArchetype": " Arquetipo de rol",
+        "badge": "Insignia"
+      }
+    }
+  }
+}

@@ -1,0 +1,1671 @@
+{
+  "assignments": {
+    "assignment-claim-extend": {
+      "claimAll": "Захтевај све\n        ",
+      "extendAfter": "Продужите после {дате}",
+      "extendBefore": "Продужите пре {дате}",
+      "youMustReApply": "Морате се поново пријавити"
+    },
+    "assignment-suspend": {
+      "suspend": "СУСПЕНД",
+      "thisActionWill": "Ова радња ће предложити суспензију задатка корисника {1}",
+      "pleaseProvideAReason": "Наведите разлог.",
+      "reason": "Разлог",
+      "suspend1": "Суспенд\n          ",
+      "suspendingSAssignment": "Суспендовање задатка корисника {1}",
+      "areYouSure": "Да ли сте сигурни да желите да предложите суспензију овог задатка?",
+      "reason1": "Разлог:",
+      "cancel": "Поништити, отказати",
+      "suspend2": "Суспенд"
+    },
+    "assignment-withdraw": {
+      "withdraw": "ПОВЛАЧИ СЕ",
+      "ifYouWithdraw": "\n          Ако повучете свој задатак, он ће бити уклоњен из ДАО-а\n          \n        ",
+      "warningThisAction": "УПОЗОРЕЊЕ: Ова радња је неповратна.",
+      "notes": "Напомене",
+      "withdraw1": "Повуци се\n          ",
+      "withdrawingFromYourAssignment": "Повлачење са вашег задатка",
+      "areYouSure": "Да ли сте сигурни да желите да се повучете са овог задатка?",
+      "notes1": "напомене:",
+      "warningThisAction1": "УПОЗОРЕЊЕ: Ова радња је неповратна.",
+      "cancel": "Поништити, отказати",
+      "withdraw2": "Повуци се"
+    },
+    "dynamic-commit": {
+      "adjustmentsToYour": "За прилагођавање вашег задатка није потребно гласање.",
+      "commitment": "ПРИВРЖЕНОСТ",
+      "chooseBetween": "Изаберите између {1}% и {2}%",
+      "multipleAdjustmentsTo": "Вишеструка прилагођавања ваше обавезе ће бити укључена у прорачун.",
+      "deferral": "ДЕФЕРРАЛ",
+      "chooseBetween1": "Изаберите између {1}% и {2}%",
+      "thisDeferralRate": "Ова стопа одлагања се примењује само у тренутку када поднесете захтев.",
+      "confirm": "Потврди"
+    },
+    "salary": {
+      "compensation": "КОМПЕНЗАЦИЈА",
+      "showTokensFor": "Прикажи жетоне за пуни лунарни циклус (око 1 месец)",
+      "commitmentAndDeferral": "ОБАВЕЗЕ И ОДЛАГАЊЕ"
+    }
+  },
+  "circles": {
+    "circle-card": {
+      "productCircle": "Круг производа",
+      "openProposals": "2 отворена предлога",
+      "activeAssignments": "5 активних задатака",
+      "more": "2 више",
+      "thisIsThe": "Ово је најхладнији круг. ",
+      "lastMonth": "Прошлог месеца",
+      "husd": "20.000 ХУСД",
+      "hypha": "1.345 ХИПХА",
+      "hvoice": "45.330 ХВОИЦЕ",
+      "more1": "Више"
+    }
+  },
+  "common": {
+    "button-card": {
+      "until": "Све док"
+    },
+    "confirm-action-modal": {
+      "no": "Не",
+      "yes": "да"
+    },
+    "edit-controls": {
+      "edit": "Уредити",
+      "cancel": "Поништити, отказати",
+      "save": "сачувати"
+    },
+    "empty-widget-label": {
+      "yourOrganizationDoesnt": "Ваша организација још увек нема ниједан {1}.",
+      "click": "Кликните",
+      "here": "овде",
+      "toSetThemUp": "да их постави."
+    },
+    "explore-by-widget": {
+      "daos": "ДАО",
+      "ecosystems": "Екосистеми",
+      "exploreBy": "Истражите према:"
+    },
+    "upvote-delegate-widget": {
+      "upvoteDelegates": "Упвоте Делегати",
+      "electionValidityExpiresIn": "Изборни рок истиче за:",
+      "days": "дана",
+      "day": "дан",
+      "hours": "сати",
+      "hour": "сат",
+      "mins": "мин",
+      "min": "мин",
+      "headDelegate": "ГЛАВНИ ДЕЛЕГАТ"
+    },
+    "widget-editable": {
+      "more": "Више"
+    },
+    "widget-more-btn": {
+      "seeMore": "Види више"
+    },
+    "widget": {
+      "seeAll": "Видети све",
+      "seeAll1": "Видети све"
+    }
+  },
+  "contributions": {
+    "payout": {
+      "payout": "Исплата"
+    },
+    "token-multipliers": {
+      "deferredSeeds": "Одложено семе",
+      "husd": "ХУСД",
+      "hvoice": "ХВОИЦЕ",
+      "hypha": "ХИПХА"
+    }
+  },
+  "dao": {
+    "settings-communication": {
+      "announcements": "Најаве",
+      "postAnAnnouncement": "Поставите обавештење у свим одељцима да бисте обавестили чланове о важном ажурирању.",
+      "title": "Наслов",
+      "message": "Порука",
+      "removeAnnouncement": "Уклони најаву -",
+      "addMore": "Додај још",
+      "onlyForHypha": "Само за Хипха – објавите упозорење на свим ДАО-овима да бисте обавестили кориснике о важном ажурирању.",
+      "alert": "Алерт",
+      "positive": "Позитивно",
+      "negative": "Негативно",
+      "warning": "Упозорење",
+      "removeNotification": "Уклони обавештење -",
+      "alerts": "Алертс",
+      "enterYourMessageHere": "Унесите своју поруку овде"
+    },
+    "settings-community": {
+      "community": "Заједница",
+      "classic": "Цлассиц",
+      "upvote": "Гласајте за",
+      "doYouWantToExpand": "Да ли желите да проширите свој ДАО смисао на чланове ваше ДАО заједнице (држаоце токена)? ",
+      "activateCommunityVoting": "Активирајте гласање заједнице",
+      "onlyDaoAdminsCanChange": "Само ДАО администратори могу да промене подешавања",
+      "communityVotingMethod": "Метод гласања у заједници",
+      "theClassicMethodAllowsAll": "Класични метод омогућава свим члановима ДАО заједнице да гласају о предлозима заједнице користећи свој ХВОИЦЕ. ",
+      "upvoteElectionDateAndTime": "Гласајте за датум и време избора",
+      "upvoteElectionStartingDate": "Датум почетка избора за гласање",
+      "upvoteElectionStartingTime": "Гласајте за почетак избора",
+      "upvoteElectionRounds": "Гласајте за изборне рунде",
+      "round": "Роунд",
+      "peoplePassing": "- људи пролазе",
+      "duration": "- трајање",
+      "removeRound": "Уклони рунду -",
+      "addRound": "Адд Роунд",
+      "chiefDelegateRoundHowManyChiefDelegates": "Круг главног делегата > Колико главних делегата?",
+      "chiefDelegatesRoundDuration": "Круг шефова делегата - трајање",
+      "headDelegateRoundDoYouWant": "Круг главног делегата > Да ли желите 1 главног делегата?",
+      "headDelegatesRoundDuration": "Круг шефова делегата - трајање",
+      "upvoteMethodExpirationTime": "Време истека методе за гласање",
+      "afterTheElectionHasBeen": "Након што се избори успешно заврше, ЕДЕН метода гласања ће трајати одређено време. ",
+      "edenVotingMethod": "Трајање метода гласања ЕДЕН",
+      "communityProposalsDiligence": "Предлози заједнице",
+      "theFollowingSectionAllows": "Следећи одељак вам омогућава да подесите другачије јединство, кворум и трајање САМО за предлоге заједнице.",
+      "voteAlignment": " Поравнање гласања (јединство)",
+      "unityIsTheMinimumRequired": "Јединство је минимални потребан проценат чланова који подржавају (гласају за, насупрот гласању против) предлог да би он прошао. ",
+      "voteQuorum": "Кворум за гласање",
+      "quorumIsTheMinimumRequired": "Кворум је минимални потребан проценат укупног броја чланова који учествују у гласању да би он прошао.",
+      "voteDuration": "Трајање гласања",
+      "isTheDurationPeriod": "Да ли је период трајања гласања активан и члан може дати један или више гласова."
+    },
+    "settings-design": {
+      "design": "Дизајн",
+      "useDesignSettingsToChange": "Користите подешавања дизајна да бисте променили важне елементе бренда вашег ДАО-а, укључујући боје, логотипе, шаре, банере и позадине. ",
+      "general": "Генерал",
+      "splashpage": "Спласхпаге",
+      "banners": "Баннери",
+      "primaryColor": "Примарна боја",
+      "onlyDaoAdmins": "Само ДАО администратори могу да промене подешавања",
+      "secondaryColor": "Секундарна боја",
+      "textOnColor": "Текст у боји",
+      "logo": "Лого",
+      "extendedLogo": "Ектендед Лого",
+      "pattern": "Шаблон",
+      "color": "Боја",
+      "opacity": "Непрозирност",
+      "uploadAnImage": "Отпремите слику (макс. 3МБ)",
+      "title": "Наслов",
+      "shortParagraph": "Кратак пасус",
+      "dashboard": "Командна табла",
+      "proposals": "Предлози",
+      "members": "Чланови",
+      "organization": "Организација",
+      "explore": "Истражите",
+      "max50Characters": "Максимално 50 знакова",
+      "max140Characters": "Максимално 140 знакова"
+    },
+    "multisig-modal": {
+      "multisig": "Мултисиг",
+      "proposal": "предлог",
+      "doYouWant": "Да ли желите да креирате више потписа?",
+      "doYouWant1": "Да ли желите да одобрите промене?",
+      "changes": "Промене",
+      "signers": "Потписници",
+      "cancelMultiSig": "Откажи више потписа",
+      "resetChanges": "Ресетујте промене",
+      "createMultiSig": "Направите више потписа",
+      "deny": "негирати",
+      "approve": "Одобре"
+    },
+    "settings-voting": {
+      "voting": "Гласање",
+      "useVotingSettings": "Користите подешавања гласања да бисте подесили своје параметре гласања, укључујући јединство (мин % чланова који га подржавају), кворум (мин % од укупног броја чланова који учествују у гласању) и трајање гласања (колико дуго је гласање отворено, укључујући ажурирања вашег гласа).",
+      "voteAlignmentUnity": "Поравнање гласања (јединство)",
+      "unityIsThe": "Јединство је минимални потребан проценат чланова који подржавају (гласају за, насупрот гласању против) предлог да би он прошао. ",
+      "val": "= 0 ",
+      "onlyDaoAdmins": "Само ДАО администратори могу да промене подешавања",
+      "voteQuorum": "Кворум за гласање",
+      "quorumIsThe": "Кворум је минимални потребан проценат укупног броја чланова који учествују у гласању да би он прошао.",
+      "val1": "= 0 ",
+      "onlyDaoAdmins1": "Само ДАО администратори могу да промене подешавања",
+      "voteDuration": "Трајање гласања",
+      "isTheDuration": "Да ли је период трајања гласања активан и члан може дати један или више гласова.",
+      "onlyDaoAdmins2": "Само ДАО администратори могу да промене подешавања"
+    },
+    "settings-general": {
+      "general": "Генерал",
+      "useGeneralSettings": "Користите општа подешавања да бисте подесили неке основне параметре као што је веза до вашег главног простора за сарадњу и вашег ДАО-а и користите прекидач да бисте омогућили или онемогућили кључне функције.",
+      "daoName": "ДАО име",
+      "pasteTheUrl": "Овде налепите УРЛ адресу",
+      "onlyDaoAdmins": "Само ДАО администратори могу да промене подешавања",
+      "customUrl": "Прилагођени УРЛ",
+      "daohyphaearth": "дао.хипха.еартх/",
+      "typeYourCustom": "Овде унесите прилагођени УРЛ",
+      "onlyDaoAdmins1": "Само ДАО администратори могу да промене подешавања",
+      "socialChat": "Друштвено ћаскање",
+      "pasteTheUrl1": "Овде налепите УРЛ адресу",
+      "onlyDaoAdmins2": "Само ДАО администратори могу да промене подешавања",
+      "linkToDocumentation": "Линк до документације",
+      "pasteTheUrl2": "Овде налепите УРЛ адресу",
+      "onlyDaoAdmins3": "Само ДАО администратори могу да промене подешавања",
+      "buttonText": "Текст дугмета",
+      "documentation": "Документација",
+      "onlyDaoAdmins4": "Само ДАО администратори могу да промене подешавања",
+      "proposalsCreation": "Креирање предлога",
+      "activateOrDeactivate": "Активирајте или деактивирајте креирање предлога.",
+      "onlyDaoAdmins5": "Само ДАО администратори могу да промене подешавања",
+      "membersApplication": "Пријава за чланове",
+      "activateOrDeactivate1": "Активирајте или деактивирајте чланске апликације.",
+      "onlyDaoAdmins6": "Само ДАО администратори могу да промене подешавања",
+      "removableBanners": "Баннери који се могу уклонити",
+      "activateOrDeactivate2": "Активирајте или деактивирајте уклоњиве банере.",
+      "onlyDaoAdmins7": "Само ДАО администратори могу да промене подешавања",
+      "multisigConfiguration": "Мултисиг конфигурација",
+      "activateOrDeactivateMultisig": "Активирајте или деактивирајте мултисигн.",
+      "onlyDaoAdmins8": "Само ДАО администратори могу да промене подешавања"
+    },
+    "settings-plan": {
+      "selectYourPlan": "Изаберите свој план",
+      "actionRequired": "Мере потребне",
+      "membersMax": "максимално {1} чланова",
+      "billingPeriod": "Период за обрачун",
+      "discount": "{1}% попуста!",
+      "availableBalance": "Доступно Стање",
+      "notEnoughTokens": "Нема довољно жетона",
+      "buyHyphaToken": "Купите Хипха токен",
+      "pleaseSelectPlan": "Прво изаберите план и период.",
+      "billingHistory": "Историја наплате",
+      "suspended": "Суспендед",
+      "expired": "Истекао",
+      "planActive": "План активан",
+      "renewPlan": "Обновите план ",
+      "activatePlan": "Активирајте план"
+    }
+  },
+  "dashboard": {
+    "how-it-works": {
+      "readyForVoting": "Спремни за гласање?",
+      "proposingAPolicy": "Предлажење политике?",
+      "applyingForARole": "Пријављујете се за улогу?",
+      "creatingANewRole": "Стварање нове улоге?",
+      "creatingABadge": "Правите значку?",
+      "launchingAQuest": "Покретање потраге?",
+      "youNeedTo": "Потребно је да усвојите и кворум (мин % од укупног броја чланова који учествују у гласању) и јединство (мин % чланова који га подржавају). ",
+      "createAGeneric": "Направите општи предлог доприноса са описним насловом и јасном дефиницијом политике заједно са корацима за спровођење политике.",
+      "createARecurring": "Направите понављајућу активност за постојећу доделу улоге и опишите зашто се добро слажете са што више детаља.",
+      "createAProposal": "Направите предлог за средство организације и изаберите архетип улоге са описним именом и јасном дефиницијом улоге са одговорностима.",
+      "createAProposal1": "Направите предлог за средство организације и изаберите тип значке са именом и јасним препознавањем учења или откључавања достигнућа или потврђивања нивоа статуса.",
+      "createAGeneric1": "Направите генерички предлог доприноса са описним насловом и јасним рашчлањивањем прекретница и исплата по прекретници дуж временске линије."
+    },
+    "news-item": {
+      "posted": "објављено {1}"
+    },
+    "news-widget": {
+      "latestNews": "Најновије вести"
+    },
+    "organization-banner": {
+      "thePurposeOf": "Сврха",
+      "hypha": "Хипха",
+      "loremIpsumDolor": "Лорем ипсум долор сит амет, цонсецтетур адиписцинг елит, сед до еиусмод темпор инцидидунт ут лаборе ет долоре магна аликуа.",
+      "documentation": "Документација"
+    },
+    "support-widget": {
+      "documentation": "Документација",
+      "needSupport": "Потребна вам је подршка?",
+      "pleaseReadOur": "Молимо прочитајте нашу документацију за више информација. "
+    }
+  },
+  "ecosystem": {
+    "ecosystem-card": {
+      "daos": "{1} ДАО",
+      "coreMembers": "{1} Основни чланови",
+      "communityMembers": "{1} Чланови заједнице"
+    },
+    "ecosystem-info": {
+      "firstStepConfigureYour": "Први корак: Конфигуришите свој",
+      "ecosystem": "Екосистем",
+      "editEcosystemInformation": "Уредите информације о екосистему",
+      "onlyDaoAdmins": "Само ДАО администратори могу да промене подешавања",
+      "saveEcosystemInformation": "Сачувајте информације о екосистему",
+      "ecosystemName": "Име екосистема",
+      "typeNameHere": "Овде унесите име (највише 30 знакова)",
+      "onlyDaoAdmins1": "Само ДАО администратори могу да промене подешавања",
+      "logo": "Лого",
+      "uploadAnImage": "Отпремите слику (макс. 3МБ)",
+      "showEcosystemOnMarketplace": "Прикажи екосистем на Маркетплаце-у",
+      "findInvestorsWilling": "Пронађите инвеститоре који су спремни да финансирају ваш екосистем",
+      "onlyDaoAdmins2": "Само ДАО администратори могу да промене подешавања",
+      "ecosystemDomain": "Домен екосистема",
+      "ecosystemPurpose": "Сврха екосистема",
+      "typeADescription": "Овде унесите опис (макс. 300 знакова)"
+    }
+  },
+  "filters": {
+    "filter-widget": {
+      "filters": "Филтери",
+      "saveFilters": "Сачувајте филтере",
+      "resetFilters": "Ресетујте филтере"
+    }
+  },
+  "form": {
+    "custom-period-input": {
+      "customPeriod": "Прилагођени период",
+      "typeAnAmount": "Унесите износ",
+      "hours": "сати",
+      "days": "дана",
+      "weeks": "недеље",
+      "months": "месеци"
+    },
+    "image-processor": {
+      "rotate": "Ротирај 90",
+      "rotate1": "Ротирај -90",
+      "zoomIn": "Увеличати",
+      "zoomOut": "Умањите",
+      "verticalMirror": "Вертикално огледало",
+      "horizontalMirror": "Хоризонтално огледало",
+      "cancel": "Поништити, отказати",
+      "reset": "Ресетовати"
+    }
+  },
+  "ipfs": {
+    "demo-ipfs-inputs": {
+      "ipfsId": "ИПФС ИД: {1}",
+      "previewImage": "Преглед слике",
+      "ipfsId1": "ИПФС ИД: {1}",
+      "ipfsFile": "ИПФС датотека",
+      "ipfsId2": "ИПФС ИД: {1}",
+      "ipfsFileWith": "ИПФС датотека са дугметом за преузимање"
+    },
+    "input-file-ipfs": {
+      "uploadAFile": "Отпремите датотеку"
+    },
+    "ipfs-file-viewer": {
+      "seeAttachedDocument": "Погледајте приложени документ"
+    }
+  },
+  "login": {
+    "bottom-section": {
+      "newUser": "Нови корисник?",
+      "registerHere": "Региструјте овде\n          ",
+      "registrationIsTemporarilyDisabled": "Регистрација је привремено онемогућена",
+      "areYouAMember": "Да ли сте члан?",
+      "loginHere": "Логин овде",
+      "otherwise": "Иначе",
+      "loginWithWallet": "Пријавите се са новчаником",
+      "newUser1": "Нови корисник?",
+      "registerHere1": "Региструјте овде\n        ",
+      "registrationIsTemporarilyDisabled1": "Регистрација је привремено онемогућена"
+    },
+    "login-view": {
+      "loginTo": "Пријавите се на",
+      "your": " твој",
+      "account": "рачун",
+      "loginTo1": "Пријавите се на\n          ",
+      "yourAccount": "Ваш рачун",
+      "youCanEither": "Можете се или пријавити са својим СЕЕДС Лигхт новчаником (",
+      "downloadHere": "Преузмите овде",
+      "orAnchor": ") Или Анцхор, безбедан алат отвореног кода који је доступан за преузимање као а",
+      "desktopAppFor": "Десктоп апликација за Виндовс и Мац",
+      "andAMobile": "и мобилну апликацију за обоје",
+      "android": "Андроид",
+      "and": " и",
+      "nbspios": "",
+      "forMore": ". ",
+      "seeTheseSlidesnbsp": "погледајте ове слајдове.",
+      "pleaseLoginWith": "Пријавите се са једним од новчаника, својим приватним кључем или наставите као гост. ",
+      "account1": "Рачун",
+      "account2": "Рачун",
+      "privateKey": "Приватни кључ",
+      "privateKey1": "Приватни кључ",
+      "login": "Пријавите се",
+      "login1": "{1} Пријава {2}",
+      "getApp": "Преузмите апликацију"
+    },
+    "register-user-view": {
+      "account": "Рачун",
+      "information": "информације",
+      "inOrderTo": "Да бисте учествовали у доношењу одлука или да бисте се пријавили за било коју улогу или добили било какав допринос, морате се регистровати и постати члан. ",
+      "pleaseUseThe": "Молимо вас да користите вођени образац за креирање новог СЕЕДС налога и регистрацију чланства. ",
+      "accountName": "Назив налога\n          ",
+      "charactersAlphanumeric": "12 знакова, алфанумерички а-з, 1-5",
+      "phoneNumber": "Број телефона",
+      "country": "Држава",
+      "phoneNumber1": "Број телефона",
+      "your": "Твоје",
+      "verificationCode": "верификациони код",
+      "pleaseCheckYour": "Проверите на свом телефону верификациони код",
+      "verificationCode1": "Верификациони код",
+      "charactersAlphanumeric1": "12 знакова, алфанумерички а-з, 1-5",
+      "problemsWithTheCode": "Проблеми са кодом?",
+      "checkYourPhoneNumber": "Проверите свој број телефона",
+      "welcome": "Добродошли",
+      "ourAuthenticationMethod": "Наш метод аутентификације је Анцхор, безбедан алат отвореног кода који је доступан за преузимање као а ",
+      "desktopAppFor": "Десктоп апликација за Виндовс и Мац",
+      "andAMobile": " и мобилну апликацију за обоје ",
+      "android": "Андроид",
+      "and": " и ",
+      "ios": "иОС",
+      "forMore": ".  ",
+      "theseSlides": "ове слајдове",
+      "areYouAMember": "Да ли сте члан?",
+      "loginHere": "Логин овде",
+      "createDao": "Креирајте ДАО"
+    },
+    "register-user-with-captcha-view": {
+      "createNew": "Створи ново\n            ",
+      "hyphaAccount": "Хипха налог",
+      "pleaseVerifyYou": "Молимо потврдите да нисте БОТ",
+      "proceedWith": "Наставите са\n                ",
+      "hyphaWallet": "Хипха Валлет",
+      "setupHyphaWallet": "Подесите Хипха новчаник",
+      "scanTheQr": "Скенирајте КР код на овој страници,",
+      "itContainsThe": " садржи позивницу за креирање Хипха налога на вашем новчанику.",
+      "onceTheAccount": " Када је рачун спреман,",
+      "youAreSet": " спремни сте за последњи следећи корак.",
+      "copyInviteLink": "Копирај линк позива",
+      "loginWith": "Пријавите се\n            ",
+      "hyphaWallet1": "Хипха Валлет",
+      "signYourFirstTransaction": "Потпишите своју прву трансакцију",
+      "didYouCreate": "Да ли сте креирали свој Хипха налог у Хипха новчанику? ",
+      "login": "{1} Пријава {2}",
+      "getApp": "Преузмите апликацију",
+      "areYouAMember": "Да ли сте члан?",
+      "loginHere": "Логин овде"
+    },
+    "welcome-view": {
+      "youNeedAn": "Потребан вам је Хипха налог да бисте комуницирали са Хипха екосистемом и креирали ДАО.",
+      "isonboarding": "{{ исОнбоардинг ?  ",
+      "ifThisIs": "Ако сте први пут овде,",
+      "clickCreateNew": " кликните на Креирај нови Хипха налог и пратите кораке. ",
+      "ifYouAlready": "Ако већ имате конфигурисан Хипха налог и Анцхор новчаник",
+      "clickThe": ", кликните на дугме за пријаву, потврдите трансакцију помоћу Анцхор Валлет-а и унесите ДАО.' ",
+      "theDhoDecentralized": "ДХО (Децентрализована људска организација) је оквир за изградњу ваше организације од темеља на органски и партиципативан начин и заједно са другима.",
+      "createNewHyphaAccount": "Креирајте нови Хипха налог",
+      "registrationIsTemporarilyDisabled": "Регистрација је привремено онемогућена",
+      "login": "Пријавите се",
+      "continueAsAGuest": "Наставите као гост",
+      "useAnExisting": "Користите постојећи\n      ",
+      "blockhainAccount": "блоцкхаин налог"
+    }
+  },
+  "navigation": {
+    "alert-message": {
+      "thisIsA": "Ово је",
+      "versionOfThe": "верзија нове Хипха ДАО платформе. ",
+      "ratingMeaning": "оцена, што значи {1}. "
+    },
+    "dho-info": {
+      "moreInfo": "Више информација",
+      "votingDuration": "Трајање гласања: {1}",
+      "periodDuration": "Трајање периода: {1}",
+      "admins": "Админс"
+    },
+    "guest-menu": {
+      "login": "Пријавите се",
+      "register": "Регистровати",
+      "registrationIsTemporarilyDisabled": "Регистрација је привремено онемогућена",
+      "login1": "Пријавите се",
+      "register1": "Регистровати",
+      "help": "Помоћ"
+    },
+    "left-navigation": {
+      "proposals": "Предлози",
+      "members": "Чланови",
+      "organization": "Организација",
+      "explore": "Истражите"
+    },
+    "navigation-header": {
+      "home": "Кућа",
+      "proposals": "Предлози",
+      "members": "Чланови",
+      "organization": "Организација",
+      "circles": "Цирцлес",
+      "archetypes": "Архетипови",
+      "badges": "Значке",
+      "policies": "Политике",
+      "alliances": "Савези",
+      "treasury": "Треасури",
+      "admin": "Админ"
+    },
+    "non-member-menu": {
+      "becomeMember": "Постаните члан",
+      "registrationIsTemporarilyDisabled": "Регистрација је привремено онемогућена"
+    },
+    "profile-sidebar-guest": {
+      "asAGuest": "Као гост имате пун приступ свим садржајима ДАО-а. ",
+      "registerNewAccount": "Региструјте нови налог",
+      "registrationIsTemporarilyDisabled": "Регистрација је привремено онемогућена",
+      "login": "Пријавите се",
+      "welcomeTo": "Добро дошли у {даоНаме}"
+    },
+    "quick-actions": {
+      "7432": "2",
+      "quickActions": "Брзе акције",
+      "completeDraft": "Комплетан нацрт",
+      "youHaveA": "Имате нацрт предлога који треба да завршите",
+      "claimPeriods": "Периоди захтева",
+      "youHave": "Имате 2 периода да затражите",
+      "adjustCommitment": "Прилагодите посвећеност",
+      "forASpecific": "За одређени временски период",
+      "extendAssignment": "Продужи задатак",
+      "extendYourAssignment": "Продужите свој задатак за 24 дана"
+    },
+    "quick-links": {
+      "thisDaoConfigured": "Овај ДАО је конфигурисан за ниједан предлог",
+      "newProposal": "Нови предлог",
+      "myProfile": "Мој профил",
+      "myWallet": "Мој новчаник",
+      "logout": "Одјавити се"
+    },
+    "sidebar-news": {
+      "weAreCurrently": "Тренутно разматрамо вашу пријаву. ",
+      "weAreCurrently1": "Тренутно разматрамо вашу пријаву. ",
+      "niceToSee": "Драго ми је да те видим овде. ",
+      "youCanVoteFor": "Можете гласати за ",
+      "proposals": "предлозима",
+      "searchFor": ", тражити ",
+      "members": "чланова",
+      "andFindOut": " и сазнајте шта чини ваш ",
+      "organization": "организација",
+      "tick": " тицк.",
+      "beSureTo": "Обавезно довршите своје ",
+      "profile": "профил",
+      "andHaveFun": " и забавите се стварајући нове и узбудљиве ствари са својим ДАО-ом и једни са другима.",
+      "welcomeTo": "Добро дошли у {даоНаме}"
+    }
+  },
+  "organization-asset": {
+    "asset-card": {
+      "revoke": "Опозови",
+      "seeDetails": "Види детаље",
+      "na": "н/а",
+      "apply": "Применити",
+      "applied": "Примењено"
+    },
+    "create-badge-widget": {
+      "newBadgeProposal": "Предлог нове значке",
+      "createYourBadge": "Направите своју значку",
+      "doYouNeedSpecific": "Да ли вам је потребна посебна значка за ваше кључне чланове ДАО-а или за Заједницу власника токена? "
+    }
+  },
+  "organization": {
+    "archetypes-widget": {
+      "archetypes": "Архетипови"
+    },
+    "badge-assignments-widget": {
+      "badgeAssignments": "Задаци значке"
+    },
+    "badge-card": " 150 ? ",
+    "badges-widget": {
+      "badges": "Значке"
+    },
+    "circle-card": {
+      "subCircles": "Подкругови ({1})",
+      "showSubcirclesDetails": "Прикажи детаље о подкруговима",
+      "goToCircle": "Иди у круг",
+      "members": "Чланови ({1})",
+      "members1": "Чланови ({1})",
+      "na": "н/а"
+    },
+    "circles-widget": {
+      "structure": "Структура",
+      "circleBudgetDistribution": "Цирцле Будгет Дистрибутион",
+      "total": "УКУПНО:",
+      "husd": "ХУСД",
+      "hypha": "ХИПХА",
+      "budgetBreakdown": "Преглед буџета"
+    },
+    "create-dho-widget": {
+      "createNewDao": "Креирајте нови ДАО",
+      "createNewDao1": "Креирајте нови ДАО"
+    },
+    "payout-card": " 150 ? ",
+    "payouts-widget": {
+      "passedGenericContributions": "Положени генерички доприноси"
+    },
+    "policies-widget": {
+      "policies": "Политике",
+      "seeAll": "Видети све"
+    },
+    "role-assignment-card": " 150 ? ",
+    "role-assignments-widget": {
+      "activeRoleAssignments": "Додељивање активних улога"
+    },
+    "tokens": {
+      "seeMore": "Види више",
+      "seeMore1": "Види више",
+      "issuance": "Издавање"
+    }
+  },
+  "plan": {
+    "chip-plan": {
+      "plan": "{1} план",
+      "daysLeft": "дана остало",
+      "daysLeftTo": "преосталих дана да обновите свој план"
+    },
+    "downgrade-pop-up": {
+      "downgradeYourPlan": "Вратите свој план на старију верзију",
+      "areYouSure": "Да ли сте сигурни да желите да вратите на старију верзију?",
+      "byDowngradingYou": "Враћањем на старију верзију више нећете моћи да приступите неким ДАО функцијама повезаним са вашим активним планом. ",
+      "pleaseCheckTerms": "Проверите услове и одредбе да бисте сазнали више.",
+      "keepMyPlan": "Задржи мој план",
+      "downgrade": "Надоградња"
+    }
+  },
+  "profiles": {
+    "about": {
+      "about": "О томе"
+    },
+    "active-assignments": {
+      "userHasNoActivity": "Корисник нема никакву активност",
+      "noActivityMatchingFilter": "Нема филтера који се подудара са активностима",
+      "userHasNoActivity1": "Корисник нема никакву активност",
+      "noActivityMatchingFilter1": "Нема филтера који се подудара са активностима"
+    },
+    "contact-info": {
+      "contactInfo": "Контакт информације",
+      "phone": "Телефон",
+      "email": "Емаил"
+    },
+    "current-balance": {
+      "currentBalance": "Тренутно стање на рацуну",
+      "loremIpsumDolor": "Лорем ипсум долор сит амет, цонсецтетур адиписцинг елит, сед до еиусмод темпор"
+    },
+    "edit-dialog": {
+      "save": "сачувати",
+      "lukegravdent": "@лукегравдент",
+      "accountSettings": "Подешавања налога"
+    },
+    "members-list": {
+      "noMembersAt": "Тренутно нема чланова"
+    },
+    "multi-sig": {
+      "multiSig": "Мулти сиг",
+      "clickHereTo": "Кликните овде да бисте потписали нове ПР-ове",
+      "multiSig1": "Мулти сиг"
+    },
+    "open-proposals": {
+      "openProposals": "Отворите предлоге"
+    },
+    "organizations": {
+      "otherOrganizations": "Друге организације",
+      "seeMore": "Види више",
+      "organizations": "Организације",
+      "seeMore1": "Види више"
+    },
+    "past-achievements": {
+      "pastAchievements": "Прошла достигнућа",
+      "youHaveNo": "Немате прошла достигнућа"
+    },
+    "profile-card": {
+      "voice": "{1} ГЛАС",
+      "name": "Име",
+      "timeZone": "Временска зона",
+      "text": "текст",
+      "applicant": "АППЛИЦАНТ",
+      "coreTeam": "ГЛАВНИ ТИМ",
+      "community": "ЗАЈЕДНИЦА"
+    },
+    "proposal-item": {
+      "viewProposal": "Погледајте предлог",
+      "viewProposal1": "Погледајте предлог"
+    },
+    "transaction-history": {
+      "transactionHistory": "Трансакције"
+    },
+    "voting-history": {
+      "recentVotes": "Недавни гласови",
+      "caption": "Наслов",
+      "noVotesFound": "Нема пронађених гласова за корисника"
+    },
+    "wallet-adresses": {
+      "bitcoin": "Битцоин",
+      "address": "адреса",
+      "btcPayoutsAre": "БТЦ исплате су тренутно онемогућене",
+      "ethereum": "Етхереум",
+      "address1": "адреса",
+      "ethPayoutsAre": "ЕТХ исплате су тренутно онемогућене",
+      "eos": "ЕОС",
+      "address2": "адреса",
+      "memo": "Белешка",
+      "eos1": "ЕОС",
+      "address3": "адреса",
+      "memo1": "Белешка",
+      "walletAdresses": "Валлет Аддрессес",
+      "onlyVisibleToYou": "видљиво само вама"
+    },
+    "wallet-base": {
+      "485": "500,00",
+      "4842": "1000.00",
+      "wallet": "Новчаник",
+      "redeemHusd": "Откупите ХУСД",
+      "makeAnotherRedemption": "Направите још један откуп",
+      "redemptionPending": "Исплата је на чекању",
+      "requestor": "Захтевалац",
+      "amount": "Износ",
+      "redeemHusd1": "Откупите ХУСД",
+      "husdAvailable": "ХУСД доступан",
+      "amountToRedeem": "Износ за откуп",
+      "typeAmount": "Унесите износ",
+      "maxAvailable": "Мак Аваилабле",
+      "redeemToAddress": "Искористите на адресу",
+      "redemptionSuccessful": "Искупљење успешно!",
+      "daoid": "ДАО_ид",
+      "requestor1": "Захтевалац",
+      "amount1": "Износ",
+      "asSoonAs": "Чим благајници креирају трансакцију са више потписа и изврше овај захтев, добићете своја средства директно на вашу ХУСД адресу наведену у кораку прегледа",
+      "noWalletFound": "Новчаник није пронађен",
+      "pendingRedemptions": "Исплате на чекању",
+      "details": "Детаљи",
+      "queueHusdRedemption": "Ставите у ред откупа ХУСД-а за исплату трезора у конфигурисани новчаник",
+      "redeem": "Искупити"
+    },
+    "wallet-hypha": {
+      "availableBalance": "Доступно Стање",
+      "notEnoughTokens": "Нема довољно жетона",
+      "buyHyphaToken": "Купите Хипха токен"
+    }
+  },
+  "proposals": {
+    "version-history": {
+      "versionHistory": "Историја верзија",
+      "original": "Оригинал",
+      "currentOnVoting": "Актуелно - на гласању",
+      "rejected": "Одбијен"
+    },
+    "comment-input": {
+      "typeACommentHere": "Унесите коментар овде...",
+      "youMustBe": "Морате бити члан да бисте остављали коментаре"
+    },
+    "comment-item": {
+      "showMore": "прикажи више ({1})",
+      "showLess": "показати мање"
+    },
+    "comments-widget": {
+      "comments": "Коментари"
+    },
+    "creation-stepper": {
+      "saveAsDraft": "Сачувај као нацрт",
+      "nextStep": "Следећи корак",
+      "publish": "Објавите"
+    },
+    "proposal-card": {
+      "comments": "{1} коментара"
+    },
+    "proposal-draft": {
+      "continueProposal": "Наставите са предлогом",
+      "deleteDraft": "Избриши нацрт"
+    },
+    "proposal-dynamic-popup": {
+      "save": "сачувати"
+    },
+    "proposal-staging": {
+      "yourProposalIs": "Ваш предлог је на инсценацији",
+      "publishingYourProposal": "Објављивање вашег предлога о постављању значи да још није уживо или на ланцу. ",
+      "publish": "Објавите",
+      "editProposal": "Уредите предлог"
+    },
+    "proposal-suspended": {
+      "thatMeansThat": "То значи да ће се уступање завршити и потраживања више нису могућа, али сви претходно испуњени периоди остају подложни.",
+      "publish": "Објавите",
+      "iChangedMyMind": "предомислио сам се"
+    },
+    "proposal-card-chips": {
+      "poll": "Анкета",
+      "circleBudget": "Цирцле Будгет",
+      "quest": "Куест",
+      "start": "Почетак",
+      "payout": "Исплата",
+      "circle": "Цирцле",
+      "policy": "Полици",
+      "genericContribution": "Генерички допринос",
+      "role": "Улога",
+      "assignment": "Додељивање",
+      "extension": "Продужетак",
+      "ability": "Способност",
+      "archetype": " Архетип",
+      "badge": "Значка",
+      "suspension": "Суспензија",
+      "withdrawn": "Повучен",
+      "accepted": "ПРИХВАЋЕНО",
+      "rejected": "ОДБИЈЕН",
+      "voting": "ГЛАСАЊЕ",
+      "active": "АКТИВНО",
+      "archived": "АРХИВИРАНО",
+      "suspended": "СУСПЕНДЕД"
+    },
+    "proposal-view": {
+      "s": " 1 ? ",
+      "title": "Наслов",
+      "icon": "Икона",
+      "votingSystem": "Систем гласања",
+      "commitmentLevel": "Ниво посвећености",
+      "adjustCommitment": "Адјуст Цоммитмент",
+      "edit": "Уредити",
+      "deferredAmount": "Одложени износ",
+      "adjustDeferred": "Адјуст Деферред",
+      "edit1": "Уредити",
+      "salaryBand": "Платни опсег",
+      "equivalentPerYear": "{1} еквивалент годишње",
+      "minDeferredAmount": "Мин одложени износ",
+      "roleCapacity": "Капацитет улога",
+      "compensation": "Компензација",
+      "showCompensationFor": "Прикажите надокнаду за један период",
+      "deferredAmount1": "Одложени износ",
+      "parentCircle": "Родитељски круг",
+      "parentCircle1": "Родитељски круг",
+      "parentPolicy": "Политика родитеља",
+      "description": "Опис",
+      "attachedDocuments": "Приложена документација",
+      "createdBy": "Креирао:",
+      "seeProfile": "Види профил"
+    },
+    "quest-progression": {
+      "questProgression": "Прогресија задатака"
+    },
+    "voter-list": {
+      "votes": "Гласови"
+    },
+    "voting-option-5-scale": {
+      "hellYa": "Хелл Иа",
+      "yes": "да",
+      "abstain": "Уздржати се",
+      "hellNo": "До ђавола не"
+    },
+    "voting-option-yes-no": {
+      "yes": "да",
+      "abstain": "Уздржати се",
+      "no": "Не"
+    },
+    "voting-result": {
+      "unity": "Јединство",
+      "quorum": "Кворум"
+    },
+    "voting": {
+      "yes": "да",
+      "abstain": "Уздржати се",
+      "no": "Не",
+      "yes1": "да",
+      "no1": "Не",
+      "yes2": "да",
+      "no2": "Не",
+      "voteNow": "Гласајте сад",
+      "youCanChange": "Можете променити свој глас",
+      "activate": "Активирати",
+      "archive": "Архива",
+      "apply": "Применити",
+      "suspendAssignment": "Обустави задатак\n          ",
+      "invokeASuspension": "Позовите предлог суспензије за ову активност",
+      "withdrawAssignment": "Повући задатак"
+    }
+  },
+  "templates": {
+    "templates-modal": {
+      "customizeYourDao": "Прилагодите свој ДАО",
+      "allTemplatesProposals": "Сви предлози шаблона су успешно објављени и сада су спремни за гласање осталих чланова ДАО-а!",
+      "creatingAndPublishing": "Креирање и објављивање свих предлога шаблона. ",
+      "loremIpsumDolor": "Лорем ипсум долор сит амет, цонсецтетур адиписцинг елит, сед до еиусмод темпор инцидидунт ут лаборе ет долоре магна аликуа. ",
+      "publishingProcess": "Процес објављивања:",
+      "chooseADaoTemplate": "Изаберите ДАО шаблон",
+      "aDaoTemplate": "ДАО шаблон је унапред упаковани скуп предлога. ",
+      "useATemplate": "Користите шаблон",
+      "startFromScratch": "Почети од нуле",
+      "youCanChoose": "Можете одабрати да прилагодите свој ДАО када изаберете ову опцију. ",
+      "createYourOwn": "Створи сопствени",
+      "seeDetails": "Види детаље",
+      "select": "Изаберите",
+      "roleArchetypes": "Архетипови улога ({1})",
+      "moreDetails": "Детаљније",
+      "circles": "Кругови ({1})",
+      "moreDetails1": "Детаљније",
+      "daoPolicies": "ДАО смернице ({1})",
+      "moreDetails2": "Детаљније",
+      "coreTeamVotingMethod": "Основни тим Метод гласања",
+      "unity": "Јединство",
+      "quorum": "Кворум",
+      "communityTeamVotingMethod": "Тим заједнице Метод гласања",
+      "unity1": "Јединство",
+      "quorum1": "Кворум",
+      "coreTeamBadges": "Значке главног тима ({1})",
+      "moreDetails3": "Детаљније",
+      "communityTeamBadges": "Значке тима заједнице ({1})",
+      "moreDetails4": "Детаљније",
+      "title": "Наслов",
+      "description": "Опис",
+      "backToTemplates": "Назад на шаблоне",
+      "selectThisTemplate": "Изаберите овај шаблон",
+      "goToProposalsDashboard": "Идите на контролну таблу предлога",
+      "goToOrganizationDashboard": "Идите на контролну таблу организације"
+    }
+  },
+  "layouts": {
+    "mainlayout": {
+      "hyphaDao": "Хипха ДАО"
+    },
+    "multidholayout": {
+      "plan": "{1} план",
+      "suspended": "суспендован",
+      "actionRequired": "Мере потребне",
+      "reactivateYourDao": "Поново активирајте свој ДАО",
+      "weHaveTemporarily": "Привремено смо суспендовали ваш ДАО налог. ",
+      "downgradeMeTo": "Вратите ме на бесплатни план",
+      "renewMyCurrentPlan": "Обнови мој тренутни план",
+      "member": "{1} ЧЛАН"
+    }
+  },
+  "pages": {
+    "dho": {
+      "multisig": {
+        "transactions": "Трансакције",
+        "developer": "Девлопер",
+        "note": "Белешка",
+        "clickOnYourInitials": "Кликните на своје иницијале ",
+        "toSignATransaction": " да потпише трансакцију",
+        "multisigEnablesUs": "Мултисиг нам омогућава да потписујемо трансакције на безбедан начин. ",
+        "doYouReally": "Да ли заиста желите ",
+        "signThisTransaction": " потписати ову трансакцију?",
+        "multisigEnablesUs1": "Мултисиг нам омогућава да потписујемо трансакције на безбедан начин. ",
+        "sign": "Сигн",
+        "noTransactionsTo": "Нема трансакција за ",
+        "signAtTheMoment": " потписати у овом тренутку",
+        "multisigEnablesUs2": "Мултисиг нам омогућава да потписујемо трансакције на безбедан начин. "
+      },
+      "circle": {
+        "joinCircle": "Придружите се кругу",
+        "budget": "Буџет",
+        "subcircles": "Подкругови",
+        "applicants": "Апликанти",
+        "members": "Чланови"
+      },
+      "circles": {
+        "circles": "Цирцлес"
+      },
+      "configuration": {
+        "areYouSure": "Да ли сте сигурни да желите да изађете без чувања радне верзије?",
+        "general": "Генерал",
+        "voting": "Гласање",
+        "community": "Заједница",
+        "communication": "Комуникација",
+        "design": "Дизајн",
+        "planManager": "План Манагер",
+        "resetChanges": "Ресетујте промене",
+        "saveChanges": "Сачувај измене",
+        "viewMultisig": "Виев мултисиг"
+      },
+      "ecosystem": {
+        "active": "{1} Активан",
+        "daos": "ДАО",
+        "inactive": "{1} Неактиван",
+        "daos1": "ДАО",
+        "coreMembers": "56 основних чланова",
+        "communityMembers": "0 чланова заједнице",
+        "activate": "Активирати",
+        "onlyDaoAdmins": "Само ДАО администратори могу да промене подешавања",
+        "foundedBy": "Основали:",
+        "activate1": "Активирати",
+        "members": "Чланови",
+        "createNewDao": "Креирајте нови ДАО",
+        "youNeedTo": "Морате да активирате сидрени ДАО пре него што можете да креирате подређене ДАО.",
+        "onlyDaoAdmins1": "Само ДАО администратори могу да промене подешавања"
+      },
+      "explore": {
+        "discoverMore": "Открити више",
+        "members": "Чланови",
+        "discoverTheHyphaDAONetwork": "Откријте Хипха ДАО мрежу",
+        "welcomeToTheGlobalDAO": "Добродошли у глобални ДАО директоријум! ",
+        "searchDHOs": "Претражите ДХОс",
+        "searchEcosystems": "Сеарцх Ецосистемс",
+        "sortBy": "Сортирај по",
+        "oldestFirst": "Прво најстарији",
+        "newestFirst": "Најновији први",
+        "alphabetically": "По абецедном реду"
+      },
+      "finflow": {
+        "totalUnclaimedPeriods": "Укупни периоди без захтева",
+        "totalUnclaimedUtility": "Укупна непотражена корисност",
+        "totalUnclaimedCash": "Укупни непретражени новац",
+        "totalUnclaimedVoice": "Тотално незатражен глас",
+        "assignments": "Задаци",
+        "exportToCsv": "Извези у цсв"
+      },
+      "home": {
+        "days": "дана",
+        "day": "дан",
+        "hours": "сати",
+        "hour": "сат",
+        "mins": "мин",
+        "min": "мин",
+        "moreInformationAbout": "Више информација о изборима за УпВоте",
+        "here": "овде",
+        "signup": "Пријави се",
+        "currentstepindex": " 0 ",
+        "goCastYourVote": "Иди дај свој глас!",
+        "checkResults": "Проверите резултате",
+        "discoverMore": "Открити више",
+        "assignments": "Задаци",
+        "badges": "Значке",
+        "members": "Чланови",
+        "proposals": "Предлози"
+      },
+      "members": {
+        "becomeAMember": "Постати члан",
+        "registrationIsTemporarilyDisabled": "Регистрација је привремено онемогућена",
+        "copyInviteLink": "Копирај линк позива",
+        "sendALink": "Пошаљите линк својим пријатељима да их позовете да се придруже овом ДАО-у",
+        "daoApplicants": "ДАО апликанти",
+        "daoApplicants1": "ДАО апликанти",
+        "filterByAccountName": "Филтрирајте према називу налога",
+        "sortBy": "Сортирај по",
+        "joinDateDescending": "Датум придруживања опада",
+        "joinDateAscending": "Датум придруживања расте",
+        "alphabetically": "по абецедном реду (А-З)",
+        "all": "Све",
+        "coreTeam": "Главни тим",
+        "communityMembers": "Чланови заједнице"
+      },
+      "organization": {
+        "documentation": "Документација",
+        "activeAssignments": "Активни задаци",
+        "payouts": "Исплате",
+        "activeBadges": "Активне значке",
+        "daoCircles": "ДАО Цирцлес",
+        "archetypes": "Архетипови",
+        "badges": "Значке",
+        "daoCircles1": "ДАО Цирцлес",
+        "archetypes1": "Архетипови",
+        "badges1": "Значке",
+        "activeAssignments1": "Активни задаци",
+        "payouts1": "Исплате",
+        "activeBadges1": "Активне значке",
+        "activeAssignments2": "Активни задаци",
+        "payouts2": "Исплате",
+        "activeBadges2": "Активне значке",
+        "daoCircles2": "ДАО Цирцлес",
+        "archetypes2": "Архетипови",
+        "badges2": "Значке"
+      },
+      "organizationalassets": {
+        "noBadges": "Но Бадгес",
+        "noBadges1": "Но Бадгес",
+        "yourOrganizationDoesnt": "Ваша организација још увек нема ниједну значку. ",
+        "searchBadges": "Претражите значке",
+        "filterByName": "Филтрирајте по имену",
+        "createANewBadge": "Направите нову значку",
+        "sortByCreateDateAscending": "Сортирај по датуму креирања узлазно",
+        "sortByCreateDateDescending": "Сортирај према опадајућем датуму креирања",
+        "sortAlpabetically": "Сортирај по абецедном реду (А-З)"
+      },
+      "treasury": {
+        "transactionReview": "Трансацтион Ревиев",
+        "wellDoneMultisigTransaction": "Добро урађено! ",
+        "youCanNowFindTheMultisig": "Сада можете пронаћи захтев за трансакцију са више потписа на",
+        "other2TreasurersNeeds": "Друга 2 благајника треба да га потпишу,",
+        "theTheTransactionIsReady": "онда је трансакција спремна за извршење!",
+        "anErrorOccurredPlease": "Дошло је до грешке, покушајте поново кликом на дугме испод",
+        "itWouldBeCoolIfWeCould": "Било би супер када бисмо овде могли да пружимо информације о евентуалној грешци",
+        "allGoodCreateMultisig": "Све у реду, креирајте Мултисиг",
+        "history": "Историја",
+        "allDoneHere": "Све је готово овде",
+        "noPendingPayoutRequest": "Тренутно нема захтева за исплату на чекању. ",
+        "open": "отворен",
+        "pending": "нерешен",
+        "signedBy": "Потписали",
+        "realTokenConversion": "*Права конверзија токена ће се десити када благајници изврше трансакције исплате:",
+        "hereYouSeeTheConversion": "Овде видите конверзију за [ТОКЕН] тренутно тржиште само као референцу. ",
+        "endorsed": "одобрио",
+        "helloTreasurerThisMultisig": "Здраво благајник! ",
+        "helloTreasurerSelectTheMultisig": "Здраво благајник! ",
+        "helloTreasurerStartAMultisig": "Здраво благајник! ",
+        "allMultisigTransactionHasBeenSuccessfully": "Алл Мултисиг. ",
+        "signMultisigTransaction": "Сигн Мултисиг. ",
+        "executeMultisigTransaction": "Изврши Мултисиг. ",
+        "showCompletedTransactions": "Прикажи завршене трансакције",
+        "generateMultisigTransaction": "Генерате Милтисиг. ",
+        "accountAndPaymentStatus": "Рачун",
+        "payoutRequests": "Захтеви за исплату",
+        "multisigSignRequests": "Захтев за вишезначни знак",
+        "readyToExecute": "Спреман за извршење"
+      }
+    },
+    "ecosystem": {
+      "ecosystemchekout": {
+        "reviewPurchaseDetails": "Прегледајте детаље куповине",
+        "hypha": "{1} ХИФА",
+        "tokensStaked": "Уложени токени:",
+        "hypha1": "{1} ХИФА",
+        "total": "Укупно",
+        "hypha2": "{1} ХИФА",
+        "tokensStaked1": "Уложени токени:",
+        "hypha3": "{1} ХИФА"
+      }
+    },
+    "error404": {
+      "1080": "(404)",
+      "sorryNothingHere": "Извини, овде ништа...",
+      "goBack": "Вратити се"
+    },
+    "error404dho": {
+      "7348": "404",
+      "daoIsUnderMaintenance": "ДАО је на одржавању"
+    },
+    "error404page": {
+      "ooops": "Упс",
+      "thisPageDoesnt": "Ова страница не постоји - покушајте поново са другом УРЛ-ом",
+      "backToDashboard": "Назад на контролну таблу"
+    },
+    "profiles": {
+      "wallet": {
+        "notitle": "без наслова",
+        "notitle1": "без наслова",
+        "activity": "активност",
+        "date": "датум",
+        "status": "статус",
+        "amount": "износ",
+        "claimed": "тврдио"
+      },
+      "profile": {
+        "inlinelabel": "инлине-лабел",
+        "personalInfo": "Лични подаци",
+        "about": "О томе",
+        "myProjects": "Моји пројекти",
+        "votes": "Гласови",
+        "badges": "Значке",
+        "inlinelabel1": "инлине-лабел",
+        "assignments": "Задаци",
+        "contributions": "Прилози",
+        "quests": "Куестс",
+        "biography": "Биографија",
+        "recentVotes": "Недавни гласови",
+        "noBadgesYesApplyFor": "Још нема значке - пријавите се за значку овде",
+        "noBadgesToSeeHere": "Овде нема беџева.",
+        "apply": "Применити",
+        "looksLikeYouDontHaveAnyActiveAssignments": "Изгледа да немате ниједан активни задатак. ",
+        "noActiveOrArchivedAssignments": "Нема активних или архивираних задатака које можете видети овде.",
+        "createAssignment": "Креирај задатак",
+        "looksLikeYouDontHaveAnyContributions": "Изгледа да још увек немате ниједан допринос. ",
+        "noContributionsToSeeHere": "Овде нема прилога.",
+        "createContribution": "Направите допринос",
+        "looksLikeYouDontHaveAnyQuests": "Изгледа да још увек немате задатака. ",
+        "noQuestsToSeeHere": "Нема задатака да видите овде.",
+        "createQuest": "Цреате Куест",
+        "writeSomethingAboutYourself": "Напишите нешто о себи и обавестите друге кориснике о својој мотивацији да се придруже.",
+        "looksLikeDidntWrite": "Изгледа да {усернаме} још није написао ништа о својој мотивацији да се придружи овом ДАО-у.",
+        "writeBiography": "Напишите биографију",
+        "retrievingBio": "Преузимање биографије...",
+        "youHaventCast": "Још нисте дали ниједан глас. ",
+        "noVotesCastedYet": "Још нема датих гласова.",
+        "vote": "Гласајте"
+      },
+      "profile-creation": {
+        "profilePicture": "Профиле пицуре",
+        "makeSureToUpdate": "Обавезно ажурирајте свој профил када постанете члан. ",
+        "uploadAnImage": "Отпремите слику",
+        "name": "Име",
+        "accountName": "Назив налога",
+        "location": "Локација",
+        "timeZone": "Временска зона",
+        "tellUsSomethingAbout": "Реци нам нешто о себи",
+        "connectYourPersonalWallet": "Повежите свој лични новчаник",
+        "youCanEnterYourOther": "Можете да унесете друге адресе новчаника за будуће откупе токена ако зарадите токен који се може искористити. ",
+        "selectThisAsPreferred": "Изаберите ово као жељену адресу",
+        "yourContactInfo": "Ваше контакт информације",
+        "thisInformationIsOnly": "Ове информације се користе само у интерне сврхе. ",
+        "selectThisAsPreferredContactMethod": "Изаберите ово као жељени метод контакта"
+      }
+    },
+    "proposals": {
+      "create": {
+        "optionsarchetypes": {
+          "chooseARoleArchetype": "Изаберите архетип улоге\n        ",
+          "noArchetypesExistYet": "Архетипови још не постоје.",
+          "pleaseCreateThemHere": "Направите их овде."
+        },
+        "optionsassignments": {
+          "chooseARecent": "Изаберите недавни задатак да бисте израчунали исплату за премошћивање"
+        },
+        "optionsbadges": {
+          "chooseABadge": "Изаберите значку\n        ",
+          "noArchetypesExistYet": "Архетипови још не постоје.",
+          "pleaseCreateThemHere": "Направите их овде."
+        },
+        "optionspolicies": {
+          "chooseAParentPolicy": "Изаберите родитељску политику\n        ",
+          "noPoliciesExistYet": "Још увек не постоје политике."
+        },
+        "stepreview": {
+          "back": "Назад"
+        },
+        "stepproposaltype": {
+          "completeYourDraftProposal": "Довршите свој нацрт предлога",
+          "onetimeContributions": "Једнократни доприноси",
+          "recurringAssignments": "Понављајући задаци",
+          "organizationalAssets": "Организациона средства",
+          "onetimeContributions1": "Једнократни доприноси",
+          "recurringAssignments1": "Понављајући задаци",
+          "organizationalAssets1": "Организациона средства"
+        },
+        "stepicon": {
+          "chooseAnIcon": "Изаберите икону",
+          "searchIconFor": "Икона за претрагу за...",
+          "uploadAFile": "Отпремите датотеку",
+          "back": "Назад",
+          "nextStep": "Следећи корак"
+        },
+        "stepduration": {
+          "startDate": "Датум почетка",
+          "periods": "Периоди",
+          "endDate": "Крајњи датум",
+          "youMustSelect": "Морате да изаберете мање од {1} периода (Тренутно сте изабрали {2} периода)",
+          "theStartDate": "Датум почетка не сме бити каснији од датума завршетка",
+          "back": "Назад",
+          "nextStep": "Следећи корак"
+        },
+        "optionsquests": {
+          "chooseAQuestType": "Изаберите тип мисије\n      "
+        },
+        "stepdetails": {
+          "titleIsRequired": "Наслов је обавезан!",
+          "proposalTitleLengthHasToBeLess": "Дужина наслова предлога мора да буде мања или једнака {ТИТЛЕ_МАКС_ЛЕНГТХ} знакова (ваш наслов садржи {ленгтх} знакова)",
+          "theDescriptionMustContainLess": "Опис мора да садржи мање од {ДЕСЦРИПТИОН_МАКС_ЛЕНГТХ} знакова (ваш опис садржи {ленгтх} знакова)",
+          "images": "Слике",
+          "pngJpegInApp": "ПНГ, Јпег. ",
+          "documents": "Документи",
+          "txtPdfDoc": "Ткт, ПДФ, Док. ",
+          "videos": "Видеос",
+          "mp4MovMax": "МП4, Мов. ",
+          "leaveFileHere": "Оставите датотеку овде",
+          "dragAndDrop": "Драг",
+          "orBrowse": "или прегледајте",
+          "back": "Назад",
+          "nextStep": "Следећи корак"
+        },
+        "steppayout": {
+          "payout": "Исплата",
+          "pleaseEnterTheUsd": "Молимо унесите еквивалент у УСД и % одлагања за овај допринос – што више одложите на каснији датум, већи ће бити бонус (погледајте стварни обрачун плате испод или користите наш калкулатор). ",
+          "typeTheAmountOfUsd": "Унесите износ ХУСД-а",
+          "commitmentMustBeGreater": "Обавеза мора бити већа или једнака конфигурацији улоге. ",
+          "defferedMustBeGreater": "Одложено мора бити веће или једнако конфигурацији улоге. ",
+          "salaryCompensationForOneYear": "Надокнада плате за годину дана (${валуе})",
+          "salaryCompensationForOneYearUsd": "Надокнада плате за годину дана (${валуе}) УСД",
+          "compensation": "Компензација",
+          "pleaseEnterTheUSD": "Молимо унесите еквивалент у УСД и % одлагања за овај допринос – што више одложите на каснији датум, већи ће бити бонус (погледајте стварни обрачун плате испод или користите наш калкулатор). ",
+          "compensationForOnePeriod": "Накнада за један период",
+          "compensationForOneCycle": "Компензација за један циклус",
+          "customCompensation": "Прилагођена компензација"
+        }
+      },
+      "proposallist": {
+        "createProposal": "Направите предлог",
+        "learnMore": "Сазнајте више",
+        "unity": "Јединство",
+        "quorum": "Кворум",
+        "noProposals": "Нема предлога",
+        "oopsNothingCould": "Упс, овде се ништа није могло пронаћи",
+        "stagingProposals": "Инсценацијски предлози",
+        "activeProposals": "Активни предлози",
+        "noProposals1": "Нема предлога",
+        "stagingProposals1": "Инсценацијски предлози",
+        "activeProposals1": "Активни предлози",
+        "proposalHistory": "Историја предлога",
+        "lookingToMonitor": "Желите да пратите колико су стари предлози прошли? ",
+        "seeHistory": "Погледајте историју >",
+        "isTheMinimumRequiredPercentageOfMembers": "Да ли је минимални потребан проценат чланова који подржавају предлог за његово усвајање.",
+        "isTheMinimumRequiredPercentageOfTotal": "Да ли је минимални потребан проценат укупног броја чланова који учествују у гласању да би он прошао. ",
+        "searchProposals": "Тражите предлоге",
+        "proposalTypes": "Типови предлога",
+        "sortByLastAdded": "Сортирај према последњем додатку"
+      },
+      "proposalhistory": {
+        "noProposals": "Нема предлога",
+        "oopsNothingCould": "Упс, овде се ништа није могло пронаћи"
+      },
+      "proposalcreate": {
+        "areYouSure": "Да ли сте сигурни да желите да изађете без чувања радне верзије?",
+        "leaveWithoutSaving": "Отиђите без штедње",
+        "saveDraftAndLeave": "Сачувајте нацрт и идите"
+      },
+      "proposaldetail": {
+        "proposalDetails": "Детаљи предлога",
+        "yourProposalIs": "Ваш предлог је на инсценацији",
+        "thatMeansYour": "То значи да ваш предлог још није објављен у блокчејну. ",
+        "publish": "Објавите",
+        "editProposal": "Уредите предлог",
+        "deleteProposal": "Избриши предлог",
+        "publishing": "Публисхинг",
+        "pleaseWait": "...Сачекајте...",
+        "deleting": "Брисање",
+        "pleaseWait1": "...Сачекајте...",
+        "badgeHolders": "Носиоци значке",
+        "apply": "Применити",
+        "thereAreNo": "Још нема држача",
+        "questCompletion": "Завршетак мисије",
+        "didYouFinish": "Да ли сте завршили посао и спремни сте да креирате предлог за завршетак мисије? ",
+        "claimYourPayment": "Затражите своју уплату",
+        "yourProposalIs1": "Ваш предлог је на инсценацији",
+        "thatMeansYour1": "То значи да ваш предлог још није објављен у блокчејну. ",
+        "publish1": "Објавите",
+        "editProposal1": "Уредите предлог",
+        "deleteProposal1": "Избриши предлог",
+        "publishing1": "Публисхинг",
+        "pleaseWait2": "...Сачекајте...",
+        "deleting1": "Брисање",
+        "pleaseWait3": "...Сачекајте...",
+        "badgeHolders1": "Носиоци значке",
+        "apply1": "Применити",
+        "thereAreNo1": "Још нема држача"
+      }
+    },
+    "upvote-election": {
+      "upvoteelection": {
+        "timeLeft": "Преостало време:",
+        "days": "дана",
+        "day": "дан",
+        "hours": "сати",
+        "hour": "сат",
+        "mins": "мин",
+        "min": "мин",
+        "secs": "сец",
+        "sec": "сец",
+        "castYourVote": "Дајте свој глас",
+        "loremIpsumDolor": "Лорем ипсум долор сит амет, цонсецтетур адиписцинг елит, сед",
+        "electionProcess": "Изборни процес"
+      },
+      "steps": {
+        "stepround1": {
+          "voterBadge": "Гласачка значка",
+          "assigned": "Додељен:",
+          "delegates": "Делегати",
+          "applicants": "Апликанти:",
+          "totalVoters": "Укупно гласача:",
+          "delegatesApplicants": "Делегати Подносиоци захтева"
+        },
+        "stepheaddelegate": {
+          "voterBadge": "Гласачка значка",
+          "assigned": "Додељен:",
+          "memberInThisRound": "Члан у овом кругу",
+          "totalVoters": "Укупно гласача:",
+          "eligibleForChief": "Испуњава услове за значку главног делегата"
+        },
+        "stepchiefdelegates": {
+          "voterBadge": "Гласачка значка",
+          "assigned": "Додељен:",
+          "memberInThisRound": "Члан у овом кругу",
+          "totalVoters": "Укупно гласача:",
+          "eligibleForChief": "Испуњава услове за значку главног делегата"
+        },
+        "stepresult": {
+          "totalVoters": "Укупно гласача:",
+          "totalDelegatesApplicants": "Укупан број пријављених делегата:",
+          "round1Voters": "Гласачи 1. круга:",
+          "chiefDVoters": "Начелник Д. Гласачи:",
+          "headDVoters": "Руководилац Д. Гласачи:",
+          "headDelegate": "Главни делегат",
+          "HEADDELEGATE": "ГЛАВНИ ДЕЛЕГАТ",
+          "chiefDelegates": "Главни делегати"
+        }
+      }
+    },
+    "support": {
+      "support": {
+        "transactions": "Трансакције",
+        "whenYouEncounter": "Када наиђете на поруку о грешци, копирајте и налепите трансакцију на ДАО канал подршке.",
+        "transactionLog": "Дневник трансакција",
+        "copyDataReport": "Копирајте извештај о подацима тиму за подршку",
+        "displayOnBlockExplorer": "Прикажи у претраживачу блокова",
+        "doYouHaveQuestions": "Да ли имате питања?",
+        "findOurFull": "Пронађите нашу комплетну документацију овде",
+        "openWiki": "Отвори вики",
+        "version": "Версион"
+      }
+    },
+    "onboarding": {
+      "goToDashboard": "Идите на контролну таблу",
+      "optionalStep": "Опциони корак",
+      "inviteMembers": "Позовите чланове",
+      "youReInTheEndGame": "У завршници сте и спремни сте да позовете чланове у свој ДАО! ",
+      "optionalStepTelosAccount": "Опциони корак (потребан је Телос налог)",
+      "launchTeam": "Лаунцх Теам",
+      "createATeamOfMembersWithAdmin": "Направите тим чланова са администраторским правима. ",
+      "createLaunchTeam": "Креирајте тим за покретање",
+      "daoIndentity": "ДАО Идентити",
+      "youCanAddYourDaoName": "Можете додати име свог ДАО-а, описати његову сврху и додати лого. ",
+      "name": "Име",
+      "logoIcon": "Лого / Икона",
+      "purpose": "Сврха",
+      "theDisplayNameOfYourDao": "Име за приказ вашег ДАО-а (макс. 50 знакова)",
+      "uploadAnImage": "Отпремите слику",
+      "brieflyExplainWhatYourDao": "Укратко објасните шта је ваш ДАО (макс. 300 знакова)",
+      "nextStep": "Следећи корак",
+      "utilityToken": "Услужни токен",
+      "theUtilityTokenThatRepresents": "Услужни токен који представља вредност унутар ДАО-а и омогућава вам приступ одређеним услугама или радњама у ДАО-у.",
+      "max20CharactersExBitcoin": "Максимално 20 знакова. ",
+      "max7CharactersExBTC": "Највише 7 знакова нпр. ",
+      "symbol": "Симбол",
+      "treasuryToken": "Токен трезора",
+      "theTreasuryTokenIsAPromise": "Токен трезора је обећање да ће се зарађени токени откупити за ликвидне токене који се могу заменити у фиат валуту на јавним берзама.",
+      "design": "Дизајн",
+      "setUpYourDaoBrand": "Овде подесите палету боја вашег ДАО бренда. ",
+      "primaryColor": "Примарна боја",
+      "secondaryColor": "Секундарна боја",
+      "buttonTextColor": "Боја текста дугмета",
+      "preview": "Преглед",
+      "createATeamOfCoreMembersWithAdmin": "Направите тим кључних чланова са администраторским капацитетом. ",
+      "telosAccount": "Телос налог",
+      "addToTheTeam": "Додајте тиму",
+      "daoPublished": "ДАО Публисхед!"
+    }
+  },
+  "proposalparsing": {
+    "createdAgo": "Направљено пре {дифф}",
+    "closedAgo": "Затворено пре {дифф}",
+    "thisVoteWillCloseIn": "Ово гласање ће се затворити за {даиСтр}{хоурСтр}:{минСтр}:{сегСтр}",
+    "second": " друго",
+    "seconds": " секунди",
+    "minutes": " минута",
+    "minute": " минут",
+    "hour": " сат",
+    "hours": " сати",
+    "day": " дан",
+    "days": " дана",
+    "dayWithValue": "{даис} дан, ",
+    "daysWithValue": "{даис} дана, "
+  },
+  "proposalFilter": {
+    "all": "Све",
+    "ability": "Способност",
+    "role": "Улога",
+    "queststart": "Почетак мисије",
+    "questend": "Куест Енд",
+    "archetype": "Архетип",
+    "badge": "Значка",
+    "circle": "Цирцле",
+    "budget": "Буџет",
+    "policy": "Полици",
+    "genericcontributions": "Генерички доприноси",
+    "suspension": "Суспензија"
+  },
+  "routes": {
+    "exploreDAOs": "Истражите ДАО",
+    "findOutMoreAboutHowToSetUp": "Сазнајте више о томе како да подесите сопствени ДАО и Хипха овде: хттпс://хипха.еартх",
+    "404NotFound": "404 Није пронађено",
+    "finflow": "Финфлов",
+    "dashboard": "Командна табла",
+    "explore": "Истражите",
+    "createANewDao": "Направите нови ДХО",
+    "login": "Пријавите се",
+    "members": "Чланови",
+    "proposals": "Предлози",
+    "createProposal": "Цреате Пропосал",
+    "proposalHistory": "Историја предлога",
+    "proposalDetails": "Детаљи предлога",
+    "organization": "Организација",
+    "organizationAssets": "Средства организације",
+    "organizationBadges": "Организацијске значке",
+    "organizationRoles": "Организацијске улоге",
+    "profile": "Профил",
+    "profileCreation": "Креирање профила",
+    "wallet": "Новчаник",
+    "circles": "Цирцлес",
+    "searchResults": "Резултати претраге",
+    "search": "Претрага",
+    "support": "Подршка",
+    "treasury": "Треасури",
+    "multiSig": "Мулти сиг",
+    "configurationSettings": "Подешавања конфигурације",
+    "ecosystemDashboard": "Контролна табла екосистема",
+    "checkout": "Провери",
+    "upvoteElection": "Избори за гласање"
+  },
+  "proposal-creation": {
+    "creation-process": "Процес стварања",
+    "steps": {
+      "type": {
+        "label": "Тип"
+      },
+      "description": {
+        "label": "Детаљи",
+        "placeholder": "Наведите разлог за овај допринос. "
+      },
+      "date": {
+        "label": "Трајање"
+      },
+      "icon": {
+        "label": "Избор икона"
+      },
+      "compensation": {
+        "label": "Компензација"
+      },
+      "review": {
+        "label": "Преглед"
+      }
+    },
+    "description": "Опис",
+    "title": "Наслов",
+    "typeTheTitleOfYourProposal": "Унесите наслов свог предлога",
+    "pleaseStateTheReasonForThisContributionTheMore": "Наведите разлог за овај допринос. ",
+    "ability": "Способност",
+    "shareTheDetailsOfThisBadgeAssignment": "Поделите детаље о овом додељивању значке пратећи смернице ове организације. ",
+    "multiply": "Помножите",
+    "abilityDuration": "Трајање способности",
+    "circle": "Цирцле",
+    "selectACircleFromTheList": "Изаберите круг са листе",
+    "voiceCoefficient": "Воице Цоеффициент",
+    "utilityCoefficient": "Коефицијент корисности",
+    "cashCoefficient": "Цасх Цоеффициент",
+    "payout": "Исплата",
+    "compensation": "Компензација",
+    "pleaseEnterTheUSDEquivalentAnd": "Молимо унесите еквивалент у УСД и % одлагања за овај допринос – што више одложите на каснији датум, већи ће бити бонус (погледајте стварни обрачун плате испод или користите наш калкулатор). ",
+    "typeThePayoutTitle": "Унесите наслов исплате",
+    "typeThePayoutDescription": "Унесите опис исплате",
+    "attachments": "Прилози",
+    "clickToAddFile": "Кликните да додате датотеку",
+    "totalUSDEquivalent": "Укупан УСД еквивалент",
+    "chooseTheDeferredAmount": "Изаберите одложени износ",
+    "customCompensation": "Прилагођена компензација",
+    "cashToken": "Цасх Токен",
+    "utilityToken": "Утилити Токен",
+    "voiceToken": "Воице Токен",
+    "poll": "Анкета",
+    "pollOrSenseCheckWithCommunityMembers": "Анкета или провера смисла са члановима заједнице да видите шта ће изградити јачу подршку у односу на друге предлоге. ",
+    "useThisFieldToDetailTheContentOfYourPoll": "Користите ово поље да бисте детаљно описали садржај своје анкете",
+    "votingMethod": "Начин гласања",
+    "selectVotingMethod": "Изаберите метод гласања",
+    "content": "Садржај",
+    "contribution": "Допринос",
+    "shareTheDetailsOfYoutContribution": "Поделите детаље свог доприноса пратећи смернице ове организације. ",
+    "describeYourProposal": "Опишите свој предлог",
+    "chooseYourPayout": "Одаберите своју исплату",
+    "documentation": "Документација",
+    "quest": "Куест",
+    "aQuestIsA2Step": "Потрага је предлог у 2 корака. ",
+    "createNewQuest": "Креирајте нову потрагу",
+    "typeTheQuestName": "Унесите назив мисије",
+    "describeYourQuest": "Опишите своју потрагу",
+    "duration": "Трајање",
+    "type": "Тип",
+    "selectQuestType": "Изаберите тип мисије",
+    "milestone": "Постигнуће",
+    "selectPreviousQuest": "Изаберите претходну мисију",
+    "createNewPoll": "Направите нову анкету",
+    "role": "Улога",
+    "applyBySelectingARoleArchetype": "Пријавите се тако што ћете изабрати архетип улоге (шаблон) и платни опсег. ",
+    "applyForTheRole": "Пријавите се за улогу",
+    "name": "Име",
+    "typeTheRoleName": "Унесите име улоге",
+    "typeTheRoleDescription": "Унесите опис улоге",
+    "manageYourSalary": "Управљајте својом платом",
+    "fieldsBelowDisplayTheMinimum": "Поља испод приказују минимални % обавеза и % ХИПХА токена у односу на ХУСД токене потребне за ову улогу, као и капацитет улоге (колико људи може бити додељено овој улози) и еквивалент у УСД.",
+    "chooseYourCommitmentLevel": "Одаберите ниво посвећености",
+    "badge": "Значка",
+    "findHereAvailableBadges": "Пронађите овде доступне значке са јединственим обимом и карактеристикама. ",
+    "applyForTheNewAbility": "Пријавите се за нову способност",
+    "typeTheAbilityName": "Унесите назив способности",
+    "tellOtherMembersThereReasons": "Реците другим члановима зашто желите да се пријавите за ову значку",
+    "theseAreBasicAccountAbilities": "Ово су основне способности налога које улога корисника може да испуни. ",
+    "createNewArchetype": "Креирајте нови архетип",
+    "typeTheArchetypeName": "Унесите име архетипа",
+    "typeTheArchetypeDescription": "Унесите опис архетипа",
+    "chooseTheSalaryBand": "Изаберите платни опсег",
+    "enterTheRoleCapacity": "Унесите капацитет улоге",
+    "maximumNumberOfPeopleForThisRole": "Максималан број људи за ову улогу. ",
+    "chooseTheMinimumDeferredAmount": "Изаберите минимални одложени износ",
+    "minimumRequiredPayedOutAsUtilityToken": "Минимални постотак који је потребан који се исплаћује као помоћни токен",
+    "badgesGiveCertainRightsAndAccountAbilities": "Беџеви дају одређена права и могућности рачуна власнику. ",
+    "createNewBadge": "Направите нову значку",
+    "typeTheBadgeName": "Унесите назив значке",
+    "typeTheBadgeDescription": "Унесите опис значке",
+    "tokenMultiplier": "Мултипликатор токена",
+    "badgesProvideAnAdditionalMultiplier": "Значке обезбеђују додатни множилац поврх сваке зараде добијене кроз активност у ДАО-у. ",
+    "circleDefineTheDAOsBoundaries": "Кругови дефинишу границе и домене ДАО-а. ",
+    "createNewCircle": "Направите нови круг",
+    "typeTheCircleName": "Унесите назив круга",
+    "purpose": "Сврха",
+    "typeTheCircleBudget": "Откуцајте буџет круга",
+    "parentCircle": "Родитељски круг",
+    "selectTheCircleParent": "Изаберите родитељ круга. ",
+    "budget": "Буџет",
+    "requestBudgetAllocation": "Затражите доделу буџета за одређени круг са овим предлогом. ",
+    "createNewBudget": "Креирајте нови буџет",
+    "typeTheBudgetName": "Унесите назив буџета",
+    "typeHereTheContentOfYourBadge": "Овде унесите садржај свог буџета",
+    "policy": "Полици",
+    "policiesCreateRulesThatDAOMembers": "Политике стварају правила која чланови ДАО-а морају поштовати. ",
+    "createNewPolicy": "Креирајте нову политику",
+    "typeThePolicyName": "Унесите назив политике",
+    "typeHereTheContentOfYourPolicy": "Овде унесите садржај своје политике",
+    "selectTheCircleParentOrLeaveItBlank": "Изаберите родитељ круга или га оставите празним",
+    "policyType": "Врста политике",
+    "selectThePolicyType": "Изаберите тип политике. "
+  },
+  "search": {
+    "results": {
+      "results": "{валуе} Резултати",
+      "noResultsFound": "Нема резултата",
+      "resultsTypes": "Врсте резултата",
+      "all": "Све",
+      "members": "Чланови",
+      "genericContribution": "Генерички допринос",
+      "roleAssignments": "Задаци улога",
+      "roleArchetypes": "Архетипови улога",
+      "badgeTypes": "Врсте значки",
+      "badgeAssignments": "Задаци значке",
+      "suspensions": "Суспензије",
+      "filterBy": "Филтер од",
+      "voting": "Гласање",
+      "active": "Ацтиве",
+      "archived": "Архивирано",
+      "suspended": "Суспендед",
+      "sortBy": "Сортирај по",
+      "oldestFirst": "Прво најстарији",
+      "newestFirst": "Најновији први",
+      "alphabetically": "по абецедном реду (А-З)",
+      "result": {
+        "active": "Ацтиве",
+        "pendingToClose": "Чека се затварање",
+        "voting": "Гласање",
+        "suspended": "Суспендед",
+        "archived": "Архивирано",
+        "withdrawn": "Повучен",
+        "applicant": "апликант",
+        "genericContribution": "Генерички допринос",
+        "extension": "Продужетак",
+        "roleAssignment": "Додељивање улога",
+        "badgeAssignment": "Додела значке",
+        "suspension": "Суспензија",
+        "roleArchetype": " Архетип улога",
+        "badge": "Значка"
+      }
+    }
+  }
+}
