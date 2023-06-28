@@ -21,12 +21,6 @@ export default {
 
   data () {
     return {
-      CORE_SHOWCASE: [
-        { title: 'HVOICE', description: 'Every member can use their HVOICE governance tokens as a vote share.' },
-        { title: 'Multiple votes', description: 'Members can vote multiple times during the voting period' },
-        { title: 'Voting period', description: 'The default voting period is 1 week' },
-        { title: 'Requirements', description: 'Proposals need to have the required percentage of supportive votes (unity) and percentage of all votes (quorum)' }
-      ],
 
       COMMUNITY_SHOWCASE: [
         { title: '1 member = 1 vote', description: 'Every member can vote using 1 member 1 vote.' },
@@ -44,17 +38,17 @@ export default {
 
 <template lang="pug">
 .tab
-  widget(title='Core Team voting methods' titleImage='/svg/core-voting.svg' bar).q-pa-none.full-width
+  widget(:title="$t('configuration.settings-voting.core.title')" titleImage='/svg/core-voting.svg' bar).q-pa-none.full-width
     template(v-slot:header)
       q-toggle(:disable="!isAdmin" color="secondary" keep-color v-model="form.proposalsCreationEnabled")
 
-    p.text-sm.text-h-gray.leading-loose.q-mt-md Every DAO can shape their own voting system, allowing core team members to make collective decisions. You can select a template that best suits your needs, or feel free to customize your own voting system.
+    p.text-sm.text-h-gray.leading-loose.q-mt-md {{ $t('configuration.settings-voting.core.description') }}
 
     section(v-show="form.proposalsCreationEnabled")
       .hr
       section.row.q-mt-xl.q-col-gutter-x-md
         .col-12.col-md-4
-          label.h-label Unity (% of required voice)
+          label.h-label {{ $t('configuration.settings-voting.core.form.unity.label') }}
           .row.full-width.items-center
             .col.row.q-mr-sm
               q-slider(
@@ -78,7 +72,7 @@ export default {
             q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
 
         .col-12.col-md-4
-          label.h-label Quorum (% of required participants)
+          label.h-label {{ $t('configuration.settings-voting.core.form.quorum.label') }}
           .row.full-width.items-center
             .col.row.q-mr-sm
               q-slider(
@@ -102,28 +96,28 @@ export default {
             q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
 
         .col-12.col-md-4
-          label.h-label Vote duration
+          label.h-label {{ $t('configuration.settings-voting.core.form.duration.label') }}
           custom-period-input(:disable="!isAdmin" v-model='form.votingDurationSec')
           q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
 
       section.row.q-mt-xl.q-col-gutter-x-md.q-mb-xl(v-show="$q.screen.gt.sm")
-        template(v-for="item in CORE_SHOWCASE")
+        template(v-for="item in $t('configuration.settings-voting.core.showcase')")
           .col(:style="{'height': '164px'}")
             .q-pa-md.bg-internal-bg.rounded-border.full-height
               p.q-pa-none.q-ma-none {{ item.title }}
               p.text-sm.text-h-gray.leading-loose.q-mt-sm {{ item.description }}
 
-  widget(title='Community Voting Methods' titleImage='/svg/community-voting.svg' bar).q-pa-none.full-width.q-mt-sm
+  widget(:title="$t('configuration.settings-voting.community.title')" titleImage='/svg/community-voting.svg' bar).q-pa-none.full-width.q-mt-sm
     template(v-slot:header)
       q-toggle(:disable="!isAdmin" color="secondary" keep-color v-model="form.communityVotingEnabled")
 
-    p.text-sm.text-h-gray.leading-loose.q-mt-md Every DAO can shape their own voting system, allowing core team members to make collective decisions. You can select a template that best suits your needs, or feel free to customize your own voting system.
+    p.text-sm.text-h-gray.leading-loose.q-mt-md {{ $t('configuration.settings-voting.community.description') }}
 
     section(v-show="form.communityVotingEnabled")
       .hr
       section.row.q-mt-xl.q-col-gutter-x-md
         .col-12.col-md-4
-          label.h-label Unity (% of required voice)
+          label.h-label {{ $t('configuration.settings-voting.community.form.unity.label') }}
           .row.full-width.items-center
             .col.row.q-mr-sm
               q-slider(
@@ -147,7 +141,7 @@ export default {
             q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
 
         .col-12.col-md-4
-          label.h-label Quorum (% of required participants)
+          label.h-label {{ $t('configuration.settings-voting.community.form.quorum.label') }}
           .row.full-width.items-center
             .col.row.q-mr-sm
               q-slider(
@@ -171,12 +165,12 @@ export default {
             q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
 
         .col-12.col-md-4
-          label.h-label Vote duration
+          label.h-label {{ $t('configuration.settings-voting.community.form.duration.label') }}
           custom-period-input(:disable="!isAdmin" v-model='form.communityVotingDurationSec')
           q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
 
       section.row.q-mt-xl.q-col-gutter-x-md.q-mb-xl(v-show="$q.screen.gt.sm")
-        template(v-for="item in COMMUNITY_SHOWCASE")
+        template(v-for="item in $t('configuration.settings-voting.community.showcase')")
           .col(:style="{'height': '224px'}")
             .q-pa-md.bg-internal-bg.rounded-border.full-height
               p.q-pa-none.q-ma-none {{ item.title }}

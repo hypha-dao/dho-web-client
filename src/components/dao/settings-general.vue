@@ -33,13 +33,13 @@ export default {
 </script>
 
 <template lang="pug">
-widget(title='General' titleImage='/svg/cog.svg' :bar='true').q-pa-none.full-width
-    p.text-sm.text-h-gray.leading-loose.q-mt-md Use general settings to set up some basic parameters such as a link to your main collaboration space and your DAO and use the toggle to enable or disable key features.
+widget(:title="$t('configuration.settings-general.title')" titleImage='/svg/cog.svg' :bar='true').q-pa-none.full-width
+    p.text-sm.text-h-gray.leading-loose.q-mt-md {{ $t('configuration.settings-general.description') }}
     .hr.q-my-md
 
     section.row.justify-between.q-col-gutter-x-xl
         .col-12.col-md-4(:class="{'q-mt-sm': !$q.screen.gt.md}")
-            label.h-label Logo
+            label.h-label {{ $t('configuration.settings-general.form.logo.label') }}
             .row.items-center
                 q-avatar.q-mr-sm(color="primary" text-color="white")
                     img(v-show="form.logo" :src="ipfsy(form.logo)")
@@ -49,7 +49,7 @@ widget(title='General' titleImage='/svg/cog.svg' :bar='true').q-pa-none.full-wid
                         :disable="!isAdmin"
                         @click="$refs.logo.chooseFile()"
                         color="primary"
-                        label="Upload an image (max 3MB)"
+                        :label="$t('configuration.settings-general.form.upload.label')"
                         no-caps
                         outline
                         rounded
@@ -63,7 +63,7 @@ widget(title='General' titleImage='/svg/cog.svg' :bar='true').q-pa-none.full-wid
                     )
 
         .col-12.col-md-4(:class="{'q-mt-sm': !$q.screen.gt.md}")
-            label.h-label Name
+            label.h-label {{ $t('configuration.settings-general.form.name.label') }}
             q-input.q-my-xs(
                 :debounce="200"
                 :disable="!isAdmin"
@@ -80,7 +80,7 @@ widget(title='General' titleImage='/svg/cog.svg' :bar='true').q-pa-none.full-wid
                 q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
 
         .col-12.col-md-4(:class="{'q-mt-sm': !$q.screen.gt.md}")
-            label.h-label Custom URL
+            label.h-label {{ $t('configuration.settings-general.form.url.label') }}
             .row.items-center
                 p.q-mt-md.q-mr-md.subtitle dao.hypha.earth/
                 q-input.q-my-sm.col(
@@ -99,7 +99,7 @@ widget(title='General' titleImage='/svg/cog.svg' :bar='true').q-pa-none.full-wid
                     q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
 
         .full-width.q-mt-sm
-            label.h-label Purpose
+            label.h-label {{ $t('configuration.settings-general.form.purpose.label') }}
             q-input.q-my-sm(
                 :debounce="200"
                 :disable="!isAdmin"
@@ -120,7 +120,7 @@ widget(title='General' titleImage='/svg/cog.svg' :bar='true').q-pa-none.full-wid
 
     section.row.justify-between.q-col-gutter-x-xl(v-if="isShowingMore")
         .col-12.col-md-4(:class="{'q-mt-sm': !$q.screen.gt.md}")
-            label.h-label Primary color
+            label.h-label {{ $t('configuration.settings-general.form.primary-color.label') }}
             .row.full-width.items-center.q-mt-sm
                 .col-auto.q-mr-sm
                     q-avatar(size="40px" :style="{'background': form.primaryColor, 'cursor': 'context-menu'}")
@@ -143,7 +143,7 @@ widget(title='General' titleImage='/svg/cog.svg' :bar='true').q-pa-none.full-wid
             q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
 
         .col-12.col-md-4(:class="{'q-mt-sm': !$q.screen.gt.md}")
-            label.h-label Secondary color
+            label.h-label {{ $t('configuration.settings-general.form.secondary-color.label') }}
             .row.full-width.items-center.q-mt-sm
                 .col-auto.q-mr-sm
                     q-avatar(size="40px" :style="{'background': form.secondaryColor, 'cursor': 'context-menu'}")
@@ -166,7 +166,7 @@ widget(title='General' titleImage='/svg/cog.svg' :bar='true').q-pa-none.full-wid
             q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
 
         .col-12.col-md-4(:class="{'q-mt-sm': !$q.screen.gt.md}")
-            label.h-label Text on color
+            label.h-label {{ $t('configuration.settings-general.form.text-color.label') }}
             .row.full-width.items-center.q-mt-sm
                 .col-auto.q-mr-sm
                     q-avatar(size="40px" :style="{'background': form.textColor, 'border': form.textColor !== '#ffffff' ? '' : '1px solid #A3A5AA', 'cursor': 'context-menu'}")
@@ -191,11 +191,11 @@ widget(title='General' titleImage='/svg/cog.svg' :bar='true').q-pa-none.full-wid
         .row.full-width.q-my-xl.relative-position
             .col-6(:style="{'height':'96px', 'background': form.primaryColor, 'cursor': 'context-menu'}")
             .col-6(:style="{'height':'96px', 'background': form.secondaryColor, 'cursor': 'context-menu'}")
-            .absolute.z-50.absolute-center.h-h3.text-weight-500(:style="{'color': form.textColor}") This text should be visible on both colors
+            .absolute.z-50.absolute-center.h-h3.text-weight-500(:style="{'color': form.textColor}") {{ $t('configuration.settings-general.form.sample-text') }}
 
     footer.full-width.row.items-center.justify-center
         q-btn.q-px-lg.h-btn1(
-            :label="isShowingMore? 'Show less options' : 'Show more options'"
+            :label="isShowingMore? $t('configuration.settings-general.nav.show-more') : $t('configuration.settings-general.nav.show-less')"
             @click="isShowingMore = !isShowingMore"
             color="primary"
             flat

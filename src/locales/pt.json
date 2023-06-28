@@ -1,4 +1,19 @@
 {
+  "actions": {
+    "delete":"Excluir"
+  },
+
+  "periods": {
+    "hour": "Hora",
+    "hours": "Horas",
+    "day": "Dia",
+    "days": "Dias",
+    "week": "Semana",
+    "weeks": "Semanas",
+    "month": "Mês",
+    "months": "Meses"
+  },
+
   "assignments": {
     "assignment-claim-extend": {
       "claimAll": "Reivindicar tudo\n        "
@@ -56,6 +71,211 @@
       "hypha": "1,345 HIPHA",
       "hvoice": "45.330 HVOICE",
       "more1": "Mais"
+    }
+  },
+  "configuration": {
+    "alert": {
+      "confirm-action": "Tem certeza que deseja sair sem salvar seu rascunho?"
+    },
+
+    "tabs":{
+      "general":"Geral",
+      "structure":"Estrutura",
+      "voting":"Votação"
+    },
+
+    "nav": {
+      "reset":"Reiniciar alterações",
+      "submit":"Salvar alterações",
+      "execute-multisig":"Executar multisig",
+      "sign-multisig":"Assinar multisig",
+      "view-multisig":"Visualizar multisig"
+    },
+
+    "settings-general": {
+      "title":"Geral",
+      "description":"Use as configurações gerais para configurar alguns parâmetros básicos, como um link para seu espaço de colaboração principal e seu DAO e use a alternância para habilitar ou desabilitar os principais recursos.",
+
+
+      "form":{
+        "logo": {
+          "label":"Logotipo"
+        },
+        "upload": {
+          "label": "Carregue uma imagem (máx. 3MB)"
+        },
+        "name": {
+          "label": "Nome"
+        },
+        "url": {
+          "label":"URL personalizada"
+        },
+        "purpose": {
+          "label":"Finalidade"
+        },
+        "primary-color": {
+          "label":"Cor primária"
+        },
+        "secondary-color": {
+          "label":"Cor secundária"
+        },
+        "text-color": {
+          "label":"Texto na cor"
+        },
+
+        "sample-text": "Este texto deve ser visível em ambas as cores"
+      },
+
+      "nav": {
+        "show-more":"Mostrar mais opções",
+        "show-less":"Mostrar menos opções"
+      }
+     
+    },
+
+    "settings-structure": {
+      "roles":{
+        "title":"Funções",
+        "description":"Aqui você pode configurar as funções do seu DAO. Trata-se de um conjunto de responsabilidades básicas que uma função de usuário pode cumprir. Você pode considerá-las como modelos de descrições de trabalho.",
+  
+
+        "tabs": {
+          "types":"Tipos",
+          "levels": "Níveis"
+        },
+
+        "type": {
+          "heading": "Aqui você pode criar novos tipos de função adicionando um nome e um conjunto de responsabilidades.",
+
+          "form":{
+            "name": {
+              "label":"Nome da Função",
+              "placeholder": "Digite um nome de papel"
+            },
+    
+            "description": {
+              "label":"Descrição da função",
+              "placeholder": "Digite uma descrição de função"
+            },
+  
+            "cancel": "Cancelar",
+            "submit": "Concluído"
+          },
+    
+          "nav": {
+            "create":"Criar nova função"
+          }
+        },
+
+
+        "level":{
+          "heading": "Adicione em que nível a função está em relação à complexidade ou contribuição comercial.",
+          "form":{
+            "name": {
+              "label":"Nome do nível",
+              "placeholder": "Digite um nome de nível"
+            },
+    
+            "yearly-reward": {
+              "label":"Recompensa anual",
+              "placeholder": "Digite um valor"
+            },
+
+            "montly-reward": {
+              "label":"Recompensa mensal"
+            },
+
+            "min-deferred": {
+              "label":"Mínimo Adiado"
+            },
+
+            "cancel": "Cancelar",
+            "submit": "Concluído"
+          },
+          "nav": {
+            "create":"Criar novo nível"
+          }
+        }
+      },
+
+      "circles":{
+        "title":"Círculos",
+        "description":"Aqui você pode configurar suas equipes principais ou círculos. Os círculos definem os limites e domínios internos do DAO. Qualquer atividade é vinculada a um único círculo (a base da atividade) para que os orçamentos possam ser mantidos por meio do DAO.",
+        "form":{
+          "name": {
+            "label":"Nome do Círculo",
+            "placeholder": "Digite um nome de círculo"
+          },
+  
+          "description": {
+            "label":"Descrição do Círculo",
+            "placeholder": "Digite uma descrição do círculo"
+          },
+
+          "cancel": "Cancelar",
+          "submit": "Concluído"
+        },
+
+        "nav": {
+          "create":"Criar novo círculo"
+        }
+      }
+    },
+
+
+    "settings-voting": {
+      "core":{
+        "title":"Métodos de votação da equipe principal",
+        "description":"Todo DAO pode moldar seu próprio sistema de votação, permitindo que os principais membros da equipe tomem decisões coletivas. Você pode selecionar um modelo que melhor atenda às suas necessidades ou sinta-se à vontade para personalizar seu próprio sistema de votação.",
+
+        "form":{
+          "unity":{
+            "label":"Unidade (% da voz necessária)"
+          },
+
+          "quorum":{
+            "label":"Quorum (% de participantes obrigatórios)"
+          },
+
+          "duration": {
+            "label": "Duração do voto"
+          }
+        },
+
+        "showcase": {
+          "1": { "title": "HVOICE", "description": "Todo membro pode usar seus tokens de governança HVOICE como uma parcela de votos." },
+          "2": { "title": "Múltiplos votos", "description": "Os membros podem votar várias vezes durante o período de votação" },
+          "3": { "title": "Período de votação", "description": "O período de votação padrão é de 1 semana" },
+          "4": { "title": "Requisitos", "description": "As propostas precisam ter a porcentagem exigida de votos de apoio (unidade) e a porcentagem de todos os votos (quórum)" }
+        }
+      },
+
+      "community":{
+        "title":"Métodos de votação da comunidade",
+        "description":"Todo DAO pode moldar seu próprio sistema de votação, permitindo que os principais membros da equipe tomem decisões coletivas. Você pode selecionar um modelo que melhor atenda às suas necessidades ou sinta-se à vontade para personalizar seu próprio sistema de votação.",
+
+        "form":{
+          "unity":{
+            "label":"Unidade (% da voz necessária)"
+          },
+
+          "quorum":{
+            "label":"Quorum (% de participantes obrigatórios)"
+          },
+
+          "duration": {
+            "label": "Duração do voto"
+          }
+        },
+
+        "showcase": {
+          "1": { "title": "1 membro = 1 voto", "description": "Todo membro pode votar usando 1 membro 1 voto." },
+          "2": { "title": "Delegar voz", "description": "Os membros podem dar sua voz (ou poder de voto) aos membros eleitos em uma eleição democrática" },
+          "3": { "title": "Múltiplos votos", "description": "Os membros podem votar várias vezes durante o período de votação" },
+          "4": { "title": "Período de votação", "description": "O período de votação padrão é de 1 semana" },
+          "5": { "title": "Requisitos", "description": "As propostas precisam ter a porcentagem exigida de votos favoráveis (unidade) e a porcentagem de todos os votos (quórum)" }
+        }
+      }
     }
   },
   "common": {

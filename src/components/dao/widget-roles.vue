@@ -96,9 +96,9 @@ export default {
       query: gql`
         query ROLES($daoId: Int64!) {
           queryRole(
-            filter: { 
-              details_dao_i: { eq: $daoId }, 
-              details_autoApprove_i: { eq: 1 } 
+            filter: {
+              details_dao_i: { eq: $daoId },
+              details_autoApprove_i: { eq: 1 }
             }
           ) {
             id: docId
@@ -113,9 +113,9 @@ export default {
         document: gql`
           subscription ROLES($daoId: Int64!) {
               queryRole(
-                filter: { 
-                  details_dao_i: { eq: $daoId }, 
-                  details_autoApprove_i: { eq: 1 } 
+                filter: {
+                  details_dao_i: { eq: $daoId },
+                  details_autoApprove_i: { eq: 1 }
                 }
               ) {
                 id: docId
@@ -225,8 +225,8 @@ export default {
 </script>
 
 <template lang="pug">
-widget(title='Roles' titleImage='/svg/briefcase.svg' bar).q-pa-none.full-width
-  p.text-sm.text-h-gray.leading-loose.q-mt-md Here you can set up your DAO's roles. These are a set of basic accountabilities that a user role can fulfill. You can think of them as templated job descriptions.
+widget(:title="$t('configuration.settings-structure.roles.title')" titleImage='/svg/briefcase.svg' bar).q-pa-none.full-width
+  p.text-sm.text-h-gray.leading-loose.q-mt-md {{ $t('configuration.settings-structure.roles.description') }}
 
   q-tabs(
     active-color="primary"
@@ -235,17 +235,17 @@ widget(title='Roles' titleImage='/svg/briefcase.svg' bar).q-pa-none.full-width
     no-caps
     v-model="tab"
   )
-    q-tab(:name="TABS.TYPE" label="Types" :ripple="false")
-    q-tab(:name="TABS.LEVEL" label="Levels" :ripple="false")
+    q-tab(:name="TABS.TYPE" :label="$t('configuration.settings-structure.roles.tabs.types')" :ripple="false")
+    q-tab(:name="TABS.LEVEL" :label="$t('configuration.settings-structure.roles.tabs.levels')" :ripple="false")
 
   section(v-if="tab === TABS.TYPE").q-mt-md
-    header.column.justify-center.text-center.items-center(v-if="!hasRoles && state !== STATES.WAITING")
-      p.text-sm.text-h-gray.leading-loose.q-mt-md Here you can create new role types by adding a name and set of accountabilities.
+    header.column.justify-center.text-center.items-center(v-if="!hasRoles && state === STATES.WAITING")
+      p.text-sm.text-h-gray.leading-loose.q-mt-md {{ $t('configuration.settings-structure.roles.type.heading') }}
       q-btn.q-px-xl.text-bold(
+        :label="$t('configuration.settings-structure.roles.type.nav.create')"
         @click="state = STATES.CREATING_ROLE"
         color="primary"
         icon="fas fa-plus"
-        label="Create new role"
         no-caps
         rounded
         unelevated
@@ -269,7 +269,7 @@ widget(title='Roles' titleImage='/svg/briefcase.svg' bar).q-pa-none.full-width
                 q-menu
                   q-list(dense)
                     q-item(@click="_deleteRole(role.id)" clickable v-close-popup)
-                      q-item-section Delete
+                      q-item-section {{ $t('actions.delete') }}
 
             p.q-pa-none.text-sm.text-h-gray.leading-loose.q-mt-md {{ role?.description }}
 
@@ -277,34 +277,34 @@ widget(title='Roles' titleImage='/svg/briefcase.svg' bar).q-pa-none.full-width
       .hr.q-my-md(v-if="hasLevels")
 
       .full-width
-          label.h-label Role Name
+          label.h-label {{ $t('configuration.settings-structure.roles.type.form.name.label') }}
           q-input.q-my-xs(
             :debounce="200"
             :disable="!isAdmin"
+            :placeholder="$t('configuration.settings-structure.roles.type.form.name.placeholder')"
             bg-color="white"
             color="accent"
             dense
             lazy-rules
             outlined
-            placeholder="Type a role name"
             ref="name"
             rounded
             v-model='role.name'
           )
       .full-width.q-mt-md
-          label.h-label Role Description
+          label.h-label {{ $t('configuration.settings-structure.roles.type.form.description.label') }}
           q-input.q-my-xs(
             :debounce="200"
             :disable="!isAdmin"
             :input-style="{ 'resize': 'none' }"
+            :placeholder="$t('configuration.settings-structure.roles.type.form.description.placeholder')"
             bg-color="white"
             color="accent"
             dense
             lazy-rules
             maxlength="300"
             outlined
-            placeholder="Type a role description"
-            ref="nickname"
+            ref="description"
             rounded
             rows="3"
             type="textarea"
@@ -313,18 +313,18 @@ widget(title='Roles' titleImage='/svg/briefcase.svg' bar).q-pa-none.full-width
 
       nav.full-width.q-my-xl.row.justify-end
           q-btn.col-auto.q-px-xl.rounded-border.text-bold.q-mr-xs(
+            :label="$t('configuration.settings-structure.roles.type.form.cancel')"
             @click="state = STATES.WAITING"
             color="white"
-            label="Cancel"
             no-caps
             rounded
             text-color="primary"
             unelevated
           )
           q-btn.col-auto.q-px-xl.rounded-border.text-bold.q-ml-xs(
+            :label="$t('configuration.settings-structure.roles.type.form.submit')"
             @click="_createRole"
             color="secondary"
-            label="Done"
             no-caps
             rounded
             unelevated
@@ -332,10 +332,10 @@ widget(title='Roles' titleImage='/svg/briefcase.svg' bar).q-pa-none.full-width
 
     nav.full-width.row.justify-end.q-mt-xl(v-if="hasRoles && state === STATES.WAITING")
       q-btn.q-px-xl.text-bold(
+        :label="$t('configuration.settings-structure.roles.type.nav.create')"
         @click="state = STATES.CREATING_ROLE"
         color="primary"
         icon="fas fa-plus"
-        label="Create new role"
         no-caps
         rounded
         unelevated
@@ -344,12 +344,12 @@ widget(title='Roles' titleImage='/svg/briefcase.svg' bar).q-pa-none.full-width
 
   section(v-if="tab === TABS.LEVEL").q-mt-md
     header.column.justify-center.text-center.items-center(v-if="!hasLevels && state !== STATES.WAITING")
-      p.text-sm.text-h-gray.leading-loose.q-mt-md Add what level the role is at with regard to complexity or commercial contribution.
+      p.text-sm.text-h-gray.leading-loose.q-mt-md {{ $t('configuration.settings-structure.roles.level.heading') }}
       q-btn.q-px-xl.text-bold(
+        :label="$t('configuration.settings-structure.roles.level.nav.create')"
         @click="state = STATES.CREATING_LEVEL"
         color="primary"
         icon="fas fa-plus"
-        label="Create new level"
         no-caps
         rounded
         unelevated
@@ -373,7 +373,7 @@ widget(title='Roles' titleImage='/svg/briefcase.svg' bar).q-pa-none.full-width
                 q-menu
                   q-list(dense)
                     q-item(@click="_deleteLevel(level)" clickable v-close-popup)
-                      q-item-section Delete
+                      q-item-section {{ $t('actions.delete') }}
 
             p.q-pa-none.text-sm.text-h-gray.leading-loose.q-mt-xs ${{ formatCurrency(level.annualAmount) }}/year
 
@@ -382,60 +382,60 @@ widget(title='Roles' titleImage='/svg/briefcase.svg' bar).q-pa-none.full-width
 
       .row.q-col-gutter-md.q-mt-xl
         .col-3
-          label.h-label Level name
+          label.h-label {{ $t('configuration.settings-structure.roles.level.form.name.label') }}
           q-input.q-my-xs(
-              :debounce="200"
-              :disable="!isAdmin"
-              bg-color="white"
-              color="accent"
-              dense
-              lazy-rules
-              outlined
-              placeholder="Type a level name"
-              ref="name"
-              rounded
-              v-model='level.name'
+            :debounce="200"
+            :disable="!isAdmin"
+            :placeholder="$t('configuration.settings-structure.roles.level.form.name.placeholder')"
+            bg-color="white"
+            color="accent"
+            dense
+            lazy-rules
+            outlined
+            ref="name"
+            rounded
+            v-model='level.name'
           )
 
         .col-3
-          label.h-label Yearly reward
+          label.h-label {{ $t('configuration.settings-structure.roles.level.form.yearly-reward.label') }}
           q-input.q-my-xs(
-              :debounce="200"
-              :disable="!isAdmin"
-              bg-color="white"
-              color="accent"
-              dense
-              lazy-rules
-              outlined
-              placeholder="Type an amount"
-              ref="annualAmount"
-              rounded
-              type='number'
-              v-model='level.annualAmount'
-          )
-            template(v-slot:before)
-              q-icon(name="fas fa-dollar-sign")
-
-        .col-3
-          label.h-label Montly reward
-          q-input.q-my-xs(
-              :debounce="200"
-              :disable="true"
-              bg-color="white"
-              color="accent"
-              dense
-              lazy-rules
-              outlined
-              ref="name"
-              rounded
-              type='number'
-              :value='parseFloat(level.annualAmount / 12).toFixed(2)'
+            :debounce="200"
+            :disable="!isAdmin"
+            :placeholder="$t('configuration.settings-structure.roles.level.form.yearly-reward.placeholder')"
+            bg-color="white"
+            color="accent"
+            dense
+            lazy-rules
+            outlined
+            ref="annualAmount"
+            rounded
+            type='number'
+            v-model='level.annualAmount'
           )
             template(v-slot:before)
               q-icon(name="fas fa-dollar-sign")
 
         .col-3
-          label.h-label Min Deferred
+          label.h-label {{ $t('configuration.settings-structure.roles.level.form.montly-reward.label') }}
+          q-input.q-my-xs(
+            :debounce="200"
+            :disable="true"
+            :value='parseFloat(level.annualAmount / 12).toFixed(2)'
+            bg-color="white"
+            color="accent"
+            dense
+            lazy-rules
+            outlined
+            ref="montlyAmount"
+            rounded
+            type='number'
+          )
+            template(v-slot:before)
+              q-icon(name="fas fa-dollar-sign")
+
+        .col-3
+          label.h-label {{ $t('configuration.settings-structure.roles.level.form.min-deferred.label') }}
           .row.full-width.items-center
             .col.row.q-mr-sm
               q-slider(
@@ -457,29 +457,29 @@ widget(title='Roles' titleImage='/svg/briefcase.svg' bar).q-pa-none.full-width
 
       nav.full-width.q-my-xl.row.justify-end
           q-btn.col-auto.q-px-xl.rounded-border.text-bold.q-mr-xs(
-              @click="state = STATES.WAITING"
-              color="white"
-              label="Cancel"
-              no-caps
-              rounded
-              text-color="primary"
-              unelevated
+            :label="$t('configuration.settings-structure.roles.level.form.cancel')"
+            @click="state = STATES.WAITING"
+            color="white"
+            no-caps
+            rounded
+            text-color="primary"
+            unelevated
           )
           q-btn.col-auto.q-px-xl.rounded-border.text-bold.q-ml-xs(
-              @click="_createLevel"
-              color="secondary"
-              label="Done"
-              no-caps
-              rounded
-              unelevated
+            :label="$t('configuration.settings-structure.roles.level.form.submit')"
+            @click="_createLevel"
+            color="secondary"
+            no-caps
+            rounded
+            unelevated
           )
 
     nav.full-width.row.justify-end.q-mt-xl(v-if="hasLevels && state === STATES.WAITING")
       q-btn.q-px-xl.text-bold(
+        :label="$t('configuration.settings-structure.roles.level.nav.create')"
         @click="state = STATES.CREATING_LEVEL"
         color="primary"
         icon="fas fa-plus"
-        label="Create new level"
         no-caps
         rounded
         unelevated

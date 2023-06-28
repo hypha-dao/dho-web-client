@@ -82,23 +82,23 @@ div.custom-period-input
         v-model.number="valueFormated"
       )
     .col-3
-      q-btn-dropdown.full-width(:label="period" outline no-caps rounded unelevated)
+      q-btn-dropdown.full-width(:label="[$t('periods.'+[period])]"  outline no-caps rounded unelevated)
         q-list
           q-item(clickable v-close-popup @click="period = 'hours'")
             q-item-section
-              q-item-label Hours
+              q-item-label {{ $t('periods.hours') }}
 
           q-item(clickable v-close-popup  @click="period = 'days'")
             q-item-section
-              q-item-label Days
+              q-item-label {{ $t('periods.days') }}
 
           q-item(clickable v-close-popup  @click="period = 'weeks'")
             q-item-section
-              q-item-label Weeks
+              q-item-label {{ $t('periods.weeks') }}
 
           q-item(clickable v-close-popup  @click="period = 'months'")
             q-item-section
-              q-item-label Months
+              q-item-label {{ $t('periods.months') }}
 </template>
 
 <style lang="stylus" scoped>

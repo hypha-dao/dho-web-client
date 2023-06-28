@@ -125,18 +125,18 @@ export default {
 </script>
 
 <template lang="pug">
-widget(title='Circles' titleImage='/svg/chart-network.svg' bar).q-pa-none.full-width.q-mt-sm
-  p.text-sm.text-h-gray.leading-loose.q-mt-md Here you can set up your core teams or circles. Circles define the DAO's inner boundaries and domains. Any activity is tied to a single circle (the activity's home base) so that budgets can be maintained through the DAO.
+widget(:title="$t('configuration.settings-structure.circles.title')" titleImage='/svg/chart-network.svg' bar).q-pa-none.full-width.q-mt-sm
+  p.text-sm.text-h-gray.leading-loose.q-mt-md {{ $t('configuration.settings-structure.roles.description') }}
   .hr.q-my-md
 
   section.q-mt-md
     header.column.justify-center.text-center.items-center(v-if="!hasCircles && state === STATES.WAITING")
       p.text-sm.text-h-gray.leading-loose.q-mt-md Feel free to shape your DAO by creating circles or teams that are meaningful to your workflow.
       q-btn.q-px-xl.text-bold(
+        :label="$t('configuration.settings-structure.circles.nav.create')"
         @click="state = STATES.CREATING_CIRCLE"
         color="primary"
         icon="fas fa-plus"
-        label="Create new circle"
         no-caps
         rounded
         unelevated
@@ -160,7 +160,7 @@ widget(title='Circles' titleImage='/svg/chart-network.svg' bar).q-pa-none.full-w
                 q-menu
                   q-list(dense)
                     q-item(@click="_deleteCircle(circle.id)" clickable v-close-popup)
-                      q-item-section Delete
+                      q-item-section {{ $t('actions.delete') }}
 
             p.q-pa-none.text-sm.text-h-gray.leading-loose.q-mt-md {{ circle.description }}
 
@@ -168,32 +168,32 @@ widget(title='Circles' titleImage='/svg/chart-network.svg' bar).q-pa-none.full-w
       .hr.q-my-md(v-if="hasCircles")
 
       .full-width
-        label.h-label Circle Name
+        label.h-label {{ $t('configuration.settings-structure.circles.form.name.label') }}
         q-input.q-my-xs(
           :debounce="200"
+          :placeholder="$t('configuration.settings-structure.circles.form.name.placeholder')"
           bg-color="white"
           color="accent"
           dense
           lazy-rules
           outlined
-          placeholder="Type a circle name"
           ref="name"
           rounded
           v-model='circle.name'
         )
 
       .full-width.q-mt-md
-        label.h-label Circle Description
+        label.h-label {{ $t('configuration.settings-structure.circles.form.description.label') }}
         q-input.q-my-xs(
           :debounce="200"
           :input-style="{ 'resize': 'none' }"
+          :placeholder="$t('configuration.settings-structure.circles.form.description.placeholder')"
           bg-color="white"
           color="accent"
           dense
           lazy-rules
           maxlength="300"
           outlined
-          placeholder="Type a circle description"
           ref="nickname"
           rounded
           rows="3"
@@ -203,29 +203,29 @@ widget(title='Circles' titleImage='/svg/chart-network.svg' bar).q-pa-none.full-w
 
       nav.full-width.q-my-xl.row.justify-end
         q-btn.col-auto.q-px-xl.rounded-border.text-bold.q-mr-xs(
-            @click="state = STATES.WAITING"
-            color="white"
-            label="Cancel"
-            no-caps
-            rounded
-            text-color="primary"
-            unelevated
+          :label="$t('configuration.settings-structure.circles.form.cancel')"
+          @click="state = STATES.WAITING"
+          color="white"
+          no-caps
+          rounded
+          text-color="primary"
+          unelevated
         )
         q-btn.col-auto.q-px-xl.rounded-border.text-bold.q-ml-xs(
-            @click="_createCircle"
-            color="secondary"
-            label="Done"
-            no-caps
-            rounded
-            unelevated
+          :label="$t('configuration.settings-structure.circles.form.submit')"
+          @click="_createCircle"
+          color="secondary"
+          no-caps
+          rounded
+          unelevated
         )
 
     nav.full-width.row.justify-end.q-mt-xl(v-if="hasCircles && state === STATES.WAITING")
       q-btn.q-px-xl.text-bold(
+        :label="$t('configuration.settings-structure.circles.nav.create')"
         @click="state = STATES.CREATING_CIRCLE"
         color="primary"
         icon="fas fa-plus"
-        label="Create new circle"
         no-caps
         rounded
         unelevated

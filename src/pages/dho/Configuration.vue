@@ -28,9 +28,7 @@ const settingsMapper = (data) => {
 
     ...(exist(form.communityVotingEnabled) ? { communityVotingEnabled: form.communityVotingEnabled ? 1 : 0 } : {})
     // ...(exist(form.upvoteHeadDelegateRound) ? { upvoteHeadDelegateRound: form.upvoteHeadDelegateRound ? 1 : 0 } : {})
-
     // ...(exist(upvoteStartDate && upvoteStartTime) ? { upvoteStartDateTime: upvoteStartDate ? new Date(`${upvoteStartDate.replace(/\//g, '-')}T${upvoteStartTime}:00.000${timezoneHours}:${timezoneMinutes}`).toISOString().replace('Z', '') : '' } : {}),
-
     // ...(exist(upvoteRounds) ? { upvoteRounds: JSON.stringify(upvoteRounds) } : {})
 
   }
@@ -441,7 +439,7 @@ q-page.page-configuration
   confirm-action-modal(
     v-model="isLeaving"
     @responded="onLeavePageConfirmed"
-    title="Are you sure you want to leave without saving your draft?"
+    :title="$t('configuration.alert.confirm-action')"
   )
 
   q-tabs(
@@ -451,9 +449,9 @@ q-page.page-configuration
     no-caps
     v-model="tab"
   )
-    q-tab(:name="TABS.GENERAL" label="General" :ripple="false")
-    q-tab(:name="TABS.STRUCTURE" label="Structure" :ripple="false")
-    q-tab(:name="TABS.VOTING" label="Voting" :ripple="false")
+    q-tab(:name="TABS.GENERAL" :label="$t('configuration.tabs.general')" :ripple="false")
+    q-tab(:name="TABS.STRUCTURE" :label="$t('configuration.tabs.structure')" :ripple="false")
+    q-tab(:name="TABS.VOTING" :label="$t('configuration.tabs.voting')" :ripple="false")
 
   settings-general(v-show="tab === TABS.GENERAL" v-bind="{ form, isAdmin, isHypha }" @change="onChange").q-mt-xl
   settings-structure(v-show="tab === TABS.STRUCTURE" v-bind="{ form, isAdmin, isHypha }" @change="onChange").q-mt-xl
@@ -464,9 +462,9 @@ q-page.page-configuration
     q-btn.q-px-xl.rounded-border.text-bold.q-mr-xs(
       :class="{ 'full-width': !$q.screen.gt.sm }"
       :disable="numberOfChanges === 0"
+      :label="$t('configuration.nav.reset')"
       @click="resetForm"
       color="white"
-      label="Reset changes"
       no-caps
       rounded
       text-color="primary"
@@ -475,9 +473,9 @@ q-page.page-configuration
     div.inline.relative-position(:class="{ 'full-width q-mt-md': !$q.screen.gt.sm }")
       q-btn.q-px-xl.rounded-border.text-bold.q-ml-xs.full-width(
         :disable="numberOfChanges === 0"
+        :label="$t('configuration.nav.submit')"
         @click="onSave"
         color="primary"
-        label="Save changes"
         no-caps
         rounded
         unelevated
@@ -488,9 +486,9 @@ q-page.page-configuration
   nav.full-width.q-my-xl.row.justify-end(v-show="isAdmin && activeMultisig")
     q-btn.q-px-xl.rounded-border.text-bold.q-mr-xs(
       :class="{ 'full-width': !$q.screen.gt.sm }"
+      :label="$t('configuration.nav.view-multisig')"
       @click="state = CONFIGURATION_STATE.VIEW_MULTI_SIG"
       color="white"
-      label="View multisig"
       no-caps
       rounded
       text-color="primary"
@@ -498,9 +496,9 @@ q-page.page-configuration
     )
     div.inline.relative-position(:class="{ 'full-width q-mt-md': !$q.screen.gt.sm }")
       q-btn.q-px-xl.rounded-border.text-bold.q-ml-xs.full-width(
+        :label="hasSignedMultisig ? $t('configuration.nav.execute-multisig') : $t('configuration.nav.sign-multisig')"
         @click="hasSignedMultisig ?  executeMultisig() : state = CONFIGURATION_STATE.SIGN_MULTI_SIG"
         color="primary"
-        :label="hasSignedMultisig ? 'Execute multisig' : 'Sign multisig'"
         no-caps
         rounded
         unelevated

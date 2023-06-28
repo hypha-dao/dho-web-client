@@ -366,7 +366,7 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
                     router-link.q-mr-sm(:to="{ name: 'support' }")
                       q-btn(unelevated rounded padding="12px" icon="fas fa-question-circle"  size="sm" :color="isActiveRoute('support') ? 'primary' : 'white'" :text-color="isActiveRoute('support') ? 'white' : 'primary'")
                     q-separator.q-mr-sm(vertical inset)
-                    //- q-btn(@click="languageSettings = true, right = false" unelevated rounded padding="12px" icon="fas fa-globe"  size="sm" :color="'white'" :text-color="'primary'")
+                    q-btn(@click="languageSettings = true, right = false" unelevated rounded padding="12px" icon="fas fa-globe"  size="sm" :color="'white'" :text-color="'primary'")
                     //- q-input.q-mx-md.search(
                     //-   v-model="searchInput"
                     //-   placeholder="Search the whole DAO"
@@ -396,31 +396,31 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
                 router-view
           .col.margin-min(v-if="$q.screen.gt.sm")
   q-drawer.full-width(v-model="right" side="right" :width="$q.screen.gt.lg ? 370 : ($q.screen.md ? 400 : ($q.screen.gt.sm ?  140 : $q.screen.width))" v-if="$q.screen.gt.lg || account || !$q.screen.gt.sm" persistent="persistent" :show-if-above="false")
-  //- q-drawer(v-model="languageSettings" overlay side="right" :width="$q.screen.gt.lg ? 370 : ($q.screen.md || $q.screen.gt.sm ? 400 : $q.screen.width)" :show-if-above="true").full-width
-  //-   div.q-pa-xl.full-height.position-relative
-  //-     .row
-  //-       .flex.full-width.justify-between.no-wrap
-  //-         .h-h3 Select your default language
-  //-         q-btn(color="internal-bg" text-color="primary" rounded unelevated size="sm" padding="12px" icon="fas fa-times" :style="{ 'height': '40px' }" @click="languageSettings = false")
-  //-       .q-mt-md.full-width
-  //-         .col(v-for="lang in languages" :key="lang.name")
-  //-           .row.q-pa-xs.items-center.flex.justify-between.q-mb-xs(:class="{ 'selected': currentLang === lang.value }")
-  //-             .row.items-center
-  //-               img.q-mr-sm(:src="lang.image" :style="{ 'border-radius': '50%', 'width': '30px', 'height': '30px' }")
-  //-               .h-b2(:style="{ 'font-size': '16px' }" :class="{ 'selected-text': currentLang === lang.value }") {{ lang.label }}
-  //-             input(
-  //-               :value="lang.value"
-  //-               v-model="currentLang"
-  //-               type="radio"
-  //-               :style="{ 'width': '20px', 'height': '20px', 'accent-color': '#242f5d', 'cursor': 'pointer' }"
-  //-             )
-  //-     .translation-box.q-pa-sm(:style="{ 'position': 'absolute', 'bottom': '30px', 'right': '30px', 'left': '30px' }")
-  //-       .row.items-center.q-mb-md.justify-between
-  //-         .row
-  //-           img.q-mr-sm(:src="require('assets/images/locales/translation.png')" :style="{ 'width': '26px', 'height': '26px' }")
-  //-           .h-b2.text-bold(:style="{ 'font-size': '14px' }") Translation
-  //-         q-toggle(v-model="autoTranslate" color="secondary" keep-color)
-  //-       .h-b2 Automatically translate proposals and Projects to your default language
+  q-drawer(v-model="languageSettings" overlay side="right" :width="$q.screen.gt.lg ? 370 : ($q.screen.md || $q.screen.gt.sm ? 400 : $q.screen.width)" :show-if-above="true").full-width
+    div.q-pa-xl.full-height.position-relative
+      .row
+        .flex.full-width.justify-between.no-wrap
+          .h-h3 Select your default language
+          q-btn(color="internal-bg" text-color="primary" rounded unelevated size="sm" padding="12px" icon="fas fa-times" :style="{ 'height': '40px' }" @click="languageSettings = false")
+        .q-mt-md.full-width
+          .col(v-for="lang in languages" :key="lang.name")
+            .row.q-pa-xs.items-center.flex.justify-between.q-mb-xs(:class="{ 'selected': currentLang === lang.value }")
+              .row.items-center
+                img.q-mr-sm(:src="lang.image" :style="{ 'border-radius': '50%', 'width': '30px', 'height': '30px' }")
+                .h-b2(:style="{ 'font-size': '16px' }" :class="{ 'selected-text': currentLang === lang.value }") {{ lang.label }}
+              input(
+                :value="lang.value"
+                v-model="currentLang"
+                type="radio"
+                :style="{ 'width': '20px', 'height': '20px', 'accent-color': '#242f5d', 'cursor': 'pointer' }"
+              )
+      .translation-box.q-pa-sm(:style="{ 'position': 'absolute', 'bottom': '30px', 'right': '30px', 'left': '30px' }")
+        .row.items-center.q-mb-md.justify-between
+          .row
+            img.q-mr-sm(:src="require('assets/images/locales/translation.png')" :style="{ 'width': '26px', 'height': '26px' }")
+            .h-b2.text-bold(:style="{ 'font-size': '14px' }") Translation
+          q-toggle(v-model="autoTranslate" color="secondary" keep-color)
+        .h-b2 Automatically translate proposals and Projects to your default language
   q-drawer(v-model="right" side="right" :width="$q.screen.gt.lg ? 370 : ($q.screen.md ? 400 : ($q.screen.gt.sm ?  140 : $q.screen.width))" v-if="$q.screen.gt.lg || account || !$q.screen.gt.sm" persistent :show-if-above="false").full-width
     .row.full-width.full-height.flex.items-center.justify-center(v-if="loadingAccount")
       loading-spinner(size="120px")
