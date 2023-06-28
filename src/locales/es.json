@@ -2,8 +2,8 @@
   "assignments": {
     "assignment-claim-extend": {
       "claimAll": "Reclamar todo\n        ",
-      "extendAfter": "Extender después de {fecha}",
-      "extendBefore": "Ampliar antes del {fecha}",
+      "extendAfter": "Extender después de {date}",
+      "extendBefore": "Ampliar antes del {date}",
       "youMustReApply": "Debe volver a aplicar"
     },
     "assignment-suspend": {
@@ -1256,8 +1256,8 @@
         },
         "stepdetails": {
           "titleIsRequired": "¡Se requiere título!",
-          "proposalTitleLengthHasToBeLess": "La longitud del título de la propuesta debe ser menor o igual a {TITLE_MAX_LENGTH} caracteres (su título contiene {longitud} caracteres)",
-          "theDescriptionMustContainLess": "La descripción debe contener menos de {DESCRIPTION_MAX_LENGTH} caracteres (su descripción contiene {longitud} caracteres)",
+          "proposalTitleLengthHasToBeLess": "La longitud del título de la propuesta debe ser menor o igual a {TITLE_MAX_LENGTH} caracteres (su título contiene {length} caracteres)",
+          "theDescriptionMustContainLess": "La descripción debe contener menos de {DESCRIPTION_MAX_LENGTH} caracteres (su descripción contiene {length} caracteres)",
           "images": "Imágenes",
           "pngJpegInApp": "PNG, JPEG. ",
           "documents": "Documentos",
@@ -1458,8 +1458,8 @@
     "hours": " horas",
     "day": " día",
     "days": " días",
-    "dayWithValue": "{días} día, ",
-    "daysWithValue": "{días} días, "
+    "dayWithValue": "{days} día, ",
+    "daysWithValue": "{days} días, "
   },
   "proposalFilter": {
     "all": "Todo",
@@ -1630,7 +1630,7 @@
   },
   "search": {
     "results": {
-      "results": "{valor} Resultados",
+      "results": "{value} Resultados",
       "noResultsFound": "No se han encontrado resultados",
       "resultsTypes": "Tipos de resultados",
       "all": "Todo",

@@ -2,8 +2,8 @@
   "assignments": {
     "assignment-claim-extend": {
       "claimAll": "Захтевај све\n        ",
-      "extendAfter": "Продужите после {дате}",
-      "extendBefore": "Продужите пре {дате}",
+      "extendAfter": "Продужите после {date}",
+      "extendBefore": "Продужите пре {date}",
       "youMustReApply": "Морате се поново пријавити"
     },
     "assignment-suspend": {
@@ -527,7 +527,7 @@
       "registerNewAccount": "Региструјте нови налог",
       "registrationIsTemporarilyDisabled": "Регистрација је привремено онемогућена",
       "login": "Пријавите се",
-      "welcomeTo": "Добро дошли у {даоНаме}"
+      "welcomeTo": "Добро дошли у {daoName}"
     },
     "quick-actions": {
       "7432": "2",
@@ -562,7 +562,7 @@
       "beSureTo": "Обавезно довршите своје ",
       "profile": "профил",
       "andHaveFun": " и забавите се стварајући нове и узбудљиве ствари са својим ДАО-ом и једни са другима.",
-      "welcomeTo": "Добро дошли у {даоНаме}"
+      "welcomeTo": "Добро дошли у {daoName}"
     }
   },
   "organization-asset": {
@@ -1180,7 +1180,7 @@
         "noQuestsToSeeHere": "Нема задатака да видите овде.",
         "createQuest": "Цреате Куест",
         "writeSomethingAboutYourself": "Напишите нешто о себи и обавестите друге кориснике о својој мотивацији да се придруже.",
-        "looksLikeDidntWrite": "Изгледа да {усернаме} још није написао ништа о својој мотивацији да се придружи овом ДАО-у.",
+        "looksLikeDidntWrite": "Изгледа да {username} још није написао ништа о својој мотивацији да се придружи овом ДАО-у.",
         "writeBiography": "Напишите биографију",
         "retrievingBio": "Преузимање биографије...",
         "youHaventCast": "Још нисте дали ниједан глас. ",
@@ -1256,8 +1256,8 @@
         },
         "stepdetails": {
           "titleIsRequired": "Наслов је обавезан!",
-          "proposalTitleLengthHasToBeLess": "Дужина наслова предлога мора да буде мања или једнака {ТИТЛЕ_МАКС_ЛЕНГТХ} знакова (ваш наслов садржи {ленгтх} знакова)",
-          "theDescriptionMustContainLess": "Опис мора да садржи мање од {ДЕСЦРИПТИОН_МАКС_ЛЕНГТХ} знакова (ваш опис садржи {ленгтх} знакова)",
+          "proposalTitleLengthHasToBeLess": "Дужина наслова предлога мора да буде мања или једнака {TITLE_MAX_LENGTH} знакова (ваш наслов садржи {length} знакова)",
+          "theDescriptionMustContainLess": "Опис мора да садржи мање од {DESCRIPTION_MAX_LENGTH} знакова (ваш опис садржи {length} знакова)",
           "images": "Слике",
           "pngJpegInApp": "ПНГ, Јпег. ",
           "documents": "Документи",
@@ -1276,8 +1276,8 @@
           "typeTheAmountOfUsd": "Унесите износ ХУСД-а",
           "commitmentMustBeGreater": "Обавеза мора бити већа или једнака конфигурацији улоге. ",
           "defferedMustBeGreater": "Одложено мора бити веће или једнако конфигурацији улоге. ",
-          "salaryCompensationForOneYear": "Надокнада плате за годину дана (${валуе})",
-          "salaryCompensationForOneYearUsd": "Надокнада плате за годину дана (${валуе}) УСД",
+          "salaryCompensationForOneYear": "Надокнада плате за годину дана (${value})",
+          "salaryCompensationForOneYearUsd": "Надокнада плате за годину дана (${value}) УСД",
           "compensation": "Компензација",
           "pleaseEnterTheUSD": "Молимо унесите еквивалент у УСД и % одлагања за овај допринос – што више одложите на каснији датум, већи ће бити бонус (погледајте стварни обрачун плате испод или користите наш калкулатор). ",
           "compensationForOnePeriod": "Накнада за један период",
@@ -1447,9 +1447,9 @@
     }
   },
   "proposalparsing": {
-    "createdAgo": "Направљено пре {дифф}",
-    "closedAgo": "Затворено пре {дифф}",
-    "thisVoteWillCloseIn": "Ово гласање ће се затворити за {даиСтр}{хоурСтр}:{минСтр}:{сегСтр}",
+    "createdAgo": "Направљено пре {diff}",
+    "closedAgo": "Затворено пре {diff}",
+    "thisVoteWillCloseIn": "Ово гласање ће се затворити за {dayStr}{hourStr}:{minStr}:{segStr}",
     "second": " друго",
     "seconds": " секунди",
     "minutes": " минута",
@@ -1458,8 +1458,8 @@
     "hours": " сати",
     "day": " дан",
     "days": " дана",
-    "dayWithValue": "{даис} дан, ",
-    "daysWithValue": "{даис} дана, "
+    "dayWithValue": "{days} дан, ",
+    "daysWithValue": "{days} дана, "
   },
   "proposalFilter": {
     "all": "Све",
@@ -1630,7 +1630,7 @@
   },
   "search": {
     "results": {
-      "results": "{валуе} Резултати",
+      "results": "{value} Резултати",
       "noResultsFound": "Нема резултата",
       "resultsTypes": "Врсте резултата",
       "all": "Све",

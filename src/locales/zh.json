@@ -2,8 +2,8 @@
   "assignments": {
     "assignment-claim-extend": {
       "claimAll": "索取全部\n        ",
-      "extendAfter": "在{日期}之后延长",
-      "extendBefore": "在{日期}之前延长",
+      "extendAfter": "在{date}之后延长",
+      "extendBefore": "在{date}之前延长",
       "youMustReApply": "您必须重新申请"
     },
     "assignment-suspend": {
@@ -1458,8 +1458,8 @@
     "hours": " 小时",
     "day": " 天",
     "days": " 天",
-    "dayWithValue": "{天}天， ",
-    "daysWithValue": "{天}天， "
+    "dayWithValue": "{days}天， ",
+    "daysWithValue": "{days}天， "
   },
   "proposalFilter": {
     "all": "全部",

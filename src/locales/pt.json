@@ -2,8 +2,8 @@
   "assignments": {
     "assignment-claim-extend": {
       "claimAll": "Reivindicar tudo\n        ",
-      "extendAfter": "Estender após {data}",
-      "extendBefore": "Estender antes de {data}",
+      "extendAfter": "Estender após {date}",
+      "extendBefore": "Estender antes de {date}",
       "youMustReApply": "Você deve se inscrever novamente"
     },
     "assignment-suspend": {
@@ -1256,8 +1256,8 @@
         },
         "stepdetails": {
           "titleIsRequired": "O título é obrigatório!",
-          "proposalTitleLengthHasToBeLess": "O comprimento do título da proposta deve ser menor ou igual a {TITLE_MAX_LENGTH} caracteres (seu título contém {comprimento} caracteres)",
-          "theDescriptionMustContainLess": "A descrição deve conter menos de {DESCRIPTION_MAX_LENGTH} caracteres (sua descrição contém {comprimento} caracteres)",
+          "proposalTitleLengthHasToBeLess": "O comprimento do título da proposta deve ser menor ou igual a {TITLE_MAX_LENGTH} caracteres (seu título contém {length} caracteres)",
+          "theDescriptionMustContainLess": "A descrição deve conter menos de {DESCRIPTION_MAX_LENGTH} caracteres (sua descrição contém {length} caracteres)",
           "images": "Imagens",
           "pngJpegInApp": "PNG, JPEG. ",
           "documents": "Documentos",
@@ -1630,7 +1630,7 @@
   },
   "search": {
     "results": {
-      "results": "{valor} Resultados",
+      "results": "{value} Resultados",
       "noResultsFound": "Nenhum resultado encontrado",
       "resultsTypes": "Tipos de resultados",
       "all": "Todos",

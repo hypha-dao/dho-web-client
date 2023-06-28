@@ -2,8 +2,8 @@
   "assignments": {
     "assignment-claim-extend": {
       "claimAll": "모두 청구\n        ",
-      "extendAfter": "{날짜} 이후 연장",
-      "extendBefore": "{날짜} 이전에 연장",
+      "extendAfter": "{date} 이후 연장",
+      "extendBefore": "{date} 이전에 연장",
       "youMustReApply": "다시 신청하셔야 합니다"
     },
     "assignment-suspend": {
