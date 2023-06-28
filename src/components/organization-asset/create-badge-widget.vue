@@ -1,5 +1,5 @@
 <script>
-import CONFIG from '~/pages/proposals/create/config.json'
+import CONFIG from '~/pages/proposals/create/config.js'
 import { mapActions } from 'vuex'
 
 export default {

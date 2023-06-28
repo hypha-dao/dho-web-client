@@ -1,6 +1,6 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
-import CONFIG from '../../pages/proposals/create/config.json'
+import CONFIG from '../../pages/proposals/create/config.js'
 import { format } from '../../mixins/format'
 import { proposals } from '../../mixins/proposals'
 import { cycleDurationSec } from '../../utils/proposal-parsing'

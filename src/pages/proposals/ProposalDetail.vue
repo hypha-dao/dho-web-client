@@ -2,7 +2,7 @@
 import { mapActions, mapGetters } from 'vuex'
 import { PROPOSAL_STATE, PROPOSAL_TYPE } from '~/const'
 
-import CONFIG from './create/config.json'
+import CONFIG from './create/config.js'
 import { calcVoicePercentage } from '~/utils/eosio'
 import { format } from '~/mixins/format'
 import lodash from 'lodash'

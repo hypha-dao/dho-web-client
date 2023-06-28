@@ -2,6 +2,7 @@
 /**
  * Control for navigating the proposal creation wizard
  */
+import I18n from '~/utils/i18n'
 export default {
   name: 'creation-stepper',
   components: {
@@ -20,7 +21,7 @@ export default {
     nextDisabled: Boolean,
     title: {
       type: String,
-      default: 'Creation process'
+      default: I18n.t('proposal-creation.creation-process')
     },
     steps: {
       type: Array,
