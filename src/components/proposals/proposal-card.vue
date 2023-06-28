@@ -93,8 +93,8 @@ export default {
       return this.isAccepted ? 'Passed' : 'Not passed'
     },
     parentCircleName () {
-      if (this.proposal?.parentcircle?.[0].name) {
-        const name = this.proposal?.parentcircle?.[0].name
+      if (this.proposal?.parentcircle?.[0]?.name) {
+        const name = this.proposal?.parentcircle?.[0]?.name
         if (name.toLowerCase().includes('circle')) {
           return name
         } else {

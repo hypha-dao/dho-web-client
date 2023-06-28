@@ -571,7 +571,7 @@ q-page.page-treasury
     .col-9.q-pr-md
       widget.q-px-xl(no-padding="no-padding")
         q-tabs(active-color="primary" indicator-color="primary" no-caps="no-caps" v-model="tab")
-          q-tab(v-if="treasuryAccount" :name="MULTISIG_TABS.PAYOUT" label="Payout Requests" :ripple="false")
+          q-tab(:name="MULTISIG_TABS.PAYOUT" label="Payout Requests" :ripple="false")
           q-tab(v-if="treasuryAccount" :name="MULTISIG_TABS.MULTISIG" label="Multisig Sign Request" :ripple="false")
           q-tab(v-if="treasuryAccount" :name="MULTISIG_TABS.READY" label="Ready to Execute" :ripple="false")
           q-tab(:name="MULTISIG_TABS.HISTORY" :label="$t('pages.dho.treasury.history')" :ripple="false")
@@ -657,11 +657,11 @@ q-page.page-treasury
               .h-h5 {{ $t('pages.dho.treasury.allDoneHere') }}
               .text-grey.h-b2.q-mt-sm {{ $t('pages.dho.treasury.noPendingPayoutRequest') }}
               q-icon(color="positive" name="fas fa-check" size="42px")
-        div(v-if="tab === MULTISIG_TABS.PAYOUT && treasuryAccount")
-          q-table.treasury-table(v-if="redemptions.length" :columns="tabsConfig.payoutRequests.columns" :data="redemptions" :loading="loading" @request="onRequest" selection="multiple" :selected.sync="selected")
+        div(v-if="tab === MULTISIG_TABS.PAYOUT")
+          q-table.treasury-table(v-if="redemptions.length" :columns="tabsConfig.payoutRequests.columns" :data="redemptions" :loading="loading" @request="onRequest" :selection="treasuryAccount ? 'multiple' : 'none'" :selected.sync="selected")
             template(v-slot:body="props")
               q-tr.q-tr--no-hover(:props="props")
-                q-td(key="selected")
+                q-td(v-if="treasuryAccount" key="selected")
                   q-checkbox(v-model="props.selected")
                 q-td(key="requestor" :props="props")
                   .row
@@ -754,7 +754,7 @@ q-page.page-treasury
         .row.q-mt-sm
           .text-grey.h-b2 {{ $t('pages.dho.treasury.helloTreasurerSelectTheMultisig') }}
         q-btn.q-px-lg.h-btn1.full-width.q-mt-md(color="primary" :label="$t('pages.dho.treasury.signMultisigTransaction')" no-caps="no-caps" rounded="rounded" unelevated="unelevated" :disable="!selected.length" @click="approveMultisig")
-      widget.q-mb-md(v-if="tab === MULTISIG_TABS.PAYOUT" :title="$t('pages.dho.treasury.generateMultisigTransaction')")
+      widget.q-mb-md(v-if="tab === MULTISIG_TABS.PAYOUT && treasuryAccount" :title="$t('pages.dho.treasury.generateMultisigTransaction')")
         .text-grey.h-b2.q-mt-sm {{ $t('pages.dho.treasury.helloTreasurerStartAMultisig') }}
         q-btn.q-px-lg.h-btn1.full-width.q-mt-md(color="primary" label="Generate" no-caps="no-caps" rounded="rounded" unelevated="unelevated" :disable="!selected.length" @click="transactionReviewOpen = true")
       filter-widget(:circle.sync="circle" :circleArray.sync="circleArray" :optionArray.sync="optionArray" :showCircle="false" :showToggle="true" :showViewSelector="false" :sort.sync="sort" :textFilter.sync="search" :toggle.sync="filter" toggleLabel="Show completed transactions")
