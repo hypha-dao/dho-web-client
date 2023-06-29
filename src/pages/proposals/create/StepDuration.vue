@@ -172,7 +172,7 @@ export default {
       const endIndex = this.$store.state.proposals.draft.endIndex
       // const periodCount = this.$store.state.proposals.draft.periodCount
       await this.$nextTick()
-      if (startPeriod || endIndex) {
+      if (startPeriod && endIndex) {
         this.isFromDraft = true
         this.startDate = startPeriod.details_startTime_t
         this.endIndex = endIndex
