@@ -67,7 +67,6 @@ export default {
       if (!this.archivedProposals) return []
 
       const enabledFilters = this.filters.filter(filter => filter.enabled)
-
       return this.archivedProposals.filter((proposal) => {
         return enabledFilters.some((filter) => {
           return filter.filter(proposal) &&
@@ -180,7 +179,7 @@ export default {
     },
 
     resetPaginationValues () {
-      this.$refs.scroll.resume()
+      this.$refs?.scroll?.resume()
       this.pagination.offset = 0
       this.pagination.more = true
       this.$apollo.queries.archivedProposals.refetch()

@@ -1,5 +1,15 @@
 # Changelog
 
+## [2.28.2](https://github.com/hypha-dao/dho-web-client/compare/v2.28.1...v2.28.2) (2023-06-18)
+
+
+### Bug Fixes
+
+* deal with race conditions ([9e484cc](https://github.com/hypha-dao/dho-web-client/commit/9e484cc8d65f9eaddecc7250fe039b4126d85773))
+* fix return ([1a05c32](https://github.com/hypha-dao/dho-web-client/commit/1a05c329632ddd6848a07b324fdd8a7ddbcb25f3))
+* handle load errors ([20c0922](https://github.com/hypha-dao/dho-web-client/commit/20c09228bc5717933763dc6910951d674ca9c3b4))
+* race condition check added ([04c301e](https://github.com/hypha-dao/dho-web-client/commit/04c301e976ee510bf0555c4166d011f6ab6a7eab))
+
 ## [2.28.1](https://github.com/hypha-dao/dho-web-client/compare/v2.28.0...v2.28.1) (2023-06-17)
 
 
