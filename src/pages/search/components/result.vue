@@ -102,61 +102,61 @@ export default {
     },
     statusTags () {
       if (this.status === 'approved') {
-        return [{ label: 'Active', color: 'positive' }]
+        return [{ label: this.$t('search.results.result.active'), color: 'positive' }]
       }
       if (this.status === 'proposed') {
         if (this.votingExpired) {
-          return [{ label: 'Pending to close', color: 'warning' }]
+          return [{ label: this.$t('search.results.result.pendingToClose'), color: 'warning' }]
         } else {
-          return [{ label: 'Voting', color: 'warning' }]
+          return [{ label: this.$t('search.results.result.voting'), color: 'warning' }]
         }
       }
       if (this.status === 'suspended') {
-        return [{ label: 'Suspended', color: 'negative' }]
+        return [{ label: this.$t('search.results.result.suspended'), color: 'negative' }]
       }
       if (this.status === 'rejected') {
-        return [{ label: 'Archived', color: 'grey' }]
+        return [{ label: this.$t('search.results.result.archived'), color: 'grey' }]
       }
       if (this.status === 'archived') {
-        return [{ label: 'Archived', color: 'grey' }]
+        return [{ label: this.$t('search.results.result.archived'), color: 'grey' }]
       }
       if (this.status === 'withdrawed') {
-        return [{ color: 'negative', label: 'Withdrawn' }]
+        return [{ color: 'negative', label: this.$t('search.results.result.withdrawn') }]
       }
       return [{}]
     },
     applicantTag () {
       if (this.type === 'Member' && this.applicant) {
-        return [{ label: 'Applicant', color: 'secondary' }]
+        return [{ label: this.$t('search.results.result.applicant'), color: 'secondary' }]
       } else {
         return null
       }
     },
     tags () {
       const tags = []
-      if (this.type === 'withdrawed') tags.push({ color: 'negative', label: 'Withdrawn', text: 'white' })
+      if (this.type === 'withdrawed') tags.push({ color: 'negative', label: this.$t('search.results.result.withdrawn'), text: 'white' })
 
       if (this.type === 'Payout') {
         if (this.salary) {
           const [usdAmount] = this.salary.split(' ')
           return [
-            { color: 'primary', label: 'Generic Contribution' },
+            { color: 'primary', label: this.$t('search.results.result.genericContribution') },
             { color: 'primary', outline: true, label: `${this.getFormatedTokenAmount(usdAmount, 3, 0)} HUSD` }
           ]
         } else {
           return [
-            { color: 'primary', label: 'Generic Contribution' }
+            { color: 'primary', label: this.$t('search.results.result.genericContribution') }
           ]
         }
       }
 
       if (this.type === 'Edit') {
-        tags.push({ color: 'primary', label: 'Extension' })
+        tags.push({ color: 'primary', label: this.$t('search.results.result.extension') })
       }
 
       if (this.type === 'Assignment' || this.type === 'Edit') {
         return [
-          { color: 'primary', label: 'Role Assignment' },
+          { color: 'primary', label: this.$t('search.results.result.roleAssignment') },
           ...tags
           // { color: 'primary', outline: true, label: 'Circle One' }
           // { color: 'primary', label: 'B3' },
@@ -166,7 +166,7 @@ export default {
 
       if (this.type === 'Assignbadge') {
         return [
-          { color: 'primary', label: 'Badge Assignment' },
+          { color: 'primary', label: this.$t('search.results.result.badgeAssignment') },
           ...tags
           // { color: 'primary', outline: true, label: 'Assign' }
           // { color: 'primary', outline: true, label: 'Circle One' }
@@ -175,19 +175,19 @@ export default {
 
       if (this.type === 'Suspend') {
         return [
-          { color: 'warning', label: 'Suspension' }
+          { color: 'warning', label: this.$t('search.results.result.suspension') }
         ]
       }
 
       if (this.type === 'Role') {
         return [
-          { color: 'primary', label: ' Role Archetype' }
+          { color: 'primary', label: this.$t('search.results.result.roleArchetype') }
         ]
       }
 
       if (this.type === 'Badge') {
         return [
-          { color: 'primary', label: 'Badge' }
+          { color: 'primary', label: this.$t('search.results.result.badge') }
         ]
       }
 

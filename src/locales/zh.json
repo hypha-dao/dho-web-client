@@ -1,0 +1,1671 @@
+{
+  "assignments": {
+    "assignment-claim-extend": {
+      "claimAll": "索取全部\n        ",
+      "extendAfter": "在{date}之后延长",
+      "extendBefore": "在{date}之前延长",
+      "youMustReApply": "您必须重新申请"
+    },
+    "assignment-suspend": {
+      "suspend": "暂停",
+      "thisActionWill": "此操作将建议暂停 {1} 的分配",
+      "pleaseProvideAReason": "请给出理由。",
+      "reason": "原因",
+      "suspend1": "暂停\n          ",
+      "suspendingSAssignment": "暂停{1}的分配",
+      "areYouSure": "您确定要提议暂停此作业吗？",
+      "reason1": "原因：",
+      "cancel": "取消",
+      "suspend2": "暂停"
+    },
+    "assignment-withdraw": {
+      "withdraw": "提取",
+      "ifYouWithdraw": "\n          如果您撤回分配，它将从 DAO 中删除\n          \n        ",
+      "warningThisAction": "警告：此操作不可逆转。",
+      "notes": "笔记",
+      "withdraw1": "提取\n          ",
+      "withdrawingFromYourAssignment": "退出你的任务",
+      "areYouSure": "您确定要退出此任务吗？",
+      "notes1": "笔记：",
+      "warningThisAction1": "警告：此操作不可逆转。",
+      "cancel": "取消",
+      "withdraw2": "提取"
+    },
+    "dynamic-commit": {
+      "adjustmentsToYour": "对您的分配的调整不需要投票。",
+      "commitment": "承诺",
+      "chooseBetween": "在 {1}% 和 {2}% 之间选择",
+      "multipleAdjustmentsTo": "计算中将包括对您的承诺的多次调整。",
+      "deferral": "延期",
+      "chooseBetween1": "在 {1}% 和 {2}% 之间选择",
+      "thisDeferralRate": "此延期费率仅在您提出索赔时适用。",
+      "confirm": "确认"
+    },
+    "salary": {
+      "compensation": "赔偿",
+      "showTokensFor": "显示完整月球周期（约 1 个月）的代币",
+      "commitmentAndDeferral": "承诺和延期"
+    }
+  },
+  "circles": {
+    "circle-card": {
+      "productCircle": "产品圈",
+      "openProposals": "2 项公开提案",
+      "activeAssignments": "5 项活跃任务",
+      "more": "还有 2 个",
+      "thisIsThe": "这是最酷的圈子。",
+      "lastMonth": "上个月",
+      "husd": "20.000 HUSD",
+      "hypha": "1.345 菌丝",
+      "hvoice": "45.330 语音",
+      "more1": "更多的"
+    }
+  },
+  "common": {
+    "button-card": {
+      "until": "直到"
+    },
+    "confirm-action-modal": {
+      "no": "不",
+      "yes": "是的"
+    },
+    "edit-controls": {
+      "edit": "编辑",
+      "cancel": "取消",
+      "save": "节省"
+    },
+    "empty-widget-label": {
+      "yourOrganizationDoesnt": "您的组织还没有任何 {1}。",
+      "click": "点击",
+      "here": "这里",
+      "toSetThemUp": "设置它们。"
+    },
+    "explore-by-widget": {
+      "daos": "DAO",
+      "ecosystems": "生态系统",
+      "exploreBy": "探索方式："
+    },
+    "upvote-delegate-widget": {
+      "upvoteDelegates": "投票代表",
+      "electionValidityExpiresIn": "选举有效期到期于：",
+      "days": "天",
+      "day": "天",
+      "hours": "小时",
+      "hour": "小时",
+      "mins": "分钟",
+      "min": "分钟",
+      "headDelegate": "首席代表"
+    },
+    "widget-editable": {
+      "more": "更多的"
+    },
+    "widget-more-btn": {
+      "seeMore": "查看更多"
+    },
+    "widget": {
+      "seeAll": "查看全部",
+      "seeAll1": "查看全部"
+    }
+  },
+  "contributions": {
+    "payout": {
+      "payout": "支出"
+    },
+    "token-multipliers": {
+      "deferredSeeds": "延期种子",
+      "husd": "哈士德",
+      "hvoice": "语音",
+      "hypha": "菌丝"
+    }
+  },
+  "dao": {
+    "settings-communication": {
+      "announcements": "公告",
+      "postAnAnnouncement": "在所有部分发布公告，让会员了解重要更新。",
+      "title": "标题",
+      "message": "信息",
+      "removeAnnouncement": "删除公告-",
+      "addMore": "添加更多",
+      "onlyForHypha": "仅适用于 Hypha - 在所有 DAO 中发布警报，让用户了解重要更新。",
+      "alert": "警报",
+      "positive": "积极的",
+      "negative": "消极的",
+      "warning": "警告",
+      "removeNotification": "删除通知 -",
+      "alerts": "警报",
+      "enterYourMessageHere": "在此输入您的留言"
+    },
+    "settings-community": {
+      "community": "社区",
+      "classic": "经典的",
+      "upvote": "点赞",
+      "doYouWantToExpand": "您想向您的 DAO 社区成员（代币持有者）扩展您的 DAO 意义吗？",
+      "activateCommunityVoting": "激活社区投票",
+      "onlyDaoAdminsCanChange": "只有 DAO 管理员可以更改设置",
+      "communityVotingMethod": "社区投票方式",
+      "theClassicMethodAllowsAll": "经典方法允许所有 DAO 社区成员使用他们的 HVOICE 对社区提案进行投票。 ",
+      "upvoteElectionDateAndTime": "支持选举日期和时间",
+      "upvoteElectionStartingDate": "支持选举开始日期",
+      "upvoteElectionStartingTime": "赞成选举开始时间",
+      "upvoteElectionRounds": "投票选举轮次",
+      "round": "圆形的",
+      "peoplePassing": "- 路过的人",
+      "duration": "- 期间",
+      "removeRound": "移除圆形 -",
+      "addRound": "添加回合",
+      "chiefDelegateRoundHowManyChiefDelegates": "首席代表回合 > 有多少位首席代表？",
+      "chiefDelegatesRoundDuration": "首席代表轮次 - 持续时间",
+      "headDelegateRoundDoYouWant": "首席代表回合 > 您想要 1 位首席代表吗？",
+      "headDelegatesRoundDuration": "首席代表回合 - 持续时间",
+      "upvoteMethodExpirationTime": "投票方法过期时间",
+      "afterTheElectionHasBeen": "选举成功完成后，EDEN投票方式将持续一段特定的时间。",
+      "edenVotingMethod": "EDEN投票方式持续时间",
+      "communityProposalsDiligence": "社区提案勤奋",
+      "theFollowingSectionAllows": "以下部分允许您仅为社区提案设置不同的 Unity、Quorum 和 Duration。",
+      "voteAlignment": " 投票对齐（Unity）",
+      "unityIsTheMinimumRequired": "团结度是指支持（投票赞成或反对）提案通过的最低成员百分比。",
+      "voteQuorum": "投票法定人数",
+      "quorumIsTheMinimumRequired": "法定人数是参与投票的会员总数所需的最低百分比才能通过。",
+      "voteDuration": "投票时长",
+      "isTheDurationPeriod": "投票有效且成员可以投一票或多票的持续时间。"
+    },
+    "settings-design": {
+      "design": "设计",
+      "useDesignSettingsToChange": "使用设计设置更改 DAO 的重要品牌元素，包括颜色、徽标、图案、横幅和背景。",
+      "general": "一般的",
+      "splashpage": "启动页",
+      "banners": "横幅",
+      "primaryColor": "原色",
+      "onlyDaoAdmins": "只有 DAO 管理员可以更改设置",
+      "secondaryColor": "次要颜色",
+      "textOnColor": "文字颜色",
+      "logo": "标识",
+      "extendedLogo": "扩展标志",
+      "pattern": "图案",
+      "color": "颜色",
+      "opacity": "不透明度",
+      "uploadAnImage": "上传图片（最大 3MB）",
+      "title": "标题",
+      "shortParagraph": "短款",
+      "dashboard": "仪表板",
+      "proposals": "提案",
+      "members": "会员",
+      "organization": "组织",
+      "explore": "探索",
+      "max50Characters": "最多 50 个字符",
+      "max140Characters": "最多 140 个字符"
+    },
+    "multisig-modal": {
+      "multisig": "多重签名",
+      "proposal": "提议",
+      "doYouWant": "您想创建多重签名吗？",
+      "doYouWant1": "您想批准更改吗？",
+      "changes": "变化",
+      "signers": "签名者",
+      "cancelMultiSig": "取消多重签名",
+      "resetChanges": "重置更改",
+      "createMultiSig": "创建多重签名",
+      "deny": "否定",
+      "approve": "批准"
+    },
+    "settings-voting": {
+      "voting": "表决",
+      "useVotingSettings": "使用投票设置来设置您的投票参数，包括团结度（支持投票的成员的最小百分比）、法定人数（参与投票的成员总数的最小百分比）和投票持续时间（投票开放的时间，包括投票的更新）。",
+      "voteAlignmentUnity": "投票对齐（Unity）",
+      "unityIsThe": "团结度是指支持（投票赞成或反对）提案通过的最低成员百分比。",
+      "val": "= 0 ",
+      "onlyDaoAdmins": "只有 DAO 管理员可以更改设置",
+      "voteQuorum": "投票法定人数",
+      "quorumIsThe": "法定人数是参与投票的会员总数所需的最低百分比才能通过。",
+      "val1": "= 0 ",
+      "onlyDaoAdmins1": "只有 DAO 管理员可以更改设置",
+      "voteDuration": "投票时长",
+      "isTheDuration": "投票有效且成员可以投一票或多票的持续时间。",
+      "onlyDaoAdmins2": "只有 DAO 管理员可以更改设置"
+    },
+    "settings-general": {
+      "general": "一般的",
+      "useGeneralSettings": "使用常规设置来设置一些基本参数，例如指向主协作空间和 DAO 的链接，并使用切换开关来启用或禁用关键功能。",
+      "daoName": "道名称",
+      "pasteTheUrl": "将 URL 地址粘贴到此处",
+      "onlyDaoAdmins": "只有 DAO 管理员可以更改设置",
+      "customUrl": "自定义网址",
+      "daohyphaearth": "dao.菌丝.earth/",
+      "typeYourCustom": "在此输入您的自定义 URL",
+      "onlyDaoAdmins1": "只有 DAO 管理员可以更改设置",
+      "socialChat": "社交聊天",
+      "pasteTheUrl1": "将 URL 地址粘贴到此处",
+      "onlyDaoAdmins2": "只有 DAO 管理员可以更改设置",
+      "linkToDocumentation": "文档链接",
+      "pasteTheUrl2": "将 URL 地址粘贴到此处",
+      "onlyDaoAdmins3": "只有 DAO 管理员可以更改设置",
+      "buttonText": "按钮文字",
+      "documentation": "文档",
+      "onlyDaoAdmins4": "只有 DAO 管理员可以更改设置",
+      "proposalsCreation": "提案创建",
+      "activateOrDeactivate": "激活或停用提案创建。",
+      "onlyDaoAdmins5": "只有 DAO 管理员可以更改设置",
+      "membersApplication": "会员申请",
+      "activateOrDeactivate1": "激活或停用会员应用程序。",
+      "onlyDaoAdmins6": "只有 DAO 管理员可以更改设置",
+      "removableBanners": "可拆卸横幅",
+      "activateOrDeactivate2": "激活或停用可移动横幅。",
+      "onlyDaoAdmins7": "只有 DAO 管理员可以更改设置",
+      "multisigConfiguration": "多重签名配置",
+      "activateOrDeactivateMultisig": "激活或停用多重签名。",
+      "onlyDaoAdmins8": "只有 DAO 管理员可以更改设置"
+    },
+    "settings-plan": {
+      "selectYourPlan": "选择您的计划",
+      "actionRequired": "需要采取的行动",
+      "membersMax": "最多 {1} 名成员",
+      "billingPeriod": "结算期",
+      "discount": "{1}% 折扣！",
+      "availableBalance": "可用余额",
+      "notEnoughTokens": "代币不足",
+      "buyHyphaToken": "购买 Hypha 代币",
+      "pleaseSelectPlan": "请先选择计划和期间。",
+      "billingHistory": "账单历史记录",
+      "suspended": "暂停",
+      "expired": "已到期",
+      "planActive": "计划活跃",
+      "renewPlan": "更新计划 ",
+      "activatePlan": "激活计划"
+    }
+  },
+  "dashboard": {
+    "how-it-works": {
+      "readyForVoting": "准备好投票了吗？",
+      "proposingAPolicy": "提出政策？",
+      "applyingForARole": "申请角色？",
+      "creatingANewRole": "创建新角色？",
+      "creatingABadge": "创建徽章？",
+      "launchingAQuest": "发起任务？",
+      "youNeedTo": "您需要同时通过法定人数（参与投票的成员总数的最低百分比）和团结（支持投票的成员的最低百分比）。",
+      "createAGeneric": "创建一个通用贡献提案，其中包含描述性标题、明确的政策定义以及实施政策的步骤。",
+      "createARecurring": "为现有的角色分配创建一个重复活动，并尽可能详细地描述为什么您是合适的人选。",
+      "createAProposal": "为组织资产创建提案，并选择具有描述性名称的角色原型以及具有职责的角色的明确定义。",
+      "createAProposal1": "为组织资产创建提案，并选择带有名称和明确学习或解锁成就或确认状态级别的徽章类型。",
+      "createAGeneric1": "创建一个通用贡献提案，其中包含描述性标题以及里程碑的清晰明细以及时间表上每个里程碑的支出。"
+    },
+    "news-item": {
+      "posted": "已发布{1}"
+    },
+    "news-widget": {
+      "latestNews": "最新消息"
+    },
+    "organization-banner": {
+      "thePurposeOf": "的目的",
+      "hypha": "菌丝",
+      "loremIpsumDolor": "Lorem ipsum dolor sat amet，consectetur adipiscing elit，sed do eiusmod tempor incididunt ut Labore et dolore magna aliqua。",
+      "documentation": "文档"
+    },
+    "support-widget": {
+      "documentation": "文档",
+      "needSupport": "需要支持吗？",
+      "pleaseReadOur": "请阅读我们的文档以获取更多信息。"
+    }
+  },
+  "ecosystem": {
+    "ecosystem-card": {
+      "daos": "{1} DAO",
+      "coreMembers": "{1} 核心成员",
+      "communityMembers": "{1}社区成员"
+    },
+    "ecosystem-info": {
+      "firstStepConfigureYour": "第一步：配置您的",
+      "ecosystem": "生态系统",
+      "editEcosystemInformation": "编辑生态系统信息",
+      "onlyDaoAdmins": "只有 DAO 管理员可以更改设置",
+      "saveEcosystemInformation": "保存生态系统信息",
+      "ecosystemName": "生态系统名称",
+      "typeNameHere": "在此输入名称（最多 30 个字符）",
+      "onlyDaoAdmins1": "只有 DAO 管理员可以更改设置",
+      "logo": "标识",
+      "uploadAnImage": "上传图片（最大 3MB）",
+      "showEcosystemOnMarketplace": "在市场上展示生态系统",
+      "findInvestorsWilling": "寻找愿意为您的生态系统提供资金的投资者",
+      "onlyDaoAdmins2": "只有 DAO 管理员可以更改设置",
+      "ecosystemDomain": "生态系统域",
+      "ecosystemPurpose": "生态系统目的",
+      "typeADescription": "在此输入描述（最多 300 个字符）"
+    }
+  },
+  "filters": {
+    "filter-widget": {
+      "filters": "过滤器",
+      "saveFilters": "保存过滤器",
+      "resetFilters": "重置过滤器"
+    }
+  },
+  "form": {
+    "custom-period-input": {
+      "customPeriod": "定制期",
+      "typeAnAmount": "输入金额",
+      "hours": "小时",
+      "days": "天",
+      "weeks": "周",
+      "months": "月"
+    },
+    "image-processor": {
+      "rotate": "旋转 90",
+      "rotate1": "旋转-90",
+      "zoomIn": "放大",
+      "zoomOut": "缩小",
+      "verticalMirror": "立镜",
+      "horizontalMirror": "卧式镜子",
+      "cancel": "取消",
+      "reset": "重置"
+    }
+  },
+  "ipfs": {
+    "demo-ipfs-inputs": {
+      "ipfsId": "IPFS ID：{1}",
+      "previewImage": "预览图像",
+      "ipfsId1": "IPFS ID：{1}",
+      "ipfsFile": "IPFS文件",
+      "ipfsId2": "IPFS ID：{1}",
+      "ipfsFileWith": "带有下载按钮的 IPFS 文件"
+    },
+    "input-file-ipfs": {
+      "uploadAFile": "上传一个文件"
+    },
+    "ipfs-file-viewer": {
+      "seeAttachedDocument": "见附件文件"
+    }
+  },
+  "login": {
+    "bottom-section": {
+      "newUser": "新用户？",
+      "registerHere": "在这里注册\n          ",
+      "registrationIsTemporarilyDisabled": "暂时禁止注册",
+      "areYouAMember": "你是会员吗？",
+      "loginHere": "在此登录",
+      "otherwise": "否则",
+      "loginWithWallet": "使用钱包登录",
+      "newUser1": "新用户？",
+      "registerHere1": "在这里注册\n        ",
+      "registrationIsTemporarilyDisabled1": "暂时禁止注册"
+    },
+    "login-view": {
+      "loginTo": "登录到",
+      "your": " 你的",
+      "account": "帐户",
+      "loginTo1": "登录到\n          ",
+      "yourAccount": "你的帐户",
+      "youCanEither": "您可以使用 SEEDS 轻钱包登录 (",
+      "downloadHere": "在这里下载",
+      "orAnchor": "）或者 Anchor，一个安全的开源工具，可以作为",
+      "desktopAppFor": "适用于 Windows 和 Mac 的桌面应用程序",
+      "andAMobile": "以及适用于两者的移动应用程序",
+      "android": "安卓",
+      "and": " 和",
+      "nbspios": "",
+      "forMore": "。",
+      "seeTheseSlidesnbsp": "请参阅这些幻灯片。",
+      "pleaseLoginWith": "请使用其中一个钱包、您的私钥登录或以访客身份继续。",
+      "account1": "帐户",
+      "account2": "帐户",
+      "privateKey": "私钥",
+      "privateKey1": "私钥",
+      "login": "登录",
+      "login1": "{1}登录{2}",
+      "getApp": "获取应用程序"
+    },
+    "register-user-view": {
+      "account": "帐户",
+      "information": "信息",
+      "inOrderTo": "为了参与任何决策或申请任何角色或接受任何捐款，您需要注册并成为会员。",
+      "pleaseUseThe": "请使用指导表格创建新的 SEEDS 帐户并进行会员注册。",
+      "accountName": "帐户名称\n          ",
+      "charactersAlphanumeric": "12 个字符，字母数字 a-z、1-5",
+      "phoneNumber": "电话号码",
+      "country": "国家",
+      "phoneNumber1": "电话号码",
+      "your": "你的",
+      "verificationCode": "验证码",
+      "pleaseCheckYour": "请检查您的手机是否有验证码",
+      "verificationCode1": "验证码",
+      "charactersAlphanumeric1": "12 个字符，字母数字 a-z、1-5",
+      "problemsWithTheCode": "代码有问题吗？",
+      "checkYourPhoneNumber": "检查您的电话号码",
+      "welcome": "欢迎",
+      "ourAuthenticationMethod": "我们的身份验证方法是 Anchor，这是一种安全的开源工具，可以作为 ",
+      "desktopAppFor": "适用于 Windows 和 Mac 的桌面应用程序",
+      "andAMobile": " 以及适用于两者的移动应用程序 ",
+      "android": "安卓",
+      "and": " 和 ",
+      "ios": "iOS系统",
+      "forMore": "。 ",
+      "theseSlides": "这些幻灯片",
+      "areYouAMember": "你是会员吗？",
+      "loginHere": "在此登录",
+      "createDao": "创建DAO"
+    },
+    "register-user-with-captcha-view": {
+      "createNew": "创建新的\n            ",
+      "hyphaAccount": "菌丝账户",
+      "pleaseVerifyYou": "请验证您不是 BOT",
+      "proceedWith": "与..一起处理\n                ",
+      "hyphaWallet": "菌丝钱包",
+      "setupHyphaWallet": "设置 Hypha 钱包",
+      "scanTheQr": "扫描本页二维码，",
+      "itContainsThe": " 它包含在您的钱包上创建 Hypha 帐户的邀请。",
+      "onceTheAccount": " 账户准备好后，",
+      "youAreSet": " 您已准备好进行下一步的最后一步。",
+      "copyInviteLink": "复制邀请链接",
+      "loginWith": "登录方式\n            ",
+      "hyphaWallet1": "菌丝钱包",
+      "signYourFirstTransaction": "签署您的第一笔交易",
+      "didYouCreate": "您是否在 Hypha 钱包内创建了 Hypha 账户？",
+      "login": "{1}登录{2}",
+      "getApp": "获取应用程序",
+      "areYouAMember": "你是会员吗？",
+      "loginHere": "在此登录"
+    },
+    "welcome-view": {
+      "youNeedAn": "您需要一个 Hypha 帐户才能与 Hypha 生态系统交互并创建 DAO。",
+      "isonboarding": "{{ isOnboarding ?  ",
+      "ifThisIs": "如果这是你第一次来这里",
+      "clickCreateNew": " 单击创建新的 Hypha 帐户并按照步骤操作。 ",
+      "ifYouAlready": "如果您已经配置了 Hypha 账户和 Anchor 钱包",
+      "clickThe": "，点击登录按钮，使用 Anchor Wallet 验证交易并输入 DAO。 ",
+      "theDhoDecentralized": "DHO（去中心化人类组织）是一个框架，用于以有机和参与的方式与其他人一起从头开始构建您的组织。",
+      "createNewHyphaAccount": "创建新的 Hypha 帐户",
+      "registrationIsTemporarilyDisabled": "暂时禁止注册",
+      "login": "登录",
+      "continueAsAGuest": "继续以访客身份",
+      "useAnExisting": "使用现有的\n      ",
+      "blockhainAccount": "区块链账户"
+    }
+  },
+  "navigation": {
+    "alert-message": {
+      "thisIsA": "这是一个",
+      "versionOfThe": "新 Hypha DAO 平台的版本。",
+      "ratingMeaning": "评级，意思是{1}。"
+    },
+    "dho-info": {
+      "moreInfo": "更多信息",
+      "votingDuration": "投票持续时间：{1}",
+      "periodDuration": "期间持续时间：{1}",
+      "admins": "管理员"
+    },
+    "guest-menu": {
+      "login": "登录",
+      "register": "登记",
+      "registrationIsTemporarilyDisabled": "暂时禁止注册",
+      "login1": "登录",
+      "register1": "登记",
+      "help": "帮助"
+    },
+    "left-navigation": {
+      "proposals": "提案",
+      "members": "会员",
+      "organization": "组织",
+      "explore": "探索"
+    },
+    "navigation-header": {
+      "home": "家",
+      "proposals": "提案",
+      "members": "会员",
+      "organization": "组织",
+      "circles": "界",
+      "archetypes": "原型",
+      "badges": "徽章",
+      "policies": "政策",
+      "alliances": "联盟",
+      "treasury": "财政部",
+      "admin": "行政"
+    },
+    "non-member-menu": {
+      "becomeMember": "成为会员",
+      "registrationIsTemporarilyDisabled": "暂时禁止注册"
+    },
+    "profile-sidebar-guest": {
+      "asAGuest": "作为访客，您可以完全访问 DAO 的所有内容。",
+      "registerNewAccount": "注册新帐户",
+      "registrationIsTemporarilyDisabled": "暂时禁止注册",
+      "login": "登录",
+      "welcomeTo": "欢迎来到 {daoName}"
+    },
+    "quick-actions": {
+      "7432": "2",
+      "quickActions": "快速行动",
+      "completeDraft": "完成草稿",
+      "youHaveA": "您有一份提案草案需要完成",
+      "claimPeriods": "索赔期限",
+      "youHave": "您有 2 个时段可以领取",
+      "adjustCommitment": "调整承诺",
+      "forASpecific": "在特定时间段内",
+      "extendAssignment": "延长任务",
+      "extendYourAssignment": "在 24 天内延长您的任务"
+    },
+    "quick-links": {
+      "thisDaoConfigured": "此 DAO 配置为不允许任何提案",
+      "newProposal": "新提案",
+      "myProfile": "我的简历",
+      "myWallet": "我的钱包",
+      "logout": "登出"
+    },
+    "sidebar-news": {
+      "weAreCurrently": "我们目前正在审核您的申请。",
+      "weAreCurrently1": "我们目前正在审核您的申请。",
+      "niceToSee": "很高兴在这里见到你。",
+      "youCanVoteFor": "您可以投票给 ",
+      "proposals": "提案",
+      "searchFor": "， 搜索 ",
+      "members": "会员",
+      "andFindOut": " 并找出是什么让你 ",
+      "organization": "组织",
+      "tick": " 打钩。",
+      "beSureTo": "请务必完成您的 ",
+      "profile": "轮廓",
+      "andHaveFun": " 并与您的 DAO 和彼此共同创造新的、令人兴奋的事物，享受乐趣。",
+      "welcomeTo": "欢迎来到 {daoName}"
+    }
+  },
+  "organization-asset": {
+    "asset-card": {
+      "revoke": "撤销",
+      "seeDetails": "查看具体信息",
+      "na": "不适用",
+      "apply": "申请",
+      "applied": "应用"
+    },
+    "create-badge-widget": {
+      "newBadgeProposal": "新徽章提案",
+      "createYourBadge": "创建您的徽章",
+      "doYouNeedSpecific": "您是否需要为 DAO 核心成员或代币持有者社区提供特定徽章？"
+    }
+  },
+  "organization": {
+    "archetypes-widget": {
+      "archetypes": "原型"
+    },
+    "badge-assignments-widget": {
+      "badgeAssignments": "徽章分配"
+    },
+    "badge-card": " 150？ ",
+    "badges-widget": {
+      "badges": "徽章"
+    },
+    "circle-card": {
+      "subCircles": "子圈子 ({1})",
+      "showSubcirclesDetails": "显示子圈详细信息",
+      "goToCircle": "前往圈子",
+      "members": "成员 ({1})",
+      "members1": "成员 ({1})",
+      "na": "不适用"
+    },
+    "circles-widget": {
+      "structure": "结构",
+      "circleBudgetDistribution": "循环预算分配",
+      "total": "全部的：",
+      "husd": "哈士德",
+      "hypha": "菌丝",
+      "budgetBreakdown": "预算细目"
+    },
+    "create-dho-widget": {
+      "createNewDao": "创建新的 DAO",
+      "createNewDao1": "创建新的 DAO"
+    },
+    "payout-card": " 150？ ",
+    "payouts-widget": {
+      "passedGenericContributions": "通过通用贡献"
+    },
+    "policies-widget": {
+      "policies": "政策",
+      "seeAll": "查看全部"
+    },
+    "role-assignment-card": " 150？ ",
+    "role-assignments-widget": {
+      "activeRoleAssignments": "主动角色分配"
+    },
+    "tokens": {
+      "seeMore": "查看更多",
+      "seeMore1": "查看更多",
+      "issuance": "发行"
+    }
+  },
+  "plan": {
+    "chip-plan": {
+      "plan": "{1}计划",
+      "daysLeft": "剩余天数",
+      "daysLeftTo": "续订计划还剩几天"
+    },
+    "downgrade-pop-up": {
+      "downgradeYourPlan": "降级您的计划",
+      "areYouSure": "您确定要降级吗？",
+      "byDowngradingYou": "通过降级，您将无法再访问与您的活动计划相关的某些 DAO 功能。",
+      "pleaseCheckTerms": "请查看条款和条件以了解更多信息。",
+      "keepMyPlan": "保留我的计划",
+      "downgrade": "降级"
+    }
+  },
+  "profiles": {
+    "about": {
+      "about": "关于"
+    },
+    "active-assignments": {
+      "userHasNoActivity": "用户没有任何活动",
+      "noActivityMatchingFilter": "没有活动匹配过滤器",
+      "userHasNoActivity1": "用户没有任何活动",
+      "noActivityMatchingFilter1": "没有活动匹配过滤器"
+    },
+    "contact-info": {
+      "contactInfo": "联系方式",
+      "phone": "电话",
+      "email": "电子邮件"
+    },
+    "current-balance": {
+      "currentBalance": "当前余额",
+      "loremIpsumDolor": "Lorem ipsum dolor sat amet、consectetur adipiscing elit、sed do eiusmod tempor"
+    },
+    "edit-dialog": {
+      "save": "节省",
+      "lukegravdent": "@lukegravdent",
+      "accountSettings": "帐号设定"
+    },
+    "members-list": {
+      "noMembersAt": "暂时没有会员"
+    },
+    "multi-sig": {
+      "multiSig": "多重签名",
+      "clickHereTo": "单击此处签署新的 PR",
+      "multiSig1": "多重签名"
+    },
+    "open-proposals": {
+      "openProposals": "公开提案"
+    },
+    "organizations": {
+      "otherOrganizations": "其他组织",
+      "seeMore": "查看更多",
+      "organizations": "组织机构",
+      "seeMore1": "查看更多"
+    },
+    "past-achievements": {
+      "pastAchievements": "过去的成就",
+      "youHaveNo": "你没有过去的成就"
+    },
+    "profile-card": {
+      "voice": "{1}语音",
+      "name": "姓名",
+      "timeZone": "时区",
+      "text": "文本",
+      "applicant": "申请人",
+      "coreTeam": "核心团队",
+      "community": "社区"
+    },
+    "proposal-item": {
+      "viewProposal": "查看提案",
+      "viewProposal1": "查看提案"
+    },
+    "transaction-history": {
+      "transactionHistory": "交易纪录"
+    },
+    "voting-history": {
+      "recentVotes": "最近投票",
+      "caption": "标题",
+      "noVotesFound": "未找到该用户的投票"
+    },
+    "wallet-adresses": {
+      "bitcoin": "比特币",
+      "address": "地址",
+      "btcPayoutsAre": "BTC 支付目前已被禁用",
+      "ethereum": "以太坊",
+      "address1": "地址",
+      "ethPayoutsAre": "ETH 支付目前已被禁用",
+      "eos": "EOS",
+      "address2": "地址",
+      "memo": "备忘录",
+      "eos1": "EOS",
+      "address3": "地址",
+      "memo1": "备忘录",
+      "walletAdresses": "钱包地址",
+      "onlyVisibleToYou": "仅您可见"
+    },
+    "wallet-base": {
+      "485": "500.00",
+      "4842": "1000.00",
+      "wallet": "钱包",
+      "redeemHusd": "兑换HUSD",
+      "makeAnotherRedemption": "进行另一次救赎",
+      "redemptionPending": "等待赎回",
+      "requestor": "请求者",
+      "amount": "数量",
+      "redeemHusd1": "兑换HUSD",
+      "husdAvailable": "HUSD 可用",
+      "amountToRedeem": "兑换金额",
+      "typeAmount": "类型 金额",
+      "maxAvailable": "最大可用数量",
+      "redeemToAddress": "兑换地址",
+      "redemptionSuccessful": "兑换成功！",
+      "daoid": "DAO_id",
+      "requestor1": "请求者",
+      "amount1": "数量",
+      "asSoonAs": "一旦财务主管创建多重签名交易并执行此请求，您将直接在预览步骤中指定的 HUSD 地址上收到资金",
+      "noWalletFound": "没有找到钱包",
+      "pendingRedemptions": "待赎回",
+      "details": "细节",
+      "queueHusdRedemption": "排队 HUSD 赎回以将国债支付至配置的钱包",
+      "redeem": "赎回"
+    },
+    "wallet-hypha": {
+      "availableBalance": "可用余额",
+      "notEnoughTokens": "代币不足",
+      "buyHyphaToken": "购买 Hypha 代币"
+    }
+  },
+  "proposals": {
+    "version-history": {
+      "versionHistory": "版本历史",
+      "original": "原来的",
+      "currentOnVoting": "当前 - 投票中",
+      "rejected": "拒绝"
+    },
+    "comment-input": {
+      "typeACommentHere": "在此输入评论...",
+      "youMustBe": "您必须是会员才能发表评论"
+    },
+    "comment-item": {
+      "showMore": "显示更多 ({1})",
+      "showLess": "显示较少"
+    },
+    "comments-widget": {
+      "comments": "评论"
+    },
+    "creation-stepper": {
+      "saveAsDraft": "保存为草稿",
+      "nextStep": "下一步",
+      "publish": "发布"
+    },
+    "proposal-card": {
+      "comments": "{1}条评论"
+    },
+    "proposal-draft": {
+      "continueProposal": "继续提案",
+      "deleteDraft": "删除草稿"
+    },
+    "proposal-dynamic-popup": {
+      "save": "节省"
+    },
+    "proposal-staging": {
+      "yourProposalIs": "您的提案正在上演",
+      "publishingYourProposal": "在暂存阶段发布您的提案意味着它尚未上线或上链。",
+      "publish": "发布",
+      "editProposal": "编辑提案"
+    },
+    "proposal-suspended": {
+      "thatMeansThat": "这意味着转让将结束并且不再可能提出索赔，但任何先前履行的期限仍然可以索赔。",
+      "publish": "发布",
+      "iChangedMyMind": "我改变主意了"
+    },
+    "proposal-card-chips": {
+      "poll": "轮询",
+      "circleBudget": "圆形预算",
+      "quest": "寻求",
+      "start": "开始",
+      "payout": "支出",
+      "circle": "圆圈",
+      "policy": "政策",
+      "genericContribution": "通用贡献",
+      "role": "角色",
+      "assignment": "任务",
+      "extension": "扩大",
+      "ability": "能力",
+      "archetype": " 原型",
+      "badge": "徽章",
+      "suspension": "暂停",
+      "withdrawn": "取消",
+      "accepted": "公认",
+      "rejected": "拒绝",
+      "voting": "表决",
+      "active": "积极的",
+      "archived": "存档",
+      "suspended": "暂停"
+    },
+    "proposal-view": {
+      "s": " 1 ? ",
+      "title": "标题",
+      "icon": "图标",
+      "votingSystem": "投票系统",
+      "commitmentLevel": "承诺级别",
+      "adjustCommitment": "调整承诺",
+      "edit": "编辑",
+      "deferredAmount": "延期金额",
+      "adjustDeferred": "调整延期",
+      "edit1": "编辑",
+      "salaryBand": "薪资带",
+      "equivalentPerYear": "每年 {1} 等值",
+      "minDeferredAmount": "最低延期金额",
+      "roleCapacity": "角色能力",
+      "compensation": "赔偿",
+      "showCompensationFor": "显示一期的补偿",
+      "deferredAmount1": "延期金额",
+      "parentCircle": "家长圈子",
+      "parentCircle1": "家长圈子",
+      "parentPolicy": "家长政策",
+      "description": "描述",
+      "attachedDocuments": "附加文件",
+      "createdBy": "由...制作：",
+      "seeProfile": "查看个人资料"
+    },
+    "quest-progression": {
+      "questProgression": "任务进展"
+    },
+    "voter-list": {
+      "votes": "投票数"
+    },
+    "voting-option-5-scale": {
+      "hellYa": "地狱呀",
+      "yes": "是的",
+      "abstain": "弃权",
+      "hellNo": "一定不行"
+    },
+    "voting-option-yes-no": {
+      "yes": "是的",
+      "abstain": "弃权",
+      "no": "不"
+    },
+    "voting-result": {
+      "unity": "统一",
+      "quorum": "法定人数"
+    },
+    "voting": {
+      "yes": "是的",
+      "abstain": "弃权",
+      "no": "不",
+      "yes1": "是的",
+      "no1": "不",
+      "yes2": "是的",
+      "no2": "不",
+      "voteNow": "立即投票",
+      "youCanChange": "您可以更改您的投票",
+      "activate": "启用",
+      "archive": "档案",
+      "apply": "申请",
+      "suspendAssignment": "暂停分配\n          ",
+      "invokeASuspension": "调用此活动的暂停建议",
+      "withdrawAssignment": "撤回作业"
+    }
+  },
+  "templates": {
+    "templates-modal": {
+      "customizeYourDao": "定制您的 DAO",
+      "allTemplatesProposals": "所有模板提案已成功发布，现在可供其他 DAO 成员投票！",
+      "creatingAndPublishing": "创建并发布所有模板提案。",
+      "loremIpsumDolor": "Lorem ipsum dolor sat amet，consectetur adipiscing elit，sed do eiusmod tempor incididunt ut Labore et dolore magna aliqua。 ",
+      "publishingProcess": "发布流程：",
+      "chooseADaoTemplate": "选择 DAO 模板",
+      "aDaoTemplate": "DAO 模板是一组预先打包的提案。",
+      "useATemplate": "使用模板",
+      "startFromScratch": "白手起家",
+      "youCanChoose": "当您选择此选项时，您可以选择自定义您的 DAO。",
+      "createYourOwn": "创建你自己的",
+      "seeDetails": "查看具体信息",
+      "select": "选择",
+      "roleArchetypes": "角色原型 ({1})",
+      "moreDetails": "更多细节",
+      "circles": "圆圈 ({1})",
+      "moreDetails1": "更多细节",
+      "daoPolicies": "DAO 政策 ({1})",
+      "moreDetails2": "更多细节",
+      "coreTeamVotingMethod": "核心团队投票方式",
+      "unity": "统一",
+      "quorum": "法定人数",
+      "communityTeamVotingMethod": "社区团队投票方式",
+      "unity1": "统一",
+      "quorum1": "法定人数",
+      "coreTeamBadges": "核心团队徽章 ({1})",
+      "moreDetails3": "更多细节",
+      "communityTeamBadges": "社区团队徽章 ({1})",
+      "moreDetails4": "更多细节",
+      "title": "标题",
+      "description": "描述",
+      "backToTemplates": "返回模板",
+      "selectThisTemplate": "选择此模板",
+      "goToProposalsDashboard": "转到提案仪表板",
+      "goToOrganizationDashboard": "转到组织仪表板"
+    }
+  },
+  "layouts": {
+    "mainlayout": {
+      "hyphaDao": "菌丝DAO"
+    },
+    "multidholayout": {
+      "plan": "{1}计划",
+      "suspended": "暂停",
+      "actionRequired": "需要采取的行动",
+      "reactivateYourDao": "重新激活您的 DAO",
+      "weHaveTemporarily": "我们已暂时暂停您的 DAO 帐户。",
+      "downgradeMeTo": "将我降级到免费计划",
+      "renewMyCurrentPlan": "更新我当前的计划",
+      "member": "{1}会员"
+    }
+  },
+  "pages": {
+    "dho": {
+      "multisig": {
+        "transactions": "交易",
+        "developer": "开发者",
+        "note": "笔记",
+        "clickOnYourInitials": "点击您名字的首字母缩写 ",
+        "toSignATransaction": " 签署交易",
+        "multisigEnablesUs": "多重签名使我们能够以安全的方式签署交易。",
+        "doYouReally": "你真的想要吗 ",
+        "signThisTransaction": " 签署此交易？",
+        "multisigEnablesUs1": "多重签名使我们能够以安全的方式签署交易。",
+        "sign": "符号",
+        "noTransactionsTo": "没有交易到 ",
+        "signAtTheMoment": " 此刻签到",
+        "multisigEnablesUs2": "多重签名使我们能够以安全的方式签署交易。"
+      },
+      "circle": {
+        "joinCircle": "加入圈子",
+        "budget": "预算",
+        "subcircles": "子圈子",
+        "applicants": "申请人",
+        "members": "会员"
+      },
+      "circles": {
+        "circles": "界"
+      },
+      "configuration": {
+        "areYouSure": "您确定要在不保存草稿的情况下离开吗？",
+        "general": "一般的",
+        "voting": "表决",
+        "community": "社区",
+        "communication": "沟通",
+        "design": "设计",
+        "planManager": "计划经理",
+        "resetChanges": "重置更改",
+        "saveChanges": "保存更改",
+        "viewMultisig": "查看多重签名"
+      },
+      "ecosystem": {
+        "active": "{1} 活跃",
+        "daos": "DAO",
+        "inactive": "{1} 无效",
+        "daos1": "DAO",
+        "coreMembers": "56名核心成员",
+        "communityMembers": "0 社区成员",
+        "activate": "启用",
+        "onlyDaoAdmins": "只有 DAO 管理员可以更改设置",
+        "foundedBy": "创立者：",
+        "activate1": "启用",
+        "members": "会员",
+        "createNewDao": "创建新的 DAO",
+        "youNeedTo": "您需要先激活锚点 DAO，然后才能创建子 DAO。",
+        "onlyDaoAdmins1": "只有 DAO 管理员可以更改设置"
+      },
+      "explore": {
+        "discoverMore": "发现更多",
+        "members": "会员",
+        "discoverTheHyphaDAONetwork": "探索 Hypha DAO 网络",
+        "welcomeToTheGlobalDAO": "欢迎来到全球 DAO 目录！",
+        "searchDHOs": "搜索 DHO",
+        "searchEcosystems": "搜索生态系统",
+        "sortBy": "排序方式",
+        "oldestFirst": "最老的在前",
+        "newestFirst": "新的先来",
+        "alphabetically": "按字母顺序"
+      },
+      "finflow": {
+        "totalUnclaimedPeriods": "无人认领期间总计",
+        "totalUnclaimedUtility": "无人认领的效用总额",
+        "totalUnclaimedCash": "无人认领的现金总额",
+        "totalUnclaimedVoice": "无人认领的声音总数",
+        "assignments": "作业",
+        "exportToCsv": "导出为 csv"
+      },
+      "home": {
+        "days": "天",
+        "day": "天",
+        "hours": "小时",
+        "hour": "小时",
+        "mins": "分钟",
+        "min": "分钟",
+        "moreInformationAbout": "有关 UpVote 选举的更多信息",
+        "here": "这里",
+        "signup": "报名",
+        "currentstepindex": " 0 ",
+        "goCastYourVote": "快来投票吧！",
+        "checkResults": "检查结果",
+        "discoverMore": "发现更多",
+        "assignments": "作业",
+        "badges": "徽章",
+        "members": "会员",
+        "proposals": "提案"
+      },
+      "members": {
+        "becomeAMember": "成为会员",
+        "registrationIsTemporarilyDisabled": "暂时禁止注册",
+        "copyInviteLink": "复制邀请链接",
+        "sendALink": "向您的朋友发送链接以邀请他们加入此 DAO",
+        "daoApplicants": "DAO 申请人",
+        "daoApplicants1": "DAO 申请人",
+        "filterByAccountName": "按帐户名过滤",
+        "sortBy": "排序方式",
+        "joinDateDescending": "加入日期降序",
+        "joinDateAscending": "加入日期升序",
+        "alphabetically": "按字母顺序 (A-Z)",
+        "all": "全部",
+        "coreTeam": "核心团队",
+        "communityMembers": "社区成员"
+      },
+      "organization": {
+        "documentation": "文档",
+        "activeAssignments": "活动任务",
+        "payouts": "支出",
+        "activeBadges": "活跃徽章",
+        "daoCircles": "DAO 圈子",
+        "archetypes": "原型",
+        "badges": "徽章",
+        "daoCircles1": "DAO 圈子",
+        "archetypes1": "原型",
+        "badges1": "徽章",
+        "activeAssignments1": "活动任务",
+        "payouts1": "支出",
+        "activeBadges1": "活跃徽章",
+        "activeAssignments2": "活动任务",
+        "payouts2": "支出",
+        "activeBadges2": "活跃徽章",
+        "daoCircles2": "DAO 圈子",
+        "archetypes2": "原型",
+        "badges2": "徽章"
+      },
+      "organizationalassets": {
+        "noBadges": "没有徽章",
+        "noBadges1": "没有徽章",
+        "yourOrganizationDoesnt": "您的组织还没有任何徽章。",
+        "searchBadges": "搜索徽章",
+        "filterByName": "按名称过滤",
+        "createANewBadge": "创建新徽章",
+        "sortByCreateDateAscending": "按创建日期升序排序",
+        "sortByCreateDateDescending": "按创建日期降序排序",
+        "sortAlpabetically": "按字母顺序排序 (A-Z)"
+      },
+      "treasury": {
+        "transactionReview": "交易审查",
+        "wellDoneMultisigTransaction": "做得好！",
+        "youCanNowFindTheMultisig": "您现在可以在",
+        "other2TreasurersNeeds": "另外2位财务需要签字，",
+        "theTheTransactionIsReady": "那么交易就可以执行了！",
+        "anErrorOccurredPlease": "发生错误，请点击下面的按钮重试",
+        "itWouldBeCoolIfWeCould": "如果我们可以在这里提供有关最终错误的信息，那就太好了",
+        "allGoodCreateMultisig": "一切顺利，创建多重签名",
+        "history": "历史",
+        "allDoneHere": "一切都在这里完成",
+        "noPendingPayoutRequest": "目前没有待处理的付款请求。",
+        "open": "打开",
+        "pending": "待办的",
+        "signedBy": "被...签名",
+        "realTokenConversion": "*当财务主管执行支付交易时，才会发生真正的代币转换：",
+        "hereYouSeeTheConversion": "这里您可以看到[TOKEN]当前市场的换算，仅供参考。",
+        "endorsed": "赞同的",
+        "helloTreasurerThisMultisig": "掌柜您好！",
+        "helloTreasurerSelectTheMultisig": "掌柜您好！",
+        "helloTreasurerStartAMultisig": "掌柜您好！",
+        "allMultisigTransactionHasBeenSuccessfully": "所有多重签名。",
+        "signMultisigTransaction": "签署多重签名。",
+        "executeMultisigTransaction": "执行多重签名。",
+        "showCompletedTransactions": "显示已完成的交易",
+        "generateMultisigTransaction": "生成 Miltisig。",
+        "accountAndPaymentStatus": "帐户",
+        "payoutRequests": "付款请求",
+        "multisigSignRequests": "多重签名请求",
+        "readyToExecute": "准备执行"
+      }
+    },
+    "ecosystem": {
+      "ecosystemchekout": {
+        "reviewPurchaseDetails": "查看购买详情",
+        "hypha": "{1} 菌丝",
+        "tokensStaked": "质押代币：",
+        "hypha1": "{1} 菌丝",
+        "total": "全部的",
+        "hypha2": "{1} 菌丝",
+        "tokensStaked1": "质押代币：",
+        "hypha3": "{1} 菌丝"
+      }
+    },
+    "error404": {
+      "1080": "(404)",
+      "sorryNothingHere": "抱歉，这里什么都没有...",
+      "goBack": "回去"
+    },
+    "error404dho": {
+      "7348": "404",
+      "daoIsUnderMaintenance": "DAO 正在维护中"
+    },
+    "error404page": {
+      "ooops": "哎呀",
+      "thisPageDoesnt": "该页面不存在 - 请使用其他网址重试",
+      "backToDashboard": "返回仪表板"
+    },
+    "profiles": {
+      "wallet": {
+        "notitle": "无题",
+        "notitle1": "无题",
+        "activity": "活动",
+        "date": "日期",
+        "status": "地位",
+        "amount": "数量",
+        "claimed": "声称"
+      },
+      "profile": {
+        "inlinelabel": "内联标签",
+        "personalInfo": "个人信息",
+        "about": "关于",
+        "myProjects": "我的项目",
+        "votes": "投票数",
+        "badges": "徽章",
+        "inlinelabel1": "内联标签",
+        "assignments": "作业",
+        "contributions": "贡献",
+        "quests": "任务",
+        "biography": "传",
+        "recentVotes": "最近投票",
+        "noBadgesYesApplyFor": "尚无徽章 - 在此申请徽章",
+        "noBadgesToSeeHere": "这里没有徽章可看。",
+        "apply": "申请",
+        "looksLikeYouDontHaveAnyActiveAssignments": "您似乎没有任何有效的任务。",
+        "noActiveOrArchivedAssignments": "此处没有可查看的活动或存档作业。",
+        "createAssignment": "创建作业",
+        "looksLikeYouDontHaveAnyContributions": "您似乎还没有任何贡献。",
+        "noContributionsToSeeHere": "这里没有可看到的贡献。",
+        "createContribution": "创建贡献",
+        "looksLikeYouDontHaveAnyQuests": "您似乎还没有任何任务。",
+        "noQuestsToSeeHere": "这里没有任务可看。",
+        "createQuest": "创建任务",
+        "writeSomethingAboutYourself": "写一些关于您自己的信息，让其他用户了解您加入的动机。",
+        "looksLikeDidntWrite": "看起来 {username} 还没有写任何关于他们加入这个 DAO 的动机。",
+        "writeBiography": "写传记",
+        "retrievingBio": "正在检索生物...",
+        "youHaventCast": "您还没有投票。",
+        "noVotesCastedYet": "尚未投票。",
+        "vote": "投票"
+      },
+      "profile-creation": {
+        "profilePicture": "个人资料图片",
+        "makeSureToUpdate": "成为会员后，请务必更新您的个人资料。",
+        "uploadAnImage": "上传图片",
+        "name": "姓名",
+        "accountName": "帐户名称",
+        "location": "地点",
+        "timeZone": "时区",
+        "tellUsSomethingAbout": "告诉我们一些关于你的事情",
+        "connectYourPersonalWallet": "连接您的个人钱包",
+        "youCanEnterYourOther": "如果您获得了可兑换代币，您可以输入其他钱包地址以供将来兑换代币。",
+        "selectThisAsPreferred": "选择此作为首选地址",
+        "yourContactInfo": "您的联系方式",
+        "thisInformationIsOnly": "该信息仅用于内部目的。",
+        "selectThisAsPreferredContactMethod": "选择此作为首选联系方式"
+      }
+    },
+    "proposals": {
+      "create": {
+        "optionsarchetypes": {
+          "chooseARoleArchetype": "选择角色原型\n        ",
+          "noArchetypesExistYet": "目前还没有原型存在。",
+          "pleaseCreateThemHere": "请在此处创建它们。"
+        },
+        "optionsassignments": {
+          "chooseARecent": "选择最近的任务来计算桥梁支出"
+        },
+        "optionsbadges": {
+          "chooseABadge": "选择徽章\n        ",
+          "noArchetypesExistYet": "目前还没有原型存在。",
+          "pleaseCreateThemHere": "请在此处创建它们。"
+        },
+        "optionspolicies": {
+          "chooseAParentPolicy": "选择家长政策\n        ",
+          "noPoliciesExistYet": "目前还没有相关政策。"
+        },
+        "stepreview": {
+          "back": "后退"
+        },
+        "stepproposaltype": {
+          "completeYourDraftProposal": "完成您的提案草案",
+          "onetimeContributions": "一次性贡献",
+          "recurringAssignments": "经常性作业",
+          "organizationalAssets": "组织资产",
+          "onetimeContributions1": "一次性贡献",
+          "recurringAssignments1": "经常性作业",
+          "organizationalAssets1": "组织资产"
+        },
+        "stepicon": {
+          "chooseAnIcon": "选择一个图标",
+          "searchIconFor": "搜索图标...",
+          "uploadAFile": "上传一个文件",
+          "back": "后退",
+          "nextStep": "下一步"
+        },
+        "stepduration": {
+          "startDate": "开始日期",
+          "periods": "经期",
+          "endDate": "结束日期",
+          "youMustSelect": "您选择的时间段必须少于 {1} 个（当前您选择了 {2} 个时间段）",
+          "theStartDate": "开始日期不得晚于结束日期",
+          "back": "后退",
+          "nextStep": "下一步"
+        },
+        "optionsquests": {
+          "chooseAQuestType": "选择任务类型\n      "
+        },
+        "stepdetails": {
+          "titleIsRequired": "标题为必填项！",
+          "proposalTitleLengthHasToBeLess": "提案标题长度必须小于或等于 {TITLE_MAX_LENGTH} 个字符（您的标题包含 {length} 个字符）",
+          "theDescriptionMustContainLess": "描述必须少于 {DESCRIPTION_MAX_LENGTH} 个字符（您的描述包含 {length} 个字符）",
+          "images": "图片",
+          "pngJpegInApp": "PNG、JPEG。",
+          "documents": "文件",
+          "txtPdfDoc": "文本、PDF、文档。",
+          "videos": "视频",
+          "mp4MovMax": "MP4，移动。",
+          "leaveFileHere": "在此留下文件",
+          "dragAndDrop": "拖",
+          "orBrowse": "或浏览",
+          "back": "后退",
+          "nextStep": "下一步"
+        },
+        "steppayout": {
+          "payout": "支出",
+          "pleaseEnterTheUsd": "请输入该捐款的等值美元和延期百分比 - 您推迟的日期越多，奖金就越高（请参阅下面的实际工资计算或使用我们的计算器）。",
+          "typeTheAmountOfUsd": "输入 HUSD 金额",
+          "commitmentMustBeGreater": "承诺必须大于或等于角色配置。",
+          "defferedMustBeGreater": "Deferred 必须大于或等于角色配置。",
+          "salaryCompensationForOneYear": "一年的工资补偿 ( ${value} )",
+          "salaryCompensationForOneYearUsd": "一年的工资补偿 ( ${value} ) 美元",
+          "compensation": "赔偿",
+          "pleaseEnterTheUSD": "请输入该捐款的等值美元和延期百分比 - 您推迟的日期越多，奖金就越高（请参阅下面的实际工资计算或使用我们的计算器）。",
+          "compensationForOnePeriod": "补偿一期",
+          "compensationForOneCycle": "补偿一个周期",
+          "customCompensation": "定制补偿"
+        }
+      },
+      "proposallist": {
+        "createProposal": "创建提案",
+        "learnMore": "了解更多",
+        "unity": "统一",
+        "quorum": "法定人数",
+        "noProposals": "没有提案",
+        "oopsNothingCould": "哎呀，这里什么也没找到",
+        "stagingProposals": "分期提案",
+        "activeProposals": "积极提案",
+        "noProposals1": "没有提案",
+        "stagingProposals1": "分期提案",
+        "activeProposals1": "积极提案",
+        "proposalHistory": "提案历史",
+        "lookingToMonitor": "希望监控旧提案的进展情况？",
+        "seeHistory": "查看历史 >",
+        "isTheMinimumRequiredPercentageOfMembers": "是支持提案通过的最低成员比例。",
+        "isTheMinimumRequiredPercentageOfTotal": "是参与投票的会员总数所需的最低百分比才能通过。 ",
+        "searchProposals": "搜索提案",
+        "proposalTypes": "提案类型",
+        "sortByLastAdded": "按最后添加排序"
+      },
+      "proposalhistory": {
+        "noProposals": "没有提案",
+        "oopsNothingCould": "哎呀，这里什么也没找到"
+      },
+      "proposalcreate": {
+        "areYouSure": "您确定要在不保存草稿的情况下离开吗？",
+        "leaveWithoutSaving": "离开而不保存",
+        "saveDraftAndLeave": "保存草稿并离开"
+      },
+      "proposaldetail": {
+        "proposalDetails": "提案详情",
+        "yourProposalIs": "您的提案正在上演",
+        "thatMeansYour": "这意味着您的提案尚未发布到区块链。",
+        "publish": "发布",
+        "editProposal": "编辑提案",
+        "deleteProposal": "删除提案",
+        "publishing": "出版",
+        "pleaseWait": "...请稍等...",
+        "deleting": "正在删除",
+        "pleaseWait1": "...请稍等...",
+        "badgeHolders": "徽章持有者",
+        "apply": "申请",
+        "thereAreNo": "还没有持有者",
+        "questCompletion": "任务完成",
+        "didYouFinish": "您完成工作并准备好创建任务完成提案了吗？",
+        "claimYourPayment": "索取您的付款",
+        "yourProposalIs1": "您的提案正在上演",
+        "thatMeansYour1": "这意味着您的提案尚未发布到区块链。",
+        "publish1": "发布",
+        "editProposal1": "编辑提案",
+        "deleteProposal1": "删除提案",
+        "publishing1": "出版",
+        "pleaseWait2": "...请稍等...",
+        "deleting1": "正在删除",
+        "pleaseWait3": "...请稍等...",
+        "badgeHolders1": "徽章持有者",
+        "apply1": "申请",
+        "thereAreNo1": "还没有持有者"
+      }
+    },
+    "upvote-election": {
+      "upvoteelection": {
+        "timeLeft": "剩余时间：",
+        "days": "天",
+        "day": "天",
+        "hours": "小时",
+        "hour": "小时",
+        "mins": "分钟",
+        "min": "分钟",
+        "secs": "秒",
+        "sec": "秒",
+        "castYourVote": "投你的票",
+        "loremIpsumDolor": "Lorem ipsum dolor sat amet、consectetur adipiscing elit、sed",
+        "electionProcess": "选举过程"
+      },
+      "steps": {
+        "stepround1": {
+          "voterBadge": "选民徽章",
+          "assigned": "分配：",
+          "delegates": "代表们",
+          "applicants": "申请人：",
+          "totalVoters": "选民总数：",
+          "delegatesApplicants": "代表申请人"
+        },
+        "stepheaddelegate": {
+          "voterBadge": "选民徽章",
+          "assigned": "分配：",
+          "memberInThisRound": "本轮会员",
+          "totalVoters": "选民总数：",
+          "eligibleForChief": "有资格获得首席代表徽章"
+        },
+        "stepchiefdelegates": {
+          "voterBadge": "选民徽章",
+          "assigned": "分配：",
+          "memberInThisRound": "本轮会员",
+          "totalVoters": "选民总数：",
+          "eligibleForChief": "有资格获得首席代表徽章"
+        },
+        "stepresult": {
+          "totalVoters": "选民总数：",
+          "totalDelegatesApplicants": "代表申请人总数：",
+          "round1Voters": "第一轮投票者：",
+          "chiefDVoters": "首席 D. 选民：",
+          "headDVoters": "D 组长 投票者：",
+          "headDelegate": "首席代表",
+          "HEADDELEGATE": "首席代表",
+          "chiefDelegates": "首席代表"
+        }
+      }
+    },
+    "support": {
+      "support": {
+        "transactions": "交易",
+        "whenYouEncounter": "当您遇到错误消息时，请将交易复制粘贴到 DAO 支持频道中。",
+        "transactionLog": "交易日志",
+        "copyDataReport": "将数据报告复制给支持团队",
+        "displayOnBlockExplorer": "在区块浏览器上显示",
+        "doYouHaveQuestions": "你有问题吗？",
+        "findOurFull": "在这里找到我们的完整文档",
+        "openWiki": "打开维基",
+        "version": "版本"
+      }
+    },
+    "onboarding": {
+      "goToDashboard": "转到仪表板",
+      "optionalStep": "可选步骤",
+      "inviteMembers": "邀请成员",
+      "youReInTheEndGame": "您已进入最后阶段并准备好邀请成员加入您的 DAO！",
+      "optionalStepTelosAccount": "可选步骤（需要telos帐户）",
+      "launchTeam": "发射团队",
+      "createATeamOfMembersWithAdmin": "创建具有管理员权限的成员团队。",
+      "createLaunchTeam": "创建启动团队",
+      "daoIndentity": "DAO身份",
+      "youCanAddYourDaoName": "您可以添加 DAO 的名称、描述其用途并添加徽标。",
+      "name": "姓名",
+      "logoIcon": "标志/图标",
+      "purpose": "目的",
+      "theDisplayNameOfYourDao": "您的 DAO 的显示名称（最多 50 个字符）",
+      "uploadAnImage": "上传图片",
+      "brieflyExplainWhatYourDao": "简要解释您的 DAO 的全部内容（最多 300 个字符）",
+      "nextStep": "下一步",
+      "utilityToken": "实用代币",
+      "theUtilityTokenThatRepresents": "代表 DAO 中价值的实用代币，可让您访问 DAO 中的某些服务或操作。",
+      "max20CharactersExBitcoin": "最多 20 个字符。",
+      "max7CharactersExBTC": "最多 7 个字符，例如",
+      "symbol": "象征",
+      "treasuryToken": "国库代币",
+      "theTreasuryTokenIsAPromise": "国库代币承诺将赚取的代币兑换为可在公共交易所兑换为法定货币的流动代币。",
+      "design": "设计",
+      "setUpYourDaoBrand": "在此设置您的 DAO 品牌调色板。",
+      "primaryColor": "原色",
+      "secondaryColor": "次要颜色",
+      "buttonTextColor": "按钮文字颜色",
+      "preview": "预览",
+      "createATeamOfCoreMembersWithAdmin": "创建一支具有管理能力的核心成员团队。",
+      "telosAccount": "泰勒斯账户",
+      "addToTheTeam": "添加到团队",
+      "daoPublished": "DAO 发布！"
+    }
+  },
+  "proposalparsing": {
+    "createdAgo": "创建于 {diff} 前",
+    "closedAgo": "{diff} 前已关闭",
+    "thisVoteWillCloseIn": "此投票将于 {dayStr}{hourStr}:{minStr}:{segStr} 结束",
+    "second": " 第二",
+    "seconds": " 秒",
+    "minutes": " 分钟",
+    "minute": " 分钟",
+    "hour": " 小时",
+    "hours": " 小时",
+    "day": " 天",
+    "days": " 天",
+    "dayWithValue": "{days}天， ",
+    "daysWithValue": "{days}天， "
+  },
+  "proposalFilter": {
+    "all": "全部",
+    "ability": "能力",
+    "role": "角色",
+    "queststart": "任务开始",
+    "questend": "任务结束",
+    "archetype": "原型",
+    "badge": "徽章",
+    "circle": "圆圈",
+    "budget": "预算",
+    "policy": "政策",
+    "genericcontributions": "通用贡献",
+    "suspension": "暂停"
+  },
+  "routes": {
+    "exploreDAOs": "探索 DAO",
+    "findOutMoreAboutHowToSetUp": "在此了解有关如何设置您自己的 DAO 和 Hypha 的更多信息：https://hypha.earth",
+    "404NotFound": "404 未找到",
+    "finflow": "芬流",
+    "dashboard": "仪表板",
+    "explore": "探索",
+    "createANewDao": "创建一个新的 DHO",
+    "login": "登录",
+    "members": "会员",
+    "proposals": "提案",
+    "createProposal": "创建提案",
+    "proposalHistory": "提案历史",
+    "proposalDetails": "提案详情",
+    "organization": "组织",
+    "organizationAssets": "组织资产",
+    "organizationBadges": "组织徽章",
+    "organizationRoles": "组织角色",
+    "profile": "轮廓",
+    "profileCreation": "创建个人资料",
+    "wallet": "钱包",
+    "circles": "界",
+    "searchResults": "搜索结果",
+    "search": "搜索",
+    "support": "支持",
+    "treasury": "财政部",
+    "multiSig": "多重签名",
+    "configurationSettings": "配置设置",
+    "ecosystemDashboard": "生态系统仪表板",
+    "checkout": "查看",
+    "upvoteElection": "投票支持选举"
+  },
+  "proposal-creation": {
+    "creation-process": "创作过程",
+    "steps": {
+      "type": {
+        "label": "类型"
+      },
+      "description": {
+        "label": "细节",
+        "placeholder": "请说明此贡献的原因。"
+      },
+      "date": {
+        "label": "期间"
+      },
+      "icon": {
+        "label": "图标选择"
+      },
+      "compensation": {
+        "label": "赔偿"
+      },
+      "review": {
+        "label": "审查"
+      }
+    },
+    "description": "描述",
+    "title": "标题",
+    "typeTheTitleOfYourProposal": "输入您提案的标题",
+    "pleaseStateTheReasonForThisContributionTheMore": "请说明此贡献的原因。",
+    "ability": "能力",
+    "shareTheDetailsOfThisBadgeAssignment": "按照该组织的政策分享此徽章分配的详细信息。",
+    "multiply": "乘",
+    "abilityDuration": "技能持续时间",
+    "circle": "圆圈",
+    "selectACircleFromTheList": "从列表中选择一个圆圈",
+    "voiceCoefficient": "语音系数",
+    "utilityCoefficient": "效用系数",
+    "cashCoefficient": "现金系数",
+    "payout": "支出",
+    "compensation": "赔偿",
+    "pleaseEnterTheUSDEquivalentAnd": "请输入该捐款的等值美元和延期百分比 - 您推迟的日期越多，奖金就越高（请参阅下面的实际工资计算或使用我们的计算器）。",
+    "typeThePayoutTitle": "输入付款标题",
+    "typeThePayoutDescription": "输入付款说明",
+    "attachments": "附件",
+    "clickToAddFile": "点击添加文件",
+    "totalUSDEquivalent": "美元等值总额",
+    "chooseTheDeferredAmount": "选择延期金额",
+    "customCompensation": "定制补偿",
+    "cashToken": "现金代币",
+    "utilityToken": "实用代币",
+    "voiceToken": "语音令牌",
+    "poll": "轮询",
+    "pollOrSenseCheckWithCommunityMembers": "与社区成员进行民意调查或感觉检查，看看什么会比其他提案获得更强有力的支持。",
+    "useThisFieldToDetailTheContentOfYourPoll": "使用此字段详细说明您的民意调查的内容",
+    "votingMethod": "投票方式",
+    "selectVotingMethod": "选择投票方式",
+    "content": "内容",
+    "contribution": "贡献",
+    "shareTheDetailsOfYoutContribution": "按照该组织的政策分享您的贡献的详细信息。",
+    "describeYourProposal": "描述您的建议",
+    "chooseYourPayout": "选择您的付款方式",
+    "documentation": "文档",
+    "quest": "寻求",
+    "aQuestIsA2Step": "探索是一个分两步的提案。",
+    "createNewQuest": "创建新任务",
+    "typeTheQuestName": "输入任务名称",
+    "describeYourQuest": "描述你的追求",
+    "duration": "期间",
+    "type": "类型",
+    "selectQuestType": "选择任务类型",
+    "milestone": "里程碑",
+    "selectPreviousQuest": "选择上一个任务",
+    "createNewPoll": "创建新的民意调查",
+    "role": "角色",
+    "applyBySelectingARoleArchetype": "通过选择角色原型（模板）和薪资范围进行申请。",
+    "applyForTheRole": "申请角色",
+    "name": "姓名",
+    "typeTheRoleName": "输入角色名称",
+    "typeTheRoleDescription": "输入角色描述",
+    "manageYourSalary": "管理你的薪水",
+    "fieldsBelowDisplayTheMinimum": "下面的字段显示了该角色所需的最低承诺百分比和 HYPHA 代币与 HUSD 代币的百分比，以及角色容量（可以分配给该角色的人数）和等值美元。",
+    "chooseYourCommitmentLevel": "选择您的承诺级别",
+    "badge": "徽章",
+    "findHereAvailableBadges": "在此查找具有独特范围和功能的可用徽章。",
+    "applyForTheNewAbility": "申请新能力",
+    "typeTheAbilityName": "输入能力名称",
+    "tellOtherMembersThereReasons": "告诉其他会员您想要申请此徽章的原因",
+    "theseAreBasicAccountAbilities": "这些是用户角色可以实现的基本帐户能力。",
+    "createNewArchetype": "创建新原型",
+    "typeTheArchetypeName": "输入原型名称",
+    "typeTheArchetypeDescription": "输入原型描述",
+    "chooseTheSalaryBand": "选择薪资范围",
+    "enterTheRoleCapacity": "输入角色能力",
+    "maximumNumberOfPeopleForThisRole": "该角色的最大人数。",
+    "chooseTheMinimumDeferredAmount": "选择最低延期金额",
+    "minimumRequiredPayedOutAsUtilityToken": "作为实用代币支付所需的最低百分比",
+    "badgesGiveCertainRightsAndAccountAbilities": "徽章赋予持有者一定的权利和账户能力。",
+    "createNewBadge": "创建新徽章",
+    "typeTheBadgeName": "输入徽章名称",
+    "typeTheBadgeDescription": "输入徽章描述",
+    "tokenMultiplier": "代币乘数",
+    "badgesProvideAnAdditionalMultiplier": "除了通过 DAO 中的活动获得的任何收入之外，徽章还可提供额外的乘数。",
+    "circleDefineTheDAOsBoundaries": "圆圈定义了 DAO 的边界和领域。",
+    "createNewCircle": "创建新圈子",
+    "typeTheCircleName": "输入圈子名称",
+    "purpose": "目的",
+    "typeTheCircleBudget": "输入圈子预算",
+    "parentCircle": "家长圈子",
+    "selectTheCircleParent": "选择圆的父级。",
+    "budget": "预算",
+    "requestBudgetAllocation": "通过此提案请求为特定圈子分配预算。",
+    "createNewBudget": "创建新预算",
+    "typeTheBudgetName": "输入预算名称",
+    "typeHereTheContentOfYourBadge": "在此输入您的预算内容",
+    "policy": "政策",
+    "policiesCreateRulesThatDAOMembers": "政策创建 DAO 成员必须遵守的规则。",
+    "createNewPolicy": "创建新政策",
+    "typeThePolicyName": "输入策略名称",
+    "typeHereTheContentOfYourPolicy": "在此输入您的保单内容",
+    "selectTheCircleParentOrLeaveItBlank": "选择圆父级或将其留空",
+    "policyType": "保单类型",
+    "selectThePolicyType": "选择策略类型。"
+  },
+  "search": {
+    "results": {
+      "results": "{value} 结果",
+      "noResultsFound": "未找到结果",
+      "resultsTypes": "结果类型",
+      "all": "全部",
+      "members": "会员",
+      "genericContribution": "通用贡献",
+      "roleAssignments": "角色分配",
+      "roleArchetypes": "角色原型",
+      "badgeTypes": "徽章类型",
+      "badgeAssignments": "徽章分配",
+      "suspensions": "暂停",
+      "filterBy": "过滤",
+      "voting": "表决",
+      "active": "积极的",
+      "archived": "已存档",
+      "suspended": "暂停",
+      "sortBy": "排序方式",
+      "oldestFirst": "最老的在前",
+      "newestFirst": "新的先来",
+      "alphabetically": "按字母顺序 (A-Z)",
+      "result": {
+        "active": "积极的",
+        "pendingToClose": "等待关闭",
+        "voting": "表决",
+        "suspended": "暂停",
+        "archived": "已存档",
+        "withdrawn": "取消",
+        "applicant": "申请人",
+        "genericContribution": "通用贡献",
+        "extension": "扩大",
+        "roleAssignment": "角色分配",
+        "badgeAssignment": "徽章分配",
+        "suspension": "暂停",
+        "roleArchetype": " 角色原型",
+        "badge": "徽章"
+      }
+    }
+  }
+}

@@ -59,11 +59,11 @@ export default {
       currentLang: localStorage.getItem('lang') ? localStorage.getItem('lang') : 'en',
       autoTranslate: false,
       languages: [
-        // {
-        //   label: 'Српски',
-        //   value: 'sr',
-        //   image: require('assets/images/locales/sr.svg')
-        // },
+        {
+          label: 'Српски',
+          value: 'sr',
+          image: require('assets/images/locales/sr.svg')
+        },
         {
           label: 'English (UK)',
           value: 'en-UK',
@@ -74,26 +74,26 @@ export default {
           value: 'en-US',
           image: require('assets/images/locales/us.png')
         },
-        // {
-        //   label: 'Español',
-        //   value: 'es',
-        //   image: require('assets/images/locales/es.jpeg')
-        // },
+        {
+          label: 'Español',
+          value: 'es',
+          image: require('assets/images/locales/es.jpeg')
+        },
         {
           label: 'Português (BR)',
           value: 'pt',
           image: require('assets/images/locales/pt.png')
+        },
+        {
+          label: '한국인',
+          value: 'ko',
+          image: require('assets/images/locales/ko.png')
+        },
+        {
+          label: '中國人',
+          value: 'zh',
+          image: require('assets/images/locales/zh.png')
         }
-        // {
-        //   label: '한국인',
-        //   value: 'ko',
-        //   image: require('assets/images/locales/ko.png')
-        // },
-        // {
-        //   label: '中國人',
-        //   value: 'zh',
-        //   image: require('assets/images/locales/zh.png')
-        // }
       ]
     }
   },
@@ -169,6 +169,8 @@ export default {
         }
         this.$i18n.locale = value
         localStorage.setItem('lang', value)
+        this.languageSettings = false
+        window.location.reload() // solution for updating translations supplied from js
       })
     }
   },

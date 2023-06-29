@@ -1,4 +1,5 @@
 <script>
+import I18n from '~/utils/i18n'
 export default {
   name: 'tokens',
   components: {
@@ -11,7 +12,7 @@ export default {
      */
     title: {
       type: String,
-      default: 'Issuance'
+      default: I18n.t('organization.tokens.issuance')
     },
     tokens: {
       type: Array,

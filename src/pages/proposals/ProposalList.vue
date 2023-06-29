@@ -118,7 +118,7 @@ export default {
       textFilter: null,
       sort: 'Sort by last added',
       circle: 'All circles',
-      optionArray: [{ label: 'Sort by last added' }],
+      optionArray: [{ label: this.$t('pages.proposals.proposallist.sortByLastAdded') }],
       circleArray: ['All circles', 'Circle One'],
       pagination: {
         first: 50,
@@ -361,9 +361,9 @@ q-page.page-proposals
     template(v-slot:right)
       .row
         .col-6.q-pa-xxs
-          button-radio.full-height(icon="fas fa-vote-yea" :title="$t('pages.proposals.proposallist.unity')" :subtitle="unityTitle" description="Is the minimum required percentage of members endorsing a proposal for it to pass." opacity="opacity" primary="primary")
+          button-radio.full-height(icon="fas fa-vote-yea" :title="$t('pages.proposals.proposallist.unity')" :subtitle="unityTitle" :description="$t('pages.proposals.proposallist.isTheMinimumRequiredPercentageOfMembers')" opacity="opacity" primary="primary")
         .col-6.q-pa-xxs
-          button-radio.full-height(icon="fas fa-users" :title="$t('pages.proposals.proposallist.quorum')" :subtitle="quorumTitle" description="Is the minimum required percentage of total members participating in the vote for it to pass. " opacity="opacity" primary="primary")
+          button-radio.full-height(icon="fas fa-users" :title="$t('pages.proposals.proposallist.quorum')" :subtitle="quorumTitle" :description="$t('pages.proposals.proposallist.isTheMinimumRequiredPercentageOfTotal')" opacity="opacity" primary="primary")
   .row.q-py-md(v-if="$q.screen.gt.md")
     .col-12.col-lg-9
       base-placeholder.q-mr-sm(:compact="!$q.screen.gt.md" v-if="!filteredStagedProposals.length && !filteredProposals.length && !hasProposals" :title="$t('pages.proposals.proposallist.noProposals')" subtitle="Your organization has not created any proposals yet. You can create a new proposal by clicking the button below." icon="fas fa-file-medical" :actionButtons="[{label: 'Create a new Proposal', color: 'primary', onClick: () => $router.push(`/${this.daoSettings.url}/proposals/create`), disable: !isMember, disableTooltip: 'You must be a member'}]")

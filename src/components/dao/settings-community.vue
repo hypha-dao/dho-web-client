@@ -106,7 +106,7 @@ export default {
 </script>
 
 <template lang="pug">
-widget.q-pa-none.full-width(title="Community" titleImage="/svg/vote.svg" :bar="true")
+widget.q-pa-none.full-width(:title="$t('dao.settings-community.community')" titleImage="/svg/vote.svg" :bar="true")
   p.text-sm.text-h-gray.leading-loose.q-mt-md {{ $t('dao.settings-community.doYouWantToExpand') }}
   .row.justify-end
     .row.items-center
@@ -122,10 +122,10 @@ widget.q-pa-none.full-width(title="Community" titleImage="/svg/vote.svg" :bar="t
         label.h-label {{ $t('dao.settings-community.communityVotingMethod') }}
         .row.q-py-sm
           .col-4.q-pr-sm
-            q-btn.full-width.q-px-xl.rounded-border.text-bold(:disable="!isAdmin" :color="form.communityVotingMethod === 'CLASSIC' ? 'primary' : 'internal-bg'  " :text-color="form.communityVotingMethod === 'CLASSIC' ? 'white' : 'primary'  " @click="form.communityVotingMethod = 'CLASSIC'" label="Classic" no-caps="no-caps" rounded="rounded" unelevated="unelevated")
+            q-btn.full-width.q-px-xl.rounded-border.text-bold(:disable="!isAdmin" :color="form.communityVotingMethod === 'CLASSIC' ? 'primary' : 'internal-bg'  " :text-color="form.communityVotingMethod === 'CLASSIC' ? 'white' : 'primary'  " @click="form.communityVotingMethod = 'CLASSIC'" :label="$t('dao.settings-community.classic')" no-caps="no-caps" rounded="rounded" unelevated="unelevated")
             q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") {{ $t('dao.settings-community.onlyDaoAdminsCanChange') }}
           .col-4.q-pl-sm
-            q-btn.full-width.q-px-xl.rounded-border.text-bold(:disable="!isAdmin" :color="form.communityVotingMethod === 'UPVOTE' ? 'primary' : 'internal-bg'  " :text-color="form.communityVotingMethod === 'UPVOTE' ? 'white' : 'primary'  " @click="form.communityVotingMethod = 'UPVOTE'" label="Upvote" no-caps="no-caps" rounded="rounded" unelevated="unelevated")
+            q-btn.full-width.q-px-xl.rounded-border.text-bold(:disable="!isAdmin" :color="form.communityVotingMethod === 'UPVOTE' ? 'primary' : 'internal-bg'  " :text-color="form.communityVotingMethod === 'UPVOTE' ? 'white' : 'primary'  " @click="form.communityVotingMethod = 'UPVOTE'" :label="$t('dao.settings-community.upvote')" no-caps="no-caps" rounded="rounded" unelevated="unelevated")
             q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") {{ $t('dao.settings-community.onlyDaoAdminsCanChange') }}
       .col-6.bg-secondary.rounded-full.row.justify-center.items-center(v-if="form.communityVotingMethod === votingMethods.UPVOTE")
         q-btn.q-px-xl.rounded-border.text-bold.q-mr-xs(:disable="!isAdmin" @click="$emit('import')" color="white" label="Import EDEN election from EOS" no-caps="no-caps" rounded="rounded" text-color="primary" unelevated="unelevated")

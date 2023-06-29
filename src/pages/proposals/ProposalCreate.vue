@@ -1,6 +1,6 @@
 <script>
 import { mapActions } from 'vuex'
-import CONFIG from './create/config.json'
+import CONFIG from './create/config.js'
 import { PROPOSAL_TYPE, MEMBER_TYPE } from '~/const'
 
 const DEFAULT_PAST_STEPS = ['step-proposal-type']

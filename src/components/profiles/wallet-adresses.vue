@@ -134,7 +134,7 @@ export default {
 </script>
 
 <template lang="pug">
-widget-editable(:notify="false" :savable="savable" @onCancel="cancel" @onEdit="onEdit" @onFail="reset" @onSave="save" editable="editable" :subtitle="modalState ? '' : 'only visible to you'" :title="modalState ? '' : 'Wallet Adresses'" :class="{ 'modal': modalState }" :modalState="modalState")
+widget-editable(:notify="false" :savable="savable" @onCancel="cancel" @onEdit="onEdit" @onFail="reset" @onSave="save" editable="editable" :subtitle="modalState ? '' : $t('profiles.wallet-adresses.onlyVisibleToYou')" :title="modalState ? '' : $t('profiles.wallet-adresses.walletAdresses')" :class="{ 'modal': modalState }" :modalState="modalState")
   template(v-if="!modalState")
     .row.q-mt-sm
       text-input-toggle.full-width(:disable="!editable || isHypha" :icon="'img:'+ require('~/assets/icons/chains/bitcoin.svg')" :iconBackground="false" :text.sync="form.btcAddress" :toggle.sync="toggles.bitcoin" :validateRules="[toggles.bitcoin && rules.required]" :label="$t('profiles.wallet-adresses.bitcoin')" :placeholder="$t('profiles.wallet-adresses.address')" ref="btcAddress" type="text")

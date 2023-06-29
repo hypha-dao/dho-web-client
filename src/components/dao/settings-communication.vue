@@ -45,7 +45,7 @@ export default {
           .col-auto
             q-toggle(v-model="announcement.enabled" color="secondary" :disable="!isAdmin" @input="(value) => toggleOff('announcements',index, value)")
           .col-12
-            q-input.q-my-sm.rounded-border(:debounce="200" :disable="!isAdmin" :ref="'announcement.' + index + '.content'" bg-color="white" color="accent" dense="dense" lazy-rules="lazy-rules" outlined="outlined" placeholder="Enter your message here" rounded="rounded" v-model="announcement.title")
+            q-input.q-my-sm.rounded-border(:debounce="200" :disable="!isAdmin" :ref="'announcement.' + index + '.content'" bg-color="white" color="accent" dense="dense" lazy-rules="lazy-rules" outlined="outlined" :placeholder="$t('dao.settings-communication.enterYourMessageHere')" rounded="rounded" v-model="announcement.title")
         .full-width
           label.h-label {{ $t('dao.settings-communication.message') }}
           q-field.full-width.q-my-sm.rounded-border(dense="dense" lazy-rules="lazy-rules" maxlength="3000" outlined="outlined" ref="bio" stack-label="stack-label" v-model="announcement.message")
@@ -53,7 +53,7 @@ export default {
       nav.row.full-width.justify-end
         q-btn.text-bold.q-pa-none.q-mr-xs(:disable="form.announcements.length === 1 || !isAdmin" flat="flat" color="primary" no-caps="no-caps" padding="none" @click="form.announcements.splice(index, 1)") {{ $t('dao.settings-communication.removeAnnouncement') }}
         q-btn.text-bold.q-pa-none.q-ml-lg.q-mr-xs(:disable="form.announcements.length === 10 || !isAdmin" v-show="index === form.announcements.length - 1" flat="flat" color="primary" no-caps="no-caps" padding="none" @click="form.alerts.push({content:'', enabled:false, level:'default' })") {{ $t('dao.settings-communication.addMore') }}
-  widget.q-pa-none.full-width.q-mt-md(title="Alerts" titleImage="/svg/bell.svg" :bar="true" v-if="isHypha")
+  widget.q-pa-none.full-width.q-mt-md(:title="$t('dao.settings-communication.alerts')" titleImage="/svg/bell.svg" :bar="true" v-if="isHypha")
     p.text-sm.text-h-gray.leading-loose.q-mt-md {{ $t('dao.settings-communication.onlyForHypha') }}
     template(v-for="(alert, index) in form.alerts")
       .row.ju.q-mt-md.items-end
@@ -82,7 +82,7 @@ export default {
                     q-avatar(size="20px" color="warning")
                   q-item-section {{ $t('dao.settings-communication.warning') }}
         .col
-          q-input.rounded-border(:debounce="200" :disable="!isAdmin" :ref="'alert.' + index + '.content'" bg-color="white" color="accent" dense="dense" lazy-rules="lazy-rules" maxlength="200" outlined="outlined" placeholder="Enter your message here" rounded="rounded" v-model="alert.content")
+          q-input.rounded-border(:debounce="200" :disable="!isAdmin" :ref="'alert.' + index + '.content'" bg-color="white" color="accent" dense="dense" lazy-rules="lazy-rules" maxlength="200" outlined="outlined" :placeholder="$t('dao.settings-communication.enterYourMessageHere')" rounded="rounded" v-model="alert.content")
       nav.row.full-width.justify-end
         q-btn.text-bold.q-pa-none.q-mr-xs(:disable="form.alerts.length === 1 || !isAdmin" flat="flat" color="primary" no-caps="no-caps" padding="none" @click="form.alerts.splice(index, 1)") {{ $t('dao.settings-communication.removeNotification') }}
         q-btn.text-bold.q-pa-none.q-ml-lg.q-mr-xs(:disable="form.alerts.length === 10 || !isAdmin" v-show="index === form.alerts.length - 1" flat="flat" color="primary" no-caps="no-caps" padding="none" @click="form.alerts.push({content:'', enabled:false, level:'default' })") {{ $t('dao.settings-communication.addMore') }}
