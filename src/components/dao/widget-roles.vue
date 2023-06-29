@@ -45,65 +45,71 @@ export default {
   },
 
   apollo: {
-    // levels: {
-    //   query: gql`
-    //     query LEVELS($daoId: Int64!) {
-    //       querySalaryband(
-    //         filter: {
-    //           details_dao_i: { eq: $daoId },
-    //         }
-    //       ) {
-    //         id: docId
-    //         name: details_name_s
-    //         annualAmount: details_annualUsdSalary_a
-    //         minDeferred: details_minDeferredX100_i
-    //       }
-    //     }`,
-    //   update: data => data.queryRole,
-    //   skip () { return !this.selectedDao?.docId },
-    //   variables () { return { daoId: this.selectedDao.docId } },
-    //   subscribeToMore: {
-    //     document: gql`
-    //       subscription LEVELS($daoId: Int64!) {
-    //         querySalaryband(
-    //           filter: {
-    //             details_dao_i: { eq: $daoId },
-    //           }
-    //         ) {
-    //           id: docId
-    //           name: details_name_s
-    //           annualAmount: details_annualUsdSalary_a
-    //           minDeferred: details_minDeferredX100_i
-    //         }
-    //       }`,
+    levels: {
+      query: gql`
+        query LEVELS($daoId: Int64!) {
+          querySalaryband(
+            filter: {
+              details_dao_i: { eq: $daoId },
+            }
+          ) {
+            id: docId
+            name: details_name_s
+            annualAmount: details_annualUsdSalary_a
+            minDeferred: details_minDeferredX100_i
+          }
+        }`,
+      update: data => data.querySalaryband,
+      skip () { return !this.selectedDao?.docId },
+      variables () { return { daoId: this.selectedDao.docId } },
+      subscribeToMore: {
+        document: gql`
+          subscription LEVELS($daoId: Int64!) {
+            querySalaryband(
+              filter: {
+                details_dao_i: { eq: $daoId },
+              }
+            ) {
+              id: docId
+              name: details_name_s
+              annualAmount: details_annualUsdSalary_a
+              minDeferred: details_minDeferredX100_i
+            }
+          }`,
 
-    //     skip () { return !this.selectedDao?.docId },
-    //     variables () { return { daoId: this.selectedDao.docId } },
-    //     updateQuery: (previousResult, { subscriptionData }) => {
-    //       if (!subscriptionData.data) {
-    //         return previousResult
-    //       }
-    //       if (!previousResult) {
-    //         return undefined
-    //       }
+        skip () { return !this.selectedDao?.docId },
+        variables () { return { daoId: this.selectedDao.docId } },
+        updateQuery: (previousResult, { subscriptionData }) => {
+          if (!subscriptionData.data) {
+            return previousResult
+          }
+          if (!previousResult) {
+            return undefined
+          }
 
-    //       return subscriptionData.data
-    //     }
-    //   }
-    // }
+          return subscriptionData.data
+        }
+      }
+    },
 
     roles: {
       query: gql`
         query ROLES($daoId: Int64!) {
           queryRole(
-            filter: {
-              details_dao_i: { eq: $daoId },
-              details_autoApprove_i: { eq: 1 }
+            filter: { 
+              details_dao_i: { eq: $daoId }, 
+              details_autoApprove_i: { eq: 1 } 
             }
           ) {
             id: docId
             name: details_title_s
             description: details_description_s
+
+            assignmentAggregate(filter: { 
+              details_state_s: { regexp: "/approved/" } 
+            }) {
+              count
+            }
           }
         }`,
       update: data => data.queryRole,
@@ -121,6 +127,13 @@ export default {
                 id: docId
                 name: details_title_s
                 description: details_description_s
+            
+                assignmentAggregate(filter: { 
+                  details_state_s: { regexp: "/approved/" } 
+                }) {
+                  count
+                }
+
               }
             }`,
         skip () { return !this.selectedDao?.docId },
@@ -208,9 +221,9 @@ export default {
   computed: {
     ...mapGetters('dao', ['selectedDao']),
 
-    hasLevels () { return this.form && this.form.levels && this?.form?.levels.length > 0 },
-    hasRoles () { return this?.roles && this?.roles.length > 0 },
-    levelCount () { return this.form && this.form.levels && this?.form?.levels.length },
+    hasLevels () { return this?.levels && this?.levels?.length > 0 },
+    hasRoles () { return this?.roles && this?.roles?.length > 0 },
+    levelCount () { return this?.levels ? this?.levels?.length : 0 },
     roleCount () { return this.roles ? this.roles?.length : 0 }
   },
 
@@ -254,7 +267,7 @@ widget(:title="$t('configuration.settings-structure.roles.title')" titleImage='/
 
     section(v-if="hasRoles").row.q-col-gutter-md
       template(v-for="role in roles")
-        article(:class="['col-'+ Math.min(Math.max(Math.floor(12/roleCount), 3), 12)]")
+        article.col-12(:class="['col-md-'+ Math.min(Math.max(Math.floor(12/roleCount), 3), 12)]")
           widget(:title="role?.name" shadow bar)
             template(v-slot:header)
               q-btn.q-pa-xs.relative-position(
@@ -271,7 +284,11 @@ widget(:title="$t('configuration.settings-structure.roles.title')" titleImage='/
                     q-item(@click="_deleteRole(role.id)" clickable v-close-popup)
                       q-item-section {{ $t('actions.delete') }}
 
-            p.q-pa-none.text-sm.text-h-gray.leading-loose.q-mt-md {{ role?.description }}
+            p.q-pa-none.text-sm.text-h-gray.leading-loose {{ role?.description }}
+            .hr.q-my-md
+            .row.items-center.q-mt-md
+              q-avatar.q-mr-sm.bg-h-gray(size="md" text-color="white" icon="fas fa-user")
+              p.q-pa-none.q-ma-none.text-sm.text-primary.text-bold.leading-loose {{ role?.assignmentAggregate?.count }} {{ $t('dao.member') }}
 
     section(v-if="state === STATES.CREATING_ROLE")
       .hr.q-my-md(v-if="hasLevels")
@@ -357,8 +374,8 @@ widget(:title="$t('configuration.settings-structure.roles.title')" titleImage='/
       )
 
     section(v-if="hasLevels").row.q-col-gutter-md
-      template(v-for="level in form.levels")
-        article(:class="['col-'+ Math.min(Math.max((12/levelCount), 3), 12)]")
+      template(v-for="level in levels")
+        article.col-12(:class="['col-md-'+ Math.min(Math.max((12/levelCount), 3), 12)]")
           widget(:title="level.name" shadow bar)
             template(v-slot:header)
               q-btn.q-pa-xs.relative-position(

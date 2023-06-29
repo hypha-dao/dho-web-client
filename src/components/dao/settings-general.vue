@@ -33,90 +33,91 @@ export default {
 </script>
 
 <template lang="pug">
-widget(:title="$t('configuration.settings-general.title')" titleImage='/svg/cog.svg' :bar='true').q-pa-none.full-width
+.tab
+  widget(:title="$t('configuration.settings-general.title')" titleImage='/svg/cog.svg' :bar='true').q-pa-none.full-width
     p.text-sm.text-h-gray.leading-loose.q-mt-md {{ $t('configuration.settings-general.description') }}
     .hr.q-my-md
 
     section.row.justify-between.q-col-gutter-x-xl
-        .col-12.col-md-4(:class="{'q-mt-sm': !$q.screen.gt.md}")
-            label.h-label {{ $t('configuration.settings-general.form.logo.label') }}
-            .row.items-center
-                q-avatar.q-mr-sm(color="primary" text-color="white")
-                    img(v-show="form.logo" :src="ipfsy(form.logo)")
-                    span(v-if="!form.logo") {{ form.title ? form.title[0] : form.name ? form.name[0] : '' }}
-                .q-my-xs.row.col
-                    q-btn.full-width.q-px-xl.rounded-border.text-bold(
-                        :disable="!isAdmin"
-                        @click="$refs.logo.chooseFile()"
-                        color="primary"
-                        :label="$t('configuration.settings-general.form.upload.label')"
-                        no-caps
-                        outline
-                        rounded
-                        unelevated
-                    )
-                    input-file-ipfs(
-                        @uploadedFile="form.logo = arguments[0]"
-                        image
-                        ref="logo"
-                        v-show="false"
-                    )
-
-        .col-12.col-md-4(:class="{'q-mt-sm': !$q.screen.gt.md}")
-            label.h-label {{ $t('configuration.settings-general.form.name.label') }}
-            q-input.q-my-xs(
-                :debounce="200"
-                :disable="!isAdmin"
-                bg-color="white"
-                color="accent"
-                dense
-                lazy-rules
-                outlined
-                placeholder="Paste the URL address here"
-                ref="name"
-                rounded
-                v-model='form.name'
+      .col-12.col-md-4(:class="{'q-mt-sm': !$q.screen.gt.md}")
+        label.h-label {{ $t('configuration.settings-general.form.logo.label') }}
+        .row.items-center
+          q-avatar.q-mr-sm(color="primary" text-color="white")
+            img(v-show="form.logo" :src="ipfsy(form.logo)")
+            span(v-if="!form.logo") {{ form.title ? form.title[0] : form.name ? form.name[0] : '' }}
+          .q-my-xs.row.col
+            q-btn.full-width.q-px-xl.rounded-border.text-bold(
+              :disable="!isAdmin"
+              :label="$t('configuration.settings-general.form.upload.label')"
+              @click="$refs.logo.chooseFile()"
+              color="primary"
+              no-caps
+              outline
+              rounded
+              unelevated
             )
-                q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
-
-        .col-12.col-md-4(:class="{'q-mt-sm': !$q.screen.gt.md}")
-            label.h-label {{ $t('configuration.settings-general.form.url.label') }}
-            .row.items-center
-                p.q-mt-md.q-mr-md.subtitle dao.hypha.earth/
-                q-input.q-my-sm.col(
-                    :debounce="200"
-                    :disable="!isAdmin"
-                    bg-color="white"
-                    color="accent"
-                    dense
-                    lazy-rules
-                    outlined
-                    placeholder="Type your custom URL here"
-                    ref="name"
-                    rounded
-                    v-model='form.url'
-                )
-                    q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
-
-        .full-width.q-mt-sm
-            label.h-label {{ $t('configuration.settings-general.form.purpose.label') }}
-            q-input.q-my-sm(
-                :debounce="200"
-                :disable="!isAdmin"
-                :input-style="{ 'resize': 'none' }"
-                bg-color="white"
-                color="accent"
-                dense
-                lazy-rules
-                maxlength="300"
-                outlined
-                placeholder="Max 140 characters"
-                ref="nickname"
-                rounded
-                rows="6"
-                type="textarea"
-                v-model='form.purpose'
+            input-file-ipfs(
+              @uploadedFile="form.logo = arguments[0]"
+              image
+              ref="logo"
+              v-show="false"
             )
+
+      .col-12.col-md-4(:class="{'q-mt-sm': !$q.screen.gt.md}")
+        label.h-label {{ $t('configuration.settings-general.form.name.label') }}
+        q-input.q-my-xs(
+          :debounce="200"
+          :disable="!isAdmin"
+          bg-color="white"
+          color="accent"
+          dense
+          lazy-rules
+          outlined
+          placeholder="Paste the URL address here"
+          ref="name"
+          rounded
+          v-model='form.name'
+        )
+        q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
+
+      .col-12.col-md-4(:class="{'q-mt-sm': !$q.screen.gt.md}")
+        label.h-label {{ $t('configuration.settings-general.form.url.label') }}
+        .row.items-center
+            p.q-mt-md.q-mr-md.subtitle dao.hypha.earth/
+            q-input.q-my-sm.col(
+              :debounce="200"
+              :disable="!isAdmin"
+              bg-color="white"
+              color="accent"
+              dense
+              lazy-rules
+              outlined
+              placeholder="Type your custom URL here"
+              ref="name"
+              rounded
+              v-model='form.url'
+            )
+            q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
+
+      .full-width.q-mt-sm
+        label.h-label {{ $t('configuration.settings-general.form.purpose.label') }}
+        q-input.q-my-sm(
+          :debounce="200"
+          :disable="!isAdmin"
+          :input-style="{ 'resize': 'none' }"
+          bg-color="white"
+          color="accent"
+          dense
+          lazy-rules
+          maxlength="300"
+          outlined
+          placeholder="Max 140 characters"
+          ref="nickname"
+          rounded
+          rows="6"
+          type="textarea"
+          v-model='form.purpose'
+        )
 
     section.row.justify-between.q-col-gutter-x-xl(v-if="isShowingMore")
         .col-12.col-md-4(:class="{'q-mt-sm': !$q.screen.gt.md}")
@@ -189,19 +190,20 @@ widget(:title="$t('configuration.settings-general.title')" titleImage='/svg/cog.
             q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
 
         .row.full-width.q-my-xl.relative-position
-            .col-6(:style="{'height':'96px', 'background': form.primaryColor, 'cursor': 'context-menu'}")
-            .col-6(:style="{'height':'96px', 'background': form.secondaryColor, 'cursor': 'context-menu'}")
-            .absolute.z-50.absolute-center.h-h3.text-weight-500(:style="{'color': form.textColor}") {{ $t('configuration.settings-general.form.sample-text') }}
+          .col-6(:style="{'height':'96px', 'background': form.primaryColor, 'cursor': 'context-menu'}")
+          .col-6(:style="{'height':'96px', 'background': form.secondaryColor, 'cursor': 'context-menu'}")
+          .absolute.z-50.absolute-center.h-h3.text-weight-500(:style="{'color': form.textColor}") {{ $t('configuration.settings-general.form.sample-text') }}
 
     footer.full-width.row.items-center.justify-center
-        q-btn.q-px-lg.h-btn1(
-            :label="isShowingMore? $t('configuration.settings-general.nav.show-more') : $t('configuration.settings-general.nav.show-less')"
-            @click="isShowingMore = !isShowingMore"
-            color="primary"
-            flat
-            no-caps
-            rounded
-        )
+      q-btn.q-px-lg(
+        :label="isShowingMore? $t('configuration.settings-general.nav.show-more') : $t('configuration.settings-general.nav.show-less')"
+        @click="isShowingMore = !isShowingMore"
+        color="primary"
+        flat
+        no-caps
+        rounded
+      )
+
 </template>
 
 <style lang="stylus" scoped>

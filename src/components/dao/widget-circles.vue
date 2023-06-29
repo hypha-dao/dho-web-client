@@ -43,6 +43,10 @@ export default {
             id: docId
             name: details_title_s
             description: details_description_s
+
+            memberAggregate {
+              count
+            }
           }
         }`,
       update: data => data.queryCircle,
@@ -60,6 +64,10 @@ export default {
               id: docId
               name: details_title_s
               description: details_description_s
+
+              memberAggregate {
+                count
+              }
             }
           }`,
         skip () { return !this.selectedDao?.docId },
@@ -126,12 +134,12 @@ export default {
 
 <template lang="pug">
 widget(:title="$t('configuration.settings-structure.circles.title')" titleImage='/svg/chart-network.svg' bar).q-pa-none.full-width.q-mt-sm
-  p.text-sm.text-h-gray.leading-loose.q-mt-md {{ $t('configuration.settings-structure.roles.description') }}
+  p.text-sm.text-h-gray.leading-loose.q-mt-md {{ $t('configuration.settings-structure.circles.description') }}
   .hr.q-my-md
 
   section.q-mt-md
     header.column.justify-center.text-center.items-center(v-if="!hasCircles && state === STATES.WAITING")
-      p.text-sm.text-h-gray.leading-loose.q-mt-md Feel free to shape your DAO by creating circles or teams that are meaningful to your workflow.
+      p.text-sm.text-h-gray.leading-loose.q-mt-md {{ $t('configuration.settings-structure.circles.heading') }}
       q-btn.q-px-xl.text-bold(
         :label="$t('configuration.settings-structure.circles.nav.create')"
         @click="state = STATES.CREATING_CIRCLE"
@@ -145,7 +153,7 @@ widget(:title="$t('configuration.settings-structure.circles.title')" titleImage=
 
     section(v-if="hasCircles").row.q-col-gutter-md
       template(v-for="circle in circles")
-        article(:class="['col-'+ Math.min(Math.max(Math.floor(12/circleCount), 3), 12)]")
+        article.col-12
           widget(:title="circle.name" shadow bar)
             template(v-slot:header)
               q-btn.q-pa-xs.relative-position(
@@ -162,7 +170,11 @@ widget(:title="$t('configuration.settings-structure.circles.title')" titleImage=
                     q-item(@click="_deleteCircle(circle.id)" clickable v-close-popup)
                       q-item-section {{ $t('actions.delete') }}
 
-            p.q-pa-none.text-sm.text-h-gray.leading-loose.q-mt-md {{ circle.description }}
+            p.q-pa-none.text-sm.text-h-gray.leading-loose {{ circle.description }}
+            .hr.q-my-md
+            .row.items-center.q-mt-md
+              q-avatar.q-mr-sm.bg-h-gray(size="md" text-color="white" icon="fas fa-user")
+              p.q-pa-none.q-ma-none.text-sm.text-primary.text-bold.leading-loose {{ circle?.memberAggregate?.count }}  {{ $t('dao.member') }}
 
     section(v-if="state === STATES.CREATING_CIRCLE")
       .hr.q-my-md(v-if="hasCircles")

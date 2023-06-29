@@ -77,7 +77,7 @@ export const createDAO = async function (context, { data, isDraft }) {
   return this.$api.signTransaction(actions)
 }
 
-export const updateDAOSettings = async function (context, { docId, data, alerts, announcements }) {
+export const updateDAOSettings = async function ({ state, rootState }, { data, alerts, announcements }) {
   // const UPVOTE = 'UPVOTE'
 
   // const daoSettings = this.getters['dao/daoSettings']
@@ -118,7 +118,7 @@ export const updateDAOSettings = async function (context, { docId, data, alerts,
       account: this.$config.contracts.dao,
       name: 'setdaosetting',
       data: {
-        dao_id: docId,
+        dao_id: rootState.dao.docId,
         kvs: Object.keys(data).map(key => {
           const valueTypes = {
             // _s for string
@@ -265,10 +265,6 @@ export const updateDAOSettings = async function (context, { docId, data, alerts,
   return this.$api.signTransaction(actions)
 }
 
-// action: createmsig, params: dao_id [int], creator [name], kvs [like kvs in setdaosetting]
-// action: votemsig, params: msig_id [int], signer [name], approve [bool]
-// action: execmsig, params: msig_id [int], executer [name]
-// action: cancelcmsig, params: msig_id [int], canceler [name]
 export const getTreasuryOptions = async function (context, data) { // TODO: add getting ready to execute requests
   const rpc = new JsonRpc(this.$apiUrl)
   const account = await rpc.get_account(data.treasuryAccount)
@@ -363,14 +359,14 @@ export const executeMultisigPay = function (context, { data }) {
   ]
   return this.$api.signTransaction(actions)
 }
-export const createSettingsMultisig = async function (context, { docId, data }) {
+export const createSettingsMultisig = async function ({ state, rootState }, { docId, data }) {
   const actions = [
     {
       account: this.$config.contracts.dao,
       name: 'createmsig',
       data: {
         creator: context.rootState.accounts.account,
-        dao_id: docId,
+        dao_id: rootState.dao.docId,
         kvs: Object.keys(data).map(key => {
           const valueTypes = {
             // _s for string

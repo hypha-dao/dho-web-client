@@ -77,13 +77,11 @@
     "alert": {
       "confirm-action": "Tem certeza que deseja sair sem salvar seu rascunho?"
     },
-
     "tabs":{
       "general":"Geral",
       "structure":"Estrutura",
       "voting":"Votação"
     },
-
     "nav": {
       "reset":"Reiniciar alterações",
       "submit":"Salvar alterações",
@@ -91,7 +89,6 @@
       "sign-multisig":"Assinar multisig",
       "view-multisig":"Visualizar multisig"
     },
-
     "settings-general": {
       "title":"Geral",
       "description":"Use as configurações gerais para configurar alguns parâmetros básicos, como um link para seu espaço de colaboração principal e seu DAO e use a alternância para habilitar ou desabilitar os principais recursos.",
@@ -132,7 +129,6 @@
       }
      
     },
-
     "settings-structure": {
       "roles":{
         "title":"Funções",
@@ -197,10 +193,10 @@
           }
         }
       },
-
       "circles":{
         "title":"Círculos",
         "description":"Aqui você pode configurar suas equipes principais ou círculos. Os círculos definem os limites e domínios internos do DAO. Qualquer atividade é vinculada a um único círculo (a base da atividade) para que os orçamentos possam ser mantidos por meio do DAO.",
+        "heading": "Sinta-se à vontade para moldar seu DAO criando círculos ou equipes que sejam significativos para seu fluxo de trabalho.",
         "form":{
           "name": {
             "label":"Nome do Círculo",
@@ -215,14 +211,11 @@
           "cancel": "Cancelar",
           "submit": "Concluído"
         },
-
         "nav": {
           "create":"Criar novo círculo"
         }
       }
     },
-
-
     "settings-voting": {
       "core":{
         "title":"Métodos de votação da equipe principal",
@@ -335,6 +328,8 @@
     }
   },
   "dao": {
+    "member": "membro",
+
     "settings-communication": {
       "announcements": "Anúncios",
       "postAnAnnouncement": "Publique um anúncio em todas as seções para informar os membros sobre uma atualização importante.",

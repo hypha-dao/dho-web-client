@@ -1,15 +1,9 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
 
-// const cloneDeep = value => JSON.parse(JSON.stringify(value))
 const exist = value => value !== undefined
 
 const settingsMapper = (data) => {
-  // upvoteStartDate,
-  // upvoteStartTime,
-  // upvoteRounds,
-  // const [timezoneHours, timezoneMinutes] = new Date().toString().match(/([-+][0-9]+)\s/)[1].match(/.{1,3}/g)
-
   const { name, purpose, url, ...form } = data || {}
 
   return {
@@ -19,17 +13,11 @@ const settingsMapper = (data) => {
     ...(exist(url) ? { daoUrl: url } : {}),
 
     ...(exist(form.proposalsCreationEnabled) ? { proposalsCreationEnabled: form.proposalsCreationEnabled ? 1 : 0 } : {}),
-    // ...(exist(form.membersApplicationEnabled) ? { membersApplicationEnabled: form.membersApplicationEnabled ? 1 : 0 } : {}),
-    // ...(exist(form.proposalsCreationEnabled) ? { removableBannersEnabled: form.removableBannersEnabled ? 1 : 0 } : {}),
-    // ...(exist(form.multisigEnabled) ? { multisigEnabled: form.multisigEnabled ? 1 : 0 } : {}),
 
     ...(exist(form.votingAlignmentPercent) ? { votingAlignmentX100: form.votingAlignmentPercent } : {}),
     ...(exist(form.votingQuorumPercent) ? { votingQuorumX100: form.votingQuorumPercent } : {}),
 
     ...(exist(form.communityVotingEnabled) ? { communityVotingEnabled: form.communityVotingEnabled ? 1 : 0 } : {})
-    // ...(exist(form.upvoteHeadDelegateRound) ? { upvoteHeadDelegateRound: form.upvoteHeadDelegateRound ? 1 : 0 } : {})
-    // ...(exist(upvoteStartDate && upvoteStartTime) ? { upvoteStartDateTime: upvoteStartDate ? new Date(`${upvoteStartDate.replace(/\//g, '-')}T${upvoteStartTime}:00.000${timezoneHours}:${timezoneMinutes}`).toISOString().replace('Z', '') : '' } : {}),
-    // ...(exist(upvoteRounds) ? { upvoteRounds: JSON.stringify(upvoteRounds) } : {})
 
   }
 }
@@ -46,57 +34,42 @@ const CONFIGURATION_STATE = Object.freeze({
 })
 
 const defaultSettings = {
-  // GENERAL FORM
+  // General
   logo: '',
   title: '',
   description: '',
   url: '',
+  primaryColor: '#242f5d',
+  secondaryColor: '#3F64EE',
+  textColor: '#ffffff',
 
+  // Structure
   roles: [],
   levels: [],
 
-  // VOTING FORM
+  // Voting
+  proposalsCreationEnabled: true,
   votingDurationSec: '',
   // periodDurationSec: '',
   votingAlignmentPercent: '',
   votingQuorumPercent: '',
+
   communityVotingEnabled: false,
   communityVotingDurationSec: 604800,
   communityVotingAlignmentPercent: 20,
-  communityVotingQuorumPercent: 50,
+  communityVotingQuorumPercent: 50
 
-  // ECONOMICS FORM
-  // utilityTokenMultiplier: 1,
-  // voiceTokenMultiplier: 2,
-  // treasuryTokenMultiplier: 1,
-  // voiceTokenDecayPeriod: '',
-
-  communityVotingMethod: 'CLASSIC',
-  upvoteStartDateTime: '',
-  upvoteStartDate: '',
-  upvoteStartTime: '',
-  upvoteDuration: 7890000,
-  upvoteRounds: [{ peoplePassing: 50, duration: 10800 }],
-  upvoteCheifDelegateCount: 4,
-  upvoteCheifDelegateDuration: 10800,
-  upvoteHeadDelegateRound: false,
-  upvoteHeadDelegateDuration: 10800,
-
-  // COMMUNICATION FORM
-  // announcements: [{ title: '', message: '', enabled: false }],
-  // alerts: [{ level: 'positive', content: '', enabled: false }],
-
-  // DESIGN FORM
-  // general
-
-  extendedLogo: '',
-  primaryColor: '#242f5d',
-  secondaryColor: '#3F64EE',
-  textColor: '#ffffff',
-  pattern: '',
-  patternColor: '#3E3B46',
-  patternOpacity: '30',
-  patternBase64: ''
+  // TODO:
+  // communityVotingMethod: 'CLASSIC',
+  // upvoteStartDateTime: '',
+  // upvoteStartDate: '',
+  // upvoteStartTime: '',
+  // upvoteDuration: 7890000,
+  // upvoteRounds: [{ peoplePassing: 50, duration: 10800 }],
+  // upvoteCheifDelegateCount: 4,
+  // upvoteCheifDelegateDuration: 10800,
+  // upvoteHeadDelegateRound: false,
+  // upvoteHeadDelegateDuration: 10800,
 
 }
 
@@ -136,16 +109,30 @@ export default {
     ...mapActions('dao', [
       'importEdenElection',
       'updateDAOSettings',
-      'createSettingsMultisig', 'cancelSettingsMultisig', 'voteSettingsMultisig', 'executeSettingsMultisig'
+
+      'createSettingsMultisig',
+      'cancelSettingsMultisig',
+      'voteSettingsMultisig',
+      'executeSettingsMultisig'
     ]),
 
     initForm () {
       this.initialForm = {
+        // General
         logo: this.daoSettings?.logo ? this.daoSettings?.logo : defaultSettings.logo,
         name: this.daoSettings?.title ? this.daoSettings?.title : defaultSettings.title,
         url: this.daoSettings?.url ? this.daoSettings?.url : defaultSettings.url,
         purpose: this.daoSettings?.description ? this.daoSettings?.description : defaultSettings.description,
 
+        primaryColor: this.daoSettings?.primaryColor ? this.daoSettings?.primaryColor : defaultSettings.primaryColor,
+        secondaryColor: this.daoSettings?.secondaryColor ? this.daoSettings?.secondaryColor : defaultSettings.secondaryColor,
+        textColor: this.daoSettings?.textColor ? this.daoSettings?.textColor : defaultSettings.textColor,
+
+        // Structure
+        // roles: this.daoSettings?.roles ? this.daoSettings?.roles : defaultSettings.roles,
+        levels: this.daoSettings?.levels ? this.daoSettings?.levels : defaultSettings.levels,
+
+        // Voting
         proposalsCreationEnabled: this.daoSettings?.proposalsCreationEnabled !== null ? this.daoSettings?.proposalsCreationEnabled : defaultSettings.proposalsCreationEnabled,
         votingDurationSec: this.daoSettings?.votingDurationSec ? this.daoSettings?.votingDurationSec : defaultSettings.votingDurationSec,
         periodDurationSec: this.daoSettings?.periodDurationSec ? this.daoSettings?.periodDurationSec : defaultSettings.periodDurationSec,
@@ -155,25 +142,9 @@ export default {
         communityVotingEnabled: this.daoSettings?.communityVotingEnabled ? this.daoSettings?.communityVotingEnabled : defaultSettings.communityVotingEnabled,
         communityVotingDurationSec: this.daoSettings?.communityVotingDurationSec ? this.daoSettings?.communityVotingDurationSec : defaultSettings.communityVotingDurationSec,
         communityVotingAlignmentPercent: this.daoSettings?.communityVotingAlignmentPercent ? this.daoSettings?.communityVotingAlignmentPercent : defaultSettings.communityVotingAlignmentPercent,
-        communityVotingQuorumPercent: this.daoSettings?.communityVotingQuorumPercent ? this.daoSettings?.communityVotingQuorumPercent : defaultSettings.communityVotingQuorumPercent,
+        communityVotingQuorumPercent: this.daoSettings?.communityVotingQuorumPercent ? this.daoSettings?.communityVotingQuorumPercent : defaultSettings.communityVotingQuorumPercent
 
-        // membersApplicationEnabled: this.daoSettings?.membersApplicationEnabled !== null ? this.daoSettings?.membersApplicationEnabled : defaultSettings.membersApplicationEnabled,
-        // removableBannersEnabled: this.daoSettings?.removableBannersEnabled !== null ? this.daoSettings?.removableBannersEnabled : defaultSettings.removableBannersEnabled,
-        // multisigEnabled: this.daoSettings?.multisigEnabled !== null ? this.daoSettings?.multisigEnabled : defaultSettings.multisigEnabled,
-        // socialChat: this.daoSettings?.socialChat ? this.daoSettings?.socialChat : defaultSettings.socialChat,
-        // documentationURL: this.daoSettings?.documentationURL ? this.daoSettings?.documentationURL : defaultSettings.documentationURL,
-        // documentationButtonText: this.daoSettings?.documentationButtonText ? this.daoSettings?.documentationButtonText : defaultSettings.documentationButtonText,
-
-        // roles: this.daoSettings?.roles ? this.daoSettings?.roles : defaultSettings.roles,
-        levels: this.daoSettings?.levels ? this.daoSettings?.levels : defaultSettings.levels,
-
-        // utilityTokenMultiplier: this.daoSettings?.utilityTokenMultiplier ? this.daoSettings?.utilityTokenMultiplier : defaultSettings.utilityTokenMultiplier,
-        // voiceTokenMultiplier: this.daoSettings?.voiceTokenMultiplier ? this.daoSettings?.voiceTokenMultiplier : defaultSettings.voiceTokenMultiplier,
-        // treasuryTokenMultiplier: this.daoSettings?.treasuryTokenMultiplier ? this.daoSettings?.treasuryTokenMultiplier : defaultSettings.treasuryTokenMultiplier,
-        // voiceTokenDecayPeriod: this.daoSettings?.voiceTokenDecayPeriod ? this.daoSettings?.voiceTokenDecayPeriod : defaultSettings.voiceTokenDecayPeriod,
-
-        // salaries: cloneDeep([...(this.daoSettings?.salaries ? this.daoSettings?.salaries : defaultSettings.salaries)]),
-
+        // TODO
         // communityVotingMethod: this.daoSettings?.communityVotingMethod ? this.daoSettings?.communityVotingMethod : defaultSettings.communityVotingMethod,
         // upvoteStartDateTime: this.daoSettings?.upvoteStartDateTime ? this.daoSettings?.upvoteStartDateTime : defaultSettings.upvoteStartDateTime,
         // upvoteStartDate: this.daoSettings?.upvoteStartDate ? this.daoSettings?.upvoteStartDate : defaultSettings.upvoteStartDate,
@@ -185,23 +156,9 @@ export default {
         // upvoteHeadDelegateRound: this.daoSettings?.upvoteHeadDelegateRound ? this.daoSettings?.upvoteHeadDelegateRound : defaultSettings.upvoteHeadDelegateRound,
         // upvoteHeadDelegateDuration: this.daoSettings?.upvoteHeadDelegateDuration ? this.daoSettings?.upvoteHeadDelegateDuration : defaultSettings.upvoteHeadDelegateDuration,
 
-        extendedLogo: this?.daoSettings?.extendedLogo ? this?.daoSettings?.extendedLogo : defaultSettings.extendedLogo,
-        primaryColor: this.daoSettings?.primaryColor ? this.daoSettings?.primaryColor : defaultSettings.primaryColor,
-        secondaryColor: this.daoSettings?.secondaryColor ? this.daoSettings?.secondaryColor : defaultSettings.secondaryColor,
-        textColor: this.daoSettings?.textColor ? this.daoSettings?.textColor : defaultSettings.textColor
-        // pattern: this.daoSettings?.pattern ? this.daoSettings?.pattern : defaultSettings.pattern,
-        // patternColor: this.daoSettings?.patternColor ? this.daoSettings?.patternColor : defaultSettings.patternColor,
-        // patternOpacity: this.daoSettings?.patternOpacity ? this.daoSettings?.patternOpacity : defaultSettings.patternOpacity,
-        // patternBase64: this.daoSettings?.patternBase64 ? this.daoSettings?.patternBase64 : defaultSettings.patternBase64,
-
       }
 
-      this.form = {
-        ...this.initialForm
-        // salaries: cloneDeep([...(this.daoSettings?.salaries ? this.daoSettings?.salaries : defaultSettings.salaries)]),
-        // alerts: cloneDeep([...(this.daoAlerts && this.daoAlerts.length > 0 ? this.daoAlerts : defaultSettings.alerts)]),
-        // announcements: cloneDeep([...(this.daoAnnouncements && this.daoAnnouncements.length > 0 ? this.daoAnnouncements : defaultSettings.announcements)])
-      }
+      this.resetForm()
     },
 
     resetForm () {
@@ -214,10 +171,7 @@ export default {
       try {
         this.state = CONFIGURATION_STATE.CREATE_MULTI_SIG
 
-        await this.createSettingsMultisig({
-          docId: this.selectedDao.docId,
-          data: settingsMapper(this.dataForSave)
-        })
+        await this.createSettingsMultisig({ data: { ...this.dataForSave } })
 
         this.initialForm = {
           ...this.form
@@ -278,13 +232,11 @@ export default {
       try {
         this.state = CONFIGURATION_STATE.SAVING
 
-        await this.updateDAOSettings({
-          docId: this.selectedDao.docId,
-          data: { ...this.dataForSave }
-        })
+        await this.updateDAOSettings({ data: { ...this.dataForSave } })
 
         const url = this.dataForSave.daoUrl
         if (url) {
+          // If url changed reload page
           this.$router.push(`/${url}/configuration`)
         }
 

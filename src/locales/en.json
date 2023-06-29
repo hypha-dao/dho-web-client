@@ -3,6 +3,7 @@
     "delete":"Delete"
   },
 
+
   "periods": {
     "hour": "Hour",
     "hours": "Hours",
@@ -82,7 +83,6 @@
       "structure":"Structure",
       "voting":"Voting"
     },
-
     "nav": {
       "reset":"Reset changes",
       "submit":"Save changes",
@@ -90,7 +90,6 @@
       "sign-multisig":"Sign multisig",
       "view-multisig":"View multisig"
     },
-
     "settings-general": {
       "title":"General",
       "description":"Use general settings to set up some basic parameters such as a link to your main collaboration space and your DAO and use the toggle to enable or disable key features.",
@@ -129,7 +128,6 @@
         "show-less":"Show less options"
       }
     },
-
     "settings-structure": {
       "roles":{
         "title":"Roles",
@@ -190,10 +188,11 @@
           }
         }
       },
-
       "circles":{
         "title":"Circles",
         "description":"Here you can set up your core teams or circles. Circles define the DAO's inner boundaries and domains. Any activity is tied to a single circle (the activity's home base) so that budgets can be maintained through the DAO.",
+        "heading": "Feel free to shape your DAO by creating circles or teams that are meaningful to your workflow.",
+
         "form":{
           "name": {
             "label":"Circle Name",
@@ -214,8 +213,6 @@
         }
       }
     },
-
-
     "settings-voting": {
       "core":{
         "title":"Core Team voting methods",
@@ -269,9 +266,7 @@
           "5": { "title": "Requirements", "description": "Proposals need to have the required percentage of supportive votes (unity) and percentage of all votes (quorum)" }
         }
       }
-    }
-
-    
+    }  
   },
   "common": {
     "button-card": {
@@ -330,6 +325,8 @@
     }
   },
   "dao": {
+    "member": "member",
+
     "settings-communication": {
       "announcements": "Announcements",
       "postAnAnnouncement": "Post an announcement across all sections to let members know about an important update.",
