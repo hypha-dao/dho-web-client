@@ -29,16 +29,16 @@ export default {
 </script>
 
 <template lang="pug">
-widget.full-height(more="more" morePosition="top" :title="title" @more-clicked="moreClicked")
+widget.full-height(more morePosition="top" :title="title" @more-clicked="moreClicked")
   .row.q-pt-xs(v-for="member in members")
-    profile-picture(:username="member.name || member.username" size="50px" show-name="show-name" link="link")
+    profile-picture(:username="member.name || member.username" size="50px" show-name link)
       template(v-slot:detail)
         .row.q-gutter-xxs.q-pt-xxs.text-h-gray
           q-icon(name="fas fa-calendar-alt")
           .text-xs {{ member.joinedDate | timeAgo }}
     .col.row.items-center.justify-end
       .row.q-gutter-xs(v-if="hasListener('enroll') && hasListener('reject')")
-        q-btn.q-pa-xxs(@click="$emit('reject', member.username)" color="negative" icon="fas fa-times" round="round" size="xs" unelevated="unelevated")
-        q-btn.q-pa-xxs(@click="$emit('enroll', member.username)" color="positive" icon="fas fa-check" round="round" size="xs" unelevated="unelevated")
+        q-btn.q-pa-xxs(@click="$emit('reject', member.username)" color="negative" icon="fas fa-times" round size="xs" unelevated)
+        q-btn.q-pa-xxs(@click="$emit('enroll', member.username)" color="positive" icon="fas fa-check" round size="xs" unelevated)
 
 </template>

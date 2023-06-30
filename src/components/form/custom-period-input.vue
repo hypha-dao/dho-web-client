@@ -98,21 +98,21 @@ export default {
 
 <template lang="pug">
 .custom-period-input
-  q-btn.full-width.text-bold(border="border" color="internal-bg" no-caps="no-caps" rounded="rounded" text-color="primary" unelevated="unelevated" @click="onSelect()" v-show="!isActive") {{ $t('form.custom-period-input.customPeriod') }}
+  q-btn.full-width.text-bold(border="border" color="internal-bg" no-caps rounded text-color="primary" unelevated @click="onSelect()" v-show="!isActive") {{ $t('form.custom-period-input.customPeriod') }}
   .full-width.bg-primary.text-white.rounded-border.q-px-sm.relative-position(v-show="isActive")
-    q-input.input-amount.inline(:disable="disable" :value="valueFormated" @change="onChange" bg-color="primary" borderless="borderless" dense="dense" :placeholder="$t('form.custom-period-input.typeAnAmount')" ref="amount")
-    q-btn-dropdown.absolute-right(v-if="type === 'time'" :disable="disable" color="primary" :label="period" no-caps="no-caps" rounded="rounded" unelevated="unelevated")
+    q-input.input-amount.inline(:disable="disable" :value="valueFormated" @change="onChange" bg-color="primary" borderless dense :placeholder="$t('form.custom-period-input.typeAnAmount')" ref="amount")
+    q-btn-dropdown.absolute-right(v-if="type === 'time'" :disable="disable" color="primary" :label="period" no-caps rounded unelevated)
       q-list
-        q-item(clickable="clickable" v-close-popup="v-close-popup" @click="period = 'hours'")
+        q-item(clickable v-close-popup="v-close-popup" @click="period = 'hours'")
           q-item-section
             q-item-label {{ $t('form.custom-period-input.hours') }}
-        q-item(clickable="clickable" v-close-popup="v-close-popup" @click="period = 'days'")
+        q-item(clickable v-close-popup="v-close-popup" @click="period = 'days'")
           q-item-section
             q-item-label {{ $t('form.custom-period-input.days') }}
-        q-item(clickable="clickable" v-close-popup="v-close-popup" @click="period = 'weeks'")
+        q-item(clickable v-close-popup="v-close-popup" @click="period = 'weeks'")
           q-item-section
             q-item-label {{ $t('form.custom-period-input.weeks') }}
-        q-item(clickable="clickable" v-close-popup="v-close-popup" @click="period = 'months'")
+        q-item(clickable v-close-popup="v-close-popup" @click="period = 'months'")
           q-item-section
             q-item-label {{ $t('form.custom-period-input.months') }}
 

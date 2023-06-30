@@ -729,7 +729,7 @@ export default {
 .full-height.full-width.fixed-full.bg-internal-bg(:style="'padding: 15px; overflow-y: scroll; z-index: 7777;'" v-if="$q.screen.lt.md || $q.screen.md")
   .flex.row.justify-between
     .h-h6.text-bold.flex.items-center(:style="'margin: 0 auto;'") {{ $t('pages.proposals.proposaldetail.proposalDetails') }}
-    q-btn(unelevated="unelevated" rounded="rounded" padding="12px" icon="fas fa-times" size="sm" :color="'white'" text-color="'primary'" :to="{ name: 'proposals'}")
+    q-btn(unelevated rounded padding="12px" icon="fas fa-times" size="sm" :color="'white'" text-color="'primary'" :to="{ name: 'proposals'}")
     q-card.main-card(:style="'border-radius: 25px; box-shadow: none; margin-top: 15px; width: 100%; margin-bottom: 300px;'")
       .row.justify-center.q-my-md(v-if="loading")
         loading-spinner(color="primary" size="72px")
@@ -737,16 +737,16 @@ export default {
         .col-12.col-lg-9
           proposal-item.bottom-no-rounded(v-if="ownAssignment" background="white" :proposal="proposal" :clickable="ownAssignment" :expandable="true" :owner="true" :moons="true" @claim-all="$emit('claim-all')" @change-deferred="(val) => $emit('change-deferred', val)" :selectedDao="selectedDao" :daoSettings="daoSettings" :supply="supply" :votingPercentages="votingPercentages")
           .separator-container(v-if="ownAssignment")
-            q-separator(color="grey-3" inset="inset")
+            q-separator(color="grey-3" inset)
           proposal-view(:proposal="optimisticProposal ? optimisticProposal : proposal" :ownAssignment="ownAssignment" :class="{'top-no-rounded': ownAssignment}" :withToggle="toggle(proposal)" :created="proposalParsing.created(proposal)" :restrictions="proposalParsing.restrictions(proposal)" :status="proposalParsing.status(proposal)" :docId="proposalParsing.docId(proposal)" :creator="proposalParsing.creator(proposal)" :capacity="proposalParsing.capacity(proposal)" :deferred="proposalParsing.deferred(proposal)" :description="proposalParsing.description(proposal)" :periodCount="proposalParsing.periodCount(proposal)" :salary="proposalParsing.salary(proposal)" :start="proposalParsing.start(proposal)" :subtitle="!ownAssignment ? proposalParsing.subtitle(proposal) : undefined" :title="!ownAssignment ? proposalParsing.title(proposal) : undefined" :type="proposal.__typename === 'Suspend' ? proposal.suspend[0].__typename : proposal.__typename" :url="proposalParsing.url(proposal)" :icon="proposalParsing.icon(proposal)" :commit="proposalParsing.commit(optimisticProposal ? optimisticProposal : proposal)" :compensation="proposalParsing.compensation(optimisticProposal ? optimisticProposal : proposal, daoSettings)" :tokens="proposalParsing.tokens(optimisticProposal ? optimisticProposal : proposal, periodsOnCycle, daoSettings, isDefaultBadgeMultiplier)" :isBadge="isBadge" :pastQuorum="proposalParsing.pastQuorum(proposal)" :pastUnity="proposalParsing.pastUnity(proposal)" :votingMethod="proposalParsing.votingMethod(proposal)" :parentCircle="proposalParsing.parentCircle(proposal)" @change-deferred="onDeferredUpdate" @change-commit="onCommitUpdate")
           comments-widget(v-if="!isBadge" :comments="comments" :disable="expired" @create="createComment" @update="updateComment" @delete="deleteComment" @like="likeComment" @unlike="unlikeComment" @load-comment="fetchComment")
         .col-12.col-lg-3(v-if="!isBadge" :class="{ 'q-pl-md': $q.screen.gt.md }")
           widget.bg-primary(v-if="proposalParsing.status(proposal) === PROPOSAL_STATE.DRAFTED && isCreator && state === 'WAITING'")
             h2.h-h4.text-white.leading-normal.q-ma-none {{ $t('pages.proposals.proposaldetail.yourProposalIs') }}
             p.h-b2.q-mt-xl.text-disabled {{ $t('pages.proposals.proposaldetail.thatMeansYour') }}
-            q-btn.q-mt-xl.text-primary.text-bold.full-width(@click="onPublish(proposal)" color="white" text-color="primary" no-caps="no-caps" rounded="rounded") {{ $t('pages.proposals.proposaldetail.publish') }}
-            q-btn.q-mt-xs.text-bold.full-width(@click="onEdit(proposal)" flat="flat" text-color="white" no-caps="no-caps" rounded="rounded") {{ $t('pages.proposals.proposaldetail.editProposal') }}
-            q-btn.q-mt-xs.text-bold.full-width(@click="onDelete(proposal)" flat="flat" text-color="white" no-caps="no-caps" rounded="rounded") {{ $t('pages.proposals.proposaldetail.deleteProposal') }}
+            q-btn.q-mt-xl.text-primary.text-bold.full-width(@click="onPublish(proposal)" color="white" text-color="primary" no-caps rounded) {{ $t('pages.proposals.proposaldetail.publish') }}
+            q-btn.q-mt-xs.text-bold.full-width(@click="onEdit(proposal)" flat text-color="white" no-caps rounded) {{ $t('pages.proposals.proposaldetail.editProposal') }}
+            q-btn.q-mt-xs.text-bold.full-width(@click="onDelete(proposal)" flat text-color="white" no-caps rounded) {{ $t('pages.proposals.proposaldetail.deleteProposal') }}
           widget.bg-primary(v-else-if="proposalParsing.status(proposal) === PROPOSAL_STATE.DRAFTED && isCreator && state === 'PUBLISHING'")
             h2.h-h4.text-white.leading-normal.q-ma-none {{ $t('pages.proposals.proposaldetail.publishing') }}
             p.h-b2.q-mt-xl.text-disabled {{ $t('pages.proposals.proposaldetail.pleaseWait') }}
@@ -759,16 +759,16 @@ export default {
         widget.full-width(:style="{ 'margin-top': '-40px'}" v-if="isBadge && proposalParsing.status(proposal) !== PROPOSAL_STATE.DRAFTED" :title="$t('pages.proposals.proposaldetail.badgeHolders')")
           template(v-if="paginatedHolders.length")
             template(v-for="holderName in paginatedHolders")
-              profile-picture.q-my-xxxl(:username="holderName" show-name="show-name" size="40px" limit="limit" link="link")
-            q-btn.bg-primary.q-mt-xs.text-bold.full-width(:disable="currentElectionIndex !== 0 && (this.proposal.details_title_s === 'Voter' || this.proposal.details_title_s === 'Delegate')" @click="onApply(proposal)" flat="flat" text-color="white" no-caps="no-caps" rounded="rounded") {{ $t('pages.proposals.proposaldetail.apply') }}
+              profile-picture.q-my-xxxl(:username="holderName" show-name size="40px" limit link)
+            q-btn.bg-primary.q-mt-xs.text-bold.full-width(:disable="currentElectionIndex !== 0 && (this.proposal.details_title_s === 'Voter' || this.proposal.details_title_s === 'Delegate')" @click="onApply(proposal)" flat text-color="white" no-caps rounded) {{ $t('pages.proposals.proposaldetail.apply') }}
             .row.justify-between.q-pt-sm.items-center
-              q-btn.round-circle(@click="onPrev()" :disable="page === 1" round="round" unelevated="unelevated" icon="fas fa-chevron-left" color="inherit" text-color="primary" size="sm" :ripple="false")
+              q-btn.round-circle(@click="onPrev()" :disable="page === 1" round unelevated icon="fas fa-chevron-left" color="inherit" text-color="primary" size="sm" :ripple="false")
               span {{  getPaginationText }}
-              q-btn.round-circle(@click="onNext()" :disable="isLastPage" round="round" unelevated="unelevated" icon="fas fa-chevron-right" color="inherit" text-color="primary" size="sm" :ripple="false")
+              q-btn.round-circle(@click="onNext()" :disable="isLastPage" round unelevated icon="fas fa-chevron-right" color="inherit" text-color="primary" size="sm" :ripple="false")
           template(v-else)
             .q-mt-md {{ $t('pages.proposals.proposaldetail.thereAreNo') }}
       .bottom-rounded.shadow-up-7.fixed-bottom.z-top(v-if="$q.screen.lt.lg")
-        voting(v-if="proposalParsing.status(proposal) !== PROPOSAL_STATE.DRAFTED && !hideVoting" :proposal="proposal" :title="null" fixed="fixed" @voting="onVoting" @on-apply="onApply(proposal)" @on-suspend="onSuspend(proposal)" @on-active="onActive(proposal)" @change-prop="modifyData" @on-withdraw="onWithDraw(proposal)" :activeButtons="isMember")
+        voting(v-if="proposalParsing.status(proposal) !== PROPOSAL_STATE.DRAFTED && !hideVoting" :proposal="proposal" :title="null" fixed @voting="onVoting" @on-apply="onApply(proposal)" @on-suspend="onSuspend(proposal)" @on-active="onActive(proposal)" @change-prop="modifyData" @on-withdraw="onWithDraw(proposal)" :activeButtons="isMember")
 .proposal-detail.full-width(v-else-if="$q.screen.gt.md")
   .row.justify-center.q-my-md(v-if="loading")
     loading-spinner(color="primary" size="72px")
@@ -776,19 +776,19 @@ export default {
     .col-12.col-sm-9
       proposal-item.bottom-no-rounded(v-if="ownAssignment" background="white" :proposal="proposal" :clickable="ownAssignment" :expandable="true" :owner="true" :moons="true" @claim-all="$emit('claim-all')" @change-deferred="(val) => $emit('change-deferred', val)" :selectedDao="selectedDao" :daoSettings="daoSettings" :supply="supply" :votingPercentages="votingPercentages")
       .separator-container(v-if="ownAssignment")
-        q-separator(color="grey-3" inset="inset")
+        q-separator(color="grey-3" inset)
       proposal-view(:proposal="optimisticProposal ? optimisticProposal : proposal" :ownAssignment="ownAssignment" :class="{'top-no-rounded': ownAssignment}" :withToggle="toggle(proposal)" :created="proposalParsing.created(proposal)" :restrictions="proposalParsing.restrictions(proposal)" :status="proposalParsing.status(proposal)" :docId="proposalParsing.docId(proposal)" :creator="proposalParsing.creator(proposal)" :capacity="proposalParsing.capacity(proposal)" :deferred="proposalParsing.deferred(proposal)" :description="proposalParsing.description(proposal)" :periodCount="proposalParsing.periodCount(proposal)" :salary="proposalParsing.salary(proposal)" :start="proposalParsing.start(proposal)" :subtitle="!ownAssignment ? proposalParsing.subtitle(proposal) : undefined" :title="!ownAssignment ? proposalParsing.title(proposal) : undefined" :type="proposal.__typename === 'Suspend' ? proposal.suspend[0].__typename : proposal.__typename" :url="proposalParsing.url(proposal)" :icon="proposalParsing.icon(proposal)" :commit="proposalParsing.commit(optimisticProposal ? optimisticProposal : proposal)" :compensation="proposalParsing.compensation(optimisticProposal ? optimisticProposal : proposal, daoSettings)" :tokens="proposalParsing.tokens(optimisticProposal ? optimisticProposal : proposal, periodsOnCycle, daoSettings, isDefaultBadgeMultiplier)" :isBadge="isBadge" :pastQuorum="proposalParsing.pastQuorum(proposal)" :pastUnity="proposalParsing.pastUnity(proposal)" :purpose="proposalParsing.purpose(proposal)" :votingMethod="proposalParsing.votingMethod(proposal)" :parentCircle="proposalParsing.parentCircle(proposal)" @change-deferred="onDeferredUpdate" @change-commit="onCommitUpdate")
       comments-widget(v-if="!isBadge" :comments="comments" :disable="expired" @create="createComment" @update="updateComment" @delete="deleteComment" @like="likeComment" @unlike="unlikeComment" @load-comment="fetchComment")
     .col-12.col-sm-3(:class="{ 'q-pl-md': $q.screen.gt.sm }")
       widget.q-mb-md.position-relative(v-if="proposalParsing.status(proposal) === PROPOSAL_STATE.APPROVED && proposal.__typename === PROPOSAL_TYPE.QUEST_START && !claimPayments.length" :title="$t('pages.proposals.proposaldetail.questCompletion')")
         .text-ellipsis.text-body.q-my-xl {{ $t('pages.proposals.proposaldetail.didYouFinish') }}
-        q-btn.full-width.q-mt-xl.q-px-lg(rounded="rounded" color="primary" no-caps="no-caps" @click="onQuestPayout") {{ $t('pages.proposals.proposaldetail.claimYourPayment') }}
+        q-btn.full-width.q-mt-xl.q-px-lg(rounded color="primary" no-caps @click="onQuestPayout") {{ $t('pages.proposals.proposaldetail.claimYourPayment') }}
       widget.bg-primary(v-if="proposalParsing.status(proposal) === PROPOSAL_STATE.DRAFTED && isCreator && state === 'WAITING'")
         h2.h-h4.text-white.leading-normal.q-ma-none {{ $t('pages.proposals.proposaldetail.yourProposalIs1') }}
         p.h-b2.q-mt-xl.text-disabled {{ $t('pages.proposals.proposaldetail.thatMeansYour1') }}
-        q-btn.q-mt-xl.text-primary.text-bold.full-width(@click="onPublish(proposal)" color="white" text-color="primary" no-caps="no-caps" rounded="rounded") {{ $t('pages.proposals.proposaldetail.publish1') }}
-        q-btn.q-mt-xs.text-bold.full-width(@click="onEdit(proposal)" flat="flat" text-color="white" no-caps="no-caps" rounded="rounded") {{ $t('pages.proposals.proposaldetail.editProposal1') }}
-        q-btn.q-mt-xs.text-bold.full-width(@click="onDelete(proposal)" flat="flat" text-color="white" no-caps="no-caps" rounded="rounded") {{ $t('pages.proposals.proposaldetail.deleteProposal1') }}
+        q-btn.q-mt-xl.text-primary.text-bold.full-width(@click="onPublish(proposal)" color="white" text-color="primary" no-caps rounded) {{ $t('pages.proposals.proposaldetail.publish1') }}
+        q-btn.q-mt-xs.text-bold.full-width(@click="onEdit(proposal)" flat text-color="white" no-caps rounded) {{ $t('pages.proposals.proposaldetail.editProposal1') }}
+        q-btn.q-mt-xs.text-bold.full-width(@click="onDelete(proposal)" flat text-color="white" no-caps rounded) {{ $t('pages.proposals.proposaldetail.deleteProposal1') }}
       widget.bg-primary(v-else-if="proposalParsing.status(proposal) === PROPOSAL_STATE.DRAFTED && isCreator && state === 'PUBLISHING'")
         h2.h-h4.text-white.leading-normal.q-ma-none {{ $t('pages.proposals.proposaldetail.publishing1') }}
         p.h-b2.q-mt-xl.text-disabled {{ $t('pages.proposals.proposaldetail.pleaseWait2') }}
@@ -801,16 +801,16 @@ export default {
       widget(v-if="isBadge && proposalParsing.status(proposal) !== PROPOSAL_STATE.DRAFTED" :title="$t('pages.proposals.proposaldetail.badgeHolders1')")
         template(v-if="paginatedHolders.length")
           template(v-for="holder in paginatedHolders")
-            profile-picture.q-my-xxxl(:username="holder.details_assignee_n" show-name="show-name" size="40px" limit="limit" link="link")
-          q-btn.bg-primary.q-mt-xs.text-bold.full-width(:disable="currentElectionIndex !== 0 && (this.proposal.details_title_s === 'Voter' || this.proposal.details_title_s === 'Delegate')" @click="onApply(proposal)" flat="flat" text-color="white" no-caps="no-caps" rounded="rounded") {{ $t('pages.proposals.proposaldetail.apply1') }}
+            profile-picture.q-my-xxxl(:username="holder.details_assignee_n" show-name size="40px" limit link)
+          q-btn.bg-primary.q-mt-xs.text-bold.full-width(:disable="currentElectionIndex !== 0 && (this.proposal.details_title_s === 'Voter' || this.proposal.details_title_s === 'Delegate')" @click="onApply(proposal)" flat text-color="white" no-caps rounded) {{ $t('pages.proposals.proposaldetail.apply1') }}
           .row.justify-between.q-pt-sm.items-center
-            q-btn.round-circle(@click="onPrev()" :disable="page === 1" round="round" unelevated="unelevated" icon="fas fa-chevron-left" color="inherit" text-color="primary" size="sm" :ripple="false")
+            q-btn.round-circle(@click="onPrev()" :disable="page === 1" round unelevated icon="fas fa-chevron-left" color="inherit" text-color="primary" size="sm" :ripple="false")
             span {{  getPaginationText }}
-            q-btn.round-circle(@click="onNext()" :disable="isLastPage" round="round" unelevated="unelevated" icon="fas fa-chevron-right" color="inherit" text-color="primary" size="sm" :ripple="false")
+            q-btn.round-circle(@click="onNext()" :disable="isLastPage" round unelevated icon="fas fa-chevron-right" color="inherit" text-color="primary" size="sm" :ripple="false")
         template(v-else)
           .q-mt-md {{ $t('pages.proposals.proposaldetail.thereAreNo1') }}
   .bottom-rounded.shadow-up-7.fixed-bottom(v-if="$q.screen.lt.md")
-    voting(:proposal="proposal" :title="null" fixed="fixed")
+    voting(:proposal="proposal" :title="null" fixed)
 
 </template>
 

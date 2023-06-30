@@ -53,8 +53,8 @@ export default defineComponent({
       q-icon(color="positive" name="fas fa-check" v-if="value >= threshold")
       q-icon(color="negative" name="fas fa-times" v-else)
   .col(v-if="mini")
-    q-linear-progress(:class="{'color-opacity': colorConfig.opacity}" :color="colorConfig.progress" :track-color="colorConfig.track" :value="value" rounded="rounded")
-  q-linear-progress(:class="{'color-opacity': colorConfig.opacity}" :color="colorConfig.progress" :track-color="colorConfig.track" :value="value" rounded="rounded" v-else)
+    q-linear-progress(:class="{'color-opacity': colorConfig.opacity}" :color="colorConfig.progress" :track-color="colorConfig.track" :value="value" rounded)
+  q-linear-progress(:class="{'color-opacity': colorConfig.opacity}" :color="colorConfig.progress" :track-color="colorConfig.track" :value="value" rounded v-else)
   .row.items-center(v-if="mini")
     .on-right.text-bold(:class="colorConfig.text") {{(value * 100).toFixed(2) + '%'}}
 </template>

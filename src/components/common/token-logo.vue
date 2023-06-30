@@ -49,7 +49,7 @@ export default defineComponent({
       img(:src="customIcon")
   .col-auto.on-left(v-else)
     q-avatar(:size="size")
-      ipfs-image-viewer(:color="daoLogo ? 'white' : 'secondary'" :ipfsCid="daoLogo" :size="size" showDefault="showDefault")
+      ipfs-image-viewer(:color="daoLogo ? 'white' : 'secondary'" :ipfsCid="daoLogo" :size="size" showDefault)
       .div.absolute.text-white.token-overlay(v-if="type === 'voice' || type === 'cash'")
       .div.absolute.text-white.token-text(v-if="type === 'voice'") V
       .div.absolute.text-white.token-text(v-if="type === 'cash'") $

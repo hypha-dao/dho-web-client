@@ -41,5 +41,6 @@ export default new VueI18n({
     detectLanguage() ||
     process.env.VUE_APP_I18N_LOCALE,
   fallbackLocale: process.env.VUE_APP_I18N_FALLBACK_LOCALE || 'ko',
-  messages: loadLocaleMessages()
+  messages: loadLocaleMessages(),
+  silentFallbackWarn: true
 })

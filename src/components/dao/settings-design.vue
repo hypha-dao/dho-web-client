@@ -338,7 +338,7 @@ ${backgroundImage
 .settings-design
   widget.q-pa-none.full-width.q-mt-md(:title="$t('dao.settings-design.design')" titleImage="/svg/pen-brush.svg" :bar="true")
     p.text-sm.text-h-gray.leading-loose.q-mt-md {{ $t('dao.settings-design.useDesignSettingsToChange') }}
-    q-tabs(active-color="primary" align="start" indicator-color="primary" no-caps="no-caps" v-model="tab")
+    q-tabs(active-color="primary" align="left" indicator-color="primary" no-caps v-model="tab")
       q-tab(name="GENERAL" :label="$t('dao.settings-design.general')" :ripple="false")
       q-tab(name="SPLASHPAGE" :label="$t('dao.settings-design.splashpage')" :ripple="false")
       q-tab(name="BANNERS" :label="$t('dao.settings-design.banners')" :ripple="false")
@@ -361,7 +361,7 @@ ${backgroundImage
                 q-popup-proxy(v-show="isAdmin" cover="cover" transition-show="scale" transition-hide="scale")
                   q-color(:disable="!isAdmin" v-model="form.primaryColor")
             .col
-              q-input.rounded-border(:debounce="200" :disable="!isAdmin" bg-color="white" color="accent" dense="dense" lazy-rules="lazy-rules" maxlength="50" outlined="outlined" placeholder="#9376GJ9" ref="name" rounded="rounded" v-model="form.primaryColor")
+              q-input.rounded-border(:debounce="200" :disable="!isAdmin" bg-color="white" color="accent" dense lazy-rules maxlength="50" outlined placeholder="#9376GJ9" ref="name" rounded v-model="form.primaryColor")
           q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") {{ $t('dao.settings-design.onlyDaoAdmins') }}
         .full-width.items-start.q-mt-xl
           label.h-label {{ $t('dao.settings-design.secondaryColor') }}
@@ -371,7 +371,7 @@ ${backgroundImage
                 q-popup-proxy(v-show="isAdmin" cover="cover" transition-show="scale" transition-hide="scale")
                   q-color(:disable="!isAdmin" v-model="form.secondaryColor")
             .col
-              q-input.rounded-border(:debounce="200" :disable="!isAdmin" bg-color="white" color="accent" dense="dense" lazy-rules="lazy-rules" maxlength="50" outlined="outlined" placeholder="#9376GJ9" ref="name" rounded="rounded" v-model="form.secondaryColor")
+              q-input.rounded-border(:debounce="200" :disable="!isAdmin" bg-color="white" color="accent" dense lazy-rules maxlength="50" outlined placeholder="#9376GJ9" ref="name" rounded v-model="form.secondaryColor")
           q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") {{ $t('dao.settings-design.onlyDaoAdmins') }}
         .full-width.items-start.q-mt-xl
           label.h-label {{ $t('dao.settings-design.textOnColor') }}
@@ -381,7 +381,7 @@ ${backgroundImage
                 q-popup-proxy(v-show="isAdmin" cover="cover" transition-show="scale" transition-hide="scale")
                   q-color(:disable="!isAdmin" v-model="form.textColor")
             .col
-              q-input.rounded-border(:debounce="200" :disable="!isAdmin" bg-color="white" color="accent" dense="dense" lazy-rules="lazy-rules" maxlength="50" outlined="outlined" placeholder="#9376GJ9" ref="name" rounded="rounded" v-model="form.textColor")
+              q-input.rounded-border(:debounce="200" :disable="!isAdmin" bg-color="white" color="accent" dense lazy-rules maxlength="50" outlined placeholder="#9376GJ9" ref="name" rounded v-model="form.textColor")
           q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") {{ $t('dao.settings-design.onlyDaoAdmins') }}
       .col-12.col-md-3
         .full-width.h-asset.items-start.q-mt-xl.text-center(:style="{'height':'110px'}")
@@ -399,7 +399,7 @@ ${backgroundImage
           .row.full-width.items-center.q-mt-sm
             .col
               ipfs-image-viewer.hidden(:ipfsCid="form.logo" @loaded="createBase64(arguments[0], 'logoBase64')")
-              q-btn.full-width.q-px-xl.rounded-border.text-bold(:disable="!isAdmin" @click="$refs.ipfsInput.chooseFile()" color="primary" :label="$t('dao.settings-design.uploadAnImage')" no-caps="no-caps" outline="outline" rounded="rounded" unelevated="unelevated")
+              q-btn.full-width.q-px-xl.rounded-border.text-bold(:disable="!isAdmin" @click="$refs.ipfsInput.chooseFile()" color="primary" :label="$t('dao.settings-design.uploadAnImage')" no-caps outline rounded unelevated)
               input-file-ipfs(@uploadedFile="form.logo = arguments[0]" image="image" ref="ipfsInput" v-show="false")
           q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") {{ $t('dao.settings-design.onlyDaoAdmins') }}
         .row.justify-center.items-center.full-width.q-mt-xl.h-input
@@ -413,7 +413,7 @@ ${backgroundImage
           .row.full-width.items-center.q-mt-sm
             .col
               ipfs-image-viewer.hidden(:ipfsCid="form.extendedLogo" @loaded="createBase64(arguments[0], 'extendedLogoBase64')")
-              q-btn.full-width.q-px-xl.rounded-border.text-bold(:disable="!isAdmin" @click="$refs.extendedLogoInput.chooseFile()" color="primary" :label="$t('dao.settings-design.uploadAnImage')" no-caps="no-caps" outline="outline" rounded="rounded" unelevated="unelevated")
+              q-btn.full-width.q-px-xl.rounded-border.text-bold(:disable="!isAdmin" @click="$refs.extendedLogoInput.chooseFile()" color="primary" :label="$t('dao.settings-design.uploadAnImage')" no-caps outline rounded unelevated)
               input-file-ipfs(@uploadedFile="form.extendedLogo = arguments[0]" image="image" ref="extendedLogoInput" v-show="false")
           q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") {{ $t('dao.settings-design.onlyDaoAdmins') }}
       .col-12.col-md-3
@@ -423,10 +423,10 @@ ${backgroundImage
           label.h-label {{ $t('dao.settings-design.pattern') }}
           .row.full-width.justify-between.items-center.q-mt-sm
             template(v-for="(pattern, index) in patterns")
-              q-btn(:disable="!isAdmin" :style="{'background': pattern.color, 'border': form.pattern === pattern.cid ? '1px solid #242F5D' : '1px solid transparent', 'padding': '1px'}" @click="form.pattern = pattern.cid" flat="flat" round="round")
+              q-btn(:disable="!isAdmin" :style="{'background': pattern.color, 'border': form.pattern === pattern.cid ? '1px solid #242F5D' : '1px solid transparent', 'padding': '1px'}" @click="form.pattern = pattern.cid" flat round)
                 q-avatar(size="40px")
                   img(:src="pattern.href" :style="{'transform': 'scale(2)'}")
-            q-btn(:disable="!isAdmin" :style="{'border': form.pattern === '' ? '1px solid #242F5D' : '1px solid #84878E'}" @click="form.pattern = null" color="primary" flat="flat" round="round" text-color="black")
+            q-btn(:disable="!isAdmin" :style="{'border': form.pattern === '' ? '1px solid #242F5D' : '1px solid #84878E'}" @click="form.pattern = null" color="primary" flat round text-color="black")
               q-icon.q-pa-xs.text-h-gray(size="xs" name="fas fa-ban")
         .full-width.items-start.q-mt-xl
           label.h-label {{ $t('dao.settings-design.color') }}
@@ -436,7 +436,7 @@ ${backgroundImage
                 q-popup-proxy(v-show="isAdmin" cover="cover" transition-show="scale" transition-hide="scale")
                   q-color(:disable="!isAdmin" v-model="form.patternColor")
             .col
-              q-input.rounded-border(:debounce="200" :disable="!isAdmin" bg-color="white" color="accent" dense="dense" lazy-rules="lazy-rules" maxlength="50" outlined="outlined" placeholder="#9376GJ9" ref="name" rounded="rounded" v-model="form.patternColor")
+              q-input.rounded-border(:debounce="200" :disable="!isAdmin" bg-color="white" color="accent" dense lazy-rules maxlength="50" outlined placeholder="#9376GJ9" ref="name" rounded v-model="form.patternColor")
           q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") {{ $t('dao.settings-design.onlyDaoAdmins') }}
         .full-width.items-start.q-mt-xl
           label.h-label {{ $t('dao.settings-design.opacity') }}
@@ -451,30 +451,30 @@ ${backgroundImage
         .col-8.relative-position
           img.relative-position.z-40(:src="previewSplashImage")
           .absolute-top-right.z-50.q-pa-xl.row
-            q-btn.q-mr-xs(@click="$emit('change', 'splashBackgroundImage', 0)" color="white" icon="fas fa-trash" padding="12px" rounded="rounded" size="sm" text-color="primary" unelevated="unelevated")
+            q-btn.q-mr-xs(@click="$emit('change', 'splashBackgroundImage', 0)" color="white" icon="fas fa-trash" padding="12px" rounded size="sm" text-color="primary" unelevated)
     .row.justify-between.full-width.q-mt-xl(v-if="tab==='BANNERS'")
       .full-width.items-start.q-my-xl
         template(v-for="(banner, index) in banners")
           label.h-label {{banner.label}}
           .q-mt-sm.row(v-if="!$q.screen.gt.sm")
-            q-btn.q-mr-xs(@click="form[banner.image] = null" color="internal-bg" icon="fas fa-trash" padding="12px" rounded="rounded" size="sm" text-color="primary" unelevated="unelevated")
-            q-btn.col.q-px-xl.rounded-border.text-bold(:disable="!isAdmin || banners[index].state === 'UPLOADING'" @click="$refs.bannerImages[index].chooseFile()" color="internal-bg" :label="banners[index].state === 'UPLOADING' ? '...Uploading...' : $t('dao.settings-design.uploadAnImage')" no-caps="no-caps" rounded="rounded" text-color="primary" unelevated="unelevated")
+            q-btn.q-mr-xs(@click="form[banner.image] = null" color="internal-bg" icon="fas fa-trash" padding="12px" rounded size="sm" text-color="primary" unelevated)
+            q-btn.col.q-px-xl.rounded-border.text-bold(:disable="!isAdmin || banners[index].state === 'UPLOADING'" @click="$refs.bannerImages[index].chooseFile()" color="internal-bg" :label="banners[index].state === 'UPLOADING' ? '...Uploading...' : $t('dao.settings-design.uploadAnImage')" no-caps rounded text-color="primary" unelevated)
             input-file-ipfs(@uploading="banners[index].state = 'UPLOADING'" @uploadedFile="form[banner.image] = arguments[0]; banners[index].state = 'FINISHED'" image="image" ref="bannerImages" v-show="false")
           base-banner.q-mt-sm(:compact="!$q.screen.gt.sm" :title="form[banner.title]" :description="form[banner.paragraph]" :background="ipfsy(form[banner.image])" :pattern="form.patternBase64" :color="form.primaryColor")
             template(#top-right)
               .q-pa-xl.row(v-if="$q.screen.gt.sm")
-                q-btn.q-mr-xs(@click="form[banner.image] = null" color="white" icon="fas fa-trash" padding="12px" rounded="rounded" size="sm" text-color="primary" unelevated="unelevated")
-                q-btn.col.q-px-xl.rounded-border.text-bold(:disable="!isAdmin || banners[index].state === 'UPLOADING'" @click="$refs.bannerImages[index].chooseFile()" color="white" :label="banners[index].state === 'UPLOADING' ? '...Uploading...' : $t('dao.settings-design.uploadAnImage')" no-caps="no-caps" rounded="rounded" text-color="primary" unelevated="unelevated")
+                q-btn.q-mr-xs(@click="form[banner.image] = null" color="white" icon="fas fa-trash" padding="12px" rounded size="sm" text-color="primary" unelevated)
+                q-btn.col.q-px-xl.rounded-border.text-bold(:disable="!isAdmin || banners[index].state === 'UPLOADING'" @click="$refs.bannerImages[index].chooseFile()" color="white" :label="banners[index].state === 'UPLOADING' ? '...Uploading...' : $t('dao.settings-design.uploadAnImage')" no-caps rounded text-color="primary" unelevated)
                 input-file-ipfs(@uploading="banners[index].state = 'UPLOADING'" @uploadedFile="form[banner.image] = arguments[0]; banners[index].state = 'FINISHED'" image="image" ref="bannerImages" v-show="false")
             template(#right)
           .row.full-width.justify-between(:class="{'q-mt-sm': $q.screen.gt.sm, 'q-mb-xl': !$q.screen.gt.sm}")
             .col-12.col-md-3(:class="{'q-pr-sm': $q.screen.gt.sm}")
               label.h-label(v-if="$q.screen.gt.sm") {{ $t('dao.settings-design.title') }}
-              q-input.q-my-sm.rounded-border(:debounce="200" :disable="!isAdmin" bg-color="white" color="accent" dense="dense" lazy-rules="lazy-rules" maxlength="50" outlined="outlined" :placeholder="$t('dao.settings-design.max50Characters')" ref="name" rounded="rounded" v-model="form[banner.title]")
+              q-input.q-my-sm.rounded-border(:debounce="200" :disable="!isAdmin" bg-color="white" color="accent" dense lazy-rules maxlength="50" outlined :placeholder="$t('dao.settings-design.max50Characters')" ref="name" rounded v-model="form[banner.title]")
               q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") {{ $t('dao.settings-design.onlyDaoAdmins') }}
             .col-12.col-md-9(:class="{'q-pl-sm': $q.screen.gt.sm}")
               label.h-label(v-if="$q.screen.gt.sm") {{ $t('dao.settings-design.shortParagraph') }}
-              q-input.rounded-border(:class="{'q-my-sm': $q.screen.gt.sm}" :debounce="200" :disable="!isAdmin" :input-style="{ 'resize': 'none' }" bg-color="white" color="accent" dense="dense" lazy-rules="lazy-rules" maxlength="300" outlined="outlined" placeholder="$t('dao.settings-design.max140Characters')" ref="nickname" rounded="rounded" :rows="$q.screen.gt.sm ? 3 : 6" type="textarea" v-model="form[banner.paragraph]")
+              q-input.rounded-border(:class="{'q-my-sm': $q.screen.gt.sm}" :debounce="200" :disable="!isAdmin" :input-style="{ 'resize': 'none' }" bg-color="white" color="accent" dense lazy-rules maxlength="300" outlined placeholder="$t('dao.settings-design.max140Characters')" ref="nickname" rounded :rows="$q.screen.gt.sm ? 3 : 6" type="textarea" v-model="form[banner.paragraph]")
               q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") {{ $t('dao.settings-design.onlyDaoAdmins') }}
 
 </template>

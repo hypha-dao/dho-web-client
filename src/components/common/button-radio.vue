@@ -67,16 +67,16 @@ export default defineComponent({
 </script>
 
 <template lang="pug">
-q-btn.full-width.relative-position(:class="{'grey-opacity': opacity}" :color="selected ? 'primary' : 'internal-bg'" :disable="disable" :ripple="false" :style="{'border-radius': '24px'}" @click="$emit('click')" no-caps="no-caps" padding="0" unelevated="unelevated")
+q-btn.full-width.relative-position(:class="{'grey-opacity': opacity}" :color="selected ? 'primary' : 'internal-bg'" :disable="disable" :ripple="false" :style="{'border-radius': '24px'}" @click="$emit('click')" no-caps padding="0" unelevated)
   .q-pa-md.full-width.full-height(:class="{'text-body': !selected}")
     .row.q-mb-md.full-width.justify-between(v-if="!horizontal && icon")
-      q-btn(:color="selected ? 'white' : 'primary'" :icon="icon" :ripple="false" :text-color="selected ? 'primary' : 'white'" round="round" size="sm" unelevated="unelevated")
+      q-btn(:color="selected ? 'white' : 'primary'" :icon="icon" :ripple="false" :text-color="selected ? 'primary' : 'white'" round size="sm" unelevated)
         .text-subtitle2 {{iconText}}
       q-icon(name="fas fa-check" v-if="selected")
     .row.text-left
       .col-4(:class="{'col-12': !horizontal}")
         .row.items-center.justify-start
-          q-btn.on-left(:color="selected ? 'white' : 'primary'" :icon="icon" :ripple="false" :text-color="selected ? 'primary' : 'white'" round="round" size="sm" unelevated="unelevated" v-if="horizontal && icon")
+          q-btn.on-left(:color="selected ? 'white' : 'primary'" :icon="icon" :ripple="false" :text-color="selected ? 'primary' : 'white'" round size="sm" unelevated v-if="horizontal && icon")
             .text-subtitle2 {{iconText}}
           .row.full-width.justify-between.items-center
             .row.items-center

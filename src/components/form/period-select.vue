@@ -91,7 +91,7 @@ export default {
 </script>
 
 <template lang="pug">
-q-input(ref="model" v-model="form.model" :readonly="readonly" :label="label" outlined="outlined" dense="dense" @clear="$emit('update:value', null)" :rules="[rules.requiredIf(required)]" lazy-rules="lazy-rules")
+q-input(ref="model" v-model="form.model" :readonly="readonly" :label="label" outlined dense @clear="$emit('update:value', null)" :rules="[rules.requiredIf(required)]" lazy-rules)
   template(v-slot:append)
     q-icon(class="{ 'cursor-pointer': !readonly }" :name="getIcon (phase)")
       q-popup-proxy(v-if="!readonly" ref="qDateProxy" transition-show="scale" transition-hide="scale")

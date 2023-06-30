@@ -1,7 +1,7 @@
 <template lang="pug">
 widget.bg-internal-bg.q-mb-sm
   .row.items-center.justify-between
-    q-btn(v-if="username === ''" round="round" unelevated="unelevated" :icon="icon" color="primary" text-color="white" size="sm" :ripple="false")
+    q-btn(v-if="username === ''" round unelevated :icon="icon" color="primary" text-color="white" size="sm" :ripple="false")
     profile-picture(v-else :username="username" size="28px")
     .q-ml-md.q-mr-auto.spacingInfo
       .h-h6 {{ header.length > maxChar ? header.substring(0,maxChar) + '...' : header }}

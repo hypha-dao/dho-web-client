@@ -239,16 +239,16 @@ widget
       .q-gutter-sm(:class="{ 'row': $q.screen.gt.md }")
         .col.select-date-block.relative
           label.h-h7 {{ $t('pages.proposals.create.stepduration.startDate') }}
-          q-input.rounded-border.col.q-mt-xs(dense="dense" outlined="outlined" rounded="rounded" v-model="startValue")
+          q-input.rounded-border.col.q-mt-xs(dense outlined rounded v-model="startValue")
             template(v-slot:append)
               q-icon(size="xs" name="fa fa-calendar-alt")
-          q-date.bg-internal-bg.calendar.absolute.z-top(:options="datePickerOptions" minimal="minimal" ref="calendar" v-model="startValue" rounded="rounded")
+          q-date.bg-internal-bg.calendar.absolute.z-top(:options="datePickerOptions" minimal="minimal" ref="calendar" v-model="startValue" rounded)
         .col
           label.h-h7 {{ $t('pages.proposals.create.stepduration.periods') }}
-          q-input.rounded-border.col.q-mt-xs(dense="dense" outlined="outlined" rounded="rounded" v-model="periodCount")
+          q-input.rounded-border.col.q-mt-xs(dense outlined rounded v-model="periodCount")
         .col
           label.h-h7 {{ $t('pages.proposals.create.stepduration.endDate') }}
-          q-input.rounded-border.col.q-mt-xs(dense="dense" filled="filled" rounded="rounded" disable="disable" v-model="dateString")
+          q-input.rounded-border.col.q-mt-xs(dense filled rounded disable v-model="dateString")
     .row.justify-center(v-if="$apolloData.queries.periods.loading")
       q-spinner-tail(size="md")
   .confirm.q-mt-xl(v-if="startIndex >= 0 && endIndex >= 0")
@@ -257,8 +257,8 @@ widget
   .next-step.q-mt-xl
     .row.items-center(:class="{'justify-between': !$store.state.proposals.draft.edit, 'justify-end': $store.state.proposals.draft.edit}")
       nav.row.justify-end.full-width.q-gutter-xs(v-if="$q.screen.gt.md")
-        q-btn.h-btn2.q-px-xl(v-if="!disablePrevButton" @click="$emit('prev')" color="primary" :label="$t('pages.proposals.create.stepduration.back')" no-caps="no-caps" outline="outline" rounded="rounded" flat="flat")
-        q-btn.q-px-xl(:disable="nextDisabled" @click="$emit('next')" color="primary" :label="$t('pages.proposals.create.stepduration.nextStep')" no-caps="no-caps" rounded="rounded" unelevated="unelevated")
+        q-btn.h-btn2.q-px-xl(v-if="!disablePrevButton" @click="$emit('prev')" color="primary" :label="$t('pages.proposals.create.stepduration.back')" no-caps outline rounded flat)
+        q-btn.q-px-xl(:disable="nextDisabled" @click="$emit('next')" color="primary" :label="$t('pages.proposals.create.stepduration.nextStep')" no-caps rounded unelevated)
 
 </template>
 

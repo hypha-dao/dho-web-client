@@ -53,7 +53,7 @@ export default defineComponent({
 <template lang="pug">
 .row
   template(v-for="tag in tags")
-    q-chip.q-ml-none(:clickable="clickable" :color="tag.color" :dense="tag.dense" :outline="!!tag.outline" :removable="removable" :ripple="false" :size="chipSize" :text-color="tag.text ? tag.text : 'white'" @click="$emit('click-tag', tag)" @remove="$emit('clear-tag', tag)")
+    q-chip.q-ml-none(clickable :color="tag.color" :dense="tag.dense" :outline="!!tag.outline" :removable="removable" :ripple="false" :size="chipSize" :text-color="tag.text ? tag.text : 'white'" @click="$emit('click-tag', tag)" @remove="$emit('clear-tag', tag)")
       q-avatar(:icon="tag.icon.name" :text-color="tag.icon.color" size="1em" v-if="tag.icon")
       .h-tag.tag(:class="{'q-pr-xs': removable}") {{tag.label}}
       q-tooltip(:content-style="{'font-size': '1em'}" anchor="top middle" self="bottom middle" v-if="tag.tooltip") {{tag.tooltip}}

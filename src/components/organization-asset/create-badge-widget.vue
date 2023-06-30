@@ -37,7 +37,7 @@ widget.item(:style="{ 'background': 'transparent', 'border': '1px solid #CBCDD1'
       .h-h5.text-weight-bold {{ $t('organization-asset.create-badge-widget.createYourBadge') }}
     .row.q-my-xs
       .h-b2.description {{ $t('organization-asset.create-badge-widget.doYouNeedSpecific') }}
-  q-btn.full-width(noCaps="noCaps" rounded="rounded" outline="outline" color="primary" :style="{ 'font-weight': '600', 'margin-top': '75px' }" @click="onApply") {{ $t('organization-asset.create-badge-widget.newBadgeProposal') }}
+  q-btn.full-width(noCaps rounded outline color="primary" :style="{ 'font-weight': '600', 'margin-top': '75px' }" @click="onApply") {{ $t('organization-asset.create-badge-widget.newBadgeProposal') }}
 
 </template>
 

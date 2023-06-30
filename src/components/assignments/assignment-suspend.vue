@@ -27,8 +27,8 @@ export default {
             | .
           span {{ $t('assignments.assignment-suspend.pleaseProvideAReason') }}
       .col-12
-        q-input(v-model="reason" dense="dense" rounded="rounded" outlined="outlined" :label="$t('assignments.assignment-suspend.reason')" @click.stop)
-        q-btn.full-width.q-mt-md(rounded="rounded" unelevated="unelevated" :color="reason === '' ? 'disabled' : 'negative'" :disable="reason === '' || submitting" :loading="submitting" @click.stop) {{ $t('assignments.assignment-suspend.suspend1') }}
+        q-input(v-model="reason" dense rounded outlined :label="$t('assignments.assignment-suspend.reason')" @click.stop)
+        q-btn.full-width.q-mt-md(rounded unelevated :color="reason === '' ? 'disabled' : 'negative'" :disable="reason === '' || submitting" :loading="submitting" @click.stop) {{ $t('assignments.assignment-suspend.suspend1') }}
           q-popup-proxy(anchor="center middle" self="bottom middle")
             .bg-white.q-pa-lg
               .text-bold {{ $t('assignments.assignment-suspend.suspendingSAssignment', { '1': owner }) }}
@@ -38,6 +38,6 @@ export default {
                 span.text-italic {{ $t('assignments.assignment-suspend.reason1') }}
                 span.q-pa-xs {{ reason }}
               .row.flex.justify-between.q-mt-md
-                q-btn(color="primary" :label="$t('assignments.assignment-suspend.cancel')" size="md" outline="outline" rounded="rounded" v-close-popup="-1")
-                q-btn(color="negative" :label="$t('assignments.assignment-suspend.suspend2')" size="md" rounded="rounded" @click="$emit('suspend', reason)" v-close-popup="-1")
+                q-btn(color="primary" :label="$t('assignments.assignment-suspend.cancel')" size="md" outline rounded v-close-popup="-1")
+                q-btn(color="negative" :label="$t('assignments.assignment-suspend.suspend2')" size="md" rounded @click="$emit('suspend', reason)" v-close-popup="-1")
 </template>

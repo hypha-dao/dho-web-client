@@ -393,7 +393,7 @@ export default {
           },
           // Transform the previous result with new data
           updateQuery: (previousResult, { fetchMoreResult }) => {
-            if (!fetchMoreResult.getDao.applicant.length) {
+            if (!fetchMoreResult.getDao.applicant?.length) {
               this.applicantsPagination.fetchMore = false
               this.coreMembersPagination.fetchMore = true
             }
@@ -427,7 +427,7 @@ export default {
           },
           // Transform the previous result with new data
           updateQuery: (previousResult, { fetchMoreResult }) => {
-            if (!fetchMoreResult.getDao.member.length) {
+            if (!fetchMoreResult.getDao.member?.length) {
               this.coreMembersPagination.fetchMore = false
             }
 
@@ -483,23 +483,23 @@ q-page.page-members
     template(v-slot:buttons)
       nav.row.items-center
         .row.inline.q-pr-md(v-if="!isMember && !isApplicant && account && !loadingAccount")
-          q-btn.q-px-lg.h-btn1(:disable="!daoSettings.registrationEnabled" @click="onApply" color="secondary" :label="$t('pages.dho.members.becomeAMember')" no-caps="no-caps" rounded="rounded" text-color="white" unelevated="unelevated")
+          q-btn.q-px-lg.h-btn1(:disable="!daoSettings.registrationEnabled" @click="onApply" color="secondary" :label="$t('pages.dho.members.becomeAMember')" no-caps="no-caps" rounded text-color="white" unelevated="unelevated")
           q-tooltip(v-if="!daoSettings.registrationEnabled") {{ $t('pages.dho.members.registrationIsTemporarilyDisabled') }}
-        q-btn.q-px-lg.h-btn1(:flat="!account" @click="copyToClipBoard" color="secondary" :label="$t('pages.dho.members.copyInviteLink')" no-caps="no-caps" rounded="rounded" text-color="white" unelevated="unelevated")
+        q-btn.q-px-lg.h-btn1(:flat="!account" @click="copyToClipBoard" color="secondary" :label="$t('pages.dho.members.copyInviteLink')" no-caps="no-caps" rounded text-color="white" unelevated="unelevated")
           q-tooltip {{ $t('pages.dho.members.sendALink') }}
-  upvote-delegate-widget(endDate="2023-05-29" :users="tempUsersForVotes")
+  //- upvote-delegate-widget(endDate="2023-05-29" :users="tempUsersForVotes")
   .row.q-py-md(v-if="$q.screen.gt.md")
     .col-9
       .row.q-mb-md
         .h-h4 {{ $t('pages.dho.members.daoApplicants') }}
         .h-h4-regular.q-ml-xs (
-          | {{ daoApplicants.length }}
+          | {{ daoApplicants?.length }}
           | )
       members-list(:lastResult="hasLastResult()" :members="daoApplicants" :view="'list'" @loadMore="onLoadMoreMembers" ref="scroll" v-bind="{ canEnroll }")
       .row.q-mb-md
         .h-h4 {{ 'Core &amp; Community members' }}
         .h-h4-regular.q-ml-xs (
-          | {{ members.length }}
+          | {{ members?.length }}
           | )
       members-list(:lastResult="hasLastResult()" :members="members" :view="'card'" @loadMore="onLoadMoreMembers" ref="scroll" v-bind="{ canEnroll }")
     .col-3
@@ -511,13 +511,13 @@ q-page.page-members
       .row.q-mb-md
         .h-h4 {{ $t('pages.dho.members.daoApplicants1') }}
         .h-h4-regular.q-ml-xs (
-          | {{ daoApplicants.length }}
+          | {{ daoApplicants?.length }}
           | )
       members-list(:lastResult="hasLastResult()" :members="daoApplicants" view="card" @loadMore="onLoadMoreMembers" ref="scroll" compact="compact" v-bind="{ canEnroll }")
       .row.q-mb-md
         .h-h4 {{ 'Core &amp; Community members' }}
         .h-h4-regular.q-ml-xs (
-          | {{ members.length }}
+          | {{ members?.length }}
           | )
       members-list(:lastResult="hasLastResult()" :members="members" view="card" @loadMore="onLoadMoreMembers" ref="scroll" compact="compact" v-bind="{ canEnroll }")
 

@@ -96,7 +96,7 @@ export default defineComponent({
 </script>
 
 <template lang="pug">
-q-card.widget.relative-position(:class="{...widgetClass, 'q-py-xl': !noPadding, 'q-px-xl': !noPadding}" flat="flat")
+q-card.widget.relative-position(:class="{...widgetClass, 'q-py-xl': !noPadding, 'q-px-xl': !noPadding}" flat)
   q-card-section.q-pa-none.row.items-center(:class="titleClass" :style="{height: titleHeight}" v-if="bar")
     img(:src="titleImage")
     .h-h4.text-bold.q-ml-sm(:class="textClass" v-if="!noTitle") {{title}}
@@ -109,10 +109,10 @@ q-card.widget.relative-position(:class="{...widgetClass, 'q-py-xl': !noPadding, 
             q-tooltip {{tooltip}}
       slot(name="header")
       .col-auto(v-if="more && morePosition == 'top'")
-        q-btn.h-btn2(@click="$emit('more-clicked')" flat="flat" no-caps="no-caps" rounded="rounded" text-color="primary") {{ $t('common.widget.seeAll') }}
+        q-btn.h-btn2(@click="$emit('more-clicked')" flat no-caps rounded text-color="primary") {{ $t('common.widget.seeAll') }}
     slot
     .q-mt-lg(v-if="more && morePosition != 'top'" vertical="vertical")
-      q-btn.h-btn2.q-mx-lg.full-width(@click="$emit('more-clicked')" no-caps="no-caps" outline="outline" rounded="rounded" text-color="primary") {{ $t('common.widget.seeAll1') }}
+      q-btn.h-btn2.q-mx-lg.full-width(@click="$emit('more-clicked')" no-caps outline rounded text-color="primary") {{ $t('common.widget.seeAll1') }}
 </template>
 
 <style lang="stylus" scoped>

@@ -312,7 +312,7 @@ export default {
       .row.justify-center.q-my-md(v-if="!(list && list.length)")
         loading-spinner(color="primary" size="72px")
       base-placeholder(v-if="(list && !list.length)" :title="$t('pages.dho.organizationalassets.noBadges')" :subtitle="$t('pages.dho.organizationalassets.yourOrganizationDoesnt')" icon="fas fa-id-badge" :actionButtons="[{label: $t('pages.dho.organizationalassets.createANewBadge'), color: 'primary', onClick: () => routeTo('proposals/create')}]")
-      asset-list(:assetList="list" @loadMore="onLoadMore" ref="scroll" ownerStyles="ownerStyles" :memberBadges="memberBadges" :currentElectionIndex="currentElectionIndex")
+      asset-list(:assetList="list" @loadMore="onLoadMore" ref="scroll" ownerStyles :memberBadges="memberBadges" :currentElectionIndex="currentElectionIndex")
     .col-3.q-py-md.q-pl-md
       filter-widget.sticky(:sort.sync="sort" :textFilter.sync="textFilter" :optionArray.sync="optionArray" :showCircle="false" :showViewSelector="false" :showToggle="false" :filterTitle="type === 'badge' ? $t('pages.dho.organizationalassets.searchBadges') : $t('pages.dho.organizationalassets.filterByName') ")
   .row.full-width(v-else)
@@ -322,6 +322,6 @@ export default {
       .row.justify-center.q-my-md(v-if="!(list && list.length)")
         loading-spinner(color="primary" size="72px")
       base-placeholder.full-width(v-if="(list && !list.length)" :title="$t('pages.dho.organizationalassets.noBadges1')" :subtitle="$t('pages.dho.organizationalassets.yourOrganizationDoesnt')" icon="fas fa-id-badge" :actionButtons="[{label: $t('pages.dho.organizationalassets.createANewBadge'), color: 'primary', onClick: () => routeTo('proposals/create')}]")
-      asset-list.full-width(:assetList="list" @loadMore="onLoadMore" ref="scroll" isMobile="isMobile" ownerStyles="ownerStyles" :memberBadges="memberBadges")
+      asset-list.full-width(:assetList="list" @loadMore="onLoadMore" ref="scroll" isMobile="isMobile" ownerStyles :memberBadges="memberBadges")
 
 </template>

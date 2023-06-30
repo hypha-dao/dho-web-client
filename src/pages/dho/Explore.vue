@@ -233,13 +233,13 @@ q-page.page-explore
     base-banner(v-bind="banner" @onClose="hideExploreBanner" :compact="!$q.screen.gt.sm")
       template(v-slot:buttons)
         a(target="_tab" href="https://hypha.earth/")
-          q-btn.q-px-lg.h-btn1(no-caps="no-caps" rounded="rounded" unelevated="unelevated" color="secondary" href="https://hypha.earth/" target="_blank") {{ $t('pages.dho.explore.discoverMore') }}
+          q-btn.q-px-lg.h-btn1(no-caps rounded unelevated color="secondary" href="https://hypha.earth/" target="_blank") {{ $t('pages.dho.explore.discoverMore') }}
   .row.q-py-md
     .col-sm-12.col-md-12.col-lg-9(ref="scrollContainer" v-if="exploreBy === EXPLORE_BY.DAOS")
       q-infinite-scroll(@load="onLoad" :offset="250" :scroll-target="$refs.scrollContainer" ref="scroll")
         .row
           .col-4.q-mb-md(v-for="(dho,index) in dhos" :key="dho.name" :class="{ 'col-6': $q.screen.lt.lg, 'q-pr-md': $q.screen.lt.sm ? false : $q.screen.gt.md ? true : index % 2 === 0, 'full-width':  view === 'list' || $q.screen.lt.sm}")
-            dho-card.full-width(v-bind="dho" :view="view" useIpfsy="useIpfsy" ellipsis="ellipsis")
+            dho-card.full-width(v-bind="dho" :view="view" useIpfsy ellipsis)
               template(v-slot:footer)
                 footer.full-width.row.items-center
                   .col-6.text-center

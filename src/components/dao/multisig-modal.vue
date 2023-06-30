@@ -142,7 +142,7 @@ q-dialog(:value="open" persistent="persistent")
   .bg-external-bg.rounded-border(:style="{'min-width':'680px'}")
     header.bg-primary.q-px-xl.q-py-md.row.h-h4.text-white(:class="{'justify-between h-h5': !$q.screen.gt.sm }" :style="{'border-bottom': '2px solid rgba(255, 255, 255, .2)'}")
       .full-width.row.justify-end
-        q-btn.q-pa-xxs(@click="$emit('close')" color="white" flat="flat" icon="fas fa-times" round="round" size="sl")
+        q-btn.q-pa-xxs(@click="$emit('close')" color="white" flat icon="fas fa-times" round size="sl")
       div(:class="{'q-pr-md': $q.screen.gt.sm }")
         span(v-if="state === 'VIEW'") {{ $t('dao.multisig-modal.multisig') }}
         span.text-weight-500.q-pl-xxs(v-if="state === 'VIEW'") {{ $t('dao.multisig-modal.proposal') }}
@@ -151,24 +151,24 @@ q-dialog(:value="open" persistent="persistent")
     section.q-px-xl.q-py-md
       div
         h3.q-pa-none.q-ma-none.h-h4.text-weight-700 {{ $t('dao.multisig-modal.changes') }}
-        q-table(title="" :data="rows" :columns="columns" row-key="name" :rows-per-page-options="[0]" flat="flat" bordered="bordered" :hide-bottom="true")
+        q-table(title="" :data="rows" :columns="columns" row-key="name" :rows-per-page-options="[0]" flat bordered :hide-bottom="true")
       .q-mt-md
         h3.q-pa-none.q-ma-none.h-h4.text-weight-700(v-if="state === 'VIEW'") {{ $t('dao.multisig-modal.signers') }}
         profile-picture(v-for="username in singers" :username="username" :key="username" size="32px")
           q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle") {{ username }}
     nav.q-px-xl.q-pb-xl.full-width.row(v-if="state === 'VIEW'")
       .col-6.q-pl-xs
-        q-btn.q-px-xl.rounded-border.text-bold.full-width(@click="$emit('cancel')" color="negative" text-color="white" :label="$t('dao.multisig-modal.cancelMultiSig')" no-caps="no-caps" rounded="rounded" unelevated="unelevated")
+        q-btn.q-px-xl.rounded-border.text-bold.full-width(@click="$emit('cancel')" color="negative" text-color="white" :label="$t('dao.multisig-modal.cancelMultiSig')" no-caps rounded unelevated)
     nav.q-px-xl.q-pb-xl.full-width.row(v-if="state === 'CREATE'")
       .col-6.q-pr-xs
-        q-btn.q-px-xl.rounded-border.text-bold.full-width(@click="$emit('reset')" :label="$t('dao.multisig-modal.resetChanges')" color="white" no-caps="no-caps" rounded="rounded" text-color="primary" unelevated="unelevated")
+        q-btn.q-px-xl.rounded-border.text-bold.full-width(@click="$emit('reset')" :label="$t('dao.multisig-modal.resetChanges')" color="white" no-caps rounded text-color="primary" unelevated)
       .col-6.q-pl-xs
-        q-btn.q-px-xl.rounded-border.text-bold.full-width(@click="$emit('create')" color="positive" text-color="white" :label="$t('dao.multisig-modal.createMultiSig')" no-caps="no-caps" rounded="rounded" unelevated="unelevated")
+        q-btn.q-px-xl.rounded-border.text-bold.full-width(@click="$emit('create')" color="positive" text-color="white" :label="$t('dao.multisig-modal.createMultiSig')" no-caps rounded unelevated)
     nav.q-px-xl.q-pb-xl.full-width.row(v-if="state === 'SIGN'")
       .col-6.q-pr-xs
-        q-btn.q-px-xl.rounded-border.text-bold.full-width(@click="$emit('vote', false)" :label="$t('dao.multisig-modal.deny')" no-caps="no-caps" rounded="rounded" color="negative" text-color="white" unelevated="unelevated")
+        q-btn.q-px-xl.rounded-border.text-bold.full-width(@click="$emit('vote', false)" :label="$t('dao.multisig-modal.deny')" no-caps rounded color="negative" text-color="white" unelevated)
       .col-6.q-pl-xs
-        q-btn.q-px-xl.rounded-border.text-bold.full-width(@click="$emit('vote', true)" color="positive" text-color="white" :label="$t('dao.multisig-modal.approve')" no-caps="no-caps" rounded="rounded" unelevated="unelevated")
+        q-btn.q-px-xl.rounded-border.text-bold.full-width(@click="$emit('vote', true)" color="positive" text-color="white" :label="$t('dao.multisig-modal.approve')" no-caps rounded unelevated)
 </template>
 
 <style lang="stylus" scoped>

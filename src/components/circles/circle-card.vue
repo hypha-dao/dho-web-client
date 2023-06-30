@@ -33,7 +33,7 @@ q-card.circle-card
     pre.q-my-none {{ $t('circles.circle-card.hypha') }}
     pre.q-my-none {{ $t('circles.circle-card.hvoice') }}
   q-card-actions(align="center")
-    q-btn(flat="flat" color="primary") {{ $t('circles.circle-card.more1') }}
+    q-btn(flat color="primary") {{ $t('circles.circle-card.more1') }}
 </template>
 
 <style lang="stylus" scoped>

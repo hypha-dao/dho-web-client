@@ -22,11 +22,11 @@ export default {
 <template lang="pug">
 .pricing-history-card
   widget(:background="status === 'PAID' ? 'secondary' : 'primary'")
-    q-btn(round="round" unelevated="unelevated" :icon="status === 'PAID' ? 'fas fa-check' : 'fa fa-exclamation-triangle'" color="white" text-color="primary" size="12px" :ripple="false")
+    q-btn(round unelevated :icon="status === 'PAID' ? 'fas fa-check' : 'fa fa-exclamation-triangle'" color="white" text-color="primary" size="12px" :ripple="false")
     .h-h5.text-white.q-mt-xs {{planName}}
     .text-ellipsis.text-xs.text-white {{status === 'PAID' ? 'Payed/active': 'Next billing'}}
     .text-ellipsis.text-xs.text-white.q-mt-sm {{ planName === 'Founders' ? 'Free forever' : dateToString(date) }}
-    q-badge.badge(v-if="status === 'EXPIRED'" floating="floating" rounded="rounded" color="red" label="")
+    q-badge.badge(v-if="status === 'EXPIRED'" floating rounded color="red" label="")
 
 </template>
 

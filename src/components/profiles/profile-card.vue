@@ -306,13 +306,13 @@ widget-editable.q-pa-md(:class="{ 'full-width': list, 'cursor-pointer': !editBut
     .col-auto(:class="{ 'col-12': card, 'col-7': isEnroller, 'q-px-xs': card }" v-if="isApplicant")
       .row.items-center.justify-end.full-height
         .col-4(:class="{ 'text-center': card , 'col-12': card, 'q-mt-md': card, 'justify-end flex': $q.screen.gt.md }" v-if="isEnroller")
-          q-btn(:style="{ 'border-radius': '50%' }" :disable="!canEnroll" :loading="submittingEnroll" :icon="'fas fa-times'" @click="onRemoveApplicant" color="negative" no-caps="no-caps" rounded="rounded" unelevated="unelevated")
-          q-btn.q-ml-xs(:style="{ 'border-radius': '50%' }" :disable="!canEnroll" :loading="submittingEnroll" :icon="'fas fa-check'" @click="onEnroll" color="positive" no-caps="no-caps" rounded="rounded" unelevated="unelevated")
+          q-btn(:style="{ 'border-radius': '50%' }" :disable="!canEnroll" :loading="submittingEnroll" :icon="'fas fa-times'" @click="onRemoveApplicant" color="negative" no-caps rounded unelevated)
+          q-btn.q-ml-xs(:style="{ 'border-radius': '50%' }" :disable="!canEnroll" :loading="submittingEnroll" :icon="'fas fa-check'" @click="onEnroll" color="positive" no-caps rounded unelevated)
   .row.items-center(v-else :style="{ 'height': card ? '358px' : '113px' }")
     .col-2.q-pt-md.q-mb-xs.justify-center.flex(:class="{ 'col-12': card }")
       croppa.image-selector.q-mb-lg(v-model="image" :show-remove-button="false" :replace-drop="true" :canvas-color="'#3E3B46CC'" :placeholder="'UPLOAD A NEW PROFILE PIC'" :placeholder-font-size="8" :placeholder-color="'#FFFFFF'" :accept="'image/*'" :file-size-limit="4e6" :width="140" :height="140" :quality="1" prevent-white-space="prevent-white-space")
-      q-input.full-width.rounded-border.q-mt-xl(ref="name" v-model="form.name" :label="$t('profiles.profile-card.name')" maxlength="200" :rules="[rules.required]" lazy-rules="lazy-rules" outlined="outlined" dense="dense")
-      q-select.full-width.rounded-border(dropdown-icon="fas fa-map-marker-alt" outlined="outlined" hide-bottom-space="hide-bottom-space" v-model="form.timeZone" use-input="use-input" fill-input="fill-input" hide-selected="hide-selected" dense="dense" :label="$t('profiles.profile-card.timeZone')" :options="timeZonesFilteredOptions" @filter="filterTimeZones" option-value="value" :option-label="$t('profiles.profile-card.text')" emit-value="emit-value" map-options="map-options")
+      q-input.full-width.rounded-border.q-mt-xl(ref="name" v-model="form.name" :label="$t('profiles.profile-card.name')" maxlength="200" :rules="[rules.required]" lazy-rules outlined dense)
+      q-select.full-width.rounded-border(dropdown-icon="fas fa-map-marker-alt" outlined hide-bottom-space v-model="form.timeZone" use-input="use-input" fill-input="fill-input" hide-selected="hide-selected" dense :label="$t('profiles.profile-card.timeZone')" :options="timeZonesFilteredOptions" @filter="filterTimeZones" option-value="value" :option-label="$t('profiles.profile-card.text')" emit-value map-options)
 
 </template>
 

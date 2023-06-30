@@ -35,25 +35,25 @@ widget(:title="$t('profiles.organizations.otherOrganizations')" v-if="tablet" ti
   .dao-container(v-if="organizations && organizations.length")
     template(v-for="(organisation, index) in organizations")
       q-item.list-item.cursor-pointer.row.justify-center.items-center(:key="index" :style="'padding: 0;'" ripple="false" :to="'/' + organisation.url ")
-        q-item-section(avatar="avatar")
+        q-item-section(avatar)
           q-avatar(v-if="organisation.logo" size="xl")
             img(:src="organisation.logo")
           q-avatar(v-else size="xl" color="primary" text-color="white" font-size="24px") {{ label(organisation.name) }}
         q-item-section.text-body1.text-bold.creator(lines="1" :title="organisation.name")
     .flex.flex-center(v-if="true")
-      q-btn.q-pa-xs.button(flat="flat" size="sm" color="primary" :label="$t('profiles.organizations.seeMore')" v-show="hasMore" @click="onSeeMore")
+      q-btn.q-pa-xs.button(flat size="sm" color="primary" :label="$t('profiles.organizations.seeMore')" v-show="hasMore" @click="onSeeMore")
 widget(:title="$t('profiles.organizations.organizations')" v-else)
   q-list(v-if="organizations && organizations.length")
     template(v-for="(organisation, index) in organizations")
       q-item.list-item.q-py-md.q-px-none.cursor-pointer.row.justify-center.items-center(:key="index" :class="index===0 && 'q-mt-md'" ripple="false" :to="'/' + organisation.url ")
-        q-item-section(avatar="avatar")
+        q-item-section(avatar)
           q-avatar(v-if="organisation.logo" size="xl")
             img(:src="organisation.logo")
           q-avatar(v-else size="xl" color="primary" text-color="white" font-size="24px") {{ label(organisation.name) }}
         q-item-section.text-body1.text-bold.creator(lines="1" :title="organisation.name") {{ truncate(organisation.name, 15) }}
-        q-btn(round="round" unelevated="unelevated" icon="fas fa-chevron-right" color="inherit" text-color="disabled" size="sm" :ripple="false")
+        q-btn(round unelevated icon="fas fa-chevron-right" color="inherit" text-color="disabled" size="sm" :ripple="false")
   .q-pt-md.flex.flex-center(v-if="true")
-    q-btn.q-pa-xs.button(flat="flat" size="sm" color="primary" :label="$t('profiles.organizations.seeMore1')" v-show="hasMore" @click="onSeeMore")
+    q-btn.q-pa-xs.button(flat size="sm" color="primary" :label="$t('profiles.organizations.seeMore1')" v-show="hasMore" @click="onSeeMore")
 
 </template>
 
