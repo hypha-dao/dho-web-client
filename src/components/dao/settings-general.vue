@@ -36,7 +36,7 @@ export default {
 .tab
   widget(:title="$t('configuration.settings-general.title')" titleImage='/svg/cog.svg' :bar='true').q-pa-none.full-width
     p.text-sm.text-h-gray.leading-loose.q-mt-md {{ $t('configuration.settings-general.description') }}
-    .hr.q-my-md
+    .hr.q-my-xl
 
     section.row.justify-between.q-col-gutter-x-xl
       .col-12.col-md-4(:class="{'q-mt-sm': !$q.screen.gt.md}")

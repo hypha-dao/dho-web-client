@@ -106,7 +106,7 @@ q-card.widget.relative-position(
     v-if="bar"
   )
     .row.justify-between.items-center.full-width
-      div.row.items-center
+      div.row.items-center(v-if="title || titleImage")
         img.q-mr-sm(v-if="titleImage" :src="titleImage")
         .h-h4.text-bold(
           :class="textClass"

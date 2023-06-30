@@ -37,7 +37,7 @@ export default {
     p.text-sm.text-h-gray.leading-loose.q-mt-md {{ $t('configuration.settings-voting.core.description') }}
 
     section(v-show="form.proposalsCreationEnabled")
-      .hr.q-my-md
+      .hr.q-my-xl
 
       section.row.q-mt-xl.q-col-gutter-x-md
         .col-12.col-md-4
