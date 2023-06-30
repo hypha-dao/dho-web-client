@@ -61,7 +61,7 @@ widget.q-pa-none.full-width(:title="$t('dao.settings-voting.voting')" titleImage
         .col-12.col-md-7.row.q-mr-sm
           q-slider(:disable="!isAdmin" :max="100" :min="0" :step="1" color="primary" v-model="form.votingAlignmentPercent")
         .col-grow
-          q-input.rounded-border.q-py-sm(:disable="!isAdmin" :rules="[val => val >= 0 && val <= 100]" dense="dense" outlined="outlined" rounded="rounded" suffix="%" v-model.number="form.votingAlignmentPercent")
+          q-input.rounded-border.q-py-sm(:disable="!isAdmin" :rules="[val => val >= 0 && val <= 100]" dense outlined rounded suffix="%" v-model.number="form.votingAlignmentPercent")
         q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") {{ $t('dao.settings-voting.onlyDaoAdmins') }}
     .col-12.col-md-6(:class="{'q-mt-md': !$q.screen.gt.sm}")
       .row.items-center.q-col-gutter-xs
@@ -72,7 +72,7 @@ widget.q-pa-none.full-width(:title="$t('dao.settings-voting.voting')" titleImage
         .col-12.col-md-7.row.q-mr-sm
           q-slider(:disable="!isAdmin" :max="100" :min="0" :step="1" color="primary" v-model="form.votingQuorumPercent")
         .col-grow
-          q-input.rounded-border.q-py-sm(:disable="!isAdmin" :rules="[val => val >= 0 && val <= 100]" dense="dense" outlined="outlined" rounded="rounded" suffix="%" v-model.number="form.votingQuorumPercent")
+          q-input.rounded-border.q-py-sm(:disable="!isAdmin" :rules="[val => val >= 0 && val <= 100]" dense outlined rounded suffix="%" v-model.number="form.votingQuorumPercent")
         q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") {{ $t('dao.settings-voting.onlyDaoAdmins1') }}
   .row.q-mt-xl.q-col-gutter-x-md
     .col-12.col-md-6.row
@@ -83,7 +83,7 @@ widget.q-pa-none.full-width(:title="$t('dao.settings-voting.voting')" titleImage
             q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle") {{ $t('dao.settings-voting.isTheDuration') }}
         .q-mt-xs.row.full-width
           .col-12.col-md-7.row.justify-between.q-mr-sm
-            q-btn.duration-button.text-bold.text-lowercase(:color="form.votingDurationSec === option.value ? 'primary' : 'internal-bg'" :disable="!isAdmin" :key="index" :text-color="form.votingDurationSec === option.value ? 'white' : 'primary'" @click="form.votingDurationSec = option.value" padding="none" rounded="rounded" unelevated="unelevated" v-for="(option, index) in durationOptions") {{ option.label }}
+            q-btn.duration-button.text-bold.text-lowercase(:color="form.votingDurationSec === option.value ? 'primary' : 'internal-bg'" :disable="!isAdmin" :key="index" :text-color="form.votingDurationSec === option.value ? 'white' : 'primary'" @click="form.votingDurationSec = option.value" padding="none" rounded unelevated v-for="(option, index) in durationOptions") {{ option.label }}
           .col-grow(:class="{'q-mt-md': !$q.screen.gt.sm}")
             custom-period-input(:disable="!isAdmin" :isActive="isCustomVotingDuration" @selected="form.votingDurationSec = 0" v-model="form.votingDurationSec")
         q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") {{ $t('dao.settings-voting.onlyDaoAdmins2') }}

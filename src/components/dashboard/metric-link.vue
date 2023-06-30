@@ -25,7 +25,7 @@ export default {
 </script>
 
 <template lang="pug">
-widget(noPadding="noPadding" :class="link ? 'cursor-pointer' : ''")
+widget(noPadding :class="link ? 'cursor-pointer' : ''")
   #container.q-px-xxl.q-py-xl(@click="redirectToLink")
     .row
       .col
@@ -34,7 +34,7 @@ widget(noPadding="noPadding" :class="link ? 'cursor-pointer' : ''")
       .col-10
         .h-b1.text-grey-7.ellipsis {{ title }}
       .col.flex.justify-end.q-pl-xxl(v-if="link")
-        q-btn(flat="flat" rounded="rounded" dense="dense" icon="fas fa-chevron-right" color="inherit" text-color="primary" size="xs" :ripple="false")
+        q-btn(flat rounded dense icon="fas fa-chevron-right" color="inherit" text-color="primary" size="xs" :ripple="false")
 </template>
 
 <style lang="stylus" scoped>

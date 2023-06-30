@@ -282,7 +282,7 @@ export default {
 .upvote-election
   .row.full-width.q-my-md.q-mt-lg
     .col-9
-      q-card.widget.full-width.q-pa-xl.relative-position.rounded(flat="flat")
+      q-card.widget.full-width.q-pa-xl.relative-position.rounded(flat)
         .row.items-center.q-mb-md
           .row.items-center.q-mr-md
             img(src="/svg/check-to-slot.svg" width="18px" height="14px")
@@ -315,10 +315,10 @@ export default {
         template(v-else v-for="step in stepsBasedOnSelection")
           component(v-if="(step.index - 1) === currentStepIndex" :is="step.component" :step="step" :selectedUsers="selectedUsers" :votingState="votingState" :upvoteElectionData="upvoteElectionData" :currentElectionIndex="currentStepIndex" :votedUsers="votedUsers" @selectUser="selectUser")
     .col-3.q-pl-md
-      widget.q-pa-xxl.bg-secondary.q-mb-md(v-if="selectedUsers.length || votedUsers.length" rounded="rounded")
+      widget.q-pa-xxl.bg-secondary.q-mb-md(v-if="selectedUsers.length || votedUsers.length" rounded)
         .h-h4.text-white {{ $t('pages.upvote-election.upvoteelection.castYourVote') }}
         .text-white.q-my-md {{ $t('pages.upvote-election.upvoteelection.loremIpsumDolor') }}
-        q-btn.q-px-lg.h-btn1.full-width(@click="vote" color="white" :label="votingState ? 'Revert / Change' : 'Vote!'" no-caps="no-caps" rounded="rounded" text-color="primary" unelevated="unelevated")
+        q-btn.q-px-lg.h-btn1.full-width(@click="vote" color="white" :label="votingState ? 'Revert / Change' : 'Vote!'" no-caps rounded text-color="primary" unelevated)
       creation-stepper.sticky(:steps="stepsBasedOnSelection" :activeStepIndex="currentStepIndex" :title="$t('pages.upvote-election.upvoteelection.electionProcess')")
 
 </template>

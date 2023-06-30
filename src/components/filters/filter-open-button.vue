@@ -12,7 +12,7 @@ export default {
 
 <template lang="pug">
 .container
-  q-btn(round="round" color="primary" text-color="white" rounded="rounded" unelevated="unelevated" size="sm" padding="25px" icon="fas fa-filter" @click="$emit('open')")
+  q-btn(round color="primary" text-color="white" rounded unelevated size="sm" padding="25px" icon="fas fa-filter" @click="$emit('open')")
 </template>
 
 <style lang="stylus" scoped>

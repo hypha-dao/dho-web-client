@@ -16,15 +16,13 @@ export default defineComponent({
      * Title text for the banner
      */
     title: {
-      type: String,
-      required: true
+      type: String
     },
     /**
      * Subtitle text for the banner
      */
     description: {
-      type: String,
-      required: true
+      type: String
     },
     /**
      * Color (background) for the banner
@@ -80,7 +78,7 @@ export default defineComponent({
   .content.relative-position.z-50.full-height.q-pa-xl(:class="{'q-pa-xxxl': $q.screen.gt.sm}")
     .absolute-top-right.z-50.q-pa-sm(v-if="hasListener('onClose') || hasSlot('top-right')")
       slot(name="top-right")
-      q-btn.absolute-top-right.q-pa-sm.close-btn(@click="$emit('onClose')" color="white" flat="flat" icon="fas fa-times" round="round" size="sm" v-show="!hasSlot('top-right')")
+      q-btn.absolute-top-right.q-pa-sm.close-btn(@click="$emit('onClose')" color="white" flat icon="fas fa-times" round size="sm" v-show="!hasSlot('top-right')")
     slot(name="header")
     section.row
       div(:class="{'col-6': split || hasSlot('right'), 'full-width': contentFullWidth}" v-if="!compact")

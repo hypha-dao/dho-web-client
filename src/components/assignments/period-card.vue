@@ -101,9 +101,9 @@ export default {
 
 <template lang="pug">
 .period-card
-  button-card(v-if="mini" :color="end < now ? chip.color : color" flat="flat" :round="moon" :icon="icon" :icon-only="moon" :hide-icon="!moon" clickable="clickable" :width="16" :height="16")
+  button-card(v-if="mini" :color="end < now ? chip.color : color" flat :round="moon" :icon="icon" :icon-only="moon" :hide-icon="!moon" clickable :width="16" :height="16")
     q-tooltip(anchor="top middle" self="bottom middle" :content-style="{ 'font-size': '1em', width: '142px' }")
       div(v-html="miniText")
-  button-card(v-else-if="clickable" :color="color" :text="end < now ? 'grey-7' : undefined" round="round" :from="start" :end="end" :outline="!selected || outline" :title="title" :subtitle="dateString" :icon="icon" :chip="chip" @click="$emit('click')" :selected="selected")
-  button-card(v-else :color="color" :text="end < now ? 'grey-7' : ''" round="round" :outline="end > now" :disable="start > now" :title="title" :subtitle="dateString" :icon="icon" :chip="chip" :clickable="false")
+  button-card(v-else-if="clickable" :color="color" :text="end < now ? 'grey-7' : undefined" round :from="start" :end="end" :outline="!selected || outline" :title="title" :subtitle="dateString" :icon="icon" :chip="chip" @click="$emit('click')" :selected="selected")
+  button-card(v-else :color="color" :text="end < now ? 'grey-7' : ''" round :outline="end > now" :disable="start > now" :title="title" :subtitle="dateString" :icon="icon" :chip="chip" :clickable="false")
 </template>

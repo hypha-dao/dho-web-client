@@ -19,7 +19,7 @@ export default {
 transition(name="slide")
   .container
     .top-buttons.q-ma-md
-      q-btn(color="internal-bg" text-color="primary" rounded="rounded" unelevated="unelevated" size="sm" padding="12px" icon="fas fa-times" @click="$emit('close')")
+      q-btn(color="internal-bg" text-color="primary" rounded unelevated size="sm" padding="12px" icon="fas fa-times" @click="$emit('close')")
     filter-widget.full-height(v-bind="{ ...$props, ...$attrs, ...$slots }" v-on="$listeners" :showViewSelector="false" @close-window="$emit('close')")
     .bottom-buttons
 </template>

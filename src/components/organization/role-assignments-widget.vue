@@ -24,7 +24,7 @@ export default {
 </script>
 
 <template lang="pug">
-widget.full-width(:title="$t('organization.role-assignments-widget.activeRoleAssignments')" more="more" :morePosition="isMobile ?'bottom': 'top'" @more-clicked="$router.push({ name: 'search', params: { dhoname: $route.params.dhoname, findBy: 'Role Assignments', filterBy: 'document' }, query: {q: '', type: '4', filter: 'Active'} })")
+widget.full-width(:title="$t('organization.role-assignments-widget.activeRoleAssignments')" more :morePosition="isMobile ?'bottom': 'top'" @more-clicked="$router.push({ name: 'search', params: { dhoname: $route.params.dhoname, findBy: 'Role Assignments', filterBy: 'document' }, query: {q: '', type: '4', filter: 'Active'} })")
   .q-mt-xs
   .row(v-if="!assignments || assignments.length === 0")
     slot(name="empty")

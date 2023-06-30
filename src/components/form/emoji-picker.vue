@@ -694,13 +694,13 @@ export default {
 
 <template lang="pug">
 .emoji-picker.relative-position(v-global-click-outside="hidePanel")
-  q-btn(@click="showPanel" unelevated="unelevated" flat="flat" rounded="rounded")
+  q-btn(@click="showPanel" unelevated flat rounded)
     q-icon(name="fas fa-smile" size="16px" color="body")
     div(class="emoji-picker__panel bg-white q-pa-sm" v-show="isOpen")
       .row.full-width(:class="{'q-mt-xl': index > 0}" :key="category" v-for="(emojiGroup, category, index) in emojis")
         .h-b2.text-uppercase.q-ml-xxs {{ category }}
         .row.full-width.justify-between
-          q-btn(:key="emojiName" :label="emoji" :title="emojiName" @click="addEmoji(emoji)" flat="flat" padding="8px" unelevated="unelevated" v-for="(emoji, emojiName) in emojiGroup")
+          q-btn(:key="emojiName" :label="emoji" :title="emojiName" @click="addEmoji(emoji)" flat padding="8px" unelevated v-for="(emoji, emojiName) in emojiGroup")
           .col
 
 </template>

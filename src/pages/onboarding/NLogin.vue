@@ -144,7 +144,7 @@ export default {
           bottom-section.index.custom-full-height(:daoSettings="daoSettings" v-if="step === steps.login || step === steps.register && registerStep !== 'finish'" :stepPK="stepPK" :step="step" :steps="steps" @onClickRegisterHere="step = steps.register; stepPK = false" @onClickLogin="stepPK = false" @onClickLoginPage="step = steps.login; stepPK = false")
       .col.full-height.card-container.relative-position.gt-xs
         .welcome-info.absolute-center
-          ipfs-image-viewer(:ipfsCid="selectedDao.logo" showDefault="showDefault" :defaultLabel="daoName" size="300px")
+          ipfs-image-viewer(:ipfsCid="selectedDao.logo" showDefault :defaultLabel="daoName" size="300px")
   .relative-position.full-height.full-width.custom-scroll-area(v-if="$q.screen.lt.md || $q.screen.md")
     .welcome-bg-mobile.full-height.full-width(:class="animationBGMobile")
     .welcome-fg.full-height.full-width

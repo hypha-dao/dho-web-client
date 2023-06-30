@@ -23,8 +23,8 @@ widget(:title="$t('profiles.multi-sig.multiSig')")
   p.h-b2.text-grey-7.ellipsis {{ $t('profiles.multi-sig.clickHereTo') }}
   .row.q-pt-xxs
     .inline.relative-position
-      q-btn.h-btn1.q-px-xl(:loading="loading" @click="$router.push({ name: 'multi-sig' })" color="primary" :label="$t('profiles.multi-sig.multiSig1')" no-caps="no-caps" rounded="rounded" unelevated="unelevated")
-      q-badge.notification-badge(v-show="numberOfPRToSign > 0" rounded="rounded" color="red" :label="numberOfPRToSign" size="10px")
+      q-btn.h-btn1.q-px-xl(:loading="loading" @click="$router.push({ name: 'multi-sig' })" color="primary" :label="$t('profiles.multi-sig.multiSig1')" no-caps rounded unelevated)
+      q-badge.notification-badge(v-show="numberOfPRToSign > 0" rounded color="red" :label="numberOfPRToSign" size="10px")
 
 </template>
 

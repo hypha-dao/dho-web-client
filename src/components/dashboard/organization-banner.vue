@@ -21,7 +21,7 @@ export default {
             span.text-bold.on-right {{ $t('dashboard.organization-banner.hypha') }}
           .text-white.text-body2.q-my-lg {{ $t('dashboard.organization-banner.loremIpsumDolor') }}
           .row.q-gutter-sm
-            q-btn.q-px-lg(color="secondary" no-caps="no-caps" unelevated="unelevated" rounded="rounded" :label="$t('dashboard.organization-banner.documentation')")
+            q-btn.q-px-lg(color="secondary" no-caps unelevated rounded :label="$t('dashboard.organization-banner.documentation')")
       .col-5.q-ml-lg
         img(:src="imageUrl('hypha-logo-full.svg')")
 </template>

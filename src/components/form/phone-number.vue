@@ -76,8 +76,8 @@ export default {
 
 <template lang="pug">
 .row.flex.phone-input
-  q-select(ref="country" v-model="form.country" :options="phoneOptions" :label="`Country${required ? '*' : ''}`" map-options="map-options" emit-value="emit-value" :rules="[rules.requiredIf(required), isPhoneValid]" lazy-rules="lazy-rules" :outlined="outlined" :style="{width:'50%'}")
-  q-input(ref="number" v-model="form.number" :label="`Phone number${required ? '*' : ''}`" :rules="[rules.requiredIf(required), isPhoneValid]" lazy-rules="lazy-rules" :outlined="outlined" :style="{width:'50%'}")
+  q-select(ref="country" v-model="form.country" :options="phoneOptions" :label="`Country${required ? '*' : ''}`" map-options emit-value :rules="[rules.requiredIf(required), isPhoneValid]" lazy-rules :outlined :style="{width:'50%'}")
+  q-input(ref="number" v-model="form.number" :label="`Phone number${required ? '*' : ''}`" :rules="[rules.requiredIf(required), isPhoneValid]" lazy-rules :outlined :style="{width:'50%'}")
 
 </template>
 

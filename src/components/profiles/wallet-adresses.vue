@@ -144,13 +144,13 @@ widget-editable(:notify="false" :savable="savable" @onCancel="cancel" @onEdit="o
         q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-show="!editable || isHypha") {{ $t('profiles.wallet-adresses.ethPayoutsAre') }}
     .row.q-mt-sm
       text-input-toggle.full-width(:disable="!editable" :icon="'img:'+ require('~/assets/icons/chains/eos.svg')" :iconBackground="false" :text.sync="form.eosAccount" :toggle.sync="toggles.eos" :validateRules="[toggles.eos && rules.required]" :label="$t('profiles.wallet-adresses.eos')" :placeholder="$t('profiles.wallet-adresses.address2')" ref="eosAccount" type="text")
-        q-input.full-width.rounded-border.q-mt-xs(dense="dense" outlined="outlined" :disable="!editable" :placeholder="$t('profiles.wallet-adresses.memo')" ref="eosMemo" type="text" v-model="form.eosMemo")
+        q-input.full-width.rounded-border.q-mt-xs(dense outlined :disable="!editable" :placeholder="$t('profiles.wallet-adresses.memo')" ref="eosMemo" type="text" v-model="form.eosMemo")
   template(v-else)
     .row.q-mt-sm
       .col
         text-input-toggle.full-width(:disable="!editable" :icon="'img:'+ require('~/assets/icons/chains/eos.svg')" :iconBackground="false" :text.sync="form.eosAccount" :toggle.sync="toggles.eos" :validateRules="[toggles.eos && rules.required]" :whiteInput="modalState" :label="$t('profiles.wallet-adresses.eos1')" :placeholder="$t('profiles.wallet-adresses.address3')" ref="eosAccount" type="text")
       .col-5.flex.items-end.q-ml-md
-        q-input.full-width.rounded-border.q-mt-xs(dense="dense" outlined="outlined" :disable="!editable" :class="{ 'bg-white': modalState }" :placeholder="$t('profiles.wallet-adresses.memo1')" ref="eosMemo" type="text" v-model="form.eosMemo")
+        q-input.full-width.rounded-border.q-mt-xs(dense outlined :disable="!editable" :class="{ 'bg-white': modalState }" :placeholder="$t('profiles.wallet-adresses.memo1')" ref="eosMemo" type="text" v-model="form.eosMemo")
 
 </template>
 

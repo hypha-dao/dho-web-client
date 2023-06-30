@@ -24,7 +24,7 @@ export default {
 </script>
 
 <template lang="pug">
-widget.full-width(:title="$t('organization.payouts-widget.passedGenericContributions')" more="more" :morePosition="isMobile ?'bottom': 'top'" @more-clicked="$router.push({ name: 'search', params: { dhoname: $route.params.dhoname, findBy: 'Generic Contribution', filterBy: 'document' }, query: {q: '', type: '3', filter: 'Active'} })")
+widget.full-width(:title="$t('organization.payouts-widget.passedGenericContributions')" more :morePosition="isMobile ?'bottom': 'top'" @more-clicked="$router.push({ name: 'search', params: { dhoname: $route.params.dhoname, findBy: 'Generic Contribution', filterBy: 'document' }, query: {q: '', type: '3', filter: 'Active'} })")
   .q-mt-xs
   .row(v-if="!payouts || payouts.length === 0")
     slot(name="empty")

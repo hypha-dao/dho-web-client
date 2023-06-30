@@ -57,7 +57,7 @@ widget.full-width.relative
             img.q-pt-xxs(:src="getIconPath(data.domain)")
             .text-xs.q-ml-xxs.q-mt-xs {{ parseEcosystemDomain(data.domain) }}
         .text-xs.text-h-gray {{ data.purpose }}
-    q-separator(:vertical="true" color="grey-3" inset="inset")
+    q-separator(:vertical="true" color="grey-3" inset)
     .col
       .column.justify-between.full-width.full-height.items-center
         div

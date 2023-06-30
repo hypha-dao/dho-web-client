@@ -108,9 +108,9 @@ q-card.edit-dialog.bg-white.relative-position
         .text-center {{ $t('profiles.edit-dialog.lukegravdent') }}
       .text-bold.text-grey.q-mt-lg
         q-list
-          q-item(v-for="opt in options" clickable="clickable" v-ripple="v-ripple" :key="opt.section" :class="{ 'text-black': tab === opt.tab }" @click="tab = opt.tab")
+          q-item(v-for="opt in options" clickable v-ripple :key="opt.section" :class="{ 'text-black': tab === opt.tab }" @click="tab = opt.tab")
             q-item-section {{ opt.section }}
-            q-item-section(avatar="avatar")
+            q-item-section(avatar)
               q-icon(:name="opt.icon")
     .details.col
       .text-h5.q-ma-lg.q-mt-xl.q-ml-xl {{ $t('profiles.edit-dialog.accountSettings') }}
@@ -120,7 +120,7 @@ q-card.edit-dialog.bg-white.relative-position
             .section.bg-grey-2.q-pa-md(v-if="tab === opt.tab || $q.screen.lt.md")
               .text-h6.q-ml-sm.lt-md {{ opt.section }}
               template(v-for="val in opt.values")
-                q-input.q-ma-lg(outlined="outlined" v-model="val.value" :label="val.label" :key="val.label")
+                q-input.q-ma-lg(outlined v-model="val.value" :label="val.label" :key="val.label")
 
 </template>
 

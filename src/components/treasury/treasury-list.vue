@@ -13,9 +13,9 @@ widget.q-mr-sm
       .flex.justify-center.full-width
         loading-spinner(color="primary" size="50px")
   .row.justify-between.q-mt-lg
-    q-btn.round-circle(@click="onPrev" :disable="page === 1" round="round" unelevated="unelevated" icon="fas fa-chevron-left" color="inherit" text-color="primary" size="md" :ripple="false")
+    q-btn.round-circle(@click="onPrev" :disable="page === 1" round unelevated icon="fas fa-chevron-left" color="inherit" text-color="primary" size="md" :ripple="false")
     .q-pt-sm {{ getPaginationText }}
-    q-btn.round-circle(@click="onLoad" :disable="isLastPage" round="round" unelevated="unelevated" icon="fas fa-chevron-right" color="inherit" text-color="primary" size="md" :ripple="false")
+    q-btn.round-circle(@click="onLoad" :disable="isLastPage" round unelevated icon="fas fa-chevron-right" color="inherit" text-color="primary" size="md" :ripple="false")
 
 </template>
 

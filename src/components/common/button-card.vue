@@ -55,7 +55,7 @@ export default defineComponent({
 </script>
 
 <template lang="pug">
-q-btn.button(:class="{'no-pointer-events': !clickable}" :color="color" :disable="disable" :flat="iconOnly" :outline="outline" :ripple="false" :style="{'border-radius': round ? '24px' : '4px'}" :text-color="text" @click="$emit('click')" no-caps="no-caps" padding="4px" unelevated="unelevated")
+q-btn.button(:class="{'no-pointer-events': !clickable}" :color="color" :disable="disable" :flat="iconOnly" :outline="outline" :ripple="false" :style="{'border-radius': round ? '24px' : '4px'}" :text-color="text" @click="$emit('click')" no-caps padding="4px" unelevated)
   .row(:style="{width: `${width}px`, height: `${height}px`}")
     .row.items-left.justify-between.full-width(:class="{'q-mt-xs': !iconOnly}")
       q-avatar.q-ml-xs(:color="outline ? 'primary' : 'white'" size="35px")
