@@ -16,37 +16,35 @@ export default {
 
     dao: {
       query: require('~/query/dao-active.gql'),
-      // subscribeToMore: {
-      //   document: require('~/graphql/subscription/dao-active.subscription.gql'),
-      //   updateQuery: (previousResult, { subscriptionData }) => {
-      //     // this.$store.commit('dao/switchDao', subscriptionData.data.queryDao)
-      //   },
-      //   variables () {
-      //     return {
-      //       regexp: this.daoRegexp
-      //     }
-      //   }
-      // },
       update: data => data.queryDao,
       result (res) {
-        if (!(res.data?.queryDao?.length)) {
+        const data = res.data?.queryDao
+        if (!(data.length)) {
           this.$router.push({ path: '/not-found' })
         }
 
         this.$store.dispatch('accounts/checkMembership')
-        this.$store.commit('dao/switchDao', res.data.queryDao)
+        this.$store.commit('dao/switchDao', data)
         this.$store.dispatch('dao/setTheme')
       },
-      variables () {
-        return {
-          regexp: this.daoRegexp
+      skip () { return !this.dhoname || !this.daoRegexp },
+      variables () { return { regexp: this.daoRegexp } },
+      subscribeToMore: {
+        document: require('~/graphql/subscription/dao-active.subscription.gql'),
+        variables () { return { regexp: this.daoRegexp } },
+        updateQuery: (previousResult, { subscriptionData }) => {
+          if (!subscriptionData.data) {
+            return previousResult
+          }
+          if (!previousResult) {
+            return undefined
+          }
+
+          return subscriptionData.data
         }
-      },
-      skip () {
-        return !this.dhoname || !this.daoRegexp
-      },
-      fetchPolicy: 'no-cache'
-      // pollInterval: 1000 // THIS IS JUST TEMPORARY UNTIL GRAPHQL SUBSCRIPTION IS READY
+
+      }
+
     },
 
     dho: {

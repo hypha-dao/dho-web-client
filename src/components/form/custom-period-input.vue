@@ -1,27 +1,33 @@
 <script>
 
-/**
- * Base component for a text input and toggle pair
- */
-
 const secondsToInterval = (seconds) => {
   // const hours = Math.floor((seconds % (3600 * 24)) / 3600)
   // const days = Math.floor(((seconds % 31536000) % 2628000) / 86400)
   // const months = Math.floor((seconds % 31536000) / 2628000)
+
+  let period = ''
 
   const hours = Math.floor(seconds / 3600)
   const days = Math.floor(seconds / 86400)
   const weeks = Math.floor(seconds / 604800)
   const months = Math.floor(seconds / 2628000)
 
-  return { months, weeks, days, hours }
+  if (months > 0) {
+    period = 'months'
+  } else if (weeks > 0) {
+    period = 'weeks'
+  } else if (days > 0) {
+    period = 'days'
+  } else if (hours > 0) {
+    period = 'hours'
+  }
+
+  return { period, months, weeks, days, hours }
 }
+
 export default {
   name: 'custom-period-input',
-  components: {
-
-  },
-  data: function () {
+  data () {
     return {
       period: 'days'
     }
@@ -29,101 +35,72 @@ export default {
 
   props: {
     disable: Boolean,
-    isActive: Boolean,
-    value: String,
+    value: Number,
     type: {
       type: String,
       default: 'time'
     }
   },
 
-  mounted () {
-    const { months, weeks, days, hours } = secondsToInterval(this.value)
-
-    if (months > 0) {
-      this.period = 'months'
-      return
-    }
-    if (weeks > 0) {
-      this.period = 'weeks'
-      return
-    }
-    if (days > 0) {
-      this.period = 'days'
-      return
-    }
-    if (hours > 0) {
-      this.period = 'hours'
-    }
-  },
-
   computed: {
-    valueFormated () {
-      if (this.type === ' time') {
-        const { months, weeks, days, hours } = secondsToInterval(this.value)
 
-        if (months > 0) { return months }
-        if (weeks > 0) { return weeks }
-        if (days > 0) { return days }
-        if (hours > 0) { return hours }
+    valueFormated: {
+      get () {
+        const period = secondsToInterval(this.value).period
+        return secondsToInterval(this.value)[period]
+      },
+      set (value) {
+        if (this.type === 'time' && this.period !== '') {
+          if (this.period === 'hours') { value = (value * 60) * 60 }
+          if (this.period === 'days') { value = value * 24 * 60 * 60 }
+          if (this.period === 'weeks') { value = value * 7 * 24 * 60 * 60 }
+          if (this.period === 'months') { value = value * 2628000 }
+        }
 
-        return 0
-      } else {
-        return this.value
+        this.$emit('input', value)
       }
+
     }
   },
-  methods: {
-    onChange (e) {
-      let value = e.target.value
 
-      if (this.type === ' time') {
-        if (this.period === 'hours') { value = (value * 60) * 60 }
-        if (this.period === 'days') { value = value * 24 * 60 * 60 }
-        if (this.period === 'weeks') { value = value * 7 * 24 * 60 * 60 }
-        if (this.period === 'months') { value = value * 2628000 }
-        // 2628002.88
-      }
-
-      this.$emit('input', value)
-    },
-
-    onSelect () {
-      this.$emit('selected')
-      this.$refs.amount.focus()
-    }
+  mounted () {
+    this.period = secondsToInterval(this.value).period
   }
+
 }
 </script>
 
 <template lang="pug">
-.custom-period-input
-  q-btn.full-width.text-bold(border="border" color="internal-bg" no-caps rounded text-color="primary" unelevated @click="onSelect()" v-show="!isActive") {{ $t('form.custom-period-input.customPeriod') }}
-  .full-width.bg-primary.text-white.rounded-border.q-px-sm.relative-position(v-show="isActive")
-    q-input.input-amount.inline(:disable="disable" :value="valueFormated" @change="onChange" bg-color="primary" borderless dense :placeholder="$t('form.custom-period-input.typeAnAmount')" ref="amount")
-    q-btn-dropdown.absolute-right(v-if="type === 'time'" :disable="disable" color="primary" :label="period" no-caps rounded unelevated)
-      q-list
-        q-item(clickable v-close-popup="v-close-popup" @click="period = 'hours'")
-          q-item-section
-            q-item-label {{ $t('form.custom-period-input.hours') }}
-        q-item(clickable v-close-popup="v-close-popup" @click="period = 'days'")
-          q-item-section
-            q-item-label {{ $t('form.custom-period-input.days') }}
-        q-item(clickable v-close-popup="v-close-popup" @click="period = 'weeks'")
-          q-item-section
-            q-item-label {{ $t('form.custom-period-input.weeks') }}
-        q-item(clickable v-close-popup="v-close-popup" @click="period = 'months'")
-          q-item-section
-            q-item-label {{ $t('form.custom-period-input.months') }}
+div.custom-period-input
+  .row.full-width.items-center
+    .col.row.q-mr-sm
+      q-input.full-width.q-py-sm(
+        :disable="disable"
+        dense
+        outlined
+        rounded
+        v-model.number="valueFormated"
+      )
+    .col-3
+      q-btn-dropdown.full-width(:label="[$t('periods.'+[period])]"  outline no-caps rounded unelevated)
+        q-list
+          q-item(clickable v-close-popup @click="period = 'hours'")
+            q-item-section
+              q-item-label {{ $t('periods.hours') }}
 
+          q-item(clickable v-close-popup  @click="period = 'days'")
+            q-item-section
+              q-item-label {{ $t('periods.days') }}
+
+          q-item(clickable v-close-popup  @click="period = 'weeks'")
+            q-item-section
+              q-item-label {{ $t('periods.weeks') }}
+
+          q-item(clickable v-close-popup  @click="period = 'months'")
+            q-item-section
+              q-item-label {{ $t('periods.months') }}
 </template>
 
 <style lang="stylus" scoped>
 
-.input-amount
-  :first-child
-    font-size: 13px;
-    color: white;
-    ::placeholder
-      color: white;
 </style>
