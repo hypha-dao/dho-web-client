@@ -130,7 +130,7 @@ export default {
 
         // Structure
         // roles: this.daoSettings?.roles ? this.daoSettings?.roles : defaultSettings.roles,
-        levels: this.daoSettings?.levels ? this.daoSettings?.levels : defaultSettings.levels,
+        // levels: this.daoSettings?.levels ? this.daoSettings?.levels : defaultSettings.levels,
 
         // Voting
         proposalsCreationEnabled: this.daoSettings?.proposalsCreationEnabled !== null ? this.daoSettings?.proposalsCreationEnabled : defaultSettings.proposalsCreationEnabled,
@@ -236,7 +236,7 @@ export default {
 
         const url = this.dataForSave.daoUrl
         if (url) {
-          // If url changed reload page
+          // If url changes reload page
           this.$router.push(`/${url}/configuration`)
         }
 
@@ -273,12 +273,11 @@ export default {
     },
 
     async onSave () {
-      this.updateSettings()
-      // if (this.daoSettings.multisigEnabled) {
-      //   this.state = CONFIGURATION_STATE.CREATE_MULTI_SIG
-      // } else {
-      //   this.updateSettings()
-      // }
+      if (this.daoSettings.multisigEnabled) {
+        this.state = CONFIGURATION_STATE.CREATE_MULTI_SIG
+      } else {
+        this.updateSettings()
+      }
     }
 
   },
