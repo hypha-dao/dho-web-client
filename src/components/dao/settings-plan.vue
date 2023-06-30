@@ -76,7 +76,7 @@ export default {
     ...mapGetters('dao', ['selectedDao', 'selectedDaoPlan', 'isFreePlan']),
 
     canActivate () { return this.form.plan !== null && this.form.period !== null },
-    planChipName () { return this.selectedDaoPlan.hasExpired ? 'Suspended' : (this.selectedDaoPlan.isExpiring ? 'Expired' : 'Plan active') },
+    planChipName () { return this.selectedDaoPlan.hasExpired ? this.$t('dao.settings-plan.suspended') : (this.selectedDaoPlan.isExpiring ? this.$t('dao.settings-plan.expired') : this.$t('dao.settings-plan.planActive')) },
     planChipColor () { return this.selectedDaoPlan.hasExpired ? 'negative' : (this.selectedDaoPlan.isExpiring ? 'negative' : 'secondary') },
     hasEnoughTokens () { return Number(this.balances?.[0]?.amount) >= this.tokenAmount },
     PLANS () {
@@ -237,7 +237,7 @@ export default {
     .absolute.z-50(:style="{'top': '-60px', 'right': '-30px'}" v-if="$q.screen.gt.sm")
       chip-plan(:plan="selectedDaoPlan.name" :daysLeft="selectedDaoPlan.daysLeft" :graceDaysLeft="selectedDaoPlan.graceDaysLeft" :color="selectedDaoPlan.isExpiring ? 'negative' : 'secondary'")
         template(v-slot:cta)
-          q-btn.h-h4.text-white(v-if="!selectedDaoPlan.isExpiring" :label=" isFreePlan ? 'Upgrade' : 'Extend'" flat="flat" no-caps="no-caps" padding="0px" unelevated="unelevated" @click="state = 'BILLING'")
+          q-btn.h-h4.text-white(v-if="!selectedDaoPlan.isExpiring" :label=" isFreePlan ? 'Upgrade' : 'Extend'" flat no-caps padding="0px" unelevated @click="state = 'BILLING'")
           .h-h4.text-white.row.items-center.q-gutter-x-sm(v-if="selectedDaoPlan.isExpiring")
             q-icon(name="fas fa-exclamation-triangle" size="sm")
             span {{ $t('dao.settings-plan.actionRequired') }}
@@ -270,7 +270,7 @@ export default {
               template(v-slot:description)
                 .row.justify-end.full-width
                   .text-ellipsis.text-xs {{opts.priceHypha == 0 ? 'Free forever' : `${parseFloat((selectedPlan.priceHypha - (selectedPlan.priceHypha * opts.discountPerc)) * opts.periods).toFixed(2)} HYPHA`}}
-  widget.q-pa-none.full-width.q-mt-md(:bar="true" noPadding="noPadding")
+  widget.q-pa-none.full-width.q-mt-md(:bar="true" noPadding)
     .row.justify-between.items-center
       .col-12.q-px-xl(:class="{ 'q-py-xl': !$q.screen.gt.md}")
         .row.items-center(:class="{ 'full-width': !$q.screen.gt.md}")
@@ -283,10 +283,10 @@ export default {
           .col-12.col-sm-12.col-md-12.col-lg-6.row.justify-end
             nav.col-12.col-md-12.col-lg-8.q-my-xl.row.q-col-gutter-x-sm(:class="{ 'q-col-gutter-y-sm': !$q.screen.gt.md}")
               .col-12.col-sm-12.col-md-12.col-lg-6
-                q-btn.rounded-border.text-bold.q-mr-xs.full-width.full-height(:disable="!canActivate || !hasEnoughTokens" @click="goToHyphaTokenSales" color="primary" :label="$t('dao.settings-plan.buyHyphaToken')" no-caps="no-caps" rounded="rounded" unelevated="unelevated")
+                q-btn.rounded-border.text-bold.q-mr-xs.full-width.full-height(:disable="!canActivate || !hasEnoughTokens" @click="goToHyphaTokenSales" color="primary" :label="$t('dao.settings-plan.buyHyphaToken')" no-caps rounded unelevated)
                 q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!canActivate") {{ $t('dao.settings-plan.pleaseSelectPlan') }}
               .col-12.col-sm-12.col-md-12.col-lg-6
-                q-btn.rounded-border.text-bold.q-ml-xs.full-width.full-height(:disable="!canActivate || !hasEnoughTokens" :label="(selectedPlan.name === selectedDaoPlan.name) ? 'Renew plan ': 'Activate plan'" @click="openActivateModal" color="secondary" no-caps="no-caps" rounded="rounded" unelevated="unelevated")
+                q-btn.rounded-border.text-bold.q-ml-xs.full-width.full-height(:disable="!canActivate || !hasEnoughTokens" :label="(selectedPlan.name === selectedDaoPlan.name) ? $t('dao.settings-plan.renewPlan') : $t('dao.settings-plan.activatePlan')" @click="openActivateModal" color="secondary" no-caps rounded unelevated)
   widget.full-width.q-mt-md(:title="$t('dao.settings-plan.billingHistory')")
     .calendar-container.q-mt-lg.row.q-gutter-sm
       template(v-for="(bill, index) in BILLING_HISTORY")

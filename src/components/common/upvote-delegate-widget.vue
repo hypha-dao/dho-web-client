@@ -121,7 +121,7 @@ export default defineComponent({
 </script>
 
 <template lang="pug">
-q-card.widget.full-width.q-pt-xl.q-pl-xl.q-pr-xs.q-pb-xs.relative-position.rounded(:class="{'q-pr-xl': $q.screen.md || $q.screen.lt.md}" flat="flat")
+q-card.widget.full-width.q-pt-xl.q-pl-xl.q-pr-xs.q-pb-xs.relative-position.rounded(:class="{'q-pr-xl': $q.screen.md || $q.screen.lt.md}" flat)
   .col
     .row.justify-between.items-center
       .row.items-center
@@ -148,12 +148,12 @@ q-card.widget.full-width.q-pt-xl.q-pl-xl.q-pr-xs.q-pb-xs.relative-position.round
         .user-card
           .tag {{ $t('common.upvote-delegate-widget.headDelegate') }}
           .row.items-center.justify-between
-            ProfilePicture(:username="user.details_member_n" boldName="boldName" noMargins="noMargins" showName="showName" showUsername="showUsername" size="50px" withoutItalic="withoutItalic")
+            ProfilePicture(:username="user.details_member_n" boldName noMargins showName showUsername size="50px" withoutItalic)
             q-icon.card-icon(color="white" name="far fa-address-card" size="16px")
       .template.col(:class="{'col-6 q-px-xs': $q.screen.md, 'q-mr-md q-mb-md': $q.screen.gt.md, 'q-mb-md': $q.screen.md || $q.screen.lt.md, 'col-12': $q.screen.lt.md}" v-for="user in chiefWinners")
         .user-card
           .row.items-center.justify-between
-            ProfilePicture(:username="user.details_member_n" boldName="boldName" noMargins="noMargins" showName="showName" showUsername="showUsername" size="50px" withoutItalic="withoutItalic")
+            ProfilePicture(:username="user.details_member_n" boldName noMargins showName showUsername size="50px" withoutItalic)
             q-icon.card-icon(color="white" name="far fa-address-card" size="16px")
 
 </template>

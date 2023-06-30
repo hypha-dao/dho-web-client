@@ -140,10 +140,10 @@ export default {
     q-img(:src="avatar" @error="onImageError")
       q-tooltip(v-if="tooltip" anchor="top middle" self="bottom middle" :content-style="{ 'font-size': '1em' }")
         div(v-html="nameTooltip")
-    q-badge(v-if="badge" floating="floating" rounded="rounded" color="red" :label="badge")
+    q-badge(v-if="badge" floating rounded color="red" :label="badge")
   q-avatar(v-else color="secondary" text-color="white" :size="size" :class="{ 'cursor-pointer': link && username, 'q-mr-xxs': showName && !noMargins }") {{ getNameAbbreviation() }}
 
-    q-badge(v-if="badge" floating="floating" rounded="rounded" color="red" :label="badge")
+    q-badge(v-if="badge" floating rounded color="red" :label="badge")
     q-tooltip(v-if="tooltip" anchor="top middle" self="bottom middle" :content-style="{ 'font-size': '1em' }")
       div(v-html="nameTooltip")
   .q-my-xs.q-ml-xs(v-if="showName || showUsername || detail" :style="{ 'display': 'grid' }")

@@ -36,7 +36,7 @@ export default defineComponent({
 
 <template lang="pug">
 .row
-  q-btn.q-pa-xxs(@click="onMore" color="primary" flat="flat" :label="$t('common.widget-more-btn.seeMore')" no-caps="no-caps" rounded="rounded" size="12px" v-if="!completed && !loading")
+  q-btn.q-pa-xxs(@click="onMore" color="primary" flat :label="$t('common.widget-more-btn.seeMore')" no-caps rounded size="12px" v-if="!completed && !loading")
   loading-spinner.q-pa-xxs(color="primary" size="40px" v-if="loading")
 </template>
 

@@ -267,14 +267,14 @@ widget.wallet-base(:more="more" :no-title="noTitle" morePosition="top" :title="$
               div {{ currentDetailsObject.requestor }}
             .row.justify-between.h-b2.text-bold.text-black.full-width
               div {{ $t('profiles.wallet-base.amount') }}
-              div {{ `${formatCurrency(currentDetailsObject.amount)} HUSD` }}
+              div {{ `${formatCurrency(currentDetailsObject?.amount)} HUSD` }}
         .col-3
           .flex.items-center.justify-center(:style="{ 'width': '112px', 'height': '112px', 'border-radius': '20px', 'background': '#f99f17' }")
             q-icon(name="far fa-clock" color="white" size="60px")
       .row.full-width.q-mt-xl.no-wrap
         .col
         .col.q-mr-sm
-          q-btn.h-btn1.full-width(color="primary" outline="outline" no-caps="no-caps" unelevated="unelevated" rounded="rounded" :label="'Close'" :loading="submitting" @click="showDetailsModal = false")
+          q-btn.h-btn1.full-width(color="primary" outline no-caps unelevated rounded :label="'Close'" :loading="submitting" @click="showDetailsModal = false")
   q-dialog(:value="showPayoutModal" @hide="showPayoutModal = false, resetForm()")
     widget.full-width.q-pa-md(:title="$t('profiles.wallet-base.redeemHusd1')")
       .row.q-mt-md
@@ -284,12 +284,12 @@ widget.wallet-base(:more="more" :no-title="noTitle" morePosition="top" :title="$
             q-avatar.q-mr-sm(size="40px")
               img(:style="{ 'width': '40px', 'height': '40px' }" src="~/assets/icons/usd.png")
             .flex.items-center.full-width(:style="{ 'background': '#F1F1F3', 'border-radius': '15px', 'padding': '12px 15px' }")
-              div {{ formatCurrency(pegToken.amount) }}
+              div {{ formatCurrency(pegToken?.amount) }}
         .col-6.full-width
       template(v-if="!successRedeem")
         .row.q-mt-md
           .h-b2.text-bold.text-black.q-mb-sm {{ $t('profiles.wallet-base.amountToRedeem') }}
-          q-input.text-black.full-width(:rules="[rules.greaterThan(0), rules.lessOrEqualThan(pegToken.amount)]" v-model.number="form.amount" type="number" rounded="rounded" outlined="outlined" dense="dense" :placeholder="$t('profiles.wallet-base.typeAmount')")
+          q-input.text-black.full-width(:rules="[rules.greaterThan(0), rules.lessOrEqualThan(pegToken?.amount)]" v-model.number="form.amount" type="number" rounded outlined dense :placeholder="$t('profiles.wallet-base.typeAmount')")
           .row.justify-end.full-width.q-mt-xs
             .h-b2.text-primary.text-bold.text-underline.cursor-pointer(@click="form.amount = 500.00") {{ $t('profiles.wallet-base.485') }}
             .h-b2.text-primary.text-bold.text-underline.q-ml-sm.cursor-pointer(@click="form.amount = 1000.00") {{ $t('profiles.wallet-base.4842') }}
@@ -317,40 +317,40 @@ widget.wallet-base(:more="more" :no-title="noTitle" morePosition="top" :title="$
         .row.q-my-xl.text-grey.text-italic.h-b2 {{ $t('profiles.wallet-base.asSoonAs') }}
       .row.full-width.q-mt-xl.no-wrap
         .col.q-mr-sm
-          q-btn.h-btn1.full-width(color="primary" outline="outline" no-caps="no-caps" unelevated="unelevated" rounded="rounded" :label="'Close'" :loading="submitting" @click="showPayoutModal = false")
+          q-btn.h-btn1.full-width(color="primary" outline no-caps unelevated rounded :label="'Close'" :loading="submitting" @click="showPayoutModal = false")
         .col
-          q-btn.h-btn1.full-width(v-if="successRedeem" :disable="!form.amount" color="primary" no-caps="no-caps" unelevated="unelevated" rounded="rounded" :label="'Make another Redemption'" :loading="submitting" @click="successRedeem = false, resetForm()")
-          q-btn.h-btn1.full-width(v-else :disable="!form.amount || form.amount <= 0 || form.amount > pegToken.amount" color="primary" no-caps="no-caps" unelevated="unelevated" rounded="rounded" :label="'Redeem HUSD'" :loading="submitting" @click="onRedeemHusd()")
-  .row.justify-center.q-mb-md(v-if="!wallet || wallet.length === 0")
+          q-btn.h-btn1.full-width(v-if="successRedeem" :disable="!form.amount" color="primary" no-caps unelevated rounded :label="$t('profiles.wallet-base.makeAnotherRedemption')" :loading="submitting" @click="successRedeem = false, resetForm()")
+          q-btn.h-btn1.full-width(v-else :disable="!form.amount || form.amount <= 0 || form.amount > pegToken.amount" color="primary" no-caps unelevated rounded :label="$t('profiles.wallet-base.redeemHusd')" :loading="submitting" @click="onRedeemHusd()")
+  .row.justify-center.q-mb-md(v-if="!wallet || wallet?.length === 0")
     loading-spinner(v-if="loading" color="primary" size="40px")
     .h-b2(v-else) {{ $t('profiles.wallet-base.noWalletFound') }}
-  q-list.q-mt-md(v-else dense="dense")
+  q-list.q-mt-md(v-else dense)
     template(v-for="(item, index) in wallet")
-      q-item.wallet-item(v-if="item && item.value && !(item.label === 'dSEEDS' || item.label === 'SEEDS')" :key="item.label" :class="index !== wallet.length - 1 ? 'q-mb-sm' : ''")
-        q-item-section.icon-section(avatar="avatar")
+      q-item.wallet-item(v-if="item && item.value && !(item?.label === 'dSEEDS' || item?.label === 'SEEDS')" :key="item?.label" :class="index !== wallet?.length - 1 ? 'q-mb-sm' : ''")
+        q-item-section.icon-section(avatar)
           token-logo(size="sm" :type="item.type" :daoLogo="daoLogo" :customIcon="item.icon")
         q-item-section
-          q-item-label.h-b2 {{ item.label }}
-        q-item-section(side="side")
+          q-item-label.h-b2 {{ item?.label }}
+        q-item-section(side)
           .row
             q-item-label
               .h-b2.text-right.text-bold.value-text {{ getFormatedTokenAmount(item.value) + (item.percentage ? ' (' + item.percentage + '%)' : '') }}
                 q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle") {{ getFormatedTokenAmount(item.value, Number.MAX_VALUE) }}
-    .row.full-width.justify-end.flex.items-center.q-mt-sm.no-wrap(v-if="wallet.filter(token => (token.label === 'dSEEDS' || token.label === 'SEEDS') && token.value != 0).length")
+    .row.full-width.justify-end.flex.items-center.q-mt-sm.no-wrap(v-if="wallet.filter(token => (token?.label === 'dSEEDS' || token?.label === 'SEEDS') && token.value != 0).length")
       .flex.items-center.justify-center(:style="{ 'height': '1px', 'background': '#84878E', 'opacity': '50%', 'width': '100%' }")
       .h-b2.text-primary.text-bold.text-underline.text-no-wrap.q-ml-sm(@click="showMoreTokens = !showMoreTokens") {{ showMoreTokens ? 'Hide' : 'Show more' }}
     template(v-if="showMoreTokens" v-for="(item, index) in wallet")
-      q-item.wallet-item(v-if="item && (item.label === 'dSEEDS' || item.label === 'SEEDS')" :key="item.label" :class="index !== wallet.length - 1 ? 'q-mb-sm' : ''")
-        q-item-section.icon-section(avatar="avatar")
+      q-item.wallet-item(v-if="item && (item?.label === 'dSEEDS' || item?.label === 'SEEDS')" :key="item?.label" :class="index !== wallet?.length - 1 ? 'q-mb-sm' : ''")
+        q-item-section.icon-section(avatar)
           token-logo(size="sm" :type="item.type" :daoLogo="daoLogo" :customIcon="item.icon")
         q-item-section
-          q-item-label.h-b2 {{ item.label }}
-        q-item-section(side="side")
+          q-item-label.h-b2 {{ item?.label }}
+        q-item-section(side)
           .row
             q-item-label
               .h-b2.text-right.text-bold.value-text {{ getFormatedTokenAmount(item.value) + (item.percentage ? ' (' + item.percentage + '%)' : '') }}
                 q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle") {{ getFormatedTokenAmount(item.value, Number.MAX_VALUE) }}
-  .flex.items-center.full-width.q-mt-md(v-if="isOwner && redemptions.length" :style="{ 'background': '#F1F1F3', 'border-radius': '15px', 'padding': '20px' }")
+  .flex.items-center.full-width.q-mt-md(v-if="isOwner && redemptions?.length" :style="{ 'background': '#F1F1F3', 'border-radius': '15px', 'padding': '20px' }")
     .row.full-width.no-wrap.justify-between.items-center.q-mb-xxs
       .h-b2.text-bold.text-black {{ $t('profiles.wallet-base.pendingRedemptions') }}
       q-icon(name="fas fa-hourglass-half" size="12px" color="black")
@@ -359,7 +359,7 @@ widget.wallet-base(:more="more" :no-title="noTitle" morePosition="top" :title="$
         .h-b2 {{ dateToStringShort(redemption.date) }}
         .h-b2.text-primary.text-bold.text-underline(@click="showDetailsModal = true, currentDetailsObject = redemption") {{ $t('profiles.wallet-base.details') }}
   .row.q-pt-xxs.q-mt-md(v-if="canRedeem && isOwner")
-    q-btn.h-btn1.full-width(color="primary" no-caps="no-caps" unelevated="unelevated" rounded="rounded" :label="'Redeem '" @click="showPayoutModal = true")
+    q-btn.h-btn1.full-width(color="primary" no-caps unelevated rounded :label="$t('profiles.wallet-base.redeem')" @click="showPayoutModal = true")
       q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle") {{ $t('profiles.wallet-base.queueHusdRedemption') }}
 
 </template>

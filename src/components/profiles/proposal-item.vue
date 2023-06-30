@@ -1,6 +1,6 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
-import CONFIG from '../../pages/proposals/create/config.json'
+import CONFIG from '../../pages/proposals/create/config.js'
 import { format } from '../../mixins/format'
 import { proposals } from '../../mixins/proposals'
 import { cycleDurationSec } from '../../utils/proposal-parsing'
@@ -233,19 +233,19 @@ export default {
 </script>
 
 <template lang="pug">
-widget.q-px-sm(noPadding="noPadding" :background="background" :class="{ 'cursor-pointer': clickable }" @click.native="clickable && onClick()")
+widget.q-px-sm(noPadding :background="background" :class="{ 'cursor-pointer': clickable }" @click.native="clickable && onClick()")
   .flex.justify-center(:class="{item: !expandable, 'item-expandable': expandable, 'compact-card': compact}")
     one-time-activity-header.q-px-lg(v-if="type === 'Payout' || type === PROPOSAL_TYPE.QUEST_PAYOUT" :votingExpired="isVotingExpired" :accepted="isAccepted" :title="title" :state="status" :compensation="compensation" :created="created" :type="type")
       template(v-slot:right)
         .q-mt-md(v-if="$q.screen.sm")
         voting-result(:class="{'q-mt-xl': compact}" v-if="isProposed" v-bind="voting" :colorConfig="isVotingExpired || isApproved ? expiredColorConfig : colorConfig" :colorConfigQuorum="isVotingExpired || isApproved ? expiredColorConfig : colorConfigQuorum")
-        q-btn.q-mr-md.view-proposa-btn(v-if="!owner && !isProposed" :label="$t('profiles.proposal-item.viewProposal')" color="primary" rounded="rounded" unelevated="unelevated" no-caps="no-caps" outline="outline" @click="onClick")
+        q-btn.q-mr-md.view-proposa-btn(v-if="!owner && !isProposed" :label="$t('profiles.proposal-item.viewProposal')" color="primary" rounded unelevated no-caps outline @click="onClick")
     recurring-activity-header.q-px-lg(v-if="type === 'Assignment' || type === 'Assignbadge'" calendar="calendar" :type="type" :claims="claims" :periods="periods" :expanded="expanded" :moons="true" :votingExpired="isVotingExpired" :accepted="isAccepted" :title="title" :subtitle="subtitle" :state="status" :salary="salary" :commit="commit")
       template(v-slot:right)
         .q-mt-md(v-if="$q.screen.sm")
         voting-result(:class="{'q-mt-xl': compact}" v-if="isProposed" v-bind="voting" :colorConfig="isVotingExpired || isApproved ? expiredColorConfig : colorConfig" :colorConfigQuorum="isVotingExpired || isApproved ? expiredColorConfig : colorConfigQuorum")
         assignment-claim-extend(:class="{'q-mt-xl': compact}" v-if="owner && !isProposed && (proposal.details_state_s === 'approved' || proposal.details_state_s === 'archived')" :notClaim="!daoSettings.cashClaimsEnabled && (newDeferred < 100)" :showClaim="type === 'Assignment'" :claims="claims" :claiming="claiming" :extend="extend" :state="proposal.details_state_s" :stacked="true" @claim-all="onClaimAll" @extend="onExtend")
-        q-btn.q-mr-md.view-proposa-btn(v-if="!owner && !isProposed" :label="$t('profiles.proposal-item.viewProposal1')" color="primary" rounded="rounded" unelevated="unelevated" no-caps="no-caps" outline="outline" @click="onClick")
+        q-btn.q-mr-md.view-proposa-btn(v-if="!owner && !isProposed" :label="$t('profiles.proposal-item.viewProposal1')" color="primary" rounded unelevated no-caps outline @click="onClick")
     .row.justify-center(v-if="owner && expandable && periods.length")
       q-icon.expand-icon(:name="'fas fa-chevron-down' + (expanded ? ' fa-rotate-180' : '')" color="grey-7")
 

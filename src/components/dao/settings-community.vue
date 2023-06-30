@@ -106,7 +106,7 @@ export default {
 </script>
 
 <template lang="pug">
-widget.q-pa-none.full-width(title="Community" titleImage="/svg/vote.svg" :bar="true")
+widget.q-pa-none.full-width(:title="$t('dao.settings-community.community')" titleImage="/svg/vote.svg" :bar="true")
   p.text-sm.text-h-gray.leading-loose.q-mt-md {{ $t('dao.settings-community.doYouWantToExpand') }}
   .row.justify-end
     .row.items-center
@@ -122,13 +122,13 @@ widget.q-pa-none.full-width(title="Community" titleImage="/svg/vote.svg" :bar="t
         label.h-label {{ $t('dao.settings-community.communityVotingMethod') }}
         .row.q-py-sm
           .col-4.q-pr-sm
-            q-btn.full-width.q-px-xl.rounded-border.text-bold(:disable="!isAdmin" :color="form.communityVotingMethod === 'CLASSIC' ? 'primary' : 'internal-bg'  " :text-color="form.communityVotingMethod === 'CLASSIC' ? 'white' : 'primary'  " @click="form.communityVotingMethod = 'CLASSIC'" label="Classic" no-caps="no-caps" rounded="rounded" unelevated="unelevated")
+            q-btn.full-width.q-px-xl.rounded-border.text-bold(:disable="!isAdmin" :color="form.communityVotingMethod === 'CLASSIC' ? 'primary' : 'internal-bg'  " :text-color="form.communityVotingMethod === 'CLASSIC' ? 'white' : 'primary'  " @click="form.communityVotingMethod = 'CLASSIC'" :label="$t('dao.settings-community.classic')" no-caps rounded unelevated)
             q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") {{ $t('dao.settings-community.onlyDaoAdminsCanChange') }}
           .col-4.q-pl-sm
-            q-btn.full-width.q-px-xl.rounded-border.text-bold(:disable="!isAdmin" :color="form.communityVotingMethod === 'UPVOTE' ? 'primary' : 'internal-bg'  " :text-color="form.communityVotingMethod === 'UPVOTE' ? 'white' : 'primary'  " @click="form.communityVotingMethod = 'UPVOTE'" label="Upvote" no-caps="no-caps" rounded="rounded" unelevated="unelevated")
+            q-btn.full-width.q-px-xl.rounded-border.text-bold(:disable="!isAdmin" :color="form.communityVotingMethod === 'UPVOTE' ? 'primary' : 'internal-bg'  " :text-color="form.communityVotingMethod === 'UPVOTE' ? 'white' : 'primary'  " @click="form.communityVotingMethod = 'UPVOTE'" :label="$t('dao.settings-community.upvote')" no-caps rounded unelevated)
             q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") {{ $t('dao.settings-community.onlyDaoAdminsCanChange') }}
       .col-6.bg-secondary.rounded-full.row.justify-center.items-center(v-if="form.communityVotingMethod === votingMethods.UPVOTE")
-        q-btn.q-px-xl.rounded-border.text-bold.q-mr-xs(:disable="!isAdmin" @click="$emit('import')" color="white" label="Import EDEN election from EOS" no-caps="no-caps" rounded="rounded" text-color="primary" unelevated="unelevated")
+        q-btn.q-px-xl.rounded-border.text-bold.q-mr-xs(:disable="!isAdmin" @click="$emit('import')" color="white" label="Import EDEN election from EOS" no-caps rounded text-color="primary" unelevated)
     section#UPVOTE(v-if="form.communityVotingEnabled && form.communityVotingMethod === votingMethods.UPVOTE")
       section.full-width.q-mt-xl.q-pt-xl
         .h-h4
@@ -138,11 +138,11 @@ widget.q-pa-none.full-width(title="Community" titleImage="/svg/vote.svg" :bar="t
           .col-6
             .row
               label.h-label {{ $t('dao.settings-community.upvoteElectionStartingDate') }}
-            q-date.q-mt-xs.bg-internal-bg(flat="flat" landscape="landscape" v-model="form.upvoteStartDate")
+            q-date.q-mt-xs.bg-internal-bg(flat landscape="landscape" v-model="form.upvoteStartDate")
           .col-6
             .row
               label.h-label {{ $t('dao.settings-community.upvoteElectionStartingTime') }}
-            q-time.q-mt-xs.bg-internal-bg(flat="flat" landscape="landscape" v-model="form.upvoteStartTime")
+            q-time.q-mt-xs.bg-internal-bg(flat landscape="landscape" v-model="form.upvoteStartTime")
       section.full-width.q-mt-xl.q-pt-xl
         .h-h4
           spain.text-secondary.q-mr-md 2
@@ -158,7 +158,7 @@ widget.q-pa-none.full-width(title="Community" titleImage="/svg/vote.svg" :bar="t
                       | {{ $t('dao.settings-community.peoplePassing') }}
                   .q-mt-xs.row.full-width
                     .col-7.row.justify-between.q-mr-sm
-                      q-btn.duration-button.text-bold.text-lowercase(:color="form.upvoteRounds[index].peoplePassing === option.value ? 'primary' : 'internal-bg'" :disable="!isAdmin" :key="index" :text-color="form.upvoteRounds[index].peoplePassing === option.value ? 'white' : 'primary'" @click="form.upvoteRounds[index].peoplePassing = option.value" padding="none" rounded="rounded" unelevated="unelevated" v-for="(option) in peoplePassingOptions") {{ option.label }}
+                      q-btn.duration-button.text-bold.text-lowercase(:color="form.upvoteRounds[index].peoplePassing === option.value ? 'primary' : 'internal-bg'" :disable="!isAdmin" :key="index" :text-color="form.upvoteRounds[index].peoplePassing === option.value ? 'white' : 'primary'" @click="form.upvoteRounds[index].peoplePassing = option.value" padding="none" rounded unelevated v-for="(option) in peoplePassingOptions") {{ option.label }}
                     .col-grow
                       custom-period-input(type="number" :disable="!isAdmin" :isActive="isCustomPeoplePassing(form.upvoteRounds[index].peoplePassing)" @selected="form.upvoteRounds[index].peoplePassing = 0" v-model="form.upvoteRounds[index].peoplePassing")
                   q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") {{ $t('dao.settings-community.onlyDaoAdminsCanChange') }}
@@ -170,15 +170,15 @@ widget.q-pa-none.full-width(title="Community" titleImage="/svg/vote.svg" :bar="t
                       | {{ $t('dao.settings-community.duration') }}
                   .q-mt-xs.row.full-width
                     .col-7.row.justify-between.q-mr-sm
-                      q-btn.duration-button.text-bold.text-lowercase(:color="form.upvoteRounds[index].duration === option.value ? 'primary' : 'internal-bg'" :disable="!isAdmin" :key="index" :text-color="form.upvoteRounds[index].duration === option.value ? 'white' : 'primary'" @click="form.upvoteRounds[index].duration = option.value" padding="none" rounded="rounded" unelevated="unelevated" v-for="(option) in roundsDurationOptions") {{ option.label }}
+                      q-btn.duration-button.text-bold.text-lowercase(:color="form.upvoteRounds[index].duration === option.value ? 'primary' : 'internal-bg'" :disable="!isAdmin" :key="index" :text-color="form.upvoteRounds[index].duration === option.value ? 'white' : 'primary'" @click="form.upvoteRounds[index].duration = option.value" padding="none" rounded unelevated v-for="(option) in roundsDurationOptions") {{ option.label }}
                     .col-grow
                       custom-period-input(:disable="!isAdmin" :isActive="isCustomRoundsDuration(form.upvoteRounds[index].duration)" @selected="form.upvoteRounds[index].duration = 0" v-model="form.upvoteRounds[index].duration")
                   q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") {{ $t('dao.settings-community.onlyDaoAdminsCanChange') }}
             .row.items-center.q-mt-md
               .hr.col
               nav.row.justify-end
-                q-btn.text-bold.q-pa-none.q-mr-xs(:disable="form.upvoteRounds.length === 1 || !isAdmin" flat="flat" color="primary" no-caps="no-caps" padding="none" @click="form.upvoteRounds.splice(index, 1)") {{ $t('dao.settings-community.removeRound') }}
-                q-btn.text-bold.q-pa-none.q-ml-lg.q-mr-xs(:disable="form.upvoteRounds.length === 10 || !isAdmin" v-show="index === form.upvoteRounds.length - 1" flat="flat" color="primary" no-caps="no-caps" padding="none" @click="form.upvoteRounds.push({ peoplePassing: 50, duration: 10800 })") {{ $t('dao.settings-community.addRound') }}
+                q-btn.text-bold.q-pa-none.q-mr-xs(:disable="form.upvoteRounds.length === 1 || !isAdmin" flat color="primary" no-caps padding="none" @click="form.upvoteRounds.splice(index, 1)") {{ $t('dao.settings-community.removeRound') }}
+                q-btn.text-bold.q-pa-none.q-ml-lg.q-mr-xs(:disable="form.upvoteRounds.length === 10 || !isAdmin" v-show="index === form.upvoteRounds.length - 1" flat color="primary" no-caps padding="none" @click="form.upvoteRounds.push({ peoplePassing: 50, duration: 10800 })") {{ $t('dao.settings-community.addRound') }}
         .row.q-mt-xl
           .col-6.row.q-pr-xl
             .row.items-end.full-width
@@ -186,7 +186,7 @@ widget.q-pa-none.full-width(title="Community" titleImage="/svg/vote.svg" :bar="t
                 label.h-label {{ $t('dao.settings-community.chiefDelegateRoundHowManyChiefDelegates') }}
               .q-mt-xs.row.full-width
                 .col-7.row.justify-between.q-mr-sm
-                  q-btn.duration-button.text-bold.text-lowercase(:color="form.upvoteCheifDelegateCount === option.value ? 'primary' : 'internal-bg'" :disable="!isAdmin" :key="index" :text-color="form.upvoteCheifDelegateCount === option.value ? 'white' : 'primary'" @click="form.upvoteCheifDelegateCount = option.value" padding="none" rounded="rounded" unelevated="unelevated" v-for="(option, index) in delegatesPassingOptions") {{ option.label }}
+                  q-btn.duration-button.text-bold.text-lowercase(:color="form.upvoteCheifDelegateCount === option.value ? 'primary' : 'internal-bg'" :disable="!isAdmin" :key="index" :text-color="form.upvoteCheifDelegateCount === option.value ? 'white' : 'primary'" @click="form.upvoteCheifDelegateCount = option.value" padding="none" rounded unelevated v-for="(option, index) in delegatesPassingOptions") {{ option.label }}
                 .col-grow
                   custom-period-input(type="number" :disable="!isAdmin" :isActive="isCustomDelegates(form.upvoteCheifDelegateCount)" @selected="form.upvoteCheifDelegateCount = 0" v-model="form.upvoteCheifDelegateCount")
               q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") {{ $t('dao.settings-community.onlyDaoAdminsCanChange') }}
@@ -196,7 +196,7 @@ widget.q-pa-none.full-width(title="Community" titleImage="/svg/vote.svg" :bar="t
                 label.h-label {{ $t('dao.settings-community.chiefDelegatesRoundDuration') }}
               .q-mt-xs.row.full-width
                 .col-7.row.justify-between.q-mr-sm
-                  q-btn.duration-button.text-bold.text-lowercase(:color="form.upvoteCheifDelegateDuration === option.value ? 'primary' : 'internal-bg'" :disable="!isAdmin" :key="index" :text-color="form.upvoteCheifDelegateDuration === option.value ? 'white' : 'primary'" @click="form.upvoteCheifDelegateDuration = option.value" padding="none" rounded="rounded" unelevated="unelevated" v-for="(option, index) in roundsDurationOptions") {{ option.label }}
+                  q-btn.duration-button.text-bold.text-lowercase(:color="form.upvoteCheifDelegateDuration === option.value ? 'primary' : 'internal-bg'" :disable="!isAdmin" :key="index" :text-color="form.upvoteCheifDelegateDuration === option.value ? 'white' : 'primary'" @click="form.upvoteCheifDelegateDuration = option.value" padding="none" rounded unelevated v-for="(option, index) in roundsDurationOptions") {{ option.label }}
                 .col-grow
                   custom-period-input(:disable="!isAdmin" :isActive="isCustomRoundsDuration(form.upvoteCheifDelegateDuration)" @selected="form.upvoteCheifDelegateDuration = 0" v-model="form.upvoteCheifDelegateDuration")
               q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") {{ $t('dao.settings-community.onlyDaoAdminsCanChange') }}
@@ -208,9 +208,9 @@ widget.q-pa-none.full-width(title="Community" titleImage="/svg/vote.svg" :bar="t
                 label.h-label {{ $t('dao.settings-community.headDelegateRoundDoYouWant') }}
               .q-mt-xs.row.full-width
                 .col-4.q-pr-sm
-                  q-btn.full-width.q-px-xl.rounded-border.text-bold(:color="form.upvoteHeadDelegateRound ? 'primary' : 'internal-bg'  " :text-color="form.upvoteHeadDelegateRound ? 'white' : 'primary'  " @click="form.upvoteHeadDelegateRound = true" label="Yes" no-caps="no-caps" rounded="rounded" unelevated="unelevated")
+                  q-btn.full-width.q-px-xl.rounded-border.text-bold(:color="form.upvoteHeadDelegateRound ? 'primary' : 'internal-bg'  " :text-color="form.upvoteHeadDelegateRound ? 'white' : 'primary'  " @click="form.upvoteHeadDelegateRound = true" label="Yes" no-caps rounded unelevated)
                 .col-4.q-pl-sm
-                  q-btn.full-width.q-px-xl.rounded-border.text-bold(:color="!form.upvoteHeadDelegateRound  ? 'primary' : 'internal-bg'  " :text-color="!form.upvoteHeadDelegateRound  ? 'white' : 'primary'  " @click="form.upvoteHeadDelegateRound = false" label="No" no-caps="no-caps" rounded="rounded" unelevated="unelevated")
+                  q-btn.full-width.q-px-xl.rounded-border.text-bold(:color="!form.upvoteHeadDelegateRound  ? 'primary' : 'internal-bg'  " :text-color="!form.upvoteHeadDelegateRound  ? 'white' : 'primary'  " @click="form.upvoteHeadDelegateRound = false" label="No" no-caps rounded unelevated)
               q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") {{ $t('dao.settings-community.onlyDaoAdminsCanChange') }}
           .col-6.row.q-pr-xl(v-if="form.upvoteHeadDelegateRound")
             .row.items-end.full-width
@@ -218,7 +218,7 @@ widget.q-pa-none.full-width(title="Community" titleImage="/svg/vote.svg" :bar="t
                 label.h-label {{ $t('dao.settings-community.headDelegatesRoundDuration') }}
               .q-mt-xs.row.full-width
                 .col-7.row.justify-between.q-mr-sm
-                  q-btn.duration-button.text-bold.text-lowercase(:color="form.upvoteHeadDelegateDuration === option.value ? 'primary' : 'internal-bg'" :disable="!isAdmin" :key="index" :text-color="form.upvoteHeadDelegateDuration === option.value ? 'white' : 'primary'" @click="form.upvoteHeadDelegateDuration = option.value" padding="none" rounded="rounded" unelevated="unelevated" v-for="(option, index) in roundsDurationOptions") {{ option.label }}
+                  q-btn.duration-button.text-bold.text-lowercase(:color="form.upvoteHeadDelegateDuration === option.value ? 'primary' : 'internal-bg'" :disable="!isAdmin" :key="index" :text-color="form.upvoteHeadDelegateDuration === option.value ? 'white' : 'primary'" @click="form.upvoteHeadDelegateDuration = option.value" padding="none" rounded unelevated v-for="(option, index) in roundsDurationOptions") {{ option.label }}
                 .col-grow
                   custom-period-input(:disable="!isAdmin" :isActive="isCustomRoundsDuration(form.upvoteHeadDelegateDuration)" @selected="form.upvoteHeadDelegateDuration = 0" v-model="form.upvoteHeadDelegateDuration")
               q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") {{ $t('dao.settings-community.onlyDaoAdminsCanChange') }}
@@ -234,7 +234,7 @@ widget.q-pa-none.full-width(title="Community" titleImage="/svg/vote.svg" :bar="t
                 label.h-label {{ $t('dao.settings-community.edenVotingMethod') }}
               .q-mt-xs.row.full-width
                 .col-7.row.justify-between.q-mr-sm
-                  q-btn.duration-button.text-bold.text-lowercase(:color="form.upvoteDuration === option.value ? 'primary' : 'internal-bg'" :disable="!isAdmin" :key="index" :text-color="form.upvoteDuration === option.value ? 'white' : 'primary'" @click="form.upvoteDuration = option.value" padding="none" rounded="rounded" unelevated="unelevated" v-for="(option, index) in votingDurationOptions") {{ option.label }}
+                  q-btn.duration-button.text-bold.text-lowercase(:color="form.upvoteDuration === option.value ? 'primary' : 'internal-bg'" :disable="!isAdmin" :key="index" :text-color="form.upvoteDuration === option.value ? 'white' : 'primary'" @click="form.upvoteDuration = option.value" padding="none" rounded unelevated v-for="(option, index) in votingDurationOptions") {{ option.label }}
                 .col-grow
                   custom-period-input(:disable="!isAdmin" :isActive="isCustomVotingDuration(form.upvoteDuration)" @selected="form.upvoteDuration = 0" v-model="form.upvoteDuration")
               q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") {{ $t('dao.settings-community.onlyDaoAdminsCanChange') }}
@@ -252,7 +252,7 @@ widget.q-pa-none.full-width(title="Community" titleImage="/svg/vote.svg" :bar="t
           .col-7.row.q-mr-sm
             q-slider(:disable="!isAdmin" :max="100" :min="0" :step="1" color="primary" v-model="form.communityVotingAlignmentPercent")
           .col-grow
-            q-input.rounded-border.q-py-sm(:disable="!isAdmin" :rules="[val => val >= 0 && val <= 100]" dense="dense" outlined="outlined" rounded="rounded" suffix="%" v-model.number="form.communityVotingAlignmentPercent")
+            q-input.rounded-border.q-py-sm(:disable="!isAdmin" :rules="[val => val >= 0 && val <= 100]" dense outlined rounded suffix="%" v-model.number="form.communityVotingAlignmentPercent")
           q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") {{ $t('dao.settings-community.onlyDaoAdminsCanChange') }}
       .col-6.q-pl-sm
         .row.items-center.q-col-gutter-xs
@@ -263,7 +263,7 @@ widget.q-pa-none.full-width(title="Community" titleImage="/svg/vote.svg" :bar="t
           .col-7.row.q-mr-sm
             q-slider(:disable="!isAdmin" :max="100" :min="0" :step="1" color="primary" v-model="form.communityVotingQuorumPercent")
           .col-grow
-            q-input.rounded-border.q-py-sm(:disable="!isAdmin" :rules="[val => val >= 0 && val <= 100]" dense="dense" outlined="outlined" rounded="rounded" suffix="%" v-model.number="form.communityVotingQuorumPercent")
+            q-input.rounded-border.q-py-sm(:disable="!isAdmin" :rules="[val => val >= 0 && val <= 100]" dense outlined rounded suffix="%" v-model.number="form.communityVotingQuorumPercent")
           q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") {{ $t('dao.settings-community.onlyDaoAdminsCanChange') }}
     .row.q-mt-xl
       .col-6.row.q-pr-sm
@@ -274,7 +274,7 @@ widget.q-pa-none.full-width(title="Community" titleImage="/svg/vote.svg" :bar="t
               q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle") {{ $t('dao.settings-community.isTheDurationPeriod') }}
           .q-mt-xs.row.full-width
             .col-7.row.justify-between.q-mr-sm
-              q-btn.duration-button.text-bold.text-lowercase(:color="form.communityVotingDurationSec === option.value ? 'primary' : 'internal-bg'" :disable="!isAdmin" :key="index" :text-color="form.communityVotingDurationSec === option.value ? 'white' : 'primary'" @click="form.communityVotingDurationSec = option.value" padding="none" rounded="rounded" unelevated="unelevated" v-for="(option, index) in voteDurationOptions") {{ option.label }}
+              q-btn.duration-button.text-bold.text-lowercase(:color="form.communityVotingDurationSec === option.value ? 'primary' : 'internal-bg'" :disable="!isAdmin" :key="index" :text-color="form.communityVotingDurationSec === option.value ? 'white' : 'primary'" @click="form.communityVotingDurationSec = option.value" padding="none" rounded unelevated v-for="(option, index) in voteDurationOptions") {{ option.label }}
             .col-grow
               custom-period-input(:disable="!isAdmin" :isActive="isCustomVoteDuration(form.communityVotingDurationSec)" @selected="form.communityVotingDurationSec = 0" v-model="form.communityVotingDurationSec")
           q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") {{ $t('dao.settings-community.onlyDaoAdminsCanChange') }}

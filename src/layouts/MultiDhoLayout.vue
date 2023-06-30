@@ -59,11 +59,11 @@ export default {
       currentLang: localStorage.getItem('lang') ? localStorage.getItem('lang') : 'en',
       autoTranslate: false,
       languages: [
-        // {
-        //   label: 'Српски',
-        //   value: 'sr',
-        //   image: require('assets/images/locales/sr.svg')
-        // },
+        {
+          label: 'Српски',
+          value: 'sr',
+          image: require('assets/images/locales/sr.svg')
+        },
         {
           label: 'English (UK)',
           value: 'en-UK',
@@ -74,26 +74,26 @@ export default {
           value: 'en-US',
           image: require('assets/images/locales/us.png')
         },
-        // {
-        //   label: 'Español',
-        //   value: 'es',
-        //   image: require('assets/images/locales/es.jpeg')
-        // },
+        {
+          label: 'Español',
+          value: 'es',
+          image: require('assets/images/locales/es.jpeg')
+        },
         {
           label: 'Português (BR)',
           value: 'pt',
           image: require('assets/images/locales/pt.png')
+        },
+        {
+          label: '한국인',
+          value: 'ko',
+          image: require('assets/images/locales/ko.png')
+        },
+        {
+          label: '中國人',
+          value: 'zh',
+          image: require('assets/images/locales/zh.png')
         }
-        // {
-        //   label: '한국인',
-        //   value: 'ko',
-        //   image: require('assets/images/locales/ko.png')
-        // },
-        // {
-        //   label: '中國人',
-        //   value: 'zh',
-        //   image: require('assets/images/locales/zh.png')
-        // }
       ]
     }
   },
@@ -169,6 +169,8 @@ export default {
         }
         this.$i18n.locale = value
         localStorage.setItem('lang', value)
+        this.languageSettings = false
+        window.location.reload() // solution for updating translations supplied from js
       })
     }
   },
@@ -337,9 +339,9 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
         p.h-b1.text-white.q-my-lg.text-weight-300 {{ $t('layouts.multidholayout.weHaveTemporarily') }}
       nav.q-px-xl.q-pb-xl.full-width.row
         .col-6.q-pr-xs
-          q-btn.q-px-xl.rounded-border.text-bold.full-width(@click="downgradePlan" :label="$t('layouts.multidholayout.downgradeMeTo')" no-caps="no-caps" outline="outline" rounded="rounded" text-color="white" unelevated="unelevated")
+          q-btn.q-px-xl.rounded-border.text-bold.full-width(@click="downgradePlan" :label="$t('layouts.multidholayout.downgradeMeTo')" no-caps outline rounded text-color="white" unelevated)
         .col-6.q-pl-xs
-          q-btn.q-px-xl.rounded-border.text-bold.full-width(:to="{ name: 'configuration', query: { tab: 'PLAN' } }" color="white" text-color="negative" :label="$t('layouts.multidholayout.renewMyCurrentPlan')" no-caps="no-caps" rounded="rounded" unelevated="unelevated")
+          q-btn.q-px-xl.rounded-border.text-bold.full-width(:to="{ name: 'configuration', query: { tab: 'PLAN' } }" color="white" text-color="negative" :label="$t('layouts.multidholayout.renewMyCurrentPlan')" no-caps rounded unelevated)
   q-header.bg-white(v-if="$q.screen.lt.lg")
     top-navigation(@isActiveRoute="isActiveRoute" @showLangSettings="languageSettings = true, right = false" :showTopButtons="showTopBarItems" :profile="profile" @toggle-sidebar="!$q.screen.md ? right = true : showMinimizedMenu = true" @search="onSearch" :dho="dho" :dhos="getDaos($apolloData.data.member)" :selectedDaoPlan="selectedDaoPlan")
   q-page-container.bg-white.window-height.q-py-sm(:class="{ 'q-pr-sm': $q.screen.gt.md, 'q-px-xs': !$q.screen.gt.md}")
@@ -360,7 +362,7 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
                 .col(v-if="showTopBarItems")
                   .row.justify-end.items-center(v-if="$q.screen.gt.md")
                     router-link(v-if="selectedDaoPlan.isEcosystem" :to="{ name: 'ecosystem' }")
-                      q-btn.q-mr-xs(unelevated="unelevated" rounded="rounded" padding="12px" icon="fas fa-share-alt" size="sm" :color="isActiveRoute('ecosystem') ? 'primary' : 'white'" :text-color="isActiveRoute('ecosystem') ? 'white' : 'primary'")
+                      q-btn.q-mr-xs(unelevated rounded padding="12px" icon="fas fa-share-alt" size="sm" :color="isActiveRoute('ecosystem') ? 'primary' : 'white'" :text-color="isActiveRoute('ecosystem') ? 'white' : 'primary'")
                     router-link(:to="{ name: 'configuration' }")
                       q-btn.q-mr-xs(unelevated rounded padding="12px" icon="fas fa-cog"  size="sm" :color="isActiveRoute('configuration') ? 'primary' : 'white'" :text-color="isActiveRoute('configuration') ? 'white' : 'primary'" )
                     router-link.q-mr-sm(:to="{ name: 'support' }")

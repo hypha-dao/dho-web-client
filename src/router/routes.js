@@ -1,4 +1,4 @@
-
+import I18n from '../utils/i18n'
 const routes = [
   {
     path: '/',
@@ -8,8 +8,8 @@ const routes = [
         path: '/',
         name: 'root',
         meta: {
-          title: 'Explore DAOs',
-          subtitle: 'Find out more about how to set up your own DAO and Hypha here: https://hypha.earth'
+          title: I18n.t('routes.exploreDAOs'),
+          subtitle: I18n.t('routes.findOutMoreAboutHowToSetUp')
         },
         component: () => import('pages/dho/Explore.vue')
       }
@@ -20,7 +20,7 @@ const routes = [
     path: '/not-found',
     name: 'dao-not-found',
     meta: {
-      title: '404 Not Found'
+      title: I18n.t('routes.404NotFound')
     },
     component: () => import('pages/Error404DHO.vue')
   },
@@ -33,7 +33,7 @@ const routes = [
         path: 'finflow',
         name: 'finflow-tools',
         meta: {
-          title: 'Finflow'
+          title: I18n.t('routes.finflow')
         },
         component: () => import('pages/dho/Finflow.vue')
       },
@@ -41,7 +41,7 @@ const routes = [
         path: '/',
         name: 'dashboard',
         meta: {
-          title: 'Dashboard'
+          title: I18n.t('routes.dashboard')
         },
         component: () => import('pages/dho/Home.vue')
       },
@@ -51,7 +51,7 @@ const routes = [
         meta: {
           breadcrumbs: {
             tab: {
-              name: 'Explore',
+              name: I18n.t('routes.explore'),
               link: { name: 'explore' }
             }
           },
@@ -59,7 +59,7 @@ const routes = [
             desktop: 'default',
             mobile: 'create'
           },
-          title: 'Create a new DHO'
+          title: I18n.t('routes.createANewDao')
           // requiresAuth: true,
           // requiresAuthMember: true
         },
@@ -75,7 +75,7 @@ const routes = [
         path: 'login',
         name: 'login',
         meta: {
-          title: 'Login',
+          title: I18n.t('routes.login'),
           hideForAuth: true
         },
         component: () => import('pages/onboarding/NLogin.vue')
@@ -84,14 +84,14 @@ const routes = [
         path: 'members',
         name: 'members',
         meta: {
-          title: 'Members'
+          title: I18n.t('routes.members')
         },
         component: () => import('pages/dho/Members.vue')
       },
       {
         path: 'proposals',
         meta: {
-          title: 'Proposals'
+          title: I18n.t('routes.proposals')
         },
         component: () => import('pages/proposals/Proposals.vue'),
         children: [
@@ -101,14 +101,14 @@ const routes = [
             meta: {
               breadcrumbs: {
                 tab: {
-                  name: 'Dashboard',
+                  name: I18n.t('routes.dashboard'),
                   link: { name: 'dashboard' }
                 }
               },
               props: true,
               requiresAuth: true,
               requiresAuthMember: true,
-              title: 'Create Proposal'
+              title: I18n.t('routes.createProposal')
             },
             component: () => import('pages/proposals/ProposalCreate.vue')
           },
@@ -116,10 +116,10 @@ const routes = [
             path: 'history',
             name: 'proposal-history',
             meta: {
-              title: 'Proposal history',
+              title: I18n.t('routes.proposalHistory'),
               breadcrumbs: {
                 tab: {
-                  name: 'Proposals',
+                  name: I18n.t('routes.proposals'),
                   link: { name: 'proposals' }
                 }
               }
@@ -132,12 +132,12 @@ const routes = [
             meta: {
               breadcrumbs: {
                 tab: {
-                  name: 'Proposals',
+                  name: I18n.t('routes.proposals'),
                   link: { name: 'proposals' }
                 }
               },
               layout: 'proposal',
-              title: 'Proposal Details'
+              title: I18n.t('routes.proposalDetails')
             },
             component: () => import('pages/proposals/ProposalDetail.vue'),
             props: true
@@ -146,7 +146,7 @@ const routes = [
             path: '',
             name: 'proposals',
             meta: {
-              title: 'Proposals'
+              title: I18n.t('routes.proposals')
             },
             component: () => import('pages/proposals/ProposalList.vue')
           }
@@ -156,7 +156,7 @@ const routes = [
         path: 'organization',
         name: 'organization',
         meta: {
-          title: 'Organization'
+          title: I18n.t('routes.organization')
         },
         component: () => import('pages/dho/Organization.vue')
       },
@@ -164,10 +164,10 @@ const routes = [
         path: 'organization/assets/:type',
         name: 'organization/assets',
         meta: {
-          title: 'Organization Assets',
+          title: I18n.t('routes.organizationAssets'),
           breadcrumbs: {
             tab: {
-              name: 'Organization',
+              name: I18n.t('routes.organization'),
               link: { name: 'organization' }
             }
           }
@@ -178,7 +178,7 @@ const routes = [
         path: 'organization/assets/badge/:docId',
         name: 'organization/assets/badge',
         meta: {
-          title: 'Organization Badges'
+          title: I18n.t('routes.organizationBadges')
         },
         component: () => import('pages/proposals/ProposalDetail.vue'),
         props: true
@@ -187,7 +187,7 @@ const routes = [
         path: 'organization/assets/role/:docId',
         name: 'organization/assets/role',
         meta: {
-          title: 'Organization Roles'
+          title: I18n.t('routes.organizationRoles')
         },
         component: () => import('pages/proposals/ProposalDetail.vue'),
         props: true
@@ -196,7 +196,7 @@ const routes = [
         path: 'explore',
         name: 'explore',
         meta: {
-          title: 'Explore DAOs'
+          title: I18n.t('routes.exploreDAOs')
         },
         component: () => import('pages/dho/Explore.vue')
       },
@@ -204,7 +204,7 @@ const routes = [
         path: '@:username',
         name: 'profile',
         meta: {
-          title: 'Profile'
+          title: I18n.t('routes.profile')
         },
         component: () => import('pages/profiles/Profile.vue'),
         props: true
@@ -215,11 +215,11 @@ const routes = [
         meta: {
           breadcrumbs: {
             tab: {
-              name: 'Dashboard',
+              name: I18n.t('routes.dashboard'),
               link: { name: 'dashboard' }
             }
           },
-          title: 'Profile creation',
+          title: I18n.t('routes.profileCreation'),
           requiresAuth: true,
           requiresAuthMember: true
         },
@@ -232,11 +232,11 @@ const routes = [
         meta: {
           breadcrumbs: {
             tab: {
-              name: 'Dashboard',
+              name: I18n.t('routes.dashboard'),
               link: { name: 'dashboard' }
             }
           },
-          title: 'Wallet',
+          title: I18n.t('routes.wallet'),
           requiresAuth: true
           // requiresAuthMember: true
         },
@@ -249,11 +249,11 @@ const routes = [
         meta: {
           breadcrumbs: {
             tab: {
-              name: 'Organization',
+              name: I18n.t('routes.organization'),
               link: 'organization'
             }
           },
-          title: 'Circles'
+          title: I18n.t('routes.circles')
         },
         component: () => import('pages/dho/Circle.vue')
 
@@ -264,11 +264,11 @@ const routes = [
         meta: {
           breadcrumbs: {
             tab: {
-              name: 'Search results',
+              name: I18n.t('routes.searchResults'),
               link: 'explore'
             }
           },
-          title: 'Search'
+          title: I18n.t('routes.search')
         },
         component: () => import('pages/search/Results.vue')
       },
@@ -276,7 +276,7 @@ const routes = [
         path: 'support',
         name: 'support',
         meta: {
-          title: 'Support'
+          title: I18n.t('routes.support')
         },
         component: () => import('pages/support/Support.vue')
       },
@@ -286,11 +286,11 @@ const routes = [
         meta: {
           breadcrumbs: {
             tab: {
-              name: 'Organization',
+              name: I18n.t('routes.organization'),
               link: 'organization'
             }
           },
-          title: 'Treasury'
+          title: I18n.t('routes.treasury')
         },
         component: () => import('pages/dho/Treasury.vue')
       },
@@ -300,11 +300,11 @@ const routes = [
         meta: {
           breadcrumbs: {
             tab: {
-              name: 'Dashboard',
+              name: I18n.t('routes.dashboard'),
               link: { name: 'dashboard' }
             }
           },
-          title: 'Multi sig'
+          title: I18n.t('routes.multiSig')
         },
         component: () => import('pages/dho/MultiSig.vue')
       },
@@ -314,11 +314,11 @@ const routes = [
         meta: {
           breadcrumbs: {
             tab: {
-              name: 'Dashboard',
+              name: I18n.t('routes.dashboard'),
               link: { name: 'dashboard' }
             }
           },
-          title: 'Configuration settings'
+          title: I18n.t('routes.configurationSettings')
         },
         component: () => import('pages/dho/Configuration.vue')
       },
@@ -328,11 +328,11 @@ const routes = [
         meta: {
           breadcrumbs: {
             tab: {
-              name: 'Dashboard',
+              name: I18n.t('routes.dashboard'),
               link: { name: 'dashboard' }
             }
           },
-          title: 'Ecosystem Dashboard'
+          title: I18n.t('routes.ecosystemDashboard')
         },
         component: () => import('pages/dho/Ecosystem.vue')
       },
@@ -343,11 +343,11 @@ const routes = [
         meta: {
           breadcrumbs: {
             tab: {
-              name: 'Dashboard',
+              name: I18n.t('routes.dashboard'),
               link: { name: 'dashboard' }
             }
           },
-          title: 'Checkout'
+          title: I18n.t('routes.checkout')
         },
         component: () => import('pages/ecosystem/EcosystemChekout.vue')
 
@@ -356,7 +356,7 @@ const routes = [
         path: 'home',
         name: 'dashboard',
         meta: {
-          title: 'Dashboard'
+          title: I18n.t('routes.dashboard')
         },
         component: () => import('pages/dho/Home.vue')
       },
@@ -366,11 +366,11 @@ const routes = [
         meta: {
           breadcrumbs: {
             tab: {
-              name: 'Dashboard',
+              name: I18n.t('routes.dashboard'),
               link: { name: 'dashboard' }
             }
           },
-          title: 'Upvote Election'
+          title: I18n.t('routes.upvoteElection')
         },
         component: () => import('pages/upvote-election/UpvoteElection.vue')
       },
@@ -378,7 +378,7 @@ const routes = [
         path: '*',
         name: '404-not-found',
         meta: {
-          title: '404 Not Found'
+          title: I18n.t('routes.404NotFound')
         },
         component: () => import('pages/Error404Page.vue')
       }

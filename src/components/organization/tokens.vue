@@ -1,4 +1,5 @@
 <script>
+import I18n from '~/utils/i18n'
 export default {
   name: 'tokens',
   components: {
@@ -11,7 +12,7 @@ export default {
      */
     title: {
       type: String,
-      default: 'Issuance'
+      default: I18n.t('organization.tokens.issuance')
     },
     tokens: {
       type: Array,
@@ -28,12 +29,12 @@ export default {
 </script>
 
 <template lang="pug">
-widget.q-px-xxl.q-py-lg(noPadding="noPadding")
+widget.q-px-xxl.q-py-lg(noPadding)
   .justify-between.items-center.full-width(v-if="vertical")
     .h-h4 {{ title }}
     .token-row.q-my-md(v-for="token in tokens" :key="token.tokenName" v-bind="token")
       treasury-token(v-bind="token" :daoLogo="daoLogo")
-    q-btn.h-btn2.full-width.q-mt-md(rounded="rounded" text-color="primary" outline="outline" no-caps="no-caps" @click="$emit('more-clicked')") {{ $t('organization.tokens.seeMore') }}
+    q-btn.h-btn2.full-width.q-mt-md(rounded text-color="primary" outline no-caps @click="$emit('more-clicked')") {{ $t('organization.tokens.seeMore') }}
   .row.justify-between.items-center(v-else)
     .col-12
       .row.items-center
@@ -45,6 +46,6 @@ widget.q-px-xxl.q-py-lg(noPadding="noPadding")
               treasury-token(v-bind="token" :daoLogo="daoLogo")
         .col-1(v-if="more")
           .row.justify-center.items-center
-            q-btn.h-btn2(rounded="rounded" text-color="primary" flat="flat" no-caps="no-caps" @click="$emit('more-clicked')") {{ $t('organization.tokens.seeMore1') }}
+            q-btn.h-btn2(rounded text-color="primary" flat no-caps @click="$emit('more-clicked')") {{ $t('organization.tokens.seeMore1') }}
 
 </template>

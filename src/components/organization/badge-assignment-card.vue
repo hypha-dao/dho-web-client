@@ -1,11 +1,11 @@
 <template lang="pug">
-widget.bg-internal-bg.q-my-xxs.cursor-pointer(noPadding="noPadding")
+widget.bg-internal-bg.q-my-xxs.cursor-pointer(noPadding)
   .row.items-center.content(:style="cssVars")
     .col
       .row.flex.items-center
         q-avatar(size="md" v-if="icon && !icon.includes('icon:')")
           img(:src="icon")
-        q-btn(v-if="icon && icon.includes('icon:')" round="round" unelevated="unelevated" :icon="icon.replace('icon:', '')" color="primary" text-color="white" size="10px" :ripple="false")
+        q-btn(v-if="icon && icon.includes('icon:')" round unelevated :icon="icon.replace('icon:', '')" color="primary" text-color="white" size="10px" :ripple="false")
         .h-h5.q-ml-xl.one-line(:class="{ 'q-ml-md': !compact, 'h-h7': compact }") {{ title }}
     template(v-if="!compact")
       .col

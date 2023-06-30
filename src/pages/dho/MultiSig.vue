@@ -188,7 +188,7 @@ export default {
           q-icon.expand-icon(:name="'fas fa-chevron-down' + ' fa-rotate-180'" color="grey-7")
   .col-9.q-pr-md(v-if="$q.screen.gt.md")
     widget.q-pa-none
-      q-table.multi-sig(:columns="columns " :data="proposals" :hide-bottom="true" :loading="loading" :pagination.sync="pagination" row-key="proposal.proposal_name" virtual-scroll="virtual-scroll")
+      q-table.multi-sig(:columns="columns " :data="proposals" :hide-bottom="true" :loading="loading" :pagination.sync="pagination" row-key="proposal.proposal_name" virtual-scroll)
         template(v-slot:body="props")
           q-tr.q-tr--no-hover(:props="props")
             q-td(key="type" :props="props" v-if="$q.screen.gt.md")
@@ -203,18 +203,18 @@ export default {
             q-td(key="notes" :props="props")
               p.q-py-md.q-ma-none {{ truncate (getKeyValue(props.row, 'notes'), 40) }}
             q-td(key="links" :props="props")
-              q-btn(@click="openUrl(getKeyValue(props.row, 'github_commit'))" flat="flat" round="round" v-if="getKeyValue(props.row, 'github_commit')")
+              q-btn(@click="openUrl(getKeyValue(props.row, 'github_commit'))" flat round v-if="getKeyValue(props.row, 'github_commit')")
                 q-icon(center="center" name="fab fa-github" size="20px")
-              q-btn(@click="openUrl(getKeyValue(props.row, 'document'))" flat="flat" round="round" v-if="getKeyValue(props.row, 'document')")
+              q-btn(@click="openUrl(getKeyValue(props.row, 'document'))" flat round v-if="getKeyValue(props.row, 'document')")
                 q-icon(center="center" name="fas fa-file-alt" size="20px")
             q-td(key="approvals" :props="props")
-              q-btn.approval.bg-primary.text-white.cursor-inherit(:key="approval.level.actor" padding="none" round="round" unelevated="unelevated" v-for="approval in props.row.provided_approvals") {{ getInitials(approval.level.actor) }}
+              q-btn.approval.bg-primary.text-white.cursor-inherit(:key="approval.level.actor" padding="none" round unelevated v-for="approval in props.row.provided_approvals") {{ getInitials(approval.level.actor) }}
 
                 q-tooltip Approved the
                   | {{ new Date(approval.time.slice(0, -4)).toLocaleDateString() }}
                   | by
                   | {{ approval.level.actor }}
-              q-btn.approval.bg-disabled.text-white(:disable="!isActor(approval.level.actor)" :key="approval.level.actor" @click="onConfirm(props.row)" padding="none" round="round" unelevated="unelevated" v-for="approval in props.row.requested_approvals") {{ getInitials(approval.level.actor) }}
+              q-btn.approval.bg-disabled.text-white(:disable="!isActor(approval.level.actor)" :key="approval.level.actor" @click="onConfirm(props.row)" padding="none" round unelevated v-for="approval in props.row.requested_approvals") {{ getInitials(approval.level.actor) }}
 
                 q-tooltip Requesting approval of
                   | {{ approval.level.actor }}
@@ -229,7 +229,7 @@ export default {
         br
         | {{ $t('pages.dho.multisig.signThisTransaction') }}
       p.h-b2.mt-xl.text-disabled {{ $t('pages.dho.multisig.multisigEnablesUs1') }}
-      q-btn.q-mt-xl.text-primary.text-bold.full-width(:loading="submitting" @click="onApprove()" color="white" text-color="primary" no-caps="no-caps" rounded="rounded") {{ $t('pages.dho.multisig.sign') }}
+      q-btn.q-mt-xl.text-primary.text-bold.full-width(:loading="submitting" @click="onApprove()" color="white" text-color="primary" no-caps rounded) {{ $t('pages.dho.multisig.sign') }}
     widget(v-show="state === 'NO_TRANSACTIONS'")
       h2.h-h4 {{ $t('pages.dho.multisig.noTransactionsTo') }}
         br

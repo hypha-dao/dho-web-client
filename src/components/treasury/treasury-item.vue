@@ -1,5 +1,5 @@
 <template lang="pug">
-widget.bg-internal-bg.full-width.q-pa-xl.treasury-item(noPadding="noPadding")
+widget.bg-internal-bg.full-width.q-pa-xl.treasury-item(noPadding)
   .row.items-center
     .col
       .h-b2.text-heading {{ redemption_id }}
@@ -25,7 +25,7 @@ widget.bg-internal-bg.full-width.q-pa-xl.treasury-item(noPadding="noPadding")
     .col
       template(v-for="treasury of treasurersList")
         q-avatar.over(v-if="!treasury" size="20px" color="disabled" icon="far fa-user" text-color="white")
-        profile-picture.over.display(v-else :username="treasury.creator" size="20px" ref="profilePic" tooltip="tooltip")
+        profile-picture.over.display(v-else :username="treasury.creator" size="20px" ref="profilePic" tooltip)
     .col
       slot(name="actions" v-if="actions")
 

@@ -80,6 +80,6 @@ export default {
     q-slider(v-model="newDeferred" :min="deferred.min" :max="deferred.max" :step="1" :label-value="newDeferred + '%'" :disable="submitting" label-always="label-always" :color="newDeferred === deferred.value ? 'primary' : 'negative'")
     .text-body2 {{ $t('assignments.dynamic-commit.thisDeferralRate') }}
   .col-12.q-mt-md
-    q-btn.full-width(rounded="rounded" unelevated="unelevated" :color="(newCommit === commit.value && newDeferred === deferred.value) ? 'disabled' : 'positive'" :disable="(newCommit === commit.value && newDeferred === deferred.value) || submitting" :loading="submitting" @click.stop="onSubmit") {{ $t('assignments.dynamic-commit.confirm') }}
+    q-btn.full-width(rounded unelevated :color="(newCommit === commit.value && newDeferred === deferred.value) ? 'disabled' : 'positive'" :disable="(newCommit === commit.value && newDeferred === deferred.value) || submitting" :loading="submitting" @click.stop="onSubmit") {{ $t('assignments.dynamic-commit.confirm') }}
 
 </template>

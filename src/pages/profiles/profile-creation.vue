@@ -318,25 +318,25 @@ export default {
           .full-width.q-pl-xl.column.justify-between.items-start
             p.text-caption.text-weight-thin.text-grey-7 {{ $t('pages.profiles.profile-creation.makeSureToUpdate') }}
             croppa.image-selector.q-mb-lg(v-model="image" ref="croppa" :accept="'image/*'" :file-size-limit="4e6" :width="140" :height="140" :quality="1" prevent-white-space="prevent-white-space" @file-choose="onNewImage" style="display: none")
-            q-btn.q-px-xl.rounded-border.text-bold(@click="$refs.croppa.chooseFile()" color="primary" no-caps="no-caps" outline="outline" rounded="rounded" unelevated="unelevated") {{ $t('pages.profiles.profile-creation.uploadAnImage') }}
+            q-btn.q-px-xl.rounded-border.text-bold(@click="$refs.croppa.chooseFile()" color="primary" no-caps outline rounded unelevated) {{ $t('pages.profiles.profile-creation.uploadAnImage') }}
         .row.full-width.justify-between.q-mt-xl
           .col-xs-12.col-sm-6.col-md-6.q-pr-sm
             label.h-h4 {{ $t('pages.profiles.profile-creation.name') }}
-            q-input.q-my-md.rounded-border(:debounce="200" :rules="[rules.required]" bg-color="white" dense="dense" lazy-rules="lazy-rules" maxlength="200" outlined="outlined" placeholder="Type your full name here" ref="name" rounded="rounded" v-model="form.name")
+            q-input.q-my-md.rounded-border(:debounce="200" :rules="[rules.required]" bg-color="white" dense lazy-rules maxlength="200" outlined placeholder="Type your full name here" ref="name" rounded v-model="form.name")
           .col-xs-12.col-sm-6.col-md-6.q-pl-sm
             label.h-h4 {{ $t('pages.profiles.profile-creation.accountName') }}
-            q-input.q-my-md.rounded-border(bg-color="white" dense="dense" lazy-rules="lazy-rules" maxlength="12" outlined="outlined" rounded="rounded" v-model="account" :disable="true")
+            q-input.q-my-md.rounded-border(bg-color="white" dense lazy-rules maxlength="12" outlined rounded v-model="account" :disable="true")
         .row.full-width.justify-between.q-mt-md
           .col-xs-12.col-sm-6.col-md-6.q-pr-sm
             label.h-h4.full-width {{ $t('pages.profiles.profile-creation.location') }}
-            q-select.q-my-md.rounded-border(:display-value="form.location && form.location.code" :option-label="(option) => `${option.name} (${option.code})`" :option-value="option => option" :options="phoneOptions" :rules="[rules.required]" @filter="filterCountry" bg-color="white" dense="dense" emit-value="emit-value" fill-input="fill-input" hide-selected="hide-selected" lazy-rules="lazy-rules" map-options="map-options" outlined="outlined" placeholder="Select a country" ref="location" rounded="rounded" use-input="use-input" v-model="form.location")
+            q-select.q-my-md.rounded-border(:display-value="form.location && form.location.code" :option-label="(option) => `${option.name} (${option.code})`" :option-value="option => option" :options="phoneOptions" :rules="[rules.required]" @filter="filterCountry" bg-color="white" dense emit-value fill-input="fill-input" hide-selected="hide-selected" lazy-rules map-options outlined placeholder="Select a country" ref="location" rounded use-input="use-input" v-model="form.location")
           .col-xs-12.col-sm-6.col-md-6.q-pl-sm
             label.h-h4.full-width {{ $t('pages.profiles.profile-creation.timeZone') }}
-            q-select.q-my-md.rounded-border(:options="timeZoneOptions" :rules="[rules.required]" @filter="filterTimeZones" bg-color="white" dense="dense" emit-value="emit-value" fill-input="fill-input" hide-selected="hide-selected" map-options="map-options" option-label="text" option-value="value" outlined="outlined" placeholder="Select a time zone" ref="timeZone" rounded="rounded" use-input="use-input" v-model="form.timeZone")
+            q-select.q-my-md.rounded-border(:options="timeZoneOptions" :rules="[rules.required]" @filter="filterTimeZones" bg-color="white" dense emit-value fill-input="fill-input" hide-selected="hide-selected" map-options option-label="text" option-value="value" outlined placeholder="Select a time zone" ref="timeZone" rounded use-input="use-input" v-model="form.timeZone")
       section.row(v-show="activeStepIndex === 1")
         label.h-h4.q-mt-md {{ $t('pages.profiles.profile-creation.tellUsSomethingAbout') }}
-        q-field.full-width.q-mt-xl.rounded-border(:rules="[rules.required, val => this.$sanitize(val, { allowedTags: [] }).length < ABOUT_MAX_LENGTH || `The about text must contain less than ${ABOUT_MAX_LENGTH} characters (your about text contain ${this.$sanitize(form.bio, { allowedTags: [] }).length} characters)`]" dense="dense" lazy-rules="lazy-rules" maxlength="3000" outlined="outlined" ref="bio" stack-label="stack-label" v-model="form.bio")
-          input-editor.full-width(flat="flat" placeholder="Type a short bio here" v-model="form.bio")
+        q-field.full-width.q-mt-xl.rounded-border(:rules="[rules.required, val => this.$sanitize(val, { allowedTags: [] }).length < ABOUT_MAX_LENGTH || `The about text must contain less than ${ABOUT_MAX_LENGTH} characters (your about text contain ${this.$sanitize(form.bio, { allowedTags: [] }).length} characters)`]" dense lazy-rules maxlength="3000" outlined ref="bio" stack-label v-model="form.bio")
+          input-editor.full-width(flat placeholder="Type a short bio here" v-model="form.bio")
       section.column.full-width(v-show="activeStepIndex === 2")
         label.h-h4.q-mt-md {{ $t('pages.profiles.profile-creation.connectYourPersonalWallet') }}
         p.text-caption.text-weight-thin.text-grey-7.q-mt-md {{ $t('pages.profiles.profile-creation.youCanEnterYourOther') }}
@@ -358,7 +358,7 @@ export default {
           .col-7
             .row.items-end
               text-input-toggle.col-7(:disable="false" :icon="'img:'+ require('~/assets/icons/chains/eos.svg')" :iconBackground="false" :showToggle="false" :text.sync="walletAddressesForm.eosAccount" :toggle.sync="toggles.eos" label="EOS" ref="eosAccount" type="text" placeholder="EOS address")
-              q-input.col-5.rounded-border.q-pl-sm(:disable="false" dense="dense" outlined="outlined" ref="eosMemo" type="text" v-model="walletAddressesForm.eosMemo" placeholder="EOS memo")
+              q-input.col-5.rounded-border.q-pl-sm(:disable="false" dense outlined ref="eosMemo" type="text" v-model="walletAddressesForm.eosMemo" placeholder="EOS memo")
           .col-5.flex.items-center.q-pl-md
             .text-body2.text-grey-7 {{ $t('pages.profiles.profile-creation.selectThisAsPreferred') }}
             q-toggle(v-model="toggles.eos" color="secondary" :disable="true")
@@ -381,8 +381,8 @@ export default {
       .row.full-width
         .text-red.bg-white(v-if="error") {{ error }}
       nav.row.justify-end.q-mt-xl.q-gutter-xs
-        q-btn.q-px-xl(:disable="submitting" @click="onPrevStep" color="primary" label="Previous step" no-caps="no-caps" outline="outline" rounded="rounded" unelevated="unelevated" v-show="activeStepIndex > 0")
-        q-btn.q-px-xl(:disable="submitting" :loading="submitting" @click="onNextStep" color="primary" :label="lastStep ? 'Publish' : 'Next step'" no-caps="no-caps" rounded="rounded" unelevated="unelevated")
+        q-btn.q-px-xl(:disable="submitting" @click="onPrevStep" color="primary" label="Previous step" no-caps outline rounded unelevated v-show="activeStepIndex > 0")
+        q-btn.q-px-xl(:disable="submitting" :loading="submitting" @click="onNextStep" color="primary" :label="lastStep ? 'Publish' : 'Next step'" no-caps rounded unelevated)
   .column.col-xs-12.col-sm-3.col-md-3
     creation-stepper(:activeStepIndex="activeStepIndex" :steps="steps")
 

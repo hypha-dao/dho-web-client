@@ -145,23 +145,23 @@ export default {
         .h-b1-signup.color-secondary.q-mt-lg.q-mb-lg(v-if="$q.platform.is.desktop") {{ $t('login.register-user-view.inOrderTo') }}
         .h-b1-signup.color-secondary.q-mt-lg.q-mb-lg(v-if="$q.platform.is.mobile") {{ $t('login.register-user-view.pleaseUseThe') }}
         .h-h7.q-mb-xs.q-pt-xxxl(:class="{ 'input-label-mobile':$q.platform.is.mobile }") {{ $t('login.register-user-view.accountName') }}
-          q-input.q-mb-sm(ref="account" v-model="formStep1.account" bg-color="white" :placeholder="$t('login.register-user-view.charactersAlphanumeric')" outlined="outlined" maxlength="12" :rules="[rules.required, rules.accountFormatBasic, rules.accountLength, rules.isAccountAvailable]" lazy-rules="lazy-rules" :debounce="200" rounded="rounded" @blur="formStep1.account = (formStep1.account || '').toLowerCase()" dense="dense")
+          q-input.q-mb-sm(ref="account" v-model="formStep1.account" bg-color="white" :placeholder="$t('login.register-user-view.charactersAlphanumeric')" outlined maxlength="12" :rules="[rules.required, rules.accountFormatBasic, rules.accountLength, rules.isAccountAvailable]" lazy-rules :debounce="200" rounded @blur="formStep1.account = (formStep1.account || '').toLowerCase()" dense)
           .h-h7.q-mb-xs(:class="{ 'input-label-mobile':$q.platform.is.mobile }") {{ $t('login.register-user-view.phoneNumber') }}
           .row.flex.phone-input.q-col-gutter-x-sm
             .col
-              q-select(ref="countryCode" v-model="formStep1.countryCode" :options="phoneOptions" :option-value="option => option" :option-label="(option) => `${option.name} (${option.dialCode})`" :display-value="formStep1.countryCode && formStep1.countryCode.dialCode" :placeholder="$t('login.register-user-view.country')" bg-color="white" emit-value="emit-value" map-options="map-options" outlined="outlined" clearable="clearable" :rules="[rules.required]" lazy-rules="lazy-rules" use-input="use-input" hide-selected="hide-selected" fill-input="fill-input" @filter="filterCountry" rounded="rounded" dense="dense")
+              q-select(ref="countryCode" v-model="formStep1.countryCode" :options="phoneOptions" :option-value="option => option" :option-label="(option) => `${option.name} (${option.dialCode})`" :display-value="formStep1.countryCode && formStep1.countryCode.dialCode" :placeholder="$t('login.register-user-view.country')" bg-color="white" emit-value map-options outlined clearable="clearable" :rules="[rules.required]" lazy-rules use-input="use-input" hide-selected="hide-selected" fill-input="fill-input" @filter="filterCountry" rounded dense)
             .col
-              q-input(ref="smsNumber" v-model="formStep1.smsNumber" bg-color="white" :placeholder="$t('login.register-user-view.phoneNumber1')" outlined="outlined" :rules="[rules.required, isPhoneValid]" lazy-rules="lazy-rules" type="number" rounded="rounded" dense="dense")
+              q-input(ref="smsNumber" v-model="formStep1.smsNumber" bg-color="white" :placeholder="$t('login.register-user-view.phoneNumber1')" outlined :rules="[rules.required, isPhoneValid]" lazy-rules type="number" rounded dense)
           .text-red.bg-white(v-if="error") {{ error }}
       #form2(v-show="step === 'keys'")
         .h-h1-signup.color-primary {{ $t('login.register-user-view.your') }}
         .h-h1-signup.color-primary.text-bold {{ $t('login.register-user-view.verificationCode') }}
         .h-b1-signup.color-secondary.q-mt-lg.q-mb-lg {{ $t('login.register-user-view.pleaseCheckYour') }}
         .h-h7.text-bold.input-label.q-mb-xxs {{ $t('login.register-user-view.verificationCode1') }}
-        input-field.q-pa-none.full-width(ref="code" v-model="formStep2.code" bg-color="white" outlined="outlined" :placeholder="$t('login.register-user-view.charactersAlphanumeric1')" :rules="[rules.required]" lazy-rules="lazy-rules" :error="!!error" :error-message="error" rounded="rounded" dense="dense")
+        input-field.q-pa-none.full-width(ref="code" v-model="formStep2.code" bg-color="white" outlined :placeholder="$t('login.register-user-view.charactersAlphanumeric1')" :rules="[rules.required]" lazy-rules :error="!!error" :error-message="error" rounded dense)
         p.text-xs.text-h-gray.font-lato.q-pa-none.q-ma-none.q-mt-xs.row.items-center.justify-end
           span.q-mr-xxs {{ $t('login.register-user-view.problemsWithTheCode') }}
-          q-btn.q-pa-none.q-ma-none.text-underline(flat="flat" color="primary" no-caps="no-caps" padding="0" @click="step = 'phoneNumber'") {{ $t('login.register-user-view.checkYourPhoneNumber') }}
+          q-btn.q-pa-none.q-ma-none.text-underline(flat color="primary" no-caps padding="0" @click="step = 'phoneNumber'") {{ $t('login.register-user-view.checkYourPhoneNumber') }}
       #form3(v-show="step === 'finish'")
         template
           .h-h1-signup(:class="{ 'h-h1-signup-mobile':$q.platform.is.mobile, 'color-primary':$q.platform.is.desktop }") {{ $t('login.register-user-view.welcome') }}
@@ -188,10 +188,10 @@ export default {
           .h-b3-signup.color-secondary.flex.column(v-if="$q.platform.is.mobile") {{ $t('login.register-user-view.areYouAMember') }}
             span.h-b3-signup.text-primary.cursor-pointer(style="text-decoration: underline" @click="$emit('onClickLoginPage')") {{ $t('login.register-user-view.loginHere') }}
         .col-4(v-if="$q.platform.is.desktop")
-          q-btn.full-width(v-if="isOnboarding && step === 'finish'" @click="onAuthorize" :label="$t('login.register-user-view.createDao')" color="primary" unelevated="unelevated" rounded="rounded" no-caps="no-caps")
-          q-btn.full-width(v-if="isOnboarding ? step !== 'finish' : true" :label="step === 'finish' ? 'Done' : 'Next'" color="primary" unelevated="unelevated" @click="next" :disable="step === 'keys' && !formStep2.copy" :loading="submitting" rounded="rounded" no-caps="no-caps")
+          q-btn.full-width(v-if="isOnboarding && step === 'finish'" @click="onAuthorize" :label="$t('login.register-user-view.createDao')" color="primary" unelevated rounded no-caps)
+          q-btn.full-width(v-if="isOnboarding ? step !== 'finish' : true" :label="step === 'finish' ? 'Done' : 'Next'" color="primary" unelevated @click="next" :disable="step === 'keys' && !formStep2.copy" :loading="submitting" rounded no-caps)
         .col(v-if="$q.platform.is.mobile")
-          q-btn.full-width(:label="step === 'finish' ? 'Done' : 'Next'" color="primary" unelevated="unelevated" @click="next" :loading="submitting" rounded="rounded" no-caps="no-caps")
+          q-btn.full-width(:label="step === 'finish' ? 'Done' : 'Next'" color="primary" unelevated @click="next" :loading="submitting" rounded no-caps)
 
 </template>
 

@@ -11,7 +11,7 @@ export default {
   props: {
     daoName: String,
     registrationEnabled: {
-      type: Boolean,
+      type: [Boolean, Number],
       default: true
     }
   },
@@ -35,16 +35,16 @@ export default {
         .row.justify-between
           profile-picture(username="g" size="88px" textOnly="textOnly")
           .container
-            q-btn(color="internal-bg" text-color="primary" rounded="rounded" unelevated="unelevated" size="sm" padding="12px" icon="fas fa-times" @click="$emit('close')")
+            q-btn(color="internal-bg" text-color="primary" rounded unelevated size="sm" padding="12px" icon="fas fa-times" @click="$emit('close')")
         .h-h3.q-mt-md {{ '@Guest' }}
       .sidebar-text
-        .h-h5 Welcome to {{ daoName && daoName.replace(/^\w/, (c) => c.toUpperCase()) }}
+        .h-h5 {{ $t('navigation.profile-sidebar-guest.welcomeTo', { daoName: daoName && daoName.replace(/^\w/, (c) => c.toUpperCase()) })}}
         .h-b2.text-body {{ $t('navigation.profile-sidebar-guest.asAGuest') }}
       .sidebar-buttons.aling-self-center
         div
-          q-btn.full-width.q-mt-xl(:label="$t('navigation.profile-sidebar-guest.registerNewAccount')" color="primary" rounded="rounded" no-caps="no-caps" :disable="!registrationEnabled" @click="onLogin")
+          q-btn.full-width.q-mt-xl(:label="$t('navigation.profile-sidebar-guest.registerNewAccount')" color="primary" rounded no-caps :disable="!registrationEnabled" @click="onLogin")
           q-tooltip(anchor="top middle" v-if="!registrationEnabled") {{ $t('navigation.profile-sidebar-guest.registrationIsTemporarilyDisabled') }}
-        q-btn.full-width.q-mt-xs(:label="$t('navigation.profile-sidebar-guest.login')" color="secondary" rounded="rounded" no-caps="no-caps" @click="onLogin")
+        q-btn.full-width.q-mt-xs(:label="$t('navigation.profile-sidebar-guest.login')" color="secondary" rounded no-caps @click="onLogin")
 
 </template>
 

@@ -217,7 +217,7 @@ widget.proposal-view.q-mb-sm
   .q-my-sm(:class="{ 'row':$q.screen.gt.md }" v-if="type === PROPOSAL_TYPE.ROLE || type === PROPOSAL_TYPE.EDIT || type === PROPOSAL_TYPE.PAYOUT || type === PROPOSAL_TYPE.ABILITY || type === PROPOSAL_TYPE.BADGE")
     .col.bg-internal-bg.rounded-border(:class="{ 'q-mr-xs':$q.screen.gt.md, 'q-mb-sm':$q.screen.lt.md || $q.screen.md }" v-if="icon")
       .row.full-width.q-pt-md.q-px-md.q-ml-xs(:class="{ 'q-pb-md':$q.screen.lt.md || $q.screen.md }" v-if="iconDetails")
-        q-btn.no-pointer-events(round="round" unelevated="unelevated" :icon="iconDetails.name" color="primary" text-color="white" size="15px" :ripple="false" v-if="iconDetails.type === 'icon'")
+        q-btn.no-pointer-events(round unelevated :icon="iconDetails.name" color="primary" text-color="white" size="15px" :ripple="false" v-if="iconDetails.type === 'icon'")
         q-avatar(size="lg" v-else-if="iconDetails.type === 'img'")
           img.icon-img(:src="iconDetails.name")
         ipfs-image-viewer(size="lg" :ipfsCid="iconDetails.cid" v-else-if="iconDetails.type === 'ipfs'")
@@ -237,7 +237,7 @@ widget.proposal-view.q-mb-sm
                 | %
               .dynamic-popup(v-if="showCommitPopup")
                 proposal-dynamic-popup.q-pa-xxl.absolute(:title="$t('proposals.proposal-view.adjustCommitment')" description="Multiple adjustments to your commitment will be included in the calculation." :step="5" :min="commit.min" :max="commit.max" :initialValue="commit.value" @close="showCommitPopup = false" @save="onCommitmentEdit")
-              q-btn.q-ml-xxxl(flat="flat" round="round" size="sm" icon="fas fa-pen" color="primary" v-if="ownAssignment && status === PROPOSAL_STATE.APPROVED" @click="showCommitPopup = true; showDefferredPopup = false")
+              q-btn.q-ml-xxxl(flat round size="sm" icon="fas fa-pen" color="primary" v-if="ownAssignment && status === PROPOSAL_STATE.APPROVED" @click="showCommitPopup = true; showDefferredPopup = false")
                 q-tooltip {{ $t('proposals.proposal-view.edit') }}
         .col-6(v-if="deferred !== undefined && type !== PROPOSAL_TYPE.PAYOUT")
           .text-bold.q-mb-xs {{ $t('proposals.proposal-view.deferredAmount') }}
@@ -246,7 +246,7 @@ widget.proposal-view.q-mb-sm
 
               .dynamic-popup(v-if="showDefferredPopup")
                 proposal-dynamic-popup.q-pa-xxl.absolute(:title="$t('proposals.proposal-view.adjustDeferred')" description="The % deferral will be immediately reflected on your next claim" :step="1" :min="deferred.min" :max="deferred.max" :initialValue="deferred.value" @close="showDefferredPopup = false" @save="onDeferredEdit")
-              q-btn.q-ml-xxxl(flat="flat" round="round" size="sm" icon="fas fa-pen" color="primary" v-if="ownAssignment && status === PROPOSAL_STATE.APPROVED || status === PROPOSAL_TYPE.ARCHIVED" @click="showDefferredPopup = true; showCommitPopup = false")
+              q-btn.q-ml-xxxl(flat round size="sm" icon="fas fa-pen" color="primary" v-if="ownAssignment && status === PROPOSAL_STATE.APPROVED || status === PROPOSAL_TYPE.ARCHIVED" @click="showDefferredPopup = true; showCommitPopup = false")
                 q-tooltip {{ $t('proposals.proposal-view.edit1') }}
   .q-my-sm(:class="{ 'row':$q.screen.gt.md }" v-if="type === PROPOSAL_TYPE.ARCHETYPE")
     .col-6
@@ -280,11 +280,11 @@ widget.proposal-view.q-mb-sm
             .text-grey-7.text-body2 {{ deferred.value + '%' }}
   template(v-if="parentCircle?.length")
     .text-xs.text-grey.text-italic {{ $t('proposals.proposal-view.parentCircle') }}
-    circles-widget(:circles="parentCircle" singleCircle="singleCircle")
+    circles-widget(:circles="parentCircle" singleCircle)
   template(v-if="circle")
     .q-mt-md
       .text-xs.text-grey.text-italic {{ $t('proposals.proposal-view.parentCircle1') }}
-      circles-widget(:circles="circleData" singleCircle="singleCircle")
+      circles-widget(:circles="circleData" singleCircle)
   template(v-if="masterPolicy")
     .text-xs.text-grey.text-italic {{ $t('proposals.proposal-view.parentPolicy') }}
     .row.q-mb-lg {{ masterPolicy.label }}
@@ -300,8 +300,8 @@ widget.proposal-view.q-mb-sm
   template(v-if="!preview && !isBadge")
     .text-grey.text-italic.top-border.q-pt-sm(:style="{ 'font-size': '12px' }") {{ $t('proposals.proposal-view.createdBy') }}
     .row.q-pt-md.justify-between
-      profile-picture(:username="creator" show-name="show-name" size="40px" link="link")
-      q-btn(flat="flat" color="primary" no-caps="no-caps" rounded="rounded" :disable="creator === null" :to="profile") {{ $t('proposals.proposal-view.seeProfile') }}
+      profile-picture(:username="creator" show-name size="40px" link)
+      q-btn(flat color="primary" no-caps rounded :disable="creator === null" :to="profile") {{ $t('proposals.proposal-view.seeProfile') }}
   .row
     slot(name="bottom")
 

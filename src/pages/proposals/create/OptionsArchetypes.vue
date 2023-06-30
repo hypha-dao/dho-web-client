@@ -59,10 +59,10 @@ export default {
       .h-h4.q-pt-xl {{ $t('pages.proposals.create.optionsarchetypes.chooseARoleArchetype') }}
         .row.full-width.q-mt-xs
           .col-6.q-pr-xxs
-            q-select.q-mt-xs(:options="archetypes" dense="dense" dropdown-icon="fas fa-chevron-down" hide-bottom-space="hide-bottom-space" options-dense="options-dense" outlined="outlined" rounded="rounded" v-model="archetype")
+            q-select.q-mt-xs(:options="archetypes" dense dropdown-icon="fas fa-chevron-down" hide-bottom-space options-dense outlined rounded v-model="archetype")
     .row.justify-center(v-else)
       .q-py-sm.q-mt-sm.text-center.full-width {{ $t('pages.proposals.create.optionsarchetypes.noArchetypesExistYet') }}
-      q-btn.text-xs.q-pa-none.q-ma-none.text-weight-900.text-secondary.text-underline(flat="flat" padding="0px" no-caps="no-caps" @click="$emit('changeOption','archetype')") {{ $t('pages.proposals.create.optionsarchetypes.pleaseCreateThemHere') }}
+      q-btn.text-xs.q-pa-none.q-ma-none.text-weight-900.text-secondary.text-underline(flat padding="0px" no-caps @click="$emit('changeOption','archetype')") {{ $t('pages.proposals.create.optionsarchetypes.pleaseCreateThemHere') }}
 
 </template>
 

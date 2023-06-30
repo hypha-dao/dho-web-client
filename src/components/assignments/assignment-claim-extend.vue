@@ -59,17 +59,15 @@ export default {
     extendable () {
       return this.extend && this.extend.start < this.now && this.extend.end > this.now && this.state !== 'withdrawed' && this.state !== 'suspended'
     },
-
     extendLabel () {
       if (this.extend.start && this.extend.start > this.now) {
-        return `Extend after ${dateToStringShort(this.extend.start, false)}`
+        return this.$t('assignments.assignment-claim-extend.extendAfter', { date: dateToStringShort(this.extend.start, false) })
       }
 
       if (this.extend.end && this.extend.end > this.now) {
-        return `Extend before ${dateToStringShort(this.extend.end, false)}`
+        return this.$t('assignments.assignment-claim-extend.extendBefore', { date: dateToStringShort(this.extend.end, false) })
       }
-
-      return 'You must re-apply'
+      return this.$t('assignments.assignment-claim-extend.youMustReApply')
     }
   }
 }
@@ -86,16 +84,16 @@ div
         :text-color="claims ? 'white' : 'grey-7'"
         :disable="claims === 0 || claiming || notClaim"
         :loading="claiming"
-        rounded="rounded"
-        unelevated="unelevated"
+        rounded
+        unelevated
         @click.stop="$emit('claim-all')"
       ) {{ $t('assignments.assignment-claim-extend.claimAll') }}
         q-badge(
           v-if="claims > 0"
-          rounded="rounded"
+          rounded
           color="red"
           :label="claims"
-          floating="floating"
+          floating
         )
     .q-mr-sm.q-mt-xs(:class="{ 'col-12': stacked, 'col-6': !stacked }")
       q-btn.full-width(
@@ -104,8 +102,8 @@ div
         :color="extendable ? 'secondary' : 'disabled'"
         :text-color="extendable ? 'white' : 'grey-7'"
         :disable="!extendable"
-        rounded="rounded"
-        unelevated="unelevated"
+        rounded
+        unelevated
         @click.stop="$emit('extend')"
       ) {{ extendLabel }}
 </template>
