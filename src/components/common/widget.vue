@@ -137,7 +137,7 @@ q-card.widget.relative-position(
           no-caps
           rounded
           text-color="primary"
-        ) See all
+        ) {{ $t('common.widget.seeAll') }}
     slot
     .q-mt-lg(
       v-if="more && morePosition != 'top'"
@@ -149,7 +149,7 @@ q-card.widget.relative-position(
         outline
         rounded
         text-color="primary"
-      ) See all
+      ) {{ $t('common.widget.seeAll') }}
 </template>
 
 <style lang="stylus" scoped>
