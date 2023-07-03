@@ -1,6 +1,8 @@
 <script>
 import { mapActions, mapGetters, mapMutations } from 'vuex'
 import BrowserIpfs from '~/ipfs/browser-ipfs.js'
+import I18n from '~/utils/i18n'
+import { date } from 'quasar'
 export default {
   name: 'multi-dho-layout',
   components: {
@@ -95,7 +97,58 @@ export default {
           image: require('assets/images/locales/zh.png')
         }
       ],
-      notificationsCount: 1
+      showNotificationsBar: false,
+      notifications: [ // Dummy
+        {
+          user: 'accountname',
+          notification: 'newcomment',
+          createdDate: '2023-01-17T16:45:30'
+        },
+        {
+          user: 'accountname',
+          notification: 'proposalvotingexpire',
+          createdDate: '2023-05-17T16:45:30',
+          content: {
+            days: 3
+          }
+        },
+        {
+          user: 'accountname',
+          notification: 'proposalpassed',
+          createdDate: '2023-06-17T16:45:30'
+        },
+        {
+          user: 'accountname',
+          notification: 'proposalrejected',
+          createdDate: '2023-06-12T16:45:30'
+        },
+        {
+          user: 'accountname',
+          notification: 'claimableperiod',
+          createdDate: '2023-06-12T16:45:30',
+          content: {
+            periods: 1
+          }
+        },
+        {
+          user: 'accountname',
+          notification: 'extendyourassignment',
+          createdDate: '2023-05-17T16:45:30',
+          content: {
+            days: 6
+          }
+        },
+        {
+          user: 'accountname',
+          notification: 'assignmentapproved',
+          createdDate: '2023-06-12T16:45:30'
+        },
+        {
+          user: 'accountname',
+          notification: 'assignmentrejected',
+          createdDate: '2023-06-12T16:45:30'
+        }
+      ]
     }
   },
 
@@ -315,6 +368,87 @@ export default {
       } catch (error) {
 
       }
+    },
+
+    timeago (createdDate) {
+      const TODAY = new Date()
+      const created = new Date(createdDate)
+
+      const second = date.getDateDiff(TODAY, created, 'seconds')
+      const minute = date.getDateDiff(TODAY, created, 'minutes')
+      const hour = date.getDateDiff(TODAY, created, 'hours')
+      const day = date.getDateDiff(TODAY, created, 'days')
+      const month = date.getDateDiff(TODAY, created, 'months')
+      const year = date.getDateDiff(TODAY, created, 'years')
+      if (year > 0) {
+        if (month < 12) {
+          return `${month} month${month > 1 ? 's' : ''} ago`
+        } else {
+          return `${year} year${year > 1 ? 's' : ''} ago`
+        }
+      }
+
+      if (month > 0) return `${month} month${month > 1 ? 's' : ''} ago`
+      if (day > 0) return `${day} day${day > 1 ? 's' : ''} ago`
+      if (hour > 0) return `${hour} hour${hour > 1 ? 's' : ''} ago`
+      if (minute > 0) return `${minute} minute${minute > 1 ? 's' : ''} ago`
+      if (second > 0) return `${second} second${second > 1 ? 's' : ''} ago`
+
+      return ''
+    },
+
+    parsedNotification (notification) {
+      let icon = null
+      let title = null
+      let description = null
+      const createdDate = this.timeago(notification.createdDate)
+      switch (notification.notification) {
+        case ('newcomment'):
+          icon = require('~/assets/icons/notifications/newcomment.png')
+          title = I18n.t('notifications.newComment')
+          description = I18n.t('notifications.hasJustLeftAComment', { accountname: notification.user })
+          break
+        case ('proposalvotingexpire'):
+          icon = require('~/assets/icons/notifications/voting-expire.png')
+          title = I18n.t('notifications.proposalVotingExpire')
+          description = I18n.t('notifications.proposalIsExpiring', { accountname: notification.user, days: notification.content?.days })
+          break
+        case ('proposalpassed'):
+          icon = require('~/assets/icons/notifications/proposal-passed.png')
+          title = I18n.t('notifications.proposalPassed')
+          description = I18n.t('notifications.proposalHasPassed', { accountname: notification.user })
+          break
+        case ('proposalrejected'):
+          icon = require('~/assets/icons/notifications/proposal-rejected.png')
+          title = I18n.t('notifications.proposalRejected')
+          description = I18n.t('notifications.proposalHasntPassed', { accountname: notification.user })
+          break
+        case ('claimableperiod'):
+          icon = require('~/assets/icons/notifications/claimable-period.png')
+          title = I18n.t('notifications.claimablePeriod')
+          description = I18n.t('notifications.youHaveClaimablePeriod', { value: notification.content?.periods })
+          break
+        case ('extendyourassignment'):
+          icon = require('~/assets/icons/notifications/extend-assignment.png')
+          title = I18n.t('notifications.extendYourAssignment')
+          description = I18n.t('notifications.youStillHave', { days: notification.content?.days })
+          break
+        case ('assignmentapproved'):
+          icon = require('~/assets/icons/notifications/assignment-approved.png')
+          title = I18n.t('notifications.assignmentApproved')
+          description = I18n.t('notifications.yourAssignmentHasBeenApproved')
+          break
+        case ('assignmentrejected'):
+          icon = require('~/assets/icons/notifications/assignment-rejected.png')
+          title = I18n.t('notifications.assignmentRejected')
+          description = I18n.t('notifications.yourAssignmentHasntBeenApproved')
+      }
+      return {
+        icon: icon,
+        title: title,
+        description: description,
+        createdDate: createdDate
+      }
     }
   }
 }
@@ -324,6 +458,7 @@ export default {
 q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout")
   q-dialog(:value="selectedDaoPlan.hasExpired && $route.name !== 'configuration' && $route.name !== 'login'" persistent="persistent")
   div.absolute.full-width.full-height.bg-black(v-if="languageSettings" @click="languageSettings = false" :style="{ 'opacity': '.4', 'z-index': '2000' }")
+  div.absolute.full-width.full-height.bg-black(v-if="showNotificationsBar" @click="showNotificationsBar = false" :style="{ 'opacity': '.4', 'z-index': '2000' }")
   //- templates-modal(:isOpen="!isActivated" @submit="setupTemplate")
   q-dialog(:value="selectedDaoPlan.hasExpired && $route.name !== 'configuration' && $route.name !== 'login'" persistent)
     .bg-negative.rounded-border(:style="{'min-width':'680px'}")
@@ -344,7 +479,7 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
         .col-6.q-pl-xs
           q-btn.q-px-xl.rounded-border.text-bold.full-width(:to="{ name: 'configuration', query: { tab: 'PLAN' } }" color="white" text-color="negative" :label="$t('layouts.multidholayout.renewMyCurrentPlan')" no-caps rounded unelevated)
   q-header.bg-white(v-if="$q.screen.lt.lg")
-    top-navigation(@isActiveRoute="isActiveRoute" @showLangSettings="languageSettings = true, right = false" :showTopButtons="showTopBarItems" :profile="profile" @toggle-sidebar="!$q.screen.md ? right = true : showMinimizedMenu = true" @search="onSearch" :dho="dho" :dhos="getDaos($apolloData.data.member)" :selectedDaoPlan="selectedDaoPlan")
+    top-navigation(:notifications="notifications" @openNotifications="languageSettings = false, right = false, showNotificationsBar = true" @isActiveRoute="isActiveRoute" @showLangSettings="languageSettings = true, right = false" :showTopButtons="showTopBarItems" :profile="profile" @toggle-sidebar="!$q.screen.md ? right = true : showMinimizedMenu = true" @search="onSearch" :dho="dho" :dhos="getDaos($apolloData.data.member)" :selectedDaoPlan="selectedDaoPlan")
   q-page-container.bg-white.window-height.q-py-sm(:class="{ 'q-pr-sm': $q.screen.gt.md, 'q-px-xs': !$q.screen.gt.md}")
     .bg-internal-bg.content.full-height
       q-resize-observer(@resize="onContainerResize")
@@ -362,9 +497,9 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
                     .h-h3(v-if="title") {{ title }}
                 .col(v-if="showTopBarItems")
                   .row.justify-end.items-center(v-if="$q.screen.gt.md")
-                    .notifications-icon(v-if="notificationsCount > 0")
-                      .notifications-icon__counter {{ notificationsCount }}
-                      q-btn.q-mr-xs(unelevated rounded padding="12px" icon="far fa-bell"  size="sm" :color="'white'" :text-color="'primary'")
+                    .notifications-icon
+                      .notifications-icon__counter(v-if="notifications.length > 0") {{ notifications.length }}
+                      q-btn.q-mr-xs(@click="languageSettings = false, right = false, showNotificationsBar = true" unelevated rounded padding="12px" icon="far fa-bell"  size="sm" :color="'white'" :text-color="'primary'")
                     router-link(v-if="selectedDaoPlan.isEcosystem" :to="{ name: 'ecosystem' }")
                       q-btn.q-mr-xs(unelevated rounded padding="12px" icon="fas fa-share-alt" size="sm" :color="isActiveRoute('ecosystem') ? 'primary' : 'white'" :text-color="isActiveRoute('ecosystem') ? 'white' : 'primary'")
                     router-link(:to="{ name: 'configuration' }")
@@ -402,7 +537,7 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
                 router-view
           .col.margin-min(v-if="$q.screen.gt.sm")
   q-drawer.full-width(v-model="right" side="right" :width="$q.screen.gt.lg ? 370 : ($q.screen.md ? 400 : ($q.screen.gt.sm ?  140 : $q.screen.width))" v-if="$q.screen.gt.lg || account || !$q.screen.gt.sm" persistent="persistent" :show-if-above="false")
-  q-drawer(v-model="languageSettings" overlay side="right" :width="$q.screen.gt.lg ? 370 : ($q.screen.md || $q.screen.gt.sm ? 400 : $q.screen.width)" :show-if-above="true").full-width
+  q-drawer(v-model="languageSettings" overlay side="right" :width="$q.screen.gt.lg ? 370 : ($q.screen.md || $q.screen.gt.sm ? 400 : $q.screen.width)").full-width
     div.q-pa-xl.full-height.position-relative
       .row
         .flex.full-width.justify-between.no-wrap
@@ -436,7 +571,25 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
     bottom-navigation
   q-drawer(v-else v-model="left" side="left" :width="80" persistent="persistent" :show-if-above="true")
     left-navigation(:dho="dho" :dhos="getDaos($apolloData.data.member)")
-
+  q-drawer(v-model="showNotificationsBar" overlay side="right" :width="$q.screen.gt.lg ? 370 : ($q.screen.md || $q.screen.gt.sm ? 400 : $q.screen.width)").full-width
+    div.q-pa-xl.full-height
+      .row
+        .flex.full-width.justify-between.no-wrap
+          .h-h3.items-center.flex {{ $t('notifications.notifications')}}
+          q-btn(color="internal-bg" text-color="primary" rounded unelevated size="sm" padding="12px" icon="fas fa-times" :style="{ 'height': '40px' }" @click="showNotificationsBar = false")
+        .q-mt-md.full-width(:style="{ 'position': 'relative' }")
+          .col(v-for="notification, index in notifications" :key="notification.notification")
+            .row.q-py-md(:style="{ 'border-top': '1px solid #CBCDD1' }" :class="{ 'last-item': index === notifications.length - 1}")
+              .col-2.items-center.flex
+                div.flex.items-center.justify-center(:style="{ 'width': '40px', 'height': '40px', 'border-radius': '50%', 'background': '#F2F1F3'}")
+                  img(:src="parsedNotification(notification).icon")
+              .col
+                .h-b2.text-bold.text-black.q-mb-xs(:style="{ 'font-size': '16px' }") {{ parsedNotification(notification).title }}
+                .h-b2 {{ parsedNotification(notification).description }}
+              .col-3.flex.items-center
+                .h-b2.text-italic {{ parsedNotification(notification).createdDate }}
+          .row.bg-white.full-width(v-if="notifications.length" :style="{ 'position': 'fixed', 'bottom': '0', 'padding-right': '60px', 'padding-bottom': '20px', 'padding-top': '20px' }")
+            q-btn.full-width.q-px-xl(@click="notifications = []" color="primary" :label="$t('notifications.clearAll')" no-caps outline rounded unelevated)
 </template>
 <style lang="stylus" scoped>
 .rounded-border
@@ -473,7 +626,6 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
 .translation-box
   background: #F2F1F3
   border-radius: 10px
-
 .notifications-icon
   position: relative
 .notifications-icon__counter
@@ -490,4 +642,6 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
   right: 8px
   top: -2px
   font-size: 14px
+.last-item
+  margin-bottom: 80px
 </style>

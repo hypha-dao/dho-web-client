@@ -1329,5 +1329,25 @@
       "addToTheTeam": "Add to the team +",
       "daoPublished": "DAO Published!"
     }
+  },
+  "notifications": {
+    "clearAll": "Clear all",
+    "notifications": "Notifications",
+    "newComment": "New comment",
+    "hasJustLeftAComment": "@{accountname} has just left a comment on your proposal",
+    "proposalVotingExpire": "Proposal voting expire",
+    "proposalIsExpiring": "@{accountname}‘s proposal is expiring in {days} days",
+    "proposalPassed": "Proposal passed",
+    "proposalHasPassed": "@{accountname}‘s proposal has passed",
+    "proposalRejected": "Proposal rejected",
+    "proposalHasntPassed": "@{accountname}‘s proposal hasn’t passed",
+    "claimablePeriod": "Claimable period",
+    "youHaveClaimablePeriod": "You have {value} claimable period available",
+    "extendYourAssignment": "Extend your assignment",
+    "youStillHave": "You still have {days} days to extend you assignment",
+    "assignmentApproved": "Assignment approved",
+    "yourAssignmentHasBeenApproved": "Your assignment has been approved",
+    "assignmentRejected": "Assignment rejected",
+    "yourAssignmentHasntBeenApproved": "Your assignment hasn’t been approved"
   }
 }

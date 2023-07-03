@@ -20,7 +20,8 @@ export default {
     profile: Object,
     disabledSelector: Boolean,
     selectedDaoPlan: Object,
-    showTopButtons: Boolean
+    showTopButtons: Boolean,
+    notifications: Array
   },
 
   data () {
@@ -64,6 +65,9 @@ export default {
       .div.row(v-if="!searching")
         //- TODO: temporarily commented
         //- q-btn.q-mr-xxs.icon(flat unelevated rounded padding="12px" icon="fas fa-search"  size="sm" color="white" text-color="primary" @click="searching=!searching")
+        .notifications-icon
+          .notifications-icon__counter(v-if="notifications.length > 0") {{ notifications.length }}
+          q-btn.q-mr-xs(@click="$emit('openNotifications')" unelevated rounded padding="12px" icon="far fa-bell"  size="sm" :color="'white'" :text-color="'primary'")
         router-link(:to="{ name: 'configuration' }")
           q-btn.q-mr-xs(unelevated rounded padding="12px" icon="fas fa-cog"  size="sm" :color="isActiveRoute('configuration') ? 'primary' : 'white'" :text-color="isActiveRoute('configuration') ? 'white' : 'primary'")
         router-link(:to="{ name: 'support' }")
@@ -108,4 +112,20 @@ export default {
 
   .border-right
     border-right 1px solid $internal-bg
+.notifications-icon
+  position: relative
+.notifications-icon__counter
+  width: 16px
+  height: 16px
+  background: #EF3F69
+  border-radius: 50%
+  display: flex
+  align-items: center
+  justify-content: center
+  color: #FFFFFF
+  position: absolute
+  z-index: 1
+  right: 14px
+  top: 4px
+  font-size: 14px
 </style>
