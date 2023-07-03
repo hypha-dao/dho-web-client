@@ -44,10 +44,10 @@ widget.bg-internal-bg.q-my-md.cursor-pointer
     .row.items-center
       .h-h4 {{ name }}
       .text-italic.q-ml-md(v-if="subcircles.length > 0") {{ $t('organization.circle-card.subCircles', { '1': subcircles.length }) }}
-      q-btn.q-ml-md.text-primary.h-h7(:icon-right="expandIcon" @click="toggleExpanded" dense="dense" flat="flat" :label="$t('organization.circle-card.showSubcirclesDetails')" no-caps="no-caps" v-if="subcircles.length > 0")
-    q-btn.q-ml-md.text-primary.h-h7(@click="$router.replace($route.path.includes('circles') ? id : 'circles/' + id)" dense="dense" flat="flat" icon-right="fas fa-chevron-right" :label="$t('organization.circle-card.goToCircle')" no-caps="no-caps")
+      q-btn.q-ml-md.text-primary.h-h7(:icon-right="expandIcon" @click="toggleExpanded" dense flat :label="$t('organization.circle-card.showSubcirclesDetails')" no-caps v-if="subcircles.length > 0")
+    q-btn.q-ml-md.text-primary.h-h7(@click="$router.replace($route.path.includes('circles') ? id : 'circles/' + id)" dense flat icon-right="fas fa-chevron-right" :label="$t('organization.circle-card.goToCircle')" no-caps)
   template(v-if="isExpanded && subcircles")
-    widget.q-pa-md.q-my-xs(v-if="subcircles" v-for="circle, index in subcircles" v-bind:key="index" noPadding="noPadding")
+    widget.q-pa-md.q-my-xs(v-if="subcircles" v-for="circle, index in subcircles" v-bind:key="index" noPadding)
       .row.items-center
         .h-h6(v-if="circle.name") {{ circle.name }}
         .text-italic.q-ml-md(v-if="members") {{ $t('organization.circle-card.members', { '1': members.length }) }}

@@ -1,6 +1,6 @@
 <script>
 
-import CONFIG from '~/pages/proposals/create/config.json'
+import CONFIG from '~/pages/proposals/create/config.js'
 import { mapActions, mapGetters } from 'vuex'
 import lodash from 'lodash'
 /**
@@ -99,7 +99,7 @@ export default {
       }
     },
     buttonText () {
-      return this.stylesForOwner ? 'Applied' : 'Apply'
+      return this.stylesForOwner ? this.$t('organization-asset.asset-card.applied') : this.$t('organization-asset.asset-card.apply')
     }
   },
 
@@ -179,7 +179,7 @@ widget.item.full-width(:class="{'mobile-item': isMobile, 'desktop-item': !isMobi
   .clickable.flex.column.justify-between.full-height(@click="sendToPage")
     .col.top-section
       .row.justify-between
-        q-btn.no-pointer-events(round="round" unelevated="unelevated" :icon="iconDetails.name" color="primary" text-color="white" size="14px" :ripple="false" v-if="iconDetails && iconDetails.type === 'icon'")
+        q-btn.no-pointer-events(round unelevated :icon="iconDetails.name" color="primary" text-color="white" size="14px" :ripple="false" v-if="iconDetails && iconDetails.type === 'icon'")
         q-avatar(size="30px" v-else-if="iconDetails && iconDetails.type === 'img'")
           img.icon-img(:src="iconDetails.name")
         ipfs-image-viewer(size="30px" :ipfsCid="iconDetails.cid" v-else-if="iconDetails && iconDetails.type === 'ipfs'")
@@ -200,7 +200,7 @@ widget.item.full-width(:class="{'mobile-item': isMobile, 'desktop-item': !isMobi
         .profile-counter.bg-internal-bg(v-if="badgeHolders.length > 3") +
           | {{ badgeHolders.length - 3 }}
         .profile-counter.bg-internal-bg(v-else-if="!badgeHolders.length") {{ $t('organization-asset.asset-card.na') }}
-    q-btn.q-mt-md.text-white(v-if="isBadge" :disable="currentElectionIndex !== 0 && (this.asset.title === 'Voter' || this.asset.title === 'Delegate')" noCaps="noCaps" unelevated="unelevated" rounded="rounded" color="primary" @click="onApply" :class="{ 'owner-button': stylesForOwner }") {{ buttonText }}
+    q-btn.q-mt-md.text-white(v-if="isBadge" :disable="currentElectionIndex !== 0 && (this.asset.title === 'Voter' || this.asset.title === 'Delegate')" noCaps unelevated rounded color="primary" @click="onApply" :class="{ 'owner-button': stylesForOwner }") {{ buttonText }}
 
 </template>
 

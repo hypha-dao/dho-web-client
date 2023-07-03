@@ -10,5 +10,5 @@ export default {
 
 <template lang="pug">
 widget.q-my-md.position-relative(:title="$t('organization.create-dho-widget.createNewDao')")
-  q-btn.full-width.q-px-lg(rounded="rounded" color="primary" no-caps="no-caps" @click="$emit('create')") {{ $t('organization.create-dho-widget.createNewDao1') }}
+  q-btn.full-width.q-px-lg(rounded color="primary" no-caps @click="$emit('create')") {{ $t('organization.create-dho-widget.createNewDao1') }}
 </template>

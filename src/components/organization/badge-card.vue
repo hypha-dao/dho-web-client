@@ -94,11 +94,11 @@ export default {
 </script>
 
 <template lang="pug">
-widget.bg-internal-bg.q-my-xxs.cursor-pointer(noPadding="noPadding")
+widget.bg-internal-bg.q-my-xxs.cursor-pointer(noPadding)
   .row.items-center.content(:style="cssVars")
     .col
       .row.flex.items-center
-        q-btn.no-pointer-events(round="round" unelevated="unelevated" :icon="iconDetails.name" color="primary" text-color="white" size="14px" :ripple="false" v-if="iconDetails && iconDetails.type === 'icon'")
+        q-btn.no-pointer-events(round unelevated :icon="iconDetails.name" color="primary" text-color="white" size="14px" :ripple="false" v-if="iconDetails && iconDetails.type === 'icon'")
         q-avatar(size="lg" v-else-if="iconDetails && iconDetails.type === 'img'")
           img.icon-img(:src="iconDetails.name")
         ipfs-image-viewer(size="lg" :ipfsCid="iconDetails.cid" v-else-if="iconDetails && iconDetails.type === 'ipfs'")

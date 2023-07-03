@@ -48,7 +48,12 @@ export default {
       sort: '',
       textFilter: null,
       circle: '',
-      optionArray: [{ label: 'Sort by', disable: true }, 'Join date descending', 'Join date ascending', 'Alphabetically (A-Z)'],
+      optionArray: [
+        { label: this.$t('pages.dho.members.sortBy'), disable: true },
+        this.$t('pages.dho.members.joinDateDescending'),
+        this.$t('pages.dho.members.joinDateAscending'),
+        this.$t('pages.dho.members.alphabetically')
+      ],
       circleArray: ['All circles', 'Circle One'],
       showApplicants: false,
       mobileFilterStyles: {
@@ -60,18 +65,18 @@ export default {
       filters: [
         {
           label: 'All',
-          value: 'ALL',
+          value: this.$t('pages.dho.members.all'),
           enabled: true,
           filter: () => true
         },
         {
-          label: 'Core Team',
+          label: this.$t('pages.dho.members.coreTeam'),
           value: MEMBER_TYPE.CORE,
           enabled: false,
           filter: (p) => p.__typename === 'Payout'
         },
         {
-          label: 'Community Members',
+          label: this.$t('pages.dho.members.communityMembers'),
           value: MEMBER_TYPE.COMMUNITY,
           enabled: false,
           filter: (p) => p.__typename === 'Assignment' || p.__typename === 'Edit'
@@ -388,7 +393,7 @@ export default {
           },
           // Transform the previous result with new data
           updateQuery: (previousResult, { fetchMoreResult }) => {
-            if (!fetchMoreResult.getDao.applicant.length) {
+            if (!fetchMoreResult.getDao.applicant?.length) {
               this.applicantsPagination.fetchMore = false
               this.coreMembersPagination.fetchMore = true
             }
@@ -422,7 +427,7 @@ export default {
           },
           // Transform the previous result with new data
           updateQuery: (previousResult, { fetchMoreResult }) => {
-            if (!fetchMoreResult.getDao.member.length) {
+            if (!fetchMoreResult.getDao.member?.length) {
               this.coreMembersPagination.fetchMore = false
             }
 
@@ -478,41 +483,41 @@ q-page.page-members
     template(v-slot:buttons)
       nav.row.items-center
         .row.inline.q-pr-md(v-if="!isMember && !isApplicant && account && !loadingAccount")
-          q-btn.q-px-lg.h-btn1(:disable="!daoSettings.registrationEnabled" @click="onApply" color="secondary" :label="$t('pages.dho.members.becomeAMember')" no-caps="no-caps" rounded="rounded" text-color="white" unelevated="unelevated")
+          q-btn.q-px-lg.h-btn1(:disable="!daoSettings.registrationEnabled" @click="onApply" color="secondary" :label="$t('pages.dho.members.becomeAMember')" no-caps="no-caps" rounded text-color="white" unelevated="unelevated")
           q-tooltip(v-if="!daoSettings.registrationEnabled") {{ $t('pages.dho.members.registrationIsTemporarilyDisabled') }}
-        q-btn.q-px-lg.h-btn1(:flat="!account" @click="copyToClipBoard" color="secondary" :label="$t('pages.dho.members.copyInviteLink')" no-caps="no-caps" rounded="rounded" text-color="white" unelevated="unelevated")
+        q-btn.q-px-lg.h-btn1(:flat="!account" @click="copyToClipBoard" color="secondary" :label="$t('pages.dho.members.copyInviteLink')" no-caps="no-caps" rounded text-color="white" unelevated="unelevated")
           q-tooltip {{ $t('pages.dho.members.sendALink') }}
-  upvote-delegate-widget(endDate="2023-05-29" :users="tempUsersForVotes")
+  //- upvote-delegate-widget(endDate="2023-05-29" :users="tempUsersForVotes")
   .row.q-py-md(v-if="$q.screen.gt.md")
     .col-9
       .row.q-mb-md
         .h-h4 {{ $t('pages.dho.members.daoApplicants') }}
         .h-h4-regular.q-ml-xs (
-          | {{ daoApplicants.length }}
+          | {{ daoApplicants?.length }}
           | )
       members-list(:lastResult="hasLastResult()" :members="daoApplicants" :view="'list'" @loadMore="onLoadMoreMembers" ref="scroll" v-bind="{ canEnroll }")
       .row.q-mb-md
         .h-h4 {{ 'Core &amp; Community members' }}
         .h-h4-regular.q-ml-xs (
-          | {{ members.length }}
+          | {{ members?.length }}
           | )
       members-list(:lastResult="hasLastResult()" :members="members" :view="'card'" @loadMore="onLoadMoreMembers" ref="scroll" v-bind="{ canEnroll }")
     .col-3
-      filter-widget.sticky(:circle.sync="circle" :circleArray.sync="circleArray" :defaultOption="1" :optionArray.sync="optionArray" :showCircle="false" :sort.sync="sort" :textFilter.sync="textFilter" filterTitle="Filter by account name" :filters.sync="filters" :showViewSelector="false" @update:filters="value => onChange('filters', value)")
+      filter-widget.sticky(:circle.sync="circle" :circleArray.sync="circleArray" :defaultOption="1" :optionArray.sync="optionArray" :showCircle="false" :sort.sync="sort" :textFilter.sync="textFilter" :filterTitle="$t('pages.dho.members.filterByAccountName')" :filters.sync="filters" :showViewSelector="false" @update:filters="value => onChange('filters', value)")
   div(v-else)
     filter-open-button(@open="mobileFilterOpen = true")
-    filter-widget-mobile(:circle.sync="circle" :circleArray.sync="circleArray" :defaultOption="1" :optionArray.sync="optionArray" :showCircle="false" :sort.sync="sort" :textFilter.sync="textFilter" :showViewSelector="false" @close="mobileFilterOpen = false" filterTitle="Filter by account name" v-show="mobileFilterOpen" :style="mobileFilterStyles")
+    filter-widget-mobile(:circle.sync="circle" :circleArray.sync="circleArray" :defaultOption="1" :optionArray.sync="optionArray" :showCircle="false" :sort.sync="sort" :textFilter.sync="textFilter" :showViewSelector="false" @close="mobileFilterOpen = false" :filterTitle="$t('pages.dho.members.filterByAccountName')" v-show="mobileFilterOpen" :style="mobileFilterStyles")
     .cols.q-mt-md
       .row.q-mb-md
         .h-h4 {{ $t('pages.dho.members.daoApplicants1') }}
         .h-h4-regular.q-ml-xs (
-          | {{ daoApplicants.length }}
+          | {{ daoApplicants?.length }}
           | )
       members-list(:lastResult="hasLastResult()" :members="daoApplicants" view="card" @loadMore="onLoadMoreMembers" ref="scroll" compact="compact" v-bind="{ canEnroll }")
       .row.q-mb-md
         .h-h4 {{ 'Core &amp; Community members' }}
         .h-h4-regular.q-ml-xs (
-          | {{ members.length }}
+          | {{ members?.length }}
           | )
       members-list(:lastResult="hasLastResult()" :members="members" view="card" @loadMore="onLoadMoreMembers" ref="scroll" compact="compact" v-bind="{ canEnroll }")
 

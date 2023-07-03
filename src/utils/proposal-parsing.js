@@ -1,6 +1,7 @@
 import { date } from 'quasar'
 import { dateToString } from './TimeUtils'
 import { PROPOSAL_TYPE, PROPOSAL_STATE } from '../const'
+import I18n from './i18n'
 export const PERIOD_NAMES = ['First Quarter', 'Full Moon', 'New Moon', 'Last Quarter']
 export const coefficientBase = 10000
 export const cycleDurationSec = 2629800
@@ -77,13 +78,13 @@ export function timeLeftString (proposal, long = false) {
 
     let dayStr = ''
     if (days > 0) {
-      dayStr = days === 1 ? `${days} day, ` : `${days} days, `
+      dayStr = days === 1 ? I18n.t('proposalparsing.dayWithValue', { days: days }) : I18n.t('proposalparsing.daysWithValue', { days: days })
     }
     const hourStr = hours > 9 ? hours : `0${hours}`
     const minStr = min > 9 ? min : `0${min}`
     const segStr = seg > 9 ? seg : `0${seg}`
     if (long) {
-      return `This vote will close in ${dayStr}${hourStr}:${minStr}:${segStr}`
+      return I18n.t('proposalparsing.thisVoteWillCloseIn', { dayStr: dayStr, hourStr: hourStr, minStr: minStr, segStr: segStr })
     } else {
       return `${dayStr}${hourStr}:${minStr}:${segStr}`
     }
@@ -102,28 +103,28 @@ export function timeLeftString (proposal, long = false) {
         diff = date.getDateDiff(now, end, 'minutes')
         if (diff === 0) {
           diff = date.getDateDiff(now, end, 'seconds')
-          diff += diff === 1 ? ' second' : ' seconds'
+          diff += diff === 1 ? I18n.t('proposalparsing.second') : I18n.t('proposalparsing.seconds')
         } else {
-          diff += diff === 1 ? ' minute' : ' minutes'
+          diff += diff === 1 ? I18n.t('proposalparsing.minute') : I18n.t('proposalparsing.minutes')
         }
       } else {
-        diff += diff === 1 ? ' hour' : ' hours'
+        diff += diff === 1 ? I18n.t('proposalparsing.hour') : I18n.t('proposalparsing.hours')
       }
     } else {
-      diff += diff === 1 ? ' day' : ' days'
+      diff += diff === 1 ? I18n.t('proposalparsing.day') : I18n.t('proposalparsing.days')
     }
-    return `Created ${diff} ago`
+    return I18n.t('proposalparsing.createdAgo', { diff: diff })
   } else {
     const now = new Date()
     const end = proposal.ballot_expiration_t ? new Date(expiration(proposal)) : new Date(createdDate(proposal))
     let diff = date.getDateDiff(now, end, 'days')
     if (diff === 0) {
       diff = date.getDateDiff(now, end, 'hours')
-      diff += diff === 1 ? ' hour' : ' hours'
+      diff += diff === 1 ? I18n.t('proposalparsing.hour') : I18n.t('proposalparsing.hours')
     } else {
-      diff += diff === 1 ? ' day' : ' days'
+      diff += diff === 1 ? I18n.t('proposalparsing.day') : I18n.t('proposalparsing.days')
     }
-    return `Closed ${diff} ago`
+    return I18n.t('proposalparsing.closedAgo', { diff: diff })
   }
 }
 

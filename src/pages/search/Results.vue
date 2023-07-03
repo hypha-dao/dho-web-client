@@ -33,7 +33,7 @@ export default {
     getPaginationText () {
       const total = this.results.total ? this.results.total.value : 0
       if (total === 0) {
-        return 'No results found'
+        return this.$t('search.results.noResultsFound')
       }
       const lowerBound = this.params.from + 1
       let upperBound = this.params.from + this.params.size + 1
@@ -149,13 +149,10 @@ export default {
           let type = ''
           this.filters.forEach((filter) => {
             if (filter.enabled) {
-              switch (filter.label) {
-                case 'Members':
+              switch (filter.value) {
+                case 'Member':
                   type = `${type}2,`
                   this.params.filter.queries.push('Member')
-                  break
-                case 'Recurring Activity':
-                  this.params.filter.queries.push('Assignbadge', 'Assignment')
                   break
                 case 'Organizational':
                   this.params.filter.queries.push('Role', 'Badge')
@@ -164,23 +161,23 @@ export default {
                   type = `${type}3,`
                   this.params.filter.queries.push('Payout')
                   break
-                case 'Role Archetypes':
+                case 'Role':
                   type = `${type}4,`
                   this.params.filter.queries.push('Role')
                   break
-                case 'Role Assignments':
+                case 'Assignment':
                   type = `${type}5,`
                   this.params.filter.queries.push('Assignment')
                   break
-                case 'Badge Types':
+                case 'Badge':
                   type = `${type}6,`
                   this.params.filter.queries.push('Badge')
                   break
-                case 'Badge Assignments':
+                case 'Assignbadge':
                   type = `${type}7,`
                   this.params.filter.queries.push('Assignbadge')
                   break
-                case 'Suspensions':
+                case 'Suspend':
                   type = `${type}8,`
                   this.params.filter.queries.push('Suspend')
                   break
@@ -281,24 +278,36 @@ export default {
           sort: 'asc'
         }
       },
-      optionArray: [{ label: 'Filter by', disable: true }, 'All', 'Voting', 'Active', 'Archived', 'Suspended'],
-      circleArray: [{ label: 'Sort by', disable: true }, 'Oldest first', 'Newest first', 'Alphabetically (A-Z)'],
+      optionArray: [
+        { label: this.$t('search.results.filterBy'), disable: true },
+        'All',
+        'Voting',
+        'Active',
+        'Archived',
+        'Suspended'
+      ],
+      circleArray: [
+        { label: this.$t('search.results.sortBy'), disable: true },
+        this.$t('search.results.oldestFirst'),
+        this.$t('search.results.newestFirst'),
+        this.$t('search.results.alphabetically')
+      ],
       results: [],
       filters: [
         {
-          label: 'All',
+          label: this.$t('search.results.all'),
           value: 'All',
           enabled: true,
           filter: () => true
         },
         {
-          label: 'Members',
+          label: this.$t('search.results.members'),
           value: 'Member',
           enabled: false,
           filter: (p) => p.__typename === 'Member'
         },
         {
-          label: 'Generic Contribution',
+          label: this.$t('search.results.genericContribution'),
           value: 'Generic Contribution',
           enabled: false,
           filter: (p) => p.__typename === 'Generic Contribution'
@@ -314,31 +323,31 @@ export default {
         //   filter: (p) => p.__typename === 'Organizational'
         // },
         {
-          label: 'Role Assignments',
+          label: this.$t('search.results.roleAssignments'),
           value: 'Assignment',
           enabled: false,
           filter: (p) => p.__typename === 'Assignment'
         },
         {
-          label: 'Role Archetypes',
+          label: this.$t('search.results.roleArchetypes'),
           value: 'Role',
           enabled: false,
           filter: (p) => p.__typename === 'Role'
         },
         {
-          label: 'Badge Types',
+          label: this.$t('search.results.badgeTypes'),
           value: 'Badge',
           enabled: false,
           filter: (p) => p.__typename === 'Badge'
         },
         {
-          label: 'Badge Assignments',
+          label: this.$t('search.results.badgeAssignments'),
           value: 'Assignbadge',
           enabled: false,
           filter: (p) => p.__typename === 'Assignbadge'
         },
         {
-          label: 'Suspensions',
+          label: this.$t('search.results.suspensions'),
           value: 'Suspend',
           enabled: false,
           filter: (p) => p.__typename === 'Suspend'
@@ -409,16 +418,16 @@ q-page.page-search-results
     .q-py-md.col-12.col-lg-9(:class="{'q-px-sm': $q.screen.gt.md }")
       .row.justify-center.q-my-md(v-if="!results.hits")
         loading-spinner(color="primary" size="72px")
-      widget(v-else :title="`${results.total ? results.total.value : 0} Results`")
+      widget(v-else :title="$t('search.results.results', { value: results.total ? results.total.value : 0 })")
         .cursor-pointer(v-for="result in results.hits" @click="onClick(result._source)")
           result(:key="result._id" :type="result._source.type" :icon="getIcon(result._source.type)" :salary="result._source.details_husdAmount_a" :compensation="result._source.details_voiceAmount_a" :status="result._source.details_state_s" :applicant="isApplicant(result._source)" :expirationDate="result._source.ballot_expiration_t" :username="result._source.type === 'Member' ? result._source.details_member_n : ''" :creator="result._source.type !== 'Member' ? getMemberName(result._source.creator) : ''" :title="(result._source.type !== 'Member') && (result._source.type !== 'Edit') ? result._source.details_title_s : result._source.system_nodeLabel_s")
         .row.justify-between.q-pt-sm
-          q-btn.round-circle(@click="onPrev()" :disable="!params.from" round="round" unelevated="unelevated" icon="fas fa-chevron-left" color="inherit" text-color="primary" size="sm" :ripple="false")
+          q-btn.round-circle(@click="onPrev()" :disable="!params.from" round unelevated icon="fas fa-chevron-left" color="inherit" text-color="primary" size="sm" :ripple="false")
           .q-pt-sm {{  getPaginationText }}
-          q-btn.round-circle(@click="onNext()" :disable="isLastPage" round="round" unelevated="unelevated" icon="fas fa-chevron-right" color="inherit" text-color="primary" size="sm" :ripple="false")
+          q-btn.round-circle(@click="onNext()" :disable="isLastPage" round unelevated icon="fas fa-chevron-right" color="inherit" text-color="primary" size="sm" :ripple="false")
     .col-3.q-pa-sm.q-py-md(v-if="$q.screen.gt.md")
-      filter-widget.sticky(filterTitle="Search DAOs" :sort.sync="filterStatus" :optionArray="optionArray" :defaultOption="defaultSelector" :circle.sync="orderSelected" :circleArray="circleArray" :circleDefault="orderDefaultSelector" :showToggle="false" :showViewSelector="false" :chipsFiltersLabel="'Results types'" :filters.sync="filters" :showTextFilter="false")
+      filter-widget.sticky(filterTitle="Search DAOs" :sort.sync="filterStatus" :optionArray="optionArray" :defaultOption="defaultSelector" :circle.sync="orderSelected" :circleArray="circleArray" :circleDefault="orderDefaultSelector" :showToggle="false" :showViewSelector="false" :chipsFiltersLabel="$t('search.results.resultsTypes')" :filters.sync="filters" :showTextFilter="false")
     .mobile-filter(v-else)
       filter-open-button(@open="mobileFilterOpen = true")
-      filter-widget-mobile(v-show="mobileFilterOpen" @close="mobileFilterOpen = false" filterTitle="Search DAOs" :sort.sync="filterStatus" :optionArray="optionArray" :defaultOption="defaultSelector" :circle.sync="orderSelected" :circleArray="circleArray" :circleDefault="orderDefaultSelector" :showToggle="false" :showViewSelector="false" :chipsFiltersLabel="'Results types'" :filters.sync="filters" :showTextFilter="false" :style="'width: 400px; right: 0; left: auto;'")
+      filter-widget-mobile(v-show="mobileFilterOpen" @close="mobileFilterOpen = false" filterTitle="Search DAOs" :sort.sync="filterStatus" :optionArray="optionArray" :defaultOption="defaultSelector" :circle.sync="orderSelected" :circleArray="circleArray" :circleDefault="orderDefaultSelector" :showToggle="false" :showViewSelector="false" :chipsFiltersLabel="$t('search.results.resultsTypes')" :filters.sync="filters" :showTextFilter="false" :style="'width: 400px; right: 0; left: auto;'")
 </template>

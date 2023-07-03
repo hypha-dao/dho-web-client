@@ -127,14 +127,14 @@ widget(:title="$t('proposals.voter-list.votes')")
       loading-spinner(color="primary" size="40px")
   template(v-for="vote of paginatedVotes")
     .row.items-center.justify-between.q-my-md(:key="vote.username")
-      profile-picture(:username="vote.username" show-name="show-name" size="40px" limit="limit" link="link" noMargins="noMargins" ellipsisName="ellipsisName")
+      profile-picture(:username="vote.username" show-name size="40px" limit link noMargins ellipsisName)
         template(v-slot:detail)
           .h-b3.text-italic.text-grey-6 {{ vote.percentage }}
       chips(:tags="[tag(vote)]")
       // q-icon(:name="icon(vote)" :color="color(vote)" size="sm")
   .row.justify-between.q-pt-sm.items-center
-    q-btn.round-circle(@click="onPrev()" :disable="page === 1" round="round" unelevated="unelevated" icon="fas fa-chevron-left" color="inherit" text-color="primary" size="sm" :ripple="false")
+    q-btn.round-circle(@click="onPrev()" :disable="page === 1" round unelevated icon="fas fa-chevron-left" color="inherit" text-color="primary" size="sm" :ripple="false")
     span {{  getPaginationText }}
-    q-btn.round-circle(@click="load" :disable="isLastPage" round="round" unelevated="unelevated" icon="fas fa-chevron-right" color="inherit" text-color="primary" size="sm" :ripple="false")
+    q-btn.round-circle(@click="load" :disable="isLastPage" round unelevated icon="fas fa-chevron-right" color="inherit" text-color="primary" size="sm" :ripple="false")
 
 </template>

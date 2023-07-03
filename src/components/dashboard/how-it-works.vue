@@ -7,7 +7,14 @@ export default {
   data () {
     return {
       slide: '1',
-      titles: ['Ready for voting?', 'Proposing a policy?', 'Applying for a role?', 'Creating a new role?', 'Creating a badge?', 'Launching a quest?']
+      titles: [
+        this.$t('dashboard.how-it-works.readyForVoting'),
+        this.$t('dashboard.how-it-works.proposingAPolicy'),
+        this.$t('dashboard.how-it-works.applyingForARole'),
+        this.$t('dashboard.how-it-works.creatingANewRole'),
+        this.$t('dashboard.how-it-works.creatingABadge'),
+        this.$t('dashboard.how-it-works.launchingAQuest')
+      ]
     }
   },
   computed: {
@@ -34,9 +41,9 @@ widget(:title="title")
       .h-b2 {{ $t('dashboard.how-it-works.createAGeneric1') }}
     template(v-slot:control)
       q-carousel-control(position="bottom-right")
-        q-btn.q-mt-md.round-circle(flat="flat" unelevated="unelevated" padding="13px" icon="fas fa-chevron-right" size="xxs" color="primary" @click="$refs.carousel.next()")
+        q-btn.q-mt-md.round-circle(flat unelevated padding="13px" icon="fas fa-chevron-right" size="xxs" color="primary" @click="$refs.carousel.next()")
       q-carousel-control(position="bottom-left")
-        q-btn.q-mt-md.round-circle(flat="flat" unelevated="unelevated" padding="13px" icon="fas fa-chevron-left" size="xxs" color="primary" @click="$refs.carousel.previous()")
+        q-btn.q-mt-md.round-circle(flat unelevated padding="13px" icon="fas fa-chevron-left" size="xxs" color="primary" @click="$refs.carousel.previous()")
 
 </template>
 

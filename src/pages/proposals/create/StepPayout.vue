@@ -343,7 +343,7 @@ widget(:class="{ 'disable-step': currentStepName !== 'step-payout' && $q.screen.
       .row.full-width.items-center.q-mt-xs
         q-avatar.q-mr-xs(size="40px")
           img(src="~assets/icons/usd.svg")
-        q-input.rounded-border.col(:disable="custom" dense="dense" outlined="outlined" rounded="rounded" suffix="$" type="number" v-model="usdAmount" :placeholder="$t('pages.proposals.create.steppayout.typeTheAmountOfUsd')")
+        q-input.rounded-border.col(:disable="custom" dense outlined rounded suffix="$" type="number" v-model="usdAmount" :placeholder="$t('pages.proposals.create.steppayout.typeTheAmountOfUsd')")
     .col.q-pr-sm(v-if="fields.commitment")
       label.h-label {{ fields.commitment.label }}
       .text-body2.text-grey-7.q-my-md(v-if="fields.commitment.description") {{ fields.commitment.description }}
@@ -351,7 +351,7 @@ widget(:class="{ 'disable-step': currentStepName !== 'step-payout' && $q.screen.
         .col.q-pr-xs
           q-slider(v-model="commitment" :min="0" :max="100" :step="1" color="primary")
         .col-4
-          q-input.q-ma-none.q-pa-none.rounded-border(:disable="custom" :rules="[val => val >= 0 && val <= 100]" dense="dense" outlined="outlined" rounded="rounded" suffix="%" v-model.number="commitment")
+          q-input.q-ma-none.q-pa-none.rounded-border(:disable="custom" :rules="[val => val >= 0 && val <= 100]" dense outlined rounded suffix="%" v-model.number="commitment")
       .row
         .text-negative.h-b2.q-ml-xs(v-if="!isValidCommitment(commitment) && !firstPaintCommitment") {{ $t('pages.proposals.create.steppayout.commitmentMustBeGreater') }}
           | {{ this.$store.state.proposals.draft.minCommitment }}
@@ -363,7 +363,7 @@ widget(:class="{ 'disable-step': currentStepName !== 'step-payout' && $q.screen.
         .col.q-pr-xs
           q-slider(:disable="custom || (!daoSettings.cashClaimsEnabled && isContribution)" :max="100" :min="0" :step="1" color="primary" v-model="deferred")
         .col-4
-          q-input.q-ma-none.q-pa-none.rounded-border(:disable="custom || (!daoSettings.cashClaimsEnabled && isContribution)" :rules="[val => val >= 0 && val <= 100]" dense="dense" outlined="outlined" rounded="rounded" suffix="%" v-model.number="deferred")
+          q-input.q-ma-none.q-pa-none.rounded-border(:disable="custom || (!daoSettings.cashClaimsEnabled && isContribution)" :rules="[val => val >= 0 && val <= 100]" dense outlined rounded suffix="%" v-model.number="deferred")
       .row
         .text-negative.h-b2.q-ml-xs(v-if="!isValidDeferred(deferred) && !firstPaintDeferred") {{ $t('pages.proposals.create.steppayout.defferedMustBeGreater') }}
           | {{ this.$store.state.proposals.draft.minDeferred }}
@@ -371,11 +371,11 @@ widget(:class="{ 'disable-step': currentStepName !== 'step-payout' && $q.screen.
     .col-6(v-if="fields.annualUsdSalary")
       label.h-label {{ fields.annualUsdSalary.label }}
       .text-body2.text-grey-7.q-my-md(v-if="fields.annualUsdSalary.description") {{ fields.annualUsdSalary.description }}
-      q-select.q-mt-xs.rounded-border(:options="fields.annualUsdSalary.options" dense="dense" emit-value="emit-value" map-options="map-options" outlined="outlined" placeholder="B2 - $ 100.000/year" rounded="rounded" v-model="annualUsdSalary")
+      q-select.q-mt-xs.rounded-border(:options="fields.annualUsdSalary.options" dense emit-value map-options outlined placeholder="B2 - $ 100.000/year" rounded v-model="annualUsdSalary")
     .col-6(v-if="fields.roleCapacity")
       label.h-label {{ fields.roleCapacity.label }}
       .text-body2.text-grey-7.q-my-md(v-if="fields.roleCapacity.description") {{ fields.roleCapacity.description }}
-      q-input.q-mt-xs.rounded-border(dense="dense" outlined="outlined" rounded="rounded" v-model="roleCapacity")
+      q-input.q-mt-xs.rounded-border(dense outlined rounded v-model="roleCapacity")
   .row.full-width.q-mt-xl(v-if="fields.minDeferred")
     label.h-label {{ fields.minDeferred.label }}
     .text-body2.text-grey-7.q-my-md(v-if="fields.minDeferred.description") {{ fields.minDeferred.description }}
@@ -383,7 +383,7 @@ widget(:class="{ 'disable-step': currentStepName !== 'step-payout' && $q.screen.
       .col-8.q-pr-md
         q-slider(v-model="minDeferred" :min="0" :max="100" :step="1" color="primary")
       .col-4.q-pl-sm.q-mt-md
-        q-input.rounded-border(:rules="[val => val >= 0 && val <= 100]" outlined="outlined" rounded="rounded" v-model.number="minDeferred" dense="dense" suffix="%")
+        q-input.rounded-border(:rules="[val => val >= 0 && val <= 100]" outlined rounded v-model.number="minDeferred" dense suffix="%")
   .row.full-width.q-pt-md(v-if="$store.state.proposals.draft.annualUsdSalary")
     label.h-label(v-if="$store.state.proposals.draft.annualUsdSalary.toString().includes('USD')") {{ $t('pages.proposals.create.steppayout.salaryCompensationForOneYear', { value: $store.state.proposals.draft.annualUsdSalary }) }}
     label.h-label(v-else) {{ $t('pages.proposals.create.steppayout.salaryCompensationForOneYearUsd', { value: $store.state.proposals.draft.annualUsdSalary }) }}
@@ -397,20 +397,20 @@ widget(:class="{ 'disable-step': currentStepName !== 'step-payout' && $q.screen.
       label.h-label {{ `${fields.reward.label} (${$store.state.dao.settings.rewardToken})` }}
       .row.full-width.items-center.q-mt-xs
         token-logo.q-mr-xs(size="40px" type="utility" :daoLogo="daoSettings.logo")
-        q-input.rounded-border.col(dense="dense" :readonly="!custom" outlined="outlined" v-model="!toggle ? reward : utilityToken" rounded="rounded" v-if="isAssignment")
-        q-input.rounded-border.col(dense="dense" :readonly="!custom" outlined="outlined" v-model="reward" rounded="rounded" v-else)
+        q-input.rounded-border.col(dense :readonly="!custom" outlined v-model="!toggle ? reward : utilityToken" rounded v-if="isAssignment")
+        q-input.rounded-border.col(dense :readonly="!custom" outlined v-model="reward" rounded v-else)
     .col-4(:class="{ 'q-mt-md':$q.screen.lt.md || $q.screen.md }" v-if="fields.peg")
       label.h-label {{ `${fields.peg.label} (${$store.state.dao.settings.pegToken})` }}
       .row.full-width.items-center.q-mt-xs
         token-logo.q-mr-xs(size="40px" type="cash" :daoLogo="daoSettings.logo")
-        q-input.rounded-border.col(dense="dense" :readonly="!custom" outlined="outlined" v-model="!toggle ? peg : cashToken" rounded="rounded" v-if="isAssignment")
-        q-input.rounded-border.col(dense="dense" :readonly="!custom || !daoSettings.cashClaimsEnabled" outlined="outlined" v-model="peg" rounded="rounded" v-else)
+        q-input.rounded-border.col(dense :readonly="!custom" outlined v-model="!toggle ? peg : cashToken" rounded v-if="isAssignment")
+        q-input.rounded-border.col(dense :readonly="!custom || !daoSettings.cashClaimsEnabled" outlined v-model="peg" rounded v-else)
     .col-4(:class="{ 'q-mt-md':$q.screen.lt.md || $q.screen.md }" v-if="fields.voice")
       label.h-label {{ `${fields.voice.label} (${$store.state.dao.settings.voiceToken})` }}
       .row.full-width.items-center.q-mt-xs
         token-logo.q-mr-xs(size="40px" type="voice" :daoLogo="daoSettings.logo")
-        q-input.rounded-border.col(dense="dense" :readonly="!custom" outlined="outlined" v-model="!toggle ? voice : voiceToken" rounded="rounded" v-if="isAssignment")
-        q-input.rounded-border.col(dense="dense" :readonly="!custom" outlined="outlined" v-model="voice" rounded="rounded" v-else)
+        q-input.rounded-border.col(dense :readonly="!custom" outlined v-model="!toggle ? voice : voiceToken" rounded v-if="isAssignment")
+        q-input.rounded-border.col(dense :readonly="!custom" outlined v-model="voice" rounded v-else)
   .row.items-center.q-mt-md(v-if="showToggle")
     template(v-if="fields.custom")
       div(:class="{ 'col-1':$q.screen.gt.md }")
@@ -429,26 +429,26 @@ widget(:class="{ 'disable-step': currentStepName !== 'step-payout' && $q.screen.
           label.h-label {{ `${fields.rewardCoefficient.label} (${$store.state.dao.settings.rewardToken})` }}
           .row.items-center
             .col
-              q-input.q-my-sm.rounded-border(v-model="rewardCoefficientLabel" outlined="outlined" suffix="%" :prefix="fields.rewardCoefficient.disabled ? 'x' : rewardCoefficientLabel > 9 ? 'x1.' : 'x1.0'" :readonly="fields.rewardCoefficient.disabled" :rules="[rules.lessOrEqualThan(20), rules.greaterThanOrEqual(-20)]")
+              q-input.q-my-sm.rounded-border(v-model="rewardCoefficientLabel" outlined suffix="%" :prefix="fields.rewardCoefficient.disabled ? 'x' : rewardCoefficientLabel > 9 ? 'x1.' : 'x1.0'" :readonly="fields.rewardCoefficient.disabled" :rules="[rules.lessOrEqualThan(20), rules.greaterThanOrEqual(-20)]")
                 template(v-slot:prepend)
                   token-logo.logo-border(size="md" type="utility" :daoLogo="daoSettings.logo")
         .col(v-if="fields.pegCoefficient")
           label.h-label {{ `${fields.pegCoefficient.label} (${$store.state.dao.settings.pegToken})` }}
           .row.items-center
             .col
-              q-input.q-my-sm.rounded-border(v-model="pegCoefficientLabel" outlined="outlined" suffix="%" :prefix="fields.pegCoefficient.disabled ? 'x' : pegCoefficientLabel > 9 ? 'x1.' : 'x1.0'" :readonly="fields.pegCoefficient.disabled" :rules="[rules.lessOrEqualThan(20), rules.greaterThanOrEqual(-20)]")
+              q-input.q-my-sm.rounded-border(v-model="pegCoefficientLabel" outlined suffix="%" :prefix="fields.pegCoefficient.disabled ? 'x' : pegCoefficientLabel > 9 ? 'x1.' : 'x1.0'" :readonly="fields.pegCoefficient.disabled" :rules="[rules.lessOrEqualThan(20), rules.greaterThanOrEqual(-20)]")
                 template(v-slot:prepend)
                   token-logo.logo-border(size="md" type="cash" :daoLogo="daoSettings.logo")
         .col(v-if="fields.voiceCoefficient")
           label.h-label {{ `${fields.voiceCoefficient.label} (${$store.state.dao.settings.voiceToken})` }}
           .row.items-center
             .col
-              q-input.q-my-sm.rounded-border(v-model="voiceCoefficientLabel" outlined="outlined" suffix="%" :prefix="fields.voiceCoefficient.disabled ? 'x' : voiceCoefficientLabel > 9 ? 'x1.' : 'x1.0'" :readonly="fields.voiceCoefficient.disabled" :rules="[rules.lessOrEqualThan(20), rules.greaterThanOrEqual(-20)]")
+              q-input.q-my-sm.rounded-border(v-model="voiceCoefficientLabel" outlined suffix="%" :prefix="fields.voiceCoefficient.disabled ? 'x' : voiceCoefficientLabel > 9 ? 'x1.' : 'x1.0'" :readonly="fields.voiceCoefficient.disabled" :rules="[rules.lessOrEqualThan(20), rules.greaterThanOrEqual(-20)]")
                 template(v-slot:prepend)
                   token-logo.logo-border(size="md" type="voice" :daoLogo="daoSettings.logo")
   nav.row.justify-end.q-mt-xl.q-gutter-xs(v-if="$q.screen.gt.md")
-    q-btn.h-btn2.q-px-xl(v-if="!disablePrevButton" @click="$emit('prev')" color="primary" label="Back" no-caps="no-caps" outline="outline" rounded="rounded" flat="flat")
-    q-btn.q-px-xl(:disable="nextDisabled" @click="$emit('next')" color="primary" label="Next step" no-caps="no-caps" rounded="rounded" unelevated="unelevated")
+    q-btn.h-btn2.q-px-xl(v-if="!disablePrevButton" @click="$emit('prev')" color="primary" label="Back" no-caps outline rounded flat)
+    q-btn.q-px-xl(:disable="nextDisabled" @click="$emit('next')" color="primary" label="Next step" no-caps rounded unelevated)
 
 </template>
 

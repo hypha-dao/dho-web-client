@@ -2,6 +2,7 @@
 /**
  * Control for navigating the proposal creation wizard
  */
+import I18n from '~/utils/i18n'
 export default {
   name: 'creation-stepper',
   components: {
@@ -20,7 +21,7 @@ export default {
     nextDisabled: Boolean,
     title: {
       type: String,
-      default: 'Creation process'
+      default: I18n.t('proposal-creation.creation-process')
     },
     steps: {
       type: Array,
@@ -43,7 +44,7 @@ widget(:title="title" :noTitle="!$q.screen.gt.md")
   q-list.wizard(:class="{ 'q-pt-md':$q.screen.gt.md }")
     template(v-if="$q.screen.gt.md" v-for="(step, index) in filteredSteps")
       q-item.q-py-md.q-px-none.wizard-item
-        q-item-section(avatar="avatar")
+        q-item-section(avatar)
           transition(enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
             span.wizard-item-line(v-show="activeStepIndex > step.index - 1")
           .text-bold.wizard-item-icon(:class=" {'cursor-pointer': activeStepIndex > index-1, 'active': activeStepIndex === step.index - 1 }" @click=" activeStepIndex > index-1 && $emit('goToStep', { index: step.index - 1, stepName: step.component })")
@@ -53,14 +54,14 @@ widget(:title="title" :noTitle="!$q.screen.gt.md")
           .label-text.q-pl-sm(:class="{ 'cursor-pointer': activeStepIndex > index-1, 'selected-label-text text-primary': activeStepIndex === step.index - 1 }" @click="activeStepIndex > index-1 && $emit('goToStep', { index: step.index - 1, stepName: step.component })") {{ step.label }}
   .flex.full-width.justify-between
     .flex.items-center(:class="{ 'full-width':!$q.screen.sm }")
-      q-btn.q-px-sm(:class="{ 'q-mt-xxxl':$q.screen.gt.md, 'full-width':!$q.screen.sm, 'q-mr-xs':$q.screen.sm }" :disabled="!this.$store.state.proposals.draft.title" @click="$emit('save')" color="primary" :label="$t('proposals.creation-stepper.saveAsDraft')" no-caps="no-caps" outline="outline" rounded="rounded" v-if="hasSaveListener && $q.screen.gt.md")
+      q-btn.q-px-sm(:class="{ 'q-mt-xxxl':$q.screen.gt.md, 'full-width':!$q.screen.sm, 'q-mr-xs':$q.screen.sm }" :disabled="!this.$store.state.proposals.draft.title" @click="$emit('save')" color="primary" :label="$t('proposals.creation-stepper.saveAsDraft')" no-caps outline rounded v-if="hasSaveListener && $q.screen.gt.md")
       .flex.items-center.justify-between.row.full-width(v-if="!$q.screen.gt.md" :style="{ 'flex-direction': 'row', 'margin-bottom': '40px' }")
         .flex.row.justify-center(v-if="!$q.screen.sm")
           template(v-if="$q.screen.lt.md || $q.screen.md" v-for="(step, index) in filteredSteps")
             div(:class="{ 'active-dot':activeStepIndex === step.index - 1, 'upcoming-dot':activeStepIndex < step.index - 1 }" style="width: 10px; height: 10px; border-radius: 100%; border: 1px solid #242F5D; margin: 0 7.5px;")
-        q-btn.q-px-sm(:class="{ 'btn-primary-disabled': nextDisabled, 'btn-primary-active': !nextDisabled, 'full-width q-mt-sm': $q.screen.gt.md }" :disable="nextDisabled" @click="$emit('next')" color="primary" :label="$t('proposals.creation-stepper.nextStep')" no-caps="no-caps" rounded="rounded" unelevated="unelevated" v-if="($q.screen.lt.md || $q.screen.md) && !lastStep")
+        q-btn.q-px-sm(:class="{ 'btn-primary-disabled': nextDisabled, 'btn-primary-active': !nextDisabled, 'full-width q-mt-sm': $q.screen.gt.md }" :disable="nextDisabled" @click="$emit('next')" color="primary" :label="$t('proposals.creation-stepper.nextStep')" no-caps rounded unelevated v-if="($q.screen.lt.md || $q.screen.md) && !lastStep")
         slot(name="cta")
-        q-btn.q-px-sm(v-show="!hasCTA" :class="{ 'btn-primary-disabled': !lastStep, 'btn-primary-active': lastStep, 'full-width q-mt-sm': $q.screen.gt.md }" :disabled="!lastStep" @click="$emit('publish')" :label="$t('proposals.creation-stepper.publish')" no-caps="no-caps" rounded="rounded" unelevated="unelevated" v-if="hasPublishListener && lastStep")
+        q-btn.q-px-sm(v-show="!hasCTA" :class="{ 'btn-primary-disabled': !lastStep, 'btn-primary-active': lastStep, 'full-width q-mt-sm': $q.screen.gt.md }" :disabled="!lastStep" @click="$emit('publish')" :label="$t('proposals.creation-stepper.publish')" no-caps rounded unelevated v-if="hasPublishListener && lastStep")
 
 </template>
 

@@ -19,9 +19,9 @@ q-dialog(:value="value" persistent="persistent")
       p.h-b1.text-white.q-my-lg.text-weight-300 {{ $t('plan.downgrade-pop-up.pleaseCheckTerms') }}
     nav.q-mt-xxl.q-px-xl.q-pb-xl.full-width.row
       .col-6.q-pr-xs
-        q-btn.q-px-xl.rounded-border.full-width(@click="$emit('hidePopUp')" :label="$t('plan.downgrade-pop-up.keepMyPlan')" no-caps="no-caps" outline="outline" rounded="rounded" text-color="white" unelevated="unelevated")
+        q-btn.q-px-xl.rounded-border.full-width(@click="$emit('hidePopUp')" :label="$t('plan.downgrade-pop-up.keepMyPlan')" no-caps outline rounded text-color="white" unelevated)
       .col-6.q-pl-xs
-        q-btn.q-px-xl.rounded-border.text-bold.full-width(@click="$emit('activatePlan')" color="white" text-color="primary" :label="$t('plan.downgrade-pop-up.downgrade')" no-caps="no-caps" rounded="rounded" unelevated="unelevated")
+        q-btn.q-px-xl.rounded-border.text-bold.full-width(@click="$emit('activatePlan')" color="white" text-color="primary" :label="$t('plan.downgrade-pop-up.downgrade')" no-caps rounded unelevated)
 
 </template>
 

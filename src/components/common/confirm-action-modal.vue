@@ -14,7 +14,7 @@ export default defineComponent({
 q-dialog(:value="value" @hide="$emit('input', false)" persistent="persistent")
   q-card.q-pa-md.card-container
     .row.justify-end
-      q-btn.close-btn(@click="$emit('input', false)" color="primary" flat="flat" icon="fas fa-times" round="round" size="sm")
+      q-btn.close-btn(@click="$emit('input', false)" color="primary" flat icon="fas fa-times" round size="sm")
     .row
       .h-h4 {{title}}
     slot(name="buttons-actions")
@@ -22,9 +22,9 @@ q-dialog(:value="value" @hide="$emit('input', false)" persistent="persistent")
         .col-10
           .row
             .col
-              q-btn.full-width(@click="$emit('responded', false)" color="primary" flat="flat" :label="$t('common.confirm-action-modal.no')" no-caps="no-caps" rounded="rounded")
+              q-btn.full-width(@click="$emit('responded', false)" color="primary" flat :label="$t('common.confirm-action-modal.no')" no-caps rounded)
             .col
-              q-btn.full-width(@click="$emit('responded', true)" color="primary" :label="$t('common.confirm-action-modal.yes')" no-caps="no-caps" rounded="rounded")
+              q-btn.full-width(@click="$emit('responded', true)" color="primary" :label="$t('common.confirm-action-modal.yes')" no-caps rounded)
 </template>
 
 <style lang="sass" scoped>

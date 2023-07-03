@@ -74,7 +74,7 @@ export default {
                   div {{ $t('templates.templates-modal.publishingProcess') }}
                   .q-ml-xxs(:class="{ 'text-positive': successful }") {{ processPercentage }}
                     | %
-                q-linear-progress.q-mt-sm(:value="processPercentage/100" :color="successful ? 'positive' : 'primary'" rounded="rounded")
+                q-linear-progress.q-mt-sm(:value="processPercentage/100" :color="successful ? 'positive' : 'primary'" rounded)
           .col.justify-center.flex
             .flex.items-center.justify-center(v-if="successful" :style="{ 'width': '205px', 'height': '205px', 'background': '#1CB59B', 'border-radius': '50%' }")
               q-icon(name="fa fa-check" color="white" size="110px")
@@ -92,7 +92,7 @@ export default {
                 q-card-section.full-width.q-px-xl.justify-end.flex
                   .col
                   .col
-                    q-btn.relative.q-px-lg.h-btn1.full-width(@click="currentStepIndex = 1" color="primary" :label="$t('templates.templates-modal.useATemplate')" no-caps="no-caps" rounded="rounded" unelevated="unelevated")
+                    q-btn.relative.q-px-lg.h-btn1.full-width(@click="currentStepIndex = 1" color="primary" :label="$t('templates.templates-modal.useATemplate')" no-caps rounded unelevated)
                       q-icon.absolute(name="fas fa-plus" size="10px" :style="{ 'margin-top': '2px', 'right': '12px' }")
             .col
               q-card.card.row.justify-between
@@ -103,7 +103,7 @@ export default {
                 q-card-section.full-width.q-px-xl.justify-end.flex
                   .col
                   .col
-                    q-btn.relative.q-px-lg.h-btn1.full-width(@click="isOpen = false" color="primary" :label="$t('templates.templates-modal.createYourOwn')" no-caps="no-caps" rounded="rounded" unelevated="unelevated")
+                    q-btn.relative.q-px-lg.h-btn1.full-width(@click="isOpen = false" color="primary" :label="$t('templates.templates-modal.createYourOwn')" no-caps rounded unelevated)
                       q-icon.absolute(name="fas fa-plus" size="10px" :style="{ 'margin-top': '2px', 'right': '12px' }")
         template(v-if="currentStepIndex === 1")
           .row.q-gutter-xl
@@ -123,9 +123,9 @@ export default {
                     q-card-section.relative(:style="{ 'bottom': '0' }")
                       .row.q-gutter-md
                         .col
-                          q-btn.q-px-lg.h-btn1.relative.full-width.text-no-wrap(color="primary" :label="$t('templates.templates-modal.seeDetails')" no-caps="no-caps" rounded="rounded" unelevated="unelevated" outline="outline" @click="currentStepIndex = 2, selectedOption = option")
+                          q-btn.q-px-lg.h-btn1.relative.full-width.text-no-wrap(color="primary" :label="$t('templates.templates-modal.seeDetails')" no-caps rounded unelevated outline @click="currentStepIndex = 2, selectedOption = option")
                         .col
-                          q-btn.q-px-lg.h-btn1.relative.full-width(color="primary" :label="$t('templates.templates-modal.select')" no-caps="no-caps" rounded="rounded" unelevated="unelevated" @click="$emit('submit' ,option)")
+                          q-btn.q-px-lg.h-btn1.relative.full-width(color="primary" :label="$t('templates.templates-modal.select')" no-caps rounded unelevated @click="$emit('submit' ,option)")
         template(v-if="currentStepIndex === 2")
           .h-h4 {{ selectedOption.title }}
           .font-lato.text-black.q-mt-md(:style="{ 'font-size': '18px' }") {{ selectedOption.description }}
@@ -167,7 +167,7 @@ export default {
                         .h-b2.text-bold.text-black {{ $t('templates.templates-modal.unity') }}
                       .h-b2.text-bold.text-black {{ method.unity }}
                         | %
-                      q-linear-progress.q-mt-xxs(:value="method.unity/100" :color="'primary'" rounded="rounded")
+                      q-linear-progress.q-mt-xxs(:value="method.unity/100" :color="'primary'" rounded)
                   .row.q-mt-md
                     .col.flex.justify-between
                       .row.items-center
@@ -175,7 +175,7 @@ export default {
                         .h-b2.text-bold.text-black {{ $t('templates.templates-modal.quorum') }}
                       .h-b2.text-bold.text-black {{ method.quorum }}
                         | %
-                      q-linear-progress.q-mt-xxs(:value="method.quorum/100" :color="'primary'" rounded="rounded")
+                      q-linear-progress.q-mt-xxs(:value="method.quorum/100" :color="'primary'" rounded)
           .col.q-mt-md
             .row.h-h4.q-mb-md {{ $t('templates.templates-modal.communityTeamVotingMethod') }}
             .row.q-col-gutter-xl
@@ -190,7 +190,7 @@ export default {
                         .h-b2.text-bold.text-black {{ $t('templates.templates-modal.unity1') }}
                       .h-b2.text-bold.text-black {{ method.unity }}
                         | %
-                      q-linear-progress.q-mt-xxs(:value="method.unity/100" :color="'primary'" rounded="rounded")
+                      q-linear-progress.q-mt-xxs(:value="method.unity/100" :color="'primary'" rounded)
                   .row.q-mt-md
                     .col.flex.justify-between
                       .row.items-center
@@ -198,7 +198,7 @@ export default {
                         .h-b2.text-bold.text-black {{ $t('templates.templates-modal.quorum1') }}
                       .h-b2.text-bold.text-black {{ method.quorum }}
                         | %
-                      q-linear-progress.q-mt-xxs(:value="method.quorum/100" :color="'primary'" rounded="rounded")
+                      q-linear-progress.q-mt-xxs(:value="method.quorum/100" :color="'primary'" rounded)
           .row.q-mt-md
             .row.h-h4.q-mb-md {{ $t('templates.templates-modal.coreTeamBadges', { '1': selectedOption.details.coreBadges.length }) }}
             .row.q-col-gutter-xl
@@ -226,11 +226,11 @@ export default {
             .text-grey.text-italic.q-mt-md(:style="{ 'font-size': '12px' }") {{ $t('templates.templates-modal.description') }}
             .h-b4(:style="{ 'font-size': '18px' }") {{ currentProposal.description }}
         .row.full-width.justify-end.q-pb-md(v-if="currentStepIndex === 2")
-          q-btn.q-px-lg.h-btn1.relative(color="primary" :label="$t('templates.templates-modal.backToTemplates')" no-caps="no-caps" rounded="rounded" unelevated="unelevated" outline="outline" @click="currentStepIndex = 1")
-          q-btn.q-ml-md.q-px-lg.h-btn1.relative(color="primary" :label="$t('templates.templates-modal.selectThisTemplate')" no-caps="no-caps" rounded="rounded" unelevated="unelevated" @click="$emit('submit' ,selectedOption)")
+          q-btn.q-px-lg.h-btn1.relative(color="primary" :label="$t('templates.templates-modal.backToTemplates')" no-caps rounded unelevated outline @click="currentStepIndex = 1")
+          q-btn.q-ml-md.q-px-lg.h-btn1.relative(color="primary" :label="$t('templates.templates-modal.selectThisTemplate')" no-caps rounded unelevated @click="$emit('submit' ,selectedOption)")
       .row.absolute(:style="{ 'bottom': '0', 'right': '0' }")
-        q-btn.q-px-lg.h-btn1.relative(v-if="successful" color="primary" :label="$t('templates.templates-modal.goToProposalsDashboard')" no-caps="no-caps" rounded="rounded" unelevated="unelevated" outline="outline")
-        q-btn.q-ml-md.q-px-lg.h-btn1.relative(v-if="successful" color="primary" :label="$t('templates.templates-modal.goToOrganizationDashboard')" no-caps="no-caps" rounded="rounded" unelevated="unelevated")
+        q-btn.q-px-lg.h-btn1.relative(v-if="successful" color="primary" :label="$t('templates.templates-modal.goToProposalsDashboard')" no-caps rounded unelevated outline)
+        q-btn.q-ml-md.q-px-lg.h-btn1.relative(v-if="successful" color="primary" :label="$t('templates.templates-modal.goToOrganizationDashboard')" no-caps rounded unelevated)
 
 </template>
 

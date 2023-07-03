@@ -34,10 +34,10 @@ export default {
       sort: '',
       textFilter: null,
       optionArray: [
-        { label: 'Sort by', disable: true },
-        'Oldest first',
-        'Newest first',
-        'Alphabetically'
+        { label: this.$t('pages.dho.explore.sortBy'), disable: true },
+        this.$t('pages.dho.explore.oldestFirst'),
+        this.$t('pages.dho.explore.newestFirst'),
+        this.$t('pages.dho.explore.alphabetically')
       ],
       showApplicants: false,
       mobileFilterStyles: {
@@ -114,8 +114,8 @@ export default {
 
     banner () {
       return {
-        title: this.daoSettings.exploreTitle || 'Discover the Hypha DAO network',
-        description: this.daoSettings.exploreParagraph || 'Welcome to the global DAO directory! Click on any card to open the DAO and to take a look under the hood. You can learn more about them, apply as a member or simply take a look around.',
+        title: this.daoSettings.exploreTitle || this.$t('pages.dho.explore.discoverTheHyphaDAONetwork'),
+        description: this.daoSettings.exploreParagraph || this.$t('pages.dho.explore.welcomeToTheGlobalDAO'),
         background: ipfsy(this.daoSettings.exploreBackgroundImage),
         color: this.daoSettings.primaryColor,
         pattern: this.daoSettings.pattern,
@@ -134,9 +134,9 @@ export default {
 
     filterPlacehoder () {
       if (this.exploreBy === EXPLORE_BY.DAOS) {
-        return 'Search DHOs'
+        return this.$t('pages.dho.explore.searchDHOs')
       } else if (this.exploreBy === EXPLORE_BY.ECOSYSTEMS) {
-        return 'Search Ecosystems'
+        return this.$t('pages.dho.explore.searchEcosystems')
       }
       return ''
     }
@@ -233,13 +233,13 @@ q-page.page-explore
     base-banner(v-bind="banner" @onClose="hideExploreBanner" :compact="!$q.screen.gt.sm")
       template(v-slot:buttons)
         a(target="_tab" href="https://hypha.earth/")
-          q-btn.q-px-lg.h-btn1(no-caps="no-caps" rounded="rounded" unelevated="unelevated" color="secondary" href="https://hypha.earth/" target="_blank") {{ $t('pages.dho.explore.discoverMore') }}
+          q-btn.q-px-lg.h-btn1(no-caps rounded unelevated color="secondary" href="https://hypha.earth/" target="_blank") {{ $t('pages.dho.explore.discoverMore') }}
   .row.q-py-md
     .col-sm-12.col-md-12.col-lg-9(ref="scrollContainer" v-if="exploreBy === EXPLORE_BY.DAOS")
       q-infinite-scroll(@load="onLoad" :offset="250" :scroll-target="$refs.scrollContainer" ref="scroll")
         .row
           .col-4.q-mb-md(v-for="(dho,index) in dhos" :key="dho.name" :class="{ 'col-6': $q.screen.lt.lg, 'q-pr-md': $q.screen.lt.sm ? false : $q.screen.gt.md ? true : index % 2 === 0, 'full-width':  view === 'list' || $q.screen.lt.sm}")
-            dho-card.full-width(v-bind="dho" :view="view" useIpfsy="useIpfsy" ellipsis="ellipsis")
+            dho-card.full-width(v-bind="dho" :view="view" useIpfsy ellipsis)
               template(v-slot:footer)
                 footer.full-width.row.items-center
                   .col-6.text-center

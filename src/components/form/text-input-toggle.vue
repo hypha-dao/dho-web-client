@@ -68,10 +68,10 @@ export default {
     q-toggle(v-show="showToggle" :value="toggle" @input="input($event, 'toggle')" color="secondary" :disable="disable")
   .row
     .col-auto.q-mr-sm
-      q-btn.q-pa-xxs(round="round" unelevated="unelevated" :icon="icon" color="primary" text-color="white" size="sm" :ripple="false" v-if="iconBackground")
+      q-btn.q-pa-xxs(round unelevated :icon="icon" color="primary" text-color="white" size="sm" :ripple="false" v-if="iconBackground")
       q-icon.chain-icon(:name="icon" :ripple="false" size="40px" v-else)
     .col
-      q-input.full-width.rounded-border.q-pb-none(dense="dense" outlined="outlined" ref="text" :value="text" @input="input($event, 'text')" :type="type" :rules="validateRules" :disable="disable" :placeholder="placeholder" :class="{ 'bg-white': whiteInput }")
+      q-input.full-width.rounded-border.q-pb-none(dense outlined ref="text" :value="text" @input="input($event, 'text')" :type="type" :rules="validateRules" :disable="disable" :placeholder="placeholder" :class="{ 'bg-white': whiteInput }")
       slot
 
 </template>

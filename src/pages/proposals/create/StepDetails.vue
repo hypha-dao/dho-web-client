@@ -159,14 +159,14 @@ widget
   section.q-mt-xl
     .col.q-mt-sm(v-if="fields.title")
       label.h-label {{ fields.title.label }}
-      q-input.q-mt-xs.rounded-border(:disable="isEditing || isProposalType(PROPOSAL_TYPE.ABILITY)" :placeholder="fields.title.placeholder" :rules="[val => !!val || $t('pages.proposals.create.stepdetails.titleIsRequired'), val => (val.length <= TITLE_MAX_LENGTH) || $t('pages.proposals.create.stepdetails.proposalTitleLengthHasToBeLess', { TITLE_MAX_LENGTH: TITLE_MAX_LENGTH, length: title.length })]" dense="dense" outlined="outlined" v-model="title")
+      q-input.q-mt-xs.rounded-border(:disable="isEditing || isProposalType(PROPOSAL_TYPE.ABILITY)" :placeholder="fields.title.placeholder" :rules="[val => !!val || $t('pages.proposals.create.stepdetails.titleIsRequired'), val => (val.length <= TITLE_MAX_LENGTH) || $t('pages.proposals.create.stepdetails.proposalTitleLengthHasToBeLess', { TITLE_MAX_LENGTH: TITLE_MAX_LENGTH, length: title.length })]" dense outlined v-model="title")
     .col.q-mt-sm(v-if="fields.description")
       label.h-label {{ fields.description.label }}
-      q-field.q-mt-xs.rounded-border(:rules="[rules.required, val => this.$sanitize(val, { allowedTags: [] }).length < DESCRIPTION_MAX_LENGTH || $t('pages.proposals.create.stepdetails.theDescriptionMustContainLess', { DESCRIPTION_MAX_LENGTH: DESCRIPTION_MAX_LENGTH, length: this.$sanitize(description, { allowedTags: [] }).length })]" dense="dense" maxlength="4000" outlined="outlined" ref="bio" stack-label="stack-label" v-model="description" :disable="isProposalType(PROPOSAL_TYPE.ABILITY)")
-        input-editor.full-width(:placeholder="fields.description.placeholder" :toolbar="[['bold', 'italic', /*'strike', 'underline'*/],['token', 'hr', 'link', 'custom_btn'],['quote', 'unordered', 'ordered']]" flat="flat" ref="editorRef" v-model="description")
+      q-field.q-mt-xs.rounded-border(:rules="[rules.required, val => this.$sanitize(val, { allowedTags: [] }).length < DESCRIPTION_MAX_LENGTH || $t('pages.proposals.create.stepdetails.theDescriptionMustContainLess', { DESCRIPTION_MAX_LENGTH: DESCRIPTION_MAX_LENGTH, length: this.$sanitize(description, { allowedTags: [] }).length })]" dense maxlength="4000" outlined ref="bio" stack-label v-model="description" :disable="isProposalType(PROPOSAL_TYPE.ABILITY)")
+        input-editor.full-width(:placeholder="fields.description.placeholder" :toolbar="[['bold', 'italic', /*'strike', 'underline'*/],['token', 'hr', 'link', 'custom_btn'],['quote', 'unordered', 'ordered']]" flat ref="editorRef" v-model="description")
     .col.q-mt-sm(v-if="fields.circle")
       label.h-label {{ fields.circle.label }}
-      q-select.q-mt-xs.q-pb-md(:option-label="(option) => option.label" :option-value="option => option" :options="circles" dense="dense" dropdown-icon="fas fa-chevron-down" hide-bottom-space="hide-bottom-space" options-dense="options-dense" outlined="outlined" rounded="rounded" v-model="circle")
+      q-select.q-mt-xs.q-pb-md(:option-label="(option) => option.label" :option-value="option => option" :options="circles" dense dropdown-icon="fas fa-chevron-down" hide-bottom-space options-dense outlined rounded v-model="circle")
     .col.q-mt-sm.full-width(v-if="fields.url")
       label.h-label {{ fields.url.label }}
       .row.q-pb-md.q-mt-xxs.q-gutter-md
@@ -207,7 +207,7 @@ widget
       .flex.justify-center.full-width.items-center(v-if="uploading")
         loading-spinner.loadingSpinner(color="primary" size="4rem")
       template(v-else)
-        ipfs-image-viewer(v-if="url && fileIsImage()" :ipfsCid="url" showDefault="showDefault" square="square" :originalUploadedFile="originalUploadedFile" canRemoveFile="canRemoveFile" @removeFile="url=''")
+        ipfs-image-viewer(v-if="url && fileIsImage()" :ipfsCid="url" showDefault square :originalUploadedFile="originalUploadedFile" canRemoveFile="canRemoveFile" @removeFile="url=''")
         template(v-else-if="url")
           .col(:style="{ 'max-width': '180px', 'border-radius': '12px', 'box-shadow': '0px 0px 14px #23283C14' }")
             .row.bg-grey.flex.items-center.justify-center(:style="{ 'height': '98px', 'border-radius': '12px 12px 0 0', 'position': 'relative' }")
@@ -222,8 +222,8 @@ widget
                   | KB
       input-file-ipfs(@uploading="uploading = true" @uploadedFile="url = arguments[0], uploading = false, originalUploadedFile = arguments[1]" ref="url" v-show="false")
   nav.q-mt-xl.row.justify-end.q-gutter-xs(v-if="$q.screen.gt.md")
-    q-btn.q-px-xl(@click="$emit('prev')" color="primary" flat="flat" :label="$t('pages.proposals.create.stepdetails.back')" no-caps="no-caps" outline="outline" rounded="rounded" v-if="!disablePrevButton")
-    q-btn.q-px-xl(:disable="canGoNext" @click="onNext" color="primary" :label="$t('pages.proposals.create.stepdetails.nextStep')" no-caps="no-caps" rounded="rounded" unelevated="unelevated")
+    q-btn.q-px-xl(@click="$emit('prev')" color="primary" flat :label="$t('pages.proposals.create.stepdetails.back')" no-caps outline rounded v-if="!disablePrevButton")
+    q-btn.q-px-xl(:disable="canGoNext" @click="onNext" color="primary" :label="$t('pages.proposals.create.stepdetails.nextStep')" no-caps rounded unelevated)
 
 </template>
 

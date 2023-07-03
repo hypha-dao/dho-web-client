@@ -83,21 +83,21 @@ export default {
     .h-b1-signup.text-weight-thin.q-mt-lg.q-mb-lg(v-if="$q.platform.is.mobile") {{ $t('login.login-view.pleaseLoginWith') }}
     .col-12(v-if="pkForm && pk")
       .text-h5.text-bold.input-label.q-mb-md {{ $t('login.login-view.account1') }}
-      q-input(ref="account" v-model="form.account" :placeholder="$t('login.login-view.account2')" maxlength="12" :rules="[rules.required, rules.accountFormat]" lazy-rules="lazy-rules" rounded="rounded" dense="dense" outlined="outlined" bg-color="white")
+      q-input(ref="account" v-model="form.account" :placeholder="$t('login.login-view.account2')" maxlength="12" :rules="[rules.required, rules.accountFormat]" lazy-rules rounded dense outlined bg-color="white")
       .text-h5.text-bold.input-label.q-mb-md {{ $t('login.login-view.privateKey') }}
-      q-input(ref="privateKey" v-model="form.privateKey" type="password" :placeholder="$t('login.login-view.privateKey1')" :rules="[rules.required]" lazy-rules="lazy-rules" :error="!!errorPrivateKey" :error-message="errorPrivateKey" rounded="rounded" dense="dense" outlined="outlined" bg-color="white")
+      q-input(ref="privateKey" v-model="form.privateKey" type="password" :placeholder="$t('login.login-view.privateKey1')" :rules="[rules.required]" lazy-rules :error="!!errorPrivateKey" :error-message="errorPrivateKey" rounded dense outlined bg-color="white")
       .row.justify-end
-        q-btn.q-mt-md.login-button(unelevated="unelevated" :label="$t('login.login-view.login')" no-caps="no-caps" @click="onLoginInApp" :loading="submitting")
+        q-btn.q-mt-md.login-button(unelevated :label="$t('login.login-view.login')" no-caps @click="onLoginInApp" :loading="submitting")
     .col-xs-12.col-md-6.q-mt-xxxl(v-else)
       q-list
-        q-item.wallet.q-my-xs(v-if="$ual" v-for="(wallet, idx) in $ual.authenticators" :key="wallet.getStyle().text" v-ripple="v-ripple" :style="{ background: wallet.getStyle().background, color: wallet.getStyle().textColor }")
-          q-item-section.cursor-pointer(avatar="avatar" @click="onLoginWallet(idx)")
+        q-item.wallet.q-my-xs(v-if="$ual" v-for="(wallet, idx) in $ual.authenticators" :key="wallet.getStyle().text" v-ripple :style="{ background: wallet.getStyle().background, color: wallet.getStyle().textColor }")
+          q-item-section.cursor-pointer(avatar @click="onLoginWallet(idx)")
             img(:src="wallet.getStyle().icon" width="20")
           q-item-section.cursor-pointer.text-center(@click="onLoginWallet(idx)") {{ $t('login.login-view.login1', { '1': wallet.getStyle().text, '2': wallet.getStyle().text === 'Seeds' ? '(beta)' : '' }) }}
-          q-item-section(avatar="avatar")
+          q-item-section(avatar)
             .flex
               loading-spinner(v-if="loading === wallet.getStyle().text" :color="wallet.getStyle().textColor" size="2em")
-              q-btn(v-else :color="wallet.getStyle().textColor" icon="fas fa-cloud-download-alt" @click="openUrl(wallet.getOnboardingLink())" target="_blank" dense="dense" flat="flat" size="10px")
+              q-btn(v-else :color="wallet.getStyle().textColor" icon="fas fa-cloud-download-alt" @click="openUrl(wallet.getOnboardingLink())" target="_blank" dense flat size="10px")
                 q-tooltip {{ $t('login.login-view.getApp') }}
 
 </template>

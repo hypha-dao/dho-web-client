@@ -55,7 +55,7 @@ export default {
 
 <template>
 
-<widget class="q-pa-none full-width" :bar="true" noPadding="noPadding">
+<widget class="q-pa-none full-width" :bar="true" noPadding>
   <div class="row justify-between items-center">
     <div class="col-12 q-px-xl" :class="{ 'q-py-xl': !$q.screen.gt.md}">
       <div class="row items-center" :class="{ 'full-width': !$q.screen.gt.md}">
@@ -71,10 +71,10 @@ export default {
         <div class="col-12 col-sm-12 col-md-12 col-lg-6 row justify-end">
           <nav class="col-md-12 col-lg-8 q-my-xl row q-col-gutter-x-sm" :class="{ 'q-col-gutter-y-sm': !$q.screen.gt.md}">
             <div class="col-12 col-sm-12 col-md-12 col-lg-6">
-              <q-btn class="rounded-border text-bold q-mr-xs full-width full-height" :disabled="!isAdmin" @click="goToHyphaTokenSales" color="primary" :label="$t('profiles.wallet-hypha.buyHyphaToken')" no-caps="no-caps" rounded="rounded" unelevated="unelevated"></q-btn>
+              <q-btn class="rounded-border text-bold q-mr-xs full-width full-height" :disabled="!isAdmin" @click="goToHyphaTokenSales" color="primary" :label="$t('profiles.wallet-hypha.buyHyphaToken')" no-caps rounded unelevated></q-btn>
             </div>
             <div class="col-12 col-sm-12 col-md-12 col-lg-6">
-              <q-btn class="rounded-border text-bold q-ml-xs full-width full-height" :disable="!canActivate || !hasEnoughTokens || !isAdmin" @click="$emit('click')" color="secondary" no-caps="no-caps" rounded="rounded" unelevated="unelevated">
+              <q-btn class="rounded-border text-bold q-ml-xs full-width full-height" :disable="!canActivate || !hasEnoughTokens || !isAdmin" @click="$emit('click')" color="secondary" no-caps rounded unelevated>
                 <slot name="cta"></slot>
               </q-btn>
             </div>
