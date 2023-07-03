@@ -94,7 +94,8 @@ export default {
           value: 'zh',
           image: require('assets/images/locales/zh.png')
         }
-      ]
+      ],
+      notificationsCount: 1
     }
   },
 
@@ -361,6 +362,9 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
                     .h-h3(v-if="title") {{ title }}
                 .col(v-if="showTopBarItems")
                   .row.justify-end.items-center(v-if="$q.screen.gt.md")
+                    .notifications-icon(v-if="notificationsCount > 0")
+                      .notifications-icon__counter {{ notificationsCount }}
+                      q-btn.q-mr-xs(unelevated rounded padding="12px" icon="far fa-bell"  size="sm" :color="'white'" :text-color="'primary'")
                     router-link(v-if="selectedDaoPlan.isEcosystem" :to="{ name: 'ecosystem' }")
                       q-btn.q-mr-xs(unelevated rounded padding="12px" icon="fas fa-share-alt" size="sm" :color="isActiveRoute('ecosystem') ? 'primary' : 'white'" :text-color="isActiveRoute('ecosystem') ? 'white' : 'primary'")
                     router-link(:to="{ name: 'configuration' }")
@@ -469,4 +473,21 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
 .translation-box
   background: #F2F1F3
   border-radius: 10px
+
+.notifications-icon
+  position: relative
+.notifications-icon__counter
+  width: 16px
+  height: 16px
+  background: #EF3F69
+  border-radius: 50%
+  display: flex
+  align-items: center
+  justify-content: center
+  color: #FFFFFF
+  position: absolute
+  z-index: 1
+  right: 8px
+  top: -2px
+  font-size: 14px
 </style>
