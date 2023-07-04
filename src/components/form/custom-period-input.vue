@@ -60,7 +60,9 @@ export default {
         this.$emit('input', value)
       }
 
-    }
+    },
+
+    label  () { return this.$t(`periods.${this.period}`) }
   },
 
   mounted () {
@@ -82,7 +84,7 @@ div.custom-period-input
         v-model.number="valueFormated"
       )
     .col-3
-      q-btn-dropdown.full-width(:label="[$t('periods.'+[period])]"  outline no-caps rounded unelevated)
+      q-btn-dropdown.full-width(:label="label"  outline no-caps rounded unelevated)
         q-list
           q-item(clickable v-close-popup @click="period = 'hours'")
             q-item-section
