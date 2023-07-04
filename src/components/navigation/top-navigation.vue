@@ -21,7 +21,8 @@ export default {
     disabledSelector: Boolean,
     selectedDaoPlan: Object,
     showTopButtons: Boolean,
-    notifications: Array
+    notifications: Array,
+    unreadNotifications: Number
   },
 
   data () {
@@ -66,7 +67,7 @@ export default {
         //- TODO: temporarily commented
         //- q-btn.q-mr-xxs.icon(flat unelevated rounded padding="12px" icon="fas fa-search"  size="sm" color="white" text-color="primary" @click="searching=!searching")
         .notifications-icon
-          .notifications-icon__counter(v-if="notifications.length > 0") {{ notifications.length }}
+          .notifications-icon__counter(v-if="unreadNotifications > 0") {{ unreadNotifications }}
           q-btn.q-mr-xs(@click="$emit('openNotifications')" unelevated rounded padding="12px" icon="far fa-bell"  size="sm" :color="'white'" :text-color="'primary'")
         router-link(:to="{ name: 'configuration' }")
           q-btn.q-mr-xs(unelevated rounded padding="12px" icon="fas fa-cog"  size="sm" :color="isActiveRoute('configuration') ? 'primary' : 'white'" :text-color="isActiveRoute('configuration') ? 'white' : 'primary'")

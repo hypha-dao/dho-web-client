@@ -102,7 +102,8 @@ export default {
         {
           user: 'accountname',
           notification: 'newcomment',
-          createdDate: '2023-01-17T16:45:30'
+          createdDate: '2023-01-17T16:45:30',
+          id: 0
         },
         {
           user: 'accountname',
@@ -110,17 +111,20 @@ export default {
           createdDate: '2023-05-17T16:45:30',
           content: {
             days: 3
-          }
+          },
+          id: 1
         },
         {
           user: 'accountname',
           notification: 'proposalpassed',
-          createdDate: '2023-06-17T16:45:30'
+          createdDate: '2023-06-17T16:45:30',
+          id: 2
         },
         {
           user: 'accountname',
           notification: 'proposalrejected',
-          createdDate: '2023-06-12T16:45:30'
+          createdDate: '2023-06-12T16:45:30',
+          id: 3
         },
         {
           user: 'accountname',
@@ -128,7 +132,8 @@ export default {
           createdDate: '2023-06-12T16:45:30',
           content: {
             periods: 1
-          }
+          },
+          id: 4
         },
         {
           user: 'accountname',
@@ -136,23 +141,34 @@ export default {
           createdDate: '2023-05-17T16:45:30',
           content: {
             days: 6
-          }
+          },
+          id: 5
         },
         {
           user: 'accountname',
           notification: 'assignmentapproved',
-          createdDate: '2023-06-12T16:45:30'
+          createdDate: '2023-06-12T16:45:30',
+          id: 6
         },
         {
           user: 'accountname',
           notification: 'assignmentrejected',
-          createdDate: '2023-06-12T16:45:30'
+          createdDate: '2023-06-12T16:45:30',
+          id: 7
         }
-      ]
+      ],
+      localNotifications: []
     }
   },
 
   watch: {
+    localNotifications: {
+      handler (v) {
+        this.localNotifications = v
+      },
+      immediate: true,
+      deep: true
+    },
     dho (v) {
       if (v.icon) {
         this.updateTitle()
@@ -253,7 +269,6 @@ export default {
       }
       return true
     }
-
   },
 
   methods: {
@@ -449,7 +464,61 @@ export default {
         description: description,
         createdDate: createdDate
       }
+    },
+    initNotifications () {
+      if (!localStorage.getItem('notifications')) {
+        const notifications = []
+        this.notifications.forEach((notification) => {
+          notifications.push({
+            ...notification,
+            showed: false
+          })
+        })
+        this.localNotifications = notifications
+        localStorage.setItem('notifications', JSON.stringify(notifications))
+      } else {
+        const parsedNotifications = JSON.parse(localStorage.getItem('notifications'))
+        this.notifications.forEach((notification) => {
+          const isMatched = parsedNotifications.find(item => item.id === notification.id)
+          if (!isMatched) {
+            parsedNotifications.push({
+              ...notification,
+              showed: false
+            })
+          }
+        })
+        this.localNotifications = parsedNotifications
+        localStorage.setItem('notifications', JSON.stringify(parsedNotifications))
+      }
+    },
+    countObjectsWithKeyValue(array, key, value) {
+      let count = 0
+      array.forEach(obj => {
+        if (obj[key] === value) {
+          count++
+        }
+      })
+      return count
+    },
+    readNotification (id) {
+      const localNotifications = JSON.parse(localStorage.getItem('notifications'))
+      const showedNotifications = localNotifications.map(obj => {
+        if (obj.id === id) {
+          return { ...obj, showed: true }
+        }
+        return obj
+      })
+      this.localNotifications = showedNotifications
+      localStorage.setItem('notifications', JSON.stringify(showedNotifications))
+    },
+    clearAllNotifications () {
+      localStorage.removeItem('notifications')
+      this.localNotifications = []
+      this.notifications = []
     }
+  },
+  created () {
+    this.initNotifications()
   }
 }
 </script>
@@ -479,7 +548,7 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
         .col-6.q-pl-xs
           q-btn.q-px-xl.rounded-border.text-bold.full-width(:to="{ name: 'configuration', query: { tab: 'PLAN' } }" color="white" text-color="negative" :label="$t('layouts.multidholayout.renewMyCurrentPlan')" no-caps rounded unelevated)
   q-header.bg-white(v-if="$q.screen.lt.lg")
-    top-navigation(:notifications="notifications" @openNotifications="languageSettings = false, right = false, showNotificationsBar = true" @isActiveRoute="isActiveRoute" @showLangSettings="languageSettings = true, right = false" :showTopButtons="showTopBarItems" :profile="profile" @toggle-sidebar="!$q.screen.md ? right = true : showMinimizedMenu = true" @search="onSearch" :dho="dho" :dhos="getDaos($apolloData.data.member)" :selectedDaoPlan="selectedDaoPlan")
+    top-navigation(:unreadNotifications="countObjectsWithKeyValue(localNotifications, 'showed', false)" :notifications="notifications" @openNotifications="languageSettings = false, right = false, showNotificationsBar = true" @isActiveRoute="isActiveRoute" @showLangSettings="languageSettings = true, right = false" :showTopButtons="showTopBarItems" :profile="profile" @toggle-sidebar="!$q.screen.md ? right = true : showMinimizedMenu = true" @search="onSearch" :dho="dho" :dhos="getDaos($apolloData.data.member)" :selectedDaoPlan="selectedDaoPlan")
   q-page-container.bg-white.window-height.q-py-sm(:class="{ 'q-pr-sm': $q.screen.gt.md, 'q-px-xs': !$q.screen.gt.md}")
     .bg-internal-bg.content.full-height
       q-resize-observer(@resize="onContainerResize")
@@ -498,7 +567,7 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
                 .col(v-if="showTopBarItems")
                   .row.justify-end.items-center(v-if="$q.screen.gt.md")
                     .notifications-icon
-                      .notifications-icon__counter(v-if="notifications.length > 0") {{ notifications.length }}
+                      .notifications-icon__counter(v-if="countObjectsWithKeyValue(localNotifications, 'showed', false) > 0") {{ countObjectsWithKeyValue(localNotifications, 'showed', false) }}
                       q-btn.q-mr-xs(@click="languageSettings = false, right = false, showNotificationsBar = true" unelevated rounded padding="12px" icon="far fa-bell"  size="sm" :color="'white'" :text-color="'primary'")
                     router-link(v-if="selectedDaoPlan.isEcosystem" :to="{ name: 'ecosystem' }")
                       q-btn.q-mr-xs(unelevated rounded padding="12px" icon="fas fa-share-alt" size="sm" :color="isActiveRoute('ecosystem') ? 'primary' : 'white'" :text-color="isActiveRoute('ecosystem') ? 'white' : 'primary'")
@@ -578,8 +647,8 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
           .h-h3.items-center.flex {{ $t('notifications.notifications')}}
           q-btn(color="internal-bg" text-color="primary" rounded unelevated size="sm" padding="12px" icon="fas fa-times" :style="{ 'height': '40px' }" @click="showNotificationsBar = false")
         .q-mt-md.full-width(:style="{ 'position': 'relative' }")
-          .col(v-for="notification, index in notifications" :key="notification.notification")
-            .row.q-py-md(:style="{ 'border-top': '1px solid #CBCDD1' }" :class="{ 'last-item': index === notifications.length - 1}")
+          .col(v-for="notification, index in localNotifications" :key="notification.notification")
+            .row.q-py-md(v-on:mouseover="readNotification(notification.id)" :style="{ 'border-top': '1px solid #CBCDD1' }" :class="{ 'last-item': index === notifications.length - 1, 'read-notify': notification.showed === true }")
               .col-2.items-center.flex
                 div.flex.items-center.justify-center(:style="{ 'width': '40px', 'height': '40px', 'border-radius': '50%', 'background': '#F2F1F3'}")
                   img(:src="parsedNotification(notification).icon")
@@ -588,8 +657,8 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
                 .h-b2 {{ parsedNotification(notification).description }}
               .col-3.flex.items-center
                 .h-b2.text-italic {{ parsedNotification(notification).createdDate }}
-          .row.bg-white.full-width(v-if="notifications.length" :style="{ 'position': 'fixed', 'bottom': '0', 'padding-right': '60px', 'padding-bottom': '20px', 'padding-top': '20px' }")
-            q-btn.full-width.q-px-xl(@click="notifications = []" color="primary" :label="$t('notifications.clearAll')" no-caps outline rounded unelevated)
+          .row.bg-white.full-width(v-if="localNotifications.length" :style="{ 'position': 'fixed', 'bottom': '0', 'padding-right': '60px', 'padding-bottom': '20px', 'padding-top': '20px' }")
+            q-btn.full-width.q-px-xl(@click="clearAllNotifications()" color="primary" :label="$t('notifications.clearAll')" no-caps outline rounded unelevated)
 </template>
 <style lang="stylus" scoped>
 .rounded-border
@@ -644,4 +713,6 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
   font-size: 14px
 .last-item
   margin-bottom: 80px
+.read-notify
+  opacity: .5
 </style>
