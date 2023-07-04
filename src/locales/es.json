@@ -1,4 +1,17 @@
 {
+  "actions": {
+    "delete": "Borrar"
+  },
+  "periods": {
+    "hour": "Hora",
+    "hours": "Horas",
+    "day": "Día",
+    "days": "Días",
+    "week": "Semana",
+    "weeks": "Semanas",
+    "month": "Mes",
+    "months": "Meses"
+  },
   "assignments": {
     "assignment-claim-extend": {
       "claimAll": "Reclamar todo\n        ",
@@ -61,6 +74,203 @@
       "more1": "Más"
     }
   },
+  "configuration": {
+    "alert": {
+      "confirm-action": "¿Estás seguro de que quieres salir sin guardar el borrador?"
+    },
+    "tabs": {
+      "general": "General",
+      "structure": "Estructura",
+      "voting": "Votar"
+    },
+    "nav": {
+      "reset": "Restablecer cambios",
+      "submit": "Guardar ediciones",
+      "execute-multisig": "Ejecutar multigrado",
+      "sign-multisig": "Suscríbete a multisig",
+      "view-multisig": "Ver multigrado"
+    },
+    "settings-general": {
+      "title": "General",
+      "description": "Use la configuración general para configurar algunos parámetros básicos, como un enlace a su espacio de colaboración principal y su DAO, y use el interruptor para habilitar o deshabilitar funciones clave.",
+      "form": {
+        "logo": {
+          "label": "Logo"
+        },
+        "upload": {
+          "label": "Sube una imagen (máx. 3 MB)"
+        },
+        "name": {
+          "label": "Nombre"
+        },
+        "url": {
+          "label": "URL personalizada"
+        },
+        "purpose": {
+          "label": "Objetivo"
+        },
+        "primary-color": {
+          "label": "Color primario"
+        },
+        "secondary-color": {
+          "label": "Color secundario"
+        },
+        "text-color": {
+          "label": "Color de texto"
+        },
+        "sample-text": "Este texto debe ser visible en ambos colores."
+      },
+      "nav": {
+        "show-more": "Mostrar más",
+        "show-less": "Muestra menos"
+      }
+    },
+    "settings-structure": {
+      "roles": {
+        "title": "Funciones",
+        "description": "Aquí puedes configurar tus funciones DAO. ",
+        "tabs": {
+          "types": "Tipos",
+          "levels": "Niveles"
+        },
+        "type": {
+          "heading": "Aquí puede crear nuevos tipos de roles agregando un nombre y un conjunto de responsabilidades.",
+          "form": {
+            "name": {
+              "label": "Nombre de rol",
+              "placeholder": "Ingrese un nombre de rol"
+            },
+            "description": {
+              "label": "Descripción del trabajo",
+              "placeholder": "Ingrese una descripción del rol"
+            },
+            "cancel": "Cancelar",
+            "submit": "Entregar"
+          },
+          "nav": {
+            "create": "Crear nuevo rol"
+          }
+        },
+        "level": {
+          "heading": "Agregue en qué nivel se encuentra el rol en términos de complejidad o contribución empresarial.",
+          "form": {
+            "name": {
+              "label": "Nombre del nivel",
+              "placeholder": "Introduzca un nombre de nivel"
+            },
+            "yearly-reward": {
+              "label": "Recompensa anual",
+              "placeholder": "Introduce un valor"
+            },
+            "montly-reward": {
+              "label": "Recompensa mensual"
+            },
+            "min-deferred": {
+              "label": "Mínimo pospuesto"
+            },
+            "cancel": "Cancelar",
+            "submit": "Concluido"
+          },
+          "nav": {
+            "create": "Crear nuevo nivel"
+          }
+        }
+      },
+      "circles": {
+        "title": "círculos",
+        "description": "Aquí puede configurar sus equipos o círculos principales. ",
+        "heading": "Siéntase libre de dar forma a su DAO creando círculos o equipos que sean significativos para su flujo de trabajo.",
+        "form": {
+          "name": {
+            "label": "Nombre del círculo",
+            "placeholder": "Introduce un nombre de círculo"
+          },
+          "description": {
+            "label": "Descripción del círculo",
+            "placeholder": "Introduce una descripción del círculo."
+          },
+          "cancel": "Cancelar",
+          "submit": "Entregar"
+        },
+        "nav": {
+          "create": "Crear nuevo círculo",
+          "create-subcircle": "Añadir subcírculo"
+        }
+      }
+    },
+    "settings-voting": {
+      "core": {
+        "title": "Métodos de votación del equipo central",
+        "description": "Cada DAO puede configurar su propio sistema de votación, lo que permite que los miembros clave del equipo tomen decisiones colectivas. ",
+        "form": {
+          "unity": {
+            "label": "Unidad (% de voz requerida)"
+          },
+          "quorum": {
+            "label": "Quórum (% de participantes obligatorios)"
+          },
+          "duration": {
+            "label": "Duración de la votación"
+          }
+        },
+        "showcase": {
+          "1": {
+            "title": "HVOICE",
+            "description": "Cada miembro puede usar sus tokens de gobernanza HVOICE como parte de los votos."
+          },
+          "2": {
+            "title": "Votos múltiples",
+            "description": "Los miembros pueden votar varias veces durante el período de votación"
+          },
+          "3": {
+            "title": "Período de votación",
+            "description": "El período de votación predeterminado es de 1 semana."
+          },
+          "4": {
+            "title": "Requisitos",
+            "description": "Las propuestas deben tener el porcentaje requerido de votos a favor (unidad) y el porcentaje requerido de todos los votos (quórum)"
+          }
+        }
+      },
+      "community": {
+        "title": "Métodos de votación de la comunidad",
+        "description": "Cada DAO puede configurar su propio sistema de votación, lo que permite que los miembros clave del equipo tomen decisiones colectivas. ",
+        "form": {
+          "unity": {
+            "label": "Unidad (% de voz requerida)"
+          },
+          "quorum": {
+            "label": "Quórum (% de participantes obligatorios)"
+          },
+          "duration": {
+            "label": "Duración de la votación"
+          }
+        },
+        "showcase": {
+          "1": {
+            "title": "1 miembro = 1 voto",
+            "description": "Cada miembro puede votar usando 1 miembro 1 voto."
+          },
+          "2": {
+            "title": "Delegado de voz",
+            "description": "Los miembros pueden dar su voz (o poder de voto) a los miembros electos en una elección democrática"
+          },
+          "3": {
+            "title": "Votos múltiples",
+            "description": "Los miembros pueden votar varias veces durante el período de votación"
+          },
+          "4": {
+            "title": "Período de votación",
+            "description": "El período de votación predeterminado es de 1 semana."
+          },
+          "5": {
+            "title": "Requisitos",
+            "description": "Las propuestas deben tener el porcentaje requerido de votos favorables (unidad) y el porcentaje requerido de todos los votos (quórum)"
+          }
+        }
+      }
+    }
+  },
   "common": {
     "button-card": {
       "until": "Hasta"
@@ -119,6 +329,7 @@
     }
   },
   "dao": {
+    "member": "Miembro",
     "settings-communication": {
       "announcements": "Anuncios",
       "postAnAnnouncement": "Publique un anuncio en todas las secciones para informar a los miembros sobre una actualización importante.",
@@ -152,7 +363,7 @@
       "peoplePassing": "- gente que pasa",
       "duration": "- duración",
       "removeRound": "Quitar Ronda -",
-      "addRound": "Agregar ronda",
+      "addRound": "Agregar Ronda",
       "chiefDelegateRoundHowManyChiefDelegates": "Ronda de Jefes de Delegados > ¿Cuántos Jefes de Delegados?",
       "chiefDelegatesRoundDuration": "Ronda de Jefes de Delegados - duración",
       "headDelegateRoundDoYouWant": "Ronda de delegados principales > ¿Quieres 1 delegado principal?",
@@ -279,7 +490,7 @@
       "proposingAPolicy": "¿Proponer una política?",
       "applyingForARole": "¿Aplicar para un puesto?",
       "creatingANewRole": "¿Creando un nuevo rol?",
-      "creatingABadge": "¿Creando una insignia?",
+      "creatingABadge": "¿Crear una insignia?",
       "launchingAQuest": "¿Lanzar una misión?",
       "youNeedTo": "Debe aprobar tanto el quórum (% mínimo del total de miembros que participan en la votación) como la unidad (% mínimo de miembros que lo respaldan). ",
       "createAGeneric": "Cree una propuesta de contribución genérica con un título descriptivo y una definición clara de la política junto con los pasos para implementar la política.",
@@ -428,7 +639,7 @@
       "verificationCode1": "Código de verificación",
       "charactersAlphanumeric1": "12 caracteres, alfanuméricos a-z, 1-5",
       "problemsWithTheCode": "¿Problemas con el código?",
-      "checkYourPhoneNumber": "Verifique su número de teléfono",
+      "checkYourPhoneNumber": "Verifica tu número de teléfono",
       "welcome": "Bienvenido",
       "ourAuthenticationMethod": "Nuestro método de autenticación es Anchor, una herramienta segura y de código abierto que está disponible para descargar como ",
       "desktopAppFor": "Aplicación de escritorio para Windows y Mac",
@@ -510,7 +721,7 @@
       "proposals": "Propuestas",
       "members": "miembros",
       "organization": "Organización",
-      "circles": "Círculos",
+      "circles": "círculos",
       "archetypes": "Arquetipos",
       "badges": "Insignias",
       "policies": "Políticas",
@@ -593,7 +804,7 @@
     "circle-card": {
       "subCircles": "Subcírculos ({1})",
       "showSubcirclesDetails": "Mostrar detalles de subcírculos",
-      "goToCircle": "ir al círculo",
+      "goToCircle": "ir al circulo",
       "members": "Miembros ({1})",
       "members1": "Miembros ({1})",
       "na": "n / A"
@@ -885,7 +1096,7 @@
       "activate": "Activar",
       "archive": "Archivo",
       "apply": "Aplicar",
-      "suspendAssignment": "Suspender tarea\n          ",
+      "suspendAssignment": "Suspender asignación\n          ",
       "invokeASuspension": "Invocar una propuesta de suspensión para esta actividad",
       "withdrawAssignment": "Retirar asignación"
     }
@@ -894,7 +1105,7 @@
     "templates-modal": {
       "customizeYourDao": "Personaliza tu DAO",
       "allTemplatesProposals": "¡Todas las propuestas de Plantillas se han publicado con éxito y ahora están listas para que las voten otros miembros de DAO!",
-      "creatingAndPublishing": "Creación y publicación de todas las propuestas de plantillas. ",
+      "creatingAndPublishing": "Creación y publicación de todas las propuestas de plantilla. ",
       "loremIpsumDolor": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ",
       "publishingProcess": "Proceso de publicación:",
       "chooseADaoTemplate": "Elija una plantilla DAO",
@@ -969,7 +1180,7 @@
         "members": "miembros"
       },
       "circles": {
-        "circles": "Círculos"
+        "circles": "círculos"
       },
       "configuration": {
         "areYouSure": "¿Estás seguro de que quieres irte sin guardar el borrador?",
@@ -1256,8 +1467,8 @@
         },
         "stepdetails": {
           "titleIsRequired": "¡Se requiere título!",
-          "proposalTitleLengthHasToBeLess": "La longitud del título de la propuesta debe ser menor o igual a {TITLE_MAX_LENGTH} caracteres (su título contiene {length} caracteres)",
-          "theDescriptionMustContainLess": "La descripción debe contener menos de {DESCRIPTION_MAX_LENGTH} caracteres (su descripción contiene {length} caracteres)",
+          "proposalTitleLengthHasToBeLess": "La longitud del título de la propuesta debe ser menor o igual a {TITLE_MAX_LENGTH} caracteres (su título contiene {longitud} caracteres)",
+          "theDescriptionMustContainLess": "La descripción debe contener menos de {DESCRIPTION_MAX_LENGTH} caracteres (su descripción contiene {longitud} caracteres)",
           "images": "Imágenes",
           "pngJpegInApp": "PNG, JPEG. ",
           "documents": "Documentos",
@@ -1292,10 +1503,10 @@
         "quorum": "Quórum",
         "noProposals": "Sin Propuestas",
         "oopsNothingCould": "Vaya, no se pudo encontrar nada aquí",
-        "stagingProposals": "Propuestas escénicas",
+        "stagingProposals": "Propuestas de puesta en escena",
         "activeProposals": "Propuestas activas",
         "noProposals1": "Sin Propuestas",
-        "stagingProposals1": "Propuestas escénicas",
+        "stagingProposals1": "Propuestas de puesta en escena",
         "activeProposals1": "Propuestas activas",
         "proposalHistory": "Historial de propuestas",
         "lookingToMonitor": "¿Quiere monitorear la antigüedad de las propuestas? ",
@@ -1318,7 +1529,7 @@
       "proposaldetail": {
         "proposalDetails": "Detalles de la propuesta",
         "yourProposalIs": "Tu propuesta está en escena",
-        "thatMeansYour": "Eso significa que su propuesta aún no se publica en la cadena de bloques. ",
+        "thatMeansYour": "Eso significa que su propuesta aún no se ha publicado en la cadena de bloques. ",
         "publish": "Publicar",
         "editProposal": "Editar propuesta",
         "deleteProposal": "Eliminar propuesta",
@@ -1333,7 +1544,7 @@
         "didYouFinish": "¿Terminaste el trabajo y estás listo para crear la propuesta de finalización de la misión? ",
         "claimYourPayment": "Reclama tu pago",
         "yourProposalIs1": "Tu propuesta está en escena",
-        "thatMeansYour1": "Eso significa que su propuesta aún no se publica en la cadena de bloques. ",
+        "thatMeansYour1": "Eso significa que su propuesta aún no se ha publicado en la cadena de bloques. ",
         "publish1": "Publicar",
         "editProposal1": "Editar propuesta",
         "deleteProposal1": "Eliminar propuesta",
@@ -1496,7 +1707,7 @@
     "profile": "Perfil",
     "profileCreation": "Creación de perfil",
     "wallet": "Billetera",
-    "circles": "Círculos",
+    "circles": "círculos",
     "searchResults": "Resultados de la búsqueda",
     "search": "Buscar",
     "support": "Apoyo",
@@ -1559,7 +1770,7 @@
     "poll": "Encuesta",
     "pollOrSenseCheckWithCommunityMembers": "Haga una encuesta o consulte con los miembros de la comunidad para ver qué generará un mayor apoyo sobre otras propuestas. ",
     "useThisFieldToDetailTheContentOfYourPoll": "Utilice este campo para detallar el contenido de su encuesta",
-    "votingMethod": "método de votación",
+    "votingMethod": "Método de votación",
     "selectVotingMethod": "Seleccionar método de votación",
     "content": "Contenido",
     "contribution": "Contribución",
@@ -1644,7 +1855,7 @@
       "filterBy": "Filtrado por",
       "voting": "Votación",
       "active": "Activo",
-      "archived": "Archivado",
+      "archived": "archivado",
       "suspended": "Suspendido",
       "sortBy": "Ordenar por",
       "oldestFirst": "Los más viejos primero",
@@ -1655,12 +1866,12 @@
         "pendingToClose": "Pendiente de cerrar",
         "voting": "Votación",
         "suspended": "Suspendido",
-        "archived": "Archivado",
+        "archived": "archivado",
         "withdrawn": "Retirado",
         "applicant": "Solicitante",
         "genericContribution": "Contribución Genérica",
         "extension": "Extensión",
-        "roleAssignment": "Asignación de roles",
+        "roleAssignment": "Asignación de funciones",
         "badgeAssignment": "Asignación de insignias",
         "suspension": "Suspensión",
         "roleArchetype": " Arquetipo de rol",

@@ -398,7 +398,7 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
                 router-view
           .col.margin-min(v-if="$q.screen.gt.sm")
   q-drawer.full-width(v-model="right" side="right" :width="$q.screen.gt.lg ? 370 : ($q.screen.md ? 400 : ($q.screen.gt.sm ?  140 : $q.screen.width))" v-if="$q.screen.gt.lg || account || !$q.screen.gt.sm" persistent="persistent" :show-if-above="false")
-  q-drawer(v-model="languageSettings" overlay side="right" :width="$q.screen.gt.lg ? 370 : ($q.screen.md || $q.screen.gt.sm ? 400 : $q.screen.width)" :show-if-above="true").full-width
+  q-drawer(v-model="languageSettings" overlay side="right" :width="$q.screen.gt.lg ? 370 : ($q.screen.md || $q.screen.gt.sm ? 400 : $q.screen.width)").full-width
     div.q-pa-xl.full-height.position-relative
       .row
         .flex.full-width.justify-between.no-wrap
