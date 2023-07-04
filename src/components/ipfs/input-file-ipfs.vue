@@ -4,11 +4,11 @@
     q-avatar(:size="previewSize")
       img(:src="imageURI" v-if="imageURI")
       q-icon(name="fas fa-edit" v-else-if="!imageURI && !isUploading" size="sm" color="primary")
-    q-btn.btnf(:disable="isUploading" round="round" icon="fa fa-edit" color="primary" size="md" @click="$refs.qFile.pickFiles()")
+    q-btn.btnf(:disable="isUploading" round icon="fa fa-edit" color="primary" size="md" @click="$refs.qFile.pickFiles()")
       q-tooltip {{ $t('ipfs.input-file-ipfs.uploadAFile') }}
     .row.container-spinner.justify-center(v-if="isUploading && image")
       loading-spinner.loadingSpinner(color="primary" size="3rem")
-  q-file(ref="qFile" v-show="!image" @input=" e => updateModel(e)" :accept="acceptedFiles" counter="counter" outlined="outlined" flat="flat" rounded="rounded" v-model="file" :max-total-size="maxSize" @rejected="e => showError(e)" :label="label")
+  q-file(ref="qFile" v-show="!image" @input=" e => updateModel(e)" :accept="acceptedFiles" counter="counter" outlined flat rounded v-model="file" :max-total-size="maxSize" @rejected="e => showError(e)" :label="label")
     template(v-slot:append v-if="isUploading")
       loading-spinner(color="primary" size="2em")
     template(v-slot:append v-else-if="!isUploading && typeCid && download")

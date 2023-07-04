@@ -125,14 +125,14 @@ export default {
           .h-h2-signup {{ $t('login.register-user-with-captcha-view.signYourFirstTransaction') }}
           p.text-normal {{ $t('login.register-user-with-captcha-view.didYouCreate') }}
           q-list
-            q-item.wallet.q-my-xs(v-for="(wallet, idx) in this.hyphaAuthenticators" :key="wallet.getStyle().text" v-ripple="v-ripple" :style="{ background: wallet.getStyle().background, color: wallet.getStyle().textColor }")
-              q-item-section.cursor-pointer(avatar="avatar" @click="onLoginWallet(idx)")
+            q-item.wallet.q-my-xs(v-for="(wallet, idx) in this.hyphaAuthenticators" :key="wallet.getStyle().text" v-ripple :style="{ background: wallet.getStyle().background, color: wallet.getStyle().textColor }")
+              q-item-section.cursor-pointer(avatar @click="onLoginWallet(idx)")
                 img(:src="wallet.getStyle().icon" width="20")
               q-item-section.cursor-pointer.text-center(@click="onLoginWallet(idx)") {{ $t('login.register-user-with-captcha-view.login', { '1': wallet.getStyle().text, '2': wallet.getStyle().text === 'Seeds' ? '(beta)' : '' }) }}
-              q-item-section(avatar="avatar")
+              q-item-section(avatar)
                 .flex
                   loading-spinner(v-if="loading === wallet.getStyle().text" :color="wallet.getStyle().textColor" size="2em")
-                  q-btn(v-else :color="wallet.getStyle().textColor" icon="fas fa-cloud-download-alt" @click="openUrl(wallet.getOnboardingLink())" target="_blank" dense="dense" flat="flat" size="10px")
+                  q-btn(v-else :color="wallet.getStyle().textColor" icon="fas fa-cloud-download-alt" @click="openUrl(wallet.getOnboardingLink())" target="_blank" dense flat size="10px")
                     q-tooltip {{ $t('login.register-user-with-captcha-view.getApp') }}
     #bottom-indicator.row.items-center
       .col
@@ -141,7 +141,7 @@ export default {
           .ellipse-border(:class="(step === this.steps.inviteLink.name || step === this.steps.finish.name ) && 'ellipse-filled'")
           .ellipse-border(:class="step === this.steps.finish.name && 'ellipse-filled'")
       .col-4(v-if="$q.platform.is.desktop")
-        q-btn.full-width(:label="step === 'finish' ? 'Need Help?' : 'Next'" color="primary" unelevated="unelevated" @click="next" :disable="!this.inviteLink" :loading="submitting" rounded="rounded" no-caps="no-caps")
+        q-btn.full-width(:label="step === 'finish' ? 'Need Help?' : 'Next'" color="primary" unelevated @click="next" :disable="!this.inviteLink" :loading="submitting" rounded no-caps)
         .h-b3-signup.color-secondary.flex.column(v-if="$q.platform.is.mobile") {{ $t('login.register-user-with-captcha-view.areYouAMember') }}
           span.h-b3-signup.text-primary.cursor-pointer(style="text-decoration: underline" @click="$emit('onClickLoginPage')") {{ $t('login.register-user-with-captcha-view.loginHere') }}
 

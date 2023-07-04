@@ -14,15 +14,15 @@ export default {
       q-route-tab.q-mr-md(:to="{ name: 'organization' }")
         .row.items-center.justify-center
           .on-left {{ $t('navigation.navigation-header.organization') }}
-          q-btn-dropdown(auto-close="auto-close" flat="flat")
+          q-btn-dropdown(auto-close="auto-close" flat)
             q-list
-              q-item(clickable="clickable") {{ $t('navigation.navigation-header.circles') }}
-              q-item(clickable="clickable" :to="{ name: 'archetypes' }") {{ $t('navigation.navigation-header.archetypes') }}
-              q-item(clickable="clickable") {{ $t('navigation.navigation-header.badges') }}
-              q-item(clickable="clickable") {{ $t('navigation.navigation-header.policies') }}
-              q-item(clickable="clickable") {{ $t('navigation.navigation-header.alliances') }}
-              q-item(clickable="clickable") {{ $t('navigation.navigation-header.treasury') }}
-              q-item(clickable="clickable") {{ $t('navigation.navigation-header.admin') }}
+              q-item(clickable) {{ $t('navigation.navigation-header.circles') }}
+              q-item(clickable :to="{ name: 'archetypes' }") {{ $t('navigation.navigation-header.archetypes') }}
+              q-item(clickable) {{ $t('navigation.navigation-header.badges') }}
+              q-item(clickable) {{ $t('navigation.navigation-header.policies') }}
+              q-item(clickable) {{ $t('navigation.navigation-header.alliances') }}
+              q-item(clickable) {{ $t('navigation.navigation-header.treasury') }}
+              q-item(clickable) {{ $t('navigation.navigation-header.admin') }}
 
 </template>
 

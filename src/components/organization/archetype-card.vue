@@ -18,7 +18,7 @@ export default {
 </script>
 
 <template lang="pug">
-widget.bg-internal-bg.cursor-pointer.q-px-xxl.q-py-sm.content(noPadding="noPadding")
+widget.bg-internal-bg.cursor-pointer.q-px-xxl.q-py-sm.content(noPadding)
   .row.items-center.full-height
     .col.text-wrap
       .h-h7.text-weight-bold.q-ml-sm {{title}}

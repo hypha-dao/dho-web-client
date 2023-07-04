@@ -41,13 +41,13 @@ export default defineComponent({
 <template lang="pug">
 .row
   .col(v-if="!editing")
-    q-btn(@click="onEdit" color="primary" flat="flat" icon="fas fa-pen" round="round" size="sm")
+    q-btn(@click="onEdit" color="primary" flat icon="fas fa-pen" round size="sm")
       q-tooltip {{ $t('common.edit-controls.edit') }}
   .col(v-if="editing")
-    q-btn(@click="onCancel" color="black" flat="flat" icon="fas fa-times" round="round" size="sm")
+    q-btn(@click="onCancel" color="black" flat icon="fas fa-times" round size="sm")
       q-tooltip {{ $t('common.edit-controls.cancel') }}
   .col(v-if="editing")
-    q-btn(:disable="!savable" @click="onSave" color="green" flat="flat" icon="fas fa-check" round="round" size="sm")
+    q-btn(:disable="!savable" @click="onSave" color="green" flat icon="fas fa-check" round size="sm")
       q-tooltip(v-if="savable") {{ $t('common.edit-controls.save') }}
 </template>
 

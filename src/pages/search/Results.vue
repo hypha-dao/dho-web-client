@@ -422,9 +422,9 @@ q-page.page-search-results
         .cursor-pointer(v-for="result in results.hits" @click="onClick(result._source)")
           result(:key="result._id" :type="result._source.type" :icon="getIcon(result._source.type)" :salary="result._source.details_husdAmount_a" :compensation="result._source.details_voiceAmount_a" :status="result._source.details_state_s" :applicant="isApplicant(result._source)" :expirationDate="result._source.ballot_expiration_t" :username="result._source.type === 'Member' ? result._source.details_member_n : ''" :creator="result._source.type !== 'Member' ? getMemberName(result._source.creator) : ''" :title="(result._source.type !== 'Member') && (result._source.type !== 'Edit') ? result._source.details_title_s : result._source.system_nodeLabel_s")
         .row.justify-between.q-pt-sm
-          q-btn.round-circle(@click="onPrev()" :disable="!params.from" round="round" unelevated="unelevated" icon="fas fa-chevron-left" color="inherit" text-color="primary" size="sm" :ripple="false")
+          q-btn.round-circle(@click="onPrev()" :disable="!params.from" round unelevated icon="fas fa-chevron-left" color="inherit" text-color="primary" size="sm" :ripple="false")
           .q-pt-sm {{  getPaginationText }}
-          q-btn.round-circle(@click="onNext()" :disable="isLastPage" round="round" unelevated="unelevated" icon="fas fa-chevron-right" color="inherit" text-color="primary" size="sm" :ripple="false")
+          q-btn.round-circle(@click="onNext()" :disable="isLastPage" round unelevated icon="fas fa-chevron-right" color="inherit" text-color="primary" size="sm" :ripple="false")
     .col-3.q-pa-sm.q-py-md(v-if="$q.screen.gt.md")
       filter-widget.sticky(filterTitle="Search DAOs" :sort.sync="filterStatus" :optionArray="optionArray" :defaultOption="defaultSelector" :circle.sync="orderSelected" :circleArray="circleArray" :circleDefault="orderDefaultSelector" :showToggle="false" :showViewSelector="false" :chipsFiltersLabel="$t('search.results.resultsTypes')" :filters.sync="filters" :showTextFilter="false")
     .mobile-filter(v-else)

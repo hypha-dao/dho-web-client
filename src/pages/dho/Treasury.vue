@@ -544,7 +544,7 @@ q-page.page-treasury
         .row.q-mt-sm.q-pb-md
           .text-grey.h-b2 {{ $t('pages.dho.treasury.itWouldBeCoolIfWeCould') }}
         .row.justify-end
-          q-btn.q-px-lg.h-btn1.q-mt-md(color="primary" label="Try again" no-caps="no-caps" rounded="rounded" unelevated="unelevated" @click="successfullMultisigTransaction = null")
+          q-btn.q-px-lg.h-btn1.q-mt-md(color="primary" label="Try again" no-caps rounded unelevated @click="successfullMultisigTransaction = null")
       template(v-else-if="successfullMultisigTransaction === null")
         q-table.treasury-table(:columns="tabsConfig.payoutRequests.columns" :data="selected" :loading="loading" @request="onRequest")
           template(v-slot:body="props")
@@ -566,17 +566,17 @@ q-page.page-treasury
               q-td(key="requestedDate" :props="props")
                 p.q-py-md.q-ma-none.text-italic {{ formatDate(props.row.requestedDate) }}
         .row.justify-end
-          q-btn.col-3.q-px-lg.h-btn1.q-mt-md(color="primary" :label="$t('pages.dho.treasury.allGoodCreateMultisig')" no-caps="no-caps" rounded="rounded" unelevated="unelevated" @click="createMultisig")
+          q-btn.col-3.q-px-lg.h-btn1.q-mt-md(color="primary" :label="$t('pages.dho.treasury.allGoodCreateMultisig')" no-caps rounded unelevated @click="createMultisig")
   .row.full-width(v-if="$q.screen.gt.md")
     .col-9.q-pr-md
       widget.q-px-xl(no-padding="no-padding")
-        q-tabs(active-color="primary" indicator-color="primary" no-caps="no-caps" v-model="tab")
-          q-tab(v-if="treasuryAccount" :name="MULTISIG_TABS.PAYOUT" label="Payout Requests" :ripple="false")
+        q-tabs(active-color="primary" indicator-color="primary" no-caps v-model="tab")
+          q-tab(:name="MULTISIG_TABS.PAYOUT" label="Payout Requests" :ripple="false")
           q-tab(v-if="treasuryAccount" :name="MULTISIG_TABS.MULTISIG" label="Multisig Sign Request" :ripple="false")
           q-tab(v-if="treasuryAccount" :name="MULTISIG_TABS.READY" label="Ready to Execute" :ripple="false")
           q-tab(:name="MULTISIG_TABS.HISTORY" :label="$t('pages.dho.treasury.history')" :ripple="false")
         div(v-if="tab === MULTISIG_TABS.READY && treasuryAccount")
-          q-table.treasury-table(v-if="formattedExecRequests.length" :columns="tabsConfig.multisig.columns" :data="formattedExecRequests" :loading="loading" selection="single" :selected.sync="selected")
+          q-table.treasury-table(v-if="formattedExecRequests?.length" :columns="tabsConfig.multisig.columns" :data="formattedExecRequests" :loading="loading" selection="single" :selected.sync="selected")
             template(v-slot:body="formattedExecRequests")
               q-tr.q-tr--no-hover(:props="formattedExecRequests")
                 q-td(key="selected")
@@ -608,16 +608,16 @@ q-page.page-treasury
                         profile-picture(:username="user" size="26px" :key="user")
                         q-tooltip @
                           | {{ user }}
-                    .profile-counter.bg-internal-bg(v-if="formattedExecRequests.row.approvedby.length > 1") +
-                      | {{ formattedExecRequests.row.approvedby.length - 1 }}
-                    .profile-counter.bg-internal-bg(v-else-if="!formattedExecRequests.row.approvedby.length") n/a
+                    .profile-counter.bg-internal-bg(v-if="formattedExecRequests.row.approvedby?.length > 1") +
+                      | {{ formattedExecRequests.row.approvedby?.length - 1 }}
+                    .profile-counter.bg-internal-bg(v-else-if="!formattedExecRequests.row.approvedby?.length") n/a
           .q-mt-xl.q-pb-xxl.row(v-else)
             .col
               .h-h5 {{ $t('pages.dho.treasury.allDoneHere') }}
               .text-grey.h-b2.q-mt-sm {{ $t('pages.dho.treasury.allMultisigTransactionHasBeenSuccessfully') }}
               q-icon(color="positive" name="fas fa-check" size="42px")
         div(v-if="tab === MULTISIG_TABS.MULTISIG && treasuryAccount")
-          q-table.treasury-table(v-if="daoMultisigSignRequestsQuery.length" :columns="tabsConfig.multisig.columns" :data="daoMultisigSignRequestsQuery" :loading="loading" selection="single" :selected.sync="selected")
+          q-table.treasury-table(v-if="daoMultisigSignRequestsQuery?.length" :columns="tabsConfig.multisig.columns" :data="daoMultisigSignRequestsQuery" :loading="loading" selection="single" :selected.sync="selected")
             template(v-slot:body="daoMultisigSignRequestsQuery")
               q-tr.q-tr--no-hover(:props="daoMultisigSignRequestsQuery")
                 q-td(key="selected")
@@ -649,19 +649,19 @@ q-page.page-treasury
                         profile-picture(:username="user" size="26px" :key="user")
                         q-tooltip @
                           | {{ user }}
-                    .profile-counter.bg-internal-bg(v-if="daoMultisigSignRequestsQuery.row.approvedby.length > 1") +
-                      | {{ daoMultisigSignRequestsQuery.row.approvedby.length - 1 }}
-                    .profile-counter.bg-internal-bg(v-else-if="!daoMultisigSignRequestsQuery.row.approvedby.length") n/a
+                    .profile-counter.bg-internal-bg(v-if="daoMultisigSignRequestsQuery.row.approvedby?.length > 1") +
+                      | {{ daoMultisigSignRequestsQuery.row.approvedby?.length - 1 }}
+                    .profile-counter.bg-internal-bg(v-else-if="!daoMultisigSignRequestsQuery.row.approvedby?.length") n/a
           .q-mt-xl.q-pb-xxl.row(v-else)
             .col
               .h-h5 {{ $t('pages.dho.treasury.allDoneHere') }}
               .text-grey.h-b2.q-mt-sm {{ $t('pages.dho.treasury.noPendingPayoutRequest') }}
               q-icon(color="positive" name="fas fa-check" size="42px")
-        div(v-if="tab === MULTISIG_TABS.PAYOUT && treasuryAccount")
-          q-table.treasury-table(v-if="redemptions.length" :columns="tabsConfig.payoutRequests.columns" :data="redemptions" :loading="loading" @request="onRequest" selection="multiple" :selected.sync="selected")
+        div(v-if="tab === MULTISIG_TABS.PAYOUT")
+          q-table.treasury-table(v-if="redemptions?.length" :columns="tabsConfig.payoutRequests.columns" :data="redemptions" :loading="loading" @request="onRequest" :selection="treasuryAccount ? 'multiple' : 'none'" :selected.sync="selected")
             template(v-slot:body="props")
               q-tr.q-tr--no-hover(:props="props")
-                q-td(key="selected")
+                q-td(v-if="treasuryAccount" key="selected")
                   q-checkbox(v-model="props.selected")
                 q-td(key="requestor" :props="props")
                   .row
@@ -686,7 +686,7 @@ q-page.page-treasury
             .col-1.items-center.flex
               q-icon(color="positive" name="fas fa-check" size="42px")
         div(v-if="tab === MULTISIG_TABS.HISTORY")
-          q-table.treasury-table(:columns="tabsConfig.history.columns" :data="treasuryAccount ? redemptions.filter(redemption => redemption.paidBy?.msiginfo?.[0]?.details_state_s === 'executed') : redemptions.filter(redemption => redemption.paidBy?.details_creator_n)" :loading="loading" @request="onRequest" row-key="redemption.id" virtual-scroll="virtual-scroll")
+          q-table.treasury-table(:columns="tabsConfig.history.columns" :data="treasuryAccount ? redemptions.filter(redemption => redemption.paidBy?.msiginfo?.[0]?.details_state_s === 'executed') : redemptions.filter(redemption => redemption.paidBy?.details_creator_n)" :loading="loading" @request="onRequest" row-key="redemption.id" virtual-scroll)
             template(v-slot:body="props")
               q-tr.q-tr--no-hover(:props="props")
                 q-td(key="requestor" :props="props")
@@ -731,14 +731,14 @@ q-page.page-treasury
                       | {{ props.row.paidBy.details_creator_n }}
                   q-icon.icon-placeholder.q-mr-xs(v-if="!props.row.trxDetails" :key="`treasurer1_rd_${props.row.redemption_id}`" name="fas fa-user-circle" size="sm" color="white")
                 q-td(key="actions" :props="props")
-                  q-btn.q-mb-xs(v-if="isTreasurer && props.row.amountPaid < parseFloat(props.row.amountRequested)" icon="fas fa-plus-circle" color="green" unelevated="unelevated" round="round" @click="onShowNewTrx(props.row)")
-                  q-btn.q-mb-xs(v-if="isTreasurer && props.row.trxDetails && !hasEndorsed(props.row.trxDetails)" icon="fas fa-check-square" color="yellow-10" unelevated="unelevated" round="round" @click="onShowEndorse(props.row.trxDetails)")
+                  q-btn.q-mb-xs(v-if="isTreasurer && props.row.amountPaid < parseFloat(props.row.amountRequested)" icon="fas fa-plus-circle" color="green" unelevated round @click="onShowNewTrx(props.row)")
+                  q-btn.q-mb-xs(v-if="isTreasurer && props.row.trxDetails && !hasEndorsed(props.row.trxDetails)" icon="fas fa-check-square" color="yellow-10" unelevated round @click="onShowEndorse(props.row.trxDetails)")
                   div(v-if="props.row.trxDetails")
-                    q-btn(size="10px" :disabled="!props.row.trxDetails.network" icon="fas fa-eye" color="primary" unelevated="unelevated" round="round" @click="openTrx(props.row.trxDetails)")
-                  div(v-if="props.row.payments.length > 1")
-                    q-btn-dropdown(icon="fas fa-eye" color="blue" unelevated="unelevated" rounded="rounded")
+                    q-btn(size="10px" :disabled="!props.row.trxDetails.network" icon="fas fa-eye" color="primary" unelevated round @click="openTrx(props.row.trxDetails)")
+                  div(v-if="props.row.payments?.length > 1")
+                    q-btn-dropdown(icon="fas fa-eye" color="blue" unelevated rounded)
                       q-list
-                        q-item(v-for="(payment, i) in props.row.payments" :key="`trx${i}_rd_${props.row.redemption_id}`" clickable="clickable" :disable="!payment.notes.some(n => n.key === 'network')" v-close-popup="v-close-popup" @click="openTrx(payment.notes)")
+                        q-item(v-for="(payment, i) in props.row.payments" :key="`trx${i}_rd_${props.row.redemption_id}`" clickable :disable="!payment.notes.some(n => n.key === 'network')" v-close-popup="v-close-popup" @click="openTrx(payment.notes)")
                           q-item-section
                             q-item-label TRX
                               | {{ i + 1}}
@@ -749,24 +749,24 @@ q-page.page-treasury
       widget.q-mb-md(v-if="tab === MULTISIG_TABS.READY" :title="$t('pages.dho.treasury.executeMultisigTransaction')")
         .row.q-mt-sm
           .text-grey.h-b2 {{ $t('pages.dho.treasury.helloTreasurerThisMultisig') }}
-        q-btn.q-px-lg.h-btn1.full-width.q-mt-md(color="primary" :label="$t('pages.dho.treasury.executeMultisigTransaction')" no-caps="no-caps" rounded="rounded" unelevated="unelevated" :disable="!selected.length" @click="executeMultisig")
+        q-btn.q-px-lg.h-btn1.full-width.q-mt-md(color="primary" :label="$t('pages.dho.treasury.executeMultisigTransaction')" no-caps rounded unelevated :disable="!selected?.length" @click="executeMultisig")
       widget.q-mb-md(v-if="tab === MULTISIG_TABS.MULTISIG" :title="$t('pages.dho.treasury.signMultisigTransaction')")
         .row.q-mt-sm
           .text-grey.h-b2 {{ $t('pages.dho.treasury.helloTreasurerSelectTheMultisig') }}
-        q-btn.q-px-lg.h-btn1.full-width.q-mt-md(color="primary" :label="$t('pages.dho.treasury.signMultisigTransaction')" no-caps="no-caps" rounded="rounded" unelevated="unelevated" :disable="!selected.length" @click="approveMultisig")
-      widget.q-mb-md(v-if="tab === MULTISIG_TABS.PAYOUT" :title="$t('pages.dho.treasury.generateMultisigTransaction')")
+        q-btn.q-px-lg.h-btn1.full-width.q-mt-md(color="primary" :label="$t('pages.dho.treasury.signMultisigTransaction')" no-caps rounded unelevated :disable="!selected?.length" @click="approveMultisig")
+      widget.q-mb-md(v-if="tab === MULTISIG_TABS.PAYOUT && treasuryAccount" :title="$t('pages.dho.treasury.generateMultisigTransaction')")
         .text-grey.h-b2.q-mt-sm {{ $t('pages.dho.treasury.helloTreasurerStartAMultisig') }}
-        q-btn.q-px-lg.h-btn1.full-width.q-mt-md(color="primary" label="Generate" no-caps="no-caps" rounded="rounded" unelevated="unelevated" :disable="!selected.length" @click="transactionReviewOpen = true")
+        q-btn.q-px-lg.h-btn1.full-width.q-mt-md(color="primary" label="Generate" no-caps rounded unelevated :disable="!selected?.length" @click="transactionReviewOpen = true")
       filter-widget(:circle.sync="circle" :circleArray.sync="circleArray" :optionArray.sync="optionArray" :showCircle="false" :showToggle="true" :showViewSelector="false" :sort.sync="sort" :textFilter.sync="search" :toggle.sync="filter" toggleLabel="Show completed transactions")
   .row.full-width(v-else)
     widget.full-width(:title="$t('pages.dho.treasury.accountAndPaymentStatus')" :titleSize="'h-h7'")
-      q-tabs(active-color="primary" align="start" indicator-color="primary" no-caps="no-caps" v-model="tab")
+      q-tabs(active-color="primary" align="left" indicator-color="primary" no-caps v-model="tab")
         q-tab(:name="MULTISIG_TABS.PAYOUT" :label="$t('pages.dho.treasury.payoutRequests')" :ripple="false")
         q-tab(:name="MULTISIG_TABS.MULTISIG" :label="$t('pages.dho.treasury.multisigSignRequests')" :ripple="false")
         q-tab(:name="MULTISIG_TABS.READY" :label="$t('pages.dho.treasury.readyToExecute')" :ripple="false")
         q-tab(:name="MULTISIG_TABS.HISTORY" :label="$t('pages.dho.treasury.history')" :ripple="false")
       div(v-if="tab === MULTISIG_TABS.HISTORY")
-        template(v-if="(redemptions.length === 0)")
+        template(v-if="(redemptions?.length === 0)")
           .row.justify-center.q-my-md
             loading-spinner(color="primary" size="40px")
         template(v-for="item in redemptions")
@@ -788,9 +788,9 @@ q-page.page-treasury
                   span(v-if="item.amountPaid > 0 && item.amountPaid < parseFloat(item.amountRequested)") {{ $t('pages.dho.treasury.pending') }}
                   .endorsed-text(v-if="item.amountPaid === parseFloat(item.amountRequested)") {{ $t('pages.dho.treasury.endorsed') }}
         .row.justify-between.q-pt-sm.items-center
-          q-btn.round-circle(@click="onPrev()" :disable="pagination.page === 1" round="round" unelevated="unelevated" icon="fas fa-chevron-left" color="inherit" text-color="primary" size="sm" :ripple="false")
+          q-btn.round-circle(@click="onPrev()" :disable="pagination.page === 1" round unelevated icon="fas fa-chevron-left" color="inherit" text-color="primary" size="sm" :ripple="false")
           span {{  getPaginationText }}
-          q-btn.round-circle(@click="onNext()" :disable="isLastPage" round="round" unelevated="unelevated" icon="fas fa-chevron-right" color="inherit" text-color="primary" size="sm" :ripple="false")
+          q-btn.round-circle(@click="onNext()" :disable="isLastPage" round unelevated icon="fas fa-chevron-right" color="inherit" text-color="primary" size="sm" :ripple="false")
     .row.q-mt-md
       .text-italic.h-b2.text-bold {{ $t('pages.dho.treasury.realTokenConversion') }}
       .text-italic.h-b2 {{ $t('pages.dho.treasury.hereYouSeeTheConversion') }}

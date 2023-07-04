@@ -29,7 +29,7 @@ export default {
 
 <template lang="pug">
 .step-round-1
-  widget.full-width.q-mb-xl.q-px-sm.q-py-md(:style="{ 'border': '1px solid #84878E' }" noPadding="noPadding")
+  widget.full-width.q-mb-xl.q-px-sm.q-py-md(:style="{ 'border': '1px solid #84878E' }" noPadding)
     .row
       div
         .row
@@ -48,13 +48,13 @@ export default {
     .h-h6.text-no-wrap {{ $t('pages.upvote-election.steps.stepround1.totalVoters') }}
     .percent-number.q-mx-md {{ Math.floor((upvoteElectionData.currentVotedAggregateCount / upvoteElectionData.votersBadgeCount) * 100) }}
       | %
-    q-linear-progress(:value="upvoteElectionData.currentVotedAggregateCount / upvoteElectionData.votersBadgeCount" color="secondary" rounded="rounded")
+    q-linear-progress(:value="upvoteElectionData.currentVotedAggregateCount / upvoteElectionData.votersBadgeCount" color="secondary" rounded)
   .h-b2.q-my-xl {{ step.description }}
   .h-h6 {{ $t('pages.upvote-election.steps.stepround1.delegatesApplicants') }}
   .row.q-mt-md
     .template.col-4(v-for="user in upvoteElectionData.candidates" :class="{ 'col-6 q-px-xs': $q.screen.md, 'q-px-xs q-mb-md': $q.screen.gt.md, 'q-mb-md': $q.screen.md || $q.screen.lt.md, 'col-12': $q.screen.lt.md }")
       .user-card.justify-between.row.items-center(@click="$emit('selectUser', user)" :class="{ 'selected': selectedUsers.find(compItem => compItem === user), 'voting': votingState && votedUsers.includes(user.details_member_n) }")
-        ProfilePicture(:textWhite="selectedUsers.includes(user) || votedUsers.includes(user.details_member_n) && votingState" :username="user.details_member_n" size="50px" showUsername="showUsername" showName="showName" noMargins="noMargins" boldName="boldName" withoutItalic="withoutItalic")
+        ProfilePicture(:textWhite="selectedUsers.includes(user) || votedUsers.includes(user.details_member_n) && votingState" :username="user.details_member_n" size="50px" showUsername showName noMargins boldName withoutItalic)
         .indicator(:class="{ 'indicator-selected-state': selectedUsers.includes(user) || votedUsers.includes(user.details_member_n) && votingState}")
         q-icon.check-icon(v-if="votingState && votedUsers.includes(user.details_member_n)" name="fas fa-check")
         .dot(v-else-if="selectedUsers.includes(user)")

@@ -259,9 +259,9 @@ export default {
     widget(:title="$t('pages.dho.finflow.totalUnclaimedVoice')")
       .h-h7 {{getFormatedTokenAmount(totalUnclaimedVoice)}}
   .table-container
-    q-table(:pagination="{rowsPerPage: 30}" :title="$t('pages.dho.finflow.assignments')" dense="dense" @row-click="onRowClick" :data="rows" :columns="columns" :sort-method="customSort" binary-state-sort="binary-state-sort" row-key="docId")
+    q-table(:pagination="{rowsPerPage: 30}" :title="$t('pages.dho.finflow.assignments')" dense @row-click="onRowClick" :data="rows" :columns="columns" :sort-method="customSort" binary-state-sort="binary-state-sort" row-key="docId")
       template(v-slot:top-right)
-        q-btn(color="primary" icon-right="fa fa-download" :label="$t('pages.dho.finflow.exportToCsv')" no-caps="no-caps" unelevated="unelevated" rounded="rounded" @click="exportTable")
+        q-btn(color="primary" icon-right="fa fa-download" :label="$t('pages.dho.finflow.exportToCsv')" no-caps unelevated rounded @click="exportTable")
 
 </template>
 <style lang="stylus" scoped>

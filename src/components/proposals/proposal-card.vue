@@ -93,8 +93,8 @@ export default {
       return this.isAccepted ? 'Passed' : 'Not passed'
     },
     parentCircleName () {
-      if (this.proposal?.parentcircle?.[0].name) {
-        const name = this.proposal?.parentcircle?.[0].name
+      if (this.proposal?.parentcircle?.[0]?.name) {
+        const name = this.proposal?.parentcircle?.[0]?.name
         if (name.toLowerCase().includes('circle')) {
           return name
         } else {
@@ -119,7 +119,7 @@ export default {
 </script>
 
 <template lang="pug">
-widget.cursor-pointer.card.relative(:background="background" :class="{ 'full-width': list || fullWidth}" :color="color" :style="{ 'min-height': card ? '344px': '145px', 'max-width': (card && !fullWidth) ? '302px' : '940px', 'full-width': list || fullWidth, 'background': 'white' }" @click.native="$router.push({ name: 'proposal-detail', params: { docId } })" noPadding="noPadding")
+widget.cursor-pointer.card.relative(:background="background" :class="{ 'full-width': list || fullWidth}" :color="color" :style="{ 'min-height': card ? '344px': '145px', 'max-width': (card && !fullWidth) ? '302px' : '940px', 'full-width': list || fullWidth, 'background': 'white' }" @click.native="$router.push({ name: 'proposal-detail', params: { docId } })" noPadding)
   .bg-internal-bg.absolute.flex.items-center.justify-center(v-if="status === PROPOSAL_STATE.DRAFTED" :style="{ 'right': '20px', 'top': '20px', 'width': '30px', 'height': '30px', 'border-radius': '50%' }")
     q-icon(name="fas fa-hourglass-half" color="white")
   .row.justify-center.items-center
@@ -133,7 +133,7 @@ widget.cursor-pointer.card.relative(:background="background" :class="{ 'full-wid
           .h-h5.two-lines(v-if="title" :class="{ 'one-line': list }") {{ title }}
           .row.items-center
             .row.q-mr-md
-              profile-picture(:username="creator" showName="showName" lightName="lightName" size="20px" noMargins="noMargins")
+              profile-picture(:username="creator" showName lightName size="20px" noMargins)
             .row.items-center.q-ml-sm(v-if="list")
               q-icon(name="far fa-comment-alt")
               .h-b2.text-center.text-body.q-ml-xs.q-mr-md.q-mr-xxxl {{ $t('proposals.proposal-card.comments', { '1': getCommentCount() }) }}

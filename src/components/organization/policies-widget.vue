@@ -25,7 +25,7 @@ widget.full-width
     .col-8
       .headline-widget {{ $t('organization.policies-widget.policies') }}
     .col
-      q-btn.full-width(:label="$t('organization.policies-widget.seeAll')" flat="flat" no-caps="no-caps" dense="dense")
+      q-btn.full-width(:label="$t('organization.policies-widget.seeAll')" flat no-caps dense)
   .row(v-for="policy in policies")
     .col-12
       policy-card(v-bind="policy")

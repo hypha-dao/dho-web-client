@@ -13,7 +13,7 @@ export default {
   .row.q-my-xl.gt-sm
     .text-body.text-disabled {{ $t('proposals.proposal-staging.publishingYourProposal') }}
   .row.justify-center.q-my-lg.q-px-lg
-    q-btn.full-width(no-caps="no-caps" rounded="rounded" color="white" text-color="primary") {{ $t('proposals.proposal-staging.publish') }}
-    q-btn.q-mt-md.full-width(no-caps="no-caps" rounded="rounded" flat="flat" color="white") {{ $t('proposals.proposal-staging.editProposal') }}
+    q-btn.full-width(no-caps rounded color="white" text-color="primary") {{ $t('proposals.proposal-staging.publish') }}
+    q-btn.q-mt-md.full-width(no-caps rounded flat color="white") {{ $t('proposals.proposal-staging.editProposal') }}
 
 </template>

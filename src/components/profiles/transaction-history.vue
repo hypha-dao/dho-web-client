@@ -19,16 +19,16 @@ export default {
 </script>
 
 <template lang="pug">
-widget(:more="more" :title="$t('profiles.transaction-history.transactionHistory')")
+widget(:more :title="$t('profiles.transaction-history.transactionHistory')")
   q-list.margin-fix
     template(v-for="(item, index) in transactions")
-      q-item(clickable="clickable" v-ripple="v-ripple")
+      q-item(clickable v-ripple)
         q-item-section
           q-item-label.text-body1.text-bold(lines="2") {{ item.account + ':' + item.name }}
           q-item-label.caption {{ dateToStringShort(item.timestamp) }}
-        q-item-section(side="side")
+        q-item-section(side)
           q-icon(name="fas fa-chevron-right")
-      q-separator(v-if="index < transactions.length - 1" spaced="spaced" inset="inset" :key="'sep' + index")
+      q-separator(v-if="index < transactions.length - 1" spaced="spaced" inset :key="'sep' + index")
 
 </template>
 

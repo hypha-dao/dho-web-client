@@ -440,7 +440,7 @@ q-page.dao-launcher-page
               label.h-h4 {{ this.form.title }}
               p.font-sans.text-xs.text-weight-500.text-h-gray.q-mt-md {{this.form.description}}
           .row.justify-end.q-mt-md
-            q-btn.q-px-xl(@click="onGoToDashboard" color="primary" :label="$t('pages.onboarding.goToDashboard')" no-caps="no-caps" rounded="rounded" unelevated="unelevated")
+            q-btn.q-px-xl(@click="onGoToDashboard" color="primary" :label="$t('pages.onboarding.goToDashboard')" no-caps rounded unelevated)
         .row.items-stretch.q-mt-md(:class="{ 'q-pr-xs': $q.screen.gt.md }")
           div(:style="{'height': 'auto'}" :class="{ 'col-6 q-pr-xs': $q.screen.gt.md }")
             widget
@@ -450,7 +450,7 @@ q-page.dao-launcher-page
                   label.h-h4 {{ $t('pages.onboarding.inviteMembers') }}
                   p.font-sans.text-xs.text-weight-500.text-h-gray.q-mt-md(:style="{'min-height':'48px'}") {{ $t('pages.onboarding.youReInTheEndGame') }}
                 .row.full-width.justify-end
-                  q-btn.q-px-xl(@click="copyToClipboard" color="primary" label="Copy Public Link" no-caps="no-caps" outline="outline" rounded="rounded" unelevated="unelevated")
+                  q-btn.q-px-xl(@click="copyToClipboard" color="primary" label="Copy Public Link" no-caps outline rounded unelevated)
           div(:style="{'height': 'auto'}" :class="{ 'col-6 q-pl-xs': $q.screen.gt.md, 'q-mt-md': $q.screen.lt.md || $q.screen.md }")
             widget
               .row.justify-between
@@ -459,7 +459,7 @@ q-page.dao-launcher-page
                   label.h-h4 {{ $t('pages.onboarding.launchTeam') }}
                   p.font-sans.text-xs.text-weight-500.text-h-gray.q-mt-md(:style="{'min-height':'48px'}") {{ $t('pages.onboarding.createATeamOfMembersWithAdmin') }}
                 .row.full-width.justify-end
-                  q-btn.q-px-xl(@click="state = 'ADDING_ADMINS'" color="primary" :label="$t('pages.onboarding.createLaunchTeam')" no-caps="no-caps" outline="outline" rounded="rounded" unelevated="unelevated")
+                  q-btn.q-px-xl(@click="state = 'ADDING_ADMINS'" color="primary" :label="$t('pages.onboarding.createLaunchTeam')" no-caps outline rounded unelevated)
       template(v-if="isState(['DRAFTING'])")
         widget#step-identity.q-mb-md(v-if="$q.screen.gt.md ? pastSteps.includes('step-identity') : activeStep === 'IDENTITY'" :class="{ 'disabled': (activeStep !== 'IDENTITY') && $q.screen.gt.md, 'ghost-margin-bottom': pastSteps.slice(-1)[0] === 'step-identity' }")
           label.h-h4 {{ $t('pages.onboarding.daoIndentity') }}
@@ -467,22 +467,22 @@ q-page.dao-launcher-page
           .row.full-width.justify-between.q-mt-xl
             .col-7(:class="{ 'full-width': !$q.screen.gt.md, 'q-pr-md': $q.screen.gt.md }")
               label.h-label {{ $t('pages.onboarding.name') }}
-              q-input.q-mt-xs.rounded-border(:rules="[rules.required, rules.min(3)]" dense="dense" lazy-rules="ondemand" maxlength="50" outlined="outlined" :placeholder="$t('pages.onboarding.theDisplayNameOfYourDao')" ref="title" v-model="form.title")
+              q-input.q-mt-xs.rounded-border(:rules="[rules.required, rules.min(3)]" dense lazy-rules="ondemand" maxlength="50" outlined :placeholder="$t('pages.onboarding.theDisplayNameOfYourDao')" ref="title" v-model="form.title")
             .col-5(:class="{ 'full-width q-pt-md': !$q.screen.gt.md }")
               .row.justify-center.items-center
                 .col-auto
                   q-avatar(:size="$q.screen.gt.md ? '80px' :'60px' " color="primary" text-color="white")
-                    q-btn(v-if="!isImageSelected" @click="$refs.ipfsInput.chooseFile()" icon="fa fa-image" color="white" flat="flat" padding="30px" round="round" size="xl" unelevated="unelevated")
+                    q-btn(v-if="!isImageSelected" @click="$refs.ipfsInput.chooseFile()" icon="fa fa-image" color="white" flat padding="30px" round size="xl" unelevated)
                     img(v-if="isImageSelected" :src="$refs.ipfsInput.imageURI")
                 .col.q-ml-md
                   label.h-label {{ $t('pages.onboarding.logoIcon') }}
-                  q-btn.full-width.rounded-border.text-bold.q-mt-xs(:class="{ 'q-px-xl': $q.screen.gt.md }" @click="$refs.ipfsInput.chooseFile()" color="primary" :label="$t('pages.onboarding.uploadAnImage')" no-caps="no-caps" outline="outline" rounded="rounded" unelevated="unelevated")
+                  q-btn.full-width.rounded-border.text-bold.q-mt-xs(:class="{ 'q-px-xl': $q.screen.gt.md }" @click="$refs.ipfsInput.chooseFile()" color="primary" :label="$t('pages.onboarding.uploadAnImage')" no-caps outline rounded unelevated)
                   input-file-ipfs(@uploadedFile="form.logo = arguments[0] " image="image" ref="ipfsInput" v-show="false")
             .col-12.q-mt-md(:class="{ 'full-width': !$q.screen.gt.md }")
               label.h-label {{ $t('pages.onboarding.purpose') }}
-              q-input.q-mt-xs.rounded-border(:input-style="{ 'resize': 'none' }" :rules="[rules.required]" dense="dense" lazy-rules="ondemand" maxlength="300" outlined="outlined" :placeholder="$t('pages.onboarding.brieflyExplainWhatYourDao')" ref="description" rows="10" type="textarea" v-model="form.description")
+              q-input.q-mt-xs.rounded-border(:input-style="{ 'resize': 'none' }" :rules="[rules.required]" dense lazy-rules="ondemand" maxlength="300" outlined :placeholder="$t('pages.onboarding.brieflyExplainWhatYourDao')" ref="description" rows="10" type="textarea" v-model="form.description")
           nav.row.justify-end.q-mt-xl.q-gutter-xs
-            q-btn.q-px-xl(@click="onNextStep(activeStepIndex)" color="primary" :label="$t('pages.onboarding.nextStep')" no-caps="no-caps" rounded="rounded" unelevated="unelevated" v-if="$q.screen.gt.md")
+            q-btn.q-px-xl(@click="onNextStep(activeStepIndex)" color="primary" :label="$t('pages.onboarding.nextStep')" no-caps rounded unelevated v-if="$q.screen.gt.md")
         widget#step-token.q-mb-md(:class="{ 'disabled': (activeStep !== 'TOKEN') && $q.screen.gt.md, 'ghost-margin-bottom': pastSteps.slice(-1)[0] === 'step-token' }" v-if="$q.screen.gt.md ? pastSteps.includes('step-token') : activeStep === 'TOKEN'")
           .row
             q-avatar.q-mr-xs(size="30px")
@@ -492,10 +492,10 @@ q-page.dao-launcher-page
           .row.full-width.justify-between.q-mt-xl
             .col-8(:class="{ 'full-width': !$q.screen.gt.md, 'q-pr-md': $q.screen.gt.md }")
               label.h-label {{ $t('pages.onboarding.name') }}
-                q-input.q-mt-xs.rounded-border(:debounce="200" :rules="[rules.required, rules.min(1), rules.max(20)]" bg-color="white" dense="dense" lazy-rules="ondemand" maxlength="20" outlined="outlined" :placeholder="$('pages.onboarding.max20CharactersExBitcoin')" ref="utilityName" rounded="rounded" v-model="form.utilityName")
+                q-input.q-mt-xs.rounded-border(:debounce="200" :rules="[rules.required, rules.min(1), rules.max(20)]" bg-color="white" dense lazy-rules="ondemand" maxlength="20" outlined :placeholder="$t('pages.onboarding.max20CharactersExBitcoin')" ref="utilityName" rounded v-model="form.utilityName")
             .col-4(:class="{ 'full-width': !$q.screen.gt.md, '': $q.screen.gt.md }")
               label.h-label {{ $t('pages.onboarding.symbol') }}
-              q-input.q-mt-xs.rounded-border(:debounce="200" :rules="[rules.required, rules.isTokenAvailable]" bg-color="white" dense="dense" lazy-rules="ondemand" mask="AAAAAAAA" maxlength="7" outlined="outlined" :placeholder="$t('pages.onboarding.max7CharactersExBTC')" ref="utilitySymbol" rounded="rounded" v-model="form.utilitySymbol")
+              q-input.q-mt-xs.rounded-border(:debounce="200" :rules="[rules.required, rules.isTokenAvailable]" bg-color="white" dense lazy-rules="ondemand" mask="AAAAAAAA" maxlength="7" outlined :placeholder="$t('pages.onboarding.max7CharactersExBTC')" ref="utilitySymbol" rounded v-model="form.utilitySymbol")
           .row.q-mt-xl
             q-avatar.q-mr-xs(size="30px")
               img(src="~assets/icons/token-treasury-icon.svg")
@@ -504,13 +504,13 @@ q-page.dao-launcher-page
           .row.full-width.justify-between.q-mt-xl
             .col-8(:class="{ 'full-width': !$q.screen.gt.md, 'q-pr-md': $q.screen.gt.md }")
               label.h-label {{ $t('pages.onboarding.name') }}
-                q-input.q-mt-xs.rounded-border(:debounce="200" :rules="[rules.required, rules.min(1), rules.max(20)]" bg-color="white" dense="dense" lazy-rules="ondemand" maxlength="20" outlined="outlined" :placeholder="$('pages.onboarding.max20CharactersExBitcoin')" ref="utilityName" rounded="rounded" v-model="form.treasuryName")
+                q-input.q-mt-xs.rounded-border(:debounce="200" :rules="[rules.required, rules.min(1), rules.max(20)]" bg-color="white" dense lazy-rules="ondemand" maxlength="20" outlined :placeholder="$t('pages.onboarding.max20CharactersExBitcoin')" ref="utilityName" rounded v-model="form.treasuryName")
             .col-4(:class="{ 'full-width': !$q.screen.gt.md, '': $q.screen.gt.md }")
               label.h-label {{ $t('pages.onboarding.symbol') }}
-              q-input.q-mt-xs.rounded-border(:debounce="200" :rules="[rules.required, rules.isTokenAvailable]" bg-color="white" dense="dense" lazy-rules="ondemand" mask="AAAAAAAA" maxlength="7" outlined="outlined" :placeholder="$t('pages.onboarding.max7CharactersExBTC')" ref="treasurySymbol" rounded="rounded" v-model="form.treasurySymbol")
+              q-input.q-mt-xs.rounded-border(:debounce="200" :rules="[rules.required, rules.isTokenAvailable]" bg-color="white" dense lazy-rules="ondemand" mask="AAAAAAAA" maxlength="7" outlined :placeholder="$t('pages.onboarding.max7CharactersExBTC')" ref="treasurySymbol" rounded v-model="form.treasurySymbol")
           nav.row.justify-end.q-mt-xl.q-gutter-xs
-            q-btn.q-px-xl(@click="onPreviousStep()" color="primary" :label="'Back'" no-caps="no-caps" rounded="rounded" flat="flat" v-if="$q.screen.gt.md")
-            q-btn.q-px-xl(@click="onNextStep(activeStepIndex)" color="primary" :label="$t('pages.onboarding.nextStep')" no-caps="no-caps" rounded="rounded" unelevated="unelevated" v-if="$q.screen.gt.md")
+            q-btn.q-px-xl(@click="onPreviousStep()" color="primary" :label="'Back'" no-caps rounded flat v-if="$q.screen.gt.md")
+            q-btn.q-px-xl(@click="onNextStep(activeStepIndex)" color="primary" :label="$t('pages.onboarding.nextStep')" no-caps rounded unelevated v-if="$q.screen.gt.md")
         widget#step-design(:class="{ 'disabled': (activeStep !== 'DESIGN') && $q.screen.gt.md, 'ghost-margin-bottom': pastSteps.slice(-1)[0] === 'step-design' }" v-if="$q.screen.gt.md ? pastSteps.includes('step-design') : activeStep === 'DESIGN'")
           label.h-h4 {{ $t('pages.onboarding.design') }}
           p.font-sans.text-xs.text-weight-500.text-h-gray.q-mt-md {{ $t('pages.onboarding.setUpYourDaoBrand') }}
@@ -523,7 +523,7 @@ q-page.dao-launcher-page
                     q-popup-proxy(cover="cover" transition-show="scale" transition-hide="scale")
                       q-color(v-model="form.primaryColor")
                 .col
-                  q-input.rounded-border(:debounce="200" bg-color="white" dense="dense" lazy-rules="lazy-rules" maxlength="50" outlined="outlined" placeholder="#9376GJ9" ref="primaryColor" rounded="rounded" v-model="form.primaryColor")
+                  q-input.rounded-border(:debounce="200" bg-color="white" dense lazy-rules maxlength="50" outlined placeholder="#9376GJ9" ref="primaryColor" rounded v-model="form.primaryColor")
             .col-4(:class="{ 'full-width': !$q.screen.gt.sm }")
               label.h-label {{ $t('pages.onboarding.secondaryColor') }}
               .row.full-width.q-my-sm.items-center
@@ -532,7 +532,7 @@ q-page.dao-launcher-page
                     q-popup-proxy(cover="cover" transition-show="scale" transition-hide="scale")
                       q-color(v-model="form.secondaryColor")
                 .col
-                  q-input.rounded-border(:debounce="200" bg-color="white" dense="dense" lazy-rules="lazy-rules" maxlength="50" outlined="outlined" placeholder="#9376GJ9" ref="secondaryColor" rounded="rounded" v-model="form.secondaryColor")
+                  q-input.rounded-border(:debounce="200" bg-color="white" dense lazy-rules maxlength="50" outlined placeholder="#9376GJ9" ref="secondaryColor" rounded v-model="form.secondaryColor")
             .col-4(:class="{ 'full-width': !$q.screen.gt.sm }")
               label.h-label {{ $t('pages.onboarding.buttonTextColor') }}
               .row.full-width.q-my-sm.items-center
@@ -541,7 +541,7 @@ q-page.dao-launcher-page
                     q-popup-proxy(cover="cover" transition-show="scale" transition-hide="scale")
                       q-color(v-model="form.textColor")
                 .col
-                  q-input.rounded-border(:debounce="200" bg-color="white" dense="dense" lazy-rules="lazy-rules" maxlength="50" outlined="outlined" placeholder="#ffffff" ref="textColor" rounded="rounded" v-model="form.textColor")
+                  q-input.rounded-border(:debounce="200" bg-color="white" dense lazy-rules maxlength="50" outlined placeholder="#ffffff" ref="textColor" rounded v-model="form.textColor")
             .col-12.row
               .full-width
                 label.h-label {{ $t('pages.onboarding.preview') }}
@@ -552,28 +552,28 @@ q-page.dao-launcher-page
                   span {{ form.title ? form.title[0] : 'D' }}
               .row(:class="{ 'full-width': !$q.screen.gt.sm, 'col': $q.screen.gt.sm }")
                 .col-4(:class="{ 'full-width q-mt-md': !$q.screen.gt.sm, 'q-pr-md': $q.screen.gt.sm }")
-                  q-btn.q-px-xl.full-width(:style="{'background': form.primaryColor, 'color': form.textColor}" label="Primary color" no-caps="no-caps" rounded="rounded" unelevated="unelevated")
+                  q-btn.q-px-xl.full-width(:style="{'background': form.primaryColor, 'color': form.textColor}" label="Primary color" no-caps rounded unelevated)
                 .col-4(:class="{ 'full-width q-mt-md': !$q.screen.gt.sm, 'q-pr-md': $q.screen.gt.sm }")
-                  q-btn.q-px-xl.full-width(:style="{'background': form.secondaryColor, 'color': form.textColor }" :label="$t('pages.onboarding.secondaryColor')" no-caps="no-caps" rounded="rounded" unelevated="unelevated")
+                  q-btn.q-px-xl.full-width(:style="{'background': form.secondaryColor, 'color': form.textColor }" :label="$t('pages.onboarding.secondaryColor')" no-caps rounded unelevated)
                 .col-4(:class="{ 'full-width q-mt-md': !$q.screen.gt.sm, '': $q.screen.gt.sm }")
-                  q-btn.q-px-xl.full-width(:style="{'color': form.primaryColor}" label="Primary color" no-caps="no-caps" outline="outline" rounded="rounded" unelevated="unelevated")
+                  q-btn.q-px-xl.full-width(:style="{'color': form.primaryColor}" label="Primary color" no-caps outline rounded unelevated)
           nav.row.justify-end.q-mt-xl.q-gutter-xs
-            q-btn.q-px-xl(@click="onPreviousStep()" color="primary" :label="'Back'" no-caps="no-caps" rounded="rounded" flat="flat" v-if="$q.screen.gt.md")
-            q-btn.q-px-xl(@click="onSubmit()" color="primary" :label="'Publish'" no-caps="no-caps" rounded="rounded" unelevated="unelevated" v-if="$q.screen.gt.md")
+            q-btn.q-px-xl(@click="onPreviousStep()" color="primary" :label="'Back'" no-caps rounded flat v-if="$q.screen.gt.md")
+            q-btn.q-px-xl(@click="onSubmit()" color="primary" :label="'Publish'" no-caps rounded unelevated v-if="$q.screen.gt.md")
       widget(v-if="isState(['ADDING_ADMINS','FINISHED'])")
         label.h-h4 {{ $t('pages.onboarding.launchTeam') }}
         p.font-sans.text-xs.text-weight-500.text-h-gray.q-mt-md {{ $t('pages.onboarding.createATeamOfCoreMembersWithAdmin') }}
         .row.full-width.justify-between.q-mt-xl
           .full-width(v-if="isState(['ADDING_ADMINS'])")
             label.h-label {{ $t('pages.onboarding.telosAccount') }}
-            q-input.q-mt-xs.q-pa-none.rounded-border(:debounce="200" :ref="'member'" :rules="[rules.required, rules.accountFormatBasic, rules.accountLength, rules.accountExists]" bg-color="white" dense="dense" lazy-rules="ondemand" maxlength="12" outlined="outlined" placeholder="Type account here and press enter" rounded="rounded" v-model="form.member" v-on:keyup.enter="addTeamMember")
+            q-input.q-mt-xs.q-pa-none.rounded-border(:debounce="200" :ref="'member'" :rules="[rules.required, rules.accountFormatBasic, rules.accountLength, rules.accountExists]" bg-color="white" dense lazy-rules="ondemand" maxlength="12" outlined placeholder="Type account here and press enter" rounded v-model="form.member" v-on:keyup.enter="addTeamMember")
             nav.row.full-width.justify-end.q-mt-xs
-              q-btn.text-bold.q-pa-none.q-ml-lg.q-mr-xs(flat="flat" color="primary" no-caps="no-caps" padding="none" @click="addTeamMember") {{ $t('pages.onboarding.addToTheTeam') }}
+              q-btn.text-bold.q-pa-none.q-ml-lg.q-mr-xs(flat color="primary" no-caps padding="none" @click="addTeamMember") {{ $t('pages.onboarding.addToTheTeam') }}
           .row.full-width.q-mt-xl
             template(v-for="(member, index) in form.members")
               .col-4.q-mt-md.q-px-md
                 .q-pa-sm.rounded-border.row.items-center.relative.member-item(:style="{'border': '1px solid var(--q-color-primary)'}")
-                  q-btn.absolute-top-right.q-pa-xxs.z-50(@click="() => removeTeamMember(member.username)" color="body" flat="flat" icon="fas fa-times" round="round" size="sm")
+                  q-btn.absolute-top-right.q-pa-xxs.z-50(@click="() => removeTeamMember(member.username)" color="body" flat icon="fas fa-times" round size="sm")
                   q-avatar.q-mr-xs(size="xl" :style="{'background': form.primaryColor, 'color': form.textColor }")
                     img.object-cover(:src="member.avatar" v-if="member.avatar")
                     span {{ member && member.username[0] }}
@@ -582,8 +582,8 @@ q-page.dao-launcher-page
                     p.q-pa-none.q-ma-none.font-sans.text-xs.text-weight-500.text-h-gray(v-if="member.fullName") @
                       | {{member.username}}
         nav.row.justify-end.q-mt-xl.q-gutter-xs
-          q-btn.q-px-xl(@click="onGoToDashboard" color="primary" :label="$t('pages.onboarding.goToDashboard')" no-caps="no-caps" outline="outline" rounded="rounded" unelevated="unelevated")
-          q-btn.q-px-xl(@click="onAddAdmin" color="primary" label="Save Team" no-caps="no-caps" rounded="rounded" unelevated="unelevated" v-if="isState(['ADDING_ADMINS'])")
+          q-btn.q-px-xl(@click="onGoToDashboard" color="primary" :label="$t('pages.onboarding.goToDashboard')" no-caps outline rounded unelevated)
+          q-btn.q-px-xl(@click="onAddAdmin" color="primary" label="Save Team" no-caps rounded unelevated v-if="isState(['ADDING_ADMINS'])")
     .col-sm-12.col-md-12.col-lg-3(:class="{ 'full-width': $q.screen.lt.md || $q.screen.md }")
       widget(v-if="isState(['CREATED'])")
         .row

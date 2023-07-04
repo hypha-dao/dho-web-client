@@ -57,17 +57,17 @@ export default {
           q-icon.q-pa-xs(size="md" name="fas fa-file-medical")
           .text-caption.text-no-wrap.text-bold {{ $t('navigation.quick-links.newProposal') }}
     .col-6.justify-start(:class="{ 'col-12': compact, 'flex': !compact }")
-      q-btn.button-square(@click="changeRoute('profile', {username})" rounded="rounded" unelevated="unelevated" :color="isActiveRoute('profile') && isUserProfile ? 'primary' : 'internal-bg'" :text-color="isActiveRoute('profile') && isUserProfile ? 'internal-bg' : 'primary'")
+      q-btn.button-square(@click="changeRoute('profile', {username})" rounded unelevated :color="isActiveRoute('profile') && isUserProfile ? 'primary' : 'internal-bg'" :text-color="isActiveRoute('profile') && isUserProfile ? 'internal-bg' : 'primary'")
         .column.items-center
           q-icon.q-pa-xs(size="md" name="far fa-user")
           .text-caption.text-no-wrap.text-bold {{ $t('navigation.quick-links.myProfile') }}
     .col-6.justify-end(:class="{ 'col-12': compact, 'flex': !compact }")
-      q-btn.button-square(@click="changeRoute('wallet',{username})" rounded="rounded" unelevated="unelevated" :color="isActiveRoute('wallet') ? 'primary' : 'internal-bg'" :text-color="isActiveRoute('wallet') ? 'internal-bg' : 'primary'" :disabled="!isAuthenticated")
+      q-btn.button-square(@click="changeRoute('wallet',{username})" rounded unelevated :color="isActiveRoute('wallet') ? 'primary' : 'internal-bg'" :text-color="isActiveRoute('wallet') ? 'internal-bg' : 'primary'" :disabled="!isAuthenticated")
         .column.items-center
           q-icon.q-pa-xs(size="md" name="fas fa-wallet")
           .text-caption.text-no-wrap.text-bold {{ $t('navigation.quick-links.myWallet') }}
     .col-6.justify-start(:class="{ 'col-12': compact, 'flex': !compact }")
-      q-btn.button-square(@click="logout" rounded="rounded" unelevated="unelevated" color="internal-bg")
+      q-btn.button-square(@click="logout" rounded unelevated color="internal-bg")
         .column.items-center
           q-icon.q-pa-xs(color="primary" size="md" name="fas fa-sign-out-alt")
           .text-caption.text-no-wrap.text-primary.text-bold {{ $t('navigation.quick-links.logout') }}

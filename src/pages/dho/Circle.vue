@@ -108,7 +108,7 @@ export default {
 q-page
   base-banner(:compact="!$q.screen.gt.sm" :split="$q.screen.gt.md" v-bind="banner")
     template(v-slot:buttons)
-      q-btn.q-px-lg.h-btn1(@click="_apply" color="secondary" :label="$t('pages.dho.circle.joinCircle')" no-caps="no-caps" rounded="rounded" unelevated="unelevated")
+      q-btn.q-px-lg.h-btn1(@click="_apply" color="secondary" :label="$t('pages.dho.circle.joinCircle')" no-caps rounded unelevated)
   .row.q-mt-md.q-col-gutter-md.items-start
     .col-8
       tokens(v-if="!$q.screen.md" :daoLogo="daoSettings.logo" :tokens="budget" :vertical="!$q.screen.gt.sm" :title="$t('pages.dho.circle.budget')")

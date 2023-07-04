@@ -1,4 +1,17 @@
 {
+  "actions": {
+    "delete": "Excluir"
+  },
+  "periods": {
+    "hour": "Hora",
+    "hours": "Horas",
+    "day": "Dia",
+    "days": "Dias",
+    "week": "Semana",
+    "weeks": "Semanas",
+    "month": "Mês",
+    "months": "Meses"
+  },
   "assignments": {
     "assignment-claim-extend": {
       "claimAll": "Reivindicar tudo\n        ",
@@ -61,6 +74,203 @@
       "more1": "Mais"
     }
   },
+  "configuration": {
+    "alert": {
+      "confirm-action": "Tem certeza de que deseja sair sem salvar seu rascunho?"
+    },
+    "tabs": {
+      "general": "Em geral",
+      "structure": "Estrutura",
+      "voting": "Voto"
+    },
+    "nav": {
+      "reset": "Redefinir alterações",
+      "submit": "Salvar edições",
+      "execute-multisig": "Executar multisig",
+      "sign-multisig": "Assinar multisig",
+      "view-multisig": "Ver multisig"
+    },
+    "settings-general": {
+      "title": "Em geral",
+      "description": "Use as configurações gerais para configurar alguns parâmetros básicos, como um link para seu espaço de colaboração principal e seu DAO, e use a alternância para habilitar ou desabilitar os principais recursos.",
+      "form": {
+        "logo": {
+          "label": "Logotipo"
+        },
+        "upload": {
+          "label": "Carregue uma imagem (máx. 3MB)"
+        },
+        "name": {
+          "label": "Nome"
+        },
+        "url": {
+          "label": "url personalizado"
+        },
+        "purpose": {
+          "label": "Propósito"
+        },
+        "primary-color": {
+          "label": "Cor primária"
+        },
+        "secondary-color": {
+          "label": "cor secundária"
+        },
+        "text-color": {
+          "label": "Cor do texto"
+        },
+        "sample-text": "Este texto deve estar visível em ambas as cores"
+      },
+      "nav": {
+        "show-more": "Mostre mais",
+        "show-less": "Mostre menos"
+      }
+    },
+    "settings-structure": {
+      "roles": {
+        "title": "Funções",
+        "description": "Aqui você pode configurar suas funções DAO. ",
+        "tabs": {
+          "types": "tipos",
+          "levels": "Níveis"
+        },
+        "type": {
+          "heading": "Aqui você pode criar novos tipos de função adicionando um nome e um conjunto de responsabilidades.",
+          "form": {
+            "name": {
+              "label": "Nome do papel",
+              "placeholder": "Digite um nome de função"
+            },
+            "description": {
+              "label": "Descrição do trabalho",
+              "placeholder": "Insira uma descrição da função"
+            },
+            "cancel": "Cancelar",
+            "submit": "Enviar"
+          },
+          "nav": {
+            "create": "Criar nova função"
+          }
+        },
+        "level": {
+          "heading": "Adicione em que nível a função está em termos de complexidade ou contribuição comercial.",
+          "form": {
+            "name": {
+              "label": "Nome do nível",
+              "placeholder": "Digite um nome de nível"
+            },
+            "yearly-reward": {
+              "label": "Recompensa anual",
+              "placeholder": "Insira um valor"
+            },
+            "montly-reward": {
+              "label": "Recompensa mensal"
+            },
+            "min-deferred": {
+              "label": "Mínimo adiado"
+            },
+            "cancel": "Cancelar",
+            "submit": "Concluído"
+          },
+          "nav": {
+            "create": "Criar novo nível"
+          }
+        }
+      },
+      "circles": {
+        "title": "círculos",
+        "description": "Aqui você pode configurar suas equipes principais ou círculos. ",
+        "heading": "Sinta-se à vontade para moldar seu DAO criando círculos ou equipes que sejam significativos para seu fluxo de trabalho.",
+        "form": {
+          "name": {
+            "label": "Nome do Círculo",
+            "placeholder": "Digite um nome de círculo"
+          },
+          "description": {
+            "label": "Descrição do círculo",
+            "placeholder": "Insira uma descrição do círculo"
+          },
+          "cancel": "Cancelar",
+          "submit": "Enviar"
+        },
+        "nav": {
+          "create": "Criar novo círculo",
+          "create-subcircle": "Adicionar subcírculo"
+        }
+      }
+    },
+    "settings-voting": {
+      "core": {
+        "title": "Métodos de votação da equipe principal",
+        "description": "Cada DAO pode moldar seu próprio sistema de votação, permitindo que os principais membros da equipe tomem decisões coletivas. ",
+        "form": {
+          "unity": {
+            "label": "Unidade (% de voz necessária)"
+          },
+          "quorum": {
+            "label": "Quorum (% de participantes obrigatórios)"
+          },
+          "duration": {
+            "label": "Duração do voto"
+          }
+        },
+        "showcase": {
+          "1": {
+            "title": "HVOICE",
+            "description": "Cada membro pode usar seus tokens de governança HVOICE como uma parte dos votos."
+          },
+          "2": {
+            "title": "Votos múltiplos",
+            "description": "Os membros podem votar várias vezes durante o período de votação"
+          },
+          "3": {
+            "title": "período de votação",
+            "description": "O período de votação padrão é de 1 semana"
+          },
+          "4": {
+            "title": "Requisitos",
+            "description": "As propostas devem ter a porcentagem necessária de votos de apoio (unidade) e a porcentagem necessária de todos os votos (quórum)"
+          }
+        }
+      },
+      "community": {
+        "title": "Métodos de votação da comunidade",
+        "description": "Cada DAO pode moldar seu próprio sistema de votação, permitindo que os principais membros da equipe tomem decisões coletivas. ",
+        "form": {
+          "unity": {
+            "label": "Unidade (% de voz necessária)"
+          },
+          "quorum": {
+            "label": "Quorum (% de participantes obrigatórios)"
+          },
+          "duration": {
+            "label": "Duração do voto"
+          }
+        },
+        "showcase": {
+          "1": {
+            "title": "1 membro = 1 voto",
+            "description": "Cada membro pode votar usando 1 membro 1 voto."
+          },
+          "2": {
+            "title": "Delegar voz",
+            "description": "Os membros podem dar voz (ou poder de voto) aos membros eleitos em uma eleição democrática"
+          },
+          "3": {
+            "title": "Votos múltiplos",
+            "description": "Os membros podem votar várias vezes durante o período de votação"
+          },
+          "4": {
+            "title": "período de votação",
+            "description": "O período de votação padrão é de 1 semana"
+          },
+          "5": {
+            "title": "Requisitos",
+            "description": "As propostas devem ter a porcentagem necessária de votos favoráveis ​​(unidade) e a porcentagem necessária de todos os votos (quórum)"
+          }
+        }
+      }
+    }
+  },
   "common": {
     "button-card": {
       "until": "Até"
@@ -119,6 +329,7 @@
     }
   },
   "dao": {
+    "member": "Membro",
     "settings-communication": {
       "announcements": "Anúncios",
       "postAnAnnouncement": "Publique um anúncio em todas as seções para informar os membros sobre uma atualização importante.",
@@ -281,7 +492,7 @@
       "creatingANewRole": "Criando uma nova função?",
       "creatingABadge": "Criando um selo?",
       "launchingAQuest": "Lançando uma missão?",
-      "youNeedTo": "Você precisa passar no quórum (mínimo % do total de membros que participam da votação) e na unidade (mínimo % dos membros que o endossam). ",
+      "youNeedTo": "Você precisa passar no quórum (mínimo % do total de membros participando da votação) e na unidade (mínimo % dos membros que o endossam). ",
       "createAGeneric": "Crie uma proposta de contribuição genérica com um título descritivo e uma definição clara da política junto com as etapas para implementar a política.",
       "createARecurring": "Crie uma atividade recorrente para uma atribuição de função existente e descreva por que você é uma boa combinação com o máximo de detalhes possível.",
       "createAProposal": "Crie uma proposta para um ativo da organização e escolha o arquétipo da função com um nome descritivo e uma definição clara da função com responsabilidades.",
@@ -323,7 +534,7 @@
       "onlyDaoAdmins1": "Somente administradores DAO podem alterar as configurações",
       "logo": "Logotipo",
       "uploadAnImage": "Carregue uma imagem (máx. 3 MB)",
-      "showEcosystemOnMarketplace": "Mostrar ecossistema no Marketplace",
+      "showEcosystemOnMarketplace": "Mostrar Ecossistema no Marketplace",
       "findInvestorsWilling": "Encontre investidores dispostos a financiar seu ecossistema",
       "onlyDaoAdmins2": "Somente administradores DAO podem alterar as configurações",
       "ecosystemDomain": "Domínio do Ecossistema",
@@ -452,7 +663,7 @@
       "scanTheQr": "Escaneie o código QR nesta página,",
       "itContainsThe": " ele contém o convite para criar a Conta Hypha em sua carteira.",
       "onceTheAccount": " Com a conta pronta,",
-      "youAreSet": " você está pronto para a próxima etapa.",
+      "youAreSet": " você está pronto para a última próxima etapa.",
       "copyInviteLink": "Copiar link de convite",
       "loginWith": "Entrar com\n            ",
       "hyphaWallet1": "Carteira Hypha",
@@ -534,7 +745,7 @@
       "quickActions": "Ações rápidas",
       "completeDraft": "Rascunho completo",
       "youHaveA": "Você tem um rascunho de proposta para concluir",
-      "claimPeriods": "Períodos de reclamação",
+      "claimPeriods": "Períodos de reivindicação",
       "youHave": "Você tem 2 períodos para reivindicar",
       "adjustCommitment": "Ajustar compromisso",
       "forASpecific": "Por um período de tempo específico",
@@ -797,7 +1008,7 @@
       "editProposal": "Editar proposta"
     },
     "proposal-suspended": {
-      "thatMeansThat": "Isso significa que a cessão terminará e as reclamações não serão mais possíveis, mas quaisquer períodos cumpridos anteriormente permanecem exigíveis.",
+      "thatMeansThat": "Isso significa que a cessão terminará e as reivindicações não serão mais possíveis, mas quaisquer períodos cumpridos anteriormente permanecem exigíveis.",
       "publish": "Publicar",
       "iChangedMyMind": "eu mudei de ideia"
     },
@@ -1049,7 +1260,7 @@
         "sortBy": "Ordenar por",
         "joinDateDescending": "Data de entrada descendente",
         "joinDateAscending": "Data de entrada ascendente",
-        "alphabetically": "Em ordem alfabética (A-Z)",
+        "alphabetically": "Alfabeticamente (A-Z)",
         "all": "Todos",
         "coreTeam": "Equipe principal",
         "communityMembers": "Membros da comunidade"
@@ -1079,7 +1290,7 @@
         "noBadges": "Sem emblemas",
         "noBadges1": "Sem emblemas",
         "yourOrganizationDoesnt": "Sua organização ainda não tem selos. ",
-        "searchBadges": "Procurar insígnias",
+        "searchBadges": "Procurar distintivos",
         "filterByName": "Filtrar por nome",
         "createANewBadge": "Criar um novo selo",
         "sortByCreateDateAscending": "Classificar por data de criação ascendente",
@@ -1542,7 +1753,7 @@
     "selectACircleFromTheList": "Selecione um círculo da lista",
     "voiceCoefficient": "Coeficiente de Voz",
     "utilityCoefficient": "Coeficiente de Utilidade",
-    "cashCoefficient": "Coeficiente de Caixa",
+    "cashCoefficient": "Coeficiente de caixa",
     "payout": "Pagamento",
     "compensation": "Compensação",
     "pleaseEnterTheUSDEquivalentAnd": "Insira o equivalente em USD e o percentual de diferimento para esta contribuição - quanto mais você adiar para uma data posterior, maior será o bônus (consulte o cálculo do salário real abaixo ou use nossa calculadora). ",
@@ -1559,7 +1770,7 @@
     "poll": "Enquete",
     "pollOrSenseCheckWithCommunityMembers": "Pesquise ou verifique com os membros da comunidade o que criará um apoio mais forte em relação a outras propostas. ",
     "useThisFieldToDetailTheContentOfYourPoll": "Use este campo para detalhar o conteúdo da sua enquete",
-    "votingMethod": "Método de votação",
+    "votingMethod": "método de votação",
     "selectVotingMethod": "Selecione o método de votação",
     "content": "Contente",
     "contribution": "Contribuição",
@@ -1585,7 +1796,7 @@
     "typeTheRoleName": "Digite o nome da função",
     "typeTheRoleDescription": "Digite a descrição da função",
     "manageYourSalary": "Gerencie seu salário",
-    "fieldsBelowDisplayTheMinimum": "Os campos abaixo exibem o percentual mínimo de comprometimento e % de tokens HYPHA versus tokens HUSD necessários para esta função, bem como a capacidade da função (quantas pessoas podem ser atribuídas a esta função) e o equivalente em USD.",
+    "fieldsBelowDisplayTheMinimum": "Os campos abaixo exibem o percentual mínimo de comprometimento e % de tokens HYPHA versus tokens HUSD necessários para esta função, bem como a capacidade da função (quantas pessoas podem ser atribuídas a esta função) e equivalente em USD.",
     "chooseYourCommitmentLevel": "Escolha o seu nível de compromisso",
     "badge": "Distintivo",
     "findHereAvailableBadges": "Encontre aqui Distintivos disponíveis com abrangência e características únicas. ",
@@ -1637,7 +1848,7 @@
       "members": "Membros",
       "genericContribution": "Contribuição Genérica",
       "roleAssignments": "Atribuições de função",
-      "roleArchetypes": "Arquétipos de papel",
+      "roleArchetypes": "Arquétipos de papéis",
       "badgeTypes": "Tipos de crachá",
       "badgeAssignments": "Atribuições de crachás",
       "suspensions": "Suspensões",
@@ -1649,7 +1860,7 @@
       "sortBy": "Ordenar por",
       "oldestFirst": "Mais velhos primeiro",
       "newestFirst": "Os mais novos primeiro",
-      "alphabetically": "Em ordem alfabética (A-Z)",
+      "alphabetically": "Alfabeticamente (A-Z)",
       "result": {
         "active": "Ativo",
         "pendingToClose": "Pendente para fechar",
@@ -1660,10 +1871,10 @@
         "applicant": "Candidato",
         "genericContribution": "Contribuição Genérica",
         "extension": "Extensão",
-        "roleAssignment": "Atribuição de Função",
+        "roleAssignment": "Atribuição de função",
         "badgeAssignment": "Atribuição de crachá",
         "suspension": "Suspensão",
-        "roleArchetype": " Arquétipo de função",
+        "roleArchetype": " Arquétipo de Função",
         "badge": "Distintivo"
       }
     }

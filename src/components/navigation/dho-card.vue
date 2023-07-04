@@ -81,9 +81,9 @@ export default {
 </script>
 
 <template lang="pug">
-q-card.dho-card.q-px-md.q-py-md(flat="flat" :class="{'dho-card--card': isCardView, 'dho-card--list': isListView }")
+q-card.dho-card.q-px-md.q-py-md(flat :class="{'dho-card--card': isCardView, 'dho-card--list': isListView }")
   slot(name="icon")
-  q-btn#share-button.absolute-top-right.q-pa-xxs.z-10(:class="{ 'q-mt-sm q-mr-sm': isCardView, '': isListView, '': !$q.screen.gt.sm }" @click="copyToClipboardADaoLink" color="internal-bg" icon="fas fa-share-alt" padding="8px" round="round" size="sm" text-color="primary" unelevated="unelevated" v-if="url")
+  q-btn#share-button.absolute-top-right.q-pa-xxs.z-10(:class="{ 'q-mt-sm q-mr-sm': isCardView, '': isListView, '': !$q.screen.gt.sm }" @click="copyToClipboardADaoLink" color="internal-bg" icon="fas fa-share-alt" padding="8px" round size="sm" text-color="primary" unelevated v-if="url")
   q-card-section.q-pa-none.row.justify-center.items-center(:class="{'col-auto q-pr-xs': isListView, 'full-width': !$q.screen.gt.sm }" :style="[isCardView ? {'height': '200px'}: {}]")
     .full-width
       slot(name="header")
