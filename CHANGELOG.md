@@ -1,5 +1,21 @@
 # Changelog
 
+## [2.30.0](https://github.com/hypha-dao/dho-web-client/compare/v2.29.1...v2.30.0) (2023-07-04)
+
+
+### Features
+
+* **configuration:** add v2 ([#2258](https://github.com/hypha-dao/dho-web-client/issues/2258)) ([63b5d48](https://github.com/hypha-dao/dho-web-client/commit/63b5d48d71b2d61b6b8c4dc0f5d1c36c491a6ff1))
+
+
+### Bug Fixes
+
+* missed translations ([#2276](https://github.com/hypha-dao/dho-web-client/issues/2276)) ([c328292](https://github.com/hypha-dao/dho-web-client/commit/c328292ff7b8eb1b7bc2804c7f957387fbc81393))
+* missed translations ([#2283](https://github.com/hypha-dao/dho-web-client/issues/2283)) ([0d5451e](https://github.com/hypha-dao/dho-web-client/commit/0d5451e0438d6e788d86c311c43bf942773117b9))
+* **proposals:** proposals page on mobile (#DEV-830) ([#2277](https://github.com/hypha-dao/dho-web-client/issues/2277)) ([23fc714](https://github.com/hypha-dao/dho-web-client/commit/23fc714b2a05a282615064494d8b19e60e4c5e66))
+* **step-duration:** dates picker bug (#DEV-819) ([#2278](https://github.com/hypha-dao/dho-web-client/issues/2278)) ([56e34a6](https://github.com/hypha-dao/dho-web-client/commit/56e34a61138973d156c7056acbd594d843fbbe2d))
+* **typo:** console warnings and errors (#DEV-822) ([#2279](https://github.com/hypha-dao/dho-web-client/issues/2279)) ([4153f03](https://github.com/hypha-dao/dho-web-client/commit/4153f03356dbb464664eaeb725c750fb3d246a61))
+
 ## [2.29.1](https://github.com/hypha-dao/dho-web-client/compare/v2.29.0...v2.29.1) (2023-06-28)
 
 
