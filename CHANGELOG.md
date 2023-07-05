@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.29.3](https://github.com/hypha-dao/dho-web-client/compare/v2.29.2...v2.29.3) (2023-07-05)
+
+
+### Bug Fixes
+
+* **dao:** read registrationEnabled from api ([3ebefab](https://github.com/hypha-dao/dho-web-client/commit/3ebefabd75d3ae8ca34dd716c0385a3233997ef9))
+* **dao:** read registrationEnabled from api ([3ebefab](https://github.com/hypha-dao/dho-web-client/commit/3ebefabd75d3ae8ca34dd716c0385a3233997ef9))
+
 ## [2.29.1](https://github.com/hypha-dao/dho-web-client/compare/v2.29.0...v2.29.1) (2023-06-28)
 
 
