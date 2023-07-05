@@ -44,7 +44,7 @@ jobs:
           ELASTIC_SEARCH_API_KEY: ${{ secrets.PROD_ELASTIC_SEARCH_API_KEY }}
           IPFS_URL: 'ipfs.infura.io'
           IPFS_PROJECT_ID: '2F5pWHIOMgHji1DeqUT0mGpvySz'
-          IPFS_PROJECT_SECRET: ${{ secrets.STAGING_IPFS_PROJECT_SECRET }}
+          IPFS_PROJECT_SECRET: ${{ secrets.IPFS_PROJECT_SECRET }}
           IPFS_GATEWAY: 'https://hypha.infura-ipfs.io/ipfs/'
           MULTISIG_CONTRACT: 'msigdhohypha'
 
