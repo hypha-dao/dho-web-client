@@ -1,5 +1,15 @@
 # Changelog
 
+## [2.29.1](https://github.com/hypha-dao/dho-web-client/compare/v2.29.0...v2.29.1) (2023-06-28)
+
+
+### Bug Fixes
+
+* **onboarding:** importang bug-fix in dao creation ([#2268](https://github.com/hypha-dao/dho-web-client/issues/2268)) ([15ae331](https://github.com/hypha-dao/dho-web-client/commit/15ae331388df32b7e9274007641fb6eab05d06db))
+* **proposal-list:** showing active policy proposals (#DEV-826) ([#2273](https://github.com/hypha-dao/dho-web-client/issues/2273)) ([4381ed1](https://github.com/hypha-dao/dho-web-client/commit/4381ed1ea0d0e6a7db2d8cdf46e27d02f40e108d))
+* **treasury:** showing treasury payout tab ([#2272](https://github.com/hypha-dao/dho-web-client/issues/2272)) ([d948d82](https://github.com/hypha-dao/dho-web-client/commit/d948d820de2c9e23ee23e019532becfaad7bc28f))
+* update the ual-hypha ([3e44431](https://github.com/hypha-dao/dho-web-client/commit/3e44431ea46d0bcb3d8aa6b96c4753ab79bbcb5b))
+
 ## [2.28.2](https://github.com/hypha-dao/dho-web-client/compare/v2.28.1...v2.28.2) (2023-06-18)
 
 
