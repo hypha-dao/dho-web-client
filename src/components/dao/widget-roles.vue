@@ -36,6 +36,10 @@ const LEVELS_QUERY = `
     name: details_name_s
     annualAmount: details_annualUsdSalary_a
     minDeferred: details_minDeferredX100_i
+
+    assignmentAggregate {
+      count
+    }
   }
 `
 
