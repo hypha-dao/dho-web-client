@@ -24,6 +24,7 @@ const CIRCLE_QUERY = `
     filter: { 
       details_dao_i: { eq: $daoId }, 
       details_autoApprove_i: { eq: 1 } 
+      not: { has: parentcircle }
     }
   ) {
     id: docId
