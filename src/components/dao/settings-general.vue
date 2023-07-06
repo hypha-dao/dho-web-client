@@ -196,7 +196,7 @@ export default {
 
     footer.full-width.row.items-center.justify-center
       q-btn.q-px-lg(
-        :label="isShowingMore? $t('configuration.settings-general.nav.show-more') : $t('configuration.settings-general.nav.show-less')"
+        :label="isShowingMore ? $t('configuration.settings-general.nav.show-less') : $t('configuration.settings-general.nav.show-more')"
         @click="isShowingMore = !isShowingMore"
         color="primary"
         flat
