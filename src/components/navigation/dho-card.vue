@@ -30,7 +30,7 @@ export default {
   methods: {
     async copyToClipboardADaoLink () {
       try {
-        const resolved = this.$router.resolve({ name: 'login', params: { dhoname: this.name } })
+        const resolved = this.$router.resolve({ name: 'login', params: { dhoname: this.url } })
         const host = window.location.host
         const url = `${host}${resolved.href}`
         await copyToClipboard(url)
