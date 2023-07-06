@@ -44,6 +44,7 @@ export const EXPLORE_BY = Object.freeze({
 })
 
 export const MEMBER_TYPE = Object.freeze({
+  ALL: 'ALL',
   CORE: 'CORE',
   COMMUNITY: 'COMMUNITY'
 })
