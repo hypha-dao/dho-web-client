@@ -65,7 +65,7 @@ export default {
       filters: [
         {
           label: 'All',
-          value: this.$t('pages.dho.members.all'),
+          value: MEMBER_TYPE.ALL,
           enabled: true,
           filter: () => true
         },
