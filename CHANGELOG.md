@@ -1,5 +1,18 @@
 # Changelog
 
+## [2.29.3](https://github.com/hypha-dao/dho-web-client/compare/v2.29.2...v2.29.3) (2023-07-06)
+
+
+### Bug Fixes
+
+* always enabled registration ([671bf03](https://github.com/hypha-dao/dho-web-client/commit/671bf0309cc65457851283e4b09d1ef849a9f23a))
+* **configuration:** add correct label for show more button ([2850ff8](https://github.com/hypha-dao/dho-web-client/commit/2850ff8abc8137a64fac94d1b9771e9e7af18e6e))
+* **dao:** read registrationEnabled from api ([3ebefab](https://github.com/hypha-dao/dho-web-client/commit/3ebefabd75d3ae8ca34dd716c0385a3233997ef9))
+* **dao:** read registrationEnabled from api ([3ebefab](https://github.com/hypha-dao/dho-web-client/commit/3ebefabd75d3ae8ca34dd716c0385a3233997ef9))
+* **dho-card:** share button link (#DEV-828) ([#2292](https://github.com/hypha-dao/dho-web-client/issues/2292)) ([4232858](https://github.com/hypha-dao/dho-web-client/commit/4232858e46a115e6d2f7ab6cb8a14e01273c5671))
+* **language-drawer:** remove automating translation widget ([52bc2b3](https://github.com/hypha-dao/dho-web-client/commit/52bc2b3fc2ef7e15a1d439e58cf35576df80a3ad))
+* **members:** add correct value for filter ([#2293](https://github.com/hypha-dao/dho-web-client/issues/2293)) ([76519f2](https://github.com/hypha-dao/dho-web-client/commit/76519f250e4a702186d0d0d3f9cbb72ec9db34f4))
+
 ## [2.29.1](https://github.com/hypha-dao/dho-web-client/compare/v2.29.0...v2.29.1) (2023-06-28)
 
 
