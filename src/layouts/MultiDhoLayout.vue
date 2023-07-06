@@ -59,18 +59,14 @@ export default {
       currentLang: localStorage.getItem('lang') ? localStorage.getItem('lang') : 'en',
       autoTranslate: false,
       languages: [
+
+        // {
+        //   label: 'English (UK)',
+        //   value: 'en-UK',
+        //   image: require('assets/images/locales/uk.png')
+        // },
         {
-          label: 'Српски',
-          value: 'sr',
-          image: require('assets/images/locales/sr.svg')
-        },
-        {
-          label: 'English (UK)',
-          value: 'en-UK',
-          image: require('assets/images/locales/uk.png')
-        },
-        {
-          label: 'English (US)',
+          label: 'English',
           value: 'en-US',
           image: require('assets/images/locales/us.png')
         },
@@ -83,6 +79,11 @@ export default {
           label: 'Português (BR)',
           value: 'pt',
           image: require('assets/images/locales/pt.png')
+        },
+        {
+          label: 'Српски',
+          value: 'sr',
+          image: require('assets/images/locales/sr.svg')
         },
         {
           label: '한국인',
@@ -416,13 +417,13 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
                 type="radio"
                 :style="{ 'width': '20px', 'height': '20px', 'accent-color': '#242f5d', 'cursor': 'pointer' }"
               )
-      .translation-box.q-pa-sm(:style="{ 'position': 'absolute', 'bottom': '30px', 'right': '30px', 'left': '30px' }")
-        .row.items-center.q-mb-md.justify-between
-          .row
-            img.q-mr-sm(:src="require('assets/images/locales/translation.png')" :style="{ 'width': '26px', 'height': '26px' }")
-            .h-b2.text-bold(:style="{ 'font-size': '14px' }") Translation
-          q-toggle(v-model="autoTranslate" color="secondary" keep-color)
-        .h-b2 Automatically translate proposals and Projects to your default language
+      //- .translation-box.q-pa-sm(:style="{ 'position': 'absolute', 'bottom': '30px', 'right': '30px', 'left': '30px' }")
+      //-   .row.items-center.q-mb-md.justify-between
+      //-     .row
+      //-       img.q-mr-sm(:src="require('assets/images/locales/translation.png')" :style="{ 'width': '26px', 'height': '26px' }")
+      //-       .h-b2.text-bold(:style="{ 'font-size': '14px' }") Translation
+      //-     q-toggle(v-model="autoTranslate" color="secondary" keep-color)
+      //-   .h-b2 Automatically translate proposals and Projects to your default language
   q-drawer(v-model="right" side="right" :width="$q.screen.gt.lg ? 370 : ($q.screen.md ? 400 : ($q.screen.gt.sm ?  140 : $q.screen.width))" v-if="$q.screen.gt.lg || account || !$q.screen.gt.sm" persistent :show-if-above="false").full-width
     .row.full-width.full-height.flex.items-center.justify-center(v-if="loadingAccount")
       loading-spinner(size="120px")
