@@ -131,7 +131,7 @@
         "description": "在这里您可以配置 DAO 功能。 ",
         "tabs": {
           "types": "类型",
-          "levels": "级别"
+          "tiers": "级别"
         },
         "type": {
           "heading": "您可以在此处通过添加名称和职责集来创建新的角色类型。",

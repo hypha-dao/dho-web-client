@@ -131,7 +131,7 @@
         "description": "Aquí puedes configurar tus funciones DAO. ",
         "tabs": {
           "types": "Tipos",
-          "levels": "Niveles"
+          "tiers": "Niveles"
         },
         "type": {
           "heading": "Aquí puede crear nuevos tipos de roles agregando un nombre y un conjunto de responsabilidades.",

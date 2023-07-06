@@ -128,35 +128,35 @@
     "settings-structure": {
       "roles": {
         "title": "Roles",
-        "description": "Here you can configure your DAO roles. ",
+        "description": "Here you can set up your DAO's roles. These are a set of basic accountabilities that a user role can fulfill. You can think of them as templated job descriptions.",
         "tabs": {
           "types": "Types",
-          "levels": "Levels"
+          "tiers": "Tiers"
         },
         "type": {
-          "heading": "Here you can create new role types by adding a name and set of responsibilities.",
+          "heading": "Here you can create new role types by adding a name and set of accountabilities.",
           "form": {
             "name": {
-              "label": "Role Name",
+              "label": "Role name",
               "placeholder": "Enter a role name"
             },
             "description": {
-              "label": "Job description",
+              "label": "Role description",
               "placeholder": "Enter a role description"
             },
             "cancel": "Cancel",
-            "submit": "Submit"
+            "submit": "Done"
           },
           "nav": {
-            "create": "Create new role"
+            "create": "Create new type"
           }
         },
-        "level": {
-          "heading": "Add what level the role is at in terms of complexity or business contribution.",
+        "tier": {
+          "heading": "Add what tier the role is at with regard to complexity or commercial contribution.",
           "form": {
             "name": {
-              "label": "Level name",
-              "placeholder": "Enter a level name"
+              "label": "Tier name",
+              "placeholder": "Enter a tier name"
             },
             "yearly-reward": {
               "label": "Annual reward",
@@ -169,10 +169,10 @@
               "label": "Postponed Minimum"
             },
             "cancel": "Cancel",
-            "submit": "Concluded"
+            "submit": "Done"
           },
           "nav": {
-            "create": "Create new level"
+            "create": "Create new tier"
           }
         }
       },
@@ -190,7 +190,7 @@
             "placeholder": "Enter a circle description"
           },
           "cancel": "Cancel",
-          "submit": "Submit"
+          "submit": "Done"
         },
         "nav": {
           "create": "Create new circle",
