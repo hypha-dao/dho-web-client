@@ -207,10 +207,6 @@ export default {
       // Everytime tab changes, reset state to WAITING
       this.state = STATES.WAITING
     }
-  },
-
-  updated () {
-    console.log(JSON.stringify(this.state === STATES.CREATING_TIER))
   }
 
 }
