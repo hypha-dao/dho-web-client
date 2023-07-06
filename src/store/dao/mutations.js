@@ -31,9 +31,9 @@ const settingsMapper = (settings) => {
     socialChat: settings?.settings_socialChat_s,
     url: settings?.settings_daoUrl_s,
 
-    membersApplicationEnabled: Boolean(settings?.settings_membersApplicationEnabled_i),
+    membersApplicationEnabled: true, // Boolean(settings?.settings_membersApplicationEnabled_i),
     removableBannersEnabled: Boolean(settings?.settings_removableBannersEnabled_i),
-    registrationEnabled: Boolean(settings?.settings_membersApplicationEnabled_i),
+    registrationEnabled: true, // Boolean(settings?.settings_membersApplicationEnabled_i),
     multisigEnabled: Boolean(settings?.settings_multisigEnabled_i),
     cashClaimsEnabled: settings?.settings_claimEnabled_i,
 
