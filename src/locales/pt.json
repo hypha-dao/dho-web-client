@@ -151,7 +151,7 @@
             "create": "Criar nova função"
           }
         },
-        "level": {
+        "tier": {
           "heading": "Adicione em que nível a função está em termos de complexidade ou contribuição comercial.",
           "form": {
             "name": {

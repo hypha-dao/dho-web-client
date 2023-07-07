@@ -151,7 +151,7 @@
             "create": "Crear nuevo rol"
           }
         },
-        "level": {
+        "tier": {
           "heading": "Agregue en qué nivel se encuentra el rol en términos de complejidad o contribución empresarial.",
           "form": {
             "name": {
