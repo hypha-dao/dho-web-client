@@ -167,6 +167,8 @@ widget(:title="$t('filters.filter-widget.filters')")
     white-space nowrap
     padding-right 10px
     height 30px !important
-    display flex
+    display inline-block
+    padding-top 5px
     align-items center
+    overflow hidden
 </style>
