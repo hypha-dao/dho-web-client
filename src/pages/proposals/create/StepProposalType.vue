@@ -167,6 +167,20 @@ export default {
 
       return false
     }
+  },
+
+  watch: {
+    referenceComponent: {
+      immediate: true,
+      deep: true,
+      async handler (value) {
+        if (value) {
+          setTimeout(() => {
+            document.getElementById('submenu').scrollIntoView({ behavior: 'smooth', block: 'center' })
+          }, 300)
+        }
+      }
+    }
   }
 
 }
@@ -237,8 +251,8 @@ export default {
               .q-pb-md(:class="{ 'col-6 q-px-xs':$q.screen.sm }")
                 button-radio.full-height.q-py-xs.q-px-xs(:description="opts.description" :disable="opts.disable" :icon="opts.icon" :selected="isSelected(opts.key)" :title="opts.title" @click="selectOption(opts.key)" minHeight)
     q-slide-transition
-      .leaf-options(v-if="referenceComponent")
-        component(:is="`options-${referenceComponent}`" :reference="reference" @select="referenceObject" @changeOption="selectOption")
+      #submenu.leaf-options
+        component(v-if="referenceComponent" :is="`options-${referenceComponent}`" :reference="reference" @select="referenceObject" @changeOption="selectOption")
 
 </template>
 
