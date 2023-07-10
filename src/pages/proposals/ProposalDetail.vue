@@ -1,26 +1,852 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
-import { PROPOSAL_STATE, PROPOSAL_TYPE } from '~/const'
+import gql from 'graphql-tag'
 
 import CONFIG from './create/config.js'
-import { calcVoicePercentage } from '~/utils/eosio'
+import { PROPOSAL_STATE, PROPOSAL_TYPE } from '~/const'
+// import { calcVoicePercentage } from '~/utils/eosio'
+
 import { format } from '~/mixins/format'
 import lodash from 'lodash'
 
 // eslint-disable-next-line no-unused-vars
 import * as proposalParsing from '~/utils/proposal-parsing'
+
+const PROPOSAL_QUERY = `
+  getDocument(docId: $docId) {
+    __typename
+    docId
+    creator
+    createdDate
+
+    ... on Poll {
+      ballot_expiration_t
+      docId
+      details_title_s
+      details_description_s
+      details_votingMethod_s
+
+      details_state_s
+      details_ballotQuorum_i
+      details_ballotSupply_a
+      details_ballotAlignment_i
+
+      cmntsect {
+        docId
+
+        comment {
+          id: docId
+          author: comment_author_n
+          content: comment_content_s
+          createdDate
+          deletedStatus: comment_deleted_i
+
+          reactions: reaction {
+            reactionlnkrAggregate {
+              count
+            }
+
+            reactionlnkr {
+              author: details_member_n
+            }
+          }
+
+          commentAggregate {
+            count
+          }
+        }
+      }
+    }
+
+    ... on Budget {
+        ballot_expiration_t
+        details_title_s
+        details_description_s
+        details_state_s
+        details_ballotQuorum_i
+        details_ballotSupply_a
+        details_ballotAlignment_i
+        circle {
+          ... on Circle {
+            id: docId
+            name: details_title_s
+            purpose: details_description_s
+            budget: details_purpose_s
+
+            applicant {
+              username: details_member_n
+            }
+
+            members: member {
+              username: details_member_n
+            }
+
+            subcircles: subcircle {
+              id: docId
+              name: details_title_s
+              purpose: details_description_s
+              budget: details_purpose_s
+            }
+          }
+        }
+        details_pegAmount_a
+        details_voiceAmount_a
+        details_rewardAmount_a
+        creator
+        createdDate
+
+        cmntsect {
+          docId
+
+          comment {
+            id: docId
+            author: comment_author_n
+            content: comment_content_s
+            createdDate
+            deletedStatus: comment_deleted_i
+
+            reactions: reaction {
+              reactionlnkrAggregate {
+                count
+              }
+
+              reactionlnkr {
+                author: details_member_n
+              }
+            }
+
+            commentAggregate {
+              count
+            }
+          }
+        }
+      }
+
+    ... on Queststart {
+      ballot_expiration_t
+
+      details_title_s
+      details_description_s
+
+      details_pegAmount_a
+      details_rewardAmount_a
+      details_voiceAmount_a
+
+      details_state_s
+      details_ballotQuorum_i
+      details_ballotSupply_a
+      details_ballotAlignment_i
+      details_url_s
+
+      lockedby {
+        docId
+      }
+
+      completedby {
+        docId
+      }
+
+      dao {
+        details_daoName_n
+      }
+
+      circles: circle {
+        name: details_title_s
+      }
+
+      cmntsect {
+        docId
+
+        comment {
+          id: docId
+          author: comment_author_n
+          content: comment_content_s
+          createdDate
+          deletedStatus: comment_deleted_i
+
+          reactions: reaction {
+            reactionlnkrAggregate {
+              count
+            }
+
+            reactionlnkr {
+              author: details_member_n
+            }
+          }
+
+          commentAggregate {
+            count
+          }
+        }
+      }
+    }
+
+    ... on Questcomplet {
+      ballot_expiration_t
+
+      details_title_s
+      details_description_s
+
+      details_state_s
+      details_ballotQuorum_i
+      details_ballotSupply_a
+      details_ballotAlignment_i
+
+      queststart {
+        details_title_s
+        system_description_s
+
+        details_pegAmount_a
+        details_rewardAmount_a
+        details_voiceAmount_a
+      }
+
+      dao {
+        details_daoName_n
+      }
+
+      cmntsect {
+        docId
+
+        comment {
+          id: docId
+          author: comment_author_n
+          content: comment_content_s
+          createdDate
+          deletedStatus: comment_deleted_i
+
+          reactions: reaction {
+            reactionlnkrAggregate {
+              count
+            }
+
+            reactionlnkr {
+              author: details_member_n
+            }
+          }
+
+          commentAggregate {
+            count
+          }
+        }
+      }
+    }
+    ... on Policy {
+      ballot_expiration_t
+
+      details_title_s
+      details_description_s
+      details_name_s
+      details_purpose_s
+
+      details_state_s
+      details_ballotQuorum_i
+      details_ballotSupply_a
+      details_ballotAlignment_i
+
+      details_url_s
+
+      parentcircle {
+        ... on Circle {
+          id: docId
+          name: details_title_s
+        }
+      }
+
+      masterpolicy {
+          details_title_s
+        }
+
+      dao {
+        details_daoName_n
+      }
+
+      cmntsect {
+        docId
+
+        comment {
+          id: docId
+          author: comment_author_n
+          content: comment_content_s
+          createdDate
+          deletedStatus: comment_deleted_i
+
+          reactions: reaction {
+            reactionlnkrAggregate {
+              count
+            }
+
+            reactionlnkr {
+              author: details_member_n
+            }
+          }
+
+          commentAggregate {
+            count
+          }
+        }
+      }
+    }
+
+    ... on Circle {
+      ballot_expiration_t
+
+      details_title_s
+      details_description_s
+      details_name_s
+      details_purpose_s
+
+      details_state_s
+      details_ballotQuorum_i
+      details_ballotSupply_a
+      details_ballotAlignment_i
+      
+      parentcircle {
+        ... on Circle {
+          id: docId
+          name: details_title_s
+          purpose: details_description_s
+          budget: details_purpose_s
+
+          applicant {
+            username: details_member_n
+          }
+
+          members: member {
+            username: details_member_n
+          }
+
+          subcircles: subcircle {
+            id: docId
+            name: details_title_s
+            purpose: details_description_s
+            budget: details_purpose_s
+          }
+        }
+      }
+
+      dao {
+        details_daoName_n
+      }
+
+      cmntsect {
+        docId
+
+        comment {
+          id: docId
+          author: comment_author_n
+          content: comment_content_s
+          createdDate
+          deletedStatus: comment_deleted_i
+
+          reactions: reaction {
+            reactionlnkrAggregate {
+              count
+            }
+
+            reactionlnkr {
+              author: details_member_n
+            }
+          }
+
+          commentAggregate {
+            count
+          }
+        }
+      }
+    }
+
+    ... on Payout {
+      ballot_expiration_t
+
+      details_title_s
+      details_description_s
+      details_url_s
+
+      details_usdAmount_a
+      details_deferredPercX100_i
+
+      details_pegAmount_a
+      details_rewardAmount_a
+      details_voiceAmount_a
+
+      details_state_s
+      details_ballotQuorum_i
+      details_ballotSupply_a
+      details_ballotAlignment_i
+      details_isCustom_i
+      details_owner_n
+      details_url_s
+
+      dao {
+        details_daoName_n
+      }
+
+      cmntsect {
+        docId
+
+        comment {
+          id: docId
+          author: comment_author_n
+          content: comment_content_s
+          createdDate
+          deletedStatus: comment_deleted_i
+
+          reactions: reaction {
+            reactionlnkrAggregate {
+              count
+            }
+
+            reactionlnkr {
+              author: details_member_n
+            }
+          }
+
+          commentAggregate {
+            count
+          }
+        }
+      }
+    }
+
+    ... on Edit {
+      ballot_expiration_t
+      details_ballotTitle_s
+      details_ballotDescription_s
+      details_periodCount_i
+      details_state_s
+      details_url_s
+      dao {
+        details_daoName_n
+      }
+      original {
+        __typename
+        ... on Assignment {
+          details_usdSalaryValuePerPhase_a
+          details_ballotQuorum_i
+          details_ballotSupply_a
+          details_ballotAlignment_i
+          details_title_s
+          details_description_s
+          details_assignee_n
+          details_url_s
+          details_periodCount_i
+          start {
+            details_startTime_t
+          }
+          details_pegSalaryPerPeriod_a
+          details_rewardSalaryPerPeriod_a
+          details_voiceSalaryPerPeriod_a
+          details_timeShareX100_i
+          details_deferredPercX100_i
+          details_approvedDeferredPercX100_i
+          lastimeshare {
+            details_timeShareX100_i
+          }
+          details_state_s
+          role {
+            ... on Role {
+              details_title_s
+              details_annualUsdSalary_a
+            }
+          }
+        }
+        ... on Assignbadge {
+          details_ballotQuorum_i
+          details_ballotSupply_a
+          details_ballotAlignment_i
+          details_title_s
+          details_description_s
+          details_assignee_n
+          details_periodCount_i
+          details_state_s
+          creator
+          start {
+            details_startTime_t
+          }
+          badge {
+            details_title_s
+            details_icon_s
+            details_pegCoefficientX10000_i
+            details_voiceCoefficientX10000_i
+            details_rewardCoefficientX10000_i
+          }
+        }
+      }
+      cmntsect {
+        docId
+
+        comment {
+          id: docId
+          author: comment_author_n
+          content: comment_content_s
+          createdDate
+          deletedStatus: comment_deleted_i
+
+          reactions: reaction {
+            reactionlnkrAggregate {
+              count
+            }
+
+            reactionlnkr {
+              author: details_member_n
+            }
+          }
+
+          commentAggregate {
+            count
+          }
+        }
+      }
+    }
+    ... on Assignment {
+      details_usdSalaryValuePerPhase_a
+      ballot_expiration_t
+      details_assignee_n
+
+      details_title_s
+      details_description_s
+
+      details_periodCount_i
+
+      details_ballotQuorum_i
+      details_ballotSupply_a
+      details_ballotAlignment_i
+
+      details_url_s
+      dao {
+        details_daoName_n
+      }
+      start {
+        docId
+        details_label_s
+        details_startTime_t
+      }
+      claimed {
+        docId
+      }
+      details_pegSalaryPerPeriod_a
+      details_rewardSalaryPerPeriod_a
+      details_voiceSalaryPerPeriod_a
+      details_timeShareX100_i
+      details_approvedDeferredPercX100_i
+      lastimeshare {
+        details_timeShareX100_i
+      }
+      details_deferredPercX100_i
+      details_state_s
+      role {
+        ... on Role {
+          type
+          docId
+          details_state_s
+          details_title_s
+          details_description_s
+          details_annualUsdSalary_a
+          details_minDeferredX100_i
+          details_minTimeShareX100_i
+        }
+      }
+
+      cmntsect {
+        docId
+
+        comment {
+          id: docId
+          author: comment_author_n
+          content: comment_content_s
+          createdDate
+          deletedStatus: comment_deleted_i
+
+          reactions: reaction {
+            reactionlnkrAggregate {
+              count
+            }
+
+            reactionlnkr {
+              author: details_member_n
+            }
+          }
+
+          commentAggregate {
+            count
+          }
+        }
+      }
+    }
+
+    ... on Assignbadge {
+      ballot_expiration_t
+
+      details_state_s
+
+      details_title_s
+      details_description_s
+
+      details_periodCount_i
+
+      details_ballotQuorum_i
+      details_ballotSupply_a
+      details_ballotAlignment_i
+      creator
+      start {
+        details_startTime_t
+      }
+      dao {
+        details_daoName_n
+      }
+      badge {
+        ... on Badge {
+          type
+          docId
+          details_state_s
+          details_title_s
+          details_description_s
+
+          details_icon_s
+          details_pegCoefficientX10000_i
+          details_voiceCoefficientX10000_i
+          details_rewardCoefficientX10000_i
+        }
+      }
+
+      details_startPeriod_i
+      details_assignee_n
+
+      cmntsect {
+        docId
+
+        comment {
+          id: docId
+          author: comment_author_n
+          content: comment_content_s
+          createdDate
+          deletedStatus: comment_deleted_i
+
+          reactions: reaction {
+            reactionlnkrAggregate {
+              count
+            }
+
+            reactionlnkr {
+              author: details_member_n
+            }
+          }
+
+          commentAggregate {
+            count
+          }
+        }
+      }
+    }
+
+    ... on Role {
+      ballot_expiration_t
+      details_title_s
+      details_description_s
+
+      details_annualUsdSalary_a
+      details_minDeferredX100_i
+      details_fulltimeCapacityX100_i
+
+      details_state_s
+
+      details_ballotQuorum_i
+      details_ballotSupply_a
+      details_ballotAlignment_i
+
+      details_minTimeShareX100_i
+      details_owner_n
+
+      details_url_s
+      dao {
+        details_daoName_n
+      }
+    }
+
+    ... on Badge {
+      ballot_expiration_t
+      details_title_s
+      details_description_s
+      details_pegCoefficientX10000_i
+      details_voiceCoefficientX10000_i
+      details_rewardCoefficientX10000_i
+      details_icon_s
+      details_state_s
+      details_maxCycles_i
+      details_maxPeriodCount_i
+      details_ballotQuorum_i
+      details_ballotSupply_a
+      details_ballotAlignment_i
+      details_purpose_s
+      system_proposer_n
+      assignment {
+        details_assignee_n
+        dao {
+          details_daoName_n
+        }
+      }
+      dao {
+        details_daoName_n
+      }
+
+      cmntsect {
+        docId
+
+        comment {
+          id: docId
+          author: comment_author_n
+          content: comment_content_s
+          createdDate
+          deletedStatus: comment_deleted_i
+
+          reactions: reaction {
+            reactionlnkrAggregate {
+              count
+            }
+
+            reactionlnkr {
+              author: details_member_n
+            }
+          }
+
+          commentAggregate {
+            count
+          }
+        }
+      }
+    }
+
+    ... on Suspend {
+      details_description_s
+      details_title_s
+      ballot_expiration_t
+      details_originalDocument_i
+      details_state_s
+      details_ballotQuorum_i
+      details_ballotSupply_a
+      details_ballotAlignment_i
+      dao {
+        details_daoName_n
+      }
+      suspend {
+        ... on Role {
+          ballot_expiration_t
+          details_title_s
+          details_description_s
+          details_annualUsdSalary_a
+          details_minDeferredX100_i
+          details_state_s
+        }
+        ... on Badge {
+          ballot_expiration_t
+          details_title_s
+          details_description_s
+          details_pegCoefficientX10000_i
+          details_voiceCoefficientX10000_i
+          details_rewardCoefficientX10000_i
+          details_icon_s
+          details_state_s
+          details_maxCycles_i
+          details_ballotQuorum_i
+          details_ballotSupply_a
+        }
+        ... on Assignbadge {
+          details_description_s
+          details_title_s
+          ballot_expiration_t
+          details_state_s
+          details_periodCount_i
+          creator
+          badge {
+            details_pegCoefficientX10000_i
+            details_voiceCoefficientX10000_i
+            details_rewardCoefficientX10000_i
+          }
+          details_startPeriod_i
+          details_ballotQuorum_i
+          details_ballotSupply_a
+          details_assignee_n
+        }
+        ... on Assignment {
+          ballot_expiration_t
+          details_title_s
+          details_description_s
+          details_assignee_n
+          details_periodCount_i
+          start {
+            details_startTime_t
+          }
+          claimed {
+            docId
+          }
+          details_pegSalaryPerPeriod_a
+          details_rewardSalaryPerPeriod_a
+          details_voiceSalaryPerPeriod_a
+          details_timeShareX100_i
+          lastimeshare {
+            details_timeShareX100_i
+          }
+          details_deferredPercX100_i
+          details_state_s
+          role {
+            ... on Role {
+              details_title_s
+              details_annualUsdSalary_a
+              details_minDeferredX100_i
+            }
+          }
+          details_ballotQuorum_i
+          details_ballotSupply_a
+        }
+      }
+    }
+    ... on Votable {
+      votetally {
+        ... on VoteTally {
+          pass_votePower_a
+          fail_votePower_a
+          abstain_votePower_a
+        }
+      }
+      voteAggregate {
+        count
+      }
+      pass: voteAggregate(filter: { vote_vote_s: { regexp: "/.*pass*./" } }) {
+        count
+      }
+      abstain: voteAggregate(
+        filter: { vote_vote_s: { regexp: "/.*abstain*./" } }
+      ) {
+        count
+      }
+      fail: voteAggregate(filter: { vote_vote_s: { regexp: "/.*fail*./" } }) {
+        count
+      }
+      vote(first: 0, offset: 0, order: { desc: createdDate }) {
+        vote_date_t
+        vote_voter_n
+        vote_vote_s
+        vote_votePower_a
+      }
+    }
+  }
+`
+
 export default {
   name: 'proposal-detail',
   mixins: [format],
   components: {
     CommentsWidget: () => import('~/components/proposals/comments-widget.vue'),
+    LoadingSpinner: () => import('~/components/common/loading-spinner.vue'),
+    ProfilePicture: () => import('~/components/profiles/profile-picture.vue'),
+
     ProposalItem: () => import('~/components/profiles/proposal-item.vue'),
     ProposalView: () => import('~/components/proposals/proposal-view.vue'),
+
     VoterList: () => import('~/components/proposals/voter-list.vue'),
     Voting: () => import('~/components/proposals/voting.vue'),
-    Widget: () => import('~/components/common/widget.vue'),
-    LoadingSpinner: () => import('~/components/common/loading-spinner.vue'),
-    ProfilePicture: () => import('~/components/profiles/profile-picture.vue')
+    Widget: () => import('~/components/common/widget.vue')
   },
 
   props: {
@@ -73,25 +899,16 @@ export default {
         }
       }
     },
+
     proposal: {
-      query: require('~/query/proposals/dao-proposal-detail.gql'),
+      query: gql`query proposalDetail($docId: String!) { ${PROPOSAL_QUERY} }`,
       update: data => data.getDocument,
-      variables () {
-        return {
-          docId: this.docId,
-          first: 0,
-          offset: 0
-        }
-      },
-      fetchPolicy: 'no-cache',
+      skip () { return !this.docId },
+      variables () { return { docId: this.docId } },
       subscribeToMore: {
-        document: require('~/query/proposals/dao-proposal-detail-subs.gql'),
-        variables () {
-          return {
-            docId: this.docId
-          }
-        },
+        document: gql`subscription proposalDetail($docId: String!) { ${PROPOSAL_QUERY} }`,
         skip () { return !this.docId },
+        variables () { return { docId: this.docId } },
         updateQuery: (previousResult, { subscriptionData }) => {
           if (!subscriptionData.data) {
             return previousResult
@@ -99,51 +916,25 @@ export default {
           if (!previousResult) {
             return undefined
           }
-          // Here, return the new result from the previous with the new data
-          return {
-            ...previousResult,
-            ...subscriptionData
-          }
+
+          return subscriptionData.data
         }
+
       },
+
       result (data) {
         if ((data.data.getDocument.dao[0].details_daoName_n !== this.selectedDao.name) && !this.isBadge) {
           this.$router.push({ name: '404-not-found' })
         }
       }
-    },
-    votesList: {
-      query: require('~/query/proposals/dao-proposal-detail.gql'),
-      update (data) {
-        if (!data.getDocument.vote) {
-          this.pagination.more = false
-          return []
-        }
-        if (data.getDocument.vote.length < this.pagination.first) this.pagination.more = false
-        return data.getDocument.vote
-      },
-      variables () {
-        return {
-          docId: this.docId,
-          first: this.pagination.first,
-          offset: 0
-        }
-      },
-      fetchPolicy: 'no-cache'
 
     },
+
     claimPayments: {
       query: require('~/query/quests/dao-quest-complete-info.gql'),
-      update: data => {
-        const completions = data.queryQuestcomplet
-        return completions
-      },
+      update: data => data.queryQuestcomplet,
       skip () { return !this.proposal?.docId },
-      variables () {
-        return {
-          id: this.proposal?.docId
-        }
-      }
+      variables () { return { id: this.proposal?.docId } }
     }
   },
 
@@ -152,7 +943,6 @@ export default {
     // Get global root settings document and get the item 'governance_token_contract'
     // Then search for the actual dao voice token (found in the dao settings document)
     ...mapGetters('accounts', ['account', 'isMember']),
-    ...mapGetters('ballots', ['supply']),
     ...mapGetters('dao', ['daoSettings', 'selectedDao', 'votingPercentages']),
 
     comments () {
@@ -163,6 +953,7 @@ export default {
           users: comment.reactions[0]?.reactionlnkr?.map(_ => _.author)
         }
       })
+
       const comments = this.rootCommentIds.map(id => {
         const comment = this.commentByIds[id]
         return {
@@ -170,6 +961,7 @@ export default {
           replies: comment && comment.replies && comment.replies.map(comment => mapComment(this.commentByIds[comment.id]))
         }
       })
+
       return comments.filter(comment => comment.deletedStatus !== 1)
     },
 
@@ -267,13 +1059,6 @@ export default {
     }
   },
 
-  async created () {
-    if (!this.supply) {
-      this.getSupply()
-    }
-    this.votes = await this.loadVotes(this.votesList)
-  },
-
   watch: {
     proposal () {
       this.proposal.cmntsect[0]?.comment.forEach(comment => {
@@ -282,106 +1067,29 @@ export default {
         this.rootCommentIds.push(comment.id)
       })
       this.optimisticProposal = JSON.parse(JSON.stringify(this.proposal))
-    },
-
-    state: {
-      handler: function (state) {
-        if (state === 'PUBLISHING') {
-          const pull = setInterval(() => {
-            if (this.proposal.details_state_s !== PROPOSAL_STATE.DRAFTED) {
-              this.state = 'PUBLISHED'
-              clearInterval(pull)
-            }
-
-            this.$apollo.queries.proposal.refetch()
-          }, 2000)
-        }
-      },
-      deep: true,
-      immediate: true
-    },
-
-    async votesList () {
-      this.votes = await this.loadVotes(this.votesList)
-    },
-    selectedDao () {
-      this.getSupply()
     }
+
   },
 
   methods: {
-    ...mapActions('ballots', ['getSupply']),
-    ...mapActions('profiles', ['getVoiceToken']),
-    ...mapActions('proposals', ['activeProposal', 'createProposalComment', 'updateProposalComment', 'deleteProposalComment', 'reactProposalComment', 'unreactProposalComment', 'deleteProposal', 'publishProposal', 'saveDraft', 'suspendProposal', 'withdrawProposal', 'createQuestPayout']),
-    ...mapActions('treasury', { getTreasurySupply: 'getSupply' }),
+    ...mapActions('proposals', [
+      'activeProposal',
+      'createProposalComment',
+      'createQuestPayout',
+      'deleteProposal',
+      'deleteProposalComment',
+      'publishProposal',
+      'reactProposalComment',
+      'saveDraft',
+      'suspendProposal',
+      'unreactProposalComment',
+      'updateProposalComment',
+      'withdrawProposal'
+    ]),
 
-    async loadVotes (votes) {
-      if (votes && Array.isArray(votes) && votes.length) {
-        const promises = []
-        const result = []
-        let votePercentages = []
-        this.supplyTokens = await this.getTreasurySupply()
-        if (this.proposal && this.proposal.details_ballotSupply_a) {
-          for (const vote of votes) {
-            const [supplyAmount, token] = this.proposal.details_ballotSupply_a.split(' ')
-            const percentage = calcVoicePercentage(vote.vote_votePower_a.split(' ')[0], supplyAmount)
-            votePercentages.push(`${percentage}% ${token}`)
-          }
-        } else {
-          for (const vote of votes) {
-            promises.push(this.loadVoiceTokenPercentage(vote.vote_voter_n, vote.vote_votePower_a.split(' ')[0]))
-          }
-          votePercentages = await Promise.all(promises)
-        }
-        for (const [i, vote] of votes.entries()) {
-          result.push({
-            date: vote.vote_date_t,
-            username: vote.vote_voter_n,
-            vote: vote.vote_vote_s,
-            strength: vote.vote_votePower_a,
-            percentage: votePercentages[i]
-          })
-        }
-
-        return result
-      }
-
-      return []
-    },
     onVoting () {
-      setTimeout(() => {
-        this.$apollo.queries.proposal.refetch()
-        this.$apollo.queries.votesList.refetch()
-      }, 1000)
     },
-    onLoad () {
-      if (this.pagination.more && this.votes.length < this.voteSize) {
-        this.pagination.offset += this.pagination.first
-        this.$apollo.queries.votesList.fetchMore({
-          variables: {
-            docId: this.docId,
-            first: this.pagination.first,
-            offset: this.pagination.offset
-          },
-          updateQuery: (previousResult, { fetchMoreResult }) => {
-            if (fetchMoreResult.getDocument.vote.length === 0) {
-              this.pagination.more = false
-              return previousResult
-            }
-            const data = {
-              getDocument: {
-                ...previousResult.getDocument,
-                vote: [
-                  ...previousResult.getDocument.vote,
-                  ...fetchMoreResult.getDocument.vote
-                ]
-              }
-            }
-            this.votesList = data.getDocument.vote
-          }
-        })
-      }
-    },
+
     onApply (proposal) {
       if (proposal.__typename === PROPOSAL_TYPE.BADGE) {
         proposal.type = PROPOSAL_TYPE.BADGE
@@ -446,10 +1154,6 @@ export default {
     async onActive (proposal) {
       try {
         await this.activeProposal(proposal.docId)
-        setTimeout(() => {
-          this.$apollo.queries.proposal.refetch()
-          this.$apollo.queries.votesList.refetch()
-        }, 2000)
       } catch (e) {
         const message = e.message || e.cause.message
         this.showNotification({
@@ -461,10 +1165,6 @@ export default {
     async onWithDraw (proposal) {
       try {
         await this.withdrawProposal(proposal.docId)
-        setTimeout(() => {
-          this.$apollo.queries.proposal.refetch()
-          this.$apollo.queries.votesList.refetch()
-        }, 2000)
       } catch (e) {
         const message = e.message || e.cause.message
         this.showNotification({
@@ -617,18 +1317,6 @@ export default {
       }
     },
 
-    async loadVoiceTokenPercentage (username, voice) {
-      const voiceToken = await this.getVoiceToken(username)
-      const supplyHVoice = parseFloat(this.supplyTokens[voiceToken.token])
-      let percentage
-      if (parseFloat(voiceToken.amount) === parseFloat(voice)) {
-        percentage = supplyHVoice ? calcVoicePercentage(parseFloat(voiceToken.amount), supplyHVoice) : '0.0'
-      } else {
-        percentage = supplyHVoice ? calcVoicePercentage(parseFloat(voice), supplyHVoice) : '0.0'
-      }
-
-      return `${percentage}% ${voiceToken.token}`
-    },
     async modifyData (changeToSuspension) {
       this.proposal.toSuspend = changeToSuspension
       await this.$forceUpdate()
@@ -657,10 +1345,6 @@ export default {
           parentId: parentId || this.commentSectionId,
           content
         })
-
-        setTimeout(() => {
-          this.$apollo.queries.proposal.refetch()
-        }, 700)
       } catch (e) {
         const message = e.message || e.cause.message
         this.showNotification({ message, color: 'red' })
@@ -677,9 +1361,6 @@ export default {
     async deleteComment (commentId) {
       try {
         await this.deleteProposalComment(commentId)
-        setTimeout(() => {
-          this.$apollo.queries.proposal.refetch()
-        }, 700)
       } catch (e) {
         const message = e.message || e.cause.message
         this.showNotification({ message, color: 'red' })
@@ -689,9 +1370,6 @@ export default {
     async likeComment (commentId) {
       try {
         await this.reactProposalComment({ commentId, reaction: 'liked' })
-        setTimeout(() => {
-          this.$apollo.queries.proposal.refetch()
-        }, 700)
       } catch (e) {
         const message = e.message || e.cause.message
         this.showNotification({ message, color: 'red' })
@@ -700,9 +1378,6 @@ export default {
     async unlikeComment (commentId) {
       try {
         await this.unreactProposalComment({ commentId })
-        setTimeout(() => {
-          this.$apollo.queries.proposal.refetch()
-        }, 700)
       } catch (e) {
         const message = e.message || e.cause.message
         this.showNotification({ message, color: 'red' })
@@ -735,7 +1410,7 @@ export default {
         loading-spinner(color="primary" size="72px")
       .row(v-else-if="proposal")
         .col-12.col-lg-9
-          proposal-item.bottom-no-rounded(v-if="ownAssignment" background="white" :proposal="proposal" :clickable="ownAssignment" :expandable="true" :owner="true" :moons="true" @claim-all="$emit('claim-all')" @change-deferred="(val) => $emit('change-deferred', val)" :selectedDao="selectedDao" :daoSettings="daoSettings" :supply="supply" :votingPercentages="votingPercentages")
+          proposal-item.bottom-no-rounded(v-if="ownAssignment" background="white" :proposal="proposal" :clickable="ownAssignment" :expandable="true" :owner="true" :moons="true" @claim-all="$emit('claim-all')" @change-deferred="(val) => $emit('change-deferred', val)" :selectedDao="selectedDao" :daoSettings="daoSettings" :votingPercentages="votingPercentages")
           .separator-container(v-if="ownAssignment")
             q-separator(color="grey-3" inset)
           proposal-view(:proposal="optimisticProposal ? optimisticProposal : proposal" :ownAssignment="ownAssignment" :class="{'top-no-rounded': ownAssignment}" :withToggle="toggle(proposal)" :created="proposalParsing.created(proposal)" :restrictions="proposalParsing.restrictions(proposal)" :status="proposalParsing.status(proposal)" :docId="proposalParsing.docId(proposal)" :creator="proposalParsing.creator(proposal)" :capacity="proposalParsing.capacity(proposal)" :deferred="proposalParsing.deferred(proposal)" :description="proposalParsing.description(proposal)" :periodCount="proposalParsing.periodCount(proposal)" :salary="proposalParsing.salary(proposal)" :start="proposalParsing.start(proposal)" :subtitle="!ownAssignment ? proposalParsing.subtitle(proposal) : undefined" :title="!ownAssignment ? proposalParsing.title(proposal) : undefined" :type="proposal.__typename === 'Suspend' ? proposal.suspend[0].__typename : proposal.__typename" :url="proposalParsing.url(proposal)" :icon="proposalParsing.icon(proposal)" :commit="proposalParsing.commit(optimisticProposal ? optimisticProposal : proposal)" :compensation="proposalParsing.compensation(optimisticProposal ? optimisticProposal : proposal, daoSettings)" :tokens="proposalParsing.tokens(optimisticProposal ? optimisticProposal : proposal, periodsOnCycle, daoSettings, isDefaultBadgeMultiplier)" :isBadge="isBadge" :pastQuorum="proposalParsing.pastQuorum(proposal)" :pastUnity="proposalParsing.pastUnity(proposal)" :votingMethod="proposalParsing.votingMethod(proposal)" :parentCircle="proposalParsing.parentCircle(proposal)" @change-deferred="onDeferredUpdate" @change-commit="onCommitUpdate")
@@ -754,8 +1429,17 @@ export default {
             h2.h-h4.text-white.leading-normal.q-ma-none {{ $t('pages.proposals.proposaldetail.deleting') }}
             p.h-b2.q-mt-xl.text-disabled {{ $t('pages.proposals.proposaldetail.pleaseWait1') }}
           div(v-else-if="proposalParsing.status(proposal) !== PROPOSAL_STATE.DRAFTED")
-            voting.q-mb-sm(v-if="$q.screen.gt.md" @voting="onVoting" @on-apply="onApply(proposal)" @on-suspend="onSuspend(proposal)" @on-active="onActive(proposal)" @change-prop="modifyData" @on-withdraw="onWithDraw(proposal)" :activeButtons="isMember")
-            voter-list.q-my-md(:votes="votes" @onload="onLoad" :size="voteSize")
+            voting.q-mb-sm(
+              v-if="$q.screen.gt.md"
+              @voting="onVoting"
+              @on-apply="onApply(proposal)"
+              @on-suspend="onSuspend(proposal)"
+              @on-active="onActive(proposal)"
+              @change-prop="modifyData"
+              @on-withdraw="onWithDraw(proposal)"
+              :activeButtons="isMember"
+            )
+            voter-list.q-my-md(:proposalId="docId")
         widget.full-width(:style="{ 'margin-top': '-40px'}" v-if="isBadge && proposalParsing.status(proposal) !== PROPOSAL_STATE.DRAFTED" :title="$t('pages.proposals.proposaldetail.badgeHolders')")
           template(v-if="paginatedHolders.length")
             template(v-for="holderName in paginatedHolders")
@@ -774,7 +1458,17 @@ export default {
     loading-spinner(color="primary" size="72px")
   .row(v-else-if="proposal")
     .col-12.col-sm-9
-      proposal-item.bottom-no-rounded(v-if="ownAssignment" background="white" :proposal="proposal" :clickable="ownAssignment" :expandable="true" :owner="true" :moons="true" @claim-all="$emit('claim-all')" @change-deferred="(val) => $emit('change-deferred', val)" :selectedDao="selectedDao" :daoSettings="daoSettings" :supply="supply" :votingPercentages="votingPercentages")
+      proposal-item.bottom-no-rounded(
+        :clickable="ownAssignment"
+        :expandable="true"
+        :moons="true"
+        :owner="true"
+        :proposal="proposal"
+        @change-deferred="(val) => $emit('change-deferred', val)"
+        @claim-all="$emit('claim-all')"
+        background="white"
+        v-if="ownAssignment"
+      )
       .separator-container(v-if="ownAssignment")
         q-separator(color="grey-3" inset)
       proposal-view(:proposal="optimisticProposal ? optimisticProposal : proposal" :ownAssignment="ownAssignment" :class="{'top-no-rounded': ownAssignment}" :withToggle="toggle(proposal)" :created="proposalParsing.created(proposal)" :restrictions="proposalParsing.restrictions(proposal)" :status="proposalParsing.status(proposal)" :docId="proposalParsing.docId(proposal)" :creator="proposalParsing.creator(proposal)" :capacity="proposalParsing.capacity(proposal)" :deferred="proposalParsing.deferred(proposal)" :description="proposalParsing.description(proposal)" :periodCount="proposalParsing.periodCount(proposal)" :salary="proposalParsing.salary(proposal)" :start="proposalParsing.start(proposal)" :subtitle="!ownAssignment ? proposalParsing.subtitle(proposal) : undefined" :title="!ownAssignment ? proposalParsing.title(proposal) : undefined" :type="proposal.__typename === 'Suspend' ? proposal.suspend[0].__typename : proposal.__typename" :url="proposalParsing.url(proposal)" :icon="proposalParsing.icon(proposal)" :commit="proposalParsing.commit(optimisticProposal ? optimisticProposal : proposal)" :compensation="proposalParsing.compensation(optimisticProposal ? optimisticProposal : proposal, daoSettings)" :tokens="proposalParsing.tokens(optimisticProposal ? optimisticProposal : proposal, periodsOnCycle, daoSettings, isDefaultBadgeMultiplier)" :isBadge="isBadge" :pastQuorum="proposalParsing.pastQuorum(proposal)" :pastUnity="proposalParsing.pastUnity(proposal)" :purpose="proposalParsing.purpose(proposal)" :votingMethod="proposalParsing.votingMethod(proposal)" :parentCircle="proposalParsing.parentCircle(proposal)" @change-deferred="onDeferredUpdate" @change-commit="onCommitUpdate")
@@ -796,8 +1490,20 @@ export default {
         h2.h-h4.text-white.leading-normal.q-ma-none {{ $t('pages.proposals.proposaldetail.deleting1') }}
         p.h-b2.q-mt-xl.text-disabled {{ $t('pages.proposals.proposaldetail.pleaseWait3') }}
       div(v-else-if="(proposalParsing.status(proposal) !== PROPOSAL_STATE.DRAFTED) && !hideVoting")
-        voting.q-mb-sm(v-if="$q.screen.gt.sm" :proposal="proposal" :isCreator="isCreator" @on-edit="onEdit(proposal)" @voting="onVoting" @on-apply="onApply(proposal)" @on-suspend="onSuspend(proposal)" @on-active="onActive(proposal)" @change-prop="modifyData" @on-withdraw="onWithDraw(proposal)" :activeButtons="isMember")
-        voter-list.q-my-md(:votes="votes" @onload="onLoad" :size="voteSize")
+        voting.q-mb-sm(
+          :activeButtons="isMember"
+          :isCreator="isCreator"
+          :proposal="proposal"
+          @change-prop="modifyData"
+          @on-active="onActive(proposal)"
+          @on-apply="onApply(proposal)"
+          @on-edit="onEdit(proposal)"
+          @on-suspend="onSuspend(proposal)"
+          @on-withdraw="onWithDraw(proposal)"
+          @voting="onVoting"
+          v-if="$q.screen.gt.sm"
+        )
+        voter-list.q-my-md(:proposalId="docId")
       widget(v-if="isBadge && proposalParsing.status(proposal) !== PROPOSAL_STATE.DRAFTED" :title="$t('pages.proposals.proposaldetail.badgeHolders1')")
         template(v-if="paginatedHolders.length")
           template(v-for="holder in paginatedHolders")
