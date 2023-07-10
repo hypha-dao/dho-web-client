@@ -44,7 +44,7 @@ export default {
       key: 'title',
       label: I18n.t('proposal-creation.title'),
       type: 'string',
-      placeholder: I18n.t('proposal.creation.typeTheTitleOfYourProposal')
+      placeholder: I18n.t('proposal-creation.typeTheTitleOfYourProposal')
     },
     description: {
       key: 'description',
