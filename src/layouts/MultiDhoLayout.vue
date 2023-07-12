@@ -3,6 +3,27 @@ import { mapActions, mapGetters, mapMutations } from 'vuex'
 import BrowserIpfs from '~/ipfs/browser-ipfs.js'
 import I18n from '~/utils/i18n'
 import { date } from 'quasar'
+import gql from 'graphql-tag'
+
+const NOTIFICATIONS_QUERY = `
+  queryNotification {
+    event{
+      eventType
+      name
+      id
+    }
+    user{
+      name
+      id
+      email
+      eosAccountName
+    }
+    read
+    time
+    content
+    id
+  }
+`
 export default {
   name: 'multi-dho-layout',
   components: {
@@ -40,6 +61,38 @@ export default {
       },
       skip () {
         return !this.account
+      }
+    },
+    notifications: {
+      query: gql`query notifications { ${NOTIFICATIONS_QUERY} }`,
+      update: data => {
+        return data.queryNotification
+      },
+      variables () {
+        return {
+          account: this.account
+        }
+      },
+      skip () {
+        return !this.account
+      },
+      subscribeToMore: {
+        query: gql`subscription notifications { ${NOTIFICATIONS_QUERY} }`,
+        skip () { return !this.account },
+        variables () { return { account: this.account } },
+        updateQuery: (previousResult, { subscriptionData }) => {
+          console.log(previousResult, subscriptionData)
+          if (!subscriptionData.data) {
+            return previousResult
+          }
+          if (!previousResult) {
+            return undefined
+          }
+          return subscriptionData.data
+        }
+      },
+      result (res) {
+        this.initNotifications()
       }
     }
   },
@@ -98,65 +151,6 @@ export default {
         }
       ],
       showNotificationsBar: false,
-      notifications: [ // Dummy
-        {
-          user: 'accountname',
-          notification: 'newcomment',
-          createdDate: '2023-01-17T16:45:30',
-          id: 0
-        },
-        {
-          user: 'accountname',
-          notification: 'proposalvotingexpire',
-          createdDate: '2023-05-17T16:45:30',
-          content: {
-            days: 3
-          },
-          id: 1
-        },
-        {
-          user: 'accountname',
-          notification: 'proposalpassed',
-          createdDate: '2023-06-17T16:45:30',
-          id: 2
-        },
-        {
-          user: 'accountname',
-          notification: 'proposalrejected',
-          createdDate: '2023-06-12T16:45:30',
-          id: 3
-        },
-        {
-          user: 'accountname',
-          notification: 'claimableperiod',
-          createdDate: '2023-06-12T16:45:30',
-          content: {
-            periods: 1
-          },
-          id: 4
-        },
-        {
-          user: 'accountname',
-          notification: 'extendyourassignment',
-          createdDate: '2023-05-17T16:45:30',
-          content: {
-            days: 6
-          },
-          id: 5
-        },
-        {
-          user: 'accountname',
-          notification: 'assignmentapproved',
-          createdDate: '2023-06-12T16:45:30',
-          id: 6
-        },
-        {
-          user: 'accountname',
-          notification: 'assignmentrejected',
-          createdDate: '2023-06-12T16:45:30',
-          id: 7
-        }
-      ],
       localNotifications: []
     }
   },
@@ -386,15 +380,14 @@ export default {
     },
 
     timeago (createdDate) {
-      const TODAY = new Date()
-      const created = new Date(createdDate)
-
-      const second = date.getDateDiff(TODAY, created, 'seconds')
-      const minute = date.getDateDiff(TODAY, created, 'minutes')
-      const hour = date.getDateDiff(TODAY, created, 'hours')
-      const day = date.getDateDiff(TODAY, created, 'days')
-      const month = date.getDateDiff(TODAY, created, 'months')
-      const year = date.getDateDiff(TODAY, created, 'years')
+      const TODAY = new Date().toUTCString()
+      const created = new Date(createdDate).toUTCString()
+      const second = date.getDateDiff(created, TODAY, 'seconds')
+      const minute = date.getDateDiff(created, TODAY, 'minutes')
+      const hour = date.getDateDiff(created, TODAY, 'hours')
+      const day = date.getDateDiff(created, TODAY, 'days')
+      const month = date.getDateDiff(created, TODAY, 'months')
+      const year = date.getDateDiff(created, TODAY, 'years')
       if (year > 0) {
         if (month < 12) {
           return `${month} month${month > 1 ? 's' : ''} ago`
@@ -402,7 +395,6 @@ export default {
           return `${year} year${year > 1 ? 's' : ''} ago`
         }
       }
-
       if (month > 0) return `${month} month${month > 1 ? 's' : ''} ago`
       if (day > 0) return `${day} day${day > 1 ? 's' : ''} ago`
       if (hour > 0) return `${hour} hour${hour > 1 ? 's' : ''} ago`
@@ -416,47 +408,52 @@ export default {
       let icon = null
       let title = null
       let description = null
-      const createdDate = this.timeago(notification.createdDate)
-      switch (notification.notification) {
-        case ('newcomment'):
+      const createdDate = this.timeago(notification.time)
+      switch (notification.event.name) {
+        case ('notification.test'):
+          icon = require('~/assets/icons/notifications/newcomment.png')
+          title = notification.content
+          description = notification.content
+          break
+        case ('proposals.comment'):
           icon = require('~/assets/icons/notifications/newcomment.png')
           title = I18n.t('notifications.newComment')
           description = I18n.t('notifications.hasJustLeftAComment', { accountname: notification.user })
           break
-        case ('proposalvotingexpire'):
+        case ('proposals.voting_expiry'):
           icon = require('~/assets/icons/notifications/voting-expire.png')
           title = I18n.t('notifications.proposalVotingExpire')
           description = I18n.t('notifications.proposalIsExpiring', { accountname: notification.user, days: notification.content?.days })
           break
-        case ('proposalpassed'):
-          icon = require('~/assets/icons/notifications/proposal-passed.png')
-          title = I18n.t('notifications.proposalPassed')
-          description = I18n.t('notifications.proposalHasPassed', { accountname: notification.user })
-          break
-        case ('proposalrejected'):
-          icon = require('~/assets/icons/notifications/proposal-rejected.png')
-          title = I18n.t('notifications.proposalRejected')
-          description = I18n.t('notifications.proposalHasntPassed', { accountname: notification.user })
-          break
-        case ('claimableperiod'):
+        // case ('proposalpassed'):
+        //   icon = require('~/assets/icons/notifications/proposal-passed.png')
+        //   title = I18n.t('notifications.proposalPassed')
+        //   description = I18n.t('notifications.proposalHasPassed', { accountname: notification.user })
+        //   break
+        // case ('proposalrejected'):
+        //   icon = require('~/assets/icons/notifications/proposal-rejected.png')
+        //   title = I18n.t('notifications.proposalRejected')
+        //   description = I18n.t('notifications.proposalHasntPassed', { accountname: notification.user })
+        //   break
+        case ('system.claimable_period'):
           icon = require('~/assets/icons/notifications/claimable-period.png')
           title = I18n.t('notifications.claimablePeriod')
           description = I18n.t('notifications.youHaveClaimablePeriod', { value: notification.content?.periods })
           break
-        case ('extendyourassignment'):
+        case ('assignment.extension_expiry'):
           icon = require('~/assets/icons/notifications/extend-assignment.png')
           title = I18n.t('notifications.extendYourAssignment')
           description = I18n.t('notifications.youStillHave', { days: notification.content?.days })
           break
-        case ('assignmentapproved'):
+        case ('assignment.approved'):
           icon = require('~/assets/icons/notifications/assignment-approved.png')
           title = I18n.t('notifications.assignmentApproved')
           description = I18n.t('notifications.yourAssignmentHasBeenApproved')
           break
-        case ('assignmentrejected'):
-          icon = require('~/assets/icons/notifications/assignment-rejected.png')
-          title = I18n.t('notifications.assignmentRejected')
-          description = I18n.t('notifications.yourAssignmentHasntBeenApproved')
+        // case ('assignmentrejected'):
+        //   icon = require('~/assets/icons/notifications/assignment-rejected.png')
+        //   title = I18n.t('notifications.assignmentRejected')
+        //   description = I18n.t('notifications.yourAssignmentHasntBeenApproved')
       }
       return {
         icon: icon,
@@ -518,7 +515,7 @@ export default {
     }
   },
   created () {
-    this.initNotifications()
+    // this.initNotifications()
   }
 }
 </script>
@@ -647,7 +644,7 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
           .h-h3.items-center.flex {{ $t('notifications.notifications')}}
           q-btn(color="internal-bg" text-color="primary" rounded unelevated size="sm" padding="12px" icon="fas fa-times" :style="{ 'height': '40px' }" @click="showNotificationsBar = false")
         .q-mt-md.full-width(:style="{ 'position': 'relative' }")
-          .col(v-for="notification, index in localNotifications" :key="notification.notification")
+          .col(v-for="notification, index in localNotifications" :key="notification.id")
             .row.q-py-md(v-on:mouseover="readNotification(notification.id)" :style="{ 'border-top': '1px solid #CBCDD1' }" :class="{ 'last-item': index === notifications.length - 1, 'read-notify': notification.showed === true }")
               .col-2.items-center.flex
                 div.flex.items-center.justify-center(:style="{ 'width': '40px', 'height': '40px', 'border-radius': '50%', 'background': '#F2F1F3'}")
