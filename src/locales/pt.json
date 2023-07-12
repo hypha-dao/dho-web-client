@@ -1429,7 +1429,8 @@
           },
           "chooseARoleArchetype": "Escolha um arquétipo de papel\n        ",
           "noArchetypesExistYet": "Ainda não existem arquétipos.",
-          "pleaseCreateThemHere": "Por favor, crie-os aqui."
+          "pleaseCreateThemHere": "Por favor, crie-os aqui.",
+          "chooseARoleTier": "Escolha um nível de função"
         },
         "optionsassignments": {
           "chooseARecent": "Escolha uma atribuição recente para calcular um pagamento de ponte"

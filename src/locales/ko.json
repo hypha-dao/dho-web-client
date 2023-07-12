@@ -1429,7 +1429,8 @@
           },
           "chooseARoleArchetype": "역할 원형 선택\n        ",
           "noArchetypesExistYet": "아직 원형이 없습니다.",
-          "pleaseCreateThemHere": "여기에서 생성하십시오."
+          "pleaseCreateThemHere": "여기에서 생성하십시오.",
+          "chooseARoleTier": "역할 등급 선택"
         },
         "optionsassignments": {
           "chooseARecent": "브리지 지불금을 계산하려면 최근 할당을 선택하십시오."
