@@ -127,11 +127,11 @@
     },
     "settings-structure": {
       "roles": {
-        "title": "Roles",
-        "description": "Here you can set up your DAO's roles. These are a set of basic accountabilities that a user role can fulfill. You can think of them as templated job descriptions.",
+        "title": "Role Types",
+        "description": "Here you can set up your DAO's role types. These are a set of basic accountabilities that a user role can fulfill. You can think of them as templated job descriptions.",
         "tabs": {
           "types": "Types",
-          "tiers": "Tiers"
+          "tiers": "Tier Reward"
         },
         "type": {
           "heading": "Here you can create new role types by adding a name and set of accountabilities.",
@@ -152,7 +152,7 @@
           }
         },
         "tier": {
-          "heading": "Add what tier the role is at with regard to complexity or commercial contribution.",
+          "heading": "Add a tier for this role type. This will show the level of commercial contribution or complexity it merits",
           "form": {
             "name": {
               "label": "Tier name",
@@ -201,7 +201,7 @@
     "settings-voting": {
       "core": {
         "title": "Core Team voting methods",
-        "description": "Every DAO can shape its own voting system, allowing key team members to make collective decisions. ",
+        "description": "Proposals must meet the criteria for the percentage of required voice (unity) and the percentage of required participants (quorum).",
         "form": {
           "unity": {
             "label": "Unity (% of required voice)"
@@ -492,12 +492,12 @@
       "creatingANewRole": "Creating a new role?",
       "creatingABadge": "Creating a badge?",
       "launchingAQuest": "Launching a quest?",
-      "youNeedTo": "You need to both pass quorum (min % of total members participating in the vote) and unity (min % of members endorsing it). Try to find the right level of support before proposing!",
-      "createAGeneric": "Create a generic contribution proposal with a descriptive title and clear definition of the policy along with steps to implement the policy..",
+      "youNeedTo": "You need to both pass percentage of required participants (min % of total members participating in the vote) and percentage of required voice (min % of members endorsing it). Try to find the right level of support before proposing!",
+      "createAGeneric": "Create a contribution proposal with a descriptive title and clear definition of the policy along with steps to implement the policy..",
       "createARecurring": "Create a recurring activity for an existing role-assignment and describe why you are a good match with as many details as possible.",
-      "createAProposal": "Create a proposal for an organization asset and pick role-archetype with a descriptive name and clear definition of the role with accountabilities.",
+      "createAProposal": "Create a proposal for an organization asset and pick a role type with a descriptive name and clear definition of the role accountabilities.",
       "createAProposal1": "Create a proposal for an organization asset and pick a badge-type with a name and clear recognition of learning or unlocking achievement or confirming a status level.",
-      "createAGeneric1": "Create a generic contribution proposal with a descriptive title and clear breakdown of milestones and payouts per milestone along a timeline."
+      "createAGeneric1": "Create a contribution proposal with a descriptive title and clear breakdown of milestones and payouts per milestone along a timeline."
     },
     "news-item": {
       "posted": "posted {1}"
@@ -792,7 +792,7 @@
   },
   "organization": {
     "archetypes-widget": {
-      "archetypes": "Archetypes"
+      "archetypes": "Role Types"
     },
     "badge-assignments-widget": {
       "badgeAssignments": "Badge assignments"
@@ -823,7 +823,7 @@
     },
     "payout-card": " 150 ? '...' : '')}}",
     "payouts-widget": {
-      "passedGenericContributions": "Passed Generic Contributions"
+      "passedGenericContributions": "Passed Contributions"
     },
     "policies-widget": {
       "policies": "Policies",
@@ -836,7 +836,7 @@
     "tokens": {
       "seeMore": "See more",
       "seeMore1": "See more",
-      "issuance": "Issuance"
+      "issuance": "Tokens Issued"
     }
   },
   "plan": {
@@ -1020,7 +1020,7 @@
       "payout": "Payout",
       "circle": "Circle",
       "policy": "Policy",
-      "genericContribution": "Generic Contribution",
+      "genericContribution": "Contribution",
       "role": "Role",
       "assignment": "Assignment",
       "extension": "Extension",
@@ -1052,7 +1052,8 @@
       "minDeferredAmount": "Min deferred amount",
       "roleCapacity": "Role capacity",
       "compensation": "Compensation",
-      "showCompensationFor": "Show compensation for one period",
+      "compensation1": "Reward",
+      "showCompensationFor": "Show reward for one period",
       "deferredAmount1": "Deferred amount",
       "parentCircle": "Parent circle",
       "parentCircle1": "Parent circle",
@@ -1419,7 +1420,7 @@
     "proposals": {
       "create": {
         "optionsarchetypes": {
-          "chooseARoleArchetype": "Choose a role archetype\n        ",
+          "chooseARoleArchetype": "Choose a role type\n        ",
           "noArchetypesExistYet": "No archetypes exist yet.",
           "pleaseCreateThemHere": "Please create them here."
         },
@@ -1484,17 +1485,20 @@
         },
         "steppayout": {
           "payout": "Payout",
-          "pleaseEnterTheUsd": "Please enter the USD equivalent and % deferral for this contribution – the more you defer to a later date, the higher the bonus will be (see actual salary calculation below or use our calculator). The bottom fields compute the actual payout in SEEDS, HVOICE, HYPHA and HUSD.",
+          "pleaseEnterTheUSDEquivalentAnd1": "Please enter the USD equivalent and % deferral for this contribution – the more you defer to a later date, the higher the bonus will be (see actual salary calculation below or use our calculator). The bottom fields compute the actual payout in SEEDS, HVOICE, HYPHA and HUSD.",
+          "pleaseEnterTheUsd": "Please enter the HUSD amount (i.e. USD equivalent) for your reward. You can use the slider to select the reward percentage you will be deferring.",
           "typeTheAmountOfUsd": "Type the amount of HUSD",
           "commitmentMustBeGreater": "Commitment must be greater than or equal to the role configuration. Role value for min commitment is",
           "defferedMustBeGreater": "Deferred must be greater than or equal to the role configuration. Role value for min deferred is",
           "salaryCompensationForOneYear": "Salary compensation for one year ( ${value} )",
           "salaryCompensationForOneYearUsd": "Salary compensation for one year ( ${value} ) USD",
-          "compensation": "Compensation",
-          "pleaseEnterTheUSD": "Please enter the USD equivalent and % deferral for this contribution – the more you defer to a later date, the higher the bonus will be (see actual salary calculation below or use our calculator). The bottom fields compute the actual payout in SEEDS, HVOICE, HYPHA and HUSD.",
-          "compensationForOnePeriod": "Compensation for one period",
-          "compensationForOneCycle": "Compensation for one cycle",
-          "customCompensation": "Custom compensation"
+          "compensation": "Calculation",
+          "compensation1": "Reward",
+          "pleaseEnterTheUSD": "Please enter the HUSD amount (i.e. USD equivalent) for your reward. You can use the slider to select the reward percentage you will be deferring.",
+          "belowYouCanSeeTheActual": "Below you can see the actual breakdown of the reward in HVOICE, HYPHA and HUSD",
+          "compensationForOnePeriod": "Reward for one period",
+          "compensationForOneCycle": "Reward for one cycle",
+          "customCompensation": "Custom Reward"
         }
       },
       "proposallist": {
@@ -1512,8 +1516,8 @@
         "proposalHistory": "Proposal history",
         "lookingToMonitor": "Looking to monitor how old proposals went? click here to check all proposal history",
         "seeHistory": "See history >",
-        "isTheMinimumRequiredPercentageOfMembers": "Is the minimum required percentage of members endorsing a proposal for it to pass.",
-        "isTheMinimumRequiredPercentageOfTotal": "Is the minimum required percentage of total members participating in the vote for it to pass. ",
+        "isTheMinimumRequiredPercentageOfMembers": "Percentage of required voice for a proposal to pass.",
+        "isTheMinimumRequiredPercentageOfTotal": "Percentage of required participants for a vote.",
         "searchProposals": "Search proposals",
         "proposalTypes": "Proposal types",
         "sortByLastAdded": "Sort by last added"
@@ -1684,7 +1688,7 @@
     "circle": "Circle",
     "budget": "Budget",
     "policy": "Policy",
-    "genericcontributions": "Generic Contributions",
+    "genericcontributions": "Contributions",
     "suspension": "Suspension"
   },
   "routes": {
@@ -1756,8 +1760,9 @@
     "utilityCoefficient": "Utility Coefficient",
     "cashCoefficient": "Cash Coefficient",
     "payout": "Payout",
-    "compensation": "Compensation",
-    "pleaseEnterTheUSDEquivalentAnd": "Please enter the USD equivalent and % deferral for this contribution – the more you defer to a later date, the higher the bonus will be (see actual salary calculation below or use our calculator). The bottom fields compute the actual payout in SEEDS, HVOICE, HYPHA and HUSD.",
+    "compensation": "Calculation",
+    "pleaseEnterTheUSDEquivalentAnd": "Please enter the HUSD amount (i.e. USD equivalent) for your reward. You can use the slider to select the reward percentage you will be deferring.",
+    "belowYouCanSeeTheActual": "Below you can see the actual breakdown of the reward in HVOICE, HYPHA and HUSD",
     "typeThePayoutTitle": "Type the payout title",
     "typeThePayoutDescription": "Type the payout description",
     "attachments": "Attachments",
@@ -1777,10 +1782,10 @@
     "contribution" : "Contribution",
     "shareTheDetailsOfYoutContribution": "Share the details of your Contribution by following the policies of this organization. If you don't know, ask an older member for help.",
     "describeYourProposal": "Describe your proposal",
-    "chooseYourPayout": "Choose your payout",
+    "chooseYourPayout": "Choose your reward",
     "documentation": "Documentation",
     "quest": "Quest",
-    "aQuestIsA2Step": "A Quest is a 2 step proposal. The first step allows DAO members to approve the project. After the project’s completion, you can trigger “quest completion” and request the payout in the second step.",
+    "aQuestIsA2Step": "A Quest is a 2 step proposal. The first step allows DAO members to approve the project. After the project’s completion, you can trigger “quest completion” and request the reward in the second step.",
     "createNewQuest": "Create new quest",
     "typeTheQuestName": "Type the quest name",
     "describeYourQuest": "Describe your quest",
@@ -1791,7 +1796,7 @@
     "selectPreviousQuest": "Select previous quest",
     "createNewPoll": "Create new poll",
     "role": "Role",
-    "applyBySelectingARoleArchetype": "Apply by selecting a role archetype (template) and a salary band. Add more details, like a matching profile, time frame, OKRs or commitment levels.",
+    "applyBySelectingARoleArchetype": "Apply by selecting a role type and tier to show its level. Add more details, like a matching profile, time frame, OKRs or commitment levels.",
     "applyForTheRole": "Apply for the role",
     "name": "Name",
     "typeTheRoleName": "Type the role name",
@@ -1847,7 +1852,7 @@
       "resultsTypes": "Results types",
       "all": "All",
       "members": "Members",
-      "genericContribution": "Generic Contribution",
+      "genericContribution": "Contribution",
       "roleAssignments": "Role Assignments",
       "roleArchetypes": "Role Archetypes",
       "badgeTypes": "Badge Types",
@@ -1870,7 +1875,7 @@
         "archived": "Archived",
         "withdrawn": "Withdrawn",
         "applicant": "Applicant",
-        "genericContribution": "Generic Contribution",
+        "genericContribution": "Contribution",
         "extension": "Extension",
         "roleAssignment": "Role Assignment",
         "badgeAssignment": "Badge Assignment",
