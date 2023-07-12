@@ -1419,6 +1419,14 @@
     "proposals": {
       "create": {
         "optionsarchetypes": {
+          "form":{
+            "archetype": {
+              "label":"유형 선택"
+            },
+            "tier": {
+              "label": "등급 선택"
+            }
+          },
           "chooseARoleArchetype": "역할 원형 선택\n        ",
           "noArchetypesExistYet": "아직 원형이 없습니다.",
           "pleaseCreateThemHere": "여기에서 생성하십시오."

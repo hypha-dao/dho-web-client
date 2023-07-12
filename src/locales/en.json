@@ -1420,6 +1420,14 @@
     "proposals": {
       "create": {
         "optionsarchetypes": {
+          "form":{
+            "archetype": {
+              "label":"Select type"
+            },
+            "tier": {
+              "label": "Select tier"
+            }
+          },
           "chooseARoleArchetype": "Choose a role type\n        ",
           "noArchetypesExistYet": "No archetypes exist yet.",
           "pleaseCreateThemHere": "Please create them here."
