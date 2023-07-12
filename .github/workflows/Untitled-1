@@ -1,0 +1,46 @@
+aws cloudfront create-distribution \
+    --origin-domain-name ${{ env.BRANCH_NAME }}.s3.amazonaws.com \
+    --distribution-config '{
+        "CallerReference": "${{ env.BRANCH_NAME }}-hypha-dho",
+        "Aliases": {
+            "Quantity": 1,
+            "Items": ["${{ env.BRANCH_NAME }}.dev-services.hypha.earth"]
+        },
+        "DefaultRootObject": "index.html",
+        "Origins": {
+            "Quantity": 1,
+            "Items": [
+                {
+                    "Id": "myS3Origin",
+                    "DomainName": "${{ env.BRANCH_NAME }}.s3.amazonaws.com",
+                    "S3OriginConfig": {
+                        "OriginAccessIdentity": "origin-access-identity/cloudfront/E127EXAMPLE"
+                    }
+                }
+            ]
+        },
+        "DefaultCacheBehavior": {
+            "TargetOriginId": "myS3Origin",
+            "ViewerProtocolPolicy": "redirect-to-https",
+            "TrustedSigners": {
+                "Enabled": false,
+                "Quantity": 0
+            },
+            "ForwardedValues": {
+                "QueryString": false,
+                "Cookies": {
+                    "Forward": "none"
+                }
+            },
+            "MinTTL": 0,
+            "MaxTTL": 31536000,
+            "DefaultTTL": 86400
+        },
+        "Comment": "Hypha DHO instance deployed automatically on a push to ${{ env.BRANCH_NAME }}",
+        "PriceClass": "PriceClass_100",
+        "Enabled": true,
+        "ViewerCertificate": {
+            "CloudFrontDefaultCertificate": true
+        }
+      }'
+    --default-root-object index.html
