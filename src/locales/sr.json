@@ -1418,6 +1418,14 @@
     "proposals": {
       "create": {
         "optionsarchetypes": {
+          "form":{
+            "archetype": {
+              "label":"Изаберите тип"
+            },
+            "tier": {
+              "label": "Изаберите ниво"
+            }
+          },
           "chooseARoleArchetype": "Изаберите архетип улоге\n        ",
           "noArchetypesExistYet": "Архетипови још не постоје.",
           "pleaseCreateThemHere": "Направите их овде."

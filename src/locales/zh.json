@@ -1418,6 +1418,14 @@
     "proposals": {
       "create": {
         "optionsarchetypes": {
+          "form":{
+            "archetype": {
+              "label":"选择类型"
+            },
+            "tier": {
+              "label": "选择等级"
+            }
+          },
           "chooseARoleArchetype": "选择角色原型\n        ",
           "noArchetypesExistYet": "目前还没有原型存在。",
           "pleaseCreateThemHere": "请在此处创建它们。"

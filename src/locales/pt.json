@@ -1418,6 +1418,14 @@
     "proposals": {
       "create": {
         "optionsarchetypes": {
+          "form":{
+            "archetype": {
+              "label":"Selecione o tipo"
+            },
+            "tier": {
+              "label": "Selecione o nível"
+            }
+          },
           "chooseARoleArchetype": "Escolha um arquétipo de papel\n        ",
           "noArchetypesExistYet": "Ainda não existem arquétipos.",
           "pleaseCreateThemHere": "Por favor, crie-os aqui."
