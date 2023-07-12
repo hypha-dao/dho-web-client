@@ -1429,7 +1429,8 @@
           },
           "chooseARoleArchetype": "选择角色原型\n        ",
           "noArchetypesExistYet": "目前还没有原型存在。",
-          "pleaseCreateThemHere": "请在此处创建它们。"
+          "pleaseCreateThemHere": "请在此处创建它们。",
+          "chooseARoleTier": "选择角色等级"
         },
         "optionsassignments": {
           "chooseARecent": "选择最近的任务来计算桥梁支出"

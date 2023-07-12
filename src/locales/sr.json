@@ -1429,7 +1429,8 @@
           },
           "chooseARoleArchetype": "Изаберите архетип улоге\n        ",
           "noArchetypesExistYet": "Архетипови још не постоје.",
-          "pleaseCreateThemHere": "Направите их овде."
+          "pleaseCreateThemHere": "Направите их овде.",
+          "chooseARoleTier": "Изаберите ниво улоге"
         },
         "optionsassignments": {
           "chooseARecent": "Изаберите недавни задатак да бисте израчунали исплату за премошћивање"

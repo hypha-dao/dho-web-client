@@ -1429,7 +1429,8 @@
           },
           "chooseARoleArchetype": "Elige un arquetipo de rol\n        ",
           "noArchetypesExistYet": "No existen arquetipos todavía.",
-          "pleaseCreateThemHere": "Por favor, créelos aquí."
+          "pleaseCreateThemHere": "Por favor, créelos aquí.",
+          "chooseARoleTier": "Elija un nivel de rol"
         },
         "optionsassignments": {
           "chooseARecent": "Elija una asignación reciente para calcular un pago puente"

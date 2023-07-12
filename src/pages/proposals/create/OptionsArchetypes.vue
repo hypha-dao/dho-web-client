@@ -140,7 +140,7 @@ export default {
             .h-h4.q-pt-xl {{ $t('pages.proposals.create.optionsarchetypes.chooseARoleArchetype') }}
             q-select.q-mt-xs(:options="archetypes" dense dropdown-icon="fas fa-chevron-down" hide-bottom-space options-dense outlined rounded v-model="archetype")
           .col-6.q-pl-xxs
-            .h-h4.q-pt-xl {{ $t('pages.proposals.create.optionsarchetypes.chooseARoleArchetype') }}
+            .h-h4.q-pt-xl {{ $t('pages.proposals.create.optionsarchetypes.chooseARoleTier') }}
             q-select.q-mt-xs(:options="tiers" dense dropdown-icon="fas fa-chevron-down" hide-bottom-space options-dense outlined rounded v-model="tier")
     .row.justify-center(v-else)
       .q-py-sm.q-mt-sm.text-center.full-width {{ $t('pages.proposals.create.optionsarchetypes.noArchetypesExistYet') }}

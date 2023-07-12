@@ -1428,9 +1428,10 @@
               "label": "Select tier"
             }
           },
-          "chooseARoleArchetype": "Choose a role type\n        ",
+          "chooseARoleArchetype": "Choose a role type",
           "noArchetypesExistYet": "No archetypes exist yet.",
-          "pleaseCreateThemHere": "Please create them here."
+          "pleaseCreateThemHere": "Please create them here.",
+          "chooseARoleTier": "Choose a role tier"
         },
         "optionsassignments": {
           "chooseARecent": "Choose a recent assignment to calculate a bridge payout"
