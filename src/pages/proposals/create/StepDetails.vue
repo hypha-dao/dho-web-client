@@ -21,7 +21,8 @@ export default {
     IpfsImageViewer: () => import('~/components/ipfs/ipfs-image-viewer.vue'),
     IpfsFileViewer: () => import('~/components/ipfs/ipfs-file-viewer.vue'),
     Widget: () => import('~/components/common/widget.vue'),
-    LoadingSpinner: () => import('~/components/common/loading-spinner.vue')
+    LoadingSpinner: () => import('~/components/common/loading-spinner.vue'),
+    CreationStepper: () => import('~/components/proposals/creation-stepper.vue')
   },
 
   props: {
@@ -224,7 +225,17 @@ widget
   nav.q-mt-xl.row.justify-end.q-gutter-xs(v-if="$q.screen.gt.md")
     q-btn.q-px-xl(@click="$emit('prev')" color="primary" flat :label="$t('pages.proposals.create.stepdetails.back')" no-caps outline rounded v-if="!disablePrevButton")
     q-btn.q-px-xl(:disable="canGoNext" @click="onNext" color="primary" :label="$t('pages.proposals.create.stepdetails.nextStep')" no-caps rounded unelevated)
-
+  template(v-if="$q.screen.lt.md || $q.screen.md")
+    q-card(:style="'border-radius: 25px; box-shadow: none; z-index: 7000; position: fixed; bottom: -20px; left: 0; right: 0; box-shadow: 0px 0px 26px 0px rgba(0, 0, 41, 0.2);'")
+      creation-stepper(
+        :activeStepIndex="stepIndex"
+        :steps="steps"
+        :nextDisabled="canGoNext"
+        @publish="$emit('publish')"
+        @save="$emit('save')"
+        @next="$emit('next')"
+      )
+</template>
 </template>
 
 <style lang="stylus" scoped>
