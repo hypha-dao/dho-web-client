@@ -250,6 +250,11 @@ export default {
               label: I18n.t('proposal-creation.chooseYourPayout'),
               description: I18n.t('proposal-creation.pleaseEnterTheUSDEquivalentAnd')
             },
+            circle: {
+              key: 'circle',
+              label: I18n.t('proposal-creation.circle'),
+              placeholder: I18n.t('proposal-creation.selectACircleFromTheList')
+            },
             url: {
               key: 'url',
               label: I18n.t('proposal-creation.documentation'),
@@ -384,20 +389,66 @@ export default {
             }
           }
         },
-        poll: {
-          optionType: 'one-time',
-          disable: false,
-          key: 'poll',
-          icon: 'fas fa-bars',
-          type: 'Poll',
-          title: I18n.t('proposal-creation.poll'),
-          description: I18n.t('proposal-creation.pollOrSenseCheckWithCommunityMembers'),
-          options: '',
+        // TODO: Return after beta
+        // poll: {
+        //   optionType: 'one-time',
+        //   disable: false,
+        //   key: 'poll',
+        //   icon: 'fas fa-bars',
+        //   type: 'Poll',
+        //   title: I18n.t('proposal-creation.poll'),
+        //   description: I18n.t('proposal-creation.pollOrSenseCheckWithCommunityMembers'),
+        //   options: '',
+        //   steps: {
+        //     icon: {
+        //       skip: true
+        //     },
+        //     date: {
+        //       skip: true
+        //     },
+        //     compensation: {
+        //       skip: true
+        //     }
+        //   },
+        //   fields: {
+        //     stepDescriptionTitle: {
+        //       label: I18n.t('proposal-creation.createNewPoll')
+        //     },
+        //     title: {
+        //       key: 'title',
+        //       label: I18n.t('proposal-creation.title'),
+        //       type: 'String',
+        //       placeholder: I18n.t('proposal-creation.useThisFieldToDetailTheContentOfYourPoll')
+        //     },
+        //     description: {
+        //       key: 'description',
+        //       label: I18n.t('proposal-creation.content'),
+        //       type: 'markdown',
+        //       placeholder: I18n.t('proposal-creation.useThisFieldToDetailTheContentOfYourPoll')
+        //     },
+        //     votingMethod: {
+        //       label: I18n.t('proposal-creation.votingMethod'),
+        //       placeholder: I18n.t('proposal-creation.selectVotingMethod'),
+        //       description: ''
+        //     },
+        //     url: {
+        //       key: 'url',
+        //       label: I18n.t('proposal-creation.attachments'),
+        //       type: 'string',
+        //       placeholder: I18n.t('proposal-creation.clickToAddFile')
+        //     }
+        //   }
+        // },
+        badge: {
+          optionType: 'recurring',
+          key: 'badge',
+          type: 'Assignment Badge',
+          icon: 'fas fa-award',
+          title: I18n.t('proposal-creation.badge'),
+          description: I18n.t('proposal-creation.findHereAvailableBadges'),
+          options: 'badges',
           steps: {
             icon: {
-              skip: true
-            },
-            date: {
               skip: true
             },
             compensation: {
@@ -406,33 +457,37 @@ export default {
           },
           fields: {
             stepDescriptionTitle: {
-              label: I18n.t('proposal-creation.createNewPoll')
+              label: I18n.t('proposal-creation.applyForTheNewAbility')
             },
             title: {
               key: 'title',
-              label: I18n.t('proposal-creation.title'),
-              type: 'String',
-              placeholder: I18n.t('proposal-creation.useThisFieldToDetailTheContentOfYourPoll')
+              label: I18n.t('proposal-creation.name'),
+              placeholder: I18n.t('proposal-creation.typeTheAbilityName'),
+              type: 'string'
             },
             description: {
               key: 'description',
-              label: I18n.t('proposal-creation.content'),
-              type: 'markdown',
-              placeholder: I18n.t('proposal-creation.useThisFieldToDetailTheContentOfYourPoll')
+              label: I18n.t('proposal-creation.description'),
+              placeholder: I18n.t('proposal-creation.tellOtherMembersThereReasons'),
+              type: 'markdown'
             },
-            votingMethod: {
-              label: I18n.t('proposal-creation.votingMethod'),
-              placeholder: I18n.t('proposal-creation.selectVotingMethod'),
-              description: ''
+            circle: {
+              key: 'circle',
+              label: I18n.t('proposal-creation.circle'),
+              placeholder: I18n.t('proposal-creation.selectACircleFromTheList')
             },
             url: {
               key: 'url',
               label: I18n.t('proposal-creation.attachments'),
               type: 'string',
               placeholder: I18n.t('proposal-creation.clickToAddFile')
+            },
+            stepDurationTitle: {
+              label: I18n.t('proposal-creation.duration')
             }
           }
         },
+
         assignment: {
           optionType: 'recurring',
           key: 'assignment',
@@ -507,153 +562,7 @@ export default {
             }
           }
         },
-        badge: {
-          optionType: 'recurring',
-          key: 'badge',
-          type: 'Assignment Badge',
-          icon: 'fas fa-award',
-          title: I18n.t('proposal-creation.badge'),
-          description: I18n.t('proposal-creation.findHereAvailableBadges'),
-          options: 'badges',
-          steps: {
-            icon: {
-              skip: true
-            },
-            compensation: {
-              skip: true
-            }
-          },
-          fields: {
-            stepDescriptionTitle: {
-              label: I18n.t('proposal-creation.applyForTheNewAbility')
-            },
-            title: {
-              key: 'title',
-              label: I18n.t('proposal-creation.name'),
-              placeholder: I18n.t('proposal-creation.typeTheAbilityName'),
-              type: 'string'
-            },
-            description: {
-              key: 'description',
-              label: I18n.t('proposal-creation.description'),
-              placeholder: I18n.t('proposal-creation.tellOtherMembersThereReasons'),
-              type: 'markdown'
-            },
-            circle: {
-              key: 'circle',
-              label: I18n.t('proposal-creation.circle'),
-              placeholder: I18n.t('proposal-creation.selectACircleFromTheList')
-            },
-            url: {
-              key: 'url',
-              label: I18n.t('proposal-creation.attachments'),
-              type: 'string',
-              placeholder: I18n.t('proposal-creation.clickToAddFile')
-            },
-            stepDurationTitle: {
-              label: I18n.t('proposal-creation.duration')
-            }
-          }
-        },
-        archetype: {
-          optionType: 'org-assets',
-          key: 'archetype',
-          icon: 'far fa-user',
-          type: 'Role',
-          title: I18n.t('proposal-creation.role'),
-          options: '',
-          description: I18n.t('proposal-creation.theseAreBasicAccountAbilities'),
-          steps: {
-            date: {
-              skip: true
-            },
-            icon: {
-              skip: true
-            }
-          },
-          fields: {
-            stepDescriptionTitle: {
-              label: I18n.t('proposal-creation.createNewArchetype')
-            },
-            title: {
-              key: 'title',
-              label: I18n.t('proposal-creation.name'),
-              type: 'string',
-              placeholder: I18n.t('proposal-creation.typeTheArchetypeName')
-            },
-            description: {
-              key: 'description',
-              label: I18n.t('proposal-creation.description'),
-              type: 'markdown',
-              placeholder: I18n.t('proposal-creation.typeTheArchetypeDescription')
-            },
-            stepCompensationTitle: {
-              label: I18n.t('proposal-creation.manageYourSalary')
-            },
-            annualUsdSalary: {
-              key: 'annualUsdSalary',
-              label: I18n.t('proposal-creation.chooseTheSalaryBand'),
-              type: 'select',
-              options: [
-                {
-                  label: 'B1 - $70000/year',
-                  value: 70000
-                },
-                {
-                  label: 'B2 - $90000/year',
-                  value: 90000
-                },
-                {
-                  label: 'B3 - $110000/year',
-                  value: 110000
-                },
-                {
-                  label: 'B4 - $130000/year',
-                  value: 130000
-                },
-                {
-                  label: 'B5 - $150000/year',
-                  value: 150000
-                },
-                {
-                  label: 'B6 - $170000/year',
-                  value: 170000
-                },
-                {
-                  label: 'B7 - $190000/year',
-                  value: 190000
-                }
-              ]
-            },
-            roleCapacity: {
-              key: 'roleCapacity',
-              type: 'number',
-              label: I18n.t('proposal-creation.enterTheRoleCapacity'),
-              tooltip: I18n.t('proposal-creation.maximumNumberOfPeopleForThisRole')
-            },
-            minDeferred: {
-              key: 'minDeferred',
-              type: 'percent',
-              label: I18n.t('proposal-creation.chooseTheMinimumDeferredAmount'),
-              tooltip: I18n.t('proposal-creation.minimumRequiredPayedOutAsUtilityToken')
-            },
-            peg: {
-              key: 'peg',
-              label: I18n.t('proposal-creation.cashToken'),
-              type: 'asset'
-            },
-            reward: {
-              key: 'reward',
-              label: I18n.t('proposal-creation.utilityToken'),
-              type: 'asset'
-            },
-            voice: {
-              key: 'voice',
-              label: I18n.t('proposal-creation.voiceToken'),
-              type: 'asset'
-            }
-          }
-        },
+
         obadge: {
           optionType: 'org-assets',
           key: 'obadge',
@@ -710,122 +619,82 @@ export default {
             }
           }
         },
-        circle: {
-          optionType: 'org-assets',
-          key: 'circle',
-          icon: 'fas fa-circle',
-          type: 'Circle',
-          title: I18n.t('proposal-creation.circle'),
-          options: '',
-          description: I18n.t('proposal-creation.circleDefineTheDAOsBoundaries'),
-          steps: {
-            date: {
-              skip: true
-            },
-            icon: {
-              skip: true
-            },
-            compensation: {
-              skip: true
-            }
-          },
-          fields: {
-            stepDescriptionTitle: {
-              label: I18n.t('proposal-creation.createNewCircle')
-            },
-            title: {
-              key: 'title',
-              label: I18n.t('proposal-creation.name'),
-              type: 'string',
-              placeholder: I18n.t('proposal-creation.typeTheCircleName')
-            },
-            description: {
-              key: 'description',
-              label: I18n.t('proposal-creation.purpose'),
-              type: 'number',
-              placeholder: I18n.t('proposal-creation.typeTheCircleBudget')
-            },
-            circle: {
-              label: I18n.t('proposal-creation.parentCircle'),
-              placeholder: I18n.t('proposal-creation.selectTheCircleParent')
-            }
-          }
-        },
-        budget: {
-          optionType: 'org-assets',
-          disable: false,
-          key: 'budget',
-          type: 'Budget',
-          icon: 'fa fa-hand-holding-usd',
-          title: I18n.t('proposal-creation.budget'),
-          description: I18n.t('proposal-creation.requestBudgetAllocation'),
-          options: '',
-          steps: {
-            icon: {
-              skip: true
-            },
-            date: {
-              skip: true
-            }
-          },
-          fields: {
-            stepDescriptionTitle: {
-              label: I18n.t('proposal-creation.createNewBudget')
-            },
-            title: {
-              key: 'title',
-              label: I18n.t('proposal-creation.title'),
-              type: 'string',
-              placeholder: I18n.t('proposal-creation.typeTheBudgetName')
-            },
-            description: {
-              key: 'description',
-              label: I18n.t('proposal-creation.description'),
-              type: 'markdown',
-              placeholder: I18n.t('proposal-creation.typeHereTheContentOfYourBadge')
-            },
-            circle: {
-              label: I18n.t('proposal-creation.circle'),
-              placeholder: I18n.t('proposal-creation.selectACircleFromTheList')
-            },
-            url: {
-              key: 'url',
-              label: I18n.t('proposal-creation.attachments'),
-              type: 'string',
-              placeholder: I18n.t('proposal-creation.clickToAddFile')
-            },
-            usdAmount: {
-              key: 'usdAmount',
-              label: I18n.t('proposal-creation.totalUSDEquivalent'),
-              type: 'asset'
-            },
-            deferred: {
-              key: 'deferred',
-              label: I18n.t('proposal-creation.chooseTheDeferredAmount'),
-              type: 'percent'
-            },
-            custom: {
-              key: 'custom',
-              label: I18n.t('proposal-creation.customCompensation'),
-              type: 'bool'
-            },
-            peg: {
-              key: 'peg',
-              label: I18n.t('proposal-creation.cashToken'),
-              type: 'asset'
-            },
-            reward: {
-              key: 'reward',
-              label: I18n.t('proposal-creation.utilityToken'),
-              type: 'asset'
-            },
-            voice: {
-              key: 'voice',
-              label: I18n.t('proposal-creation.voiceToken'),
-              type: 'asset'
-            }
-          }
-        },
+        // TODO: Return after beta
+        // budget: {
+        //   optionType: 'org-assets',
+        //   disable: false,
+        //   key: 'budget',
+        //   type: 'Budget',
+        //   icon: 'fa fa-hand-holding-usd',
+        //   title: I18n.t('proposal-creation.budget'),
+        //   description: I18n.t('proposal-creation.requestBudgetAllocation'),
+        //   options: '',
+        //   steps: {
+        //     icon: {
+        //       skip: true
+        //     },
+        //     date: {
+        //       skip: true
+        //     }
+        //   },
+        //   fields: {
+        //     stepDescriptionTitle: {
+        //       label: I18n.t('proposal-creation.createNewBudget')
+        //     },
+        //     title: {
+        //       key: 'title',
+        //       label: I18n.t('proposal-creation.title'),
+        //       type: 'string',
+        //       placeholder: I18n.t('proposal-creation.typeTheBudgetName')
+        //     },
+        //     description: {
+        //       key: 'description',
+        //       label: I18n.t('proposal-creation.description'),
+        //       type: 'markdown',
+        //       placeholder: I18n.t('proposal-creation.typeHereTheContentOfYourBadge')
+        //     },
+        //     circle: {
+        //       label: I18n.t('proposal-creation.circle'),
+        //       placeholder: I18n.t('proposal-creation.selectACircleFromTheList')
+        //     },
+        //     url: {
+        //       key: 'url',
+        //       label: I18n.t('proposal-creation.attachments'),
+        //       type: 'string',
+        //       placeholder: I18n.t('proposal-creation.clickToAddFile')
+        //     },
+        //     usdAmount: {
+        //       key: 'usdAmount',
+        //       label: I18n.t('proposal-creation.totalUSDEquivalent'),
+        //       type: 'asset'
+        //     },
+        //     deferred: {
+        //       key: 'deferred',
+        //       label: I18n.t('proposal-creation.chooseTheDeferredAmount'),
+        //       type: 'percent'
+        //     },
+        //     custom: {
+        //       key: 'custom',
+        //       label: I18n.t('proposal-creation.customCompensation'),
+        //       type: 'bool'
+        //     },
+        //     peg: {
+        //       key: 'peg',
+        //       label: I18n.t('proposal-creation.cashToken'),
+        //       type: 'asset'
+        //     },
+        //     reward: {
+        //       key: 'reward',
+        //       label: I18n.t('proposal-creation.utilityToken'),
+        //       type: 'asset'
+        //     },
+        //     voice: {
+        //       key: 'voice',
+        //       label: I18n.t('proposal-creation.voiceToken'),
+        //       type: 'asset'
+        //     }
+        //   }
+        // },
         policy: {
           optionType: 'org-assets',
           key: 'policy',

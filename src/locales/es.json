@@ -1052,6 +1052,7 @@
       "minDeferredAmount": "Importe mínimo diferido",
       "roleCapacity": "Capacidad de rol",
       "compensation": "Compensación",
+      "compensation1": "Premio",
       "showCompensationFor": "Mostrar compensación por un período",
       "deferredAmount1": "monto diferido",
       "parentCircle": "Círculo de padres",
@@ -1490,6 +1491,7 @@
           "nextStep": "Próximo paso"
         },
         "steppayout": {
+          "pleaseEnterTheUSDEquivalentAnd1": "Ingrese el equivalente en USD y el % de aplazamiento para esta contribución: cuanto más aplace a una fecha posterior, mayor será la bonificación (consulte el cálculo del salario real a continuación o use nuestra calculadora). Los campos inferiores calculan el pago real en SEEDS, HVOICE, HYPHA y HUSD.",
           "payout": "Pagar",
           "pleaseEnterTheUsd": "Ingrese el equivalente en USD y el % de aplazamiento para esta contribución: cuanto más aplace a una fecha posterior, mayor será la bonificación (consulte el cálculo del salario real a continuación o use nuestra calculadora). ",
           "typeTheAmountOfUsd": "Escriba la cantidad de HUSD",
@@ -1498,6 +1500,8 @@
           "salaryCompensationForOneYear": "Compensación de salario por un año (${value})",
           "salaryCompensationForOneYearUsd": "Compensación de salario por un año ( ${value} ) USD",
           "compensation": "Compensación",
+          "compensation1": "Premio",
+          "belowYouCanSeeTheActual": "A continuación puede ver el desglose real de la recompensa en HVOICE, HYPHA y HUSD",
           "pleaseEnterTheUSD": "Ingrese el equivalente en USD y el % de aplazamiento para esta contribución: cuanto más aplace a una fecha posterior, mayor será la bonificación (consulte el cálculo del salario real a continuación o use nuestra calculadora). ",
           "compensationForOnePeriod": "Compensación por un período",
           "compensationForOneCycle": "Compensación por un ciclo",

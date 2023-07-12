@@ -742,9 +742,6 @@ q-page.page-treasury
                           q-item-section
                             q-item-label TRX
                               | {{ i + 1}}
-      .row.q-mt-md.text-no-wrap
-        .text-italic.h-b2.text-bold {{ $t('pages.dho.treasury.realTokenConversion') }}
-        .text-italic.h-b2 {{ $t('pages.dho.treasury.hereYouSeeTheConversion') }}
     .col-3
       widget.q-mb-md(v-if="tab === MULTISIG_TABS.READY" :title="$t('pages.dho.treasury.executeMultisigTransaction')")
         .row.q-mt-sm
@@ -791,9 +788,6 @@ q-page.page-treasury
           q-btn.round-circle(@click="onPrev()" :disable="pagination.page === 1" round unelevated icon="fas fa-chevron-left" color="inherit" text-color="primary" size="sm" :ripple="false")
           span {{  getPaginationText }}
           q-btn.round-circle(@click="onNext()" :disable="isLastPage" round unelevated icon="fas fa-chevron-right" color="inherit" text-color="primary" size="sm" :ripple="false")
-    .row.q-mt-md
-      .text-italic.h-b2.text-bold {{ $t('pages.dho.treasury.realTokenConversion') }}
-      .text-italic.h-b2 {{ $t('pages.dho.treasury.hereYouSeeTheConversion') }}
     filter-open-button(@open="mobileFilterOpen = true")
     filter-widget-mobile(v-show="mobileFilterOpen" @close="mobileFilterOpen = false" :circle.sync="circle" :circleArray.sync="circleArray" :optionArray.sync="optionArray" :showCircle="true" :showToggle="true" :showViewSelector="false" :sort.sync="sort" :textFilter.sync="search" :toggle.sync="filter" :toggleLabel="$t('pages.dho.treasury.showCompletedTransactions')")
 

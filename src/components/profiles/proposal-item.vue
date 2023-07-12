@@ -61,9 +61,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters('dao', ['selectedDao', 'daoSettings']),
-    ...mapGetters('ballots', ['supply']),
-    ...mapGetters('dao', ['votingPercentages']),
+    ...mapGetters('dao', ['daoSettings']),
     claims () {
       if (this?.periods) {
         return this.periods.reduce((result, p) => {
