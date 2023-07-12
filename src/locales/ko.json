@@ -1052,6 +1052,7 @@
       "minDeferredAmount": "최소 이연 금액",
       "roleCapacity": "역할 용량",
       "compensation": "보상",
+      "compensation1": "보상",
       "showCompensationFor": "한 기간 동안 보상 표시",
       "deferredAmount1": "후불 금액",
       "parentCircle": "학부모 서클",
@@ -1482,6 +1483,7 @@
           "nextStep": "다음 단계"
         },
         "steppayout": {
+          "pleaseEnterTheUSDEquivalentAnd1": "이 기여금에 대한 USD 등가물과 % 연기금을 입력하십시오. 나중에 더 많이 연기할수록 보너스가 더 높아집니다(아래 실제 급여 계산 참조 또는 계산기 사용). 하단 필드는 SEEDS, HVOICE, HYPHA 및 HUSD의 실제 지불금을 계산합니다.",
           "payout": "지불금",
           "pleaseEnterTheUsd": "이 기여금에 대한 USD 등가물과 % 연기금을 입력하십시오. 나중에 더 많이 연기할수록 보너스가 더 높아집니다(아래 실제 급여 계산 참조 또는 계산기 사용). ",
           "typeTheAmountOfUsd": "HUSD 금액 입력",
@@ -1490,6 +1492,8 @@
           "salaryCompensationForOneYear": "1년간 급여 보상 ( ${value} )",
           "salaryCompensationForOneYearUsd": "1년간 급여 보상 ( ${value} ) USD",
           "compensation": "보상",
+          "compensation1": "보상",
+          "belowYouCanSeeTheActual": "아래에서 HVOICE, HYPHA 및 HUSD 보상의 실제 내역을 확인할 수 있습니다.",
           "pleaseEnterTheUSD": "이 기여금에 대한 USD 등가물과 % 연기금을 입력하십시오. 나중에 더 많이 연기할수록 보너스가 더 높아집니다(아래 실제 급여 계산 참조 또는 계산기 사용). ",
           "compensationForOnePeriod": "한 기간 동안의 보상",
           "compensationForOneCycle": "1주기 보상",
