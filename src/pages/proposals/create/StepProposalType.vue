@@ -12,7 +12,8 @@ export default {
     OptionsDrafts: () => import('./OptionsDrafts.vue'),
     OptionsQuests: () => import('./OptionsQuests.vue'),
     OptionsPolicies: () => import('./OptionsPolicies.vue'),
-    Widget: () => import('~/components/common/widget.vue')
+    Widget: () => import('~/components/common/widget.vue'),
+    CreationStepper: () => import('~/components/proposals/creation-stepper.vue')
   },
 
   props: {
@@ -253,7 +254,16 @@ export default {
     q-slide-transition
       #submenu.leaf-options
         component(v-if="referenceComponent" :is="`options-${referenceComponent}`" :reference="reference" @select="referenceObject" @changeOption="selectOption")
-
+    template(v-if="$q.screen.lt.md || $q.screen.md")
+      q-card(:style="'border-radius: 25px; box-shadow: none; z-index: 7000; position: fixed; bottom: -20px; left: 0; right: 0; box-shadow: 0px 0px 26px 0px rgba(0, 0, 41, 0.2);'")
+        creation-stepper(
+          :activeStepIndex="stepIndex"
+          :steps="steps"
+          :nextDisabled="nextDisabled"
+          @publish="$emit('publish')"
+          @save="$emit('save')"
+          @next="$emit('next')"
+        )
 </template>
 
 <style lang="stylus" scoped>
