@@ -106,7 +106,7 @@ export default {
 
     tiers: {
       query: gql`query TIERS($daoId: Int64!) { ${TIERS_QUERY} }`,
-      update: data => [], // data.querySalaryband,
+      update: data => data.querySalaryband,
       skip () { return !this.selectedDao?.docId },
       variables () { return { daoId: this.selectedDao.docId } },
       subscribeToMore: {
