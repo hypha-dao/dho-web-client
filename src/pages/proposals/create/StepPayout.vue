@@ -1,6 +1,8 @@
 <script>
 import { mapGetters } from 'vuex'
 import { validation } from '~/mixins/validation'
+import { PROPOSAL_TYPE } from '~/const'
+
 export default {
   name: 'step-payout',
   mixins: [validation],
@@ -8,7 +10,8 @@ export default {
     InfoTooltip: () => import('~/components/common/info-tooltip.vue'),
     PayoutAmounts: () => import('~/components/common/payout-amounts.vue'),
     TokenLogo: () => import('~/components/common/token-logo.vue'),
-    Widget: () => import('~/components/common/widget.vue')
+    Widget: () => import('~/components/common/widget.vue'),
+    CreationStepper: () => import('~/components/proposals/creation-stepper.vue')
   },
 
   props: {
@@ -21,12 +24,13 @@ export default {
 
   data () {
     return {
-      // custom: false,
-      salaryOption: null,
+      PROPOSAL_TYPE,
+
+      cycleDurationSec: 2629800,
       firstPaintCommitment: true,
       firstPaintDeferred: true,
-      toggle: false,
-      cycleDurationSec: 2629800
+      salaryOption: null,
+      toggle: false
     }
   },
 
@@ -260,13 +264,13 @@ export default {
       return (this.cycleDurationSec / this.daoSettings.periodDurationSec).toFixed(2)
     },
     cashToken () {
-      return (this.peg / this.periodsOnCycle).toFixed(2)
+      return !this.toggle ? this.peg : (this.peg / this.periodsOnCycle).toFixed(2)
     },
     utilityToken () {
-      return (this.reward / this.periodsOnCycle).toFixed(2)
+      return !this.toggle ? this.reward : (this.reward / this.periodsOnCycle).toFixed(2)
     },
     voiceToken () {
-      return (this.voice / this.periodsOnCycle).toFixed(2)
+      return !this.toggle ? this.voice : (this.voice / this.periodsOnCycle).toFixed(2)
     },
     isAssignment () {
       const proposalType = this.$store.state.proposals.draft.category.key
@@ -388,8 +392,10 @@ widget(:class="{ 'disable-step': currentStepName !== 'step-payout' && $q.screen.
     label.h-label(v-if="$store.state.proposals.draft.annualUsdSalary.toString().includes('USD')") {{ $t('pages.proposals.create.steppayout.salaryCompensationForOneYear', { value: $store.state.proposals.draft.annualUsdSalary }) }}
     label.h-label(v-else) {{ $t('pages.proposals.create.steppayout.salaryCompensationForOneYearUsd', { value: $store.state.proposals.draft.annualUsdSalary }) }}
   .row.q-mt-xxxl(v-if="$q.screen.gt.md")
-    label.h-h4 {{ $t('pages.proposals.create.steppayout.compensation') }}
-    .text-body2.text-grey-7.q-my-md {{ $t('pages.proposals.create.steppayout.pleaseEnterTheUSD') }}
+    label.h-h4(v-if="$store.state.proposals.draft.type === PROPOSAL_TYPE.ROLE") {{ $t('pages.proposals.create.steppayout.compensation1') }}
+    label.h-h4(v-else) {{ $t('pages.proposals.create.steppayout.compensation') }}
+    .text-body2.text-grey-7.q-my-md.full-width(v-if="$store.state.proposals.draft.type === PROPOSAL_TYPE.ROLE") {{ $t('pages.proposals.create.steppayout.pleaseEnterTheUSDEquivalentAnd1') }}
+    .text-body2.text-grey-7.q-my-md.full-width(v-else) {{ $t('pages.proposals.create.steppayout.belowYouCanSeeTheActual') }}
   .row(v-if="isAssignment")
     label.text-bold {{ toggle ? $t('pages.proposals.create.steppayout.compensationForOnePeriod') : $t('pages.proposals.create.steppayout.compensationForOneCycle') }}
   .q-col-gutter-xs.q-mt-sm(:class="{ 'q-mt-xxl':$q.screen.lt.md || $q.screen.md, 'row':$q.screen.gt.md }")
@@ -397,19 +403,19 @@ widget(:class="{ 'disable-step': currentStepName !== 'step-payout' && $q.screen.
       label.h-label {{ `${fields.reward.label} (${$store.state.dao.settings.rewardToken})` }}
       .row.full-width.items-center.q-mt-xs
         token-logo.q-mr-xs(size="40px" type="utility" :daoLogo="daoSettings.logo")
-        q-input.rounded-border.col(dense :readonly="!custom" outlined v-model="!toggle ? reward : utilityToken" rounded v-if="isAssignment")
+        q-input.rounded-border.col(dense :readonly="!custom" outlined v-model="utilityToken" rounded v-if="isAssignment")
         q-input.rounded-border.col(dense :readonly="!custom" outlined v-model="reward" rounded v-else)
     .col-4(:class="{ 'q-mt-md':$q.screen.lt.md || $q.screen.md }" v-if="fields.peg")
       label.h-label {{ `${fields.peg.label} (${$store.state.dao.settings.pegToken})` }}
       .row.full-width.items-center.q-mt-xs
         token-logo.q-mr-xs(size="40px" type="cash" :daoLogo="daoSettings.logo")
-        q-input.rounded-border.col(dense :readonly="!custom" outlined v-model="!toggle ? peg : cashToken" rounded v-if="isAssignment")
+        q-input.rounded-border.col(dense :readonly="!custom" outlined v-model="cashToken" rounded v-if="isAssignment")
         q-input.rounded-border.col(dense :readonly="!custom || !daoSettings.cashClaimsEnabled" outlined v-model="peg" rounded v-else)
     .col-4(:class="{ 'q-mt-md':$q.screen.lt.md || $q.screen.md }" v-if="fields.voice")
       label.h-label {{ `${fields.voice.label} (${$store.state.dao.settings.voiceToken})` }}
       .row.full-width.items-center.q-mt-xs
         token-logo.q-mr-xs(size="40px" type="voice" :daoLogo="daoSettings.logo")
-        q-input.rounded-border.col(dense :readonly="!custom" outlined v-model="!toggle ? voice : voiceToken" rounded v-if="isAssignment")
+        q-input.rounded-border.col(dense :readonly="!custom" outlined v-model="voiceToken" rounded v-if="isAssignment")
         q-input.rounded-border.col(dense :readonly="!custom" outlined v-model="voice" rounded v-else)
   .row.items-center.q-mt-md(v-if="showToggle")
     template(v-if="fields.custom")
@@ -449,7 +455,16 @@ widget(:class="{ 'disable-step': currentStepName !== 'step-payout' && $q.screen.
   nav.row.justify-end.q-mt-xl.q-gutter-xs(v-if="$q.screen.gt.md")
     q-btn.h-btn2.q-px-xl(v-if="!disablePrevButton" @click="$emit('prev')" color="primary" label="Back" no-caps outline rounded flat)
     q-btn.q-px-xl(:disable="nextDisabled" @click="$emit('next')" color="primary" label="Next step" no-caps rounded unelevated)
-
+  template(v-if="$q.screen.lt.md || $q.screen.md")
+    q-card(:style="'border-radius: 25px; box-shadow: none; z-index: 7000; position: fixed; bottom: -20px; left: 0; right: 0; box-shadow: 0px 0px 26px 0px rgba(0, 0, 41, 0.2);'")
+      creation-stepper(
+        :activeStepIndex="stepIndex"
+        :steps="steps"
+        :nextDisabled="nextDisabled"
+        @publish="$emit('publish')"
+        @save="$emit('save')"
+        @next="$emit('next')"
+      )
 </template>
 
 <style lang="stylus" scoped>

@@ -44,7 +44,7 @@ export default {
       key: 'title',
       label: I18n.t('proposal-creation.title'),
       type: 'string',
-      placeholder: I18n.t('proposal.creation.typeTheTitleOfYourProposal')
+      placeholder: I18n.t('proposal-creation.typeTheTitleOfYourProposal')
     },
     description: {
       key: 'description',
@@ -250,6 +250,11 @@ export default {
               label: I18n.t('proposal-creation.chooseYourPayout'),
               description: I18n.t('proposal-creation.pleaseEnterTheUSDEquivalentAnd')
             },
+            circle: {
+              key: 'circle',
+              label: I18n.t('proposal-creation.circle'),
+              placeholder: I18n.t('proposal-creation.selectACircleFromTheList')
+            },
             url: {
               key: 'url',
               label: I18n.t('proposal-creation.documentation'),
@@ -384,6 +389,7 @@ export default {
             }
           }
         },
+        // TODO: Return after beta
         // poll: {
         //   optionType: 'one-time',
         //   disable: false,
@@ -613,6 +619,7 @@ export default {
             }
           }
         },
+        // TODO: Return after beta
         // budget: {
         //   optionType: 'org-assets',
         //   disable: false,

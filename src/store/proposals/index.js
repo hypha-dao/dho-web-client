@@ -30,6 +30,7 @@ export default {
       // For assignments
       commitment: 0,
       role: null,
+      tier: null,
       badge: null,
       startPeriod: null,
       periodCount: null,
@@ -251,6 +252,10 @@ export default {
 
     setRole (state, role) {
       state.draft.role = role
+    },
+
+    setTier (state, tier) {
+      state.draft.tier = tier
     },
 
     setBadge (state, badge) {
@@ -505,13 +510,21 @@ export default {
                 { label: 'assignee', value: ['name', rootState.accounts.account] },
                 { label: 'title', value: ['string', draft.title] },
                 { label: 'description', value: ['string', draft.description] },
-                // { label: 'url', value: ['string', draft.url] },
-                { label: 'annual_usd_salary', value: ['asset', `${parseFloat(draft.annualUsdSalary).toFixed(2)} USD`] },
+                { label: 'url', value: ['string', draft.url] },
+
+                { label: 'salary_band_id', value: ['int64', draft.tier.value.id] },
+                // TODO: if salary_band_id is not present these are required
+                // { label: 'annual_usd_salary', value: ['asset', `${parseFloat(draft.annualUsdSalary).toFixed(2)} USD`] },
+                // { label: 'fulltime_capacity_x100', value: ['int64', Math.round(parseFloat(draft.roleCapacity) * 100)] },
+                // { label: 'min_deferred_x100', value: ['int64', Math.round(parseFloat(draft.minDeferred))] },
+
                 { label: 'time_share_x100', value: ['int64', draft.commitment] },
                 { label: 'deferred_perc_x100', value: ['int64', draft.deferred] },
-                { label: 'role', value: ['int64', draft.role.docId] },
+
+                { label: 'role', value: ['int64', draft.role.value.id] },
                 { label: 'start_period', value: ['int64', draft.startPeriod.docId] },
                 { label: 'period_count', value: ['int64', draft.periodCount] }
+
               ]
               proposalType = 'assignment'
               break
@@ -533,11 +546,8 @@ export default {
               content = [
                 { label: 'content_group_label', value: ['string', 'details'] },
                 { label: 'title', value: ['string', draft.title] },
-                { label: 'description', value: ['string', draft.description] },
-                { label: 'url', value: ['string', draft.url] },
-                { label: 'annual_usd_salary', value: ['asset', `${parseFloat(draft.annualUsdSalary).toFixed(2)} USD`] },
-                { label: 'fulltime_capacity_x100', value: ['int64', Math.round(parseFloat(draft.roleCapacity) * 100)] },
-                { label: 'min_deferred_x100', value: ['int64', Math.round(parseFloat(draft.minDeferred))] }
+                { label: 'description', value: ['string', draft.description] }
+                // { label: 'url', value: ['string', draft.url] }
               ]
               proposalType = 'role'
               break

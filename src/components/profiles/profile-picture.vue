@@ -146,7 +146,7 @@ export default {
     q-badge(v-if="badge" floating rounded color="red" :label="badge")
     q-tooltip(v-if="tooltip" anchor="top middle" self="bottom middle" :content-style="{ 'font-size': '1em' }")
       div(v-html="nameTooltip")
-  .q-my-xs.q-ml-xs(v-if="showName || showUsername || detail" :style="{ 'display': 'grid' }")
+  .q-ml-xs(v-if="showName || showUsername || detail" :style="{ 'display': 'grid' }")
     .text-bold(v-if="showName && !lightName" :class="{ 'text-external-bg': textWhite, 'one-line': limit, 'text-no-wrap': noWrapName, 'ellipsis overflow-hidden': ellipsisName, 'h-h6': boldName, 'h-label': !boldName }") {{ name }}
 
       q-tooltip {{name}}

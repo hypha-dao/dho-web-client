@@ -126,8 +126,8 @@ export default {
   computed: {
     ...mapGetters('dao', ['selectedDao']),
 
-    hasCircles () { return this.circles && this?.circles.length > 0 },
-    circleCount () { return this.circles ? this.circles?.length : 0 }
+    circleCount () { return this.circles ? this.circles?.length : 0 },
+    hasCircles () { return this.circles && this?.circles.length > 0 }
   }
 
 }
@@ -172,7 +172,7 @@ widget(:title="$t('configuration.settings-structure.circles.title')" titleImage=
                       q-item-section {{ $t('actions.delete') }}
             p.q-pa-none.text-sm.text-h-gray.leading-loose {{ circle.purpose }}
             template(v-for="(subcricle, index) in circle.subcircles")
-              article.col-12
+              article.col-12.q-mb-md
                 widget.q-pa-xl( bar shadow no-padding)
                   .row
                     .col
@@ -312,7 +312,7 @@ widget(:title="$t('configuration.settings-structure.circles.title')" titleImage=
         )
         q-btn.col-auto.q-px-xl.rounded-border.text-bold.q-ml-xs(
           :label="$t('configuration.settings-structure.circles.form.submit')"
-          @click="_createCircle(cirlce)"
+          @click="_createCircle({...circle})"
           color="secondary"
           no-caps
           rounded

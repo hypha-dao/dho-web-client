@@ -151,7 +151,7 @@
             "create": "创建新角色"
           }
         },
-        "level": {
+        "tier": {
           "heading": "添加角色在复杂性或业务贡献方面所处的级别。",
           "form": {
             "name": {
@@ -1052,6 +1052,7 @@
       "minDeferredAmount": "最低延期金额",
       "roleCapacity": "角色能力",
       "compensation": "赔偿",
+      "compensation1": "報酬",
       "showCompensationFor": "显示一期的补偿",
       "deferredAmount1": "延期金额",
       "parentCircle": "家长圈子",
@@ -1418,9 +1419,18 @@
     "proposals": {
       "create": {
         "optionsarchetypes": {
+          "form":{
+            "archetype": {
+              "label":"选择类型"
+            },
+            "tier": {
+              "label": "选择等级"
+            }
+          },
           "chooseARoleArchetype": "选择角色原型\n        ",
           "noArchetypesExistYet": "目前还没有原型存在。",
-          "pleaseCreateThemHere": "请在此处创建它们。"
+          "pleaseCreateThemHere": "请在此处创建它们。",
+          "chooseARoleTier": "选择角色等级"
         },
         "optionsassignments": {
           "chooseARecent": "选择最近的任务来计算桥梁支出"
@@ -1482,6 +1492,7 @@
           "nextStep": "下一步"
         },
         "steppayout": {
+          "pleaseEnterTheUSDEquivalentAnd1": "請輸入該捐款的等值美元和延期百分比 - 您推遲的日期越多，獎金就越高（請參閱下面的實際工資計算或使用我們的計算器）。 底部字段計算 SEEDS、HVOICE、HYPHA 和 HUSD 中的實際支出",
           "payout": "支出",
           "pleaseEnterTheUsd": "请输入该捐款的等值美元和延期百分比 - 您推迟的日期越多，奖金就越高（请参阅下面的实际工资计算或使用我们的计算器）。",
           "typeTheAmountOfUsd": "输入 HUSD 金额",
@@ -1490,6 +1501,8 @@
           "salaryCompensationForOneYear": "一年的工资补偿 ( ${value} )",
           "salaryCompensationForOneYearUsd": "一年的工资补偿 ( ${value} ) USD",
           "compensation": "赔偿",
+          "compensation1": "報酬",
+          "belowYouCanSeeTheActual": "下面您可以看到 HVOICE、HYPHA 和 HUSD 獎勵的實際明細",
           "pleaseEnterTheUSD": "请输入该捐款的等值美元和延期百分比 - 您推迟的日期越多，奖金就越高（请参阅下面的实际工资计算或使用我们的计算器）。",
           "compensationForOnePeriod": "补偿一期",
           "compensationForOneCycle": "补偿一个周期",

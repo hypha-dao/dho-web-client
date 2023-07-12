@@ -151,7 +151,7 @@
             "create": "Criar nova função"
           }
         },
-        "level": {
+        "tier": {
           "heading": "Adicione em que nível a função está em termos de complexidade ou contribuição comercial.",
           "form": {
             "name": {
@@ -1052,6 +1052,7 @@
       "minDeferredAmount": "Valor mínimo diferido",
       "roleCapacity": "Capacidade de função",
       "compensation": "Compensação",
+      "compensation1": "Recompensa",
       "showCompensationFor": "Mostrar compensação por um período",
       "deferredAmount1": "Valor diferido",
       "parentCircle": "Círculo pai",
@@ -1418,9 +1419,18 @@
     "proposals": {
       "create": {
         "optionsarchetypes": {
+          "form":{
+            "archetype": {
+              "label":"Selecione o tipo"
+            },
+            "tier": {
+              "label": "Selecione o nível"
+            }
+          },
           "chooseARoleArchetype": "Escolha um arquétipo de papel\n        ",
           "noArchetypesExistYet": "Ainda não existem arquétipos.",
-          "pleaseCreateThemHere": "Por favor, crie-os aqui."
+          "pleaseCreateThemHere": "Por favor, crie-os aqui.",
+          "chooseARoleTier": "Escolha um nível de função"
         },
         "optionsassignments": {
           "chooseARecent": "Escolha uma atribuição recente para calcular um pagamento de ponte"
@@ -1482,6 +1492,7 @@
           "nextStep": "Próxima Etapa"
         },
         "steppayout": {
+          "pleaseEnterTheUSDEquivalentAnd1": "Insira o equivalente em USD e o percentual de diferimento para esta contribuição - quanto mais você adiar para uma data posterior, maior será o bônus (consulte o cálculo do salário real abaixo ou use nossa calculadora). Os campos inferiores calculam o pagamento real em SEEDS, HVOICE, HYPHA e HUSD",
           "payout": "Pagamento",
           "pleaseEnterTheUsd": "Insira o equivalente em USD e o percentual de diferimento para esta contribuição - quanto mais você adiar para uma data posterior, maior será o bônus (consulte o cálculo do salário real abaixo ou use nossa calculadora). ",
           "typeTheAmountOfUsd": "Digite a quantidade de HUSD",
@@ -1490,6 +1501,8 @@
           "salaryCompensationForOneYear": "Compensação de salário por um ano ( ${value} )",
           "salaryCompensationForOneYearUsd": "Compensação de salário por um ano ( ${value} ) USD",
           "compensation": "Compensação",
+          "compensation1": "Recompensa",
+          "belowYouCanSeeTheActual": "Abaixo você pode ver o detalhamento real da recompensa em HVOICE, HYPHA e HUSD",
           "pleaseEnterTheUSD": "Insira o equivalente em USD e o percentual de diferimento para esta contribuição - quanto mais você adiar para uma data posterior, maior será o bônus (consulte o cálculo do salário real abaixo ou use nossa calculadora). ",
           "compensationForOnePeriod": "Compensação por um período",
           "compensationForOneCycle": "Compensação por um ciclo",
