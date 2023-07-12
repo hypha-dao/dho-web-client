@@ -2,6 +2,360 @@
 import { mapActions, mapGetters } from 'vuex'
 import ipfsy from '~/utils/ipfsy'
 import { getProposalChipFilters } from '../../utils/proposal-filter'
+import gql from 'graphql-tag'
+
+const STAGED_PROPOSALS_QUERY = `
+  queryDao(filter: { docId: { eq: $docId } }) {
+    details_daoName_n
+    docId
+    stagingprop(first: $first, offset: $offset, order: { desc: createdDate }) {
+      docId
+      type
+
+      ... on Poll {
+        details_title_s
+        details_description_s
+        details_state_s
+        creator
+        createdDate
+
+        cmntsect {
+          docId
+          comment {
+            id: docId
+            deletedStatus: comment_deleted_i
+          }
+        }
+      }
+
+      ... on Budget {
+        details_title_s
+        details_description_s
+        details_state_s
+        circle {
+          docId
+        }
+        details_pegAmount_a
+        details_voiceAmount_a
+        details_rewardAmount_a
+        creator
+        createdDate
+
+        cmntsect {
+          docId
+          comment {
+            id: docId
+            deletedStatus: comment_deleted_i
+          }
+        }
+      }
+
+      ... on Queststart {
+        details_title_s
+        details_description_s
+        details_state_s
+        # parentcircle {
+        #   docId
+        #   details_title_s
+        #   details_description_s
+        #   details_name_s
+        #   details_purpose_s
+        # }
+
+        creator
+        createdDate
+
+        cmntsect {
+          docId
+          comment {
+            id: docId
+            deletedStatus: comment_deleted_i
+          }
+        }
+      }
+
+      ... on Policy {
+        details_title_s
+        details_description_s
+        details_name_s
+        details_purpose_s
+        details_state_s
+        # parentcircle {
+        #   docId
+        #   details_title_s
+        #   details_description_s
+        #   details_name_s
+        #   details_purpose_s
+        # }
+
+        masterpolicy {
+          details_title_s
+        }
+
+        creator
+        createdDate
+
+        cmntsect {
+          docId
+          comment {
+            id: docId
+            deletedStatus: comment_deleted_i
+          }
+        }
+      }
+
+      ... on Circle {
+        details_title_s
+        details_description_s
+        details_name_s
+        details_purpose_s
+        details_state_s
+
+        creator
+        createdDate
+
+        cmntsect {
+          docId
+          comment {
+            id: docId
+            deletedStatus: comment_deleted_i
+          }
+        }
+      }
+
+      ... on Payout {
+        details_dao_i
+        details_state_s
+
+        details_title_s
+        details_description_s
+        details_url_s
+
+        details_usdAmount_a
+        details_deferredPercX100_i
+
+        details_pegAmount_a
+        details_rewardAmount_a
+        details_voiceAmount_a
+
+        ballot_expiration_t
+        creator
+        createdDate
+        details_owner_n
+        cmntsect {
+          docId
+          comment {
+            id: docId
+            deletedStatus: comment_deleted_i
+          }
+        }
+      }
+
+      ... on Assignment {
+        creator
+        createdDate
+
+        ballot_expiration_t
+
+        details_title_s
+        details_description_s
+
+        details_assignee_n
+        details_periodCount_i
+        details_ballotQuorum_i
+        details_ballotSupply_a
+        details_ballotAlignment_i
+
+        start {
+          details_startTime_t
+        }
+        claimed {
+          docId
+        }
+
+        details_pegSalaryPerPeriod_a
+        details_rewardSalaryPerPeriod_a
+        details_voiceSalaryPerPeriod_a
+
+        details_timeShareX100_i
+        details_deferredPercX100_i
+
+        details_state_s
+        role {
+          ... on Role {
+            type
+            docId
+            details_state_s
+            details_title_s
+            details_description_s
+            details_annualUsdSalary_a
+            details_minDeferredX100_i
+            details_minTimeShareX100_i
+          }
+        }
+        details_assignee_n
+        cmntsect {
+          docId
+          comment {
+            id: docId
+            deletedStatus: comment_deleted_i
+          }
+        }
+      }
+
+      ... on Assignbadge {
+        details_description_s
+        details_title_s
+        ballot_expiration_t
+        details_state_s
+        details_periodCount_i
+        details_ballotQuorum_i
+        details_ballotSupply_a
+        details_ballotAlignment_i
+        badge {
+          details_icon_s
+          details_pegCoefficientX10000_i
+          details_voiceCoefficientX10000_i
+          details_rewardCoefficientX10000_i
+        }
+        details_startPeriod_i
+        details_assignee_n
+        creator
+        createdDate
+        cmntsect {
+          docId
+          comment {
+            id: docId
+            deletedStatus: comment_deleted_i
+          }
+        }
+      }
+
+      ... on Role {
+        ballot_expiration_t
+        details_title_s
+        details_description_s
+        details_annualUsdSalary_a
+        details_minDeferredX100_i
+        details_state_s
+        details_ballotQuorum_i
+        details_ballotSupply_a
+        details_ballotAlignment_i
+        details_minTimeShareX100_i
+        details_owner_n
+        createdDate
+        creator
+        cmntsect {
+          docId
+          comment {
+            id: docId
+            deletedStatus: comment_deleted_i
+          }
+        }
+      }
+
+      ... on Badge {
+        creator
+        createdDate
+
+        ballot_expiration_t
+        details_title_s
+        details_description_s
+        details_pegCoefficientX10000_i
+        details_voiceCoefficientX10000_i
+        details_rewardCoefficientX10000_i
+        details_icon_s
+        details_state_s
+        details_maxCycles_i
+        details_ballotQuorum_i
+        details_ballotSupply_a
+        details_ballotAlignment_i
+        vote {
+          vote_voter_n
+          vote_vote_s
+        }
+        votetally {
+          ... on VoteTally {
+            pass_votePower_a
+            fail_votePower_a
+            abstain_votePower_a
+            creator
+            createdDate
+          }
+        }
+        system_proposer_n
+        cmntsect {
+          docId
+          comment {
+            id: docId
+            deletedStatus: comment_deleted_i
+          }
+        }
+      }
+
+      ... on Edit {
+        details_dao_i
+        details_state_s
+
+        creator
+        details_ballotTitle_s
+        details_ballotDescription_s
+        ballot_expiration_t
+        details_assignee_n
+        details_periodCount_i
+        details_ballotQuorum_i
+        details_ballotSupply_a
+        details_ballotAlignment_i
+        details_timeShareX100_i
+        details_deferredPercX100_i
+        details_state_s
+        createdDate
+        original {
+          __typename
+          ... on Assignbadge {
+            details_title_s
+            details_description_s
+            start {
+              details_startTime_t
+            }
+            badge {
+              details_title_s
+            }
+          }
+          ... on Assignment {
+            details_title_s
+            details_description_s
+            claimed {
+              docId
+            }
+            start {
+              details_startTime_t
+            }
+            details_pegSalaryPerPeriod_a
+            details_rewardSalaryPerPeriod_a
+            details_voiceSalaryPerPeriod_a
+            role {
+              ... on Role {
+                details_title_s
+                details_annualUsdSalary_a
+                details_minDeferredX100_i
+              }
+            }
+          }
+        }
+
+        cmntsect {
+          docId
+          comment {
+            id: docId
+            deletedStatus: comment_deleted_i
+          }
+        }
+      }
+    }
+  }
+`
+
 export default {
   name: 'active-proposals',
   components: {
@@ -58,8 +412,9 @@ export default {
       }
     },
     stagedProposals: {
-      query: () => require('../../query/proposals/dao-proposals-stage.gql'),
+      query: gql`query stageProposals($docId: String!, $first: Int!, $offset: Int!) { ${STAGED_PROPOSALS_QUERY} }`,
       update: data => data?.queryDao[0]?.stagingprop,
+      skip () { return !this.selectedDao?.docId },
       variables () {
         return {
           docId: this.selectedDao.docId,
@@ -68,29 +423,29 @@ export default {
           user: this.account
         }
       },
-      skip () { return !this.selectedDao?.docId },
-      fetchPolicy: 'no-cache',
+
       subscribeToMore: {
-        document: require('~/query/proposals/dao-proposals-stage-subs.gql'),
+        document: gql`subscription stageProposals($docId: String!, $first: Int, $offset: Int) { ${STAGED_PROPOSALS_QUERY} }`,
+        skip () { return !this.selectedDao?.docId },
         variables () {
           return {
             docId: this.selectedDao.docId,
             user: this.account
           }
         },
-        skip () { return !this.selectedDao?.docId },
         updateQuery: (previousResult, { subscriptionData }) => {
-          if (!subscriptionData?.data) {
+          if (!subscriptionData.data) {
             return previousResult
           }
-          if (!previousResult?.data) {
+          if (!previousResult) {
             return undefined
           }
-          subscriptionData.data.queryDao[0].stagingprop = [...previousResult.data.queryDao[0].stagingprop, ...subscriptionData.data.queryDao[0].stagingprop]
-          return subscriptionData
+
+          return subscriptionData.data
         }
       }
     },
+
     proposalsCount: {
       query: () => require('../../query/proposals/dao-proposals-count.gql'),
       update: data => {
