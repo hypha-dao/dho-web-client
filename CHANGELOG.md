@@ -1,5 +1,29 @@
 # Changelog
 
+## [2.31.0](https://github.com/hypha-dao/dho-web-client/compare/v2.30.0...v2.31.0) (2023-07-12)
+
+
+### Features
+
+* **options-archetypes:** add roles and tiers ([#2308](https://github.com/hypha-dao/dho-web-client/issues/2308)) ([7785b8b](https://github.com/hypha-dao/dho-web-client/commit/7785b8b37a613e7164c51f198fbbfc8896d77386))
+* **proposal-detail:** add subscription to the query ([#2306](https://github.com/hypha-dao/dho-web-client/issues/2306)) ([ece780b](https://github.com/hypha-dao/dho-web-client/commit/ece780b080487e07d8fb216ca0f3a5227cb25824))
+* **proposal-list:** add subscription to the query ([#2307](https://github.com/hypha-dao/dho-web-client/issues/2307)) ([ebef286](https://github.com/hypha-dao/dho-web-client/commit/ebef2866ccd257808028b6c05f44ecd750de3588))
+
+
+### Bug Fixes
+
+* **circle-query:** query only auto approve circles ([#2309](https://github.com/hypha-dao/dho-web-client/issues/2309)) ([f623c81](https://github.com/hypha-dao/dho-web-client/commit/f623c8141632b9e0d2bc246d42c85dfdd32ddef5))
+* **design:** copy UI changes ([#2313](https://github.com/hypha-dao/dho-web-client/issues/2313)) ([b649d6e](https://github.com/hypha-dao/dho-web-client/commit/b649d6ebcf3db87e5685ed236e3cb4ad19aa74e4))
+* **filter-widget:** overflow ellipsis in filter-widget select (#DEV-581) ([#2300](https://github.com/hypha-dao/dho-web-client/issues/2300)) ([d2c6bc4](https://github.com/hypha-dao/dho-web-client/commit/d2c6bc43e727de9916dfc14726173121293a95e3))
+* **options-archetypes:** add correct label for tier field ([#2316](https://github.com/hypha-dao/dho-web-client/issues/2316)) ([a93e281](https://github.com/hypha-dao/dho-web-client/commit/a93e281895894be8c1412e16e8a7efe2d0ac4abe))
+* **proposal-creation:** added creation-stepper in mobile view ([#2312](https://github.com/hypha-dao/dho-web-client/issues/2312)) ([500ddf1](https://github.com/hypha-dao/dho-web-client/commit/500ddf140b28cb7cf68454d72c0c4ce8bfcc82e8))
+* **proposal-filter:** added few missed translations ([#2299](https://github.com/hypha-dao/dho-web-client/issues/2299)) ([9ae92fd](https://github.com/hypha-dao/dho-web-client/commit/9ae92fd1609b8248afcc3f4c34c353097385a30c))
+* **step-proposal-type:** add auto scroll for submenus ([#2305](https://github.com/hypha-dao/dho-web-client/issues/2305)) ([01643ba](https://github.com/hypha-dao/dho-web-client/commit/01643bab44c831f60fb7a1c566891cdb398d6c2b))
+* **widget-circle:** add correct variable name ([#2314](https://github.com/hypha-dao/dho-web-client/issues/2314)) ([9e69a76](https://github.com/hypha-dao/dho-web-client/commit/9e69a76b0345a362b82fd449ce08789a39b390d1))
+* **widget-roles:** read graphql data ([#2319](https://github.com/hypha-dao/dho-web-client/issues/2319)) ([8ba03af](https://github.com/hypha-dao/dho-web-client/commit/8ba03af67d01d63729272a088d9f87708ea7cb29))
+* **widget-roles:** read graphql data ([#2319](https://github.com/hypha-dao/dho-web-client/issues/2319)) ([8ba03af](https://github.com/hypha-dao/dho-web-client/commit/8ba03af67d01d63729272a088d9f87708ea7cb29))
+* **widget-roles:** read graphql data ([#2319](https://github.com/hypha-dao/dho-web-client/issues/2319)) ([84765bd](https://github.com/hypha-dao/dho-web-client/commit/84765bd60f7722d7bbf02fe5aab5b5b2f22f5111))
+
 ## [2.30.0](https://github.com/hypha-dao/dho-web-client/compare/v2.29.2...v2.30.0) (2023-07-06)
 
 
