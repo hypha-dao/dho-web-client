@@ -35,7 +35,7 @@ export default {
       },
       result (res) {
         const v = res.data.getDao.period
-        this.periodCount = this.isExtension ? DEFAULT_PERIOD_COUNT : DEFAULT_PERIOD_COUNT - 1
+        this.periodCount = this.isExtension ? DEFAULT_PERIOD_COUNT : DEFAULT_PERIOD_COUNT
         if ((this.isFromDraft && v?.length > 0 && !this.resetPeriods) || this.isExtension) {
           const startPeriod = this.$store.state.proposals.draft.startPeriod
           const periodCount = this.$store.state.proposals.draft.periodCount
@@ -121,7 +121,6 @@ export default {
       if (this.startIndex === -1 || this.endIndex === -1) {
         return ''
       }
-
       const start = new Date(this.start(this.periods.period[this.startIndex]))
       const end = new Date(this.start(this.periods.period[this.endIndex + 1]))
       return `from ${dateToString(start, start.getFullYear() !== end.getFullYear())} to ${dateToString(end)}`
@@ -156,6 +155,7 @@ export default {
             el => new Date(el.details_startTime_t).toDateString() === new Date(this.startValue).toDateString()
           )
           this.startIndex = startIndex
+          this.periodCount = this.$store.state.proposals.draft.periodCount
         } else {
           this.startIndex = -1
         }
