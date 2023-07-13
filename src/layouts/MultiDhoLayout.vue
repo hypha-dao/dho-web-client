@@ -12,7 +12,7 @@ const NOTIFICATIONS_QUERY = `
       name
       id
     }
-    user{
+    user(filter: {eosAccountName: {eq: $account}}){
       name
       id
       email
@@ -64,7 +64,7 @@ export default {
       }
     },
     notifications: {
-      query: gql`query notifications { ${NOTIFICATIONS_QUERY} }`,
+      query: gql`query notifications($account: String!) { ${NOTIFICATIONS_QUERY} }`,
       update: data => {
         return data.queryNotification
       },
@@ -77,7 +77,7 @@ export default {
         return !this.account
       },
       subscribeToMore: {
-        query: gql`subscription notifications { ${NOTIFICATIONS_QUERY} }`,
+        query: gql`subscription notifications($account: String!) { ${NOTIFICATIONS_QUERY} }`,
         skip () { return !this.account },
         variables () { return { account: this.account } },
         updateQuery: (previousResult, { subscriptionData }) => {
@@ -92,6 +92,7 @@ export default {
         }
       },
       result (res) {
+        console.log(res)
         this.initNotifications()
       }
     }
@@ -425,16 +426,16 @@ export default {
           title = I18n.t('notifications.proposalVotingExpire')
           description = I18n.t('notifications.proposalIsExpiring', { accountname: notification.user, days: notification.content?.days })
           break
-        // case ('proposalpassed'):
-        //   icon = require('~/assets/icons/notifications/proposal-passed.png')
-        //   title = I18n.t('notifications.proposalPassed')
-        //   description = I18n.t('notifications.proposalHasPassed', { accountname: notification.user })
-        //   break
-        // case ('proposalrejected'):
-        //   icon = require('~/assets/icons/notifications/proposal-rejected.png')
-        //   title = I18n.t('notifications.proposalRejected')
-        //   description = I18n.t('notifications.proposalHasntPassed', { accountname: notification.user })
-        //   break
+        case ('proposals.passed'):
+          icon = require('~/assets/icons/notifications/proposal-passed.png')
+          title = I18n.t('notifications.proposalPassed')
+          description = I18n.t('notifications.proposalHasPassed', { accountname: notification.user })
+          break
+        case ('proposals.rejected'):
+          icon = require('~/assets/icons/notifications/proposal-rejected.png')
+          title = I18n.t('notifications.proposalRejected')
+          description = I18n.t('notifications.proposalHasntPassed', { accountname: notification.user })
+          break
         case ('system.claimable_period'):
           icon = require('~/assets/icons/notifications/claimable-period.png')
           title = I18n.t('notifications.claimablePeriod')
@@ -450,10 +451,10 @@ export default {
           title = I18n.t('notifications.assignmentApproved')
           description = I18n.t('notifications.yourAssignmentHasBeenApproved')
           break
-        // case ('assignmentrejected'):
-        //   icon = require('~/assets/icons/notifications/assignment-rejected.png')
-        //   title = I18n.t('notifications.assignmentRejected')
-        //   description = I18n.t('notifications.yourAssignmentHasntBeenApproved')
+        case ('assignment.rejected'):
+          icon = require('~/assets/icons/notifications/assignment-rejected.png')
+          title = I18n.t('notifications.assignmentRejected')
+          description = I18n.t('notifications.yourAssignmentHasntBeenApproved')
       }
       return {
         icon: icon,
