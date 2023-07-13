@@ -10,7 +10,7 @@ export default {
 
   data () {
     return {
-      badge: { label: 'Select' }
+      badge: { label: this.$t('pages.proposals.create.optionsbadges.select') }
     }
   },
 

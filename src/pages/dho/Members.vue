@@ -64,7 +64,7 @@ export default {
 
       filters: [
         {
-          label: 'All',
+          label: this.$t('pages.dho.members.all'),
           value: MEMBER_TYPE.ALL,
           enabled: true,
           filter: () => true
@@ -497,7 +497,7 @@ q-page.page-members
           | )
       members-list(:lastResult="hasLastResult()" :members="daoApplicants" :view="'list'" @loadMore="onLoadMoreMembers" ref="scroll" v-bind="{ canEnroll }")
       .row.q-mb-md
-        .h-h4 {{ 'Core &amp; Community members' }}
+        .h-h4 {{ $t('pages.dho.members.coreAndCommunityMembers') }}
         .h-h4-regular.q-ml-xs (
           | {{ members?.length }}
           | )
@@ -515,7 +515,7 @@ q-page.page-members
           | )
       members-list(:lastResult="hasLastResult()" :members="daoApplicants" view="card" @loadMore="onLoadMoreMembers" ref="scroll" compact="compact" v-bind="{ canEnroll }")
       .row.q-mb-md
-        .h-h4 {{ 'Core &amp; Community members' }}
+        .h-h4 {{ $t('pages.dho.members.coreAndCommunityMembers') }}
         .h-h4-regular.q-ml-xs (
           | {{ members?.length }}
           | )

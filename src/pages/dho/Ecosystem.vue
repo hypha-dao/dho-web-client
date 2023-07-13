@@ -30,10 +30,10 @@ export default {
       sort: '',
       textFilter: null,
       optionArray: [
-        { label: 'Sort by', disable: true },
-        'Alphabetically',
-        'Oldest first',
-        'Newest first'
+        { label: this.$t('pages.dho.ecosystem.sortBy'), disable: true },
+        this.$t('pages.dho.ecosystem.alphabetically'),
+        this.$t('pages.dho.ecosystem.oldestFirst'),
+        this.$t('pages.dho.ecosystem.newestFirst')
       ],
       showApplicants: false,
       mobileFilterStyles: {
@@ -44,37 +44,37 @@ export default {
 
       filters: [
         {
-          label: 'All',
+          label: this.$t('pages.dho.ecosystem.all'),
           enabled: true,
           filter: () => true
         },
         {
-          label: 'Generic Contributions',
+          label: this.$t('pages.dho.ecosystem.genericcontributions'),
           enabled: false,
           filter: (p) => p.__typename === 'Payout'
         },
         {
-          label: 'Role Assignments',
+          label: this.$t('pages.dho.ecosystem.role'),
           enabled: false,
           filter: (p) => p.__typename === 'Assignment' || p.__typename === 'Edit'
         },
         {
-          label: 'Role Archetypes',
+          label: this.$t('pages.dho.ecosystem.archetype'),
           enabled: false,
           filter: (p) => p.__typename === 'Role'
         },
         {
-          label: 'Badge Types',
+          label: this.$t('pages.dho.ecosystem.badge'),
           enabled: false,
           filter: (p) => p.__typename === 'Badge'
         },
         {
-          label: 'Badge Assignments',
+          label: this.$t('pages.dho.ecosystem.ability'),
           enabled: false,
           filter: (p) => p.__typename === 'Assignbadge'
         },
         {
-          label: 'Suspension',
+          label: this.$t('pages.dho.ecosystem.suspension'),
           enabled: false,
           filter: (p) => p.__typename === 'Suspend'
         }
@@ -322,7 +322,7 @@ q-page.page-ecosystem
                     .text-grey-7.h-b2.q-px-xs {{ dho.membersCount }}
                     .text-grey-7.h-b2 {{ $t('pages.dho.ecosystem.members') }}
           .col-4(:class="{ 'col-6': $q.screen.lt.lg }")
-            dho-card.full-width(ellipsis v-bind="{title:'Create new DAO', description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.', logo: '/svg/create-new-dao.svg'}" view="card")
+            dho-card.full-width(ellipsis v-bind="{title: $t('pages.dho.ecosystem.createNewDao'), description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.', logo: '/svg/create-new-dao.svg'}" view="card")
               template(v-slot:footer)
                 footer.row.justify-center.items-center
                   q-btn.q-px-xl.rounded-border.text-bold.full-width(:disabled="!selectedDaoPlan.isEcosystemActivated || !isAdmin" @click="onCreateDAO" color="primary" :label="$t('pages.dho.ecosystem.createNewDao')" no-caps rounded unelevated)
@@ -330,11 +330,11 @@ q-page.page-ecosystem
                   q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-else-if="!isAdmin") {{ $t('pages.dho.ecosystem.onlyDaoAdmins1') }}
     .col-3(v-if="$q.screen.gt.md" :class="{'no-click': !isBasicInfoAdded }" :style="{'opacity': isBasicInfoAdded ? '1' : '0.3'}")
       .sticky
-        filter-widget(:chipsFiltersLabel="'Proposal types'" :circle.sync="circle" :circleArray.sync="circleArray" :debounce="1000" :defaultOption="1" :filters.sync="filters" :optionArray.sync="optionArray" :showCircle="false" :showToggle="true" :sort.sync="sort" :textFilter.sync="textFilter" :toggle.sync="showApplicants" :toggleDefault="true" :toggleLabel="'Funds Needed'" :view.sync="view" :viewSelectorLabel="'View'" filterTitle="Search DHOs")
+        filter-widget(:chipsFiltersLabel="$t('pages.dho.ecosystem.proposalTypes')" :circle.sync="circle" :circleArray.sync="circleArray" :debounce="1000" :defaultOption="1" :filters.sync="filters" :optionArray.sync="optionArray" :showCircle="false" :showToggle="true" :sort.sync="sort" :textFilter.sync="textFilter" :toggle.sync="showApplicants" :toggleDefault="true" :toggleLabel="$t('pages.dho.ecosystem.fundsNeeded')" :view.sync="view" :viewSelectorLabel="'View'" :filterTitle="$t('pages.dho.ecosystem.searchDHOs')" :showViewSelector="false")
         create-dho-widget(@create="onCreateDAO")
     div(v-else)
       filter-open-button(@open="mobileFilterOpen = true")
-      filter-widget-mobile(:debounce="1000" :defaultOption="1" :optionArray.sync="optionArray" :showCircle="false" :showToggle="false" :showViewSelector="false" @close="mobileFilterOpen = false" @update:sort="updateSort" @update:textFilter="updateDaoName" filterTitle="Search DHOs" v-show="mobileFilterOpen" :style="mobileFilterStyles")
+      filter-widget-mobile(:debounce="1000" :defaultOption="1" :optionArray.sync="optionArray" :showCircle="false" :showToggle="false" :showViewSelector="false" @close="mobileFilterOpen = false" @update:sort="updateSort" @update:textFilter="updateDaoName" :filterTitle="$t('pages.dho.ecosystem.searchDHOs')" v-show="mobileFilterOpen" :style="mobileFilterStyles")
 
 </template>
 <style lang="stylus" scoped>

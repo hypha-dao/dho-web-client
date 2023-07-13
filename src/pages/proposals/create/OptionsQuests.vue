@@ -11,16 +11,16 @@ export default {
     return {
       types: [
         {
-          label: 'Start a new Quest',
+          label: this.$t('pages.proposals.create.optionsquests.startANewQuest'),
           value: 'queststart'
         },
         {
-          label: 'Complete an Active Quest',
+          label: this.$t('pages.proposals.create.optionsquests.completeAnActiveQuest'),
           value: 'milestone'
         }
       ],
 
-      type: { label: 'Select' }
+      type: { label: this.$t('pages.proposals.create.optionsquests.select') }
     }
   },
 
