@@ -27,6 +27,7 @@ export default {
   name: 'voter-list',
   components: {
     Chips: () => import('~/components/common/chips.vue'),
+    LoadingSpinner: () => import('~/components/common/loading-spinner.vue'),
     ProfilePicture: () => import('~/components/profiles/profile-picture.vue'),
     Widget: () => import('~/components/common/widget.vue')
   },
@@ -180,7 +181,10 @@ widget(:title="$t('proposals.voter-list.votes')" bar)
   template(v-slot:header)
     .h-h2.text-secondary {{ voteCount }}
 
-  template(v-for="vote of votesPaginated")
+  section(v-if="isLoading")
+    .row.justify-center.q-my-md
+      loading-spinner(color="primary" size="40px")
+  template(v-else v-for="vote of votesPaginated")
     .row.items-center.justify-between.q-my-md(:key="vote.username")
       profile-picture(
         :username="vote.username"
