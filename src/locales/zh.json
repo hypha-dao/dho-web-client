@@ -1,4 +1,17 @@
 {
+  "actions": {
+    "delete": "删除"
+  },
+  "periods": {
+    "hour": "小时",
+    "hours": "小时",
+    "day": "天",
+    "days": "天",
+    "week": "星期",
+    "weeks": "周数",
+    "month": "月",
+    "months": "几个月"
+  },
   "assignments": {
     "assignment-claim-extend": {
       "claimAll": "索取全部\n        ",
@@ -61,6 +74,203 @@
       "more1": "更多的"
     }
   },
+  "configuration": {
+    "alert": {
+      "confirm-action": "您确定要退出而不保存草稿吗？"
+    },
+    "tabs": {
+      "general": "一般的",
+      "structure": "结构",
+      "voting": "投票"
+    },
+    "nav": {
+      "reset": "重置更改",
+      "submit": "保存版本",
+      "execute-multisig": "运行多重签名",
+      "sign-multisig": "订阅多重签名",
+      "view-multisig": "查看多重签名"
+    },
+    "settings-general": {
+      "title": "一般的",
+      "description": "使用常规设置来配置一些基本参数，例如指向主协作空间和 DAO 的链接，并使用切换开关来启用或禁用关键功能。",
+      "form": {
+        "logo": {
+          "label": "标识"
+        },
+        "upload": {
+          "label": "上传图片（最大 3MB）"
+        },
+        "name": {
+          "label": "姓名"
+        },
+        "url": {
+          "label": "自定义网址"
+        },
+        "purpose": {
+          "label": "目的"
+        },
+        "primary-color": {
+          "label": "原色"
+        },
+        "secondary-color": {
+          "label": "次要颜色"
+        },
+        "text-color": {
+          "label": "文字颜色"
+        },
+        "sample-text": "该文本必须以两种颜色显示"
+      },
+      "nav": {
+        "show-more": "展示更多",
+        "show-less": "显示较少"
+      }
+    },
+    "settings-structure": {
+      "roles": {
+        "title": "功能",
+        "description": "在这里您可以配置 DAO 功能。 ",
+        "tabs": {
+          "types": "类型",
+          "tiers": "级别"
+        },
+        "type": {
+          "heading": "您可以在此处通过添加名称和职责集来创建新的角色类型。",
+          "form": {
+            "name": {
+              "label": "角色名称",
+              "placeholder": "输入角色名称"
+            },
+            "description": {
+              "label": "职位描述",
+              "placeholder": "输入角色描述"
+            },
+            "cancel": "取消",
+            "submit": "提交"
+          },
+          "nav": {
+            "create": "创建新角色"
+          }
+        },
+        "tier": {
+          "heading": "添加角色在复杂性或业务贡献方面所处的级别。",
+          "form": {
+            "name": {
+              "label": "关卡名称",
+              "placeholder": "输入级别名称"
+            },
+            "yearly-reward": {
+              "label": "年度奖励",
+              "placeholder": "输入一个值"
+            },
+            "montly-reward": {
+              "label": "每月奖励"
+            },
+            "min-deferred": {
+              "label": "推迟的最低限度"
+            },
+            "cancel": "取消",
+            "submit": "总结"
+          },
+          "nav": {
+            "create": "创建新关卡"
+          }
+        }
+      },
+      "circles": {
+        "title": "界",
+        "description": "您可以在此处配置您的核心团队或圈子。 ",
+        "heading": "您可以通过创建对您的工作流程有意义的圈子或团队来随意塑造您的 DAO。",
+        "form": {
+          "name": {
+            "label": "圈子名称",
+            "placeholder": "输入圈子名称"
+          },
+          "description": {
+            "label": "圆圈描述",
+            "placeholder": "输入圈子描述"
+          },
+          "cancel": "取消",
+          "submit": "提交"
+        },
+        "nav": {
+          "create": "创建新圈子",
+          "create-subcircle": "添加子圈子"
+        }
+      }
+    },
+    "settings-voting": {
+      "core": {
+        "title": "核心团队投票方式",
+        "description": "每个 DAO 都可以制定自己的投票系统，允许关键团队成员做出集体决策。 ",
+        "form": {
+          "unity": {
+            "label": "单位（所需语音百分比）"
+          },
+          "quorum": {
+            "label": "法定人数（强制参与者的百分比）"
+          },
+          "duration": {
+            "label": "投票持续时间"
+          }
+        },
+        "showcase": {
+          "1": {
+            "title": "语音",
+            "description": "每个成员都可以使用他们的 HVOICE 治理代币作为投票份额。"
+          },
+          "2": {
+            "title": "多次投票",
+            "description": "投票期间会员可以多次投票"
+          },
+          "3": {
+            "title": "投票期",
+            "description": "默认投票期限为1周"
+          },
+          "4": {
+            "title": "要求",
+            "description": "提案必须具有所需的支持票百分比（统一）和所需的所有票数百分比（法定人数）"
+          }
+        }
+      },
+      "community": {
+        "title": "社区投票方式",
+        "description": "每个 DAO 都可以制定自己的投票系统，允许关键团队成员做出集体决策。 ",
+        "form": {
+          "unity": {
+            "label": "单位（所需语音百分比）"
+          },
+          "quorum": {
+            "label": "法定人数（强制参与者的百分比）"
+          },
+          "duration": {
+            "label": "投票持续时间"
+          }
+        },
+        "showcase": {
+          "1": {
+            "title": "1 名成员 = 1 票",
+            "description": "每个会员可以使用 1 会员 1 票进行投票。"
+          },
+          "2": {
+            "title": "代表声音",
+            "description": "会员可以在民主选举中向当选会员发出自己的声音（或投票权）"
+          },
+          "3": {
+            "title": "多次投票",
+            "description": "投票期间会员可以多次投票"
+          },
+          "4": {
+            "title": "投票期",
+            "description": "默认投票期限为1周"
+          },
+          "5": {
+            "title": "要求",
+            "description": "提案必须具有所需的赞成票百分比（单位）和所需的所有票数百分比（法定人数）"
+          }
+        }
+      }
+    }
+  },
   "common": {
     "button-card": {
       "until": "直到"
@@ -119,6 +329,7 @@
     }
   },
   "dao": {
+    "member": "成员",
     "settings-communication": {
       "announcements": "公告",
       "postAnAnnouncement": "在所有部分发布公告，让会员了解重要更新。",
@@ -283,7 +494,7 @@
       "launchingAQuest": "发起任务？",
       "youNeedTo": "您需要同时通过法定人数（参与投票的成员总数的最低百分比）和团结（支持投票的成员的最低百分比）。",
       "createAGeneric": "创建一个通用贡献提案，其中包含描述性标题、明确的政策定义以及实施政策的步骤。",
-      "createARecurring": "为现有的角色分配创建一个重复活动，并尽可能详细地描述为什么您是合适的人选。",
+      "createARecurring": "为现有的角色分配创建一个定期活动，并尽可能详细地描述为什么您是合适的人选。",
       "createAProposal": "为组织资产创建提案，并选择具有描述性名称的角色原型以及具有职责的角色的明确定义。",
       "createAProposal1": "为组织资产创建提案，并选择带有名称和明确学习或解锁成就或确认状态级别的徽章类型。",
       "createAGeneric1": "创建一个通用贡献提案，其中包含描述性标题以及里程碑的清晰明细以及时间表上每个里程碑的支出。"
@@ -702,7 +913,7 @@
       "viewProposal1": "查看提案"
     },
     "transaction-history": {
-      "transactionHistory": "交易纪录"
+      "transactionHistory": "交易记录"
     },
     "voting-history": {
       "recentVotes": "最近投票",
@@ -744,7 +955,7 @@
       "daoid": "DAO_id",
       "requestor1": "请求者",
       "amount1": "数量",
-      "asSoonAs": "一旦财务主管创建多重签名交易并执行此请求，您将直接在预览步骤中指定的 HUSD 地址上收到资金",
+      "asSoonAs": "一旦财务主管创建多重签名交易并执行此请求，您将直接在预览步骤中指示的 HUSD 地址上收到资金",
       "noWalletFound": "没有找到钱包",
       "pendingRedemptions": "待赎回",
       "details": "细节",
@@ -841,6 +1052,7 @@
       "minDeferredAmount": "最低延期金额",
       "roleCapacity": "角色能力",
       "compensation": "赔偿",
+      "compensation1": "報酬",
       "showCompensationFor": "显示一期的补偿",
       "deferredAmount1": "延期金额",
       "parentCircle": "家长圈子",
@@ -1207,9 +1419,18 @@
     "proposals": {
       "create": {
         "optionsarchetypes": {
+          "form":{
+            "archetype": {
+              "label":"选择类型"
+            },
+            "tier": {
+              "label": "选择等级"
+            }
+          },
           "chooseARoleArchetype": "选择角色原型\n        ",
           "noArchetypesExistYet": "目前还没有原型存在。",
-          "pleaseCreateThemHere": "请在此处创建它们。"
+          "pleaseCreateThemHere": "请在此处创建它们。",
+          "chooseARoleTier": "选择角色等级"
         },
         "optionsassignments": {
           "chooseARecent": "选择最近的任务来计算桥梁支出"
@@ -1271,14 +1492,17 @@
           "nextStep": "下一步"
         },
         "steppayout": {
+          "pleaseEnterTheUSDEquivalentAnd1": "請輸入該捐款的等值美元和延期百分比 - 您推遲的日期越多，獎金就越高（請參閱下面的實際工資計算或使用我們的計算器）。 底部字段計算 SEEDS、HVOICE、HYPHA 和 HUSD 中的實際支出",
           "payout": "支出",
           "pleaseEnterTheUsd": "请输入该捐款的等值美元和延期百分比 - 您推迟的日期越多，奖金就越高（请参阅下面的实际工资计算或使用我们的计算器）。",
           "typeTheAmountOfUsd": "输入 HUSD 金额",
           "commitmentMustBeGreater": "承诺必须大于或等于角色配置。",
           "defferedMustBeGreater": "Deferred 必须大于或等于角色配置。",
           "salaryCompensationForOneYear": "一年的工资补偿 ( ${value} )",
-          "salaryCompensationForOneYearUsd": "一年的工资补偿 ( ${value} ) 美元",
+          "salaryCompensationForOneYearUsd": "一年的工资补偿 ( ${value} ) USD",
           "compensation": "赔偿",
+          "compensation1": "報酬",
+          "belowYouCanSeeTheActual": "下面您可以看到 HVOICE、HYPHA 和 HUSD 獎勵的實際明細",
           "pleaseEnterTheUSD": "请输入该捐款的等值美元和延期百分比 - 您推迟的日期越多，奖金就越高（请参阅下面的实际工资计算或使用我们的计算器）。",
           "compensationForOnePeriod": "补偿一期",
           "compensationForOneCycle": "补偿一个周期",
@@ -1291,7 +1515,7 @@
         "unity": "统一",
         "quorum": "法定人数",
         "noProposals": "没有提案",
-        "oopsNothingCould": "哎呀，这里什么也没找到",
+        "oopsNothingCould": "哎呀，这里什么也找不到",
         "stagingProposals": "分期提案",
         "activeProposals": "积极提案",
         "noProposals1": "没有提案",
@@ -1308,7 +1532,7 @@
       },
       "proposalhistory": {
         "noProposals": "没有提案",
-        "oopsNothingCould": "哎呀，这里什么也没找到"
+        "oopsNothingCould": "哎呀，这里什么也找不到"
       },
       "proposalcreate": {
         "areYouSure": "您确定要在不保存草稿的情况下离开吗？",
@@ -1445,6 +1669,26 @@
       "addToTheTeam": "添加到团队",
       "daoPublished": "DAO 发布！"
     }
+  },
+  "notifications": {
+    "clearAll": "全部清除",
+    "notifications": "通知",
+    "newComment": "新评论",
+    "hasJustLeftAComment": "@{accountname} 刚刚对您的提案发表了评论",
+    "proposalVotingExpire": "提案投票到期",
+    "proposalIsExpiring": "@{accountname} 的提案将于 {days} 天后到期",
+    "proposalPassed": "提案通过",
+    "proposalHasPassed": "@{accountname}的提案已通过",
+    "proposalRejected": "提案被拒绝",
+    "proposalHasntPassed": "@{accountname}的提案尚未通过",
+    "claimablePeriod": "索赔期限",
+    "youHaveClaimablePeriod": "您还有 {value} 个可索赔期限",
+    "extendYourAssignment": "延长你的任务",
+    "youStillHave": "您还有 {days} 天的时间来延长分配时间",
+    "assignmentApproved": "分配已获批准",
+    "yourAssignmentHasBeenApproved": "您的任务已被批准",
+    "assignmentRejected": "作业被拒绝",
+    "yourAssignmentHasntBeenApproved": "您的任务尚未获得批准"
   },
   "proposalparsing": {
     "createdAgo": "创建于 {diff} 前",

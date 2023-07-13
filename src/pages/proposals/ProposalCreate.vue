@@ -294,12 +294,7 @@ export default {
 
     refer (obj) {
       this.reference = obj
-      if (this.selectedConfig.type === 'Assignment') {
-        this.$store.commit('proposals/setRole', this.reference)
-        this.$store.commit('proposals/setAnnualUsdSalary', this.reference.salary ? this.reference.salary : this.reference.details_annualUsdSalary_a)
-        this.$store.commit('proposals/setMinDeferred', this.reference.minDeferred ? this.reference.minDeferred : this.reference.details_minDeferredX100_i)
-        this.$store.commit('proposals/setMinCommitment', this.reference.minCommitment ? this.reference.minCommitment : this.reference.details_minTimeShareX100_i)
-      } else if (this.selectedConfig.type === 'Assignment Badge') {
+      if (this.selectedConfig.type === PROPOSAL_TYPE.ABILITY) {
         this.$store.commit('proposals/setBadge', this.reference)
         this.$store.commit('proposals/setRewardCoefficientLabel', (this.reference.details_rewardCoefficientX10000_i) / 10000)
         this.$store.commit('proposals/setRewardCoefficient', this.reference.details_rewardCoefficientX10000_i)
@@ -308,7 +303,7 @@ export default {
         this.$store.commit('proposals/setPegCoefficientLabel', (this.reference.details_pegCoefficientX10000_i) / 10000)
         this.$store.commit('proposals/setPegCoefficient', this.reference.details_pegCoefficientX10000_i)
         this.$store.commit('proposals/setIcon', this.reference.details_icon_s)
-      } else if (this.selectedConfig.type === 'Policy') {
+      } else if (this.selectedConfig.type === PROPOSAL_TYPE.POLICY) {
         if (this.reference.value !== '') {
           this.$store.commit('proposals/setMasterPolicy', this.reference)
         } else {

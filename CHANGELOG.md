@@ -1,5 +1,33 @@
 # Changelog
 
+## [2.30.0](https://github.com/hypha-dao/dho-web-client/compare/v2.29.2...v2.30.0) (2023-07-06)
+
+
+### Bug Fixes
+
+* always enabled registration ([671bf03](https://github.com/hypha-dao/dho-web-client/commit/671bf0309cc65457851283e4b09d1ef849a9f23a))
+* **configuration:** add correct label for show more button ([2850ff8](https://github.com/hypha-dao/dho-web-client/commit/2850ff8abc8137a64fac94d1b9771e9e7af18e6e))
+* **dao:** read registrationEnabled from api ([3ebefab](https://github.com/hypha-dao/dho-web-client/commit/3ebefabd75d3ae8ca34dd716c0385a3233997ef9))
+* **dao:** read registrationEnabled from api ([3ebefab](https://github.com/hypha-dao/dho-web-client/commit/3ebefabd75d3ae8ca34dd716c0385a3233997ef9))
+* **dho-card:** share button link (#DEV-828) ([#2292](https://github.com/hypha-dao/dho-web-client/issues/2292)) ([4232858](https://github.com/hypha-dao/dho-web-client/commit/4232858e46a115e6d2f7ab6cb8a14e01273c5671))
+* **language-drawer:** remove automating translation widget ([52bc2b3](https://github.com/hypha-dao/dho-web-client/commit/52bc2b3fc2ef7e15a1d439e58cf35576df80a3ad))
+* **members:** add correct value for filter ([#2293](https://github.com/hypha-dao/dho-web-client/issues/2293)) ([76519f2](https://github.com/hypha-dao/dho-web-client/commit/76519f250e4a702186d0d0d3f9cbb72ec9db34f4))
+
+
+### Miscellaneous Chores
+
+* release 2.30.0 ([425394c](https://github.com/hypha-dao/dho-web-client/commit/425394cc246b4d05127ce482b3d09ada862175d3))
+
+## [2.29.1](https://github.com/hypha-dao/dho-web-client/compare/v2.29.0...v2.29.1) (2023-06-28)
+
+
+### Bug Fixes
+
+* **onboarding:** importang bug-fix in dao creation ([#2268](https://github.com/hypha-dao/dho-web-client/issues/2268)) ([15ae331](https://github.com/hypha-dao/dho-web-client/commit/15ae331388df32b7e9274007641fb6eab05d06db))
+* **proposal-list:** showing active policy proposals (#DEV-826) ([#2273](https://github.com/hypha-dao/dho-web-client/issues/2273)) ([4381ed1](https://github.com/hypha-dao/dho-web-client/commit/4381ed1ea0d0e6a7db2d8cdf46e27d02f40e108d))
+* **treasury:** showing treasury payout tab ([#2272](https://github.com/hypha-dao/dho-web-client/issues/2272)) ([d948d82](https://github.com/hypha-dao/dho-web-client/commit/d948d820de2c9e23ee23e019532becfaad7bc28f))
+* update the ual-hypha ([3e44431](https://github.com/hypha-dao/dho-web-client/commit/3e44431ea46d0bcb3d8aa6b96c4753ab79bbcb5b))
+
 ## [2.28.2](https://github.com/hypha-dao/dho-web-client/compare/v2.28.1...v2.28.2) (2023-06-18)
 
 

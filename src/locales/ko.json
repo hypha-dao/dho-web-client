@@ -1,4 +1,17 @@
 {
+  "actions": {
+    "delete": "삭제"
+  },
+  "periods": {
+    "hour": "시간",
+    "hours": "시간",
+    "day": "낮",
+    "days": "날",
+    "week": "주",
+    "weeks": "주",
+    "month": "월",
+    "months": "개월"
+  },
   "assignments": {
     "assignment-claim-extend": {
       "claimAll": "모두 청구\n        ",
@@ -61,6 +74,203 @@
       "more1": "더"
     }
   },
+  "configuration": {
+    "alert": {
+      "confirm-action": "초안을 저장하지 않고 종료하시겠습니까?"
+    },
+    "tabs": {
+      "general": "일반적인",
+      "structure": "구조",
+      "voting": "투표"
+    },
+    "nav": {
+      "reset": "변경 사항 재설정",
+      "submit": "에디션 저장",
+      "execute-multisig": "멀티시그 실행",
+      "sign-multisig": "멀티시그 구독",
+      "view-multisig": "멀티시그 보기"
+    },
+    "settings-general": {
+      "title": "일반적인",
+      "description": "일반 설정을 사용하여 기본 협업 공간 및 DAO에 대한 링크와 같은 몇 가지 기본 매개변수를 구성하고 토글을 사용하여 주요 기능을 활성화 또는 비활성화합니다.",
+      "form": {
+        "logo": {
+          "label": "심벌 마크"
+        },
+        "upload": {
+          "label": "이미지 업로드(최대 3MB)"
+        },
+        "name": {
+          "label": "이름"
+        },
+        "url": {
+          "label": "사용자 정의 URL"
+        },
+        "purpose": {
+          "label": "목적"
+        },
+        "primary-color": {
+          "label": "원색"
+        },
+        "secondary-color": {
+          "label": "보조 색상"
+        },
+        "text-color": {
+          "label": "텍스트 색상"
+        },
+        "sample-text": "이 텍스트는 두 가지 색상으로 모두 보여야 합니다."
+      },
+      "nav": {
+        "show-more": "자세히보기",
+        "show-less": "간단히 보기"
+      }
+    },
+    "settings-structure": {
+      "roles": {
+        "title": "기능",
+        "description": "여기에서 DAO 기능을 구성할 수 있습니다. ",
+        "tabs": {
+          "types": "유형",
+          "tiers": "레벨"
+        },
+        "type": {
+          "heading": "여기에서 이름과 책임 집합을 추가하여 새 역할 유형을 만들 수 있습니다.",
+          "form": {
+            "name": {
+              "label": "역할 이름",
+              "placeholder": "역할 이름을 입력하세요."
+            },
+            "description": {
+              "label": "업무 설명서",
+              "placeholder": "역할 설명을 입력하세요."
+            },
+            "cancel": "취소",
+            "submit": "제출하다"
+          },
+          "nav": {
+            "create": "새 역할 만들기"
+          }
+        },
+        "tier": {
+          "heading": "복잡성 또는 비즈니스 기여 측면에서 역할의 수준을 추가합니다.",
+          "form": {
+            "name": {
+              "label": "레벨 이름",
+              "placeholder": "레벨 이름을 입력하세요."
+            },
+            "yearly-reward": {
+              "label": "연간 보상",
+              "placeholder": "값을 입력하세요"
+            },
+            "montly-reward": {
+              "label": "월간 보상"
+            },
+            "min-deferred": {
+              "label": "연기된 최소"
+            },
+            "cancel": "취소",
+            "submit": "결론"
+          },
+          "nav": {
+            "create": "새 레벨 만들기"
+          }
+        }
+      },
+      "circles": {
+        "title": "서클",
+        "description": "여기에서 핵심 팀 또는 서클을 구성할 수 있습니다. ",
+        "heading": "워크플로에 의미 있는 서클이나 팀을 만들어 DAO를 자유롭게 형성하세요.",
+        "form": {
+          "name": {
+            "label": "서클 이름",
+            "placeholder": "서클 이름을 입력하세요."
+          },
+          "description": {
+            "label": "서클 설명",
+            "placeholder": "서클 설명을 입력하세요."
+          },
+          "cancel": "취소",
+          "submit": "제출하다"
+        },
+        "nav": {
+          "create": "새 서클 만들기",
+          "create-subcircle": "하위 원 추가"
+        }
+      }
+    },
+    "settings-voting": {
+      "core": {
+        "title": "핵심 팀 투표 방법",
+        "description": "모든 DAO는 자체적인 투표 시스템을 형성하여 주요 팀 구성원이 공동의 결정을 내릴 수 있도록 합니다. ",
+        "form": {
+          "unity": {
+            "label": "단위(필요한 목소리의 %)"
+          },
+          "quorum": {
+            "label": "정족수(필수 참가자 %)"
+          },
+          "duration": {
+            "label": "투표 기간"
+          }
+        },
+        "showcase": {
+          "1": {
+            "title": "HVOICE",
+            "description": "모든 구성원은 HVOICE 거버넌스 토큰을 득표율로 사용할 수 있습니다."
+          },
+          "2": {
+            "title": "다중 투표",
+            "description": "회원은 투표 기간 동안 여러 번 투표할 수 있습니다."
+          },
+          "3": {
+            "title": "투표 기간",
+            "description": "기본 투표 기간은 1주일입니다."
+          },
+          "4": {
+            "title": "요구 사항",
+            "description": "제안서에는 필요한 지지율(통합)과 필요한 전체 투표율(정족수)이 있어야 합니다."
+          }
+        }
+      },
+      "community": {
+        "title": "커뮤니티 투표 방법",
+        "description": "모든 DAO는 자체적인 투표 시스템을 형성하여 주요 팀 구성원이 공동의 결정을 내릴 수 있도록 합니다. ",
+        "form": {
+          "unity": {
+            "label": "단위(필요한 목소리의 %)"
+          },
+          "quorum": {
+            "label": "정족수(필수 참가자 %)"
+          },
+          "duration": {
+            "label": "투표 기간"
+          }
+        },
+        "showcase": {
+          "1": {
+            "title": "1명 = 1표",
+            "description": "모든 회원은 1인 1표로 투표할 수 있습니다."
+          },
+          "2": {
+            "title": "대표자 목소리",
+            "description": "회원은 민주적 선거에서 선출된 회원에게 자신의 목소리(또는 의결권)를 부여할 수 있습니다."
+          },
+          "3": {
+            "title": "다중 투표",
+            "description": "회원은 투표 기간 동안 여러 번 투표할 수 있습니다."
+          },
+          "4": {
+            "title": "투표 기간",
+            "description": "기본 투표 기간은 1주일입니다."
+          },
+          "5": {
+            "title": "요구 사항",
+            "description": "제안은 찬성 투표의 필수 비율(단위)과 모든 투표의 필수 비율(정족수)을 가져야 합니다."
+          }
+        }
+      }
+    }
+  },
   "common": {
     "button-card": {
       "until": "까지"
@@ -119,6 +329,7 @@
     }
   },
   "dao": {
+    "member": "회원",
     "settings-communication": {
       "announcements": "공지사항",
       "postAnAnnouncement": "모든 섹션에 공지를 게시하여 회원들에게 중요한 업데이트에 대해 알립니다.",
@@ -156,7 +367,7 @@
       "chiefDelegateRoundHowManyChiefDelegates": "수석대표 라운드 > 수석대표는 몇 명입니까?",
       "chiefDelegatesRoundDuration": "수석대표 라운드 - 기간",
       "headDelegateRoundDoYouWant": "헤드 델리게이트 라운드 > 헤드 델리게이트 1명을 원하십니까?",
-      "headDelegatesRoundDuration": "헤드 델리게이트 라운드 - 기간",
+      "headDelegatesRoundDuration": "헤드 대표단 라운드 - 기간",
       "upvoteMethodExpirationTime": "Upvote 방법 만료 시간",
       "afterTheElectionHasBeen": "선거가 성공적으로 완료된 후 EDEN 투표 방법은 특정 시간 동안 지속됩니다. ",
       "edenVotingMethod": "EDEN 투표 방법 기간",
@@ -173,7 +384,7 @@
       "design": "설계",
       "useDesignSettingsToChange": "디자인 설정을 사용하여 색상, 로고, 패턴, 배너 및 배경을 포함하여 DAO의 중요한 브랜드 요소를 변경하십시오. ",
       "general": "일반적인",
-      "splashpage": "스플래시페이지",
+      "splashpage": "스플래시 페이지",
       "banners": "배너",
       "primaryColor": "원색",
       "onlyDaoAdmins": "DAO 관리자만 설정을 변경할 수 있습니다.",
@@ -483,7 +694,7 @@
     "alert-message": {
       "thisIsA": "이것은",
       "versionOfThe": "새로운 Hypha DAO 플랫폼 버전. ",
-      "ratingMeaning": "등급, 의미 {1}. "
+      "ratingMeaning": "등급, {1}을 의미합니다. "
     },
     "dho-info": {
       "moreInfo": "더 많은 정보",
@@ -569,7 +780,7 @@
     "asset-card": {
       "revoke": "취소",
       "seeDetails": "자세히보다",
-      "na": "해당 없음",
+      "na": "해당 사항 없음",
       "apply": "적용하다",
       "applied": "적용된"
     },
@@ -596,7 +807,7 @@
       "goToCircle": "서클로 이동",
       "members": "구성원({1})",
       "members1": "구성원({1})",
-      "na": "해당 없음"
+      "na": "해당 사항 없음"
     },
     "circles-widget": {
       "structure": "구조",
@@ -841,6 +1052,7 @@
       "minDeferredAmount": "최소 이연 금액",
       "roleCapacity": "역할 용량",
       "compensation": "보상",
+      "compensation1": "보상",
       "showCompensationFor": "한 기간 동안 보상 표시",
       "deferredAmount1": "후불 금액",
       "parentCircle": "학부모 서클",
@@ -1207,9 +1419,18 @@
     "proposals": {
       "create": {
         "optionsarchetypes": {
+          "form":{
+            "archetype": {
+              "label":"유형 선택"
+            },
+            "tier": {
+              "label": "등급 선택"
+            }
+          },
           "chooseARoleArchetype": "역할 원형 선택\n        ",
           "noArchetypesExistYet": "아직 원형이 없습니다.",
-          "pleaseCreateThemHere": "여기에서 생성하십시오."
+          "pleaseCreateThemHere": "여기에서 생성하십시오.",
+          "chooseARoleTier": "역할 등급 선택"
         },
         "optionsassignments": {
           "chooseARecent": "브리지 지불금을 계산하려면 최근 할당을 선택하십시오."
@@ -1271,6 +1492,7 @@
           "nextStep": "다음 단계"
         },
         "steppayout": {
+          "pleaseEnterTheUSDEquivalentAnd1": "이 기여금에 대한 USD 등가물과 % 연기금을 입력하십시오. 나중에 더 많이 연기할수록 보너스가 더 높아집니다(아래 실제 급여 계산 참조 또는 계산기 사용). 하단 필드는 SEEDS, HVOICE, HYPHA 및 HUSD의 실제 지불금을 계산합니다.",
           "payout": "지불금",
           "pleaseEnterTheUsd": "이 기여금에 대한 USD 등가물과 % 연기금을 입력하십시오. 나중에 더 많이 연기할수록 보너스가 더 높아집니다(아래 실제 급여 계산 참조 또는 계산기 사용). ",
           "typeTheAmountOfUsd": "HUSD 금액 입력",
@@ -1279,6 +1501,8 @@
           "salaryCompensationForOneYear": "1년간 급여 보상 ( ${value} )",
           "salaryCompensationForOneYearUsd": "1년간 급여 보상 ( ${value} ) USD",
           "compensation": "보상",
+          "compensation1": "보상",
+          "belowYouCanSeeTheActual": "아래에서 HVOICE, HYPHA 및 HUSD 보상의 실제 내역을 확인할 수 있습니다.",
           "pleaseEnterTheUSD": "이 기여금에 대한 USD 등가물과 % 연기금을 입력하십시오. 나중에 더 많이 연기할수록 보너스가 더 높아집니다(아래 실제 급여 계산 참조 또는 계산기 사용). ",
           "compensationForOnePeriod": "한 기간 동안의 보상",
           "compensationForOneCycle": "1주기 보상",
@@ -1445,6 +1669,26 @@
       "addToTheTeam": "팀에 추가",
       "daoPublished": "DAO 출간!"
     }
+  },
+  "notifications": {
+    "clearAll": "모두 지우기",
+    "notifications": "알림",
+    "newComment": "새 댓글",
+    "hasJustLeftAComment": "@{accountname}님이 귀하의 제안에 댓글을 남겼습니다.",
+    "proposalVotingExpire": "제안 투표 만료",
+    "proposalIsExpiring": "@{accountname}님의 제안이 {days}일 후에 만료됩니다.",
+    "proposalPassed": "제안 통과",
+    "proposalHasPassed": "@{accountname}님의 제안이 통과되었습니다.",
+    "proposalRejected": "제안 거부됨",
+    "proposalHasntPassed": "@{accountname}님의 제안이 통과되지 않았습니다.",
+    "claimablePeriod": "청구가능기간",
+    "youHaveClaimablePeriod": "사용 가능한 {value} 기간이 있습니다.",
+    "extendYourAssignment": "임무를 연장하다",
+    "youStillHave": "할당을 연장할 수 있는 {days}일이 아직 남아 있습니다.",
+    "assignmentApproved": "과제 승인됨",
+    "yourAssignmentHasBeenApproved": "할당이 승인되었습니다.",
+    "assignmentRejected": "할당 거부됨",
+    "yourAssignmentHasntBeenApproved": "과제가 승인되지 않았습니다."
   },
   "proposalparsing": {
     "createdAgo": "{diff} 전에 생성됨",

@@ -1,7 +1,23 @@
 {
+  "actions": {
+    "delete": "Delete"
+  },
+  "periods": {
+    "hour": "Hour",
+    "hours": "Hours",
+    "day": "Day",
+    "days": "Days",
+    "week": "Week",
+    "weeks": "Weeks",
+    "month": "Month",
+    "months": "Months"
+  },
   "assignments": {
     "assignment-claim-extend": {
-      "claimAll": "Claim All\n        "
+      "claimAll": "Claim All\n        ",
+      "extendAfter": "Extend after {date}",
+      "extendBefore": "Extend before {date}",
+      "youMustReApply": "You must re-apply"
     },
     "assignment-suspend": {
       "suspend": "SUSPEND",
@@ -58,6 +74,203 @@
       "more1": "More"
     }
   },
+  "configuration": {
+    "alert": {
+      "confirm-action": "Are you sure you want to exit without saving your draft?"
+    },
+    "tabs": {
+      "general": "General",
+      "structure": "Structure",
+      "voting": "Voting"
+    },
+    "nav": {
+      "reset": "Reset changes",
+      "submit": "Save editions",
+      "execute-multisig": "Run multisig",
+      "sign-multisig": "Subscribe to multisig",
+      "view-multisig": "View multisig"
+    },
+    "settings-general": {
+      "title": "General",
+      "description": "Use general settings to configure some basic parameters like a link to your main collaboration space and your DAO, and use the toggle to enable or disable key features.",
+      "form": {
+        "logo": {
+          "label": "Logo"
+        },
+        "upload": {
+          "label": "Upload an image (max. 3MB)"
+        },
+        "name": {
+          "label": "Name"
+        },
+        "url": {
+          "label": "Custom URL"
+        },
+        "purpose": {
+          "label": "Purpose"
+        },
+        "primary-color": {
+          "label": "Primary color"
+        },
+        "secondary-color": {
+          "label": "Secondary color"
+        },
+        "text-color": {
+          "label": "Text color"
+        },
+        "sample-text": "This text must be visible in both colors"
+      },
+      "nav": {
+        "show-more": "Show more options",
+        "show-less": "Show less options"
+      }
+    },
+    "settings-structure": {
+      "roles": {
+        "title": "Role Types",
+        "description": "Here you can set up your DAO's role types. These are a set of basic accountabilities that a user role can fulfill. You can think of them as templated job descriptions.",
+        "tabs": {
+          "types": "Types",
+          "tiers": "Tier Reward"
+        },
+        "type": {
+          "heading": "Here you can create new role types by adding a name and set of accountabilities.",
+          "form": {
+            "name": {
+              "label": "Role name",
+              "placeholder": "Enter a role name"
+            },
+            "description": {
+              "label": "Role description",
+              "placeholder": "Enter a role description"
+            },
+            "cancel": "Cancel",
+            "submit": "Done"
+          },
+          "nav": {
+            "create": "Create new type"
+          }
+        },
+        "tier": {
+          "heading": "Add a tier for this role type. This will show the level of commercial contribution or complexity it merits",
+          "form": {
+            "name": {
+              "label": "Tier name",
+              "placeholder": "Enter a tier name"
+            },
+            "yearly-reward": {
+              "label": "Annual reward",
+              "placeholder": "Enter a value"
+            },
+            "montly-reward": {
+              "label": "Monthly reward"
+            },
+            "min-deferred": {
+              "label": "Postponed Minimum"
+            },
+            "cancel": "Cancel",
+            "submit": "Done"
+          },
+          "nav": {
+            "create": "Create new tier"
+          }
+        }
+      },
+      "circles": {
+        "title": "Circles",
+        "description": "Here you can configure your core teams or circles. ",
+        "heading": "Feel free to shape your DAO by creating circles or teams that are meaningful to your workflow.",
+        "form": {
+          "name": {
+            "label": "Circle Name",
+            "placeholder": "Enter a circle name"
+          },
+          "description": {
+            "label": "Circle Description",
+            "placeholder": "Enter a circle description"
+          },
+          "cancel": "Cancel",
+          "submit": "Done"
+        },
+        "nav": {
+          "create": "Create new circle",
+          "create-subcircle": "Add subcircle"
+        }
+      }
+    },
+    "settings-voting": {
+      "core": {
+        "title": "Core Team voting methods",
+        "description": "Proposals must meet the criteria for the percentage of required voice (unity) and the percentage of required participants (quorum).",
+        "form": {
+          "unity": {
+            "label": "Unity (% of required voice)"
+          },
+          "quorum": {
+            "label": "Quorum (% of required participants)"
+          },
+          "duration": {
+            "label": "Vote durations"
+          }
+        },
+        "showcase": {
+          "1": {
+            "title": "HVOICE",
+            "description": "Every member can use their HVOICE governance tokens as a share of votes."
+          },
+          "2": {
+            "title": "Multiple votes",
+            "description": "Members can vote multiple times during the voting period"
+          },
+          "3": {
+            "title": "Voting period",
+            "description": "The default voting period is 1 week"
+          },
+          "4": {
+            "title": "Requirements",
+            "description": "Proposals must have the required percentage of supporting votes (unity) and the required percentage of all votes (quorum)"
+          }
+        }
+      },
+      "community": {
+        "title": "Community voting methods",
+        "description": "Every DAO can shape its own voting system, allowing key team members to make collective decisions. ",
+        "form": {
+          "unity": {
+            "label": "Unit (% of voice required)"
+          },
+          "quorum": {
+            "label": "Quorum (% of mandatory participants)"
+          },
+          "duration": {
+            "label": "Duration of vote"
+          }
+        },
+        "showcase": {
+          "1": {
+            "title": "1 member = 1 vote",
+            "description": "Every member can vote using 1 member 1 vote."
+          },
+          "2": {
+            "title": "Delegate voice",
+            "description": "Members can give their voice (or voting power) to elected members in a democratic election"
+          },
+          "3": {
+            "title": "Multiple votes",
+            "description": "Members can vote multiple times during the voting period"
+          },
+          "4": {
+            "title": "Voting period",
+            "description": "The default voting period is 1 week"
+          },
+          "5": {
+            "title": "Requirements",
+            "description": "Proposals must have the required percentage of favorable votes (unit) and the required percentage of all votes (quorum)"
+          }
+        }
+      }
+    }
+  },
   "common": {
     "button-card": {
       "until": "Until"
@@ -79,7 +292,8 @@
     },
     "explore-by-widget": {
       "daos": "DAOs",
-      "ecosystems": "Ecosystems"
+      "ecosystems": "Ecosystems",
+      "exploreBy": "Explore by:"
     },
     "upvote-delegate-widget": {
       "upvoteDelegates": "Upvote Delegates",
@@ -115,6 +329,7 @@
     }
   },
   "dao": {
+    "member":"Member",
     "settings-communication": {
       "announcements": "Announcements",
       "postAnAnnouncement": "Post an announcement across all sections to let members know about an important update.",
@@ -127,9 +342,14 @@
       "positive": "Positive",
       "negative": "Negative",
       "warning": "Warning",
-      "removeNotification": "Remove notification -"
+      "removeNotification": "Remove notification -",
+      "alerts": "Alerts",
+      "enterYourMessageHere": "Enter your message here"
     },
     "settings-community": {
+      "community": "Community",
+      "classic": "Classic",
+      "upvote": "Upvote",
       "doYouWantToExpand": "Do you want to expand your DAO sense making to your DAO community members (token holders)? You can involve them in your DAO by activating the Community Voting feature. It will allow core members to publish proposals that will be voted by community. We also provide you with different voting system, your classic one based on HVOICE or a Delegate / Upvote system. This last one will allow the creation of an Election process where representative will be etc.. etc..",
       "activateCommunityVoting": "Activate Community Voting",
       "onlyDaoAdminsCanChange": "Only DAO admins can change the settings",
@@ -174,7 +394,17 @@
       "extendedLogo": "Extended Logo",
       "pattern": "Pattern",
       "color": "Color",
-      "opacity": "Opacity"
+      "opacity": "Opacity",
+      "uploadAnImage": "Upload an image (max 3MB)",
+      "title": "Title",
+      "shortParagraph": "Short paragraph",
+      "dashboard": "Dashboard",
+      "proposals": "Proposals",
+      "members": "Members",
+      "organization": "Organization",
+      "explore": "Explore",
+      "max50Characters": "Max 50 characters",
+      "max140Characters": "Max 140 characters"
     },
     "multisig-modal": {
       "multisig": "Multisig",
@@ -246,17 +476,28 @@
       "notEnoughTokens": "Not enough tokens",
       "buyHyphaToken": "Buy Hypha Token",
       "pleaseSelectPlan": "Please select plan and period first.",
-      "billingHistory": "Billing history"
+      "billingHistory": "Billing history",
+      "suspended": "Suspended",
+      "expired": "Expired",
+      "planActive": "Plan active",
+      "renewPlan": "Renew plan ",
+      "activatePlan": "Activate plan"
     }
   },
   "dashboard": {
     "how-it-works": {
-      "youNeedTo": "You need to both pass quorum (min % of total members participating in the vote) and unity (min % of members endorsing it). Try to find the right level of support before proposing!",
-      "createAGeneric": "Create a generic contribution proposal with a descriptive title and clear definition of the policy along with steps to implement the policy..",
+      "readyForVoting": "Ready for voting?",
+      "proposingAPolicy": "Proposing a policy?",
+      "applyingForARole": "Applying for a role?",
+      "creatingANewRole": "Creating a new role?",
+      "creatingABadge": "Creating a badge?",
+      "launchingAQuest": "Launching a quest?",
+      "youNeedTo": "You need to both pass percentage of required participants (min % of total members participating in the vote) and percentage of required voice (min % of members endorsing it). Try to find the right level of support before proposing!",
+      "createAGeneric": "Create a contribution proposal with a descriptive title and clear definition of the policy along with steps to implement the policy..",
       "createARecurring": "Create a recurring activity for an existing role-assignment and describe why you are a good match with as many details as possible.",
-      "createAProposal": "Create a proposal for an organization asset and pick role-archetype with a descriptive name and clear definition of the role with accountabilities.",
+      "createAProposal": "Create a proposal for an organization asset and pick a role type with a descriptive name and clear definition of the role accountabilities.",
       "createAProposal1": "Create a proposal for an organization asset and pick a badge-type with a name and clear recognition of learning or unlocking achievement or confirming a status level.",
-      "createAGeneric1": "Create a generic contribution proposal with a descriptive title and clear breakdown of milestones and payouts per milestone along a timeline."
+      "createAGeneric1": "Create a contribution proposal with a descriptive title and clear breakdown of milestones and payouts per milestone along a timeline."
     },
     "news-item": {
       "posted": "posted {1}"
@@ -271,6 +512,7 @@
       "documentation": "Documentation"
     },
     "support-widget": {
+      "documentation": "Documentation",
       "needSupport": "Need support?",
       "pleaseReadOur": "Please read our Documentation for more info. If you are stuck with a problem you can also reach out to us on discord in the \"dao-support\" channel."
     }
@@ -433,7 +675,6 @@
       "loginHere": "Login here"
     },
     "welcome-view": {
-      "ctouppercase": " c.toUpperCase()) }}",
       "youNeedAn": "You need an Hypha Account to interact with Hypha Ecosystem and create a DAO.",
       "isonboarding": "{{ isOnboarding ? 'If you already have an Hypha Account click the log-in button, validate the trasaction with Anchor Walley and start creating your DAO.' : 'You need an hypha account to interact with Hypha DAOs. ",
       "ifThisIs": "If this is your first time here,",
@@ -493,11 +734,11 @@
       "registrationIsTemporarilyDisabled": "Registration is temporarily disabled"
     },
     "profile-sidebar-guest": {
-      "ctouppercase": " c.toUpperCase()) }}",
       "asAGuest": "As a guest you have full access to all content of the DAO. However, you cannot participate in any decision making or apply for any role or receive any contribution.",
       "registerNewAccount": "Register new account",
       "registrationIsTemporarilyDisabled": "Registration is temporarily disabled",
-      "login": "Login"
+      "login": "Login",
+      "welcomeTo": "Welcome to {daoName}"
     },
     "quick-actions": {
       "7432": "2",
@@ -520,7 +761,6 @@
     },
     "sidebar-news": {
       "weAreCurrently": "We are currently reviewing your application. Please check back at a later time.",
-      "ctouppercase": " c.toUpperCase()) }}.",
       "weAreCurrently1": "We are currently reviewing your application. Please check back at a later time.",
       "niceToSee": "Nice to see you here. Go take a look around. This DAO is here to help you govern your decentralized organization, reduce coordination cost and build your vision and purpose.",
       "youCanVoteFor": "You can vote for ",
@@ -532,22 +772,27 @@
       "tick": " tick.",
       "beSureTo": "Be sure to complete your ",
       "profile": "profile",
-      "andHaveFun": " and have fun co-creating new and exciting things with your DAO and each-other."
+      "andHaveFun": " and have fun co-creating new and exciting things with your DAO and each-other.",
+      "welcomeTo": "Welcome to {daoName}"
     }
   },
   "organization-asset": {
     "asset-card": {
       "revoke": "Revoke",
       "seeDetails": "See details",
-      "na": "n/a"
+      "na": "n/a",
+      "apply": "Apply",
+      "applied": "Applied"
     },
     "create-badge-widget": {
-      "newBadgeProposal": "New Badge proposal"
+      "newBadgeProposal": "New Badge proposal",
+      "createYourBadge": "Create your badge",
+      "doYouNeedSpecific": "Do you need specific badge for your DAO core members or for the Community of Token Holders? Create a Badge proposal!"
     }
   },
   "organization": {
     "archetypes-widget": {
-      "archetypes": "Archetypes"
+      "archetypes": "Role Types"
     },
     "badge-assignments-widget": {
       "badgeAssignments": "Badge assignments"
@@ -578,7 +823,7 @@
     },
     "payout-card": " 150 ? '...' : '')}}",
     "payouts-widget": {
-      "passedGenericContributions": "Passed Generic Contributions"
+      "passedGenericContributions": "Passed Contributions"
     },
     "policies-widget": {
       "policies": "Policies",
@@ -590,7 +835,8 @@
     },
     "tokens": {
       "seeMore": "See more",
-      "seeMore1": "See more"
+      "seeMore1": "See more",
+      "issuance": "Tokens Issued"
     }
   },
   "plan": {
@@ -657,7 +903,10 @@
       "voice": "{1} VOICE",
       "name": "Name",
       "timeZone": "Time zone",
-      "text": "text"
+      "text": "text",
+      "applicant": "APPLICANT",
+      "coreTeam": "CORE TEAM",
+      "community": "COMMUNITY"
     },
     "proposal-item": {
       "viewProposal": "View proposal",
@@ -669,8 +918,6 @@
     "voting-history": {
       "recentVotes": "Recent votes",
       "caption": "caption",
-      "ctouppercase": " c.toUpperCase()) }}",
-      "ctouppercase1": " c.toUpperCase()) }}",
       "noVotesFound": "No votes found for user"
     },
     "wallet-adresses": {
@@ -685,13 +932,16 @@
       "memo": "memo",
       "eos1": "EOS",
       "address3": "address",
-      "memo1": "memo"
+      "memo1": "memo",
+      "walletAdresses": "Wallet Adresses",
+      "onlyVisibleToYou": "only visible to you"
     },
     "wallet-base": {
       "485": "500.00",
       "4842": "1000.00",
       "wallet": "Wallet",
       "redeemHusd": "Redeem HUSD",
+      "makeAnotherRedemption": "Make another Redemption",
       "redemptionPending": "Redemption pending",
       "requestor": "Requestor",
       "amount": "Amount",
@@ -709,7 +959,8 @@
       "noWalletFound": "No wallet found",
       "pendingRedemptions": "Pending redemptions",
       "details": "Details",
-      "queueHusdRedemption": "Queue HUSD Redemption for Treasury Payout to Configured Wallet"
+      "queueHusdRedemption": "Queue HUSD Redemption for Treasury Payout to Configured Wallet",
+      "redeem": "Redeem"
     },
     "wallet-hypha": {
       "availableBalance": "Available Balance",
@@ -761,6 +1012,30 @@
       "publish": "Publish",
       "iChangedMyMind": "I changed my mind"
     },
+    "proposal-card-chips": {
+      "poll": "Poll",
+      "circleBudget": "Circle Budget",
+      "quest": "Quest",
+      "start": "Start",
+      "payout": "Payout",
+      "circle": "Circle",
+      "policy": "Policy",
+      "genericContribution": "Contribution",
+      "role": "Role",
+      "assignment": "Assignment",
+      "extension": "Extension",
+      "ability": "Ability",
+      "archetype": " Archetype",
+      "badge": "Badge",
+      "suspension": "Suspension",
+      "withdrawn": "Withdrawn",
+      "accepted": "ACCEPTED",
+      "rejected": "REJECTED",
+      "voting": "VOTING",
+      "active": "ACTIVE",
+      "archived": "ARCHIVED",
+      "suspended": "SUSPENDED" 
+    },
     "proposal-view": {
       "s": " 1 ? 's' : ''}` }}",
       "title": "Title",
@@ -777,7 +1052,8 @@
       "minDeferredAmount": "Min deferred amount",
       "roleCapacity": "Role capacity",
       "compensation": "Compensation",
-      "showCompensationFor": "Show compensation for one period",
+      "compensation1": "Reward",
+      "showCompensationFor": "Show reward for one period",
       "deferredAmount1": "Deferred amount",
       "parentCircle": "Parent circle",
       "parentCircle1": "Parent circle",
@@ -937,7 +1213,15 @@
       },
       "explore": {
         "discoverMore": "Discover More",
-        "members": "Members"
+        "members": "Members",
+        "discoverTheHyphaDAONetwork": "Discover the Hypha DAO network",
+        "welcomeToTheGlobalDAO": "Welcome to the global DAO directory! Click on any card to open the DAO and to take a look under the hood. You can learn more about them, apply as a member or simply take a look around.",
+        "searchDHOs": "Search DHOs",
+        "searchEcosystems": "Search Ecosystems",
+        "sortBy": "Sort by",
+        "oldestFirst": "Oldest first",
+        "newestFirst": "Newest first",
+        "alphabetically": "Alphabetically"
       },
       "finflow": {
         "totalUnclaimedPeriods": "Total unclaimed periods",
@@ -972,7 +1256,15 @@
         "copyInviteLink": "Copy invite link",
         "sendALink": "Send a link to your friends to invite them to join this DAO",
         "daoApplicants": "DAO Applicants",
-        "daoApplicants1": "DAO Applicants"
+        "daoApplicants1": "DAO Applicants",
+        "filterByAccountName": "Filter by account name",
+        "sortBy": "Sort by",
+        "joinDateDescending": "Join date descending",
+        "joinDateAscending": "Join date ascending",
+        "alphabetically": "Alphabetically (A-Z)",
+        "all": "All",
+        "coreTeam": "Core Team",
+        "communityMembers": "Community members"
       },
       "organization": {
         "documentation": "Documentation",
@@ -997,7 +1289,14 @@
       },
       "organizationalassets": {
         "noBadges": "No Badges",
-        "noBadges1": "No Badges"
+        "noBadges1": "No Badges",
+        "yourOrganizationDoesnt": "Your organization doesn't have any badges yet. You can create one by clicking the button below.",
+        "searchBadges": "Search badges",
+        "filterByName": "Filter by name",
+        "createANewBadge": "Create a new badge",
+        "sortByCreateDateAscending": "Sort by create date ascending",
+        "sortByCreateDateDescending": "Sort by create date descending",
+        "sortAlpabetically": "Sort Alphabetically (A-Z)"
       },
       "treasury": {
         "transactionReview": "Transaction Review",
@@ -1060,7 +1359,12 @@
     "profiles": {
       "wallet": {
         "notitle": "no-title",
-        "notitle1": "no-title"
+        "notitle1": "no-title",
+        "activity": "activity",
+        "date": "date",
+        "status": "status",
+        "amount": "amount",
+        "claimed": "claimed"
       },
       "profile": {
         "inlinelabel": "inline-label",
@@ -1074,7 +1378,27 @@
         "contributions": "Contributions",
         "quests": "Quests",
         "biography": "Biography",
-        "recentVotes": "Recent votes"
+        "recentVotes": "Recent votes",
+        "noBadgesYesApplyFor": "No Badges yet - apply for a Badge here",
+        "noBadgesToSeeHere": "No badges to see here.",
+        "apply": "Apply",
+        "looksLikeYouDontHaveAnyActiveAssignments": "Looks like you don't have any active assignments. You can browse all Role Archetypes.",
+        "noActiveOrArchivedAssignments": "No active or archived assignments to see here.",
+        "createAssignment": "Create Assignment",
+        "looksLikeYouDontHaveAnyContributions": "Looks like you don't have any contributions yet. You can create a new contribution in the Proposal Creation Wizard.",
+        "noContributionsToSeeHere": "No contributions to see here.",
+        "createContribution": "Create Contribution",
+        "looksLikeYouDontHaveAnyQuests": "Looks like you don't have any quests yet. You can create a new quest in the Proposal Creation Wizard.",
+        "noQuestsToSeeHere": "No quests to see here.",
+        "createQuest": "Create Quest",
+        "writeSomethingAboutYourself": "Write something about yourself and let other users know about your motivation to join.",
+        "looksLikeDidntWrite": "Looks like {username} didn't write anything about their motivation to join this DAO yet.",
+        "writeBiography": "Write biography",
+        "retrievingBio": "Retrieving bio...",
+        "youHaventCast": "You haven't cast any votes yet. Go and take a look at all proposals",
+        "noVotesCastedYet": "No votes casted yet.",
+        "vote": "Vote"
+
       },
       "profile-creation": {
         "profilePicture": "Profile picure",
@@ -1096,9 +1420,18 @@
     "proposals": {
       "create": {
         "optionsarchetypes": {
-          "chooseARoleArchetype": "Choose a role archetype\n        ",
+          "form":{
+            "archetype": {
+              "label":"Select type"
+            },
+            "tier": {
+              "label": "Select tier"
+            }
+          },
+          "chooseARoleArchetype": "Choose a role type",
           "noArchetypesExistYet": "No archetypes exist yet.",
-          "pleaseCreateThemHere": "Please create them here."
+          "pleaseCreateThemHere": "Please create them here.",
+          "chooseARoleTier": "Choose a role tier"
         },
         "optionsassignments": {
           "chooseARecent": "Choose a recent assignment to calculate a bridge payout"
@@ -1161,17 +1494,20 @@
         },
         "steppayout": {
           "payout": "Payout",
-          "pleaseEnterTheUsd": "Please enter the USD equivalent and % deferral for this contribution – the more you defer to a later date, the higher the bonus will be (see actual salary calculation below or use our calculator). The bottom fields compute the actual payout in SEEDS, HVOICE, HYPHA and HUSD.",
+          "pleaseEnterTheUSDEquivalentAnd1": "Please enter the USD equivalent and % deferral for this contribution – the more you defer to a later date, the higher the bonus will be (see actual salary calculation below or use our calculator). The bottom fields compute the actual payout in SEEDS, HVOICE, HYPHA and HUSD.",
+          "pleaseEnterTheUsd": "Please enter the HUSD amount (i.e. USD equivalent) for your reward. You can use the slider to select the reward percentage you will be deferring.",
           "typeTheAmountOfUsd": "Type the amount of HUSD",
           "commitmentMustBeGreater": "Commitment must be greater than or equal to the role configuration. Role value for min commitment is",
           "defferedMustBeGreater": "Deferred must be greater than or equal to the role configuration. Role value for min deferred is",
           "salaryCompensationForOneYear": "Salary compensation for one year ( ${value} )",
           "salaryCompensationForOneYearUsd": "Salary compensation for one year ( ${value} ) USD",
-          "compensation": "Compensation",
-          "pleaseEnterTheUSD": "Please enter the USD equivalent and % deferral for this contribution – the more you defer to a later date, the higher the bonus will be (see actual salary calculation below or use our calculator). The bottom fields compute the actual payout in SEEDS, HVOICE, HYPHA and HUSD.",
-          "compensationForOnePeriod": "Compensation for one period",
-          "compensationForOneCycle": "Compensation for one cycle",
-          "customCompensation": "Custom compensation"
+          "compensation": "Calculation",
+          "compensation1": "Reward",
+          "pleaseEnterTheUSD": "Please enter the HUSD amount (i.e. USD equivalent) for your reward. You can use the slider to select the reward percentage you will be deferring.",
+          "belowYouCanSeeTheActual": "Below you can see the actual breakdown of the reward in HVOICE, HYPHA and HUSD",
+          "compensationForOnePeriod": "Reward for one period",
+          "compensationForOneCycle": "Reward for one cycle",
+          "customCompensation": "Custom Reward"
         }
       },
       "proposallist": {
@@ -1188,7 +1524,12 @@
         "activeProposals1": "Active proposals",
         "proposalHistory": "Proposal history",
         "lookingToMonitor": "Looking to monitor how old proposals went? click here to check all proposal history",
-        "seeHistory": "See history >"
+        "seeHistory": "See history >",
+        "isTheMinimumRequiredPercentageOfMembers": "Percentage of required voice for a proposal to pass.",
+        "isTheMinimumRequiredPercentageOfTotal": "Percentage of required participants for a vote.",
+        "searchProposals": "Search proposals",
+        "proposalTypes": "Proposal types",
+        "sortByLastAdded": "Sort by last added"
       },
       "proposalhistory": {
         "noProposals": "No Proposals",
@@ -1349,5 +1690,228 @@
     "yourAssignmentHasBeenApproved": "Your assignment has been approved",
     "assignmentRejected": "Assignment rejected",
     "yourAssignmentHasntBeenApproved": "Your assignment hasn’t been approved"
+  },
+  "proposalparsing": {
+    "createdAgo": "Created {diff} ago",
+    "closedAgo": "Closed {diff} ago",
+    "thisVoteWillCloseIn": "This vote will close in {dayStr}{hourStr}:{minStr}:{segStr}",
+    "second": " second",
+    "seconds": " seconds",
+    "minutes": " minutes",
+    "minute": " minute",
+    "hour": " hour",
+    "hours": " hours",
+    "day": " day",
+    "days": " days",
+    "dayWithValue": "{days} day, ",
+    "daysWithValue": "{days} days, "
+  },
+  "proposalFilter": {
+    "all": "All",
+    "ability": "Ability",
+    "role": "Role",
+    "queststart": "Quest Start",
+    "questend": "Quest End",
+    "archetype": "Archetype",
+    "badge": "Badge",
+    "circle": "Circle",
+    "budget": "Budget",
+    "policy": "Policy",
+    "genericcontributions": "Contributions",
+    "suspension": "Suspension"
+  },
+  "routes": {
+    "exploreDAOs": "Explore DAOs",
+    "findOutMoreAboutHowToSetUp": "Find out more about how to set up your own DAO and Hypha here: https://hypha.earth",
+    "404NotFound": "404 Not Found",
+    "finflow": "Finflow",
+    "dashboard": "Dashboard",
+    "explore": "Explore",
+    "createANewDao": "Create a new DHO",
+    "login": "Login",
+    "members": "Members",
+    "proposals": "Proposals",
+    "createProposal": "Create Proposal",
+    "proposalHistory": "Proposal history",
+    "proposalDetails": "Proposal Details",
+    "organization": "Organization",
+    "organizationAssets": "Organization Assets",
+    "organizationBadges": "Organization Badges",
+    "organizationRoles": "Organization Roles",
+    "profile": "Profile",
+    "profileCreation": "Profile creation",
+    "wallet": "Wallet",
+    "circles": "Circles",
+    "searchResults": "Search results",
+    "search": "Search",
+    "support": "Support",
+    "treasury": "Treasury",
+    "multiSig": "Multi sig",
+    "configurationSettings": "Configuration settings",
+    "ecosystemDashboard": "Ecosystem Dashboard",
+    "checkout": "Checkout",
+    "upvoteElection": "Upvote Election"
+  },
+  "proposal-creation": {
+    "creation-process": "Creation process",
+    "steps": {
+      "type": {
+        "label": "Type"
+      },
+      "description": {
+        "label": "Details",
+        "placeholder": "Please state the reason for this contribution. The more details you can provide, the more likely it is to pass."
+      },
+      "date": {
+        "label": "Duration"
+      },
+      "icon": {
+        "label": "Icon selection"
+      },
+      "compensation": {
+        "label": "Compensation"
+      },
+      "review": {
+        "label": "Review"
+      }
+    },
+    "description": "Description",
+    "title": "Title",
+    "typeTheTitleOfYourProposal": "Type the title of your proposal",
+    "pleaseStateTheReasonForThisContributionTheMore": "Please state the reason for this contribution. The more details you can provide, the more likely it is to pass.",
+    "ability": "Ability",
+    "shareTheDetailsOfThisBadgeAssignment": "Share the details of this Badge Assignment by following the policies of this organization. If you don't know, ask an older member for help.",
+    "multiply": "Multiply",
+    "abilityDuration": "Ability Duration",
+    "circle": "Circle",
+    "selectACircleFromTheList": "Select a circle from the list",
+    "voiceCoefficient": "Voice Coefficient",
+    "utilityCoefficient": "Utility Coefficient",
+    "cashCoefficient": "Cash Coefficient",
+    "payout": "Payout",
+    "compensation": "Calculation",
+    "pleaseEnterTheUSDEquivalentAnd": "Please enter the HUSD amount (i.e. USD equivalent) for your reward. You can use the slider to select the reward percentage you will be deferring.",
+    "belowYouCanSeeTheActual": "Below you can see the actual breakdown of the reward in HVOICE, HYPHA and HUSD",
+    "typeThePayoutTitle": "Type the payout title",
+    "typeThePayoutDescription": "Type the payout description",
+    "attachments": "Attachments",
+    "clickToAddFile": "Click to add file",
+    "totalUSDEquivalent": "Total USD Equivalent",
+    "chooseTheDeferredAmount": "Choose the deferred amount",
+    "customCompensation": "Custom compensation",
+    "cashToken": "Cash Token",
+    "utilityToken": "Utility Token",
+    "voiceToken": "Voice Token",
+    "poll": "Poll",
+    "pollOrSenseCheckWithCommunityMembers": "Poll or sense check with community members to see what will build stronger support over other proposals. This better aligns the community and the core team.",
+    "useThisFieldToDetailTheContentOfYourPoll": "Use this field to detail the content of your poll",
+    "votingMethod": "Voting method",
+    "selectVotingMethod": "Select voting method",
+    "content": "Content",
+    "contribution" : "Contribution",
+    "shareTheDetailsOfYoutContribution": "Share the details of your Contribution by following the policies of this organization. If you don't know, ask an older member for help.",
+    "describeYourProposal": "Describe your proposal",
+    "chooseYourPayout": "Choose your reward",
+    "documentation": "Documentation",
+    "quest": "Quest",
+    "aQuestIsA2Step": "A Quest is a 2 step proposal. The first step allows DAO members to approve the project. After the project’s completion, you can trigger “quest completion” and request the reward in the second step.",
+    "createNewQuest": "Create new quest",
+    "typeTheQuestName": "Type the quest name",
+    "describeYourQuest": "Describe your quest",
+    "duration": "Duration",
+    "type": "Type",
+    "selectQuestType": "Select quest type",
+    "milestone": "Milestone",
+    "selectPreviousQuest": "Select previous quest",
+    "createNewPoll": "Create new poll",
+    "role": "Role",
+    "applyBySelectingARoleArchetype": "Apply by selecting a role type and tier to show its level. Add more details, like a matching profile, time frame, OKRs or commitment levels.",
+    "applyForTheRole": "Apply for the role",
+    "name": "Name",
+    "typeTheRoleName": "Type the role name",
+    "typeTheRoleDescription": "Type the role description",
+    "manageYourSalary": "Manage your salary",
+    "fieldsBelowDisplayTheMinimum": "Fields below display the minimum % commitment and % HYPHA tokens vs. HUSD tokens required for this role as well as the role capacity (how many people can be assigned to this role) and USD equivalent.",
+    "chooseYourCommitmentLevel": "Choose your commitment level",
+    "badge": "Badge",
+    "findHereAvailableBadges": "Find here available Badges with unique scope and features. Apply by selecting a badge template, why it is awarded to you and a time frame it is valid for.",
+    "applyForTheNewAbility": "Apply for the new ability",
+    "typeTheAbilityName": "Type the ability name",
+    "tellOtherMembersThereReasons": "Tell other Members there reasons why you want to apply to this badge",
+    "theseAreBasicAccountAbilities": "These are basic account abilities a user role can fulfill. Think of an archetype as a templated job description for a role.",
+    "createNewArchetype": "Create new archetype",
+    "typeTheArchetypeName": "Type the archetype name",
+    "typeTheArchetypeDescription": "Type the archetype description",
+    "chooseTheSalaryBand": "Choose the salary band",
+    "enterTheRoleCapacity": "Enter the role capacity",
+    "maximumNumberOfPeopleForThisRole": "Maximum number of people for this role. Fractions are allowed",
+    "chooseTheMinimumDeferredAmount": "Choose the minimum deferred amount",
+    "minimumRequiredPayedOutAsUtilityToken": "Minimum % required payed out as utility token",
+    "badgesGiveCertainRightsAndAccountAbilities": "Badges give certain rights and account abilities to the holder. Specify these in the description, create or upload an icon. The badge is ready!'",
+    "createNewBadge": "Create new badge",
+    "typeTheBadgeName": "Type the badge name",
+    "typeTheBadgeDescription": "Type the badge description",
+    "tokenMultiplier": "Token multiplier",
+    "badgesProvideAnAdditionalMultiplier": "Badges provide an additional multiplier on top of any earnings received through an activity in the DAO. For example, if you are in a role and earn 100 voice tokens for each claim, a 1.1x multiplier on voice will give you an additional 10 voice tokens for each claim.",
+    "circleDefineTheDAOsBoundaries": "Circles define the DAO’s boundaries and domains. Any activity is tied to a circle (the activity’s home base) so DAO budgets are maintained. Circles can have roles, policies and quests.",
+    "createNewCircle": "Create new circle",
+    "typeTheCircleName": "Type the circle name",
+    "purpose": "Purpose",
+    "typeTheCircleBudget": "Type the circle budget",
+    "parentCircle": "Parent Circle",
+    "selectTheCircleParent": "Select the circle parent. If it's root circle leave it blank.",
+    "budget": "Budget",
+    "requestBudgetAllocation": "Request Budget allocation for a specific Circle with this proposal. So the the Circle’s Roles, Quests and payouts will be managed using the Circle Budget.",
+    "createNewBudget": "Create new budget",
+    "typeTheBudgetName": "Type the budget name",
+    "typeHereTheContentOfYourBadge": "Type here the content of your budget",
+    "policy": "Policy",
+    "policiesCreateRulesThatDAOMembers": "Policies create rules that DAO members must follow. It provides a frame of reference to shape the DAO and clarifies the do’s and don’ts.",
+    "createNewPolicy": "Create new policy",
+    "typeThePolicyName": "Type the policy name",
+    "typeHereTheContentOfYourPolicy": "Type here the content of your policy",
+    "selectTheCircleParentOrLeaveItBlank": "Select the circle parent or leave it blank",
+    "policyType": "Policy Type",
+    "selectThePolicyType": "Select the policy type. If it's root policy leave it blank"
+  },
+  "search": {
+    "results": {
+      "results": "{value} Results",
+      "noResultsFound": "No results found",
+      "resultsTypes": "Results types",
+      "all": "All",
+      "members": "Members",
+      "genericContribution": "Contribution",
+      "roleAssignments": "Role Assignments",
+      "roleArchetypes": "Role Archetypes",
+      "badgeTypes": "Badge Types",
+      "badgeAssignments": "Badge Assignments",
+      "suspensions": "Suspensions",
+      "filterBy": "Filter by",
+      "voting": "Voting",
+      "active": "Active",
+      "archived": "Archived",
+      "suspended": "Suspended",
+      "sortBy": "Sort by",
+      "oldestFirst": "Oldest first",
+      "newestFirst": "Newest first",
+      "alphabetically": "Alphabetically (A-Z)",
+      "result": {
+        "active": "Active",
+        "pendingToClose": "Pending to close",
+        "voting": "Voting",
+        "suspended": "Suspended",
+        "archived": "Archived",
+        "withdrawn": "Withdrawn",
+        "applicant": "Applicant",
+        "genericContribution": "Contribution",
+        "extension": "Extension",
+        "roleAssignment": "Role Assignment",
+        "badgeAssignment": "Badge Assignment",
+        "suspension": "Suspension",
+        "roleArchetype": " Role Archetype",
+        "badge": "Badge"
+      }
+    }
   }
 }

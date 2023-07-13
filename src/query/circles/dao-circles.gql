@@ -2,13 +2,13 @@ query daoCircles($daoId: String!) {
   getDao(docId: $daoId) {
     docId
     details_daoName_n
-    circle {
+    circle(filter: { details_autoApprove_i: { eq: 1 } }) {
       id: docId
       name: details_title_s
       purpose: details_description_s
       husd: budget {
         details_usdAmount_a
-      },
+      }
       hvoice: budget {
         details_voiceAmount_a
       }
@@ -27,7 +27,7 @@ query daoCircles($daoId: String!) {
         purpose: details_description_s
         husd: budget {
           details_usdAmount_a
-        },
+        }
         hvoice: budget {
           details_voiceAmount_a
         }
