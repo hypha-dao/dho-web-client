@@ -88,8 +88,17 @@ export default {
     pageCount () { return Math.ceil(this.voteCount / 5) },
 
     votesPaginated () {
-      if (!this.votes) return []
-      return [...this.votes].splice(this.page * this.size, this.size)
+      if (!this.votes || this.isLoading) return []
+
+      const startIndex = this.page * this.size
+      const lastIndex = startIndex + this.size
+      const voteCount = this.votes.length
+
+      if (voteCount >= lastIndex) {
+        return [...this.votes].splice(startIndex, this.size)
+      }
+
+      return [...this.votes].splice(startIndex / this.size, this.size)
     }
   },
 
