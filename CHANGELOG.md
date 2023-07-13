@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.31.1](https://github.com/hypha-dao/dho-web-client/compare/v2.31.0...v2.31.1) (2023-07-13)
+
+
+### Miscellaneous Chores
+
+* release 2.31.1 ([e13ff28](https://github.com/hypha-dao/dho-web-client/commit/e13ff28ace01950a96d45a35275331e446961055))
+
 ## [2.31.0](https://github.com/hypha-dao/dho-web-client/compare/v2.30.0...v2.31.0) (2023-07-12)
 
 
