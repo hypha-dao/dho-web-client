@@ -1,5 +1,14 @@
 # Changelog
 
+## [2.31.2](https://github.com/hypha-dao/dho-web-client/compare/v2.31.1...v2.31.2) (2023-07-14)
+
+
+### Bug Fixes
+
+* **proposal-creation:** archetypes creation ([#2331](https://github.com/hypha-dao/dho-web-client/issues/2331)) ([9d4084a](https://github.com/hypha-dao/dho-web-client/commit/9d4084a211350ba61ff3cf6265ad6750fef05dce))
+* **proposals:** tokens calculation ([#2330](https://github.com/hypha-dao/dho-web-client/issues/2330)) ([827a799](https://github.com/hypha-dao/dho-web-client/commit/827a79952a11b299e9d5f14ae61c79d904d4fac8))
+* **translations:** added missing translations ([#2324](https://github.com/hypha-dao/dho-web-client/issues/2324)) ([8f6329f](https://github.com/hypha-dao/dho-web-client/commit/8f6329f91ee7f842cda7912d7a29e8c8ee13e3a7))
+
 ## [2.31.1](https://github.com/hypha-dao/dho-web-client/compare/v2.31.0...v2.31.1) (2023-07-13)
 
 
