@@ -83,3 +83,8 @@ export const MULTISIG_TABS = Object.freeze({
 export const RPC_ACCOUNTS = Object.freeze({
   EOSIO: 'eosio.msig'
 })
+
+export const PERIOD_NUMBERS = Object.freeze({
+  SECS_PER_YEAR: 31557600,
+  CYCLE_DURATION_SEC: 2629800
+})
