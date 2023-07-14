@@ -695,6 +695,89 @@ export default {
         //     }
         //   }
         // },
+        archetype: {
+          key: 'archetype',
+          icon: 'far fa-user',
+          type: 'Role',
+          title: 'Role Archetype',
+          description: "Share the details of this Role Archetype by following the policies of this organization. Remember, Roles belong to the organization, Role Assignments belong to you. If you don't know, ask an older member for help.",
+          options: '',
+          steps: {
+            date: {
+              skip: true
+            },
+            icon: {
+              skip: true
+            }
+          },
+          fields: {
+            stepCompensationTitle: {
+              label: I18n.t('proposal-creation.typeTheArchetypeDescription')
+            },
+            annualUsdSalary: {
+              key: 'annualUsdSalary',
+              label: I18n.t('proposal-creation.chooseTheSalaryBand'),
+              type: 'select',
+              options: [
+                {
+                  label: 'B1 - $70000/year',
+                  value: 70000
+                },
+                {
+                  label: 'B2 - $90000/year',
+                  value: 90000
+                },
+                {
+                  label: 'B3 - $110000/year',
+                  value: 110000
+                },
+                {
+                  label: 'B4 - $130000/year',
+                  value: 130000
+                },
+                {
+                  label: 'B5 - $150000/year',
+                  value: 150000
+                },
+                {
+                  label: 'B6 - $170000/year',
+                  value: 170000
+                },
+                {
+                  label: 'B7 - $190000/year',
+                  value: 190000
+                }
+              ]
+            },
+            roleCapacity: {
+              key: 'roleCapacity',
+              type: 'number',
+              label: I18n.t('proposal-creation.enterTheRoleCapacity'),
+              tooltip: I18n.t('proposal-creation.maximumNumberOfPeopleForThisRole')
+            },
+            minDeferred: {
+              key: 'minDeferred',
+              type: 'percent',
+              label: I18n.t('proposal-creation.chooseTheMinimumDeferredAmount'),
+              tooltip: I18n.t('proposal-creation.minimumRequiredPayedOutAsUtilityToken')
+            },
+            peg: {
+              key: 'peg',
+              label: I18n.t('proposal-creation.cashToken'),
+              type: 'asset'
+            },
+            reward: {
+              key: 'reward',
+              label: I18n.t('proposal-creation.utilityToken'),
+              type: 'asset'
+            },
+            voice: {
+              key: 'voice',
+              label: I18n.t('proposal-creation.voiceToken'),
+              type: 'asset'
+            }
+          }
+        },
         policy: {
           optionType: 'org-assets',
           key: 'policy',

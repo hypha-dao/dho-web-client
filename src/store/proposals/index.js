@@ -1,5 +1,5 @@
 import Storage from '~/localStorage/storage'
-import { PROPOSAL_TYPE } from '~/const'
+import { PROPOSAL_TYPE, PERIOD_NUMBERS } from '~/const'
 /**
  * This vuex data store contains the data needed in the proposal creation wizard.
  */
@@ -401,20 +401,21 @@ export default {
       const commitment = isNaN(state.draft.commitment) ? 0 : parseFloat(state.draft.commitment || 0)
       // Assignment
       // TO DO sacar porcentaje de acuerdo al commitment share_x100
-      let ratioUsdEquity = typeProposal === 'assignment' ? parseFloat(state.draft.annualUsdSalary || 0) / 12 : parseFloat(state.draft.usdAmount || 0)
-
+      const periodsOnCycle = (PERIOD_NUMBERS.CYCLE_DURATION_SEC / rootState.dao.settings.periodDurationSec).toFixed(2)
+      const yearToPeriodRatio = rootState.dao.settings.periodDurationSec / PERIOD_NUMBERS.SECS_PER_YEAR
+      let ratioUsdEquity = typeProposal === 'assignment' ? parseFloat(state.draft.annualUsdSalary || 0) : parseFloat(state.draft.usdAmount || 0)
+      const usdSalaryPerPeriod = yearToPeriodRatio * ratioUsdEquity
       if (typeProposal === 'assignment') {
-        ratioUsdEquity = ratioUsdEquity * (commitment * 0.01)
+        ratioUsdEquity = usdSalaryPerPeriod * (commitment / 100) * periodsOnCycle
         // ratioUsdEquity = ratioUsdEquity / 12
       } else if (typeProposal === 'archetype') {
         ratioUsdEquity = parseFloat(state.draft.annualUsdSalary || 0) / 12
         deferredSan = isNaN(state.draft.minDeferred) ? 0 : parseFloat(state.draft.minDeferred || 0)
       }
       // TO DO dividir entre 12 para mostrar por mes, mostrar uun lbael para informar que es mensual solo para assignmnt, y archertypes
-
-      commit('setPeg', (ratioUsdEquity * (1 - deferredSan * 0.01)).toFixed(0))
-      commit('setReward', (ratioUsdEquity * deferredSan * 0.01 / rootState.dao.settings.rewardToPegRatio).toFixed(0))
-      commit('setVoice', ratioUsdEquity.toFixed(0))
+      commit('setPeg', (ratioUsdEquity * (1 - deferredSan / 100)).toFixed(0))
+      commit('setReward', (ratioUsdEquity * (deferredSan / 100) / rootState.dao.settings.rewardToPegRatio).toFixed(0))
+      commit('setVoice', ratioUsdEquity.toFixed(0) * 2)
 
       // Para badges multiply multiplicar x 100 y sumar 10,000
     },

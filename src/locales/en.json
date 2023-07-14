@@ -792,14 +792,16 @@
   },
   "organization": {
     "archetypes-widget": {
-      "archetypes": "Role Types"
+      "archetypes": "Role Types",
+      "archetypesDescribeAccountabilities": "Archetypes describe accountabilities and/or key tasks assigned to members of the DAO. These archetypes allow members to apply for a role."
     },
     "badge-assignments-widget": {
       "badgeAssignments": "Badge assignments"
     },
     "badge-card": " 150 ? '...' : '')}}",
     "badges-widget": {
-      "badges": "Badges"
+      "badges": "Badges",
+      "badgesAssignedToMembers": "Badges assigned to members recognise certain skills or achievements and/or confirm a status level. These badges serve as a digital proof following a vote."
     },
     "circle-card": {
       "subCircles": "Sub Circles ({1})",
@@ -916,6 +918,9 @@
       "transactionHistory": "Transaction History"
     },
     "voting-history": {
+      "yes": "Yes",
+      "no": "No",
+      "abstain": "Abstain",
       "recentVotes": "Recent votes",
       "caption": "caption",
       "noVotesFound": "No votes found for user"
@@ -1196,6 +1201,9 @@
         "viewMultisig": "View multisig"
       },
       "ecosystem": {
+        "searchDHOs": "Search DHOs",
+        "proposalTypes": "Proposal types",
+        "fundsNeeded": "Funds needed",
         "active": "{1} Active",
         "daos": "DAOs",
         "inactive": "{1} Inactive",
@@ -1209,7 +1217,23 @@
         "members": "Members",
         "createNewDao": "Create New DAO",
         "youNeedTo": "You need to activate anchor DAO before you can create child DAOs.",
-        "onlyDaoAdmins1": "Only DAO admins can change the settings"
+        "onlyDaoAdmins1": "Only DAO admins can change the settings",
+        "sortBy": "Sort by",
+        "oldestFirst": "Oldest first",
+        "newestFirst": "Newest first",
+        "alphabetically": "Alphabetically",
+        "all": "All",
+        "ability": "Ability",
+        "role": "Role",
+        "queststart": "Quest Start",
+        "questend": "Quest End",
+        "archetype": "Archetype",
+        "badge": "Badge",
+        "circle": "Circle",
+        "budget": "Budget",
+        "policy": "Policy",
+        "genericcontributions": "Contributions",
+        "suspension": "Suspension"
       },
       "explore": {
         "discoverMore": "Discover More",
@@ -1264,7 +1288,8 @@
         "alphabetically": "Alphabetically (A-Z)",
         "all": "All",
         "coreTeam": "Core Team",
-        "communityMembers": "Community members"
+        "communityMembers": "Community members",
+        "coreAndCommunityMembers": "Core & Community members"
       },
       "organization": {
         "documentation": "Documentation",
@@ -1296,7 +1321,9 @@
         "createANewBadge": "Create a new badge",
         "sortByCreateDateAscending": "Sort by create date ascending",
         "sortByCreateDateDescending": "Sort by create date descending",
-        "sortAlpabetically": "Sort Alphabetically (A-Z)"
+        "sortAlpabetically": "Sort Alphabetically (A-Z)",
+        "roleArchetypes": "Role Archetypes",
+        "badges": "Badges"
       },
       "treasury": {
         "transactionReview": "Transaction Review",
@@ -1437,6 +1464,7 @@
           "chooseARecent": "Choose a recent assignment to calculate a bridge payout"
         },
         "optionsbadges": {
+          "select": "Select",
           "chooseABadge": "Choose a badge\n        ",
           "noArchetypesExistYet": "No archetypes exist yet.",
           "pleaseCreateThemHere": "Please create them here."
@@ -1446,7 +1474,9 @@
           "noPoliciesExistYet": "No policies exist yet."
         },
         "stepreview": {
-          "back": "Back"
+          "back": "Back",
+          "publish": "Publish",
+          "publishToStaging": "Publish to staging"
         },
         "stepproposaltype": {
           "completeYourDraftProposal": "Complete your draft proposal",
@@ -1474,7 +1504,10 @@
           "nextStep": "Next step"
         },
         "optionsquests": {
-          "chooseAQuestType": "Choose a quest type\n      "
+          "chooseAQuestType": "Choose a quest type\n      ",
+          "select": "Select",
+          "startANewQuest": "Start a new Quest",
+          "completeAnActiveQuest": "Complete an Active Quest"
         },
         "stepdetails": {
           "titleIsRequired": "Title is required!",
@@ -1507,7 +1540,9 @@
           "belowYouCanSeeTheActual": "Below you can see the actual breakdown of the reward in HVOICE, HYPHA and HUSD",
           "compensationForOnePeriod": "Reward for one period",
           "compensationForOneCycle": "Reward for one cycle",
-          "customCompensation": "Custom Reward"
+          "customCompensation": "Custom Reward",
+          "back": "Back",
+          "nextStep": "Next step"
         }
       },
       "proposallist": {
@@ -1893,5 +1928,25 @@
         "badge": "Badge"
       }
     }
+  },
+  "validation": {
+    "invalidEmailFormat": "Invalid email format",
+    "invalidPhoneFormat": "Invalid phone format",
+    "invalidDiscordFormat": "Invalid discord format. Ex. Regen#0001",
+    "theAccountMustContain": "The account must contain 12 lowercase characters only, number from 1 to 5 or a period.",
+    "theAccountMustContain1": "The account must contain 12 lowercase characters only and number from 1 to 5.",
+    "theAccountMustContain2": "The account must contain 12 characters",
+    "thisFieldMustContainLessThan": "This field must contain less than {val} characters",
+    "theAccountAlreadyExists": "The account {account} already exists",
+    "theAccountDoesntExists": "The account {account} doesn't exist",
+    "theTokenAlreadyExists": "The token {token} already exists. Please choose another name.",
+    "thisFieldIsRequired": "This field is required",
+    "youMustTypeAPositiveAmount": "You must type a positive amount",
+    "theValueMustBeLessThanOrEqual": "The value must be less than or equal to {value}",
+    "youValueMustBeGreaterThan": "You value must be greater than {value}",
+    "youValueMustBeGreaterThanOrEqual": "The value must be greater than or equal to {value}",
+    "minimumNumberOfCharacters": "Minimum number of characters is {number}",
+    "maximumNumberOfCharacters": "Maximum number of characters is {number}",
+    "pleaseTypeAValidURL": "Please type a valid URL"
   }
 }

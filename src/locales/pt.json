@@ -792,14 +792,16 @@
   },
   "organization": {
     "archetypes-widget": {
-      "archetypes": "arquétipos"
+      "archetypes": "arquétipos",
+      "archetypesDescribeAccountabilities": "Os arquétipos descrevem responsabilidades e/ou tarefas principais atribuídas aos membros do DAO. Esses arquétipos permitem que os membros se candidatem a uma função."
     },
     "badge-assignments-widget": {
       "badgeAssignments": "Atribuições de emblemas"
     },
     "badge-card": " 150? ",
     "badges-widget": {
-      "badges": "Distintivos"
+      "badges": "Distintivos",
+      "badgesAssignedToMembers": "Os emblemas atribuídos aos membros reconhecem certas habilidades ou conquistas e/ou confirmam um nível de status. Esses crachás servem como prova digital após uma votação."
     },
     "circle-card": {
       "subCircles": "Subcírculos ({1})",
@@ -916,8 +918,11 @@
       "transactionHistory": "Histórico de transações"
     },
     "voting-history": {
+      "yes": "Sim",
+      "no": "Não",
+      "abstain": "Abster-se",
       "recentVotes": "votos recentes",
-      "caption": "rubrica",
+      "caption": "Rubrica",
       "noVotesFound": "Nenhum voto encontrado para o usuário"
     },
     "wallet-adresses": {
@@ -1196,6 +1201,9 @@
         "viewMultisig": "Ver multisig"
       },
       "ecosystem": {
+        "searchDHOs": "Pesquisar DHOs",
+        "proposalTypes": "Tipos de proposta",
+        "fundsNeeded": "Fundos necessários",
         "active": "{1} Ativo",
         "daos": "DAOs",
         "inactive": "{1} Inativo",
@@ -1209,7 +1217,23 @@
         "members": "Membros",
         "createNewDao": "Criar novo DAO",
         "youNeedTo": "Você precisa ativar DAO âncora antes de criar DAOs filho.",
-        "onlyDaoAdmins1": "Somente administradores DAO podem alterar as configurações"
+        "onlyDaoAdmins1": "Somente administradores DAO podem alterar as configurações",
+        "sortBy": "Ordenar por",
+        "oldestFirst": "Mais velhos primeiro",
+        "newestFirst": "Os mais novos primeiro",
+        "alphabetically": "Alfabeticamente",
+        "all": "Todos",
+        "ability": "Habilidade",
+        "role": "Papel",
+        "queststart": "Início da missão",
+        "questend": "Fim da missão",
+        "archetype": "Arquétipo",
+        "badge": "Distintivo",
+        "circle": "Círculo",
+        "budget": "Orçamento",
+        "policy": "Política",
+        "genericcontributions": "Contribuições Genéricas",
+        "suspension": "Suspensão"
       },
       "explore": {
         "discoverMore": "Descubra mais",
@@ -1264,7 +1288,8 @@
         "alphabetically": "Alfabeticamente (A-Z)",
         "all": "Todos",
         "coreTeam": "Equipe principal",
-        "communityMembers": "Membros da comunidade"
+        "communityMembers": "Membros da comunidade",
+        "coreAndCommunityMembers": "Membros principais e da comunidade"
       },
       "organization": {
         "documentation": "Documentação",
@@ -1296,7 +1321,9 @@
         "createANewBadge": "Criar um novo selo",
         "sortByCreateDateAscending": "Classificar por data de criação ascendente",
         "sortByCreateDateDescending": "Classificar por data de criação descendente",
-        "sortAlpabetically": "Classificar alfabeticamente (A-Z)"
+        "sortAlpabetically": "Classificar alfabeticamente (A-Z)",
+        "roleArchetypes": "Arquétipos de papéis",
+        "badges": "Distintivos"
       },
       "treasury": {
         "transactionReview": "Revisão da transação",
@@ -1436,6 +1463,7 @@
           "chooseARecent": "Escolha uma atribuição recente para calcular um pagamento de ponte"
         },
         "optionsbadges": {
+          "select": "Selecionar",
           "chooseABadge": "Escolha um emblema\n        ",
           "noArchetypesExistYet": "Ainda não existem arquétipos.",
           "pleaseCreateThemHere": "Por favor, crie-os aqui."
@@ -1445,7 +1473,9 @@
           "noPoliciesExistYet": "Ainda não existem políticas."
         },
         "stepreview": {
-          "back": "Voltar"
+          "back": "Voltar",
+          "publish": "Publicar",
+          "publishToStaging": "Publicar para teste"
         },
         "stepproposaltype": {
           "completeYourDraftProposal": "Conclua seu rascunho de proposta",
@@ -1473,7 +1503,10 @@
           "nextStep": "Próxima Etapa"
         },
         "optionsquests": {
-          "chooseAQuestType": "Escolha um tipo de missão\n      "
+          "chooseAQuestType": "Escolha um tipo de missão\n      ",
+          "select": "Selecionar",
+          "startANewQuest": "Iniciar uma nova missão",
+          "completeAnActiveQuest": "Complete uma missão ativa"
         },
         "stepdetails": {
           "titleIsRequired": "O título é obrigatório!",
@@ -1506,7 +1539,9 @@
           "pleaseEnterTheUSD": "Insira o equivalente em USD e o percentual de diferimento para esta contribuição - quanto mais você adiar para uma data posterior, maior será o bônus (consulte o cálculo do salário real abaixo ou use nossa calculadora). ",
           "compensationForOnePeriod": "Compensação por um período",
           "compensationForOneCycle": "Compensação por um ciclo",
-          "customCompensation": "Compensação personalizada"
+          "customCompensation": "Compensação personalizada",
+          "back": "Voltar",
+          "nextStep": "Próxima Etapa"
         }
       },
       "proposallist": {
@@ -1891,5 +1926,25 @@
         "badge": "Distintivo"
       }
     }
+  },
+  "validation": {
+    "invalidEmailFormat": "Formato de email inválido",
+    "invalidPhoneFormat": "Formato de telefone inválido",
+    "invalidDiscordFormat": "Formato de discórdia inválido. ",
+    "theAccountMustContain": "A conta deve conter apenas 12 caracteres minúsculos, número de 1 a 5 ou um ponto.",
+    "theAccountMustContain1": "A conta deve conter apenas 12 caracteres minúsculos e numerar de 1 a 5.",
+    "theAccountMustContain2": "A conta deve conter 12 caracteres",
+    "thisFieldMustContainLessThan": "Este campo deve conter menos de {val} caracteres",
+    "theAccountAlreadyExists": "A conta {account} já existe",
+    "theAccountDoesntExists": "A conta {account} não existe",
+    "theTokenAlreadyExists": "O token {token} já existe. ",
+    "thisFieldIsRequired": "Este campo é obrigatório",
+    "youMustTypeAPositiveAmount": "Você deve digitar um valor positivo",
+    "theValueMustBeLessThanOrEqual": "O valor deve ser menor ou igual a {value}",
+    "youValueMustBeGreaterThan": "Seu valor deve ser maior que {value}",
+    "youValueMustBeGreaterThanOrEqual": "O valor deve ser maior ou igual a {value}",
+    "minimumNumberOfCharacters": "O número mínimo de caracteres é {number}",
+    "maximumNumberOfCharacters": "O número máximo de caracteres é {number}",
+    "pleaseTypeAValidURL": "Digite um URL válido"
   }
 }

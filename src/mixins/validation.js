@@ -1,22 +1,23 @@
 import { mapActions } from 'vuex'
 import { isURL } from 'validator'
 import { isValidPhoneNumber } from 'libphonenumber-js'
+import I18n from '../utils/i18n'
 
 export const validation = {
   data () {
     return {
       rules: {
-        isEmail: (val) => /^(?=[a-zA-Z0-9@._%+-]{6,254}$)[a-zA-Z0-9._%+-]{1,64}@(?:[a-zA-Z0-9-]{1,63}\.){1,8}[a-zA-Z]{2,63}$/.test(val.toLowerCase()) || 'Invalid email format',
-        isPhoneNumber: (val) => isValidPhoneNumber(val.toLowerCase()) || 'Invalid phone format',
-        isDiscordUsername: (val) => val ? /^.{3,32}#[0-9]{4}$/gmi.test(val.toLowerCase()) || 'Invalid discord format. Ex. Regen#0001' : true,
-        accountFormat: val => /^([a-z]|[1-5]|.){1,12}$/.test(val.toLowerCase()) || 'The account must contain 12 lowercase characters only, number from 1 to 5 or a period.',
-        accountFormatBasic: val => /^([a-z]|[.]|[1-5]){12}$/.test(val.toLowerCase()) || 'The account must contain 12 lowercase characters only and number from 1 to 5.',
-        accountLength: val => val.length === 12 || 'The account must contain 12 characters',
-        maxLength: val => value => value.length <= val || `This field must contain less than ${val} characters`,
-        isAccountAvailable: async account => (await this.isAccountAvailable(account.toLowerCase())) || `The account "${account}" already exists`,
-        accountExists: async account => !(await this.isAccountAvailable(account.toLowerCase())) || `The account "${account}" doesn't exist`,
-        isTokenAvailable: async token => (await this.isTokenAvailable(token.toUpperCase())) || `The token "${token}" already exists. Please choose another name.`,
-        required: val => !!val || 'This field is required',
+        isEmail: (val) => /^(?=[a-zA-Z0-9@._%+-]{6,254}$)[a-zA-Z0-9._%+-]{1,64}@(?:[a-zA-Z0-9-]{1,63}\.){1,8}[a-zA-Z]{2,63}$/.test(val.toLowerCase()) || I18n.t('validation.invalidEmailFormat'),
+        isPhoneNumber: (val) => isValidPhoneNumber(val.toLowerCase()) || I18n.t('validation.invalidPhoneFormat'),
+        isDiscordUsername: (val) => val ? /^.{3,32}#[0-9]{4}$/gmi.test(val.toLowerCase()) || I18n.t('validation.invalidDiscordFormat') : true,
+        accountFormat: val => /^([a-z]|[1-5]|.){1,12}$/.test(val.toLowerCase()) || I18n.t('validation.theAccountMustContain'),
+        accountFormatBasic: val => /^([a-z]|[.]|[1-5]){12}$/.test(val.toLowerCase()) || I18n.t('validation.theAccountMustContain1'),
+        accountLength: val => val.length === 12 || I18n.t('validation.theAccountMustContain2'),
+        maxLength: val => value => value.length <= val || I18n.t('validation.thisFieldMustContainLessThan', { val: val }),
+        isAccountAvailable: async account => (await this.isAccountAvailable(account.toLowerCase())) || I18n.t('validation.theAccountAlreadyExists', { account: account }),
+        accountExists: async account => !(await this.isAccountAvailable(account.toLowerCase())) || I18n.t('validation.theAccountDoesntExists', { account: account }),
+        isTokenAvailable: async token => (await this.isTokenAvailable(token.toUpperCase())) || I18n.t('validation.theTokenAlreadyExists', { token: token }),
+        required: val => !!val || I18n.t('validation.thisFieldIsRequired'),
         requiredIf: cond => val => {
           if (!cond) {
             return true
@@ -24,15 +25,15 @@ export const validation = {
           if (cond && !!val) {
             return true
           }
-          return 'This field is required'
+          return I18n.t('validation.thisFieldIsRequired')
         },
-        positiveAmount: val => parseFloat(val) >= 0 || 'You must type a positive amount',
-        lessOrEqualThan: value => val => val <= value || `The value must be less than or equal to ${value}`,
-        greaterThan: value => val => parseFloat(val) > 0 || `You value must be greater than ${value}`,
-        greaterThanOrEqual: value => val => val >= value || `The value must be greater than or equal to ${value}`,
-        min: number => val => val.length > number || `Minimum number of characters is ${number}`,
-        max: number => val => val.length < number || `Maximum number of characters is ${number}`,
-        url: val => !val || isURL(val, { require_protocol: true }) || 'Please type a valid URL'
+        positiveAmount: val => parseFloat(val) >= 0 || I18n.t('validation.youMustTypeAPositiveAmount'),
+        lessOrEqualThan: value => val => val <= value || I18n.t('validation.theValueMustBeLessThanOrEqual', { value: value }),
+        greaterThan: value => val => parseFloat(val) > 0 || I18n.t('validation.youValueMustBeGreaterThan', { value: value }),
+        greaterThanOrEqual: value => val => val >= value || I18n.t('validation.youValueMustBeGreaterThanOrEqual', { value: value }),
+        min: number => val => val.length > number || I18n.t('validation.minimumNumberOfCharacters', { number: number }),
+        max: number => val => val.length < number || I18n.t('validation.maximumNumberOfCharacters', { number: number }),
+        url: val => !val || isURL(val, { require_protocol: true }) || I18n.t('validation.pleaseTypeAValidURL')
       }
     }
   },

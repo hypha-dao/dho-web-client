@@ -792,14 +792,16 @@
   },
   "organization": {
     "archetypes-widget": {
-      "archetypes": "Архетипови"
+      "archetypes": "Архетипови",
+      "archetypesDescribeAccountabilities": "Архетипови описују одговорности и/или кључне задатке додељене члановима ДАО. Ови архетипови омогућавају члановима да се пријаве за улогу."
     },
     "badge-assignments-widget": {
       "badgeAssignments": "Задаци значке"
     },
     "badge-card": " 150 ? ",
     "badges-widget": {
-      "badges": "Значке"
+      "badges": "Значке",
+      "badgesAssignedToMembers": "Значке које се додељују члановима препознају одређене вештине или достигнућа и/или потврђују статусни ниво. Ове значке служе као дигитални доказ након гласања."
     },
     "circle-card": {
       "subCircles": "Подкругови ({1})",
@@ -916,6 +918,9 @@
       "transactionHistory": "Трансакције"
     },
     "voting-history": {
+      "yes": "Да",
+      "no": "Не",
+      "abstain": "Уздржати се",
       "recentVotes": "Недавни гласови",
       "caption": "Наслов",
       "noVotesFound": "Нема пронађених гласова за корисника"
@@ -1196,6 +1201,9 @@
         "viewMultisig": "Виев мултисиг"
       },
       "ecosystem": {
+        "searchDHOs": "Претражите ДХОс",
+        "proposalTypes": "Типови предлога",
+        "fundsNeeded": "Потребна средства",
         "active": "{1} Активан",
         "daos": "ДАО",
         "inactive": "{1} Неактиван",
@@ -1209,7 +1217,23 @@
         "members": "Чланови",
         "createNewDao": "Креирајте нови ДАО",
         "youNeedTo": "Морате да активирате сидрени ДАО пре него што можете да креирате подређене ДАО.",
-        "onlyDaoAdmins1": "Само ДАО администратори могу да промене подешавања"
+        "onlyDaoAdmins1": "Само ДАО администратори могу да промене подешавања",
+        "sortBy": "Сортирај по",
+        "oldestFirst": "Прво најстарији",
+        "newestFirst": "Најновији први",
+        "alphabetically": "По абецедном реду",
+        "all": "Све",
+        "ability": "Способност",
+        "role": "Улога",
+        "queststart": "Почетак мисије",
+        "questend": "Куест Енд",
+        "archetype": "Архетип",
+        "badge": "Значка",
+        "circle": "Цирцле",
+        "budget": "Буџет",
+        "policy": "Полици",
+        "genericcontributions": "Генерички доприноси",
+        "suspension": "Суспензија"
       },
       "explore": {
         "discoverMore": "Открити више",
@@ -1264,7 +1288,8 @@
         "alphabetically": "по абецедном реду (А-З)",
         "all": "Све",
         "coreTeam": "Главни тим",
-        "communityMembers": "Чланови заједнице"
+        "communityMembers": "Чланови заједнице",
+        "coreAndCommunityMembers": "Чланови језгра и заједнице"
       },
       "organization": {
         "documentation": "Документација",
@@ -1296,7 +1321,9 @@
         "createANewBadge": "Направите нову значку",
         "sortByCreateDateAscending": "Сортирај по датуму креирања узлазно",
         "sortByCreateDateDescending": "Сортирај према опадајућем датуму креирања",
-        "sortAlpabetically": "Сортирај по абецедном реду (А-З)"
+        "sortAlpabetically": "Сортирај по абецедном реду (А-З)",
+        "roleArchetypes":"Архетипови улога",
+        "badges": "Значке"
       },
       "treasury": {
         "transactionReview": "Трансацтион Ревиев",
@@ -1436,6 +1463,7 @@
           "chooseARecent": "Изаберите недавни задатак да бисте израчунали исплату за премошћивање"
         },
         "optionsbadges": {
+          "select": "Изабери",
           "chooseABadge": "Изаберите значку\n        ",
           "noArchetypesExistYet": "Архетипови још не постоје.",
           "pleaseCreateThemHere": "Направите их овде."
@@ -1445,7 +1473,9 @@
           "noPoliciesExistYet": "Још увек не постоје политике."
         },
         "stepreview": {
-          "back": "Назад"
+          "back": "Назад",
+          "publish": "Објави",
+          "publishToStaging": "Објави на инсценацији"
         },
         "stepproposaltype": {
           "completeYourDraftProposal": "Довршите свој нацрт предлога",
@@ -1473,7 +1503,10 @@
           "nextStep": "Следећи корак"
         },
         "optionsquests": {
-          "chooseAQuestType": "Изаберите тип мисије\n      "
+          "chooseAQuestType": "Изаберите тип мисије\n      ",
+          "select": "Изабери",
+          "startANewQuest": "Започни нову потрагу",
+          "completeAnActiveQuest": "Заврши активну потрагу"
         },
         "stepdetails": {
           "titleIsRequired": "Наслов је обавезан!",
@@ -1506,7 +1539,9 @@
           "pleaseEnterTheUSD": "Молимо унесите еквивалент у УСД и % одлагања за овај допринос – што више одложите на каснији датум, већи ће бити бонус (погледајте стварни обрачун плате испод или користите наш калкулатор). ",
           "compensationForOnePeriod": "Накнада за један период",
           "compensationForOneCycle": "Компензација за један циклус",
-          "customCompensation": "Прилагођена компензација"
+          "customCompensation": "Прилагођена компензација",
+          "back": "Назад",
+          "nextStep": "Следећи корак"
         }
       },
       "proposallist": {
@@ -1891,5 +1926,25 @@
         "badge": "Значка"
       }
     }
+  },
+  "validation": {
+    "invalidEmailFormat": "Неважећи формат е-поште",
+    "invalidPhoneFormat": "Неважећи формат телефона",
+    "invalidDiscordFormat": "Неважећи формат неслагања. ",
+    "theAccountMustContain": "Налог мора да садржи само 12 малих слова, број од 1 до 5 или тачку.",
+    "theAccountMustContain1": "Налог мора да садржи само 12 малих слова и бројеве од 1 до 5.",
+    "theAccountMustContain2": "Налог мора да садржи 12 знакова",
+    "thisFieldMustContainLessThan": "Ово поље мора да садржи мање од {val} знакова",
+    "theAccountAlreadyExists": "Налог {account} већ постоји",
+    "theAccountDoesntExists": "Налог {account} не постоји",
+    "theTokenAlreadyExists": "Токен {token} већ постоји. ",
+    "thisFieldIsRequired": "Поље је обавезно",
+    "youMustTypeAPositiveAmount": "Морате да унесете позитиван износ",
+    "theValueMustBeLessThanOrEqual": "Вредност мора да буде мања или једнака {value}",
+    "youValueMustBeGreaterThan": "Ваша вредност мора бити већа од {value}",
+    "youValueMustBeGreaterThanOrEqual": "Вредност мора да буде већа или једнака {value}",
+    "minimumNumberOfCharacters": "Минимални број знакова је {number}",
+    "maximumNumberOfCharacters": "Максималан број знакова је {number}",
+    "pleaseTypeAValidURL": "Унесите важећи УРЛ"
   }
 }

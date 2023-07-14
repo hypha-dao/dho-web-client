@@ -203,9 +203,9 @@ export default {
     title () {
       switch (this.type) {
         case 'role':
-          return 'Role archetypes'
+          return this.$t('pages.dho.organizationalassets.roleArchetypes')
         case 'badge':
-          return 'Badges'
+          return this.$t('pages.dho.organizationalassets.badges')
         default:
           return undefined
       }

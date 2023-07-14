@@ -453,8 +453,8 @@ widget(:class="{ 'disable-step': currentStepName !== 'step-payout' && $q.screen.
                 template(v-slot:prepend)
                   token-logo.logo-border(size="md" type="voice" :daoLogo="daoSettings.logo")
   nav.row.justify-end.q-mt-xl.q-gutter-xs(v-if="$q.screen.gt.md")
-    q-btn.h-btn2.q-px-xl(v-if="!disablePrevButton" @click="$emit('prev')" color="primary" label="Back" no-caps outline rounded flat)
-    q-btn.q-px-xl(:disable="nextDisabled" @click="$emit('next')" color="primary" label="Next step" no-caps rounded unelevated)
+    q-btn.h-btn2.q-px-xl(v-if="!disablePrevButton" @click="$emit('prev')" color="primary" :label="$t('pages.proposals.create.steppayout.back')" no-caps outline rounded flat)
+    q-btn.q-px-xl(:disable="nextDisabled" @click="$emit('next')" color="primary" :label="$t('pages.proposals.create.steppayout.nextStep')" no-caps rounded unelevated)
   template(v-if="$q.screen.lt.md || $q.screen.md")
     q-card(:style="'border-radius: 25px; box-shadow: none; z-index: 7000; position: fixed; bottom: -20px; left: 0; right: 0; box-shadow: 0px 0px 26px 0px rgba(0, 0, 41, 0.2);'")
       creation-stepper(
