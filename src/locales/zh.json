@@ -792,14 +792,16 @@
   },
   "organization": {
     "archetypes-widget": {
-      "archetypes": "原型"
+      "archetypes": "原型",
+      "archetypesDescribeAccountabilities": "原型描述了分配給 DAO 成員的職責和/或關鍵任務。 這些原型允許成員申請角色。"
     },
     "badge-assignments-widget": {
       "badgeAssignments": "徽章分配"
     },
     "badge-card": " 150？ ",
     "badges-widget": {
-      "badges": "徽章"
+      "badges": "徽章",
+      "badgesAssignedToMembers": "分配給成員的徽章認可某些技能或成就和/或確認狀態級別。 這些徽章可作為投票後的數字證明。"
     },
     "circle-card": {
       "subCircles": "子圈子 ({1})",
@@ -916,6 +918,9 @@
       "transactionHistory": "交易记录"
     },
     "voting-history": {
+      "yes": "是的",
+      "no": "不",
+      "abstain": "棄權",
       "recentVotes": "最近投票",
       "caption": "标题",
       "noVotesFound": "未找到该用户的投票"
@@ -1196,6 +1201,9 @@
         "viewMultisig": "查看多重签名"
       },
       "ecosystem": {
+        "searchDHOs": "搜索 DHO",
+        "proposalTypes": "提案类型",
+        "fundsNeeded": "所需資金",
         "active": "{1} 活跃",
         "daos": "DAO",
         "inactive": "{1} 无效",
@@ -1209,7 +1217,23 @@
         "members": "会员",
         "createNewDao": "创建新的 DAO",
         "youNeedTo": "您需要先激活锚点 DAO，然后才能创建子 DAO。",
-        "onlyDaoAdmins1": "只有 DAO 管理员可以更改设置"
+        "onlyDaoAdmins1": "只有 DAO 管理员可以更改设置",
+        "sortBy": "排序方式",
+        "oldestFirst": "最老的在前",
+        "newestFirst": "新的先来",
+        "alphabetically": "按字母顺序",
+        "all": "全部",
+        "ability": "能力",
+        "role": "角色",
+        "queststart": "任务开始",
+        "questend": "任务结束",
+        "archetype": "原型",
+        "badge": "徽章",
+        "circle": "圆圈",
+        "budget": "预算",
+        "policy": "政策",
+        "genericcontributions": "通用贡献",
+        "suspension": "暂停"
       },
       "explore": {
         "discoverMore": "发现更多",
@@ -1264,7 +1288,8 @@
         "alphabetically": "按字母顺序 (A-Z)",
         "all": "全部",
         "coreTeam": "核心团队",
-        "communityMembers": "社区成员"
+        "communityMembers": "社区成员",
+        "coreAndCommunityMembers": "核心和社區成員"
       },
       "organization": {
         "documentation": "文档",
@@ -1296,7 +1321,9 @@
         "createANewBadge": "创建新徽章",
         "sortByCreateDateAscending": "按创建日期升序排序",
         "sortByCreateDateDescending": "按创建日期降序排序",
-        "sortAlpabetically": "按字母顺序排序 (A-Z)"
+        "sortAlpabetically": "按字母顺序排序 (A-Z)",
+        "roleArchetypes": "角色原型",
+        "badges": "徽章"
       },
       "treasury": {
         "transactionReview": "交易审查",
@@ -1436,6 +1463,7 @@
           "chooseARecent": "选择最近的任务来计算桥梁支出"
         },
         "optionsbadges": {
+          "select": "選擇",
           "chooseABadge": "选择徽章\n        ",
           "noArchetypesExistYet": "目前还没有原型存在。",
           "pleaseCreateThemHere": "请在此处创建它们。"
@@ -1473,7 +1501,10 @@
           "nextStep": "下一步"
         },
         "optionsquests": {
-          "chooseAQuestType": "选择任务类型\n      "
+          "chooseAQuestType": "选择任务类型\n      ",
+          "select": "選擇",
+          "startANewQuest": "開始一個新任務",
+          "completeAnActiveQuest": "完成主動任務"
         },
         "stepdetails": {
           "titleIsRequired": "标题为必填项！",
@@ -1891,5 +1922,25 @@
         "badge": "徽章"
       }
     }
+  },
+  "validation": {
+    "invalidEmailFormat": "电子邮件格式无效",
+    "invalidPhoneFormat": "电话格式无效",
+    "invalidDiscordFormat": "无效的不一致格式。",
+    "theAccountMustContain": "该帐户只能包含 12 个小写字符、1 到 5 的数字或句点。",
+    "theAccountMustContain1": "该帐户只能包含 12 个小写字符和 1 到 5 之间的数字。",
+    "theAccountMustContain2": "帐号必须包含12个字符",
+    "thisFieldMustContainLessThan": "该字段必须包含少于 {val} 个字符",
+    "theAccountAlreadyExists": "帐户 {account} 已存在",
+    "theAccountDoesntExists": "帐户 {account} 不存在",
+    "theTokenAlreadyExists": "令牌 {token} 已存在。",
+    "thisFieldIsRequired": "此字段是必需的",
+    "youMustTypeAPositiveAmount": "您必须输入正数",
+    "theValueMustBeLessThanOrEqual": "该值必须小于或等于{value}",
+    "youValueMustBeGreaterThan": "您的值必须大于 {value}",
+    "youValueMustBeGreaterThanOrEqual": "该值必须大于或等于{value}",
+    "minimumNumberOfCharacters": "最小字符数为 {number}",
+    "maximumNumberOfCharacters": "最大字符数为 {number}",
+    "pleaseTypeAValidURL": "请输入有效的网址"
   }
 }

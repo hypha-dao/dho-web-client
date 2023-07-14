@@ -30,7 +30,7 @@ export default {
 
     tags (item) {
       return [{
-        label: item.vote === 'pass' ? 'YES' : (item.vote === 'fail' ? 'NO' : 'ABSTAIN'),
+        label: item.vote === 'pass' ? this.$t('profiles.voting-history.yes') : (item.vote === 'fail' ? this.$t('profiles.voting-history.no') : this.$t('profiles.voting-history.abstain')),
         color: item.vote === 'pass' ? 'positive' : (item.vote === 'fail' ? 'negative' : 'grey-7'),
         text: 'white'
       }]

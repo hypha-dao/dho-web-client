@@ -544,7 +544,7 @@
   },
   "filters": {
     "filter-widget": {
-      "filters": "filtros",
+      "filters": "Filtros",
       "saveFilters": "Guardar filtros",
       "resetFilters": "Restablecer filtros"
     }
@@ -792,14 +792,16 @@
   },
   "organization": {
     "archetypes-widget": {
-      "archetypes": "Arquetipos"
+      "archetypes": "Arquetipos",
+      "archetypesDescribeAccountabilities": "Los arquetipos describen responsabilidades y/o tareas clave asignadas a los miembros de la DAO. Estos arquetipos permiten a los miembros solicitar un puesto."
     },
     "badge-assignments-widget": {
       "badgeAssignments": "Asignaciones de insignias"
     },
     "badge-card": " 150? ",
     "badges-widget": {
-      "badges": "Insignias"
+      "badges": "Insignias",
+      "badgesAssignedToMembers": "Las insignias asignadas a los miembros reconocen ciertas habilidades o logros y/o confirman un nivel de estatus. Estas insignias sirven como prueba digital después de una votación."
     },
     "circle-card": {
       "subCircles": "Subcírculos ({1})",
@@ -916,6 +918,9 @@
       "transactionHistory": "Historial de transacciones"
     },
     "voting-history": {
+      "yes": "Sí",
+      "no": "No",
+      "abstain": "Abstenerse",
       "recentVotes": "Votos recientes",
       "caption": "subtítulo",
       "noVotesFound": "No se encontraron votos para el usuario"
@@ -1196,6 +1201,9 @@
         "viewMultisig": "Ver multigrado"
       },
       "ecosystem": {
+        "searchDHOs": "Buscar DHO",
+        "proposalTypes": "Tipos de propuestas",
+        "fundsNeeded": "Fondos necesarios",
         "active": "{1} activo",
         "daos": "DAO",
         "inactive": "{1} inactivo",
@@ -1209,7 +1217,11 @@
         "members": "miembros",
         "createNewDao": "Crear nuevo DAO",
         "youNeedTo": "Debe activar DAO de anclaje antes de poder crear DAO secundarios.",
-        "onlyDaoAdmins1": "Solo los administradores de DAO pueden cambiar la configuración"
+        "onlyDaoAdmins1": "Solo los administradores de DAO pueden cambiar la configuración",
+        "sortBy": "Ordenar por",
+        "oldestFirst": "Los más viejos primero",
+        "newestFirst": "El más reciente primero",
+        "alphabetically": "Alfabéticamente"
       },
       "explore": {
         "discoverMore": "Descubrir más",
@@ -1221,7 +1233,19 @@
         "sortBy": "Ordenar por",
         "oldestFirst": "Los más viejos primero",
         "newestFirst": "El más reciente primero",
-        "alphabetically": "Alfabéticamente"
+        "alphabetically": "Alfabéticamente",
+        "all": "Todo",
+        "ability": "Capacidad",
+        "role": "Role",
+        "queststart": "Inicio de la misión",
+        "questend": "Fin de la misión",
+        "archetype": "Arquetipo",
+        "badge": "Insignia",
+        "circle": "Círculo",
+        "budget": "Presupuesto",
+        "policy": "Política",
+        "genericcontributions": "Contribuciones Genéricas",
+        "suspension": "Suspensión"
       },
       "finflow": {
         "totalUnclaimedPeriods": "Total de períodos no reclamados",
@@ -1247,7 +1271,7 @@
         "discoverMore": "Descubrir más",
         "assignments": "Tareas",
         "badges": "Insignias",
-        "members": "miembros",
+        "members": "Miembros",
         "proposals": "Propuestas"
       },
       "members": {
@@ -1264,7 +1288,8 @@
         "alphabetically": "Alfabéticamente (A-Z)",
         "all": "Todo",
         "coreTeam": "Equipo central",
-        "communityMembers": "Miembros de la comunidad"
+        "communityMembers": "Miembros de la comunidad",
+        "coreAndCommunityMembers": "Miembros del núcleo y de la comunidad"
       },
       "organization": {
         "documentation": "Documentación",
@@ -1296,7 +1321,9 @@
         "createANewBadge": "Crear una nueva insignia",
         "sortByCreateDateAscending": "Ordenar por fecha de creación ascendente",
         "sortByCreateDateDescending": "Ordenar por fecha de creación descendente",
-        "sortAlpabetically": "Ordenar Alfabéticamente (A-Z)"
+        "sortAlpabetically": "Ordenar Alfabéticamente (A-Z)",
+        "roleArchetypes": "Arquetipos de roles",
+        "badges": "Insignias"
       },
       "treasury": {
         "transactionReview": "Revisión de transacciones",
@@ -1436,6 +1463,7 @@
           "chooseARecent": "Elija una asignación reciente para calcular un pago puente"
         },
         "optionsbadges": {
+          "select": "Seleccionar",
           "chooseABadge": "Elige una insignia\n        ",
           "noArchetypesExistYet": "No existen arquetipos todavía.",
           "pleaseCreateThemHere": "Por favor, créelos aquí."
@@ -1473,7 +1501,10 @@
           "nextStep": "Próximo paso"
         },
         "optionsquests": {
-          "chooseAQuestType": "Elige un tipo de misión\n      "
+          "chooseAQuestType": "Elige un tipo de misión\n      ",
+          "select": "Seleccionar",
+          "startANewQuest": "Comenzar una nueva misión",
+          "completeAnActiveQuest": "Completar una misión activa"
         },
         "stepdetails": {
           "titleIsRequired": "¡Se requiere título!",
@@ -1891,5 +1922,25 @@
         "badge": "Insignia"
       }
     }
+  },
+  "validation": {
+    "invalidEmailFormat": "Formato de correo inválido",
+    "invalidPhoneFormat": "Formato de teléfono no válido",
+    "invalidDiscordFormat": "Formato de discordia inválido. ",
+    "theAccountMustContain": "La cuenta debe contener 12 caracteres en minúscula únicamente, números del 1 al 5 o un punto.",
+    "theAccountMustContain1": "La cuenta debe contener 12 caracteres en minúscula solamente y número del 1 al 5.",
+    "theAccountMustContain2": "La cuenta debe contener 12 caracteres",
+    "thisFieldMustContainLessThan": "Este campo debe contener menos de {val} caracteres",
+    "theAccountAlreadyExists": "La cuenta {account} ya existe",
+    "theAccountDoesntExists": "La cuenta {account} no existe",
+    "theTokenAlreadyExists": "El token {token} ya existe. ",
+    "thisFieldIsRequired": "Este campo es obligatorio",
+    "youMustTypeAPositiveAmount": "Debe escribir una cantidad positiva",
+    "theValueMustBeLessThanOrEqual": "El valor debe ser menor o igual que {value}",
+    "youValueMustBeGreaterThan": "Tu valor debe ser mayor que {value}",
+    "youValueMustBeGreaterThanOrEqual": "El valor debe ser mayor o igual que {value}",
+    "minimumNumberOfCharacters": "El número mínimo de caracteres es {number}",
+    "maximumNumberOfCharacters": "El número máximo de caracteres es {number}",
+    "pleaseTypeAValidURL": "Por favor, escriba una URL válida"
   }
 }
