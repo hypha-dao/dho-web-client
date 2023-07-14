@@ -1506,7 +1506,11 @@
           "pleaseEnterTheUSD": "Ingrese el equivalente en USD y el % de aplazamiento para esta contribución: cuanto más aplace a una fecha posterior, mayor será la bonificación (consulte el cálculo del salario real a continuación o use nuestra calculadora). ",
           "compensationForOnePeriod": "Compensación por un período",
           "compensationForOneCycle": "Compensación por un ciclo",
-          "customCompensation": "Compensación personalizada"
+          "customCompensation": "Compensación personalizada",
+          "back": "Atrás",
+          "nextStep": "Próximo paso",
+          "publish": "Publicar",
+          "publishToStaging": "Publicar en preparación"
         }
       },
       "proposallist": {

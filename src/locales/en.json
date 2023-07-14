@@ -1446,7 +1446,9 @@
           "noPoliciesExistYet": "No policies exist yet."
         },
         "stepreview": {
-          "back": "Back"
+          "back": "Back",
+          "publish": "Publish",
+          "publishToStaging": "Publish to staging"
         },
         "stepproposaltype": {
           "completeYourDraftProposal": "Complete your draft proposal",
@@ -1507,7 +1509,9 @@
           "belowYouCanSeeTheActual": "Below you can see the actual breakdown of the reward in HVOICE, HYPHA and HUSD",
           "compensationForOnePeriod": "Reward for one period",
           "compensationForOneCycle": "Reward for one cycle",
-          "customCompensation": "Custom Reward"
+          "customCompensation": "Custom Reward",
+          "back": "Back",
+          "nextStep": "Next step"
         }
       },
       "proposallist": {

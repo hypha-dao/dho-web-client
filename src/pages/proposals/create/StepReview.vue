@@ -201,7 +201,7 @@ export default {
     template(v-slot:bottom)
       nav.full-width.row.justify-end.q-mt-xl.q-gutter-xs(v-if="$q.screen.gt.md")
         q-btn.h-btn2.q-px-xl(v-if="!disablePrevButton" @click="$emit('prev')" color="primary" :label="$t('pages.proposals.create.stepreview.back')" no-caps outline rounded flat)
-        q-btn.q-px-xl(@click="$emit('publish')" color="primary" :label="$store.state.proposals.draft.edit ? 'Publish' : 'Publish to staging'" no-caps rounded unelevated)
+        q-btn.q-px-xl(@click="$emit('publish')" color="primary" :label="$store.state.proposals.draft.edit ? $t('pages.proposals.create.stepreview.publish') : $t('pages.proposals.create.stepreview.publishToStaging')" no-caps rounded unelevated)
   template(v-if="$q.screen.lt.md || $q.screen.md")
     q-card(:style="'border-radius: 25px; box-shadow: none; z-index: 7000; position: fixed; bottom: -20px; left: 0; right: 0; box-shadow: 0px 0px 26px 0px rgba(0, 0, 41, 0.2);'")
       creation-stepper(
