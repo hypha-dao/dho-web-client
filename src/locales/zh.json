@@ -1473,7 +1473,9 @@
           "noPoliciesExistYet": "目前还没有相关政策。"
         },
         "stepreview": {
-          "back": "后退"
+          "back": "后退",
+          "publish": "發布",
+          "publishToStaging": "發佈到暫存"
         },
         "stepproposaltype": {
           "completeYourDraftProposal": "完成您的提案草案",
@@ -1537,7 +1539,9 @@
           "pleaseEnterTheUSD": "请输入该捐款的等值美元和延期百分比 - 您推迟的日期越多，奖金就越高（请参阅下面的实际工资计算或使用我们的计算器）。",
           "compensationForOnePeriod": "补偿一期",
           "compensationForOneCycle": "补偿一个周期",
-          "customCompensation": "定制补偿"
+          "customCompensation": "定制补偿",
+          "back": "后退",
+          "nextStep": "下一步"
         }
       },
       "proposallist": {

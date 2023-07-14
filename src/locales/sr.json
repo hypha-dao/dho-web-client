@@ -1473,7 +1473,9 @@
           "noPoliciesExistYet": "Још увек не постоје политике."
         },
         "stepreview": {
-          "back": "Назад"
+          "back": "Назад",
+          "publish": "Објави",
+          "publishToStaging": "Објави на инсценацији"
         },
         "stepproposaltype": {
           "completeYourDraftProposal": "Довршите свој нацрт предлога",
@@ -1537,7 +1539,9 @@
           "pleaseEnterTheUSD": "Молимо унесите еквивалент у УСД и % одлагања за овај допринос – што више одложите на каснији датум, већи ће бити бонус (погледајте стварни обрачун плате испод или користите наш калкулатор). ",
           "compensationForOnePeriod": "Накнада за један период",
           "compensationForOneCycle": "Компензација за један циклус",
-          "customCompensation": "Прилагођена компензација"
+          "customCompensation": "Прилагођена компензација",
+          "back": "Назад",
+          "nextStep": "Следећи корак"
         }
       },
       "proposallist": {

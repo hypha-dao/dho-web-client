@@ -1473,7 +1473,9 @@
           "noPoliciesExistYet": "아직 정책이 없습니다."
         },
         "stepreview": {
-          "back": "뒤쪽에"
+          "back": "뒤쪽에",
+          "publish": "게시",
+          "publishToStaging": "준비에 게시"
         },
         "stepproposaltype": {
           "completeYourDraftProposal": "제안서 초안 작성",
@@ -1537,7 +1539,9 @@
           "pleaseEnterTheUSD": "이 기여금에 대한 USD 등가물과 % 연기금을 입력하십시오. 나중에 더 많이 연기할수록 보너스가 더 높아집니다(아래 실제 급여 계산 참조 또는 계산기 사용). ",
           "compensationForOnePeriod": "한 기간 동안의 보상",
           "compensationForOneCycle": "1주기 보상",
-          "customCompensation": "맞춤형 보상"
+          "customCompensation": "맞춤형 보상",
+          "back": "뒤쪽에",
+          "nextStep": "다음 단계"
         }
       },
       "proposallist": {
