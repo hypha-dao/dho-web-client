@@ -26,6 +26,7 @@ export default {
         this.$store.dispatch('accounts/checkMembership')
         this.$store.commit('dao/switchDao', data)
         this.$store.dispatch('dao/setTheme')
+        this.$store.dispatch('ballots/getSupply')
       },
       skip () { return !this.dhoname || !this.daoRegexp },
       variables () { return { regexp: this.daoRegexp } },

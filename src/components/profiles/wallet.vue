@@ -31,6 +31,7 @@ export default {
 
   computed: {
     ...mapGetters('accounts', ['account']),
+    ...mapGetters('ballots', ['supply']),
     ...mapGetters('dao', ['daoSettings']),
 
     isOwner () { return this.username === this.account }
@@ -45,7 +46,6 @@ export default {
   },
 
   methods: {
-    ...mapActions('ballots', ['getSupply']),
     ...mapActions('payments', ['redeemAddress']),
     ...mapActions('profiles', ['getTokensAmounts']),
 
@@ -63,7 +63,7 @@ export default {
     async fetchTokens () {
       try {
         this.wallet = []
-        this.supply = parseFloat(await this.getSupply())
+
         if (this.username) {
           const tokens = await this.getTokensAmounts(this.username)
           this.pegToken = tokens.peg

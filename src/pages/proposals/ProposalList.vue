@@ -1,5 +1,5 @@
 <script>
-import { mapActions, mapGetters } from 'vuex'
+import { mapGetters } from 'vuex'
 import ipfsy from '~/utils/ipfsy'
 import { getProposalChipFilters } from '../../utils/proposal-filter'
 import gql from 'graphql-tag'
@@ -595,7 +595,6 @@ export default {
   },
   watch: {
     selectedDao () {
-      this.getSupply()
       this.$apollo.queries.dao.stop()
       if (this.dao) {
         this.resetPaginationValues()
@@ -633,11 +632,6 @@ export default {
     }
   },
 
-  created () {
-    if (!this.supply) {
-      this.getSupply()
-    }
-  },
   activated () {
     this.$apollo.queries.stagedProposals.refetch()
   },
@@ -647,7 +641,6 @@ export default {
     }
   },
   methods: {
-    ...mapActions('ballots', ['getSupply']),
 
     hideProposalBanner () {
       localStorage.setItem('showProposalBanner', false)
