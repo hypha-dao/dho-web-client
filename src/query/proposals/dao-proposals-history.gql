@@ -185,6 +185,8 @@ query historyProposals($docId: String!, $first: Int!, $offset: Int!) {
       ... on Circle {
         details_dao_i
         details_state_s
+        
+        details_autoApprove_i
 
         details_title_s
         details_description_s
@@ -369,6 +371,7 @@ query historyProposals($docId: String!, $first: Int!, $offset: Int!) {
       }
 
       ... on Role {
+        details_autoApprove_i
         ballot_expiration_t
         details_title_s
         details_description_s

@@ -43,7 +43,7 @@ export default {
       optionArray: [{ label: 'Sort by', disable: true }, 'Last added'],
       circleArray: ['All circles', 'Circle One'],
       pagination: {
-        first: 10,
+        first: 50,
         offset: 0,
         more: true
       },
@@ -72,15 +72,16 @@ export default {
           return filter.filter(proposal) &&
             proposal.details_state_s !== PROPOSAL_STATE.DRAFTED &&
             proposal.details_state_s !== PROPOSAL_STATE.PROPOSED &&
+            !proposal.details_autoApprove_i &&
+            proposal.creator !== 'dao.hypha' &&
             (!this.textFilter || this.textFilter.length === 0 ||
             (proposal.details_title_s?.toLocaleLowerCase() || '').includes(this.textFilter.toLocaleLowerCase()))
         })
       })
     },
 
-    hasProposals () {
-      return this.archivedProposals?.length
-    }
+    hasProposals () { return this.archivedProposals?.length },
+    isLoading () { return this.$apollo.queries.archivedProposals.loading }
   },
   watch: {
     selectedDao () {
@@ -184,12 +185,12 @@ export default {
 q-page.page-proposals
   .row.q-py-md
     .col-12.col-lg-9
-      base-placeholder.q-mr-sm(:compact="!$q.screen.gt.md" v-if="!hasProposals" :title="$t('pages.proposals.proposalhistory.noProposals')" subtitle="Your organization has not created any proposals yet. You can create a new proposal by clicking the button below." icon="fas fa-file-medical" :actionButtons="[{label: 'Create a new Proposal', color: 'primary', onClick: () => $router.push(`/${this.daoSettings.url}/proposals/create`), disable: !isMember, disableTooltip: 'You must be a member'}]")
-      base-placeholder.q-mr-sm(:compact="!$q.screen.gt.md" v-if="!filteredProposals.length && hasProposals" :title="$t('pages.proposals.proposalhistory.oopsNothingCould')" subtitle="Try a different filter or another keyword" icon="far fa-check-square" :actionButtons="[{label: 'Reset filter(s)', color: 'primary', onClick: () => this.$refs.filter.resetFilters() }]")
+      base-placeholder.q-mr-sm(:compact="!$q.screen.gt.md" v-if="!isLoading && !hasProposals" :title="$t('pages.proposals.proposalhistory.noProposals')" subtitle="Your organization has not created any proposals yet. You can create a new proposal by clicking the button below." icon="fas fa-file-medical" :actionButtons="[{label: 'Create a new Proposal', color: 'primary', onClick: () => $router.push(`/${this.daoSettings.url}/proposals/create`), disable: !isMember, disableTooltip: 'You must be a member'}]")
+      base-placeholder.q-mr-sm(:compact="!$q.screen.gt.md" v-if="!isLoading && !filteredProposals.length && hasProposals" :title="$t('pages.proposals.proposalhistory.oopsNothingCould')" subtitle="Try a different filter or another keyword" icon="far fa-check-square" :actionButtons="[{label: 'Reset filter(s)', color: 'primary', onClick: () => this.$refs.filter.resetFilters() }]")
       proposal-list.q-mb-xxxl(:username="account" :proposals="filteredProposals" :supply="supply" :view="$q.screen.gt.md ? view: 'card'" :compact="!$q.screen.gt.md")
       .row.justify-center.q-mb-xxxl(v-if="$apollo.loading")
         loading-spinner(color="primary" size="72px")
-      q-infinite-scroll.scroll(@load="onLoad" :offset="750" ref="scroll" v-if="filteredProposals.length" :disable="!pagination.more" debounce="500" scroll-target=".hide-scrollbar")
+      q-infinite-scroll.scroll(@load="onLoad" :offset="1000" ref="scroll" v-if="filteredProposals.length" :disable="!pagination.more" debounce="30" scroll-target=".hide-scrollbar")
     .col-3(v-if="$q.screen.gt.md")
       filter-widget.sticky(ref="filter" :view.sync="view" :defaultOption="1" :sort.sync="sort" :textFilter.sync="textFilter" :circle.sync="circle" :showCircle="false" :optionArray.sync="optionArray" :circleArray.sync="circleArray" :viewSelectorLabel="'View'" :chipsFiltersLabel="'Proposal types'" :showViewSelector="false" :filters.sync="filters")
   .row.full-width.q-my-md(v-if="!$q.screen.gt.md")
