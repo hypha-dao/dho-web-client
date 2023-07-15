@@ -1,5 +1,5 @@
 <script>
-import { mapActions, mapGetters } from 'vuex'
+import { mapGetters } from 'vuex'
 import { getProposalChipFilters } from '../../utils/proposal-filter'
 import { PROPOSAL_STATE } from '~/const'
 
@@ -84,7 +84,6 @@ export default {
   },
   watch: {
     selectedDao () {
-      this.getSupply()
       this.$apollo.queries.archivedProposals.stop()
       if (this.archivedProposals) {
         this.resetPaginationValues()
@@ -129,18 +128,11 @@ export default {
     window.scrollTo(0, 0)
   },
 
-  created () {
-    if (!this.supply) {
-      this.getSupply()
-    }
-  },
-
   activated () {
     this.$apollo.queries.archivedProposals.refetch()
   },
 
   methods: {
-    ...mapActions('ballots', ['getSupply']),
     async onLoad (index, done) {
       if (this.$apollo.queries.archivedProposals.loading) {
         return
