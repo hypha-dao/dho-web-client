@@ -1,5 +1,14 @@
 # Changelog
 
+## [2.31.3](https://github.com/hypha-dao/dho-web-client/compare/v2.31.2...v2.31.3) (2023-07-15)
+
+
+### Bug Fixes
+
+* **proposal-history:** remove autoApproved proposals ([#2336](https://github.com/hypha-dao/dho-web-client/issues/2336)) ([a4fbd5e](https://github.com/hypha-dao/dho-web-client/commit/a4fbd5e30182867365f6e864a8ff9b017f297288))
+* **proposal:** add no cache fetch policy ([#2337](https://github.com/hypha-dao/dho-web-client/issues/2337)) ([25dfee7](https://github.com/hypha-dao/dho-web-client/commit/25dfee70adf662c8b231d11f3eba718d9153881c))
+* **voter-list:** add paginate function ([#2338](https://github.com/hypha-dao/dho-web-client/issues/2338)) ([cfea660](https://github.com/hypha-dao/dho-web-client/commit/cfea6603263982f0d44e64858832d3af75f331a8))
+
 ## [2.31.2](https://github.com/hypha-dao/dho-web-client/compare/v2.31.1...v2.31.2) (2023-07-14)
 
 
