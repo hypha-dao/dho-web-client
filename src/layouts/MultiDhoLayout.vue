@@ -81,7 +81,6 @@ export default {
         skip () { return !this.account },
         variables () { return { account: this.account } },
         updateQuery: (previousResult, { subscriptionData }) => {
-          console.log(previousResult, subscriptionData)
           if (!subscriptionData.data) {
             return previousResult
           }
@@ -92,7 +91,6 @@ export default {
         }
       },
       result (res) {
-        console.log(res)
         this.initNotifications()
       }
     }
@@ -386,10 +384,9 @@ export default {
       if (!localStorage.getItem('notifications')) {
         const notifications = []
         this.notifications.forEach((notification) => {
-          notifications.push({
-            ...notification,
-            showed: false
-          })
+          if (!notification.read) {
+            notifications.push(notification)
+          }
         })
         this.localNotifications = notifications
         localStorage.setItem('notifications', JSON.stringify(notifications))
@@ -397,11 +394,8 @@ export default {
         const parsedNotifications = JSON.parse(localStorage.getItem('notifications'))
         this.notifications.forEach((notification) => {
           const isMatched = parsedNotifications.find(item => item.id === notification.id)
-          if (!isMatched) {
-            parsedNotifications.push({
-              ...notification,
-              showed: false
-            })
+          if (!isMatched && !notification.read) {
+            parsedNotifications.push(notification)
           }
         })
         this.localNotifications = parsedNotifications
@@ -418,15 +412,21 @@ export default {
       return count
     },
     readNotification (id) {
-      const localNotifications = JSON.parse(localStorage.getItem('notifications'))
-      const showedNotifications = localNotifications.map(obj => {
-        if (obj.id === id) {
-          return { ...obj, showed: true }
+      this.$apollo.mutate({
+        mutation: gql`mutation($id: [ID!]) {
+          updateNotification(input: {set: {read: true}, filter: {id: $id}}) {
+            notification {
+              read
+            }
+          }
+        }`,
+        variables: {
+          id: id
         }
-        return obj
       })
-      this.localNotifications = showedNotifications
-      localStorage.setItem('notifications', JSON.stringify(showedNotifications))
+      this.$apollo.queries.notifications.refetch()
+      this.localNotifications = this.notifications
+      localStorage.setItem('notifications', JSON.stringify(this.notifications))
     },
     clearAllNotifications () {
       localStorage.removeItem('notifications')
@@ -465,7 +465,7 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
         .col-6.q-pl-xs
           q-btn.q-px-xl.rounded-border.text-bold.full-width(:to="{ name: 'configuration', query: { tab: 'PLAN' } }" color="white" text-color="negative" :label="$t('layouts.multidholayout.renewMyCurrentPlan')" no-caps rounded unelevated)
   q-header.bg-white(v-if="$q.screen.lt.lg")
-    top-navigation(:unreadNotifications="countObjectsWithKeyValue(localNotifications, 'showed', false)" :notifications="notifications" @openNotifications="languageSettings = false, right = false, showNotificationsBar = true" @isActiveRoute="isActiveRoute" @showLangSettings="languageSettings = true, right = false" :showTopButtons="showTopBarItems" :profile="profile" @toggle-sidebar="!$q.screen.md ? right = true : showMinimizedMenu = true" @search="onSearch" :dho="dho" :dhos="getDaos($apolloData.data.member)" :selectedDaoPlan="selectedDaoPlan")
+    top-navigation(:unreadNotifications="countObjectsWithKeyValue(localNotifications, 'read', false)" :notifications="notifications" @openNotifications="languageSettings = false, right = false, showNotificationsBar = true" @isActiveRoute="isActiveRoute" @showLangSettings="languageSettings = true, right = false" :showTopButtons="showTopBarItems" :profile="profile" @toggle-sidebar="!$q.screen.md ? right = true : showMinimizedMenu = true" @search="onSearch" :dho="dho" :dhos="getDaos($apolloData.data.member)" :selectedDaoPlan="selectedDaoPlan")
   q-page-container.bg-white.window-height.q-py-sm(:class="{ 'q-pr-sm': $q.screen.gt.md, 'q-px-xs': !$q.screen.gt.md}")
     .bg-internal-bg.content.full-height
       q-resize-observer(@resize="onContainerResize")
@@ -484,7 +484,7 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
                 .col(v-if="showTopBarItems")
                   .row.justify-end.items-center(v-if="$q.screen.gt.md")
                     .notifications-icon
-                      .notifications-icon__counter(v-if="countObjectsWithKeyValue(localNotifications, 'showed', false) > 0") {{ countObjectsWithKeyValue(localNotifications, 'showed', false) }}
+                      .notifications-icon__counter(v-if="countObjectsWithKeyValue(localNotifications, 'read', false) > 0") {{ countObjectsWithKeyValue(localNotifications, 'read', false) }}
                       q-btn.q-mr-xs(@click="languageSettings = false, right = false, showNotificationsBar = true" unelevated rounded padding="12px" icon="far fa-bell"  size="sm" :color="'white'" :text-color="'primary'")
                     router-link(v-if="selectedDaoPlan.isEcosystem" :to="{ name: 'ecosystem' }")
                       q-btn.q-mr-xs(unelevated rounded padding="12px" icon="fas fa-share-alt" size="sm" :color="isActiveRoute('ecosystem') ? 'primary' : 'white'" :text-color="isActiveRoute('ecosystem') ? 'white' : 'primary'")
@@ -565,7 +565,7 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
           q-btn(color="internal-bg" text-color="primary" rounded unelevated size="sm" padding="12px" icon="fas fa-times" :style="{ 'height': '40px' }" @click="showNotificationsBar = false")
         .q-mt-md.full-width(:style="{ 'position': 'relative' }")
           .col(v-for="notification, index in localNotifications" :key="notification.id")
-            .row.q-py-md(v-on:mouseover="readNotification(notification.id)" :style="{ 'border-top': '1px solid #CBCDD1' }" :class="{ 'last-item': index === notifications.length - 1, 'read-notify': notification.showed === true }")
+            .row.q-py-md(v-on:mouseover="readNotification(notification.id)" :style="{ 'border-top': '1px solid #CBCDD1' }" :class="{ 'last-item': index === notifications.length - 1, 'read-notify': notification.read === true }")
               .col-2.items-center.flex
                 div.flex.items-center.justify-center(:style="{ 'width': '40px', 'height': '40px', 'border-radius': '50%', 'background': '#F2F1F3'}")
                   img(:src="parsedNotification(notification).icon")

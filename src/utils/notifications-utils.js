@@ -5,6 +5,7 @@ export function parsedNotification (notification) {
   let title = null
   let description = null
   const createdDate = this.timeago(notification.time)
+  const read = notification.read
   switch (notification.event.name) {
     case ('notification.test'):
       icon = require('~/assets/icons/notifications/newcomment.png')
@@ -55,6 +56,7 @@ export function parsedNotification (notification) {
     icon: icon,
     title: title,
     description: description,
-    createdDate: createdDate
+    createdDate: createdDate,
+    read: read
   }
 }
