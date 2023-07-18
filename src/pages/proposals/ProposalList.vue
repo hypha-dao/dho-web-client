@@ -528,8 +528,7 @@ export default {
       //   })
       //   return [...withOutVote, ...withVote]
       // }
-
-      return daos[0].proposal
+      return daos[0].proposal.filter(proposal => new Date(proposal.ballot_expiration_t) > new Date(Date.now()))
     },
 
     filteredProposals () {
