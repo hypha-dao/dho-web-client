@@ -10,6 +10,7 @@ export default {
 
   props: {
     daoName: String,
+    dhoTitle: String,
     registrationEnabled: {
       type: [Boolean, Number],
       default: true
@@ -38,7 +39,7 @@ export default {
             q-btn(color="internal-bg" text-color="primary" rounded unelevated size="sm" padding="12px" icon="fas fa-times" @click="$emit('close')")
         .h-h3.q-mt-md {{ '@Guest' }}
       .sidebar-text
-        .h-h5 {{ $t('navigation.profile-sidebar-guest.welcomeTo', { daoName: daoName && daoName.replace(/^\w/, (c) => c.toUpperCase()) })}}
+        .h-h5 {{ $t('navigation.profile-sidebar-guest.welcomeTo', { daoName: dhoTitle && dhoTitle.replace(/^\w/, (c) => c.toUpperCase()) })}}
         .h-b2.text-body {{ $t('navigation.profile-sidebar-guest.asAGuest') }}
       .sidebar-buttons.aling-self-center
         div

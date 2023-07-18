@@ -85,7 +85,7 @@ export default {
 .dho-selector
   create-layout(v-if="useCreateLayout")
   login-layout(v-if="useLoginLayout")
-  multi-dho-layout(v-if="useMultiDHOLayout" :dho="dho" :daoName="dhoname")
+  multi-dho-layout(v-if="useMultiDHOLayout" :dho="dho" :daoName="dhoname" :dhoTitle="dho.title")
   proposal-layout(v-if="useMobileProposalLayout && $q.platform.is.desktop")
 </template>
 
