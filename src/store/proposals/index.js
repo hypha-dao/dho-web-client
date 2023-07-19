@@ -95,6 +95,7 @@ export default {
       state.draft.voice = 0
       state.draft.commitment = 0
       state.draft.role = null
+      state.draft.tier = null
       state.draft.badge = null
       state.draft.startPeriod = null
       state.draft.annualUsdSalary = 0
