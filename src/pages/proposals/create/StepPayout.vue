@@ -1,11 +1,12 @@
 <script>
 import { mapGetters } from 'vuex'
 import { validation } from '~/mixins/validation'
+import { format } from '~/mixins/format'
 import { PROPOSAL_TYPE } from '~/const'
 
 export default {
   name: 'step-payout',
-  mixins: [validation],
+  mixins: [validation, format],
   components: {
     InfoTooltip: () => import('~/components/common/info-tooltip.vue'),
     PayoutAmounts: () => import('~/components/common/payout-amounts.vue'),
@@ -264,13 +265,13 @@ export default {
       return (this.cycleDurationSec / this.daoSettings.periodDurationSec).toFixed(2)
     },
     cashToken () {
-      return !this.toggle ? this.peg : (this.peg / this.periodsOnCycle).toFixed(2)
+      return !this.toggle ? this.getFormatedTokenAmount(this.peg, Number.MAX_VALUE) : this.getFormatedTokenAmount((this.peg / this.periodsOnCycle).toFixed(2), Number.MAX_VALUE)
     },
     utilityToken () {
-      return !this.toggle ? this.reward : (this.reward / this.periodsOnCycle).toFixed(2)
+      return !this.toggle ? this.getFormatedTokenAmount(this.reward, Number.MAX_VALUE) : this.getFormatedTokenAmount((this.reward / this.periodsOnCycle).toFixed(2), Number.MAX_VALUE)
     },
     voiceToken () {
-      return !this.toggle ? this.voice : (this.voice / this.periodsOnCycle).toFixed(2)
+      return !this.toggle ? this.getFormatedTokenAmount(this.voice, Number.MAX_VALUE) : this.getFormatedTokenAmount((this.voice / this.periodsOnCycle).toFixed(2), Number.MAX_VALUE)
     },
     isAssignment () {
       const proposalType = this.$store.state.proposals.draft.category.key
