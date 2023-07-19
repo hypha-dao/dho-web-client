@@ -405,7 +405,6 @@ export default {
       const periodsOnCycle = (PERIOD_NUMBERS.CYCLE_DURATION_SEC / rootState.dao.settings.periodDurationSec).toFixed(2)
       const yearToPeriodRatio = rootState.dao.settings.periodDurationSec / PERIOD_NUMBERS.SECS_PER_YEAR
       let ratioUsdEquity = typeProposal === 'assignment' ? parseFloat(state.draft.annualUsdSalary || 0) : parseFloat(state.draft.usdAmount || 0)
-      console.log(state.draft.annualUsdSalary)
       const usdSalaryPerPeriod = yearToPeriodRatio * ratioUsdEquity
       if (typeProposal === 'assignment') {
         ratioUsdEquity = usdSalaryPerPeriod * (commitment / 100) * periodsOnCycle
