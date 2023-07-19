@@ -142,8 +142,7 @@ export function isAccepted (proposal, votingPercentages, supply) {
     q = votingPercentages.quorum / 100
     u = votingPercentages.unity / 100
   }
-
-  return (quorum(proposal, supply) >= q && unity(proposal, supply) >= u) || status(proposal) === PROPOSAL_STATE.APPROVED
+  return ((quorum(proposal, supply) >= q && unity(proposal, supply) >= u) || status(proposal) === PROPOSAL_STATE.APPROVED) && status(proposal) !== PROPOSAL_STATE.REJECTED
 }
 export function isProposed (proposal) {
   return status(proposal) === PROPOSAL_STATE.PROPOSED
