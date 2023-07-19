@@ -10,6 +10,7 @@ export default {
       default: () => null
     },
     daoName: String,
+    dhoTitle: String,
     isMember: Boolean,
     username: String
   }
@@ -29,7 +30,7 @@ export default {
         .h-b2(v-html="announcement.message")
   div(v-else)
     .row
-      .h-h5.text-bold {{ $t('navigation.sidebar-news.welcomeTo', { daoName: daoName && daoName.trim().replace(/^\w/, (c) => c.toUpperCase())})}}.
+      .h-h5.text-bold {{ $t('navigation.sidebar-news.welcomeTo', { daoName: dhoTitle && dhoTitle.trim().replace(/^\w/, (c) => c.toUpperCase())})}}.
     div(v-if="!isMember")
       .row.items-center.q-my-md
         .h-b2 {{ $t('navigation.sidebar-news.weAreCurrently1') }}
