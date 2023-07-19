@@ -191,6 +191,7 @@ export default {
         this.voiceToken = data.voiceToken
         this.supplyTokens = data.supplyTokens
         const timeZone = data.tz
+        this.resetForm()
         if (this.interval) {
           clearInterval(this.interval)
         }
