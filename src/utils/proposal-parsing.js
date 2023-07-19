@@ -403,7 +403,7 @@ export function salary (proposal) {
       }
     }
     if (proposal.__typename === PROPOSAL_TYPE.ROLE) {
-      return proposal.role[0].details_annualUsdSalary_a
+      return proposal.role[0].details_annualUsdSalary_a ? proposal.role[0].details_annualUsdSalary_a : proposal?.salaryband?.[0].details_annualUsdSalary_a
     }
     if (proposal.__typename === PROPOSAL_TYPE.EDIT) {
       if (proposal.original[0].__typename === PROPOSAL_TYPE.ROLE) {

@@ -173,6 +173,10 @@ const STAGED_PROPOSALS_QUERY = `
           docId
         }
 
+        salaryband {
+          details_annualUsdSalary_a
+        }
+
         details_pegSalaryPerPeriod_a
         details_rewardSalaryPerPeriod_a
         details_voiceSalaryPerPeriod_a

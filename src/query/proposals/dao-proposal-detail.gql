@@ -511,6 +511,9 @@ query proposalDetail($docId: String!, $first: Int!, $offset: Int!) {
       claimed {
         docId
       }
+      salaryband {
+        details_annualUsdSalary_a
+      }
       details_pegSalaryPerPeriod_a
       details_rewardSalaryPerPeriod_a
       details_voiceSalaryPerPeriod_a

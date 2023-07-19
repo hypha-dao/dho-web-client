@@ -512,7 +512,9 @@ const PROPOSAL_QUERY = `
       details_ballotQuorum_i
       details_ballotSupply_a
       details_ballotAlignment_i
-
+      salaryband {
+        details_annualUsdSalary_a
+      }
       details_url_s
       dao {
         details_daoName_n
