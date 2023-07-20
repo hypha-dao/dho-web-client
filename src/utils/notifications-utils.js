@@ -20,17 +20,17 @@ export function parsedNotification (notification) {
     case ('proposals.voting_expiry'):
       icon = require('~/assets/icons/notifications/voting-expire.png')
       title = I18n.t('notifications.proposalVotingExpire')
-      description = I18n.t('notifications.proposalIsExpiring', { accountname: notification.user, days: notification.content?.days })
+      description = I18n.t('notifications.proposalIsExpiring', { proposalId: notification.user, days: notification.content?.days })
       break
     case ('proposals.passed'):
       icon = require('~/assets/icons/notifications/proposal-passed.png')
       title = I18n.t('notifications.proposalPassed')
-      description = I18n.t('notifications.proposalHasPassed', { accountname: notification.user })
+      description = I18n.t('notifications.proposalHasPassed', { proposalId: notification.user })
       break
     case ('proposals.rejected'):
       icon = require('~/assets/icons/notifications/proposal-rejected.png')
       title = I18n.t('notifications.proposalRejected')
-      description = I18n.t('notifications.proposalHasntPassed', { accountname: notification.user })
+      description = I18n.t('notifications.proposalHasntPassed', { proposalId: notification.user })
       break
     case ('system.claimable_period'):
       icon = require('~/assets/icons/notifications/claimable-period.png')
