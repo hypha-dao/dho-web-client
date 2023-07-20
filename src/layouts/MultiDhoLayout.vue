@@ -12,7 +12,7 @@ const NOTIFICATIONS_QUERY = `
       name
       id
     }
-    user(filter: {eosAccountName: {eq: $account}}){
+    user{
       name
       id
       email
@@ -64,7 +64,7 @@ export default {
       }
     },
     notifications: {
-      query: gql`query notifications($account: String!) { ${NOTIFICATIONS_QUERY} }`,
+      query: gql`query notifications { ${NOTIFICATIONS_QUERY} }`,
       update: data => {
         return data.queryNotification
       },
@@ -77,7 +77,7 @@ export default {
         return !this.account
       },
       subscribeToMore: {
-        query: gql`subscription notifications($account: String!) { ${NOTIFICATIONS_QUERY} }`,
+        query: gql`subscription notifications { ${NOTIFICATIONS_QUERY} }`,
         skip () { return !this.account },
         variables () { return { account: this.account } },
         updateQuery: (previousResult, { subscriptionData }) => {
