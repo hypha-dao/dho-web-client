@@ -1,4 +1,270 @@
 <script>
+import gql from 'graphql-tag'
+
+const DAO_ACTIVE_QUERY = `
+
+  queryDao @cascade(fields: ["settings"]) {
+    docId
+    details_daoName_n
+
+    details_daoType_s
+    # details_isWaitingEcosystem_i
+    createdDate
+
+    upcomingelct {
+      docId
+    }
+
+    announcements: alert {
+      id: docId
+      title: details_level_s
+      message: details_content_s
+      enabled: details_enabled_i
+    }
+
+    planmanager {
+      bill {
+        id: docId
+        startDate: details_startDate_t
+        endDate: details_endDate_t
+        expirationDate: details_expirationDate_t
+        periodCount: details_periodCount_i
+        name: details_planName_s
+        price: details_planPrice_a
+        isInfinite: details_isInfinite_i
+        discountPercX10000: details_discountPercX10000_i
+
+        pricingplan {
+          maxMemberCount: details_maxMemberCount_i
+        }
+      }
+      currentbill {
+        id: docId
+        startDate: details_startDate_t
+        endDate: details_endDate_t
+        expirationDate: details_expirationDate_t
+        periodCount: details_periodCount_i
+        name: details_planName_s
+        price: details_planPrice_a
+        isInfinite: details_isInfinite_i
+        discountPercX10000: details_discountPercX10000_i
+
+        pricingplan {
+          maxMemberCount: details_maxMemberCount_i
+        }
+      }
+      lastbill {
+        id: docId
+        startDate: details_startDate_t
+        endDate: details_endDate_t
+        expirationDate: details_expirationDate_t
+        periodCount: details_periodCount_i
+        name: details_planName_s
+        price: details_planPrice_a
+        isInfinite: details_isInfinite_i
+        discountPercX10000: details_discountPercX10000_i
+
+        pricingplan {
+          maxMemberCount: details_maxMemberCount_i
+        }
+      }
+    }
+
+    multisigs: openmultisig {
+      approvedby {
+        docId
+        details_member_n
+      }
+
+      id: docId
+
+      # ecosystem_name_s
+      # ecosystem_logo_s
+      # ecosystem_domain_s
+      # ecosystem_purpose_s
+
+      # settings_onboarderAccount_n
+
+      # settings_claimEnabled_i
+      settings_daoUrl_s
+      # settings_daoName_n
+      settings_daoTitle_s
+      # settings_daoDescription_s
+      # settings_governanceTokenContract_n
+      # settings_pegToken_a
+      # settings_pegTokenContract_n
+      # settings_rewardToken_a
+      # settings_rewardTokenContract_n
+      # settings_rewardToPegRatio_a
+      # settings_treasuryContract_n
+      # settings_voiceToken_a
+
+      settings_socialChat_s
+      settings_documentationButtonText_s
+
+      settings_proposalsCreationEnabled_i
+      settings_membersApplicationEnabled_i
+      settings_removableBannersEnabled_i
+      settings_multisigEnabled_i
+
+      settings_votingDurationSec_i
+      # settings_periodDurationSec_i
+      settings_votingAlignmentX100_i
+      settings_votingQuorumX100_i
+      # settings_voiceTokenDecayPeriod_i
+
+      settings_communityVotingEnabled_i
+      settings_communityVotingMethod_s
+      settings_upvoteStartDateTime_s
+      settings_upvoteDuration_i
+      settings_upvoteRounds_s
+      settings_upvoteCheifDelegateCount_i
+      settings_upvoteCheifDelegateDuration_i
+      settings_upvoteHeadDelegateRound_i
+      settings_upvoteHeadDelegateDuration_i
+      settings_communityVotingDurationSec_i
+      settings_communityVotingAlignmentPercent_i
+      settings_communityVotingQuorumPercent_i
+
+      # settings_usesSeeds_i
+      # settings_isHypha_i
+
+      settings_logo_s
+      settings_extendedLogo_s
+      settings_primaryColor_s
+      settings_secondaryColor_s
+      settings_textColor_s
+      settings_pattern_s
+      settings_patternColor_s
+      settings_patternOpacity_i
+      settings_patternBase64_s
+
+      settings_splashBackgroundImage_s
+
+      settings_dashboardBackgroundImage_s
+      settings_dashboardTitle_s
+      settings_dashboardParagraph_s
+
+      settings_proposalsBackgroundImage_s
+      settings_proposalsTitle_s
+      settings_proposalsParagraph_s
+
+      settings_membersBackgroundImage_s
+      settings_membersTitle_s
+      settings_membersParagraph_s
+
+      settings_organisationBackgroundImage_s
+      settings_organisationTitle_s
+      settings_organisationParagraph_s
+
+      settings_exploreBackgroundImage_s
+      settings_exploreTitle_s
+      settings_exploreParagraph_s
+
+      settings_documentationURL_s
+    }
+
+    settings(filter: { settings_daoUrl_s: { regexp: $regexp } }) {
+      ecosystem_name_s
+      ecosystem_logo_s
+      ecosystem_domain_s
+      ecosystem_purpose_s
+
+      settings_onboarderAccount_n
+
+      settings_claimEnabled_i
+      settings_daoUrl_s
+      settings_daoName_n
+      settings_daoTitle_s
+      settings_daoDescription_s
+      settings_governanceTokenContract_n
+      settings_pegToken_a
+      settings_pegTokenContract_n
+      settings_rewardToken_a
+      settings_rewardTokenContract_n
+      settings_rewardToPegRatio_a
+      settings_treasuryContract_n
+      settings_voiceToken_a
+
+      settings_socialChat_s
+      settings_documentationButtonText_s
+
+      settings_proposalsCreationEnabled_i
+      settings_membersApplicationEnabled_i
+      settings_removableBannersEnabled_i
+      settings_multisigEnabled_i
+
+      settings_votingDurationSec_i
+      settings_periodDurationSec_i
+      settings_votingAlignmentX100_i
+      settings_votingQuorumX100_i
+      settings_voiceTokenDecayPeriod_i
+
+      settings_communityVotingEnabled_i
+      settings_communityVotingMethod_s
+      settings_upvoteStartDateTime_s
+      settings_upvoteDuration_i
+      settings_upvoteRounds_s
+      settings_upvoteCheifDelegateCount_i
+      settings_upvoteCheifDelegateDuration_i
+      settings_upvoteHeadDelegateRound_i
+      settings_upvoteHeadDelegateDuration_i
+      settings_communityVotingDurationSec_i
+      settings_communityVotingAlignmentPercent_i
+      settings_communityVotingQuorumPercent_i
+
+      settings_usesSeeds_i
+      settings_isHypha_i
+
+      settings_logo_s
+      settings_extendedLogo_s
+      settings_primaryColor_s
+      settings_secondaryColor_s
+      settings_textColor_s
+      settings_pattern_s
+      settings_patternColor_s
+      settings_patternOpacity_i
+      settings_patternBase64_s
+
+      settings_splashBackgroundImage_s
+
+      settings_dashboardBackgroundImage_s
+      settings_dashboardTitle_s
+      settings_dashboardParagraph_s
+
+      settings_proposalsBackgroundImage_s
+      settings_proposalsTitle_s
+      settings_proposalsParagraph_s
+
+      settings_membersBackgroundImage_s
+      settings_membersTitle_s
+      settings_membersParagraph_s
+
+      settings_organisationBackgroundImage_s
+      settings_organisationTitle_s
+      settings_organisationParagraph_s
+
+      settings_exploreBackgroundImage_s
+      settings_exploreTitle_s
+      settings_exploreParagraph_s
+
+      settings_documentationURL_s
+    }
+
+    levels: salaryband {
+      id: docId
+      name: details_name_s
+      annualAmount: details_annualUsdSalary_a
+      minDeferred: details_minDeferredX100_i
+    }
+
+    memberAggregate {
+      count
+    }
+  }
+
+`
+
 export default {
   name: 'dho-selector',
   components: {
@@ -14,9 +280,34 @@ export default {
 
   apollo: {
 
+    roles: {
+      query: gql`query ROLES($daoId: Int64!) { ${DAO_ACTIVE_QUERY} }`,
+      update: data => data.queryRole,
+      skip () { return !this.selectedDao?.docId },
+      variables () { return { daoId: this.selectedDao.docId } },
+      subscribeToMore: {
+        document: gql`subscription ROLES($daoId: Int64!) { ${DAO_ACTIVE_QUERY} }`,
+        skip () { return !this.selectedDao?.docId },
+        variables () { return { daoId: this.selectedDao.docId } },
+        updateQuery: (previousResult, { subscriptionData }) => {
+          if (!subscriptionData.data) {
+            return previousResult
+          }
+          if (!previousResult) {
+            return undefined
+          }
+
+          return subscriptionData.data
+        }
+      }
+    },
+
     dao: {
-      query: require('~/query/dao-active.gql'),
+      query: gql`query activeDao($regexp: String!) { ${DAO_ACTIVE_QUERY} }`,
       update: data => data.queryDao,
+      skip () { return !this.dhoname || !this.daoRegexp },
+      variables () { return { regexp: this.daoRegexp } },
+
       result (res) {
         const data = res.data?.queryDao
         if (!(data.length)) {
@@ -28,10 +319,10 @@ export default {
         this.$store.dispatch('dao/setTheme')
         this.$store.dispatch('ballots/getSupply')
       },
-      skip () { return !this.dhoname || !this.daoRegexp },
-      variables () { return { regexp: this.daoRegexp } },
+
       subscribeToMore: {
-        document: require('~/graphql/subscription/dao-active.subscription.gql'),
+        document: gql`subscription activeDao($regexp: String!) { ${DAO_ACTIVE_QUERY} }`,
+        skip () { return !this.dhoname || !this.daoRegexp },
         variables () { return { regexp: this.daoRegexp } },
         updateQuery: (previousResult, { subscriptionData }) => {
           if (!subscriptionData.data) {
