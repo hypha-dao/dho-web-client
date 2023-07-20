@@ -292,6 +292,10 @@ query historyProposals($docId: String!, $first: Int!, $offset: Int!) {
           }
         }
 
+        salaryband {
+          details_annualUsdSalary_a
+        }
+
         start {
           details_startTime_t
         }

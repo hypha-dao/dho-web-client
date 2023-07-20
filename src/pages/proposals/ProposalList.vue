@@ -173,6 +173,10 @@ const STAGED_PROPOSALS_QUERY = `
           docId
         }
 
+        salaryband {
+          details_annualUsdSalary_a
+        }
+
         details_pegSalaryPerPeriod_a
         details_rewardSalaryPerPeriod_a
         details_voiceSalaryPerPeriod_a
@@ -526,8 +530,7 @@ export default {
       //   })
       //   return [...withOutVote, ...withVote]
       // }
-
-      return daos[0].proposal
+      return daos[0].proposal.filter(proposal => new Date(proposal.ballot_expiration_t) > new Date(Date.now()))
     },
 
     filteredProposals () {
