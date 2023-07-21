@@ -396,10 +396,12 @@ export default {
           const isMatched = parsedNotifications.find(item => item.id === notification.id)
           if (!isMatched && !notification.read) {
             parsedNotifications.push(notification)
+          } else if (isMatched) {
+            isMatched.read = notification.read
           }
         })
-        this.localNotifications = parsedNotifications
         localStorage.setItem('notifications', JSON.stringify(parsedNotifications))
+        this.localNotifications = JSON.parse(localStorage.getItem('notifications'))
       }
     },
     countObjectsWithKeyValue(array, key, value) {
@@ -425,8 +427,7 @@ export default {
         }
       })
       this.$apollo.queries.notifications.refetch()
-      this.localNotifications = this.notifications
-      localStorage.setItem('notifications', JSON.stringify(this.notifications))
+      this.localNotifications = JSON.parse(localStorage.getItem('notifications'))
     },
     clearAllNotifications () {
       localStorage.removeItem('notifications')
