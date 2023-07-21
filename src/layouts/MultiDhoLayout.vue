@@ -92,7 +92,9 @@ export default {
       },
       result (res) {
         this.initNotifications()
-      }
+      },
+      fetchPolicy: 'network',
+      pollInterval: 1000
     }
   },
 
