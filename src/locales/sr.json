@@ -1705,6 +1705,26 @@
       "daoPublished": "ДАО Публисхед!"
     }
   },
+  "notifications": {
+    "clearAll": "Избриши све",
+    "notifications": "Обавештења",
+    "newComment": "Нови коментар",
+    "hasJustLeftAComment": "@{accountname} је управо оставио коментар на ваш предлог",
+    "proposalVotingExpire": "Гласање за предлог истиче",
+    "proposalIsExpiring": "Предлог {proposalId} истиче за {days} дана",
+    "proposalPassed": "Предлог је прошао",
+    "proposalHasPassed": "Предлог {proposalId} је прошао",
+    "proposalRejected": "Предлог одбијен",
+    "proposalHasntPassed": "Предлог {proposalId} није прошао",
+    "claimablePeriod": "Период на који се може потраживати",
+    "youHaveClaimablePeriod": "Имате {value} период за полагање права",
+    "extendYourAssignment": "Проширите свој задатак",
+    "youStillHave": "Још имате {days} дана да продужите свој задатак",
+    "assignmentApproved": "Задатак је одобрен",
+    "yourAssignmentHasBeenApproved": "Ваш задатак је одобрен",
+    "assignmentRejected": "Задатак је одбијен",
+    "yourAssignmentHasntBeenApproved": "Ваш задатак није одобрен"
+  },
   "proposalparsing": {
     "createdAgo": "Направљено пре {diff}",
     "closedAgo": "Затворено пре {diff}",

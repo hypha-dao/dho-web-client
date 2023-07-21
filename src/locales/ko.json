@@ -1705,6 +1705,26 @@
       "daoPublished": "DAO 출간!"
     }
   },
+  "notifications": {
+    "clearAll": "모두 지우기",
+    "notifications": "알림",
+    "newComment": "새 댓글",
+    "hasJustLeftAComment": "@{accountname}님이 귀하의 제안에 댓글을 남겼습니다.",
+    "proposalVotingExpire": "제안 투표 만료",
+    "proposalIsExpiring": "{proposalId} 제안이 {days}일 후에 만료됩니다.",
+    "proposalPassed": "제안 통과",
+    "proposalHasPassed": "{proposalId} 제안이 통과되었습니다.",
+    "proposalRejected": "제안 거부됨",
+    "proposalHasntPassed": "{proposalId} 제안이 통과되지 않았습니다.",
+    "claimablePeriod": "청구가능기간",
+    "youHaveClaimablePeriod": "사용 가능한 {value} 기간이 있습니다.",
+    "extendYourAssignment": "임무를 연장하다",
+    "youStillHave": "할당을 연장할 수 있는 {days}일이 아직 남아 있습니다.",
+    "assignmentApproved": "과제 승인됨",
+    "yourAssignmentHasBeenApproved": "할당이 승인되었습니다.",
+    "assignmentRejected": "할당 거부됨",
+    "yourAssignmentHasntBeenApproved": "과제가 승인되지 않았습니다."
+  },
   "proposalparsing": {
     "createdAgo": "{diff} 전에 생성됨",
     "closedAgo": "마감 {diff} 전",

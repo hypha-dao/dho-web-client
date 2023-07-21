@@ -1,6 +1,29 @@
 <script>
 import { mapActions, mapGetters, mapMutations } from 'vuex'
 import BrowserIpfs from '~/ipfs/browser-ipfs.js'
+import gql from 'graphql-tag'
+import { timeago } from '~/utils/TimeUtils'
+import { parsedNotification } from '~/utils/notifications-utils'
+
+const NOTIFICATIONS_QUERY = `
+  queryNotification {
+    event{
+      eventType
+      name
+      id
+    }
+    user{
+      name
+      id
+      email
+      eosAccountName
+    }
+    read
+    time
+    content
+    id
+  }
+`
 export default {
   name: 'multi-dho-layout',
   components: {
@@ -40,11 +63,46 @@ export default {
       skip () {
         return !this.account
       }
+    },
+    notifications: {
+      query: gql`query notifications { ${NOTIFICATIONS_QUERY} }`,
+      update: data => {
+        return data.queryNotification
+      },
+      variables () {
+        return {
+          account: this.account
+        }
+      },
+      skip () {
+        return !this.account
+      },
+      subscribeToMore: {
+        query: gql`subscription notifications { ${NOTIFICATIONS_QUERY} }`,
+        skip () { return !this.account },
+        variables () { return { account: this.account } },
+        updateQuery: (previousResult, { subscriptionData }) => {
+          if (!subscriptionData.data) {
+            return previousResult
+          }
+          if (!previousResult) {
+            return undefined
+          }
+          return subscriptionData.data
+        }
+      },
+      result (res) {
+        this.initNotifications()
+      },
+      fetchPolicy: 'network',
+      pollInterval: 1000
     }
   },
 
   data () {
     return {
+      timeago,
+      parsedNotification,
       profile: {
         username: null,
         avatar: null,
@@ -96,11 +154,20 @@ export default {
           value: 'zh',
           image: require('assets/images/locales/zh.png')
         }
-      ]
+      ],
+      showNotificationsBar: false,
+      localNotifications: []
     }
   },
 
   watch: {
+    localNotifications: {
+      handler (v) {
+        this.localNotifications = v
+      },
+      immediate: true,
+      deep: true
+    },
     dho (v) {
       if (v.icon) {
         this.updateTitle()
@@ -201,7 +268,6 @@ export default {
       }
       return true
     }
-
   },
 
   methods: {
@@ -316,7 +382,70 @@ export default {
       } catch (error) {
 
       }
+    },
+    initNotifications () {
+      if (!localStorage.getItem('notifications')) {
+        const notifications = []
+        this.notifications.forEach((notification) => {
+          if (!notification.read) {
+            notifications.push(notification)
+          }
+        })
+        this.localNotifications = notifications
+        localStorage.setItem('notifications', JSON.stringify(notifications))
+      } else {
+        const parsedNotifications = JSON.parse(localStorage.getItem('notifications'))
+        this.notifications.forEach((notification) => {
+          const isMatched = parsedNotifications.find(item => item.id === notification.id)
+          if (!isMatched && !notification.read) {
+            parsedNotifications.push(notification)
+          } else if (isMatched) {
+            isMatched.read = notification.read
+          }
+        })
+        localStorage.setItem('notifications', JSON.stringify(parsedNotifications))
+        this.localNotifications = JSON.parse(localStorage.getItem('notifications'))
+      }
+    },
+    countObjectsWithKeyValue(array, key, value) {
+      let count = 0
+      array.forEach(obj => {
+        if (obj[key] === value) {
+          count++
+        }
+      })
+      return count
+    },
+    readNotification (id) {
+      this.$apollo.mutate({
+        mutation: gql`mutation($id: [ID!]) {
+          updateNotification(input: {set: {read: true}, filter: {id: $id}}) {
+            notification {
+              read
+            }
+          }
+        }`,
+        variables: {
+          id: id
+        }
+      })
+      this.$apollo.queries.notifications.refetch()
+      this.localNotifications = JSON.parse(localStorage.getItem('notifications'))
+    },
+    clearAllNotifications () {
+      localStorage.removeItem('notifications')
+      this.localNotifications = []
+      this.notifications = []
+    },
+    goToProposal (notification) {
+      const proposal = JSON.parse(notification.content).proposalId
+      if (proposal) {
+        this.$router.push({ path: `/${this.selectedDao.name}/proposals/${proposal}` })
+      }
     }
+  },
+  created () {
+    // this.initNotifications()
   }
 }
 </script>
@@ -325,6 +454,7 @@ export default {
 q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout")
   q-dialog(:value="selectedDaoPlan.hasExpired && $route.name !== 'configuration' && $route.name !== 'login'" persistent="persistent")
   div.absolute.full-width.full-height.bg-black(v-if="languageSettings" @click="languageSettings = false" :style="{ 'opacity': '.4', 'z-index': '2000' }")
+  div.absolute.full-width.full-height.bg-black(v-if="showNotificationsBar" @click="showNotificationsBar = false" :style="{ 'opacity': '.4', 'z-index': '2000' }")
   //- templates-modal(:isOpen="!isActivated" @submit="setupTemplate")
   q-dialog(:value="selectedDaoPlan.hasExpired && $route.name !== 'configuration' && $route.name !== 'login'" persistent)
     .bg-negative.rounded-border(:style="{'min-width':'680px'}")
@@ -345,7 +475,7 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
         .col-6.q-pl-xs
           q-btn.q-px-xl.rounded-border.text-bold.full-width(:to="{ name: 'configuration', query: { tab: 'PLAN' } }" color="white" text-color="negative" :label="$t('layouts.multidholayout.renewMyCurrentPlan')" no-caps rounded unelevated)
   q-header.bg-white(v-if="$q.screen.lt.lg")
-    top-navigation(@isActiveRoute="isActiveRoute" @showLangSettings="languageSettings = true, right = false" :showTopButtons="showTopBarItems" :profile="profile" @toggle-sidebar="!$q.screen.md ? right = true : showMinimizedMenu = true" @search="onSearch" :dho="dho" :dhos="getDaos($apolloData.data.member)" :selectedDaoPlan="selectedDaoPlan")
+    top-navigation(:unreadNotifications="countObjectsWithKeyValue(localNotifications, 'read', false)" :notifications="notifications" @openNotifications="languageSettings = false, right = false, showNotificationsBar = true" @isActiveRoute="isActiveRoute" @showLangSettings="languageSettings = true, right = false" :showTopButtons="showTopBarItems" :profile="profile" @toggle-sidebar="!$q.screen.md ? right = true : showMinimizedMenu = true" @search="onSearch" :dho="dho" :dhos="getDaos($apolloData.data.member)" :selectedDaoPlan="selectedDaoPlan")
   q-page-container.bg-white.window-height.q-py-sm(:class="{ 'q-pr-sm': $q.screen.gt.md, 'q-px-xs': !$q.screen.gt.md}")
     .bg-internal-bg.content.full-height
       q-resize-observer(@resize="onContainerResize")
@@ -363,6 +493,9 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
                     .h-h3(v-if="title") {{ title }}
                 .col(v-if="showTopBarItems")
                   .row.justify-end.items-center(v-if="$q.screen.gt.md")
+                    .notifications-icon
+                      .notifications-icon__counter(v-if="countObjectsWithKeyValue(localNotifications, 'read', false) > 0") {{ countObjectsWithKeyValue(localNotifications, 'read', false) }}
+                      q-btn.q-mr-xs(@click="languageSettings = false, right = false, showNotificationsBar = true" unelevated rounded padding="12px" icon="far fa-bell"  size="sm" :color="'white'" :text-color="'primary'")
                     router-link(v-if="selectedDaoPlan.isEcosystem" :to="{ name: 'ecosystem' }")
                       q-btn.q-mr-xs(unelevated rounded padding="12px" icon="fas fa-share-alt" size="sm" :color="isActiveRoute('ecosystem') ? 'primary' : 'white'" :text-color="isActiveRoute('ecosystem') ? 'white' : 'primary'")
                     router-link(:to="{ name: 'configuration' }")
@@ -434,7 +567,25 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
     bottom-navigation
   q-drawer(v-else v-model="left" side="left" :width="80" persistent="persistent" :show-if-above="true")
     left-navigation(:dho="dho" :dhos="getDaos($apolloData.data.member)")
-
+  q-drawer(v-model="showNotificationsBar" overlay side="right" :width="$q.screen.gt.lg ? 370 : ($q.screen.md || $q.screen.gt.sm ? 400 : $q.screen.width)").full-width
+    div.q-pa-xl.full-height
+      .row
+        .flex.full-width.justify-between.no-wrap
+          .h-h3.items-center.flex {{ $t('notifications.notifications')}}
+          q-btn(color="internal-bg" text-color="primary" rounded unelevated size="sm" padding="12px" icon="fas fa-times" :style="{ 'height': '40px' }" @click="showNotificationsBar = false")
+        .q-mt-md.full-width(:style="{ 'position': 'relative' }")
+          .col(v-for="notification, index in localNotifications" :key="notification.id")
+            .row.q-py-md.cursor-pointer(@click="goToProposal(notification)" v-on:mouseover="readNotification(notification.id)" :style="{ 'border-top': '1px solid #CBCDD1' }" :class="{ 'last-item': index === notifications.length - 1, 'read-notify': notification.read === true }")
+              .col-2.items-center.flex
+                div.flex.items-center.justify-center(:style="{ 'width': '40px', 'height': '40px', 'border-radius': '50%', 'background': '#F2F1F3'}")
+                  img(:src="parsedNotification(notification).icon")
+              .col
+                .h-b2.text-bold.text-black.q-mb-xs(:style="{ 'font-size': '16px' }") {{ parsedNotification(notification).title }}
+                .h-b2 {{ parsedNotification(notification).description }}
+              .col-3.flex.items-center
+                .h-b2.text-italic {{ parsedNotification(notification).createdDate }}
+          .row.bg-white.full-width(v-if="localNotifications.length" :style="{ 'position': 'fixed', 'bottom': '0', 'padding-right': '60px', 'padding-bottom': '20px', 'padding-top': '20px' }")
+            q-btn.full-width.q-px-xl(@click="clearAllNotifications()" color="primary" :label="$t('notifications.clearAll')" no-caps outline rounded unelevated)
 </template>
 <style lang="stylus" scoped>
 .rounded-border
@@ -471,4 +622,24 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
 .translation-box
   background: #F2F1F3
   border-radius: 10px
+.notifications-icon
+  position: relative
+.notifications-icon__counter
+  width: 16px
+  height: 16px
+  background: #EF3F69
+  border-radius: 50%
+  display: flex
+  align-items: center
+  justify-content: center
+  color: #FFFFFF
+  position: absolute
+  z-index: 1
+  right: 8px
+  top: -2px
+  font-size: 14px
+.last-item
+  margin-bottom: 80px
+.read-notify
+  opacity: .5
 </style>

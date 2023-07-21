@@ -1705,6 +1705,26 @@
       "daoPublished": "DAO publicado!"
     }
   },
+  "notifications": {
+    "clearAll": "Limpar tudo",
+    "notifications": "Notificações",
+    "newComment": "Novo comentário",
+    "hasJustLeftAComment": "@{accountname} acabou de deixar um comentário sobre sua proposta",
+    "proposalVotingExpire": "A votação da proposta expira",
+    "proposalIsExpiring": "A proposta de {proposalId} expira em {days} dias",
+    "proposalPassed": "Proposta aprovada",
+    "proposalHasPassed": "A proposta de {proposalId} foi aprovada",
+    "proposalRejected": "Proposta rejeitada",
+    "proposalHasntPassed": "A proposta de {proposalId} não foi aprovada",
+    "claimablePeriod": "Período exigível",
+    "youHaveClaimablePeriod": "Você tem {value} período exigível disponível",
+    "extendYourAssignment": "Estenda sua tarefa",
+    "youStillHave": "Você ainda tem {days} dias para estender sua atribuição",
+    "assignmentApproved": "Atribuição aprovada",
+    "yourAssignmentHasBeenApproved": "Sua tarefa foi aprovada",
+    "assignmentRejected": "Atribuição rejeitada",
+    "yourAssignmentHasntBeenApproved": "Sua tarefa não foi aprovada"
+  },
   "proposalparsing": {
     "createdAgo": "Criado {diff} atrás",
     "closedAgo": "Fechado {diff} atrás",
