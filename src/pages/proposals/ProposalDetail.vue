@@ -514,6 +514,12 @@ const PROPOSAL_QUERY = `
       details_ballotAlignment_i
       salaryband {
         details_annualUsdSalary_a
+        details_name_s
+        assignment {
+          role {
+            system_nodeLabel_s
+          }
+        }
       }
       details_url_s
       dao {
