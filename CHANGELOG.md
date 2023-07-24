@@ -1,5 +1,18 @@
 # Changelog
 
+## [2.31.4](https://github.com/hypha-dao/dho-web-client/compare/v2.31.3...v2.31.4) (2023-07-20)
+
+
+### Bug Fixes
+
+* **profile:** autocomplete fields in profile-card on edit (#DEV-853) ([#2344](https://github.com/hypha-dao/dho-web-client/issues/2344)) ([569ac36](https://github.com/hypha-dao/dho-web-client/commit/569ac364ea6a8224226a97be21343d1e53ec3ebc))
+* **proposal-creation:** added commas in values (#DEV-856) ([#2345](https://github.com/hypha-dao/dho-web-client/issues/2345)) ([c324448](https://github.com/hypha-dao/dho-web-client/commit/c3244486c0d78f604a9a84ed7cefeec00b8e3dd3))
+* **proposal-creation:** missed variable in reset draft function ([#2348](https://github.com/hypha-dao/dho-web-client/issues/2348)) ([d1bbbc6](https://github.com/hypha-dao/dho-web-client/commit/d1bbbc68a6270ff031d0a3f50157b1d40e056dd1))
+* **proposals:** added filter for hide passed proposals from active proposals (#DEV-863) ([#2343](https://github.com/hypha-dao/dho-web-client/issues/2343)) ([e713090](https://github.com/hypha-dao/dho-web-client/commit/e71309080d7ee4c4e205d811a7a1e27872f4f985))
+* **proposals:** displaying b-level tag in proposals (#DEV-845) ([#2341](https://github.com/hypha-dao/dho-web-client/issues/2341)) ([e4b5d63](https://github.com/hypha-dao/dho-web-client/commit/e4b5d63caff856b40915a5a971547202ced31e74))
+* **proposals:** isAccepted function in proposal-parsing (#DEV-862) ([#2347](https://github.com/hypha-dao/dho-web-client/issues/2347)) ([b81d4e0](https://github.com/hypha-dao/dho-web-client/commit/b81d4e0a3d3dc280820d58a2945b918670d1a745))
+* **sidebar:** dao name in sidebar (#DEV-854) ([#2342](https://github.com/hypha-dao/dho-web-client/issues/2342)) ([f614346](https://github.com/hypha-dao/dho-web-client/commit/f614346c54a8ae3f92ae75d11e0ad7f2596235b2))
+
 ## [2.31.3](https://github.com/hypha-dao/dho-web-client/compare/v2.31.2...v2.31.3) (2023-07-15)
 
 
