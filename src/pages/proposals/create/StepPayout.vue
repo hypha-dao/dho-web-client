@@ -108,7 +108,14 @@ export default {
     nextDisabled () {
       const proposalType = this.$store.state.proposals.draft.category.key
 
-      if (proposalType === 'assignment' && (!this.annualUsdSalary || this.deferred < 1 || this.commitment < 1 || !this.isValidCommitment(this.commitment) || !this.isValidDeferred(this.deferred))) {
+      if (
+        proposalType === 'assignment' &&
+        (
+          !this.annualUsdSalary ||
+          this.deferred < 1 ||
+          this.commitment < 1 ||
+          !this.isValidCommitment(this.commitment) ||
+          !this.isValidDeferred(this.deferred))) {
         return true
       } else if (proposalType === 'archetype' && !this.annualUsdSalary) {
         return true
@@ -307,13 +314,16 @@ export default {
     isValidDeferred (deferred) {
       const proposalType = this.$store.state.proposals.draft.category.key
       if (proposalType === 'assignment') {
-        const roleSelected = this.$store.state.proposals.draft.role
-        const minDeferred = roleSelected.details_minDeferredX100_i ? roleSelected.details_minDeferredX100_i : roleSelected.minDeferred
-        if (!minDeferred) return true
-        if (deferred >= minDeferred) {
-          return true
-        } return false
-      } else return true
+        // const roleSelected = this.$store.state.proposals.draft.role
+        // const minDeferred = roleSelected.details_minDeferredX100_i ? roleSelected.details_minDeferredX100_i : roleSelected.minDeferred
+        // console.log(JSON.stringify(this.minDeferred))
+        return deferred >= this.minDeferred
+        // if (!minDeferred) return true
+        // if (deferred >= minDeferred) {
+        //   return true
+        // } return false
+      }
+      return true
     },
 
     imageUrl (icon) {
