@@ -267,7 +267,6 @@ export default {
         this.$store.commit('proposals/setCategory', { key: CONFIG.types.core.options.assignment.key, title: CONFIG.types.core.options.assignment.title })
         const tier = this.tiers.find(tier => tier.label === this.proposal?.salaryband?.[0]?.details_name_s)
         const archetype = this.archetypes.find(archetype => archetype.label === this.proposal?.salaryband?.[0]?.assignment?.[0]?.role?.[0]?.system_nodeLabel_s)
-        console.log(archetype, tier)
         this.$store.commit('proposals/setRole', archetype)
         this.$store.commit('proposals/setTier', tier)
 
