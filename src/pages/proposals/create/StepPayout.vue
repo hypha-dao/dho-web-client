@@ -314,15 +314,9 @@ export default {
     isValidDeferred (deferred) {
       const proposalType = this.$store.state.proposals.draft.category.key
       if (proposalType === 'assignment') {
-        // const roleSelected = this.$store.state.proposals.draft.role
-        // const minDeferred = roleSelected.details_minDeferredX100_i ? roleSelected.details_minDeferredX100_i : roleSelected.minDeferred
-        // console.log(JSON.stringify(this.minDeferred))
         return deferred >= this.minDeferred
-        // if (!minDeferred) return true
-        // if (deferred >= minDeferred) {
-        //   return true
-        // } return false
       }
+
       return true
     },
 
