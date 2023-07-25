@@ -84,9 +84,6 @@ export default {
       //     return subscriptionData.data
       //   }
       // },
-      result (res) {
-        console.log(JSON.stringify(res))
-      },
       fetchPolicy: 'network',
       pollInterval: 1000
     }
