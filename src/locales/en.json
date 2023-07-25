@@ -131,7 +131,7 @@
         "description": "Here you can set up your DAO's role types. These are a set of basic accountabilities that a user role can fulfill. You can think of them as templated job descriptions.",
         "tabs": {
           "types": "Types",
-          "tiers": "Tier Reward"
+          "tiers": "Reward Tier"
         },
         "type": {
           "heading": "Here you can create new role types by adding a name and set of accountabilities.",
