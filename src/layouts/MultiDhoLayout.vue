@@ -24,6 +24,7 @@ const NOTIFICATIONS_QUERY = `
     id
   }
 `
+
 export default {
   name: 'multi-dho-layout',
   components: {
@@ -66,33 +67,25 @@ export default {
     },
     notifications: {
       query: gql`query notifications { ${NOTIFICATIONS_QUERY} }`,
-      update: data => {
-        return data.queryNotification
-      },
-      variables () {
-        return {
-          account: this.account
-        }
-      },
-      skip () {
-        return !this.account
-      },
-      subscribeToMore: {
-        query: gql`subscription notifications { ${NOTIFICATIONS_QUERY} }`,
-        skip () { return !this.account },
-        variables () { return { account: this.account } },
-        updateQuery: (previousResult, { subscriptionData }) => {
-          if (!subscriptionData.data) {
-            return previousResult
-          }
-          if (!previousResult) {
-            return undefined
-          }
-          return subscriptionData.data
-        }
-      },
+      update: data => data.queryNotification,
+      variables () { return { account: this.account } },
+      skip () { return !this.account },
+      // subscribeToMore: {
+      //   query: gql`subscription notifications { ${NOTIFICATIONS_QUERY} }`,
+      //   skip () { return !this.account },
+      //   variables () { return { account: this.account } },
+      //   updateQuery: (previousResult, { subscriptionData }) => {
+      //     if (!subscriptionData.data) {
+      //       return previousResult
+      //     }
+      //     if (!previousResult) {
+      //       return undefined
+      //     }
+      //     return subscriptionData.data
+      //   }
+      // },
       result (res) {
-        this.initNotifications()
+        console.log(JSON.stringify(res))
       },
       fetchPolicy: 'network',
       pollInterval: 1000
@@ -155,19 +148,12 @@ export default {
           image: require('assets/images/locales/zh.png')
         }
       ],
-      showNotificationsBar: false,
-      localNotifications: []
+      showNotificationsBar: false
     }
   },
 
   watch: {
-    localNotifications: {
-      handler (v) {
-        this.localNotifications = v
-      },
-      immediate: true,
-      deep: true
-    },
+
     dho (v) {
       if (v.icon) {
         this.updateTitle()
@@ -325,8 +311,8 @@ export default {
         this.$set(this.profile, 'name', undefined)
         this.$set(this.profile, 'avatar', undefined)
         if (profile) {
-          this.$set(this.profile, 'name', profile.publicData.name)
-          this.$set(this.profile, 'avatar', profile.publicData.avatar)
+          this.$set(this.profile, 'name', profile?.publicData?.name)
+          this.$set(this.profile, 'avatar', profile?.publicData?.avatar)
         }
       }
     },
@@ -383,31 +369,10 @@ export default {
 
       }
     },
-    initNotifications () {
-      if (!localStorage.getItem('notifications')) {
-        const notifications = []
-        this.notifications.forEach((notification) => {
-          if (!notification.read) {
-            notifications.push(notification)
-          }
-        })
-        this.localNotifications = notifications
-        localStorage.setItem('notifications', JSON.stringify(notifications))
-      } else {
-        const parsedNotifications = JSON.parse(localStorage.getItem('notifications'))
-        this.notifications.forEach((notification) => {
-          const isMatched = parsedNotifications.find(item => item.id === notification.id)
-          if (!isMatched && !notification.read) {
-            parsedNotifications.push(notification)
-          } else if (isMatched) {
-            isMatched.read = notification.read
-          }
-        })
-        localStorage.setItem('notifications', JSON.stringify(parsedNotifications))
-        this.localNotifications = JSON.parse(localStorage.getItem('notifications'))
-      }
-    },
+
     countObjectsWithKeyValue(array, key, value) {
+      if (!array) return 0
+
       let count = 0
       array.forEach(obj => {
         if (obj[key] === value) {
@@ -430,23 +395,18 @@ export default {
         }
       })
       this.$apollo.queries.notifications.refetch()
-      this.localNotifications = JSON.parse(localStorage.getItem('notifications'))
     },
     clearAllNotifications () {
-      localStorage.removeItem('notifications')
-      this.localNotifications = []
-      this.notifications = []
+      // this.notifications = []
     },
     goToProposal (notification) {
       const proposal = JSON.parse(notification.content).proposalId
       if (proposal) {
-        this.$router.push({ path: `/${this.selectedDao.name}/proposals/${proposal}` })
+        this.$router.push({ path: `/${this.selectedDao?.name}/proposals/${proposal}` })
       }
     }
-  },
-  created () {
-    // this.initNotifications()
   }
+
 }
 </script>
 
@@ -475,7 +435,7 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
         .col-6.q-pl-xs
           q-btn.q-px-xl.rounded-border.text-bold.full-width(:to="{ name: 'configuration', query: { tab: 'PLAN' } }" color="white" text-color="negative" :label="$t('layouts.multidholayout.renewMyCurrentPlan')" no-caps rounded unelevated)
   q-header.bg-white(v-if="$q.screen.lt.lg")
-    top-navigation(:unreadNotifications="countObjectsWithKeyValue(localNotifications, 'read', false)" :notifications="notifications" @openNotifications="languageSettings = false, right = false, showNotificationsBar = true" @isActiveRoute="isActiveRoute" @showLangSettings="languageSettings = true, right = false" :showTopButtons="showTopBarItems" :profile="profile" @toggle-sidebar="!$q.screen.md ? right = true : showMinimizedMenu = true" @search="onSearch" :dho="dho" :dhos="getDaos($apolloData.data.member)" :selectedDaoPlan="selectedDaoPlan")
+    top-navigation(:unreadNotifications="countObjectsWithKeyValue(notifications, 'read', false)" :notifications="notifications" @openNotifications="languageSettings = false, right = false, showNotificationsBar = true" @isActiveRoute="isActiveRoute" @showLangSettings="languageSettings = true, right = false" :showTopButtons="showTopBarItems" :profile="profile" @toggle-sidebar="!$q.screen.md ? right = true : showMinimizedMenu = true" @search="onSearch" :dho="dho" :dhos="getDaos($apolloData.data.member)" :selectedDaoPlan="selectedDaoPlan")
   q-page-container.bg-white.window-height.q-py-sm(:class="{ 'q-pr-sm': $q.screen.gt.md, 'q-px-xs': !$q.screen.gt.md}")
     .bg-internal-bg.content.full-height
       q-resize-observer(@resize="onContainerResize")
@@ -494,7 +454,7 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
                 .col(v-if="showTopBarItems")
                   .row.justify-end.items-center(v-if="$q.screen.gt.md")
                     .notifications-icon
-                      .notifications-icon__counter(v-if="countObjectsWithKeyValue(localNotifications, 'read', false) > 0") {{ countObjectsWithKeyValue(localNotifications, 'read', false) }}
+                      .notifications-icon__counter(v-if="countObjectsWithKeyValue(notifications, 'read', false) > 0") {{ countObjectsWithKeyValue(notifications, 'read', false) }}
                       q-btn.q-mr-xs(@click="languageSettings = false, right = false, showNotificationsBar = true" unelevated rounded padding="12px" icon="far fa-bell"  size="sm" :color="'white'" :text-color="'primary'")
                     router-link(v-if="selectedDaoPlan.isEcosystem" :to="{ name: 'ecosystem' }")
                       q-btn.q-mr-xs(unelevated rounded padding="12px" icon="fas fa-share-alt" size="sm" :color="isActiveRoute('ecosystem') ? 'primary' : 'white'" :text-color="isActiveRoute('ecosystem') ? 'white' : 'primary'")
@@ -574,8 +534,8 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
           .h-h3.items-center.flex {{ $t('notifications.notifications')}}
           q-btn(color="internal-bg" text-color="primary" rounded unelevated size="sm" padding="12px" icon="fas fa-times" :style="{ 'height': '40px' }" @click="showNotificationsBar = false")
         .q-mt-md.full-width(:style="{ 'position': 'relative' }")
-          .col(v-for="notification, index in localNotifications" :key="notification.id")
-            .row.q-py-md.cursor-pointer(@click="goToProposal(notification)" v-on:mouseover="readNotification(notification.id)" :style="{ 'border-top': '1px solid #CBCDD1' }" :class="{ 'last-item': index === notifications.length - 1, 'read-notify': notification.read === true }")
+          .col(v-for="notification, index in notification" :key="notification.id")
+            .row.q-py-md.cursor-pointer(@click="goToProposal(notification)" v-on:mouseover="readNotification(notification.id)" :style="{ 'border-top': '1px solid #CBCDD1' }" :class="{ 'last-item': index === notifications?.length - 1, 'read-notify': notification.read === true }")
               .col-2.items-center.flex
                 div.flex.items-center.justify-center(:style="{ 'width': '40px', 'height': '40px', 'border-radius': '50%', 'background': '#F2F1F3'}")
                   img(:src="parsedNotification(notification).icon")
@@ -584,7 +544,7 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
                 .h-b2 {{ parsedNotification(notification).description }}
               .col-3.flex.items-center
                 .h-b2.text-italic {{ parsedNotification(notification).createdDate }}
-          .row.bg-white.full-width(v-if="localNotifications.length" :style="{ 'position': 'fixed', 'bottom': '0', 'padding-right': '60px', 'padding-bottom': '20px', 'padding-top': '20px' }")
+          .row.bg-white.full-width(v-if="notification?.length" :style="{ 'position': 'fixed', 'bottom': '0', 'padding-right': '60px', 'padding-bottom': '20px', 'padding-top': '20px' }")
             q-btn.full-width.q-px-xl(@click="clearAllNotifications()" color="primary" :label="$t('notifications.clearAll')" no-caps outline rounded unelevated)
 </template>
 <style lang="stylus" scoped>
