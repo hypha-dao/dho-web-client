@@ -12,6 +12,31 @@ import lodash from 'lodash'
 // eslint-disable-next-line no-unused-vars
 import * as proposalParsing from '~/utils/proposal-parsing'
 
+const TIERS_QUERY = `
+  querySalaryband(
+    filter: {
+      details_dao_i: { in: [0, $daoId] },
+    }
+  ) {
+    id: docId
+    name: details_name_s
+    annualAmount: details_annualUsdSalary_a
+    minDeferred: details_minDeferredX100_i
+  }
+`
+
+const ROLES_QUERY = `
+  queryRole(
+    filter: { 
+      details_dao_i: { in: [0, $daoId] },
+      details_autoApprove_i: { eq: 1 } 
+    }
+  ) {
+    id: docId
+    name: details_title_s
+  }
+`
+
 const PROPOSAL_QUERY = `
   getDocument(docId: $docId) {
     __typename
@@ -943,6 +968,56 @@ export default {
       update: data => data.queryQuestcomplet,
       skip () { return !this.proposal?.docId },
       variables () { return { id: this.proposal?.docId } }
+    },
+
+    tiers: {
+      query: gql`query TIERS($daoId: Int64!) { ${TIERS_QUERY} }`,
+      update: data => data?.querySalaryband?.map(level => ({
+        label: level?.name,
+        value: { ...level }
+      })),
+      skip () { return !this.selectedDao?.docId },
+      variables () { return { daoId: this.selectedDao.docId } },
+      subscribeToMore: {
+        document: gql`subscription TIERS($daoId: Int64!) { ${TIERS_QUERY} }`,
+        skip () { return !this.selectedDao?.docId },
+        variables () { return { daoId: this.selectedDao.docId } },
+        updateQuery: (previousResult, { subscriptionData }) => {
+          if (!subscriptionData.data) {
+            return previousResult
+          }
+          if (!previousResult) {
+            return undefined
+          }
+
+          return subscriptionData.data
+        }
+      }
+    },
+
+    archetypes: {
+      query: gql`query ROLES($daoId: Int64!) { ${ROLES_QUERY} }`,
+      update: data => data?.queryRole?.map(archetype => ({
+        label: archetype?.name,
+        value: { ...archetype }
+      })),
+      skip () { return !this.selectedDao?.docId },
+      variables () { return { daoId: this.selectedDao.docId } },
+      subscribeToMore: {
+        document: gql`subscription ROLES($daoId: Int64!) { ${ROLES_QUERY} }`,
+        skip () { return !this.selectedDao?.docId },
+        variables () { return { daoId: this.selectedDao.docId } },
+        updateQuery: (previousResult, { subscriptionData }) => {
+          if (!subscriptionData.data) {
+            return previousResult
+          }
+          if (!previousResult) {
+            return undefined
+          }
+
+          return subscriptionData.data
+        }
+      }
     }
   },
 
@@ -1246,14 +1321,19 @@ export default {
       }
 
       if (this.proposal.__typename === PROPOSAL_TYPE.ROLE) { // Role Assignment
-        this.$store.commit('proposals/setRole', {
-          ...this.proposal?.role[0],
-          minCommitment: this.proposal?.role[0].details_minTimeShareX100_i,
-          minDeferred: this.proposal?.role[0].details_minDeferredX100_i
-        })
+        const tier = this.tiers.find(tier => tier.label === this.proposal?.salaryband?.[0]?.details_name_s)
+        const archetype = this.archetypes.find(archetype => archetype.label === this.proposal?.salaryband?.[0]?.assignment?.[0]?.role?.[0]?.system_nodeLabel_s)
+        this.$store.commit('proposals/setRole', archetype)
+        this.$store.commit('proposals/setTier', tier)
+
+        this.$store.commit('proposals/setAnnualUsdSalary', tier?.value?.annualAmount || 0)
+        this.$store.commit('proposals/setMinDeferred', tier?.value?.minDeferred || 0)
+        this.$store.commit('proposals/setMinCommitment', 0)
+
+        this.$store.commit('proposals/setCommitment', parseFloat(1))
+        this.$store.commit('proposals/setDeferred', parseFloat(tier.value.minDeferred))
         this.$store.commit('proposals/setStartPeriod', this.proposal?.start[0])
         this.$store.commit('proposals/setPeriodCount', this.proposal?.details_periodCount_i)
-        this.$store.commit('proposals/setAnnualUsdSalary', parseInt(this.proposal?.role[0]?.details_annualUsdSalary_a.split(' ').shift()))
         // this.$store.commit('proposals/setMinDeferred', this.proposal?.role[0]?.details_minDeferredX100_i)
       }
 
