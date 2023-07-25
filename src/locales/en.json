@@ -1279,8 +1279,8 @@
         "registrationIsTemporarilyDisabled": "Registration is temporarily disabled",
         "copyInviteLink": "Copy invite link",
         "sendALink": "Send a link to your friends to invite them to join this DAO",
-        "daoApplicants": "DAO Applicants",
-        "daoApplicants1": "DAO Applicants",
+        "daoApplicants": "Applicants",
+        "daoApplicants1": "Applicants",
         "filterByAccountName": "Filter by account name",
         "sortBy": "Sort by",
         "joinDateDescending": "Join date descending",
@@ -1289,7 +1289,8 @@
         "all": "All",
         "coreTeam": "Core Team",
         "communityMembers": "Community members",
-        "coreAndCommunityMembers": "Core & Community members"
+        "coreAndCommunityMembers": "Core & Community members",
+        "members": "Members"
       },
       "organization": {
         "documentation": "Documentation",

@@ -1279,8 +1279,8 @@
         "registrationIsTemporarilyDisabled": "El registro está temporalmente deshabilitado",
         "copyInviteLink": "Copiar enlace de invitación",
         "sendALink": "Envía un enlace a tus amigos para invitarlos a unirse a este DAO",
-        "daoApplicants": "Solicitantes de DAO",
-        "daoApplicants1": "Solicitantes de DAO",
+        "daoApplicants": "Solicitantes",
+        "daoApplicants1": "Solicitantes",
         "filterByAccountName": "Filtrar por nombre de cuenta",
         "sortBy": "Ordenar por",
         "joinDateDescending": "Fecha de unión descendente",
@@ -1289,7 +1289,8 @@
         "all": "Todo",
         "coreTeam": "Equipo central",
         "communityMembers": "Miembros de la comunidad",
-        "coreAndCommunityMembers": "Miembros del núcleo y de la comunidad"
+        "coreAndCommunityMembers": "Miembros del núcleo y de la comunidad",
+        "members": "Miembros"
       },
       "organization": {
         "documentation": "Documentación",

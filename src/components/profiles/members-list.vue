@@ -21,21 +21,18 @@ export default {
     onLoad (index, done) {
       this.$emit('loadMore', index, done)
     }
-  },
-
-  async mounted () {
-    await this.$nextTick()
   }
+
 }
 </script>
 
 <template lang="pug">
-.members-list(ref="scrollContainer")
+.members-list
   .row.justify-center.q-my-md(v-if="!lastResult")
     loading-spinner(color="primary" size="72px")
   .row.justify-center.q-my-md(v-if="!members.length && lastResult")
     .h-b4 {{ $t('profiles.members-list.noMembersAt') }}
-  q-infinite-scroll(@load="onLoad" :offset="0" :debounce="100" ref="scroll")
+  q-infinite-scroll(@load="onLoad" :offset="1000")
     .row(:class="{'q-mr-md' : view === 'list'}")
       .template.flex.justify-center(v-for="member in members" :class="{ 'col-6 q-px-xs': $q.screen.md, 'col-4': view === 'card' && !compact, 'col-12': view === 'card' && compact && !$q.screen.md, 'full-width': view === 'list' }")
         profile-card.q-mb-md(:canEnroll="canEnroll" :compact="compact" :key="member.hash" :view="view" v-bind="member" :style="{width: '100%'}" :class="{'q-mr-md' : !compact}")
