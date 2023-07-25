@@ -311,7 +311,6 @@ export default {
     ...mapActions('accounts', ['applyMember']),
 
     pollData () {
-      console.log('pollData')
       setTimeout(() => {
         this.$apollo.queries.daoApplicants?.fetchMore({
           variables: {
@@ -322,13 +321,11 @@ export default {
             filter: this.filterObject
           },
           updateQuery: (previousResult, { fetchMoreResult }) => {
-            console.log('pollData daoApplicants')
             return {
               getDao: {
                 __typename: fetchMoreResult.getDao.__typename,
                 docId: fetchMoreResult.getDao.docId,
                 applicants: [
-                  // ...(previousResult ? previousResult.getDao.applicants : []),
                   ...(fetchMoreResult ? fetchMoreResult.getDao.applicants : [])
                 ]
               }
@@ -345,13 +342,11 @@ export default {
             filter: this.filterObject
           },
           updateQuery: (previousResult, { fetchMoreResult }) => {
-            console.log('pollData daoCoreMembers')
             return {
               getDao: {
                 __typename: fetchMoreResult.getDao.__typename,
                 docId: fetchMoreResult.getDao.docId,
                 members: [
-                  // ...(previousResult ? previousResult.getDao.members : []),
                   ...(fetchMoreResult ? fetchMoreResult.getDao.members : [])
                 ]
               }
