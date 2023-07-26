@@ -89,42 +89,59 @@ export default {
       .ellipse-border(:class="step === 'captcha' && 'ellipse-filled'")
       .ellipse-border(:class="step === 'inviteLink' && 'ellipse-filled'")
       .ellipse-border(:class="step === 'finish' && 'ellipse-filled'")
-  q-scroll-area#form-container.full-width.full-height(:thumb-style=" { 'opacity': '0' }" ref="scrollArea")
+  #form-container.full-width.full-height(:thumb-style=" { 'opacity': '0' }")
     .q-mb-xxs
-    #internal-container
-      #form1(v-show="step === this.steps.captcha.name")
-        template
-          .h-h1-signup {{ $t('login.register-user-with-captcha-view.createNew') }}
-            .text-bold {{ $t('login.register-user-with-captcha-view.hyphaAccount') }}
-        .h-h2-signup {{ $t('login.register-user-with-captcha-view.pleaseVerifyYou') }}
-        captcha(vue-recaptcha="vue-recaptcha" sitekey="6LfPcOUkAAAAAEXUdeFqdsJUob93TpWFEoHdj_yF" @setCaptchaResponse="this.setCaptchaResponse" ev-bind:callback="callback")
-      #form2(v-show="step === this.steps.inviteLink.name")
-        template
-          .row
-            .col-7
-              .h-h1-signup {{ $t('login.register-user-with-captcha-view.proceedWith') }}
-                .text-bold {{ $t('login.register-user-with-captcha-view.hyphaWallet') }}
-            .col-5.qr-code-wrapper
-              qrcode-vue(:value="inviteLink" size="150")
-          .row
-            .col-4.signup-mobile-app-preview
-              img.full-width(src="bg/hypha-wallet-preview.png" alt="Hypha Wallet Preview")
-            .col-8.font-lato
-              .h-h2-signup {{ $t('login.register-user-with-captcha-view.setupHyphaWallet') }}
-              .p-onboarding.bold {{ $t('login.register-user-with-captcha-view.scanTheQr') }}
-              .p-onboarding {{ $t('login.register-user-with-captcha-view.itContainsThe') }}
-              .p-onboarding.bold {{ $t('login.register-user-with-captcha-view.onceTheAccount') }}
-              .p-onboarding {{ $t('login.register-user-with-captcha-view.youAreSet') }}
-              .row.q-mt-md.items-center
-                .onboarding-invite-link.text-primary.text-bold.h-b2( @click="copyText()" ) {{ $t('login.register-user-with-captcha-view.copyInviteLink') }}
-                q-icon.q-ml-xxs(name="far fa-file")
-      #form3(v-show="step === this.steps.finish.name")
-        template
-          .h-h1-signup {{ $t('login.register-user-with-captcha-view.loginWith') }}
-            .text-bold {{ $t('login.register-user-with-captcha-view.hyphaWallet1') }}
-          .h-h2-signup {{ $t('login.register-user-with-captcha-view.signYourFirstTransaction') }}
-          p.text-normal {{ $t('login.register-user-with-captcha-view.didYouCreate') }}
-          q-list
+    .full-width.full-height.flex.column.justify-between.no-wrap(:style="{ 'padding-bottom': '50px' }")
+      #internal-container.flex.justify-center.full-height
+        #form1.flex.column.justify-center(v-show="step === this.steps.captcha.name")
+          .row.flex.items-center.cursor-pointer(v-if="$q.screen.gt.md" @click="$emit('back')")
+            q-icon.q-mr-xxs(name="fas fa-arrow-left" color="primary" size="14px")
+            .text-bold.text-primary {{ $t('login.login-view.back') }}
+          template
+            .font-lato.text-heading.text-weight-bolder(:style="{ 'font-size': '34px' }") {{ $t('login.register-user-with-captcha-view.createNew') }}
+          .text-medium.q-mt-md {{ $t('login.register-user-with-captcha-view.pleaseVerifyYou') }}
+          .flex.justify-center(:style="{ 'margin-top': '80px' }")
+            captcha(vue-recaptcha="vue-recaptcha" sitekey="6LfPcOUkAAAAAEXUdeFqdsJUob93TpWFEoHdj_yF" @setCaptchaResponse="this.setCaptchaResponse" ev-bind:callback="callback")
+        #form2.flex.column.justify-between.no-wrap(v-show="step === this.steps.inviteLink.name")
+          template
+            div.full-height.column.justify-center
+              .row.flex.items-center.cursor-pointer(v-if="$q.screen.gt.md" @click="step = steps.captcha.name")
+                q-icon.q-mr-xxs(name="fas fa-arrow-left" color="primary" size="14px")
+                .text-bold.text-primary {{ $t('login.login-view.back') }}
+              .row
+                .row
+                  .font-lato.text-heading.text-weight-bolder(:style="{ 'font-size': '34px' }") {{ $t('login.register-user-with-captcha-view.proceedWith') }}
+              .row.q-mt-sm
+                .col.font-lato
+                  .p-onboarding.bold {{ $t('login.register-user-with-captcha-view.scanTheQr') }}
+                  .p-onboarding {{ $t('login.register-user-with-captcha-view.itContainsThe') }}
+                  .p-onboarding.bold {{ $t('login.register-user-with-captcha-view.onceTheAccount') }}
+                  .p-onboarding {{ $t('login.register-user-with-captcha-view.youAreSet') }}
+            .row.justify-center(:style="{ 'margin-bottom': '60px' }")
+              .qr-code-wrapper
+                qrcode-vue(:value="inviteLink" size="150")
+        #form3.flex.column.justify-center(v-show="step === this.steps.finish.name")
+          template
+            div.full-height.column.justify-center
+              .row.flex.items-center.cursor-pointer(v-if="$q.screen.gt.md" @click="step = steps.inviteLink.name")
+                q-icon.q-mr-xxs(name="fas fa-arrow-left" color="primary" size="14px")
+                .text-bold.text-primary {{ $t('login.login-view.back') }}
+              .font-lato.text-heading.text-weight-bolder(:style="{ 'font-size': '34px' }") {{ $t('login.register-user-with-captcha-view.loginWith') }}
+              .text-bold.text-black.q-mt-md {{ $t('login.register-user-with-captcha-view.signYourFirstTransaction') }}
+              p.text-normal.q-mt-xs {{ $t('login.register-user-with-captcha-view.didYouCreate') }}
+              .row.flex.justify-center.items-center.q-mt-xl
+                img(:style="{ 'width': 'fit-content' }" src="~/assets/images/onboarding-mobile.png")
+                img.q-ml-md(:style="{ 'width': 'fit-content', 'height': 'fit-content' }" src="~/assets/images/onboarding-code.png")
+      #bottom-indicator.row.items-center
+        .col
+          .row.q-gutter-sm(v-if="$q.screen.gt.md")
+            .ellipse-border(:class="'ellipse-filled'")
+            .ellipse-border(:class="(step === this.steps.inviteLink.name || step === this.steps.finish.name ) && 'ellipse-filled'")
+            .ellipse-border(:class="step === this.steps.finish.name && 'ellipse-filled'")
+        .col-10.no-wrap.flex.justify-end.items-center
+          q-btn(v-if="step === this.steps.inviteLink.name" :label="$t('login.register-user-with-captcha-view.copyInviteLink')" color="primary" outline unelevated @click="copyText()" rounded no-caps)
+          q-btn.q-mx-md.q-px-md(:style="{ 'height': 'fit-content' }" :label="step === 'finish' ? 'Need Help?' : 'Next'" color="primary" unelevated @click="next" :disable="!this.inviteLink" :loading="submitting" :outline="step === this.steps.finish.name" rounded no-caps)
+          q-list(v-if="step === steps.finish.name")
             q-item.wallet.q-my-xs(v-for="(wallet, idx) in this.hyphaAuthenticators" :key="wallet.getStyle().text" v-ripple :style="{ background: wallet.getStyle().background, color: wallet.getStyle().textColor }")
               q-item-section.cursor-pointer(avatar @click="onLoginWallet(idx)")
                 img(:src="wallet.getStyle().icon" width="20")
@@ -134,16 +151,8 @@ export default {
                   loading-spinner(v-if="loading === wallet.getStyle().text" :color="wallet.getStyle().textColor" size="2em")
                   q-btn(v-else :color="wallet.getStyle().textColor" icon="fas fa-cloud-download-alt" @click="openUrl(wallet.getOnboardingLink())" target="_blank" dense flat size="10px")
                     q-tooltip {{ $t('login.register-user-with-captcha-view.getApp') }}
-    #bottom-indicator.row.items-center
-      .col
-        .row.q-gutter-sm(v-if="$q.screen.gt.md")
-          .ellipse-border(:class="'ellipse-filled'")
-          .ellipse-border(:class="(step === this.steps.inviteLink.name || step === this.steps.finish.name ) && 'ellipse-filled'")
-          .ellipse-border(:class="step === this.steps.finish.name && 'ellipse-filled'")
-      .col-4(v-if="$q.platform.is.desktop")
-        q-btn.full-width(:label="step === 'finish' ? 'Need Help?' : 'Next'" color="primary" unelevated @click="next" :disable="!this.inviteLink" :loading="submitting" rounded no-caps)
-        .h-b3-signup.color-secondary.flex.column(v-if="$q.platform.is.mobile") {{ $t('login.register-user-with-captcha-view.areYouAMember') }}
-          span.h-b3-signup.text-primary.cursor-pointer(style="text-decoration: underline" @click="$emit('onClickLoginPage')") {{ $t('login.register-user-with-captcha-view.loginHere') }}
+          //- .h-b3-signup.color-secondary.flex.column(v-if="!$q.screen.gt.md") {{ $t('login.register-user-with-captcha-view.areYouAMember') }}
+          //-   span.h-b3-signup.text-primary.cursor-pointer(style="text-decoration: underline" @click="$emit('onClickLoginPage')") {{ $t('login.register-user-with-captcha-view.loginHere') }}
 
 </template>
 
@@ -173,7 +182,7 @@ export default {
 .ellipse-border
  width: 10px
  height: 10px
- border: 1px solid $primary
+ background: #CAC8D0
  border-radius: 10px
 .ellipse-filled
  background-color: $primary
@@ -190,13 +199,11 @@ export default {
   border: 1px solid #C4C5C9;
   border-radius: 14px;
   opacity: 1;
-  margin-bottom: 40px;
-  margin-left: 20px;
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 12px 12px 6px 12px;
-  width: auto;
+  width: fit-content
   height: auto;
 .onboarding-invite-link
   display: inline-block;

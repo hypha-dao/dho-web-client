@@ -21,8 +21,8 @@ export default {
   .full-width.full-height.flex.column.justify-between.no-wrap(:style="{ 'padding-bottom': '50px' }")
     .full-height.flex.justify-center.column
       .row
-        .font-lato.text-heading.text-weight-bold(:style="{ 'font-size': '34px' }") {{ isOnboarding ? 'Launch your' : 'Welcome to' }}
-        .font-lato.text-heading.text-weight-bold(:style="{ 'font-size': '34px' }" :class="{ 'q-ml-xs': !$q.screen.lt.sm }") {{ isOnboarding ? 'first DAO' : selectedDao?.title?.replace(/^\w/, (c) => c.toUpperCase()) }}
+        .font-lato.text-heading.text-weight-bolder(:style="{ 'font-size': '34px' }") {{ isOnboarding ? 'Launch your' : 'Welcome to' }}
+        .font-lato.text-heading.text-weight-bolder(:style="{ 'font-size': '34px' }" :class="{ 'q-ml-xs': !$q.screen.lt.sm }") {{ isOnboarding ? 'first DAO' : selectedDao?.title?.replace(/^\w/, (c) => c.toUpperCase()) }}
       .h-h4.color-secondary.q-my-xxxl(v-if="$q.screen.gt.md && isOnboarding") {{ $t('login.welcome-view.youNeedAn') }}
       .h-b1-signup.text-h-gray.q-py-xl.leading-loose(v-if="$q.screen.gt.md && !isOnboarding") {{ $t('login.welcome-view.isonboarding') }}
       .h-b1-signup.color-secondary.text-weight-thin.q-mt-lg.q-mb-lg.text-grey.custom-calc-margin(v-if="!$q.screen.gt.md") {{ $t('login.welcome-view.theDhoDecentralized') }}

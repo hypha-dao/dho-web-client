@@ -138,7 +138,7 @@ export default {
           transition(v-else-if="step === steps.login" enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
             login-view(:dhoName="dhoname" :pk="stepPK" @onLoginWithPK=" v => stepPK = true" @back="step = steps.welcome" v-bind="{ isOnboarding }")
           transition(v-else-if="step === steps.register" enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
-            register-user-with-captcha-view(@stepChanged="v => registerStep = v" @onFinish="step = steps.login" v-bind="{ isOnboarding }")
+            register-user-with-captcha-view(@stepChanged="v => registerStep = v" @onFinish="step = steps.login" @back="step = steps.welcome" v-bind="{ isOnboarding }")
       .col.full-height.card-container.relative-position.gt-xs
         .welcome-info.absolute-center
           ipfs-image-viewer(:ipfsCid="selectedDao.logo" showDefault :defaultLabel="daoName" size="300px")
