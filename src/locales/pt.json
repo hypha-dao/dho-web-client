@@ -621,7 +621,8 @@
       "privateKey1": "Chave privada",
       "login": "Conecte-se",
       "login1": "{1} Entrar {2}",
-      "getApp": "Adquirir aplicativo"
+      "getApp": "Adquirir aplicativo",
+      "back": "Voltar"
     },
     "register-user-view": {
       "account": "Conta",

@@ -599,12 +599,12 @@
       "registrationIsTemporarilyDisabled1": "Registration is temporarily disabled"
     },
     "login-view": {
-      "loginTo": "Login to",
+      "loginTo": "Login to your {daoName} Account",
       "your": " your",
       "account": "account",
       "loginTo1": "Login to\n          ",
       "yourAccount": "your account",
-      "youCanEither": "You can either login with your SEEDS Light Wallet (",
+      "youCanEither": "You can log in with Hypha wallet or Seeds Light wallet (available for iOS and Android). You can also log in with Anchor wallet, a secure, open source tool (available for Windows and Mac desktops and Android and iOS mobiles).",
       "downloadHere": "Download here",
       "orAnchor": ") Or Anchor, a secure and Open Source tool that is available for download as a&nbsp;",
       "desktopAppFor": "Desktop App for Windows and Mac&nbsp;",
@@ -621,7 +621,8 @@
       "privateKey1": "Private key",
       "login": "Login",
       "login1": "{1} Login {2}",
-      "getApp": "Get app"
+      "getApp": "Get app",
+      "back": "Back"
     },
     "register-user-view": {
       "account": "Account",
@@ -676,16 +677,16 @@
     },
     "welcome-view": {
       "youNeedAn": "You need an Hypha Account to interact with Hypha Ecosystem and create a DAO.",
-      "isonboarding": "{{ isOnboarding ? 'If you already have an Hypha Account click the log-in button, validate the trasaction with Anchor Walley and start creating your DAO.' : 'You need an hypha account to interact with Hypha DAOs. ",
+      "isonboarding": "If you already have a Hypha account, click the log in button, sign the transaction with your Wallet and start creating your DAO. If not, you can click 'Create Hypha account' or 'Continue as guest.'",
       "ifThisIs": "If this is your first time here,",
       "clickCreateNew": " click Create new Hypha account and follow the steps. ",
       "ifYouAlready": "If you already have an Hypha Account and Anchor wallet configured",
-      "clickThe": ", click the log-in button, validate the transaction with Anchor Wallet and enter the DAO.' }}",
+      "clickThe": ", click the log-in button, validate the transaction with Anchor Wallet and enter the DAO.",
       "theDhoDecentralized": "The DHO (Decentralized Human Organization) is a framework to build your organization from the ground up in an organic and participative way and together with others.",
       "createNewHyphaAccount": "Create new Hypha account",
       "registrationIsTemporarilyDisabled": "Registration is temporarily disabled",
-      "login": "Login",
-      "continueAsAGuest": "Continue as a guest",
+      "login": "Log in",
+      "continueAsAGuest": "Continue as guest",
       "useAnExisting": "Use an existing\n      ",
       "blockhainAccount": "blockhain account"
     }
