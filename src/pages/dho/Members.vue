@@ -4,8 +4,55 @@ import { copyToClipboard } from 'quasar'
 import { MEMBER_TYPE } from '~/const'
 import { documents } from '~/mixins/documents'
 import ipfsy from '~/utils/ipfsy'
+import gql from 'graphql-tag'
 
 const ordersMap = [{ asc: 'createdDate' }, { desc: 'createdDate' }, { asc: 'details_member_n' }]
+
+const DAO_APPLICANTS_QUERY = `
+  getDao (docId: $daoId) {
+    docId
+
+    applicantAggregate {
+      count
+    }
+
+    applicants: applicant (first: $first, offset: $offset, filter: $filter, order: $order) {
+      docId
+      __typename
+
+      ... on Member {
+        details_member_n
+        createdDate
+      }
+    }
+  }
+`
+
+const DAO_CORE_MEMBERS_QUERY = `
+  getDao (docId: $daoId) {
+    docId
+
+    memberAggregate {
+      count
+    }
+
+    members: member (first: $first, offset: $offset, filter: $filter, order: $order) {
+      docId
+      __typename
+
+      ... on Member {
+        details_member_n
+        createdDate
+        
+        holdsbadge {
+          system_nodeLabel_s
+          details_icon_s
+        }
+      }
+    }
+  }
+
+`
 
 export default {
   name: 'page-members',
@@ -16,38 +63,41 @@ export default {
     FilterWidget: () => import('~/components/filters/filter-widget.vue'),
     FilterWidgetMobile: () => import('~/components/filters/filter-widget-mobile.vue'),
     MembersList: () => import('~/components/profiles/members-list.vue'),
-    Widget: () => import('~/components/common/widget.vue'),
-    UpvoteDelegateWidget: () => import('~/components/common/upvote-delegate-widget.vue')
+    ProfileCard: () => import('~/components/profiles/profile-card.vue'),
+    UpvoteDelegateWidget: () => import('~/components/common/upvote-delegate-widget.vue'),
+    Widget: () => import('~/components/common/widget.vue')
   },
 
   data () {
     return {
-      mobileFilterOpen: false,
-      shouldReset: false,
-      isMembersBannerVisible: true,
-      loadingQueriesCount: 0,
-
+      applicantsCount: 0,
       applicantsPagination: {
-        first: 6,
-        offset: 0,
-        fetchMore: true
-      },
-      coreMembersPagination: {
-        first: 6,
-        offset: 0,
-        fetchMore: true
-      },
-      communityMembersPagination: {
-        first: 6,
-        offset: 0,
-        fetchMore: true
+        fetchMore: true,
+        page: 0,
+        size: 3
       },
 
-      order: ordersMap[0],
-      view: '',
+      coreMembersCount: 0,
+      coreMembersPagination: {
+        fetchMore: true,
+        page: 0,
+        size: 3
+      },
+
+      communityMembersCount: 0,
+      communityMembersPagination: {
+        fetchMore: true,
+        page: 0,
+        size: 3
+      },
+
+      circle: '',
+      isMembersBannerVisible: true,
+      mobileFilterOpen: false,
+      order: ordersMap[1],
+      shouldReset: false,
       sort: '',
       textFilter: null,
-      circle: '',
       optionArray: [
         { label: this.$t('pages.dho.members.sortBy'), disable: true },
         this.$t('pages.dho.members.joinDateDescending'),
@@ -61,7 +111,6 @@ export default {
         right: this.$q.screen.md ? '0' : '0',
         left: this.$q.screen.md ? 'auto' : '0'
       },
-
       filters: [
         {
           label: this.$t('pages.dho.members.all'),
@@ -82,39 +131,23 @@ export default {
           filter: (p) => p.__typename === 'Assignment' || p.__typename === 'Edit'
         }
 
-      ],
-
-      tempUsersForVotes: [
-        {
-          headDelegate: true,
-          name: 'User'
-        },
-        {
-          name: 'User'
-        },
-        {
-          name: 'User'
-        },
-        {
-          name: 'User'
-        }
       ]
     }
   },
 
   apollo: {
     daoApplicants: {
-      query: require('~/query/members/applicants-pagination.gql'),
-      update: data => data.getDao.applicant.map(user => {
+      query: gql`query applicantPagination ($daoId: String!, $first: Int, $offset: Int, $filter: MemberFilter, $order: MemberOrder) { ${DAO_APPLICANTS_QUERY} }`,
+      update: data => data.getDao.applicants.map(user => {
         return {
-          username: user.details_member_n,
+          isApplicant: true,
           joinedDate: user.createdDate,
-          isApplicant: true
+          username: user.details_member_n
         }
       }),
       variables () {
         return {
-          first: this.applicantsPagination.first,
+          first: this.applicantsPagination.size,
           offset: 0,
           daoId: this.selectedDao.docId,
           order: this.order,
@@ -122,26 +155,25 @@ export default {
         }
       },
       skip () { return !this.selectedDao || !this.selectedDao.docId },
-      debounce: 500,
-      loadingKey: 'loadingQueriesCount'
+
+      result ({ data }) {
+        this.applicantsCount = data?.getDao?.applicantAggregate?.count
+      }
     },
 
     daoCoreMembers: {
-      query: require('~/query/members/members-core-pagination.gql'),
-      update: data => {
-        const mapUsers = data.getDao.member.map(user => {
-          return {
-            username: user.details_member_n,
-            joinedDate: user.createdDate,
-            isCoreMember: true,
-            badges: user.holdsbadge
-          }
-        })
-        return mapUsers
-      },
+      query: gql`query coreMembersPagination ($daoId: String!, $first: Int, $offset: Int, $filter: MemberFilter, $order: MemberOrder) { ${DAO_CORE_MEMBERS_QUERY} }`,
+      update: data => data.getDao.members.map(user => {
+        return {
+          isCoreMember: true,
+          joinedDate: user.createdDate,
+          username: user.details_member_n,
+          badges: user.holdsbadge
+        }
+      }),
       variables () {
         return {
-          first: 10,
+          first: this.coreMembersPagination.size,
           offset: 0,
           daoId: this.selectedDao.docId,
           order: this.order,
@@ -149,31 +181,33 @@ export default {
         }
       },
       skip () { return !this.selectedDao || !this.selectedDao.docId },
-      debounce: 500,
-      loadingKey: 'loadingQueriesCount'
-    },
 
-    daoCommunityMembers: {
-      query: require('~/query/members/members-community-pagination.gql'),
-      // cmmtymember
-      update: data => data.getDao.commember.map(user => ({
-        username: user.details_member_n,
-        joinedDate: user.createdDate,
-        isCommunityMember: true,
-        badges: user.holdsbadge
-      })),
-      variables () {
-        return {
-          first: 10,
-          offset: 0,
-          daoId: this.selectedDao.docId,
-          order: this.order,
-          filter: this.filterObject
-        }
-      },
-      skip () { return !this.selectedDao || !this.selectedDao.docId },
-      debounce: 500
+      result ({ data }) {
+        this.coreMembersCount = data?.getDao?.memberAggregate?.count
+      }
     }
+
+    // daoCommunityMembers: {
+    //   query: require('~/query/members/members-community-pagination.gql'),
+    //   // cmmtymember
+    //   update: data => data.getDao.commember.map(user => ({
+    //     username: user.details_member_n,
+    //     joinedDate: user.createdDate,
+    //     isCommunityMember: true,
+    //     badges: user.holdsbadge
+    //   })),
+    //   variables () {
+    //     return {
+    //       first: 10,
+    //       offset: 0,
+    //       daoId: this.selectedDao.docId,
+    //       order: this.order,
+    //       filter: this.filterObject
+    //     }
+    //   },
+    //   skip () { return !this.selectedDao || !this.selectedDao.docId },
+    //   debounce: 500
+    // }
 
   },
 
@@ -183,15 +217,6 @@ export default {
         this.resetPagination(true)
       },
       immediate: false
-    },
-    loadingQueriesCount (val) {
-      if (this.coreMembersPagination.offset === 0 && this.applicantsPagination.offset === 0 && val === 0) {
-        this.$refs.scroll?.resume()
-      } else if (val === 0 && this.shouldReset) {
-        this.$refs.scroll?.resume()
-        this.resetPagination(false)
-        this.shouldReset = false
-      }
     },
     showApplicants: {
       handler: function (value) {
@@ -247,7 +272,7 @@ export default {
 
   computed: {
     ...mapGetters('accounts', ['account', 'isApplicant', 'isMember']),
-    ...mapGetters('dao', ['canEnroll', 'daoSettings', 'selectedDao', 'selectedDaoPlan']),
+    ...mapGetters('dao', ['canEnroll', 'daoSettings', 'selectedDao']),
 
     banner () {
       return {
@@ -263,26 +288,18 @@ export default {
 
     members () {
       return [
-        ...(this.showCoreMembers && this.daoCoreMembers ? [...this.daoCoreMembers] : []),
-        ...(this.showCommunityMembers && this.daoCommunityMembers ? [...this.daoCommunityMembers] : [])
+        ...(this.showCoreMembers && this.daoCoreMembers ? [...this.daoCoreMembers] : [])
+        // ...(this.showCommunityMembers && this.daoCommunityMembers ? [...this.daoCommunityMembers] : [])
       ]
     },
 
     filterObject () { return this.textFilter ? { details_member_n: { regexp: `/${this.textFilter}/i` } } : null },
-    loadingAccount () { return localStorage?.getItem('autoLogin') && !this.account },
     memberTypeFilter () { return this.filters.filter(_ => _.enabled).map(_ => _.value) },
-    showCoreMembers () { return this.memberTypeFilter.includes('ALL') || this.memberTypeFilter.includes('CORE') },
-    showCommunityMembers () { return this.memberTypeFilter.includes('ALL') || this.memberTypeFilter.includes('COMMUNITY') }
+    showCommunityMembers () { return this.memberTypeFilter.includes('ALL') || this.memberTypeFilter.includes('COMMUNITY') },
+    showCoreMembers () { return this.memberTypeFilter.includes('ALL') || this.memberTypeFilter.includes('CORE') }
   },
 
   mounted () {
-    if (localStorage.getItem('showMembersBanner') === 'false') {
-      this.isMembersBannerVisible = false
-    }
-
-    this.showApplicants = this.$route.params.applicants === undefined ? false : this.$route.params.applicants
-    this.$forceUpdate()
-
     this.$EventBus.$on('membersUpdated', this.pollData)
   },
 
@@ -293,12 +310,54 @@ export default {
   methods: {
     ...mapActions('accounts', ['applyMember']),
 
-    hideMembersBanner () {
-      localStorage.setItem('showMembersBanner', false)
-      this.isMembersBannerVisible = false
+    pollData () {
+      setTimeout(() => {
+        this.$apollo.queries.daoApplicants?.fetchMore({
+          variables: {
+            first: this.applicantsPagination.size,
+            offset: this.applicantsPagination.page * this.applicantsPagination.size,
+            daoId: this.selectedDao.docId,
+            order: this.order,
+            filter: this.filterObject
+          },
+          updateQuery: (previousResult, { fetchMoreResult }) => {
+            return {
+              getDao: {
+                __typename: fetchMoreResult.getDao.__typename,
+                docId: fetchMoreResult.getDao.docId,
+                applicants: [
+                  ...(fetchMoreResult ? fetchMoreResult.getDao.applicants : [])
+                ]
+              }
+            }
+          }
+        })
+
+        this.$apollo.queries.daoCoreMembers?.fetchMore({
+          variables: {
+            first: this.coreMembersPagination.size,
+            offset: this.coreMembersPagination.page * this.coreMembersPagination.size,
+            daoId: this.selectedDao.docId,
+            order: this.order,
+            filter: this.filterObject
+          },
+          updateQuery: (previousResult, { fetchMoreResult }) => {
+            return {
+              getDao: {
+                __typename: fetchMoreResult.getDao.__typename,
+                docId: fetchMoreResult.getDao.docId,
+                members: [
+                  ...(fetchMoreResult ? fetchMoreResult.getDao.members : [])
+                ]
+              }
+            }
+          }
+        })
+      }, 1250)
     },
 
     async onApply () {
+      this.$EventBus.$emit('membersUpdated')
       const res = await this.applyMember({ content: 'DAO Applicant' })
       if (res) {
         this.$EventBus.$emit('membersUpdated')
@@ -307,7 +366,7 @@ export default {
 
     resetPagination (forceOffset) {
       if (forceOffset) {
-        this.applicantsPagination.offset = 0
+        this.applicantsPagination.page = 0
         this.coreMembersPagination.offset = 0
         this.$refs.scroll?.stop()
       } else {
@@ -317,134 +376,6 @@ export default {
       }
       this.coreMembersPagination.fetchMore = !this.showApplicants
       this.applicantsPagination.fetchMore = this.showApplicants
-    },
-
-    // Used to update the queries with lastest information
-    // Could be slow if there are a lot of members loaded on the pagination, use it wisely
-    pollData () {
-      // Wait some time before updating the data
-      setTimeout(() => {
-        this.$apollo.queries.daoApplicants?.fetchMore({
-          variables: {
-            daoId: this.selectedDao.docId,
-            first: this.applicantsPagination.first + this.applicantsPagination.offset,
-            offset: 0,
-            order: this.order,
-            filter: this.filterObject
-          },
-          updateQuery: (previousResult, { fetchMoreResult }) => {
-            return {
-              getDao: {
-                __typename: fetchMoreResult.getDao.__typename,
-                docId: fetchMoreResult.getDao.docId,
-                applicant: [
-                  ...fetchMoreResult.getDao.applicant
-                ]
-              }
-            }
-          }
-        })
-        this.$apollo.queries.daoCoreMembers?.fetchMore({
-          variables: {
-            daoId: this.selectedDao.docId,
-            first: this.coreMembersPagination.first + this.coreMembersPagination.offset,
-            offset: 0,
-            order: this.order,
-            filter: this.filterObject
-          },
-          updateQuery: (previousResult, { fetchMoreResult }) => {
-            return {
-              getDao: {
-                __typename: fetchMoreResult.getDao.__typename,
-                docId: fetchMoreResult.getDao.docId,
-                member: [
-                  ...fetchMoreResult.getDao.member
-                ]
-              }
-            }
-          }
-        })
-      }, 1250)
-    },
-
-    onLoadMoreMembers (index, done) {
-      // Do not fetch more if the initial fetch haven't been done
-      if (this.loadingQueriesCount !== 0) {
-        done()
-        return
-      }
-
-      // if ((this.daoApplicants?.length || 0) === 0) {
-      //   this.applicantsPagination.fetchMore = false
-      //   this.coreMembersPagination.fetchMore = true
-      // }
-
-      // Do not fetch more if it is the last page
-      if (!this.coreMembersPagination.fetchMore) {
-        this.applicantsPagination.offset += this.applicantsPagination.first
-        this.$apollo.queries.daoApplicants?.fetchMore({
-          // New variables
-          variables: {
-            daoId: this.selectedDao.docId,
-            first: this.applicantsPagination.first,
-            offset: this.applicantsPagination.offset,
-            order: this.order,
-            filter: this.filterObject
-          },
-          // Transform the previous result with new data
-          updateQuery: (previousResult, { fetchMoreResult }) => {
-            if (!fetchMoreResult.getDao.applicant?.length) {
-              this.applicantsPagination.fetchMore = false
-              this.coreMembersPagination.fetchMore = true
-            }
-            done()
-            return {
-              getDao: {
-                __typename: fetchMoreResult.getDao.__typename,
-                docId: fetchMoreResult.getDao.docId,
-                applicant: [
-                  ...(previousResult?.getDao?.applicant?.filter(n => !fetchMoreResult.getDao.applicant.some(p => p.docId === n.docId))) || [],
-                  ...fetchMoreResult.getDao.applicant || []
-                ]
-              }
-            }
-          }
-        })
-      } else {
-        if (this.coreMembersPagination.offset === 0) {
-          this.coreMembersPagination.offset += 1
-        } else {
-          this.coreMembersPagination.offset += this.coreMembersPagination.first
-        }
-        this.$apollo.queries.daoCoreMembers?.fetchMore({
-          // New variables
-          variables: {
-            daoId: this.selectedDao.docId,
-            first: this.coreMembersPagination.first,
-            offset: this.coreMembersPagination.offset,
-            order: this.order,
-            filter: this.filterObject
-          },
-          // Transform the previous result with new data
-          updateQuery: (previousResult, { fetchMoreResult }) => {
-            if (!fetchMoreResult.getDao.member?.length) {
-              this.coreMembersPagination.fetchMore = false
-            }
-
-            done(!this.coreMembersPagination.fetchMore)
-            return {
-              getDao: {
-                __typename: fetchMoreResult.getDao.__typename,
-                docId: fetchMoreResult.getDao.docId,
-                member: [
-                  ...previousResult ? (previousResult?.getDao.member.filter(n => !fetchMoreResult.getDao.member.some(p => p.docId === n.docId))) : [],
-                  ...fetchMoreResult.getDao.member
-                ]
-              }
-            }
-          }
-        })
-      }
     },
 
     async copyToClipBoard () {
@@ -470,16 +401,79 @@ export default {
 
     onChange (name, value) { this.$set(this, name, value) },
 
-    hasLastResult () { return this.$apollo.queries.daoApplicants.observer?.lastResult }
+    hasLastResult () { return this.$apollo.queries.daoApplicants.observer?.lastResult },
 
+    loadMoreDaoApplicants (page, done) {
+      if (this.daoApplicants?.length === this.applicantsCount) {
+        return
+        // done(true)
+      }
+
+      this.applicantsPagination.page += 1
+
+      this.$apollo.queries.daoApplicants?.fetchMore({
+        variables: {
+          first: this.applicantsPagination.size,
+          offset: this.applicantsPagination.page * this.applicantsPagination.size,
+          daoId: this.selectedDao.docId,
+          order: this.order,
+          filter: this.filterObject
+        },
+        updateQuery: (previousResult, { fetchMoreResult }) => {
+          // done()
+
+          return {
+            getDao: {
+              __typename: fetchMoreResult.getDao.__typename,
+              docId: fetchMoreResult.getDao.docId,
+              applicants: [
+                ...(previousResult ? previousResult.getDao.applicants : []),
+                ...(fetchMoreResult ? fetchMoreResult.getDao.applicants : [])
+              ]
+            }
+          }
+        }
+      })
+    },
+
+    loadMoreDaoCoreMembers (page, done) {
+      if (this.daoCoreMembers?.length === this.coreMembersCount) {
+        done(true)
+      }
+
+      this.coreMembersPagination.page += 1
+
+      this.$apollo.queries.daoCoreMembers?.fetchMore({
+        variables: {
+          first: this.coreMembersPagination.size,
+          offset: this.coreMembersPagination.page * this.coreMembersPagination.size,
+          daoId: this.selectedDao.docId,
+          order: this.order,
+          filter: this.filterObject
+        },
+        updateQuery: (previousResult, { fetchMoreResult }) => {
+          done()
+
+          return {
+            getDao: {
+              __typename: fetchMoreResult.getDao.__typename,
+              docId: fetchMoreResult.getDao.docId,
+              members: [
+                ...(previousResult ? previousResult.getDao.members : []),
+                ...(fetchMoreResult ? fetchMoreResult.getDao.members : [])
+              ]
+            }
+          }
+        }
+      })
+    }
   }
-
 }
 </script>
 
 <template lang="pug">
 q-page.page-members
-  base-banner(:compact="!$q.screen.gt.sm" @onClose="hideMembersBanner" :split="$q.screen.gt.md" v-bind="banner" v-if="isMembersBannerVisible")
+  base-banner(:compact="!$q.screen.gt.sm" :split="$q.screen.gt.md" v-bind="banner" v-if="isMembersBannerVisible")
     template(v-slot:buttons)
       nav.row.items-center
         .row.inline.q-pr-md(v-if="!isMember && !isApplicant && account && !loadingAccount")
@@ -487,39 +481,62 @@ q-page.page-members
           q-tooltip(v-if="!daoSettings.registrationEnabled") {{ $t('pages.dho.members.registrationIsTemporarilyDisabled') }}
         q-btn.q-px-lg.h-btn1(:flat="!account" @click="copyToClipBoard" color="secondary" :label="$t('pages.dho.members.copyInviteLink')" no-caps="no-caps" rounded text-color="white" unelevated="unelevated")
           q-tooltip {{ $t('pages.dho.members.sendALink') }}
+
   //- upvote-delegate-widget(endDate="2023-05-29" :users="tempUsersForVotes")
-  .row.q-py-md(v-if="$q.screen.gt.md")
-    .col-9
-      .row.q-mb-md
-        .h-h4 {{ $t('pages.dho.members.daoApplicants') }}
-        .h-h4-regular.q-ml-xs (
-          | {{ daoApplicants?.length }}
-          | )
-      members-list(:lastResult="hasLastResult()" :members="daoApplicants" :view="'list'" @loadMore="onLoadMoreMembers" ref="scroll" v-bind="{ canEnroll }")
-      .row.q-mb-md
-        .h-h4 {{ $t('pages.dho.members.coreAndCommunityMembers') }}
-        .h-h4-regular.q-ml-xs (
-          | {{ members?.length }}
-          | )
-      members-list(:lastResult="hasLastResult()" :members="members" :view="'card'" @loadMore="onLoadMoreMembers" ref="scroll" v-bind="{ canEnroll }")
-    .col-3
-      filter-widget.sticky(:circle.sync="circle" :circleArray.sync="circleArray" :defaultOption="1" :optionArray.sync="optionArray" :showCircle="false" :sort.sync="sort" :textFilter.sync="textFilter" :filterTitle="$t('pages.dho.members.filterByAccountName')" :filters.sync="filters" :showViewSelector="false" @update:filters="value => onChange('filters', value)")
-  div(v-else)
-    filter-open-button(@open="mobileFilterOpen = true")
-    filter-widget-mobile(:circle.sync="circle" :circleArray.sync="circleArray" :defaultOption="1" :optionArray.sync="optionArray" :showCircle="false" :sort.sync="sort" :textFilter.sync="textFilter" :showViewSelector="false" @close="mobileFilterOpen = false" :filterTitle="$t('pages.dho.members.filterByAccountName')" v-show="mobileFilterOpen" :style="mobileFilterStyles")
-    .cols.q-mt-md
-      .row.q-mb-md
-        .h-h4 {{ $t('pages.dho.members.daoApplicants1') }}
-        .h-h4-regular.q-ml-xs (
-          | {{ daoApplicants?.length }}
-          | )
-      members-list(:lastResult="hasLastResult()" :members="daoApplicants" view="card" @loadMore="onLoadMoreMembers" ref="scroll" compact="compact" v-bind="{ canEnroll }")
-      .row.q-mb-md
-        .h-h4 {{ $t('pages.dho.members.coreAndCommunityMembers') }}
-        .h-h4-regular.q-ml-xs (
-          | {{ members?.length }}
-          | )
-      members-list(:lastResult="hasLastResult()" :members="members" view="card" @loadMore="onLoadMoreMembers" ref="scroll" compact="compact" v-bind="{ canEnroll }")
+
+  .row.q-py-md
+    div.col-9(:class="{'full-width': $q.screen.lt.md}")
+
+      section#applicants
+        header.row.q-mb-md
+          .h-h4 {{ $t('pages.dho.members.daoApplicants') }}
+          .h-h4-regular.q-ml-xs ({{ daoApplicants?.length }}/{{ applicantsCount }})
+
+        .row.q-mr-md
+          template.full-width(v-for="applicant in daoApplicants")
+            profile-card.q-mb-md(
+              :canEnroll="canEnroll"
+              :compact="true"
+              :key="applicant.hash"
+              v-bind="applicant"
+              :view="$q.screen.gt.md ?  'list' : 'card'"
+            )
+
+        footer.row.justify-center.text-center
+          p.full-width.text-sm.text-h-gray.leading-loose ({{ daoApplicants?.length }}/{{ applicantsCount }})
+          q-btn.full-width.q-pa-xxs(
+            :label="$t('common.widget-more-btn.seeMore')"
+            @click="loadMoreDaoApplicants"
+            color="primary"
+            flat
+            no-caps
+            rounded
+            size="12px"
+            v-if="daoApplicants?.length !== applicantsCount"
+          )
+
+      section#core-members.q-mt-xl
+        header.row.q-mb-md
+          .h-h4 {{ $t('pages.dho.members.members') }}
+          .h-h4-regular.q-ml-xs ({{ members?.length }}/{{ coreMembersCount }})
+
+        members-list(
+          :lastResult="hasLastResult()"
+          :compact="$q.screen.gt.md ? false : true"
+          :members="members"
+          view="card"
+          @loadMore="loadMoreDaoCoreMembers"
+          v-bind="{ canEnroll }"
+        )
+
+        footer.row.justify-center.text-center
+          p.full-width.text-sm.text-h-gray.leading-loose ({{ members?.length }}/{{ coreMembersCount }})
+
+    div.col-3(:class="{'full-width': $q.screen.lt.md}")
+      filter-widget.sticky(v-if="$q.screen.gt.md" :circle.sync="circle" :circleArray.sync="circleArray" :defaultOption="1" :optionArray.sync="optionArray" :showCircle="false" :sort.sync="sort" :textFilter.sync="textFilter" :filterTitle="$t('pages.dho.members.filterByAccountName')" :filters.sync="filters" :showViewSelector="false" @update:filters="value => onChange('filters', value)")
+
+      filter-open-button(v-if="$q.screen.lt.md" @open="mobileFilterOpen = true")
+      filter-widget-mobile(v-if="$q.screen.lt.md" :circle.sync="circle" :circleArray.sync="circleArray" :defaultOption="1" :optionArray.sync="optionArray" :showCircle="false" :sort.sync="sort" :textFilter.sync="textFilter" :showViewSelector="false" @close="mobileFilterOpen = false" :filterTitle="$t('pages.dho.members.filterByAccountName')" v-show="mobileFilterOpen" :style="mobileFilterStyles")
 
 </template>
 

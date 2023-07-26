@@ -1279,8 +1279,8 @@
         "registrationIsTemporarilyDisabled": "Регистрација је привремено онемогућена",
         "copyInviteLink": "Копирај линк позива",
         "sendALink": "Пошаљите линк својим пријатељима да их позовете да се придруже овом ДАО-у",
-        "daoApplicants": "ДАО апликанти",
-        "daoApplicants1": "ДАО апликанти",
+        "daoApplicants": "Aпликанти",
+        "daoApplicants1": "Aпликанти",
         "filterByAccountName": "Филтрирајте према називу налога",
         "sortBy": "Сортирај по",
         "joinDateDescending": "Датум придруживања опада",
@@ -1289,7 +1289,8 @@
         "all": "Све",
         "coreTeam": "Главни тим",
         "communityMembers": "Чланови заједнице",
-        "coreAndCommunityMembers": "Чланови језгра и заједнице"
+        "coreAndCommunityMembers": "Чланови језгра и заједнице",
+        "members": "Чланови"
       },
       "organization": {
         "documentation": "Документација",

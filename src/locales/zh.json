@@ -1279,8 +1279,8 @@
         "registrationIsTemporarilyDisabled": "暂时禁止注册",
         "copyInviteLink": "复制邀请链接",
         "sendALink": "向您的朋友发送链接以邀请他们加入此 DAO",
-        "daoApplicants": "DAO 申请人",
-        "daoApplicants1": "DAO 申请人",
+        "daoApplicants": "申请人",
+        "daoApplicants1": "申请人",
         "filterByAccountName": "按帐户名过滤",
         "sortBy": "排序方式",
         "joinDateDescending": "加入日期降序",
@@ -1289,7 +1289,8 @@
         "all": "全部",
         "coreTeam": "核心团队",
         "communityMembers": "社区成员",
-        "coreAndCommunityMembers": "核心和社區成員"
+        "coreAndCommunityMembers": "核心和社區成員",
+        "members": "会员"
       },
       "organization": {
         "documentation": "文档",
