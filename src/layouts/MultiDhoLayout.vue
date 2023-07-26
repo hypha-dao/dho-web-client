@@ -529,7 +529,7 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
           .h-h3.items-center.flex {{ $t('notifications.notifications')}}
           q-btn(color="internal-bg" text-color="primary" rounded unelevated size="sm" padding="12px" icon="fas fa-times" :style="{ 'height': '40px' }" @click="showNotificationsBar = false")
         .q-mt-md.full-width(:style="{ 'position': 'relative' }")
-          .col(v-for="notification, index in notification" :key="notification.id")
+          .col(v-for="notification, index in notifications" :key="notification.id")
             .row.q-py-md.cursor-pointer(@click="goToProposal(notification)" v-on:mouseover="readNotification(notification.id)" :style="{ 'border-top': '1px solid #CBCDD1' }" :class="{ 'last-item': index === notifications?.length - 1, 'read-notify': notification.read === true }")
               .col-2.items-center.flex
                 div.flex.items-center.justify-center(:style="{ 'width': '40px', 'height': '40px', 'border-radius': '50%', 'background': '#F2F1F3'}")
