@@ -7,21 +7,19 @@ import { parsedNotification } from '~/utils/notifications-utils'
 
 const NOTIFICATIONS_QUERY = `
   queryNotification {
-    event{
+    event {
       eventType
       name
-      id
     }
-    user{
-      name
-      id
+    user {
       email
       eosAccountName
+      name
     }
+    id
+    content
     read
     time
-    content
-    id
   }
 `
 
