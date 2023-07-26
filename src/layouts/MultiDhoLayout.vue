@@ -6,7 +6,7 @@ import { timeago } from '~/utils/TimeUtils'
 import { parsedNotification } from '~/utils/notifications-utils'
 
 const NOTIFICATIONS_QUERY = `
-  queryNotification {
+  queryNotification(order: { desc: time }) {
     event {
       eventType
       name
