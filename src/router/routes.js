@@ -25,6 +25,15 @@ const routes = [
     component: () => import('pages/Error404DHO.vue')
   },
   {
+    path: '/create-your-dao',
+    name: 'create-your-dao',
+    meta: {
+      title: I18n.t('routes.login'),
+      hideForAuth: true
+    },
+    component: () => import('pages/onboarding/NLogin.vue')
+  },
+  {
     path: '/:dhoname',
     component: () => import('layouts/DhoSelector.vue'),
     props: true,

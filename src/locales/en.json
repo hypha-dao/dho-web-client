@@ -672,7 +672,10 @@
       "login": "{1} Login {2}",
       "getApp": "Get app",
       "areYouAMember": "Are you a member?",
-      "loginHere": "Login here"
+      "loginHere": "Login here",
+      "createYourDao": "Create Your DAO",
+      "goAheadAndAddYour": "Go ahead and add your DAO's name and upload a logo. You can also also list your DAO's purpose and the impact it envisions making.",
+      "publishYourDao": "Publish your DAO"
     },
     "welcome-view": {
       "youNeedAn": "You need an Hypha Account to interact with Hypha Ecosystem and create a DAO.",
@@ -687,7 +690,10 @@
       "login": "Log in",
       "continueAsAGuest": "Continue as guest",
       "useAnExisting": "Use an existing\n      ",
-      "blockhainAccount": "blockhain account"
+      "blockhainAccount": "blockhain account",
+      "launchYourFirst": "Launch your first DAO",
+      "youNeedAHyphaAccount": "You need a Hypha Account to interact with the Hypha network.",
+      "ifYouAlreadyHaveAHyphaAccount": "If you already have a Hypha Account, click the log in button, sign the transaction with your Wallet and start creating your DAO."
     }
   },
   "navigation": {
@@ -1681,11 +1687,11 @@
       "createLaunchTeam": "Create Launch Team",
       "daoIndentity": "DAO Identity",
       "youCanAddYourDaoName": "You can add your DAO’s name, describe its purpose and add a logo. The name and URL can be changed later via settings You can also add the DAO’s goals and the impact it envisions making.",
-      "name": "Name",
-      "logoIcon": "Logo / Icon",
-      "purpose": "Purpose",
+      "name": "DAO Name",
+      "logoIcon": "DAO Logo",
+      "purpose": "DAO Purpose",
       "theDisplayNameOfYourDao": "The display name of your DAO (max. 50 character)",
-      "uploadAnImage": "Upload an image",
+      "uploadAnImage": "Upload logo",
       "brieflyExplainWhatYourDao": "Briefly explain what your DAO is all about (max. 300 characters)",
       "nextStep": "Next step",
       "utilityToken": "Utility token",

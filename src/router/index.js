@@ -43,7 +43,6 @@ export default function ({ store }) {
     if (to.name && to.name === 'root') {
       next({ path: defaultPath })
     }
-
     if (to.matched.some(record => record.meta.requiresAuth) || to.matched.some(record => record.meta.requiresAuthMember)) {
       if (!isAuthenticated) {
         next({ path: `/${daoName}/login` })

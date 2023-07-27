@@ -1,13 +1,16 @@
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import { validation } from '~/mixins/validation'
 import QrcodeVue from 'qrcode.vue'
+import ipfsy from '~/utils/ipfsy'
+import { Notify } from 'quasar'
 
 export default {
   name: 'register-user-with-captcha-view',
   mixins: [validation],
   components: {
     Captcha: () => import('~/components/form/captcha.vue'),
+    InputFileIpfs: () => import('~/components/ipfs/input-file-ipfs.vue'),
     QrcodeVue
   },
   props: {
@@ -32,6 +35,11 @@ export default {
         index: 3,
         nextStep: 'captcha',
         action: () => { return this.$emit('stepChanged', this.steps.captcha.name) }
+      },
+      create: {
+        name: 'create-your-dao',
+        index: 4,
+        action: () => { return this.$emit('stepChanged', this.steps.captcha.name) }
       }
     }
     return {
@@ -48,14 +56,75 @@ export default {
       submitting: false,
       hyphaAuthenticators: this.$ual?.authenticators?.filter((authenticator) => {
         return authenticator.ualName === 'hypha'
-      }) || []
+      }) || [],
+      form: {
+        // #
+        name: this.getRandomEOSName(), // used internally to differentiate the DAO's. 12 characters, alphanumeric a-z, 1-5 lowercase
+        title: '',
+        description: '',
+
+        // #
+        template: -1, // i.e docId of the dao, -1 no template
+
+        // #
+        // Utility token (aka reward_token = utilityDigits utilitySymbol)
+        utilityName: null,
+        utilitySymbol: null,
+        utilityDigits: 2, // 1.00
+        utilityAmount: -1, // i.e 100000 or -1 for infinite supply
+        utilityValue: '1', // The equivalent value of 1 token in USD
+        // Voice token (aka voice_token = voiceDigits voiceSymbol)
+        voiceSymbol: 'VOICE',
+        voiceDigits: 2, // 1.00
+        treasuryName: null,
+        treasurySymbol: null,
+        treasuryDigits: 2, // 1.00
+        use_seeds: false,
+
+        // #
+        member: '',
+        members: [],
+
+        // #
+        votingDurationSec: 604800, // 1 week
+        periodDurationSec: 604800, // 1 week
+        votingAlignmentPercent: 80, // 80% of yes votes
+        votingQuorumPercent: 20, // 20% of people needs to vote
+        utilityTokenMultiplier: 1,
+        voiceTokenMultiplier: 2,
+        treasuryTokenMultiplier: 1,
+        logo: '',
+        primaryColor: '#242f5d',
+        secondaryColor: '#3f64ee',
+        textColor: '#ffffff'
+      }
     }
   },
   async mounted() {
     this.$emit('stepChanged', 'captcha')
   },
+  computed: {
+    ...mapGetters('accounts', ['account']),
+    isImageSelected: {
+      cache: false,
+      get () { return this.$refs.ipfsInput?.imageURI }
+    }
+  },
   methods: {
+    ...mapActions('dao', ['createDAO']),
     ...mapActions('accounts', ['loginWallet', 'loginInApp']),
+    ipfsy,
+    getRandomEOSName () {
+      function choices (population, k) {
+        const out = []
+        for (let i = 0; i < k; i++) {
+          out.push(population[Math.floor(population.length * Math.random())])
+        }
+        return out.join('')
+      }
+      const alphabet = 'abcdefghijklmnopqrstuvwxyz12345'
+      return choices(alphabet, 12)
+    },
     async next() {
       const currentStep = this.steps[this.step]
 
@@ -64,7 +133,18 @@ export default {
       await currentStep.action()
     },
     async onLoginWallet(idx) {
-      await this.loginWallet({ idx, returnUrl: this.isOnboarding ? 'create' : this.$route.query.returnUrl || 'home' })
+      if (this.$router.currentRoute.name === 'create-your-dao') {
+        try {
+          await this.loginWallet({ idx })
+          if (this.account) {
+            this.step = this.steps.create.name
+          }
+        } catch (e) {
+          console.log(e)
+        }
+      } else {
+        await this.loginWallet({ idx, returnUrl: this.isOnboarding ? 'create' : this.$route.query.returnUrl || 'home' })
+      }
     },
     async setCaptchaResponse(data) {
       this.inviteLink = data.inviteLink
@@ -77,6 +157,34 @@ export default {
       storage.setSelectionRange(0, 99999)
       document.execCommand('copy')
       this.$refs.root.removeChild(storage)
+    },
+    async onSubmit () {
+      const isDraft = !!this.$route.query.parentId
+
+      try {
+        await this.createDAO({
+          data: {
+            ...this.form,
+            onboarder_account: this.account,
+            parentId: this.$route.query.parentId
+          },
+          isDraft
+        })
+        this.$router.push({ path: `/${this.form.name}/explore` })
+      } catch (error) {
+        this.error = error
+
+        Notify.create({
+          color: 'negative',
+          icon: 'fas fa-exclamation-circle',
+          message: error.message,
+          position: 'bottom',
+          timeout: 4000,
+          actions: [
+            { icon: 'fas fa-times', color: 'white', handler: () => { /* ... */ } }
+          ]
+        })
+      }
     }
   }
 }
@@ -132,7 +240,32 @@ export default {
               .row.flex.justify-center.items-center.q-mt-xl
                 img(:style="{ 'width': 'fit-content' }" src="~/assets/images/onboarding-mobile.png")
                 img.q-ml-md(:style="{ 'width': 'fit-content', 'height': 'fit-content' }" src="~/assets/images/onboarding-code.png")
-      #bottom-indicator.row.items-center
+        #form4.flex.column.justify-between.no-wrap(v-show="step === this.steps.create.name")
+          div.full-height.column.justify-center
+            .font-lato.text-heading.text-weight-bolder(:style="{ 'font-size': '34px' }") {{ $t('login.register-user-with-captcha-view.createYourDao') }}
+            .q-mt-md {{ $t('login.register-user-with-captcha-view.goAheadAndAddYour') }}
+          div
+            .row.full-width.justify-between.q-mt-xl
+              .col(:class="{ 'full-width q-pt-md': !$q.screen.gt.md }")
+                .row.justify-center.items-center
+                  .col-auto
+                    q-avatar.flex.justify-center.items-center(size="40px" color="primary" text-color="white")
+                      q-btn(v-if="!isImageSelected" @click="$refs.ipfsInput.chooseFile()" icon="fa fa-image" color="white" flat round size="12px" unelevated)
+                      img(v-if="isImageSelected" :src="$refs.ipfsInput.imageURI")
+                  .col.q-ml-md
+                    label.h-label {{ $t('pages.onboarding.logoIcon') }}
+                    q-btn.full-width.rounded-border.text-bold.q-mt-xs(:class="{ 'q-px-xl': $q.screen.gt.md }" @click="$refs.ipfsInput.chooseFile()" color="primary" :label="$t('pages.onboarding.uploadAnImage')" no-caps outline rounded unelevated)
+                    input-file-ipfs(@uploadedFile="form.logo = arguments[0] " image="image" ref="ipfsInput" v-show="false")
+              .col.q-ml-md(:class="{ 'full-width': !$q.screen.gt.md, 'q-pr-md': $q.screen.gt.md }")
+                label.h-label {{ $t('pages.onboarding.name') }}
+                q-input.q-mt-xs.rounded-border(:rules="[rules.required, rules.min(3)]" dense lazy-rules="ondemand" maxlength="50" outlined :placeholder="$t('pages.onboarding.theDisplayNameOfYourDao')" ref="title" v-model="form.title")
+            .row.full-width.justify-between
+              .col-12.q-mt-md(:class="{ 'full-width': !$q.screen.gt.md }")
+                label.h-label {{ $t('pages.onboarding.purpose') }}
+                q-input.q-mt-xs.rounded-border(:input-style="{ 'resize': 'none' }" :rules="[rules.required]" dense lazy-rules="ondemand" maxlength="300" outlined :placeholder="$t('pages.onboarding.brieflyExplainWhatYourDao')" ref="description" rows="10" type="textarea" v-model="form.description")
+            nav.row.justify-end.q-mt-xl.q-gutter-xs
+              q-btn.q-px-xl(@click="onSubmit" color="primary" :label="$t('login.register-user-with-captcha-view.publishYourDao')" no-caps rounded unelevated)
+      #bottom-indicator.row.items-center(v-if="step !== this.steps.create.name")
         .col
           .row.q-gutter-sm(v-if="$q.screen.gt.md")
             .ellipse-border(:class="'ellipse-filled'")
