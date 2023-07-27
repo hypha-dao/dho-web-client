@@ -938,6 +938,8 @@ export default {
       update: data => data.getDocument,
       skip () { return !this.docId },
       variables () { return { docId: this.docId } },
+      fetchPolicy: 'no-cache',
+
       subscribeToMore: {
         document: gql`subscription proposalDetail($docId: String!) { ${PROPOSAL_QUERY} }`,
         skip () { return !this.docId },

@@ -3,7 +3,6 @@ name: Build and Deploy to Staging
 on:
   push:
     branches: [ master ]
-
 jobs:
   build:
     name: build-staging
@@ -57,7 +56,7 @@ jobs:
           HYPHA_TOKEN_SALES_ENCODE_KEY: ${{ secrets.HYPHA_TOKEN_SALES_ENCODE_KEY }}
           HYPHA_TOKEN_SALES_URL: 'https://tokensale.hypha.earth'
           HYPHA_TOKEN_SALES_API_URL: 'http://api-tokensale.hypha.earth'
-          HYPHA_TOKEN_SALES_RPC_URL: 'https://mainnet.telos.net
+          HYPHA_TOKEN_SALES_RPC_URL: 'https://mainnet.telos.net'
           ROOT_DAO_ID: ${{vars.ROOT_DAO_ID}}
           ROOT_DAO_SLUG: ${{vars.ROOT_DAO_SLUG}}
           HEALTH_ENDPOINT: ${{ vars.HEALTH_ENDPOINT }}

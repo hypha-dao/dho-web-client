@@ -62,7 +62,7 @@ export default {
       result ({ data }) {
         this.voteCount = data?.getDocument?.voteAggregate?.count
       },
-
+      fetchPolicy: 'no-cache',
       subscribeToMore: {
         document: gql`subscription proposalVotes($docId: String!, $first: Int, $offset: Int) { ${PROPOSAL_VOTES_QUERY} }`,
         skip () { return !this.proposalId },
