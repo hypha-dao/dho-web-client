@@ -131,7 +131,7 @@
         "description": "Here you can set up your DAO's role types. These are a set of basic accountabilities that a user role can fulfill. You can think of them as templated job descriptions.",
         "tabs": {
           "types": "Types",
-          "tiers": "Tier Reward"
+          "tiers": "Reward Tier"
         },
         "type": {
           "heading": "Here you can create new role types by adding a name and set of accountabilities.",
@@ -1279,8 +1279,8 @@
         "registrationIsTemporarilyDisabled": "Registration is temporarily disabled",
         "copyInviteLink": "Copy invite link",
         "sendALink": "Send a link to your friends to invite them to join this DAO",
-        "daoApplicants": "DAO Applicants",
-        "daoApplicants1": "DAO Applicants",
+        "daoApplicants": "Applicants",
+        "daoApplicants1": "Applicants",
         "filterByAccountName": "Filter by account name",
         "sortBy": "Sort by",
         "joinDateDescending": "Join date descending",
@@ -1289,7 +1289,8 @@
         "all": "All",
         "coreTeam": "Core Team",
         "communityMembers": "Community members",
-        "coreAndCommunityMembers": "Core & Community members"
+        "coreAndCommunityMembers": "Core & Community members",
+        "members": "Members"
       },
       "organization": {
         "documentation": "Documentation",
@@ -1705,6 +1706,26 @@
       "addToTheTeam": "Add to the team +",
       "daoPublished": "DAO Published!"
     }
+  },
+  "notifications": {
+    "clearAll": "Clear all",
+    "notifications": "Notifications",
+    "newComment": "New comment",
+    "hasJustLeftAComment": "@{accountname} has just left a comment on your proposal",
+    "proposalVotingExpire": "Proposal voting expire",
+    "proposalIsExpiring": "{proposalId} proposal is expiring in {days} days",
+    "proposalPassed": "Proposal passed",
+    "proposalHasPassed": "{proposalId} proposal has passed",
+    "proposalRejected": "Proposal rejected",
+    "proposalHasntPassed": "{proposalId} proposal hasn’t passed",
+    "claimablePeriod": "Claimable period",
+    "youHaveClaimablePeriod": "You have {value} claimable period available",
+    "extendYourAssignment": "Extend your assignment",
+    "youStillHave": "You still have {days} days to extend you assignment",
+    "assignmentApproved": "Assignment approved",
+    "yourAssignmentHasBeenApproved": "Your assignment has been approved",
+    "assignmentRejected": "Assignment rejected",
+    "yourAssignmentHasntBeenApproved": "Your assignment hasn’t been approved"
   },
   "proposalparsing": {
     "createdAgo": "Created {diff} ago",

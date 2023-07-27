@@ -5,6 +5,32 @@ import { format } from '../../mixins/format'
 import { proposals } from '../../mixins/proposals'
 import { cycleDurationSec } from '../../utils/proposal-parsing'
 import { PROPOSAL_TYPE } from '~/const'
+import gql from 'graphql-tag'
+
+const TIERS_QUERY = `
+  querySalaryband(
+    filter: {
+      details_dao_i: { in: [0, $daoId] },
+    }
+  ) {
+    id: docId
+    name: details_name_s
+    annualAmount: details_annualUsdSalary_a
+    minDeferred: details_minDeferredX100_i
+  }
+`
+
+const ROLES_QUERY = `
+  queryRole(
+    filter: { 
+      details_dao_i: { in: [0, $daoId] },
+      details_autoApprove_i: { eq: 1 } 
+    }
+  ) {
+    id: docId
+    name: details_title_s
+  }
+`
 
 /**
  * A component to display profile proposal item
@@ -38,6 +64,58 @@ export default {
     }
   },
 
+  apollo: {
+    tiers: {
+      query: gql`query TIERS($daoId: Int64!) { ${TIERS_QUERY} }`,
+      update: data => data?.querySalaryband?.map(level => ({
+        label: level?.name,
+        value: { ...level }
+      })),
+      skip () { return !this.selectedDao?.docId },
+      variables () { return { daoId: this.selectedDao.docId } },
+      subscribeToMore: {
+        document: gql`subscription TIERS($daoId: Int64!) { ${TIERS_QUERY} }`,
+        skip () { return !this.selectedDao?.docId },
+        variables () { return { daoId: this.selectedDao.docId } },
+        updateQuery: (previousResult, { subscriptionData }) => {
+          if (!subscriptionData.data) {
+            return previousResult
+          }
+          if (!previousResult) {
+            return undefined
+          }
+
+          return subscriptionData.data
+        }
+      }
+    },
+
+    archetypes: {
+      query: gql`query ROLES($daoId: Int64!) { ${ROLES_QUERY} }`,
+      update: data => data?.queryRole?.map(archetype => ({
+        label: archetype?.name,
+        value: { ...archetype }
+      })),
+      skip () { return !this.selectedDao?.docId },
+      variables () { return { daoId: this.selectedDao.docId } },
+      subscribeToMore: {
+        document: gql`subscription ROLES($daoId: Int64!) { ${ROLES_QUERY} }`,
+        skip () { return !this.selectedDao?.docId },
+        variables () { return { daoId: this.selectedDao.docId } },
+        updateQuery: (previousResult, { subscriptionData }) => {
+          if (!subscriptionData.data) {
+            return previousResult
+          }
+          if (!previousResult) {
+            return undefined
+          }
+
+          return subscriptionData.data
+        }
+      }
+    }
+  },
+
   data () {
     return {
       PROPOSAL_TYPE,
@@ -61,7 +139,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters('dao', ['daoSettings']),
+    ...mapGetters('dao', ['daoSettings, selectedDao']),
     claims () {
       if (this?.periods) {
         return this.periods.reduce((result, p) => {
@@ -145,8 +223,8 @@ export default {
     async _extendBadge () {
       const roleProposal = this.proposal.badge[0]
       roleProposal.type = 'Badge'
-      this.$store.commit('proposals/setType', CONFIG.types.core.options.apply.options.badge.type)
-      this.$store.commit('proposals/setCategory', { key: CONFIG.types.core.options.apply.options.badge.key, title: CONFIG.types.core.options.apply.options.badge.title })
+      this.$store.commit('proposals/setType', CONFIG.types.core.options.badge.type)
+      this.$store.commit('proposals/setCategory', { key: CONFIG.types.core.options.badge.key, title: CONFIG.types.core.options.badge.title })
 
       this.$store.commit('proposals/setBadge', {
         docId: roleProposal.docId,
@@ -182,49 +260,48 @@ export default {
       })
     },
     async _extendAssignment () {
-      const roleProposal = this.proposal.role[0]
-      roleProposal.type = 'Role'
-      this.$store.commit('proposals/setType', CONFIG.types.core.options.apply.options.assignment.type)
-      this.$store.commit('proposals/setCategory', { key: CONFIG.types.core.options.apply.options.assignment.key, title: CONFIG.types.core.options.apply.options.assignment.title })
-      const salary = parseFloat(roleProposal.details_annualUsdSalary_a)
+      if (this.proposal.salaryband.length !== 0) {
+        const roleProposal = this.proposal.role[0]
+        roleProposal.type = 'Role'
+        this.$store.commit('proposals/setType', CONFIG.types.core.options.assignment.type)
+        this.$store.commit('proposals/setCategory', { key: CONFIG.types.core.options.assignment.key, title: CONFIG.types.core.options.assignment.title })
+        const tier = this.tiers.find(tier => tier.label === this.proposal?.salaryband?.[0]?.details_name_s)
+        const archetype = this.archetypes.find(archetype => archetype.label === this.proposal?.salaryband?.[0]?.assignment?.[0]?.role?.[0]?.system_nodeLabel_s)
+        this.$store.commit('proposals/setRole', archetype)
+        this.$store.commit('proposals/setTier', tier)
 
-      const salaryBucket = this.getSalaryBucket(salary)
-      this.$store.commit('proposals/setRole', {
-        docId: roleProposal.docId,
-        title: roleProposal.details_title_s,
-        description: roleProposal.details_description_s,
-        salary,
-        minDeferred: roleProposal.details_minDeferredX100_i,
-        minCommitment: roleProposal.details_minTimeShareX100_i,
-        type: roleProposal.type,
-        salaryBucket
-      })
-      this.$store.commit('proposals/setAnnualUsdSalary', salary)
-      this.$store.commit('proposals/setMinDeferred', roleProposal.details_minDeferredX100_i)
-      this.$store.commit('proposals/setStepIndex', 2)
+        this.$store.commit('proposals/setAnnualUsdSalary', tier?.value?.annualAmount || 0)
+        this.$store.commit('proposals/setMinDeferred', tier?.value?.minDeferred || 0)
+        this.$store.commit('proposals/setMinCommitment', 0)
 
-      const cycleMul = (cycleDurationSec / this.daoSettings.periodDurationSec).toFixed(2)
+        this.$store.commit('proposals/setCommitment', parseFloat(1))
+        this.$store.commit('proposals/setDeferred', parseFloat(tier.value.minDeferred))
 
-      this.$store.commit('proposals/setLinkedDocId', this.proposal.docId)
-      this.$store.commit('proposals/setPeg', parseFloat(this.proposal.details_pegSalaryPerPeriod_a) * cycleMul)
-      this.$store.commit('proposals/setReward', parseFloat(this.proposal.details_rewardSalaryPerPeriod_a) * cycleMul)
-      this.$store.commit('proposals/setVoice', parseFloat(this.proposal.details_voiceSalaryPerPeriod_a) * cycleMul)
-      this.$store.commit('proposals/setDeferred', this.proposal.details_approvedDeferredPercX100_i)
-      this.$store.commit('proposals/setCommitment', this.proposal.details_timeShareX100_i)
-      this.$store.commit('proposals/setTitle', this.proposal.details_title_s)
-      this.$store.commit('proposals/setDescription', `[Extension for proposal ${this.proposal.docId}] ` + this.proposal.details_description_s)
-      this.$store.commit('proposals/setIsExtension', true)
-      this.$store.commit('proposals/setStartDate', this.endDate)
-      this.$store.commit('proposals/setDetailsPeriod', {
-        dateString: this.endDate
-      })
+        const cycleMul = (cycleDurationSec / this.daoSettings.periodDurationSec).toFixed(2)
 
-      const draftId = Date.now()
-      this.$store.commit('proposals/setDraftId', draftId)
-      this.saveDraft()
-      this.$router.push({
-        name: 'proposal-create', params: { draftId }
-      })
+        this.$store.commit('proposals/setLinkedDocId', this.proposal.docId)
+        this.$store.commit('proposals/setPeg', parseFloat(this.proposal.details_pegSalaryPerPeriod_a) * cycleMul)
+        this.$store.commit('proposals/setReward', parseFloat(this.proposal.details_rewardSalaryPerPeriod_a) * cycleMul)
+        this.$store.commit('proposals/setVoice', parseFloat(this.proposal.details_voiceSalaryPerPeriod_a) * cycleMul)
+        this.$store.commit('proposals/setTitle', this.proposal.details_title_s)
+        this.$store.commit('proposals/setDescription', `[Extension for proposal ${this.proposal.docId}] ` + this.proposal.details_description_s)
+        this.$store.commit('proposals/setIsExtension', true)
+        this.$store.commit('proposals/setStartDate', this.endDate)
+        this.$store.commit('proposals/setDetailsPeriod', {
+          dateString: this.endDate
+        })
+
+        const draftId = Date.now()
+        this.$store.commit('proposals/setDraftId', draftId)
+        this.saveDraft()
+        this.$router.push({
+          name: 'proposal-create', params: { draftId }
+        })
+      } else {
+        this.$router.push({
+          name: 'proposal-create'
+        })
+      }
     }
   }
 }

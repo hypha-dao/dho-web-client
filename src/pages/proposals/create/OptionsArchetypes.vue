@@ -91,7 +91,9 @@ export default {
     ...mapGetters('dao', ['selectedDao']),
 
     archetype: {
-      get () { return this.$store.state.proposals.draft.role || { label: this.$t('pages.proposals.create.optionsarchetypes.form.archetype.label') } },
+      get () {
+        return this.$store.state.proposals.draft.role || { label: this.$t('pages.proposals.create.optionsarchetypes.form.archetype.label') }
+      },
       set (archetype) {
         this.$store.commit('proposals/setRole', archetype)
       }

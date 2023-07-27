@@ -1279,8 +1279,8 @@
         "registrationIsTemporarilyDisabled": "El registro está temporalmente deshabilitado",
         "copyInviteLink": "Copiar enlace de invitación",
         "sendALink": "Envía un enlace a tus amigos para invitarlos a unirse a este DAO",
-        "daoApplicants": "Solicitantes de DAO",
-        "daoApplicants1": "Solicitantes de DAO",
+        "daoApplicants": "Solicitantes",
+        "daoApplicants1": "Solicitantes",
         "filterByAccountName": "Filtrar por nombre de cuenta",
         "sortBy": "Ordenar por",
         "joinDateDescending": "Fecha de unión descendente",
@@ -1289,7 +1289,8 @@
         "all": "Todo",
         "coreTeam": "Equipo central",
         "communityMembers": "Miembros de la comunidad",
-        "coreAndCommunityMembers": "Miembros del núcleo y de la comunidad"
+        "coreAndCommunityMembers": "Miembros del núcleo y de la comunidad",
+        "members": "Miembros"
       },
       "organization": {
         "documentation": "Documentación",
@@ -1704,6 +1705,26 @@
       "addToTheTeam": "Agregar al equipo",
       "daoPublished": "¡DAO publicado!"
     }
+  },
+  "notifications": {
+    "clearAll": "Limpiar todo",
+    "notifications": "Notificaciones",
+    "newComment": "Nuevo comentario",
+    "hasJustLeftAComment": "@{accountname} acaba de dejar un comentario sobre su propuesta",
+    "proposalVotingExpire": "La votación de la propuesta expira",
+    "proposalIsExpiring": "La propuesta de {proposalId} caduca en {days} días",
+    "proposalPassed": "Propuesta aprobada",
+    "proposalHasPassed": "La propuesta de {proposalId} ha sido aprobada",
+    "proposalRejected": "Propuesta rechazada",
+    "proposalHasntPassed": "La propuesta de {proposalId} no ha sido aprobada",
+    "claimablePeriod": "Período reclamable",
+    "youHaveClaimablePeriod": "Tiene {value} período reclamable disponible",
+    "extendYourAssignment": "Extiende tu tarea",
+    "youStillHave": "Todavía tienes {days} días para extender tu asignación",
+    "assignmentApproved": "Asignación aprobada",
+    "yourAssignmentHasBeenApproved": "Tu tarea ha sido aprobada",
+    "assignmentRejected": "Asignación rechazada",
+    "yourAssignmentHasntBeenApproved": "Tu tarea no ha sido aprobada"
   },
   "proposalparsing": {
     "createdAgo": "Creado hace {diff}",

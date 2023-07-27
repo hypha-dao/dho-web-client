@@ -175,6 +175,12 @@ const STAGED_PROPOSALS_QUERY = `
 
         salaryband {
           details_annualUsdSalary_a
+          details_name_s
+          assignment {
+            role {
+              system_nodeLabel_s
+            }
+          }
         }
 
         details_pegSalaryPerPeriod_a

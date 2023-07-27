@@ -19,6 +19,14 @@ query queryActivityAssignments($username: String!, $daoId: String!, $first: Int,
         details_pegSalaryPerPeriod_a
         details_rewardSalaryPerPeriod_a
         details_voiceSalaryPerPeriod_a
+        salaryband {
+          details_name_s
+          assignment {
+            role {
+              system_nodeLabel_s
+            }
+          }
+        }
         start {
           details_startTime_t
           details_label_s
