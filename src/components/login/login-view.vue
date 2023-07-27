@@ -64,15 +64,15 @@ export default {
 .full-width.full-height.flex(:class="{ 'items-start':!$q.screen.gt.md, 'items-center':$q.screen.gt.md }")
   .full-width.full-height.flex.column.justify-between.no-wrap(:style="{ 'padding-bottom': '140px' }")
     .full-height.flex.justify-center.column
-      .row.flex.items-center.cursor-pointer(v-if="$q.screen.gt.md" @click="$emit('back')")
+      .row.flex.items-center.cursor-pointer(@click="$emit('back')")
         q-icon.q-mr-xxs(name="fas fa-arrow-left" color="primary" size="14px")
         .text-bold.text-primary {{ $t('login.login-view.back') }}
       template(v-if="$q.screen.gt.md")
         .font-lato.text-heading.text-weight-bolder(:style="{ 'font-size': '34px' }") {{ $t('login.login-view.loginTo', { daoName: selectedDao?.title?.replace(/^\w/, (c) => c.toUpperCase()) }) }}
       template(v-if="!$q.screen.gt.md")
         span
-          .h-h1-signup-mobile {{ $t('login.login-view.loginTo1') }}
-            .text-bold {{ $t('login.login-view.yourAccount') }}
+          .font-lato.text-heading.text-weight-bolder(:style="{ 'font-size': '34px' }") {{ $t('login.login-view.loginTo1') }}
+            .text-weight-bolder {{ $t('login.login-view.yourAccount') }}
       .h-b1-signup.text-weight-thin.q-mt-lg.q-mb-lg(v-if="$q.screen.gt.md") {{ $t('login.login-view.youCanEither') }}
       .h-b1-signup.text-weight-thin.q-mt-lg.q-mb-lg(v-if="!$q.screen.gt.md") {{ $t('login.login-view.pleaseLoginWith') }}
     div

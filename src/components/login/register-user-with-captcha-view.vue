@@ -38,8 +38,7 @@ export default {
       },
       create: {
         name: 'create-your-dao',
-        index: 4,
-        action: () => { return this.$emit('stepChanged', this.steps.captcha.name) }
+        index: 4
       }
     }
     return {
@@ -192,7 +191,7 @@ export default {
 </script>
 <template lang="pug">
 .full-width.full-height.flex.items-start.main-container
-  #top-indicator(ref="root")
+  #top-indicator(v-if="step !== this.steps.create.name" ref="root")
     .indicator.row.q-gutter-sm.justify-center(v-if="$q.screen.lt.md || $q.screen.md")
       .ellipse-border(:class="step === 'captcha' && 'ellipse-filled'")
       .ellipse-border(:class="step === 'inviteLink' && 'ellipse-filled'")
@@ -202,7 +201,7 @@ export default {
     .full-width.full-height.flex.column.justify-between.no-wrap(:style="{ 'padding-bottom': '50px' }")
       #internal-container.flex.justify-center.full-height
         #form1.flex.column.justify-center(v-show="step === this.steps.captcha.name")
-          .row.flex.items-center.cursor-pointer(v-if="$q.screen.gt.md" @click="$emit('back')")
+          .row.flex.items-center.cursor-pointer(@click="$emit('back')")
             q-icon.q-mr-xxs(name="fas fa-arrow-left" color="primary" size="14px")
             .text-bold.text-primary {{ $t('login.login-view.back') }}
           template
@@ -213,7 +212,7 @@ export default {
         #form2.flex.column.justify-between.no-wrap(v-show="step === this.steps.inviteLink.name")
           template
             div.full-height.column.justify-center
-              .row.flex.items-center.cursor-pointer(v-if="$q.screen.gt.md" @click="step = steps.captcha.name")
+              .row.flex.items-center.cursor-pointer(@click="step = steps.captcha.name")
                 q-icon.q-mr-xxs(name="fas fa-arrow-left" color="primary" size="14px")
                 .text-bold.text-primary {{ $t('login.login-view.back') }}
               .row
@@ -231,7 +230,7 @@ export default {
         #form3.flex.column.justify-center(v-show="step === this.steps.finish.name")
           template
             div.full-height.column.justify-center
-              .row.flex.items-center.cursor-pointer(v-if="$q.screen.gt.md" @click="step = steps.inviteLink.name")
+              .row.flex.items-center.cursor-pointer(@click="step = steps.inviteLink.name")
                 q-icon.q-mr-xxs(name="fas fa-arrow-left" color="primary" size="14px")
                 .text-bold.text-primary {{ $t('login.login-view.back') }}
               .font-lato.text-heading.text-weight-bolder(:style="{ 'font-size': '34px' }") {{ $t('login.register-user-with-captcha-view.loginWith') }}
@@ -245,7 +244,7 @@ export default {
             .font-lato.text-heading.text-weight-bolder(:style="{ 'font-size': '34px' }") {{ $t('login.register-user-with-captcha-view.createYourDao') }}
             .q-mt-md {{ $t('login.register-user-with-captcha-view.goAheadAndAddYour') }}
           div
-            .row.full-width.justify-between.q-mt-xl
+            div.full-width.justify-between.q-mt-xl(:class="{ 'col': !$q.screen.gt.md, 'row': $q.screen.gt.md }")
               .col(:class="{ 'full-width q-pt-md': !$q.screen.gt.md }")
                 .row.justify-center.items-center
                   .col-auto
@@ -256,7 +255,7 @@ export default {
                     label.h-label {{ $t('pages.onboarding.logoIcon') }}
                     q-btn.full-width.rounded-border.text-bold.q-mt-xs(:class="{ 'q-px-xl': $q.screen.gt.md }" @click="$refs.ipfsInput.chooseFile()" color="primary" :label="$t('pages.onboarding.uploadAnImage')" no-caps outline rounded unelevated)
                     input-file-ipfs(@uploadedFile="form.logo = arguments[0] " image="image" ref="ipfsInput" v-show="false")
-              .col.q-ml-md(:class="{ 'full-width': !$q.screen.gt.md, 'q-pr-md': $q.screen.gt.md }")
+              .col.q-ml-md(:class="{ 'full-width q-mt-md': !$q.screen.gt.md, 'q-pr-md': $q.screen.gt.md }")
                 label.h-label {{ $t('pages.onboarding.name') }}
                 q-input.q-mt-xs.rounded-border(:rules="[rules.required, rules.min(3)]" dense lazy-rules="ondemand" maxlength="50" outlined :placeholder="$t('pages.onboarding.theDisplayNameOfYourDao')" ref="title" v-model="form.title")
             .row.full-width.justify-between

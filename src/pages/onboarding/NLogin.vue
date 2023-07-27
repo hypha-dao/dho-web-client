@@ -151,9 +151,9 @@ export default {
         transition(v-if="step === steps.welcome" enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
           welcome-view.full-width.full-height(@onLoginClick="step = steps.login" @onRegisterClick="step = steps.register")
         transition(v-else-if="step === steps.login" enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
-          login-view.full-height(:dhoName="dhoname" :pk="stepPK" @onLoginWithPK=" v => stepPK = true")
+          login-view.full-height(:dhoName="dhoname" :pk="stepPK" @onLoginWithPK=" v => stepPK = true" @back="step = steps.welcome")
         transition(v-else-if="step === steps.register" enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
-          register-user-with-captcha-view.full-height(@stepChanged="v => registerStep = v" @onFinish="step = steps.login" @onClickLoginPage="step = steps.login")
+          register-user-with-captcha-view.full-height(@back="step = steps.welcome" @stepChanged="v => registerStep = v" @onFinish="step = steps.login" @onClickLoginPage="step = steps.login")
       bottom-section(:daoSettings="daoSettings" v-if="step === steps.login || step === steps.register && registerStep !== 'finish'" :stepPK="stepPK" :step="step" :steps="steps" @onClickRegisterHere="step = steps.register; stepPK = false" @onClickLogin="stepPK = false" @onClickLoginPage="step = steps.login; stepPK = false")
 
 </template>
@@ -199,8 +199,7 @@ export default {
   left: 0
   right: 0
   bottom: 0
-  border-radius: 55px 55px 0 0
-  padding: 54px 45px 30px
+  padding: 30px 20px 30px
   @media (orientation: landscape) and (min-width: 1024px)
     height: auto !important
   @media (max-width: 375px)
@@ -209,7 +208,7 @@ export default {
   @media (max-width: 375px)
     top: auto
 .bottom-card-step-two
-  top: 130px
+  // top: 130px
   transition: all 1s
   transition-timing-function: ease-out
 .left-container
