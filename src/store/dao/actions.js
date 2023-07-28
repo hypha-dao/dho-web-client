@@ -21,13 +21,7 @@ export const createDAO = async function (context, { data, isDraft }) {
           { label: 'dao_template', value: ['int64', data?.template] },
 
           //
-          { label: 'reward_token_name', value: ['string', data?.utilityName] },
-          { label: 'reward_token', value: ['asset', `${parseFloat(1).toFixed(data?.utilityDigits)} ${data?.utilitySymbol}`] },
-          { label: 'reward_token_max_supply', value: ['asset', `${parseFloat(-1).toFixed(data?.utilityDigits)} ${data?.utilitySymbol}`] },
-          { label: 'reward_to_peg_ratio', value: ['asset', `${parseFloat(1).toFixed(data?.treasuryDigits)} ${data?.treasurySymbol}`] },
           { label: 'voice_token', value: ['asset', `${parseFloat(1).toFixed(data?.voiceDigits)} ${data?.voiceSymbol}`] },
-          { label: 'peg_token_name', value: ['string', data?.treasuryName] },
-          { label: 'peg_token', value: ['asset', `${parseFloat(1).toFixed(data?.treasuryDigits)} ${data?.treasurySymbol}`] },
           { label: 'use_seeds', value: ['int64', data?.use_seeds ? 1 : 0] },
 
           { label: 'voting_duration_sec', value: ['int64', data?.votingDurationSec] },
@@ -73,7 +67,21 @@ export const createDAO = async function (context, { data, isDraft }) {
       ]
     }
   }]
-
+  if (data.skipTokens) {
+    actions[0].data.config[0].push(
+      { label: 'skip_peg_token_create', value: ['int64', data?.skipTokens] },
+      { label: 'skip_reward_token_create', value: ['int64', data?.skipTokens] }
+    )
+  } else {
+    actions[0].data.config[0].push(
+      { label: 'reward_token_name', value: ['string', data?.utilityName] },
+      { label: 'reward_token', value: ['asset', `${parseFloat(1).toFixed(data?.utilityDigits)} ${data?.utilitySymbol}`] },
+      { label: 'reward_token_max_supply', value: ['asset', `${parseFloat(-1).toFixed(data?.utilityDigits)} ${data?.utilitySymbol}`] },
+      { label: 'reward_to_peg_ratio', value: ['asset', `${parseFloat(1).toFixed(data?.treasuryDigits)} ${data?.treasurySymbol}`] },
+      { label: 'peg_token_name', value: ['string', data?.treasuryName] },
+      { label: 'peg_token', value: ['asset', `${parseFloat(1).toFixed(data?.treasuryDigits)} ${data?.treasurySymbol}`] }
+    )
+  }
   return this.$api.signTransaction(actions)
 }
 

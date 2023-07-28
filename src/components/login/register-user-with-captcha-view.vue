@@ -165,7 +165,8 @@ export default {
           data: {
             ...this.form,
             onboarder_account: this.account,
-            parentId: this.$route.query.parentId
+            parentId: this.$route.query.parentId,
+            skipTokens: 1
           },
           isDraft
         })
