@@ -5,23 +5,23 @@ import gql from 'graphql-tag'
 import { timeago } from '~/utils/TimeUtils'
 import { parsedNotification } from '~/utils/notifications-utils'
 
-const NOTIFICATIONS_QUERY = `
-  queryNotification(order: { desc: time }) {
-    event {
-      eventType
-      name
-    }
-    user {
-      email
-      eosAccountName
-      name
-    }
-    id
-    content
-    read
-    time
-  }
-`
+// const NOTIFICATIONS_QUERY = `
+//   queryNotification(order: { desc: time }) {
+//     event {
+//       eventType
+//       name
+//     }
+//     user {
+//       email
+//       eosAccountName
+//       name
+//     }
+//     id
+//     content
+//     read
+//     time
+//   }
+// `
 
 export default {
   name: 'multi-dho-layout',
@@ -62,35 +62,36 @@ export default {
       skip () {
         return !this.account
       }
-    },
-    notifications: {
-      query: gql`query notifications { ${NOTIFICATIONS_QUERY} }`,
-      update: data => data.queryNotification,
-      variables () { return { account: this.account } },
-      skip () { return !this.account },
-      // subscribeToMore: {
-      //   query: gql`subscription notifications { ${NOTIFICATIONS_QUERY} }`,
-      //   skip () { return !this.account },
-      //   variables () { return { account: this.account } },
-      //   updateQuery: (previousResult, { subscriptionData }) => {
-      //     if (!subscriptionData.data) {
-      //       return previousResult
-      //     }
-      //     if (!previousResult) {
-      //       return undefined
-      //     }
-      //     return subscriptionData.data
-      //   }
-      // },
-      fetchPolicy: 'network',
-      pollInterval: 1000
     }
+    // notifications: {
+    //   query: gql`query notifications { ${NOTIFICATIONS_QUERY} }`,
+    //   update: data => data.queryNotification,
+    //   variables () { return { account: this.account } },
+    //   skip () { return !this.account },
+    //   // subscribeToMore: {
+    //   //   query: gql`subscription notifications { ${NOTIFICATIONS_QUERY} }`,
+    //   //   skip () { return !this.account },
+    //   //   variables () { return { account: this.account } },
+    //   //   updateQuery: (previousResult, { subscriptionData }) => {
+    //   //     if (!subscriptionData.data) {
+    //   //       return previousResult
+    //   //     }
+    //   //     if (!previousResult) {
+    //   //       return undefined
+    //   //     }
+    //   //     return subscriptionData.data
+    //   //   }
+    //   // },
+    //   fetchPolicy: 'network',
+    //   pollInterval: 1000
+    // }
   },
 
   data () {
     return {
       timeago,
       parsedNotification,
+      notifications: [],
       profile: {
         username: null,
         avatar: null,
