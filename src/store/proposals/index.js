@@ -722,10 +722,11 @@ export default {
               { label: 'title', value: ['string', draft.title] },
               { label: 'description', value: ['string', draft.description] },
               // { label: 'url', value: ['string', draft.url] },
-              { label: 'annual_usd_salary', value: ['asset', `${parseFloat(draft.annualUsdSalary).toFixed(2)} USD`] },
+              // { label: 'annual_usd_salary', value: ['asset', `${parseFloat(draft.annualUsdSalary).toFixed(2)} USD`] },
               { label: 'time_share_x100', value: ['int64', draft.commitment] },
               { label: 'deferred_perc_x100', value: ['int64', draft.deferred] },
-              { label: 'role', value: ['int64', draft.role.docId] },
+              { label: 'salary_band_id', value: ['int64', draft.tier.value.id] },
+              { label: 'role', value: ['int64', draft.role.value.id] },
               { label: 'start_period', value: ['int64', draft.startPeriod.docId] },
               { label: 'period_count', value: ['int64', draft.periodCount] }
             ]
