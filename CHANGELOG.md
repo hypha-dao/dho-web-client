@@ -1,5 +1,23 @@
 # Changelog
 
+## [2.31.5](https://github.com/hypha-dao/dho-web-client/compare/v2.31.4...v2.31.5) (2023-07-28)
+
+
+### Bug Fixes
+
+* **multi-dho-layout:** add correct var name ([d9351ed](https://github.com/hypha-dao/dho-web-client/commit/d9351eda1ce01fac23cfc95037ea96af047d42a7))
+* **multi-dho-layout:** add correct var name ([496fdd8](https://github.com/hypha-dao/dho-web-client/commit/496fdd8cc32aef17bd445a7dcb7a72e9741fb564))
+* **multi-dho-layout:** add desc notification order ([efb2873](https://github.com/hypha-dao/dho-web-client/commit/efb2873d6b6b9c2470d7b0a4b1fb17d9aa28acc2))
+* **multi-dho-layout:** add desc notification order ([9690b0e](https://github.com/hypha-dao/dho-web-client/commit/9690b0ecb0228355433878631273bfd36abb3345))
+* **multi-dho-layout:** remove ids from query ([ac6af23](https://github.com/hypha-dao/dho-web-client/commit/ac6af236841e95e2c39b31d454d7bf48393b4ea4))
+* **multi-dho-layout:** remove ids from query ([ac6af23](https://github.com/hypha-dao/dho-web-client/commit/ac6af236841e95e2c39b31d454d7bf48393b4ea4))
+* **multi-dho-layout:** remove ids from query ([8c5592f](https://github.com/hypha-dao/dho-web-client/commit/8c5592fec1ee87aa71c4638060510e5ff69bf9e5))
+* **proposal-edit:** edit proposal flow (#DEV-869) ([#2355](https://github.com/hypha-dao/dho-web-client/issues/2355)) ([408ad75](https://github.com/hypha-dao/dho-web-client/commit/408ad75b3df84f7db610ac14742e3483a8146709))
+* **proposals:** edit staging proposal action ([#2367](https://github.com/hypha-dao/dho-web-client/issues/2367)) ([b0cc580](https://github.com/hypha-dao/dho-web-client/commit/b0cc5802be86357b5283b0455539c0d7dc72c39e))
+* **step-payout:** disable next if not min deferred ([#2356](https://github.com/hypha-dao/dho-web-client/issues/2356)) ([4b3a89b](https://github.com/hypha-dao/dho-web-client/commit/4b3a89bd699369280c55e7abd7b11d2167b87cdc))
+* **widget-roles:** add pollInterval ([6a2d4e7](https://github.com/hypha-dao/dho-web-client/commit/6a2d4e7de27c16964eb3802732b6c35eb680c55a))
+* **widget-roles:** add pollInterval ([2cae454](https://github.com/hypha-dao/dho-web-client/commit/2cae4549c8de1d382f485d9138ea13f6dced7d25))
+
 ## [2.31.4](https://github.com/hypha-dao/dho-web-client/compare/v2.31.3...v2.31.4) (2023-07-20)
 
 
