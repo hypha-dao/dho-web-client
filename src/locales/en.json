@@ -622,7 +622,8 @@
       "login": "Login",
       "login1": "Log in with {1}",
       "getApp": "Get app",
-      "back": "Back"
+      "back": "Back",
+      "orChooseAPartner": "or choose a Partner Wallet"
     },
     "register-user-view": {
       "account": "Account",

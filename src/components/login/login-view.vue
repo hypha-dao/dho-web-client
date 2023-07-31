@@ -24,13 +24,23 @@ export default {
         privateKey: null
       },
       errorPrivateKey: null,
-      submitting: false
+      submitting: false,
+      selectedAuthenticator: null
     }
   },
 
   computed: {
     ...mapGetters('accounts', ['loading']),
-    ...mapGetters('dao', ['daoSettings', 'selectedDao'])
+    ...mapGetters('dao', ['daoSettings', 'selectedDao']),
+    authenticators () {
+      return this.$ual.authenticators.map((wallet, idx) => {
+        return {
+          label: wallet.ualName[0].toUpperCase() + wallet.ualName.slice(1) + ' Wallet',
+          icon: wallet.getStyle().icon,
+          idx: idx
+        }
+      })
+    }
   },
 
   methods: {
@@ -84,8 +94,8 @@ export default {
         .row.justify-end
           q-btn.q-mt-md.login-button(unelevated :label="$t('login.login-view.login')" no-caps @click="onLoginInApp" :loading="submitting")
       .col-xs-12.col-md-6.q-mt-xxxl(v-else)
-        q-list
-          q-item.wallet.q-my-xs(v-if="$ual" v-for="(wallet, idx) in $ual.authenticators" :key="wallet.getStyle().text" v-ripple :style="{ background: wallet.getStyle().background, color: wallet.getStyle().textColor }")
+        q-list(v-if="$ual" v-for="(wallet, idx) in $ual.authenticators" :key="wallet.getStyle().text")
+          q-item.wallet.q-my-xs(v-if="wallet.ualName !== 'seeds'" v-ripple :style="{ background: wallet.getStyle().background, color: wallet.getStyle().textColor }")
             q-item-section.cursor-pointer(avatar @click="onLoginWallet(idx)")
               img(:src="wallet.getStyle().icon" width="20")
             q-item-section.cursor-pointer.text-center(@click="onLoginWallet(idx)") {{ $t('login.login-view.login1', { '1': wallet.getStyle().text, '2': wallet.getStyle().text === 'Seeds' ? '(beta)' : '' }) }}
@@ -94,7 +104,23 @@ export default {
                 loading-spinner(v-if="loading === wallet.getStyle().text" :color="wallet.getStyle().textColor" size="2em")
                 q-btn(v-else :color="wallet.getStyle().textColor" icon="fas fa-cloud-download-alt" @click="openUrl(wallet.getOnboardingLink())" target="_blank" dense flat size="10px")
                   q-tooltip {{ $t('login.login-view.getApp') }}
-
+        .row.full-width.flex.justify-center.q-mt-md.q-mb-xs
+          .h-b1-signup {{ $t('login.login-view.orChooseAPartner') }}
+        .row.flex.items-center
+          .col.q-mr-md
+            q-select.q-mt-xs(:options="authenticators" dense dropdown-icon="fas fa-chevron-down" hide-bottom-space options-dense outlined rounded v-model="selectedAuthenticator")
+              template(v-if="selectedAuthenticator" v-slot:prepend)
+                img(:src="selectedAuthenticator?.icon" width="20" height="20")
+              template(v-slot:option="scope")
+                q-item.q-pa-xs(v-if="!scope.opt.group && scope.opt.label === 'Seeds Wallet'"
+                  v-bind="scope.itemProps"
+                  v-on="scope.itemEvents"
+                )
+                  .row
+                    img(:src="scope.opt.icon" width="20" height="20")
+                    .q-ml-md {{ scope.opt.label }}
+          .col-2
+            q-btn.q-mt-xs.full-width(:disable="!selectedAuthenticator" :style="{ 'height': 'fit-content' }" :label="'Log in'" color="primary" @click="onLoginWallet(selectedAuthenticator.idx)" unelevated rounded no-caps outline)
 </template>
 
 <style lang="stylus" scoped>
