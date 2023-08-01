@@ -65,10 +65,6 @@ export default {
         // #
         template: -1, // i.e docId of the dao, -1 no template
 
-        // #
-        // Utility token (aka reward_token = utilityDigits utilitySymbol)
-        utilityName: null,
-        utilitySymbol: null,
         utilityDigits: 2, // 1.00
         utilityAmount: -1, // i.e 100000 or -1 for infinite supply
         utilityValue: '1', // The equivalent value of 1 token in USD
@@ -90,7 +86,7 @@ export default {
         votingAlignmentPercent: 80, // 80% of yes votes
         votingQuorumPercent: 20, // 20% of people needs to vote
         utilityTokenMultiplier: 1,
-        voiceTokenMultiplier: 2,
+        voiceTokenMultiplier: 1,
         treasuryTokenMultiplier: 1,
         logo: '',
         primaryColor: '#242f5d',
@@ -166,11 +162,11 @@ export default {
             ...this.form,
             onboarder_account: this.account,
             parentId: this.$route.query.parentId,
-            skipTokens: 1
+            skipTokens: true
           },
           isDraft
         })
-        this.$router.push({ path: `/${this.form.name}/explore` })
+        this.$router.push({ path: `/${this.form.name}/` })
       } catch (error) {
         this.error = error
 
@@ -225,9 +221,10 @@ export default {
                   .p-onboarding {{ $t('login.register-user-with-captcha-view.itContainsThe') }}
                   .p-onboarding.bold {{ $t('login.register-user-with-captcha-view.onceTheAccount') }}
                   .p-onboarding {{ $t('login.register-user-with-captcha-view.youAreSet') }}
-            .row.justify-center(:style="{ 'margin-bottom': '60px' }")
+            .row.justify-center.items-center(:style="{ 'margin-bottom': '60px' }")
               .qr-code-wrapper
-                qrcode-vue(:value="inviteLink" size="150")
+                qrcode-vue(:value="inviteLink" size="125")
+              img.q-ml-xl(:style="{ 'width': '150px', 'height': '150px' }" src="~/assets/images/onboarding-hypha-logo.png")
         #form3.flex.column.justify-center(v-show="step === this.steps.finish.name")
           template
             div.full-height.column.justify-center
@@ -238,10 +235,10 @@ export default {
               .text-bold.text-black.q-mt-md {{ $t('login.register-user-with-captcha-view.signYourFirstTransaction') }}
               p.text-normal.q-mt-xs {{ $t('login.register-user-with-captcha-view.didYouCreate') }}
               .row.flex.justify-center.items-center.q-mt-xl
-                img(:style="{ 'width': 'fit-content' }" src="~/assets/images/onboarding-mobile.png")
-                img.q-ml-md(:style="{ 'width': 'fit-content', 'height': 'fit-content' }" src="~/assets/images/onboarding-code.png")
-        #form4.flex.column.justify-between.no-wrap(v-show="step === this.steps.create.name")
-          div.full-height.column.justify-center
+                img(:style="{ 'width': 'fit-content' }" src="~/assets/images/onboarding-mobile.svg")
+                img.q-ml-md(:style="{ 'width': 'fit-content', 'height': 'fit-content' }" src="~/assets/images/onboarding-code.svg")
+        #form4.flex.column.justify-between.no-wrap.full-height(v-show="step === this.steps.create.name")
+          div.full-height.column.justify-end
             .font-lato.text-heading.text-weight-bolder(:style="{ 'font-size': '34px' }") {{ $t('login.register-user-with-captcha-view.createYourDao') }}
             .q-mt-md {{ $t('login.register-user-with-captcha-view.goAheadAndAddYour') }}
           div

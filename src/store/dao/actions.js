@@ -69,8 +69,8 @@ export const createDAO = async function (context, { data, isDraft }) {
   }]
   if (data.skipTokens) {
     actions[0].data.config[0].push(
-      { label: 'skip_peg_token_create', value: ['int64', data?.skipTokens] },
-      { label: 'skip_reward_token_create', value: ['int64', data?.skipTokens] }
+      { label: 'skip_peg_token_create', value: ['int64', 1] },
+      { label: 'skip_reward_token_create', value: ['int64', 1] }
     )
   } else {
     actions[0].data.config[0].push(

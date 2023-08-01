@@ -1793,7 +1793,8 @@
     "configurationSettings": "Configuration settings",
     "ecosystemDashboard": "Ecosystem Dashboard",
     "checkout": "Checkout",
-    "upvoteElection": "Upvote Election"
+    "upvoteElection": "Upvote Election",
+    "createYourDao": "Create Your DAO"
   },
   "proposal-creation": {
     "creation-process": "Creation process",
