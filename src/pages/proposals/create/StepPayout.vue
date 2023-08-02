@@ -431,6 +431,8 @@ widget(:class="{ 'disable-step': currentStepName !== 'step-payout' && $q.screen.
       div(:class="{ 'col-1':$q.screen.gt.md }")
         q-toggle(v-model="toggle" size="md")
       .col.q-mt-xxs {{ $t('pages.proposals.create.steppayout.compensationForOnePeriod') }}
+      q-tooltip(v-if="toggle") {{ $t('pages.proposals.create.steppayout.1MoonPeriod') }}
+      q-tooltip(v-else) {{ $t('pages.proposals.create.steppayout.1MoonCycle') }}
   .row.q-py-md
     // TODO: Salary preview
     // Multiplier

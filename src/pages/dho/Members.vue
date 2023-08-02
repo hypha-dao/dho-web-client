@@ -276,8 +276,8 @@ export default {
 
     banner () {
       return {
-        title: this.daoSettings.membersTitle,
-        description: this.daoSettings.membersParagraph,
+        title: this.daoSettings.membersTitle || this.$t('pages.dho.members.discoverATapestry'),
+        description: this.daoSettings.membersParagraph || this.$t('pages.dho.members.wereBuildingAThriving'),
         background: ipfsy(this.daoSettings.membersBackgroundImage),
         color: this.daoSettings.primaryColor,
         pattern: this.daoSettings.pattern,

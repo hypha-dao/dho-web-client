@@ -123,7 +123,7 @@ export default {
       return !isURL(this.url, { require_protocol: true })
     },
     compensationLabel () {
-      return !this.toggle ? 'Compensation for one cycle' : 'Compensation for one period'
+      return !this.toggle ? this.$t('proposals.proposal-view.compensationForOneCycle') : this.$t('proposals.proposal-view.compensationForOnePeriod')
     },
     tokensByCycle () {
       return this.tokens.map(token => ({ ...token, value: (token.value || 0) / this.periodsOnCycle }))
@@ -207,6 +207,7 @@ widget.proposal-view.q-mb-sm
         proposal-card-chips(:proposal="proposal" :type="type" :state="status" :showVotingState="false" :compensation="compensation" :salary="salary" v-if="!ownAssignment" :commit="commit && commit.value")
     .col.justify-end.flex.items-center(v-if="periodCount")
       .text-grey.text-italic(:style="{ 'font-size': '12px' }") {{ `Starting ${start} | Duration: ${periodCount} period${periodCount > 1 ? 's' : ''}` }}
+      q-tooltip(anchor="center end") {{ $t('proposals.proposal-view.1MoonPeriod') }}
   .text-grey.text-italic.q-mt-sm(:style="{ 'font-size': '12px' }") {{ $t('proposals.proposal-view.title') }}
   .row.q-mb-sm
     .column
@@ -267,11 +268,14 @@ widget.proposal-view.q-mb-sm
     .q-my-sm(:class="{ 'row':$q.screen.gt.md }")
       .col.bg-internal-bg(:style="{ 'border-radius': '25px' }")
         .row.q-ml-md.q-py-md.text-bold(v-if="withToggle") {{ compensationLabel }}
+          q-tooltip(v-if="toggle" anchor="center start") {{ $t('proposals.proposal-view.1MoonPeriod') }}
+          q-tooltip(v-else anchor="center start") {{ $t('proposals.proposal-view.1MoonCycle') }}
         payout-amounts(:daoLogo="daoSettings.logo" :tokens="!toggle ? tokens : tokensByCycle" :class="{ 'q-pa-md': !withToggle }")
         .row.items-center.q-py-md.q-ml-xs(v-if="withToggle")
           .div(:class="{ 'col-1':$q.screen.gt.md }")
             q-toggle(v-model="toggle" size="md")
           .col.q-mt-xxs {{ $t('proposals.proposal-view.showCompensationFor') }}
+            q-tooltip(anchor="center start") {{ $t('proposals.proposal-view.1MoonPeriod') }}
       .col-3.bg-internal-bg.q-py-md.q-pa-md(:style="{ 'border-radius': '25px' }" :class="{ 'q-ml-xxs':$q.screen.gt.md, 'q-mt-md':$q.screen.lt.md || $q.screen.md }" v-if="type === PROPOSAL_TYPE.PAYOUT && deferred && deferred.value >= 0")
         .row.q-mb-sm
           .col.text-bold {{ $t('proposals.proposal-view.deferredAmount1') }}
