@@ -4,6 +4,7 @@ import { validation } from '~/mixins/validation'
 import QrcodeVue from 'qrcode.vue'
 import ipfsy from '~/utils/ipfsy'
 import { Notify } from 'quasar'
+import slugify from '~/utils/slugify'
 
 export default {
   name: 'register-user-with-captcha-view',
@@ -110,6 +111,7 @@ export default {
     ...mapActions('dao', ['createDAO']),
     ...mapActions('accounts', ['loginWallet', 'loginInApp']),
     ipfsy,
+    slugify,
     getRandomEOSName () {
       function choices (population, k) {
         const out = []
@@ -156,18 +158,19 @@ export default {
     },
     async onSubmit () {
       const isDraft = !!this.$route.query.parentId
-
+      const daoUrl = this.slugify(this.form.title, '-')
       try {
         await this.createDAO({
           data: {
             ...this.form,
             onboarder_account: this.account,
             parentId: this.$route.query.parentId,
-            skipTokens: true
+            skipTokens: true,
+            daoUrl: daoUrl
           },
           isDraft
         })
-        this.$router.push({ path: `/${this.form.name}/` })
+        this.$router.push({ path: `/${daoUrl}/` })
       } catch (error) {
         this.error = error
 

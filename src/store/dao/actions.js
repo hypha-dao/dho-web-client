@@ -67,6 +67,11 @@ export const createDAO = async function (context, { data, isDraft }) {
       ]
     }
   }]
+  if (data?.daoUrl) {
+    actions[0].data.config[0].push(
+      { label: 'dao_url', value: ['string', data?.daoUrl] }
+    )
+  }
   if (data.skipTokens) {
     actions[0].data.config[0].push(
       { label: 'skip_peg_token_create', value: ['int64', 1] },
