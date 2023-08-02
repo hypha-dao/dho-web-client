@@ -11,6 +11,7 @@ export default {
   components: {
     Captcha: () => import('~/components/form/captcha.vue'),
     InputFileIpfs: () => import('~/components/ipfs/input-file-ipfs.vue'),
+    LoadingSpinner: () => import('~/components/common/loading-spinner.vue'),
     QrcodeVue
   },
   props: {
@@ -244,9 +245,10 @@ export default {
           div
             div.full-width.justify-between.q-mt-xl(:class="{ 'col': !$q.screen.gt.md, 'row': $q.screen.gt.md }")
               .col(:class="{ 'full-width q-pt-md': !$q.screen.gt.md }")
-                .row.justify-center.items-center
-                  .col-auto
-                    q-avatar.flex.justify-center.items-center(size="40px" color="primary" text-color="white")
+                .row.justify-center.items-end
+                  .col-auto.q-mb-xxxs
+                    loading-spinner.q-mb-xxs(v-if="$refs.ipfsInput?.isUploading" color="primary" size="2em")
+                    q-avatar.flex.justify-center.items-center(v-else size="40px" color="primary" text-color="white")
                       q-btn(v-if="!isImageSelected" @click="$refs.ipfsInput.chooseFile()" icon="fa fa-image" color="white" flat round size="12px" unelevated)
                       img(v-if="isImageSelected" :src="$refs.ipfsInput.imageURI")
                   .col.q-ml-md
