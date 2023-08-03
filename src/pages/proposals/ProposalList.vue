@@ -399,6 +399,7 @@ export default {
           user: this.account
         }
       },
+      fetchPolicy: 'no-cache',
       subscribeToMore: {
         document: require('~/query/proposals/dao-proposals-active-vote-subs.gql'),
         variables () {
@@ -433,6 +434,7 @@ export default {
           user: this.account
         }
       },
+      fetchPolicy: 'no-cache',
 
       subscribeToMore: {
         document: gql`subscription stageProposals($docId: String!, $first: Int, $offset: Int) { ${STAGED_PROPOSALS_QUERY} }`,
@@ -465,11 +467,7 @@ export default {
           archived: data.queryDao[0].passedpropsAggregate.count + data.queryDao[0].failedpropsAggregate.count
         }
       },
-      variables () {
-        return {
-          docId: this.selectedDao.docId
-        }
-      },
+      variables () { return { docId: this.selectedDao.docId } },
       skip () { return !this.selectedDao?.docId },
       fetchPolicy: 'no-cache'
     }

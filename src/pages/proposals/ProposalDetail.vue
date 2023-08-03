@@ -938,6 +938,8 @@ export default {
       update: data => data.getDocument,
       skip () { return !this.docId },
       variables () { return { docId: this.docId } },
+      fetchPolicy: 'no-cache',
+
       subscribeToMore: {
         document: gql`subscription proposalDetail($docId: String!) { ${PROPOSAL_QUERY} }`,
         skip () { return !this.docId },
@@ -1295,9 +1297,6 @@ export default {
       this.$store.commit('proposals/setTitle', this.proposal?.details_title_s)
       this.$store.commit('proposals/setDescription', this.proposal?.details_description_s)
 
-      // console.table(
-      //   JSON.parse(JSON.stringify(this?.proposal))
-      // )
       this.$store.commit('proposals/setUsdAmount', parseFloat(this?.proposal?.details_usdAmount_a))
       this.$store.commit('proposals/setCommitment', parseFloat(this?.proposal?.details_timeShareX100_i))
       this.$store.commit('proposals/setDeferred', parseFloat(this?.proposal?.details_deferredPercX100_i))

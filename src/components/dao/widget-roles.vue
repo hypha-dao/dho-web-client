@@ -87,6 +87,7 @@ export default {
       update: data => data.queryRole,
       skip () { return !this.selectedDao?.docId },
       variables () { return { daoId: this.selectedDao.docId } },
+      pollInterval: 1000, // TODO: Just for demo remove after
       subscribeToMore: {
         document: gql`subscription ROLES($daoId: Int64!) { ${ROLES_QUERY} }`,
         skip () { return !this.selectedDao?.docId },
@@ -109,6 +110,7 @@ export default {
       update: data => data.querySalaryband,
       skip () { return !this.selectedDao?.docId },
       variables () { return { daoId: this.selectedDao.docId } },
+      pollInterval: 1000, // TODO: Just for demo remove after
       subscribeToMore: {
         document: gql`subscription TIERS($daoId: Int64!) { ${TIERS_QUERY} }`,
         skip () { return !this.selectedDao?.docId },

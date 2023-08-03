@@ -5,23 +5,23 @@ import gql from 'graphql-tag'
 import { timeago } from '~/utils/TimeUtils'
 import { parsedNotification } from '~/utils/notifications-utils'
 
-const NOTIFICATIONS_QUERY = `
-  queryNotification {
-    event {
-      eventType
-      name
-    }
-    user {
-      email
-      eosAccountName
-      name
-    }
-    id
-    content
-    read
-    time
-  }
-`
+// const NOTIFICATIONS_QUERY = `
+//   queryNotification(order: { desc: time }) {
+//     event {
+//       eventType
+//       name
+//     }
+//     user {
+//       email
+//       eosAccountName
+//       name
+//     }
+//     id
+//     content
+//     read
+//     time
+//   }
+// `
 
 export default {
   name: 'multi-dho-layout',
@@ -62,35 +62,36 @@ export default {
       skip () {
         return !this.account
       }
-    },
-    notifications: {
-      query: gql`query notifications { ${NOTIFICATIONS_QUERY} }`,
-      update: data => data.queryNotification,
-      variables () { return { account: this.account } },
-      skip () { return !this.account },
-      // subscribeToMore: {
-      //   query: gql`subscription notifications { ${NOTIFICATIONS_QUERY} }`,
-      //   skip () { return !this.account },
-      //   variables () { return { account: this.account } },
-      //   updateQuery: (previousResult, { subscriptionData }) => {
-      //     if (!subscriptionData.data) {
-      //       return previousResult
-      //     }
-      //     if (!previousResult) {
-      //       return undefined
-      //     }
-      //     return subscriptionData.data
-      //   }
-      // },
-      fetchPolicy: 'network',
-      pollInterval: 1000
     }
+    // notifications: {
+    //   query: gql`query notifications { ${NOTIFICATIONS_QUERY} }`,
+    //   update: data => data.queryNotification,
+    //   variables () { return { account: this.account } },
+    //   skip () { return !this.account },
+    //   // subscribeToMore: {
+    //   //   query: gql`subscription notifications { ${NOTIFICATIONS_QUERY} }`,
+    //   //   skip () { return !this.account },
+    //   //   variables () { return { account: this.account } },
+    //   //   updateQuery: (previousResult, { subscriptionData }) => {
+    //   //     if (!subscriptionData.data) {
+    //   //       return previousResult
+    //   //     }
+    //   //     if (!previousResult) {
+    //   //       return undefined
+    //   //     }
+    //   //     return subscriptionData.data
+    //   //   }
+    //   // },
+    //   fetchPolicy: 'network',
+    //   pollInterval: 1000
+    // }
   },
 
   data () {
     return {
       timeago,
       parsedNotification,
+      notifications: [],
       profile: {
         username: null,
         avatar: null,
@@ -98,7 +99,7 @@ export default {
       },
       searchInput: '',
       left: true,
-      right: true,
+      right: false,
       title: undefined,
       showMinimizedMenu: false,
       isActivated: false,
@@ -450,7 +451,7 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
                   .row.justify-end.items-center(v-if="$q.screen.gt.md")
                     .notifications-icon
                       .notifications-icon__counter(v-if="countObjectsWithKeyValue(notifications, 'read', false) > 0") {{ countObjectsWithKeyValue(notifications, 'read', false) }}
-                      q-btn.q-mr-xs(@click="languageSettings = false, right = false, showNotificationsBar = true" unelevated rounded padding="12px" icon="far fa-bell"  size="sm" :color="'white'" :text-color="'primary'")
+                      //- q-btn.q-mr-xs(@click="languageSettings = false, right = false, showNotificationsBar = true" unelevated rounded padding="12px" icon="far fa-bell"  size="sm" :color="'white'" :text-color="'primary'")
                     router-link(v-if="selectedDaoPlan.isEcosystem" :to="{ name: 'ecosystem' }")
                       q-btn.q-mr-xs(unelevated rounded padding="12px" icon="fas fa-share-alt" size="sm" :color="isActiveRoute('ecosystem') ? 'primary' : 'white'" :text-color="isActiveRoute('ecosystem') ? 'white' : 'primary'")
                     router-link(:to="{ name: 'configuration' }")
@@ -487,7 +488,7 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
               keep-alive(include="page-members,page-proposals,page-explore")
                 router-view
           .col.margin-min(v-if="$q.screen.gt.sm")
-  q-drawer.full-width(v-model="right" side="right" :width="$q.screen.gt.lg ? 370 : ($q.screen.md ? 400 : ($q.screen.gt.sm ?  140 : $q.screen.width))" v-if="$q.screen.gt.lg || account || !$q.screen.gt.sm" persistent="persistent" :show-if-above="false")
+  q-drawer.full-width(v-model="right" side="right" :width="$q.screen.gt.lg ? 370 : ($q.screen.md ? 400 : ($q.screen.gt.sm ?  140 : $q.screen.width))" v-if="$q.screen.gt.lg || account || !$q.screen.gt.sm" persistent)
   q-drawer(v-model="languageSettings" overlay side="right" :width="$q.screen.gt.lg ? 370 : ($q.screen.md || $q.screen.gt.sm ? 400 : $q.screen.width)").full-width
     div.q-pa-xl.full-height.position-relative
       .row
@@ -513,7 +514,7 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
       //-       .h-b2.text-bold(:style="{ 'font-size': '14px' }") Translation
       //-     q-toggle(v-model="autoTranslate" color="secondary" keep-color)
       //-   .h-b2 Automatically translate proposals and Projects to your default language
-  q-drawer(v-model="right" side="right" :width="$q.screen.gt.lg ? 370 : ($q.screen.md ? 400 : ($q.screen.gt.sm ?  140 : $q.screen.width))" v-if="$q.screen.gt.lg || account || !$q.screen.gt.sm" persistent :show-if-above="false").full-width
+  q-drawer(v-model="right" side="right" :width="$q.screen.gt.lg ? 370 : ($q.screen.md ? 400 : ($q.screen.gt.sm ?  140 : $q.screen.width))" v-if="$q.screen.gt.lg || account || !$q.screen.gt.sm" persistent).full-width
     .row.full-width.full-height.flex.items-center.justify-center(v-if="loadingAccount")
       loading-spinner(size="120px")
     profile-sidebar(v-if="account" :profile="profile" :announcement="announcement" :dhoTitle="dhoTitle" :daoName="daoName" @close="right = false" :isMember="isMember" :isAuthenticated="isAuthenticated" :compact="!$q.screen.gt.lg && $q.screen.gt.md" :isMobile="!$q.screen.gt.md")
@@ -529,7 +530,7 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
           .h-h3.items-center.flex {{ $t('notifications.notifications')}}
           q-btn(color="internal-bg" text-color="primary" rounded unelevated size="sm" padding="12px" icon="fas fa-times" :style="{ 'height': '40px' }" @click="showNotificationsBar = false")
         .q-mt-md.full-width(:style="{ 'position': 'relative' }")
-          .col(v-for="notification, index in notification" :key="notification.id")
+          .col(v-for="notification, index in notifications" :key="notification.id")
             .row.q-py-md.cursor-pointer(@click="goToProposal(notification)" v-on:mouseover="readNotification(notification.id)" :style="{ 'border-top': '1px solid #CBCDD1' }" :class="{ 'last-item': index === notifications?.length - 1, 'read-notify': notification.read === true }")
               .col-2.items-center.flex
                 div.flex.items-center.justify-center(:style="{ 'width': '40px', 'height': '40px', 'border-radius': '50%', 'background': '#F2F1F3'}")
