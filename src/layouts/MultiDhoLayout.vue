@@ -5,23 +5,24 @@ import gql from 'graphql-tag'
 import { timeago } from '~/utils/TimeUtils'
 import { parsedNotification } from '~/utils/notifications-utils'
 
-// const NOTIFICATIONS_QUERY = `
-//   queryNotification(order: { desc: time }) {
-//     event {
-//       eventType
-//       name
-//     }
-//     user {
-//       email
-//       eosAccountName
-//       name
-//     }
-//     id
-//     content
-//     read
-//     time
-//   }
-// `
+const NOTIFICATIONS_QUERY = `
+  queryNotification(order: { desc: time }) {
+    event {
+      eventType
+      name
+    }
+    user {
+      email
+      eosAccountName
+      name
+    }
+    id
+    content
+    read
+    time
+    archived
+  }
+`
 
 export default {
   name: 'multi-dho-layout',
@@ -62,29 +63,29 @@ export default {
       skip () {
         return !this.account
       }
+    },
+    notifications: {
+      query: gql`query notifications { ${NOTIFICATIONS_QUERY} }`,
+      update: data => data.queryNotification.filter(notification => !notification.archived),
+      variables () { return { account: this.account } },
+      skip () { return !this.account },
+      // subscribeToMore: {
+      //   query: gql`subscription notifications { ${NOTIFICATIONS_QUERY} }`,
+      //   skip () { return !this.account },
+      //   variables () { return { account: this.account } },
+      //   updateQuery: (previousResult, { subscriptionData }) => {
+      //     if (!subscriptionData.data) {
+      //       return previousResult
+      //     }
+      //     if (!previousResult) {
+      //       return undefined
+      //     }
+      //     return subscriptionData.data
+      //   }
+      // },
+      fetchPolicy: 'network',
+      pollInterval: 1000
     }
-    // notifications: {
-    //   query: gql`query notifications { ${NOTIFICATIONS_QUERY} }`,
-    //   update: data => data.queryNotification,
-    //   variables () { return { account: this.account } },
-    //   skip () { return !this.account },
-    //   // subscribeToMore: {
-    //   //   query: gql`subscription notifications { ${NOTIFICATIONS_QUERY} }`,
-    //   //   skip () { return !this.account },
-    //   //   variables () { return { account: this.account } },
-    //   //   updateQuery: (previousResult, { subscriptionData }) => {
-    //   //     if (!subscriptionData.data) {
-    //   //       return previousResult
-    //   //     }
-    //   //     if (!previousResult) {
-    //   //       return undefined
-    //   //     }
-    //   //     return subscriptionData.data
-    //   //   }
-    //   // },
-    //   fetchPolicy: 'network',
-    //   pollInterval: 1000
-    // }
   },
 
   data () {
@@ -393,7 +394,21 @@ export default {
       this.$apollo.queries.notifications.refetch()
     },
     clearAllNotifications () {
-      // this.notifications = []
+      this.notifications.forEach(notification => {
+        this.$apollo.mutate({
+          mutation: gql`mutation($id: [ID!]) {
+            updateNotification(input: {set: {archived: true}, filter: {id: $id}}) {
+              notification {
+                archived
+              }
+            }
+          }`,
+          variables: {
+            id: notification.id
+          }
+        })
+      })
+      this.$apollo.queries.notifications.refetch()
     },
     goToProposal (notification) {
       const proposal = JSON.parse(notification.content).proposalId
@@ -451,7 +466,7 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
                   .row.justify-end.items-center(v-if="$q.screen.gt.md")
                     .notifications-icon
                       .notifications-icon__counter(v-if="countObjectsWithKeyValue(notifications, 'read', false) > 0") {{ countObjectsWithKeyValue(notifications, 'read', false) }}
-                      //- q-btn.q-mr-xs(@click="languageSettings = false, right = false, showNotificationsBar = true" unelevated rounded padding="12px" icon="far fa-bell"  size="sm" :color="'white'" :text-color="'primary'")
+                      q-btn.q-mr-xs(@click="languageSettings = false, right = false, showNotificationsBar = true" unelevated rounded padding="12px" icon="far fa-bell"  size="sm" :color="'white'" :text-color="'primary'")
                     router-link(v-if="selectedDaoPlan.isEcosystem" :to="{ name: 'ecosystem' }")
                       q-btn.q-mr-xs(unelevated rounded padding="12px" icon="fas fa-share-alt" size="sm" :color="isActiveRoute('ecosystem') ? 'primary' : 'white'" :text-color="isActiveRoute('ecosystem') ? 'white' : 'primary'")
                     router-link(:to="{ name: 'configuration' }")
@@ -540,7 +555,7 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
                 .h-b2 {{ parsedNotification(notification).description }}
               .col-3.flex.items-center
                 .h-b2.text-italic {{ parsedNotification(notification).createdDate }}
-          .row.bg-white.full-width(v-if="notification?.length" :style="{ 'position': 'fixed', 'bottom': '0', 'padding-right': '60px', 'padding-bottom': '20px', 'padding-top': '20px' }")
+          .row.bg-white.full-width(v-if="notifications?.length" :style="{ 'position': 'fixed', 'bottom': '0', 'padding-right': '60px', 'padding-bottom': '20px', 'padding-top': '20px' }")
             q-btn.full-width.q-px-xl(@click="clearAllNotifications()" color="primary" :label="$t('notifications.clearAll')" no-caps outline rounded unelevated)
 </template>
 <style lang="stylus" scoped>
