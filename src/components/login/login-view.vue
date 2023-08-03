@@ -46,7 +46,12 @@ export default {
   methods: {
     ...mapActions('accounts', ['loginWallet', 'loginInApp']),
     async onLoginWallet (idx) {
-      await this.loginWallet({ idx, returnUrl: this.isOnboarding || this.$router.currentRoute.name === 'create-your-dao' ? 'create' : this.$route.query.returnUrl || 'home' })
+      if (this.$router.currentRoute.name === 'create-your-dao') {
+        await this.loginWallet({ idx, returnUrl: 'create-your-dao' })
+        this.$emit('transitionToRegister')
+      } else {
+        await this.loginWallet({ idx, returnUrl: this.isOnboarding ? 'create' : this.$route.query.returnUrl || 'home' })
+      }
     },
     async onLoginInApp () {
       this.errorPrivateKey = null

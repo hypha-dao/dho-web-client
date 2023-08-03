@@ -98,10 +98,14 @@ export default {
     }
   },
   async mounted() {
-    this.$emit('stepChanged', 'captcha')
+    if (this.isAuthenticated) {
+      this.step = this.steps.create.name
+    } else {
+      this.$emit('stepChanged', 'captcha')
+    }
   },
   computed: {
-    ...mapGetters('accounts', ['account']),
+    ...mapGetters('accounts', ['account', 'isAuthenticated']),
     isImageSelected: {
       cache: false,
       get () { return this.$refs.ipfsInput?.imageURI }

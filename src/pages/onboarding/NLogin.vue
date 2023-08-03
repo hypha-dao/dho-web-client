@@ -31,6 +31,7 @@ export default {
   },
   computed: {
     ...mapGetters('dao', ['selectedDao', 'daoSettings']),
+    ...mapGetters('accounts', ['isAuthenticated']),
     animationSwirl () {
       switch (this.step) {
         case 'welcome':
@@ -136,7 +137,7 @@ export default {
           transition(v-if="step === steps.welcome" enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
             welcome-view.full-width(@onLoginClick="step = steps.login" @onRegisterClick="step = steps.register" v-bind="{ isOnboarding }")
           transition(v-else-if="step === steps.login" enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
-            login-view(:dhoName="dhoname" :pk="stepPK" @onLoginWithPK=" v => stepPK = true" @back="step = steps.welcome" v-bind="{ isOnboarding }")
+            login-view(:dhoName="dhoname" :pk="stepPK" @transitionToRegister="step = steps.register" @onLoginWithPK=" v => stepPK = true" @back="step = steps.welcome" v-bind="{ isOnboarding }")
           transition(v-else-if="step === steps.register" enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
             register-user-with-captcha-view(@stepChanged="v => registerStep = v" @onFinish="step = steps.login" @back="step = steps.welcome" v-bind="{ isOnboarding }")
       .col.full-height.card-container.relative-position.gt-xs

@@ -34,7 +34,7 @@ const routes = [
         name: 'create-your-dao',
         meta: {
           title: I18n.t('routes.createYourDao'),
-          hideForAuth: true
+          hideForAuth: false
         },
         component: () => import('pages/onboarding/NLogin.vue')
       },
