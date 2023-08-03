@@ -237,8 +237,8 @@ export default {
 
     banner () {
       return {
-        title: this.daoSettings.organisationTitle,
-        description: this.daoSettings.organisationParagraph,
+        title: this.daoSettings.organisationTitle || this.$t('pages.dho.organization.createMeaningfulImpact'),
+        description: this.daoSettings.organisationParagraph || this.$t('pages.dho.organization.allOfHypha'),
         background: ipfsy(this.daoSettings.organisationBackgroundImage),
         color: this.daoSettings.primaryColor,
         pattern: this.daoSettings.pattern,

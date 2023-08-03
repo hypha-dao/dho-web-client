@@ -1066,7 +1066,11 @@
       "description": "Descrição",
       "attachedDocuments": "Documentos anexados",
       "createdBy": "Criado por:",
-      "seeProfile": "ver perfil"
+      "seeProfile": "ver perfil",
+      "compensationForOneCycle": "Compensação por um ciclo",
+      "compensationForOnePeriod": "Compensação por um período",
+      "1MoonCycle": "1 ciclo lunar é de cerca de 30 dias",
+      "1MoonPeriod": "1 período lunar é de cerca de 7 dias"
     },
     "quest-progression": {
       "questProgression": "Progressão da missão"
@@ -1272,7 +1276,9 @@
         "assignments": "atribuições",
         "badges": "Distintivos",
         "members": "Membros",
-        "proposals": "Propostas"
+        "proposals": "Propostas",
+        "welcomeToHyphaEvolution": "Bem-vindo à evolução Hypha",
+        "atHyphaWere": "Na Hypha, estamos cocriando soluções para construir organizações impactantes. Desenvolvemos sistemas radicais para arquitetar a próxima geração de organizações descentralizadas. Deixe-nos guiá-lo para reformular a forma como você coordena equipes, estimula a motivação, gerencia finanças e promove uma comunicação eficaz em direção a uma visão compartilhada. Transforme seus sonhos em realidade com Hypha!"
       },
       "members": {
         "becomeAMember": "Torne-se um membro",
@@ -1290,7 +1296,9 @@
         "coreTeam": "Equipe principal",
         "communityMembers": "Membros da comunidade",
         "coreAndCommunityMembers": "Membros principais e da comunidade",
-        "members": "Membros"
+        "members": "Membros",
+        "discoverATapestry": "Descubra uma tapeçaria de membros Hypha",
+        "wereBuildingAThriving": "Estamos construindo uma comunidade próspera de membros internacionais. Cada um tem suas próprias personalidades, talentos e pontos fortes, engajados em uma missão singular de cocriar valor. Mergulhe no que cada membro está apaixonadamente envolvido, quais distintivos eles possuem e para quais DAOs eles estão contribuindo. Encontre novos amigos, potenciais colaboradores e empreendimentos inovadores."
       },
       "organization": {
         "documentation": "Documentação",
@@ -1311,7 +1319,9 @@
         "activeBadges2": "Emblemas ativos",
         "daoCircles2": "Círculos DAO",
         "archetypes2": "arquétipos",
-        "badges2": "Distintivos"
+        "badges2": "Distintivos",
+        "createMeaningfulImpact": "Crie um impacto significativo com Hypha",
+        "allOfHypha": "Todas as soluções transformadoras da Hypha esperam por você! Somos o seu guia em todos os aspectos de uma organização descentralizada, desde a configuração até a economia de tokens e os sistemas de votação. Explore como você pode fazer a diferença com Hypha."
       },
       "organizationalassets": {
         "noBadges": "Sem emblemas",
@@ -1501,7 +1511,8 @@
           "youMustSelect": "Você deve selecionar menos de {1} períodos (atualmente você selecionou {2} períodos)",
           "theStartDate": "A data de início não deve ser posterior à data de término",
           "back": "Voltar",
-          "nextStep": "Próxima Etapa"
+          "nextStep": "Próxima Etapa",
+          "1MoonPeriod": "1 período lunar é de cerca de 7 dias"
         },
         "optionsquests": {
           "chooseAQuestType": "Escolha um tipo de missão\n      ",
@@ -1542,7 +1553,9 @@
           "compensationForOneCycle": "Compensação por um ciclo",
           "customCompensation": "Compensação personalizada",
           "back": "Voltar",
-          "nextStep": "Próxima Etapa"
+          "nextStep": "Próxima Etapa",
+          "1MoonCycle": "1 ciclo lunar é de cerca de 30 dias",
+          "1MoonPeriod": "1 período lunar é de cerca de 7 dias"
         }
       },
       "proposallist": {
@@ -1564,7 +1577,9 @@
         "isTheMinimumRequiredPercentageOfTotal": "É a porcentagem mínima exigida do total de membros que participam da votação para que ela seja aprovada. ",
         "searchProposals": "Propostas de pesquisa",
         "proposalTypes": "Tipos de proposta",
-        "sortByLastAdded": "Classificar por último adicionado"
+        "sortByLastAdded": "Classificar por último adicionado",
+        "yourVoteIsTheVoice": "Seu voto é a voz da mudança",
+        "atHyphaTheFuture": "Na Hypha, o futuro é construído sobre uma tomada de decisão descentralizada justa, justa e aberta. Em nossa nova forma de governança, todos os votos acumulam tokens de voz que aumentam o poder de voto de alguém. Somos pioneiros em um sistema de votação justo e igualitário com método de votação 80/20 e período de votação de 7 dias. Cada voz importa, faça a sua ser ouvida!"
       },
       "proposalhistory": {
         "noProposals": "Sem Propostas",
