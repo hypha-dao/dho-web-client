@@ -37,10 +37,20 @@ export default {
 
     tiers: {
       query: gql`query TIERS($daoId: Int64!) { ${TIERS_QUERY} }`,
-      update: data => data?.querySalaryband?.map(level => ({
-        label: level?.name,
-        value: { ...level }
-      })),
+      update: data => {
+        if (data?.querySalaryband.length > 1) {
+          const filteredTiers = data?.querySalaryband?.filter(tier => tier.name !== 'Founders')
+          return filteredTiers.map(level => ({
+            label: level?.name,
+            value: { ...level }
+          }))
+        } else {
+          return data?.querySalaryband?.map(level => ({
+            label: level?.name,
+            value: { ...level }
+          }))
+        }
+      },
       skip () { return !this.selectedDao?.docId },
       variables () { return { daoId: this.selectedDao.docId } },
       subscribeToMore: {
@@ -62,10 +72,20 @@ export default {
 
     archetypes: {
       query: gql`query ROLES($daoId: Int64!) { ${ROLES_QUERY} }`,
-      update: data => data?.queryRole?.map(archetype => ({
-        label: archetype?.name,
-        value: { ...archetype }
-      })),
+      update: data => {
+        if (data?.queryRole.length > 1) {
+          const filteredArchetypes = data?.queryRole?.filter(archetype => archetype.name !== 'Founders')
+          return filteredArchetypes.map(archetype => ({
+            label: archetype?.name,
+            value: { ...archetype }
+          }))
+        } else {
+          return data?.queryRole?.map(archetype => ({
+            label: archetype?.name,
+            value: { ...archetype }
+          }))
+        }
+      },
       skip () { return !this.selectedDao?.docId },
       variables () { return { daoId: this.selectedDao.docId } },
       subscribeToMore: {
