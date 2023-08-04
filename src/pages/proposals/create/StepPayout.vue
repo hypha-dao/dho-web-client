@@ -132,6 +132,13 @@ export default {
       return false
     },
 
+    isFounderRole: {
+      get () {
+        return this.$store.state.proposals.draft.role.label === 'Founders' &&
+          this.$store.state.proposals.draft.tier.label === 'Founders'
+      }
+    },
+
     custom: {
       get () {
         return this.$store.state.proposals.draft.custom
@@ -408,22 +415,22 @@ widget(:class="{ 'disable-step': currentStepName !== 'step-payout' && $q.screen.
       label.h-label {{ `${fields.reward.label} (${$store.state.dao.settings.rewardToken})` }}
       .row.full-width.items-center.q-mt-xs
         token-logo.q-mr-xs(size="40px" type="utility" :daoLogo="daoSettings.logo")
-        q-input.rounded-border.col(dense :readonly="!custom" outlined v-model="utilityToken" rounded v-if="isAssignment")
+        q-input.rounded-border.col(dense :readonly="!custom" outlined v-model="utilityToken" rounded v-if="isAssignment && !isFounderRole")
         q-input.rounded-border.col(dense :readonly="!custom" outlined v-model="reward" rounded v-else)
     .col-4(:class="{ 'q-mt-md':$q.screen.lt.md || $q.screen.md }" v-if="fields.peg")
       label.h-label {{ `${fields.peg.label} (${$store.state.dao.settings.pegToken})` }}
       .row.full-width.items-center.q-mt-xs
         token-logo.q-mr-xs(size="40px" type="cash" :daoLogo="daoSettings.logo")
-        q-input.rounded-border.col(dense :readonly="!custom" outlined v-model="cashToken" rounded v-if="isAssignment")
+        q-input.rounded-border.col(dense :readonly="!custom" outlined v-model="cashToken" rounded v-if="isAssignment && !isFounderRole")
         q-input.rounded-border.col(dense :readonly="!custom || !daoSettings.cashClaimsEnabled" outlined v-model="peg" rounded v-else)
     .col-4(:class="{ 'q-mt-md':$q.screen.lt.md || $q.screen.md }" v-if="fields.voice")
       label.h-label {{ `${fields.voice.label} (${$store.state.dao.settings.voiceToken})` }}
       .row.full-width.items-center.q-mt-xs
         token-logo.q-mr-xs(size="40px" type="voice" :daoLogo="daoSettings.logo")
-        q-input.rounded-border.col(dense :readonly="!custom" outlined v-model="voiceToken" rounded v-if="isAssignment")
+        q-input.rounded-border.col(dense :readonly="!custom" outlined v-model="voiceToken" rounded v-if="isAssignment && !isFounderRole")
         q-input.rounded-border.col(dense :readonly="!custom" outlined v-model="voice" rounded v-else)
   .row.items-center.q-mt-md(v-if="showToggle")
-    template(v-if="fields.custom")
+    template(v-if="fields.custom || isFounderRole")
       div(:class="{ 'col-1':$q.screen.gt.md }")
         q-toggle(v-model="custom" size="md")
       .col.q-mt-xxs {{ $t('pages.proposals.create.steppayout.customCompensation') }}
