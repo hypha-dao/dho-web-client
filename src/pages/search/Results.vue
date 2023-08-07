@@ -328,12 +328,12 @@ export default {
           enabled: false,
           filter: (p) => p.__typename === 'Assignment'
         },
-        {
-          label: this.$t('search.results.roleArchetypes'),
-          value: 'Role',
-          enabled: false,
-          filter: (p) => p.__typename === 'Role'
-        },
+        // {
+        //   label: this.$t('search.results.roleArchetypes'),
+        //   value: 'Role',
+        //   enabled: false,
+        //   filter: (p) => p.__typename === 'Role'
+        // },
         {
           label: this.$t('search.results.badgeTypes'),
           value: 'Badge',

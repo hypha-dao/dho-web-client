@@ -382,8 +382,6 @@ widget(:class="{ 'disable-step': currentStepName !== 'step-payout' && $q.screen.
           q-input.q-ma-none.q-pa-none.rounded-border(:disable="custom || (!daoSettings.cashClaimsEnabled && isContribution)" :rules="[val => val >= 0 && val <= 100]" dense outlined rounded suffix="%" v-model.number="deferred")
       .row
         .text-negative.h-b2.q-ml-xs(v-if="!isValidDeferred(deferred) && !firstPaintDeferred") {{ $t('pages.proposals.create.steppayout.defferedMustBeGreater') }}
-          | {{ this.$store.state.proposals.draft.minDeferred }}
-          | %
     .col-6(v-if="fields.annualUsdSalary")
       label.h-label {{ fields.annualUsdSalary.label }}
       .text-body2.text-grey-7.q-my-md(v-if="fields.annualUsdSalary.description") {{ fields.annualUsdSalary.description }}
@@ -404,10 +402,8 @@ widget(:class="{ 'disable-step': currentStepName !== 'step-payout' && $q.screen.
     label.h-label(v-if="$store.state.proposals.draft.annualUsdSalary.toString().includes('USD')") {{ $t('pages.proposals.create.steppayout.salaryCompensationForOneYear', { value: $store.state.proposals.draft.annualUsdSalary }) }}
     label.h-label(v-else) {{ $t('pages.proposals.create.steppayout.salaryCompensationForOneYearUsd', { value: $store.state.proposals.draft.annualUsdSalary }) }}
   .row.q-mt-xxxl(v-if="$q.screen.gt.md")
-    label.h-h4(v-if="$store.state.proposals.draft.type === PROPOSAL_TYPE.ROLE") {{ $t('pages.proposals.create.steppayout.compensation1') }}
-    label.h-h4(v-else) {{ $t('pages.proposals.create.steppayout.compensation') }}
-    .text-body2.text-grey-7.q-my-md.full-width(v-if="$store.state.proposals.draft.type === PROPOSAL_TYPE.ROLE") {{ $t('pages.proposals.create.steppayout.pleaseEnterTheUSDEquivalentAnd1') }}
-    .text-body2.text-grey-7.q-my-md.full-width(v-else) {{ $t('pages.proposals.create.steppayout.belowYouCanSeeTheActual') }}
+    label.h-h4 {{ $t('pages.proposals.create.steppayout.compensation') }}
+    .text-body2.text-grey-7.q-my-md.full-width {{ $t('pages.proposals.create.steppayout.belowYouCanSeeTheActual') }}
   .row(v-if="isAssignment")
     label.text-bold {{ toggle ? $t('pages.proposals.create.steppayout.compensationForOnePeriod') : $t('pages.proposals.create.steppayout.compensationForOneCycle') }}
   .q-col-gutter-xs.q-mt-sm(:class="{ 'q-mt-xxl':$q.screen.lt.md || $q.screen.md, 'row':$q.screen.gt.md }")

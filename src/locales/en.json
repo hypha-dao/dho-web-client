@@ -85,7 +85,7 @@
     },
     "nav": {
       "reset": "Reset changes",
-      "submit": "Save editions",
+      "submit": "Save changes",
       "execute-multisig": "Run multisig",
       "sign-multisig": "Subscribe to multisig",
       "view-multisig": "View multisig"
@@ -148,7 +148,7 @@
             "submit": "Done"
           },
           "nav": {
-            "create": "Create new type"
+            "create": "Create new role"
           }
         },
         "tier": {
@@ -166,7 +166,7 @@
               "label": "Monthly reward"
             },
             "min-deferred": {
-              "label": "Token percentage (utility vs payout)"
+              "label": "Token mix percentage (utility vs payout)"
             },
             "cancel": "Cancel",
             "submit": "Done"
@@ -495,7 +495,7 @@
       "youNeedTo": "Proposals need to have both the percentage of required agreement (unity) and percentage of required voice (quorum) to pass. Try to find the right level of support before proposing!",
       "createAGeneric": "Create a contribution proposal with a descriptive title and clear definition of the policy along with steps to implement the policy..",
       "createARecurring": "Apply for an existing position and describe why you are a good match for it with as many details as possible.",
-      "createAProposal": "Create a proposal for an organization asset and pick a role with a descriptive name and clear definition of the accountabilities.",
+      "createAProposal": "Create a proposal for a position and pick a descriptive name and clear definition of the accountabilities.",
       "createAProposal1": "Create a proposal for an organization asset and pick a badge-type with a name and clear recognition of learning or unlocking achievement or confirming a status level.",
       "createAGeneric1": "Create a contribution proposal with a descriptive title and clear breakdown of milestones and the requested reward."
     },
@@ -512,7 +512,7 @@
       "documentation": "Documentation"
     },
     "support-widget": {
-      "documentation": "Documentation",
+      "documentation": "Explore Documentation",
       "needSupport": "Need support?",
       "pleaseReadOur": "Please read our Documentation for more info. If you are stuck with a problem you can also reach out to us on discord in the \"dao-support\" channel."
     }
@@ -1049,7 +1049,7 @@
       "commitmentLevel": "Commitment level",
       "adjustCommitment": "Adjust Commitment",
       "edit": "Edit",
-      "deferredAmount": "Token percentage (utility vs cash)",
+      "deferredAmount": "Token mix percentage (utility vs payout)",
       "adjustDeferred": "Adjust Deferred",
       "edit1": "Edit",
       "salaryBand": "Reward Tier",
@@ -1059,7 +1059,7 @@
       "compensation": "Compensation",
       "compensation1": "Reward",
       "showCompensationFor": "Show reward for one period",
-      "deferredAmount1": "Token percentage (utility vs cash)",
+      "deferredAmount1": "Token percentage (utility vs payout)",
       "parentCircle": "Parent circle",
       "parentCircle1": "Parent circle",
       "parentPolicy": "Parent policy",
@@ -1342,7 +1342,7 @@
         "youCanNowFindTheMultisig": "You can now find the multisig transaction request on the &quot;Multisig Sign Request&quot;.",
         "other2TreasurersNeeds": "Other 2 treasurers needs to sign-it,",
         "theTheTransactionIsReady": "then the transaction is ready to be executed!",
-        "anErrorOccurredPlease": "An Error occurred please try again clicking the button below",
+        "anErrorOccurredPlease": "An error occurred. Please click the button below to retry.",
         "itWouldBeCoolIfWeCould": "It would be cool if we could provide info about the eventual error here",
         "allGoodCreateMultisig": "All good, create Multisig",
         "history": "History",
@@ -1543,7 +1543,7 @@
           "pleaseEnterTheUsd": "Please enter the HUSD amount (i.e. USD equivalent) for your reward. You can use the slider to select the reward percentage you will be deferring.",
           "typeTheAmountOfUsd": "Type the amount of HUSD",
           "commitmentMustBeGreater": "Commitment must be greater than or equal to the role configuration. Role value for min commitment is",
-          "defferedMustBeGreater": "Deferred must be greater than or equal to the role configuration. Role value for min deferred is",
+          "defferedMustBeGreater": "Due to the role setup you’ll have to choose a greater percentage to continue",
           "salaryCompensationForOneYear": "Reward for one year ( ${value} )",
           "salaryCompensationForOneYearUsd": "Reward for one year ( ${value} ) USD",
           "compensation": "Reward Calculation",
@@ -1574,13 +1574,13 @@
         "proposalHistory": "Proposal history",
         "lookingToMonitor": "Looking to monitor how old proposals went? click here to check all proposal history",
         "seeHistory": "See history >",
-        "isTheMinimumRequiredPercentageOfMembers": "Percentage of required voice for a proposal to pass.",
-        "isTheMinimumRequiredPercentageOfTotal": "Percentage of required participants for a vote.",
+        "isTheMinimumRequiredPercentageOfMembers": "Percentage of required agreement for a proposal to pass.",
+        "isTheMinimumRequiredPercentageOfTotal": "Percentage of required voice for a vote.",
         "searchProposals": "Search proposals",
         "proposalTypes": "Proposal types",
         "sortByLastAdded": "Sort by last added",
         "yourVoteIsTheVoice": "Your Vote Is The Voice of Change",
-        "atHyphaTheFuture": "At Hypha, the future is built on fair, just and open decentralized decision making. In our novel form of governance every, vote accumulates voice tokens that add to one’s voting power. We are pioneering a fair and equal voting system with a 80/20 voting method and 7 day voting period. Every voice matters, make yours heard!"
+        "atHyphaTheFuture": "At Hypha, the future is built on fair, just and open decentralized decision making. In our novel form of governance every vote accumulates voice tokens that add to one’s voting power. We are pioneering a fair and equal voting system with a 80/20 voting method and 7 day voting period. Every voice matters, make yours heard!"
       },
       "proposalhistory": {
         "noProposals": "No Proposals",
@@ -1681,7 +1681,7 @@
         "displayOnBlockExplorer": "Display on block explorer",
         "doYouHaveQuestions": "Do you have Questions?",
         "findOurFull": "Find our full documentation here",
-        "openWiki": "Open wiki",
+        "openWiki": "Explore Documentation",
         "version": "Version"
       }
     },
@@ -1848,9 +1848,9 @@
     "attachments": "Attachments",
     "clickToAddFile": "Click to add file",
     "totalUSDEquivalent": "Total USD Equivalent",
-    "chooseTheDeferredAmount": "Choose token percentage (utility vs cash)",
+    "chooseTheDeferredAmount": "Choose token percentage (utility vs payout)",
     "customCompensation": "Custom compensation",
-    "cashToken": "Cash Token",
+    "cashToken": "Payout Token",
     "utilityToken": "Utility Token",
     "voiceToken": "Voice Token",
     "poll": "Poll",
@@ -1882,7 +1882,7 @@
     "typeTheRoleName": "Type the role name",
     "typeTheRoleDescription": "Type the role description",
     "manageYourSalary": "Manage your reward",
-    "fieldsBelowDisplayTheMinimum": "Use the first slider to choose the commitment level for your role assignment. Moving the second slider will let you select your token percentage (utility vs cash). This way, you can decide the percentage of utility vs payout tokens to receive.",
+    "fieldsBelowDisplayTheMinimum": "Use the first slider to choose the commitment level for your role assignment. Moving the second slider will let you select your token percentage (utility vs payout). This way, you can decide the percentage of utility vs payout tokens to receive.",
     "chooseYourCommitmentLevel": "Choose your commitment level",
     "badge": "Badge",
     "findHereAvailableBadges": "Find here available Badges with unique scope and features. Apply by selecting a badge template, why it is awarded to you and a time frame it is valid for.",
@@ -1957,7 +1957,7 @@
         "applicant": "Applicant",
         "genericContribution": "Contribution",
         "extension": "Extension",
-        "roleAssignment": "Role Assignment",
+        "roleAssignment": "Assignment",
         "badgeAssignment": "Badge Assignment",
         "suspension": "Suspension",
         "roleArchetype": " Role",
