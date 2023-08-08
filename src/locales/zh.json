@@ -621,7 +621,8 @@
       "privateKey1": "私钥",
       "login": "登录",
       "login1": "{1}登录{2}",
-      "getApp": "获取应用程序"
+      "getApp": "获取应用程序",
+      "back": "后退"
     },
     "register-user-view": {
       "account": "帐户",

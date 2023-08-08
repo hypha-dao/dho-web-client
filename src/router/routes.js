@@ -30,6 +30,15 @@ const routes = [
     props: true,
     children: [
       {
+        path: 'create-your-dao',
+        name: 'create-your-dao',
+        meta: {
+          title: I18n.t('routes.createYourDao'),
+          hideForAuth: false
+        },
+        component: () => import('pages/onboarding/NLogin.vue')
+      },
+      {
         path: 'finflow',
         name: 'finflow-tools',
         meta: {

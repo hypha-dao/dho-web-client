@@ -621,7 +621,8 @@
       "privateKey1": "개인 키",
       "login": "로그인",
       "login1": "{1} 로그인 {2}",
-      "getApp": "앱 다운로드"
+      "getApp": "앱 다운로드",
+      "back": "뒤쪽에"
     },
     "register-user-view": {
       "account": "계정",

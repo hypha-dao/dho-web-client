@@ -320,6 +320,7 @@ export default {
         this.$store.dispatch('ballots/getSupply')
       },
 
+      fetchPolicy: 'no-cache',
       subscribeToMore: {
         document: gql`subscription activeDao($regexp: String!) { ${DAO_ACTIVE_QUERY} }`,
         skip () { return !this.dhoname || !this.daoRegexp },

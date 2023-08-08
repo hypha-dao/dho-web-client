@@ -599,12 +599,12 @@
       "registrationIsTemporarilyDisabled1": "Registration is temporarily disabled"
     },
     "login-view": {
-      "loginTo": "Login to",
+      "loginTo": "Login to your {daoName} Account",
       "your": " your",
       "account": "account",
       "loginTo1": "Login to\n          ",
       "yourAccount": "your account",
-      "youCanEither": "You can either login with your SEEDS Light Wallet (",
+      "youCanEither": "You can log in with Hypha wallet or Seeds Light wallet (available for iOS and Android). You can also log in with Anchor wallet, a secure, open source tool (available for Windows and Mac desktops and Android and iOS mobiles).",
       "downloadHere": "Download here",
       "orAnchor": ") Or Anchor, a secure and Open Source tool that is available for download as a&nbsp;",
       "desktopAppFor": "Desktop App for Windows and Mac&nbsp;",
@@ -620,8 +620,10 @@
       "privateKey": "Private key",
       "privateKey1": "Private key",
       "login": "Login",
-      "login1": "{1} Login {2}",
-      "getApp": "Get app"
+      "login1": "Log in with {1}",
+      "getApp": "Get app",
+      "back": "Back",
+      "orChooseAPartner": "or choose a Partner Wallet"
     },
     "register-user-view": {
       "account": "Account",
@@ -654,40 +656,45 @@
       "createDao": "Create DAO"
     },
     "register-user-with-captcha-view": {
-      "createNew": "Create New\n            ",
+      "createNew": "Create New Hypha Account\n            ",
       "hyphaAccount": "Hypha Account",
       "pleaseVerifyYou": "Please verify you are not a BOT",
-      "proceedWith": "Proceed with\n                ",
-      "hyphaWallet": "Hypha Wallet",
+      "proceedWith": "Proceed with Hypha Wallet\n                ",
       "setupHyphaWallet": "Set-up Hypha Wallet",
       "scanTheQr": "Scan the QR code on this page,",
       "itContainsThe": " it contains the invite to create the Hypha Account on your wallet.",
       "onceTheAccount": " Once the account is ready,",
       "youAreSet": " you are set for the last next step.",
       "copyInviteLink": "Copy invite link",
-      "loginWith": "Log-in with\n            ",
+      "loginWith": "Log-in with Hypha Wallet\n            ",
       "hyphaWallet1": "Hypha Wallet",
       "signYourFirstTransaction": "Sign your first transaction",
-      "didYouCreate": "Did you create your Hypha Account inside the Hypha Wallet? Great! Now click the button bellow and generate your first log-in transaction request, sign-it and you are good to go!",
+      "didYouCreate": "Did you create your Hypha Account inside the Hypha Wallet? Great! Now click the button below and generate your first log-in transaction request, sign-it and you are good to go!",
       "login": "{1} Login {2}",
       "getApp": "Get app",
       "areYouAMember": "Are you a member?",
-      "loginHere": "Login here"
+      "loginHere": "Login here",
+      "createYourDao": "Create Your DAO",
+      "goAheadAndAddYour": "Go ahead and add your DAO's name and upload a logo. You can also also list your DAO's purpose and the impact it envisions making.",
+      "publishYourDao": "Publish your DAO"
     },
     "welcome-view": {
       "youNeedAn": "You need an Hypha Account to interact with Hypha Ecosystem and create a DAO.",
-      "isonboarding": "{{ isOnboarding ? 'If you already have an Hypha Account click the log-in button, validate the trasaction with Anchor Walley and start creating your DAO.' : 'You need an hypha account to interact with Hypha DAOs. ",
+      "isonboarding": "If you already have a Hypha account, click the log in button, sign the transaction with your Wallet and start creating your DAO. If not, you can click 'Create Hypha account' or 'Continue as guest.'",
       "ifThisIs": "If this is your first time here,",
       "clickCreateNew": " click Create new Hypha account and follow the steps. ",
       "ifYouAlready": "If you already have an Hypha Account and Anchor wallet configured",
-      "clickThe": ", click the log-in button, validate the transaction with Anchor Wallet and enter the DAO.' }}",
+      "clickThe": ", click the log-in button, validate the transaction with Anchor Wallet and enter the DAO.",
       "theDhoDecentralized": "The DHO (Decentralized Human Organization) is a framework to build your organization from the ground up in an organic and participative way and together with others.",
       "createNewHyphaAccount": "Create new Hypha account",
       "registrationIsTemporarilyDisabled": "Registration is temporarily disabled",
-      "login": "Login",
-      "continueAsAGuest": "Continue as a guest",
+      "login": "Log in",
+      "continueAsAGuest": "Continue as guest",
       "useAnExisting": "Use an existing\n      ",
-      "blockhainAccount": "blockhain account"
+      "blockhainAccount": "blockhain account",
+      "launchYourFirst": "Launch your first DAO",
+      "youNeedAHyphaAccount": "You need a Hypha Account to interact with the Hypha network.",
+      "ifYouAlreadyHaveAHyphaAccount": "If you already have a Hypha Account, click the log in button, sign the transaction with your Wallet and start creating your DAO."
     }
   },
   "navigation": {
@@ -1696,11 +1703,11 @@
       "createLaunchTeam": "Create Launch Team",
       "daoIndentity": "DAO Identity",
       "youCanAddYourDaoName": "You can add your DAO’s name, describe its purpose and add a logo. The name and URL can be changed later via settings You can also add the DAO’s goals and the impact it envisions making.",
-      "name": "Name",
-      "logoIcon": "Logo / Icon",
-      "purpose": "Purpose",
+      "name": "DAO Name",
+      "logoIcon": "DAO Logo",
+      "purpose": "DAO Purpose",
       "theDisplayNameOfYourDao": "The display name of your DAO (max. 50 character)",
-      "uploadAnImage": "Upload an image",
+      "uploadAnImage": "Upload logo",
       "brieflyExplainWhatYourDao": "Briefly explain what your DAO is all about (max. 300 characters)",
       "nextStep": "Next step",
       "utilityToken": "Utility token",
@@ -1801,7 +1808,8 @@
     "configurationSettings": "Configuration settings",
     "ecosystemDashboard": "Ecosystem Dashboard",
     "checkout": "Checkout",
-    "upvoteElection": "Upvote Election"
+    "upvoteElection": "Upvote Election",
+    "createYourDao": "Create Your DAO"
   },
   "proposal-creation": {
     "creation-process": "Creation process",
