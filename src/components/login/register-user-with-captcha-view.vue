@@ -41,6 +41,10 @@ export default {
       create: {
         name: 'create-your-dao',
         index: 4
+      },
+      loading: {
+        name: 'loading',
+        index: 5
       }
     }
     return {
@@ -174,7 +178,22 @@ export default {
           },
           isDraft
         })
-        this.$router.push({ path: `/${daoUrl}/` })
+
+        this.step = this.steps.loading.name
+
+        const query = await this.$apollo.watchQuery({
+          query: require('~/query/dao-created.gql'),
+          variables: { regexp: '/^' + daoUrl + '$/i' },
+          pollInterval: 100,
+          fetchPolicy: 'no-cache'
+        })
+
+        query.subscribe(({ data, loading }) => {
+          const value = data.queryDao
+          if (value.length > 0) {
+            this.$router.push({ path: `/${daoUrl}/` })
+          }
+        })
       } catch (error) {
         this.error = error
 
@@ -214,6 +233,7 @@ export default {
           .text-medium.q-mt-md {{ $t('login.register-user-with-captcha-view.pleaseVerifyYou') }}
           .flex.justify-center(:style="{ 'margin-top': '80px' }")
             captcha(vue-recaptcha="vue-recaptcha" sitekey="6LfPcOUkAAAAAEXUdeFqdsJUob93TpWFEoHdj_yF" @setCaptchaResponse="this.setCaptchaResponse" ev-bind:callback="callback")
+
         #form2.flex.column.justify-between.no-wrap(v-show="step === this.steps.inviteLink.name")
           template
             div.full-height.column.justify-center
@@ -271,7 +291,11 @@ export default {
                 q-input.q-mt-xs.rounded-border(:input-style="{ 'resize': 'none' }" :rules="[rules.required]" dense lazy-rules="ondemand" maxlength="300" outlined :placeholder="$t('pages.onboarding.brieflyExplainWhatYourDao')" ref="description" rows="10" type="textarea" v-model="form.description")
             nav.row.justify-end.q-mt-xl.q-gutter-xs
               q-btn.q-px-xl(@click="onSubmit" color="primary" :label="$t('login.register-user-with-captcha-view.publishYourDao')" no-caps rounded unelevated)
-      #bottom-indicator.row.items-center(v-if="step !== this.steps.create.name")
+
+        #form5.flex.items-center.justify-center.no-wrap(v-show="step === this.steps.loading.name")
+          loading-spinner(color="primary" size="72px")
+
+      #bottom-indicator.row.items-center(v-if="![this.steps.create.name, this.steps.loading.name].includes(step)")
         .col
           .row.q-gutter-sm(v-if="$q.screen.gt.md")
             .ellipse-border(:class="'ellipse-filled'")
