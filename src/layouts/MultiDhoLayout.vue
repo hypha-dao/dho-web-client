@@ -5,24 +5,24 @@ import gql from 'graphql-tag'
 import { timeago } from '~/utils/TimeUtils'
 import { parsedNotification } from '~/utils/notifications-utils'
 
-const NOTIFICATIONS_QUERY = `
-  queryNotification(order: { desc: time }) {
-    event {
-      eventType
-      name
-    }
-    user {
-      email
-      eosAccountName
-      name
-    }
-    id
-    content
-    read
-    time
-    archived
-  }
-`
+// const NOTIFICATIONS_QUERY = `
+//   queryNotification(order: { desc: time }) {
+//     event {
+//       eventType
+//       name
+//     }
+//     user {
+//       email
+//       eosAccountName
+//       name
+//     }
+//     id
+//     content
+//     read
+//     time
+//     archived
+//   }
+// `
 
 export default {
   name: 'multi-dho-layout',
@@ -63,29 +63,29 @@ export default {
       skip () {
         return !this.account
       }
-    },
-    notifications: {
-      query: gql`query notifications { ${NOTIFICATIONS_QUERY} }`,
-      update: data => data.queryNotification.filter(notification => !notification.archived),
-      variables () { return { account: this.account } },
-      skip () { return !this.account },
-      // subscribeToMore: {
-      //   query: gql`subscription notifications { ${NOTIFICATIONS_QUERY} }`,
-      //   skip () { return !this.account },
-      //   variables () { return { account: this.account } },
-      //   updateQuery: (previousResult, { subscriptionData }) => {
-      //     if (!subscriptionData.data) {
-      //       return previousResult
-      //     }
-      //     if (!previousResult) {
-      //       return undefined
-      //     }
-      //     return subscriptionData.data
-      //   }
-      // },
-      fetchPolicy: 'network',
-      pollInterval: 1000
     }
+    // notifications: {
+    //   query: gql`query notifications { ${NOTIFICATIONS_QUERY} }`,
+    //   update: data => data.queryNotification.filter(notification => !notification.archived),
+    //   variables () { return { account: this.account } },
+    //   skip () { return !this.account },
+    //   // subscribeToMore: {
+    //   //   query: gql`subscription notifications { ${NOTIFICATIONS_QUERY} }`,
+    //   //   skip () { return !this.account },
+    //   //   variables () { return { account: this.account } },
+    //   //   updateQuery: (previousResult, { subscriptionData }) => {
+    //   //     if (!subscriptionData.data) {
+    //   //       return previousResult
+    //   //     }
+    //   //     if (!previousResult) {
+    //   //       return undefined
+    //   //     }
+    //   //     return subscriptionData.data
+    //   //   }
+    //   // },
+    //   fetchPolicy: 'network',
+    //   pollInterval: 1000
+    // }
   },
 
   data () {
@@ -466,7 +466,7 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
                   .row.justify-end.items-center(v-if="$q.screen.gt.md")
                     .notifications-icon
                       .notifications-icon__counter(v-if="countObjectsWithKeyValue(notifications, 'read', false) > 0") {{ countObjectsWithKeyValue(notifications, 'read', false) }}
-                      q-btn.q-mr-xs(@click="languageSettings = false, right = false, showNotificationsBar = true" unelevated rounded padding="12px" icon="far fa-bell"  size="sm" :color="'white'" :text-color="'primary'")
+                      //- q-btn.q-mr-xs(@click="languageSettings = false, right = false, showNotificationsBar = true" unelevated rounded padding="12px" icon="far fa-bell"  size="sm" :color="'white'" :text-color="'primary'")
                     router-link(v-if="selectedDaoPlan.isEcosystem" :to="{ name: 'ecosystem' }")
                       q-btn.q-mr-xs(unelevated rounded padding="12px" icon="fas fa-share-alt" size="sm" :color="isActiveRoute('ecosystem') ? 'primary' : 'white'" :text-color="isActiveRoute('ecosystem') ? 'white' : 'primary'")
                     router-link(:to="{ name: 'configuration' }")
