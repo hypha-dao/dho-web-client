@@ -146,7 +146,6 @@ export default {
             this.step = this.steps.create.name
           }
         } catch (e) {
-          console.log(e)
         }
       } else {
         await this.loginWallet({ idx, returnUrl: this.isOnboarding ? 'create' : this.$route.query.returnUrl || 'home' })
