@@ -132,6 +132,13 @@ export default {
       return false
     },
 
+    isFounderRole: {
+      get () {
+        return this.$store.state.proposals.draft.role.label === 'Founders' &&
+          this.$store.state.proposals.draft.tier.label === 'Founders'
+      }
+    },
+
     custom: {
       get () {
         return this.$store.state.proposals.draft.custom
@@ -375,8 +382,6 @@ widget(:class="{ 'disable-step': currentStepName !== 'step-payout' && $q.screen.
           q-input.q-ma-none.q-pa-none.rounded-border(:disable="custom || (!daoSettings.cashClaimsEnabled && isContribution)" :rules="[val => val >= 0 && val <= 100]" dense outlined rounded suffix="%" v-model.number="deferred")
       .row
         .text-negative.h-b2.q-ml-xs(v-if="!isValidDeferred(deferred) && !firstPaintDeferred") {{ $t('pages.proposals.create.steppayout.defferedMustBeGreater') }}
-          | {{ this.$store.state.proposals.draft.minDeferred }}
-          | %
     .col-6(v-if="fields.annualUsdSalary")
       label.h-label {{ fields.annualUsdSalary.label }}
       .text-body2.text-grey-7.q-my-md(v-if="fields.annualUsdSalary.description") {{ fields.annualUsdSalary.description }}
@@ -397,10 +402,8 @@ widget(:class="{ 'disable-step': currentStepName !== 'step-payout' && $q.screen.
     label.h-label(v-if="$store.state.proposals.draft.annualUsdSalary.toString().includes('USD')") {{ $t('pages.proposals.create.steppayout.salaryCompensationForOneYear', { value: $store.state.proposals.draft.annualUsdSalary }) }}
     label.h-label(v-else) {{ $t('pages.proposals.create.steppayout.salaryCompensationForOneYearUsd', { value: $store.state.proposals.draft.annualUsdSalary }) }}
   .row.q-mt-xxxl(v-if="$q.screen.gt.md")
-    label.h-h4(v-if="$store.state.proposals.draft.type === PROPOSAL_TYPE.ROLE") {{ $t('pages.proposals.create.steppayout.compensation1') }}
-    label.h-h4(v-else) {{ $t('pages.proposals.create.steppayout.compensation') }}
-    .text-body2.text-grey-7.q-my-md.full-width(v-if="$store.state.proposals.draft.type === PROPOSAL_TYPE.ROLE") {{ $t('pages.proposals.create.steppayout.pleaseEnterTheUSDEquivalentAnd1') }}
-    .text-body2.text-grey-7.q-my-md.full-width(v-else) {{ $t('pages.proposals.create.steppayout.belowYouCanSeeTheActual') }}
+    label.h-h4 {{ $t('pages.proposals.create.steppayout.compensation') }}
+    .text-body2.text-grey-7.q-my-md.full-width {{ $t('pages.proposals.create.steppayout.belowYouCanSeeTheActual') }}
   .row(v-if="isAssignment")
     label.text-bold {{ toggle ? $t('pages.proposals.create.steppayout.compensationForOnePeriod') : $t('pages.proposals.create.steppayout.compensationForOneCycle') }}
   .q-col-gutter-xs.q-mt-sm(:class="{ 'q-mt-xxl':$q.screen.lt.md || $q.screen.md, 'row':$q.screen.gt.md }")
@@ -408,22 +411,22 @@ widget(:class="{ 'disable-step': currentStepName !== 'step-payout' && $q.screen.
       label.h-label {{ `${fields.reward.label} (${$store.state.dao.settings.rewardToken})` }}
       .row.full-width.items-center.q-mt-xs
         token-logo.q-mr-xs(size="40px" type="utility" :daoLogo="daoSettings.logo")
-        q-input.rounded-border.col(dense :readonly="!custom" outlined v-model="utilityToken" rounded v-if="isAssignment")
+        q-input.rounded-border.col(dense :readonly="!custom" outlined v-model="utilityToken" rounded v-if="isAssignment && !isFounderRole")
         q-input.rounded-border.col(dense :readonly="!custom" outlined v-model="reward" rounded v-else)
     .col-4(:class="{ 'q-mt-md':$q.screen.lt.md || $q.screen.md }" v-if="fields.peg")
       label.h-label {{ `${fields.peg.label} (${$store.state.dao.settings.pegToken})` }}
       .row.full-width.items-center.q-mt-xs
         token-logo.q-mr-xs(size="40px" type="cash" :daoLogo="daoSettings.logo")
-        q-input.rounded-border.col(dense :readonly="!custom" outlined v-model="cashToken" rounded v-if="isAssignment")
+        q-input.rounded-border.col(dense :readonly="!custom" outlined v-model="cashToken" rounded v-if="isAssignment && !isFounderRole")
         q-input.rounded-border.col(dense :readonly="!custom || !daoSettings.cashClaimsEnabled" outlined v-model="peg" rounded v-else)
     .col-4(:class="{ 'q-mt-md':$q.screen.lt.md || $q.screen.md }" v-if="fields.voice")
       label.h-label {{ `${fields.voice.label} (${$store.state.dao.settings.voiceToken})` }}
       .row.full-width.items-center.q-mt-xs
         token-logo.q-mr-xs(size="40px" type="voice" :daoLogo="daoSettings.logo")
-        q-input.rounded-border.col(dense :readonly="!custom" outlined v-model="voiceToken" rounded v-if="isAssignment")
+        q-input.rounded-border.col(dense :readonly="!custom" outlined v-model="voiceToken" rounded v-if="isAssignment && !isFounderRole")
         q-input.rounded-border.col(dense :readonly="!custom" outlined v-model="voice" rounded v-else)
   .row.items-center.q-mt-md(v-if="showToggle")
-    template(v-if="fields.custom")
+    template(v-if="fields.custom || isFounderRole")
       div(:class="{ 'col-1':$q.screen.gt.md }")
         q-toggle(v-model="custom" size="md")
       .col.q-mt-xxs {{ $t('pages.proposals.create.steppayout.customCompensation') }}
@@ -431,6 +434,8 @@ widget(:class="{ 'disable-step': currentStepName !== 'step-payout' && $q.screen.
       div(:class="{ 'col-1':$q.screen.gt.md }")
         q-toggle(v-model="toggle" size="md")
       .col.q-mt-xxs {{ $t('pages.proposals.create.steppayout.compensationForOnePeriod') }}
+      q-tooltip(v-if="toggle") {{ $t('pages.proposals.create.steppayout.1MoonPeriod') }}
+      q-tooltip(v-else) {{ $t('pages.proposals.create.steppayout.1MoonCycle') }}
   .row.q-py-md
     // TODO: Salary preview
     // Multiplier

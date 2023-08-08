@@ -136,7 +136,7 @@ export default {
 
       if (this.type === 'Role') {
         result.push(...[
-          { color: 'primary', label: this.$t('proposals.proposal-card-chips.archetype') }
+          { color: 'primary', label: this.$t('proposals.proposal-card-chips.role') }
         ])
       }
 

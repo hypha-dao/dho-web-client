@@ -1,6 +1,7 @@
 import { UAL } from 'universal-authenticator-library'
 import { Anchor } from 'ual-anchor'
 import { HyphaAuthenticator } from '@hypha-dao/ual-hypha'
+import { SeedsAuthenticator } from 'ual-seeds'
 
 export default async ({ Vue, store }) => {
   const mainChain = {
@@ -17,10 +18,12 @@ export default async ({ Vue, store }) => {
     appName: process.env.APP_NAME,
     loginContract: process.env.LOGIN_CONTRACT
   })
+  const lw = new SeedsAuthenticator([mainChain], { appName: process.env.APP_NAME })
   const anchor = new Anchor([mainChain], { appName: process.env.APP_NAME })
   anchor.ualName = 'anchor'
   hyphaWallet.ualName = 'hypha'
-  const authenticators = [hyphaWallet, anchor]
+  lw.ualName = 'seeds'
+  const authenticators = [hyphaWallet, anchor, lw]
 
   const ual = new UAL([mainChain], process.env.APP_NAME, authenticators)
   store.$ual = ual

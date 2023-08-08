@@ -31,24 +31,24 @@ export function getProposalChipFilters () {
       enabled: false,
       filter: (p) => p.__typename === 'Questcomplet'
     },
-    {
-      label: I18n.t('proposalFilter.archetype'),
-      value: 'Role',
-      enabled: false,
-      filter: (p) => p.__typename === 'Role'
-    },
+    // {
+    //   label: I18n.t('proposalFilter.archetype'),
+    //   value: 'Role',
+    //   enabled: false,
+    //   filter: (p) => p.__typename === 'Role'
+    // },
     {
       label: I18n.t('proposalFilter.badge'),
       value: 'Badge',
       enabled: false,
       filter: (p) => p.__typename === 'Badge'
     },
-    {
-      label: I18n.t('proposalFilter.circle'),
-      value: 'Circle',
-      enabled: false,
-      filter: (p) => p.__typename === 'Circle'
-    },
+    // {
+    //   label: I18n.t('proposalFilter.circle'),
+    //   value: 'Circle',
+    //   enabled: false,
+    //   filter: (p) => p.__typename === 'Circle'
+    // },
     {
       label: I18n.t('proposalFilter.budget'),
       value: 'Budget',
@@ -66,12 +66,12 @@ export function getProposalChipFilters () {
       value: 'Payout',
       enabled: false,
       filter: (p) => p.__typename === 'Payout'
-    },
-    {
-      label: I18n.t('proposalFilter.suspension'),
-      value: 'Suspend',
-      enabled: false,
-      filter: (p) => p.__typename === 'Suspend'
     }
+    // {
+    //   label: I18n.t('proposalFilter.suspension'),
+    //   value: 'Suspend',
+    //   enabled: false,
+    //   filter: (p) => p.__typename === 'Suspend'
+    // }
   ]
 }

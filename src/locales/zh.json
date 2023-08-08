@@ -621,7 +621,8 @@
       "privateKey1": "私钥",
       "login": "登录",
       "login1": "{1}登录{2}",
-      "getApp": "获取应用程序"
+      "getApp": "获取应用程序",
+      "back": "后退"
     },
     "register-user-view": {
       "account": "帐户",
@@ -1066,7 +1067,11 @@
       "description": "描述",
       "attachedDocuments": "附加文件",
       "createdBy": "由...制作：",
-      "seeProfile": "查看个人资料"
+      "seeProfile": "查看个人资料",
+      "compensationForOneCycle": "补偿一个周期",
+      "compensationForOnePeriod": "补偿一期",
+      "1MoonCycle": "1個月亮週期約為30天",
+      "1MoonPeriod": "1個月亮週期大約是7天"
     },
     "quest-progression": {
       "questProgression": "任务进展"
@@ -1272,7 +1277,9 @@
         "assignments": "作业",
         "badges": "徽章",
         "members": "会员",
-        "proposals": "提案"
+        "proposals": "提案",
+        "welcomeToHyphaEvolution": "歡迎來到菌絲進化",
+        "atHyphaWere": "在 Hypha，我們正在共同創建解決方案來建立有影響力的組織。 我們已經發展了激進的系統來構建下一代去中心化組織。 讓我們指導您重塑團隊協調、激發動力、管理財務和促進有效溝通以實現共同願景的方式。 與 Hypha 一起將您的夢想變成現實"
       },
       "members": {
         "becomeAMember": "成为会员",
@@ -1290,7 +1297,9 @@
         "coreTeam": "核心团队",
         "communityMembers": "社区成员",
         "coreAndCommunityMembers": "核心和社區成員",
-        "members": "会员"
+        "members": "会员",
+        "discoverATapestry": "探索 Hypha 成員的錦囊",
+        "wereBuildingAThriving": "我們正在建立一個蓬勃發展的國際成員社區。 每個人都有自己的個性、才能和優勢，致力於共同創造價值的單一使命。 深入了解每個成員熱衷於做什麼、他們持有什麼徽章以及他們為 DAO 做出了哪些貢獻。 尋找新朋友、潛在合作者和創新企業."
       },
       "organization": {
         "documentation": "文档",
@@ -1311,7 +1320,9 @@
         "activeBadges2": "活跃徽章",
         "daoCircles2": "DAO 圈子",
         "archetypes2": "原型",
-        "badges2": "徽章"
+        "badges2": "徽章",
+        "createMeaningfulImpact": "通過 Hypha 創造有意義的影響",
+        "allOfHypha": "Hypha 的所有變革性解決方案都在等待著您！ 我們是去中心化組織各個方面的指南，從設置到代幣經濟學再到投票系統。 探索如何利用 Hypha 發揮作用。"
       },
       "organizationalassets": {
         "noBadges": "没有徽章",
@@ -1501,7 +1512,8 @@
           "youMustSelect": "您选择的时间段必须少于 {1} 个（当前您选择了 {2} 个时间段）",
           "theStartDate": "开始日期不得晚于结束日期",
           "back": "后退",
-          "nextStep": "下一步"
+          "nextStep": "下一步",
+          "1MoonPeriod": "1個月亮週期大約是7天"
         },
         "optionsquests": {
           "chooseAQuestType": "选择任务类型\n      ",
@@ -1542,7 +1554,9 @@
           "compensationForOneCycle": "补偿一个周期",
           "customCompensation": "定制补偿",
           "back": "后退",
-          "nextStep": "下一步"
+          "nextStep": "下一步",
+          "1MoonCycle": "1個月亮週期約為30天",
+          "1MoonPeriod": "1個月亮週期大約是7天"
         }
       },
       "proposallist": {
@@ -1564,7 +1578,9 @@
         "isTheMinimumRequiredPercentageOfTotal": "是参与投票的会员总数所需的最低百分比才能通过。 ",
         "searchProposals": "搜索提案",
         "proposalTypes": "提案类型",
-        "sortByLastAdded": "按最后添加排序"
+        "sortByLastAdded": "按最后添加排序",
+        "yourVoteIsTheVoice": "您的投票是變革的聲音",
+        "atHyphaTheFuture": "在 Hypha，未來建立在公平、公正和公開的去中心化決策之上。 在我們新穎的治理形式中，投票會積累語音代幣，從而增加一個人的投票權。 我們正在開創公平、平等的投票制度，採用 80/20 投票方式和 7 天投票期。 每個聲音都很重要，讓你的聲音被聽到"
       },
       "proposalhistory": {
         "noProposals": "没有提案",

@@ -510,8 +510,8 @@ export default {
 
     banner () {
       return {
-        title: this.daoSettings.proposalsTitle,
-        description: this.daoSettings.proposalsParagraph,
+        title: this.daoSettings.proposalsTitle || this.$t('pages.proposals.proposallist.yourVoteIsTheVoice'),
+        description: this.daoSettings.proposalsParagraph || this.$t('pages.proposals.proposallist.atHyphaTheFuture'),
         background: ipfsy(this.daoSettings.proposalsBackgroundImage),
         color: this.daoSettings.primaryColor,
         pattern: this.daoSettings.pattern,

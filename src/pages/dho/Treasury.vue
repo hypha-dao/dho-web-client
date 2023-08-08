@@ -541,8 +541,7 @@ q-page.page-treasury
           .col.h-h3 {{ $t('pages.dho.treasury.anErrorOccurredPlease') }}
           .col-1.items-center.flex
             q-icon(color="negative" name="fa fa-exclamation-circle" size="42px")
-        .row.q-mt-sm.q-pb-md
-          .text-grey.h-b2 {{ $t('pages.dho.treasury.itWouldBeCoolIfWeCould') }}
+        .q-pb-md
         .row.justify-end
           q-btn.q-px-lg.h-btn1.q-mt-md(color="primary" label="Try again" no-caps rounded unelevated @click="successfullMultisigTransaction = null")
       template(v-else-if="successfullMultisigTransaction === null")

@@ -247,6 +247,7 @@ widget
         .col
           label.h-h7 {{ $t('pages.proposals.create.stepduration.periods') }}
           q-input.rounded-border.col.q-mt-xs(dense outlined rounded v-model="periodCount")
+          q-tooltip {{ $t('pages.proposals.create.stepduration.1MoonPeriod') }}
         .col
           label.h-h7 {{ $t('pages.proposals.create.stepduration.endDate') }}
           q-input.rounded-border.col.q-mt-xs(dense filled rounded disable v-model="dateString")

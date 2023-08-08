@@ -89,7 +89,7 @@ export default defineComponent({
   .col
     .row.q-mb-sm
       .col
-        .text-body2.text-bold {{label}}
+        .text-body2.text-bold {{label === 'Cash Token (HUSD)' ? $t('proposal-creation.cashToken') : label}}
     .row.items-center
       token-logo(:customIcon="icon" :daoLogo="daoLogo" :type="type")
       .col

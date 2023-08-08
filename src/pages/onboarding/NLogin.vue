@@ -8,7 +8,6 @@ export default {
     LoginView: () => import('~/components/login/login-view.vue'),
     RegisterUserView: () => import('~/components/login/register-user-view.vue'),
     RegisterUserWithCaptchaView: () => import('~/components/login/register-user-with-captcha-view.vue'),
-    BottomSection: () => import('~/components/login/bottom-section.vue'),
     IpfsImageViewer: () => import('~/components/ipfs/ipfs-image-viewer.vue')
   },
   data () {
@@ -32,6 +31,7 @@ export default {
   },
   computed: {
     ...mapGetters('dao', ['selectedDao', 'daoSettings']),
+    ...mapGetters('accounts', ['isAuthenticated']),
     animationSwirl () {
       switch (this.step) {
         case 'welcome':
@@ -130,7 +130,6 @@ export default {
   .relative-position.full-height.full-widthrt(v-if="$q.screen.gt.md")
     .welcome-bg.full-height.full-width(:class="animationBG")
     .welcome-fg.full-height.full-width
-    .swirl(:class="animationSwirl")
     .row.full-height.card-container
       .col-xl-5.col-sm-6.col-xs-12.left-container(v-if="showingCard")
         q-card.custom-full-height.card-container.left-card
@@ -138,26 +137,24 @@ export default {
           transition(v-if="step === steps.welcome" enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
             welcome-view.full-width(@onLoginClick="step = steps.login" @onRegisterClick="step = steps.register" v-bind="{ isOnboarding }")
           transition(v-else-if="step === steps.login" enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
-            login-view(:dhoName="dhoname" :pk="stepPK" @onLoginWithPK=" v => stepPK = true" v-bind="{ isOnboarding }")
+            login-view(:dhoName="dhoname" :pk="stepPK" @transitionToRegister="step = steps.register" @onLoginWithPK=" v => stepPK = true" @back="step = steps.welcome" v-bind="{ isOnboarding }")
           transition(v-else-if="step === steps.register" enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
-            register-user-with-captcha-view(@stepChanged="v => registerStep = v" @onFinish="step = steps.login" v-bind="{ isOnboarding }")
-          bottom-section.index.custom-full-height(:daoSettings="daoSettings" v-if="step === steps.login || step === steps.register && registerStep !== 'finish'" :stepPK="stepPK" :step="step" :steps="steps" @onClickRegisterHere="step = steps.register; stepPK = false" @onClickLogin="stepPK = false" @onClickLoginPage="step = steps.login; stepPK = false")
+            register-user-with-captcha-view(@stepChanged="v => registerStep = v" @onFinish="step = steps.login" @back="step = steps.welcome" v-bind="{ isOnboarding }")
       .col.full-height.card-container.relative-position.gt-xs
         .welcome-info.absolute-center
           ipfs-image-viewer(:ipfsCid="selectedDao.logo" showDefault :defaultLabel="daoName" size="300px")
   .relative-position.full-height.full-width.custom-scroll-area(v-if="$q.screen.lt.md || $q.screen.md")
     .welcome-bg-mobile.full-height.full-width(:class="animationBGMobile")
     .welcome-fg.full-height.full-width
-    .swirl-mobile(:class="animationSwirlMobile")
     img.hyphaLogo(src="~assets/logos/hypha-logo-full.svg")
     q-card.card-container.bottom-card(:class="animationCardMobile")
       q-scroll-area.full-width.full-height(:thumb-style="{ 'opacity': '0'}" :content-style="{ 'height': '100%' }" ref="scrollArea")
         transition(v-if="step === steps.welcome" enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
           welcome-view.full-width.full-height(@onLoginClick="step = steps.login" @onRegisterClick="step = steps.register")
         transition(v-else-if="step === steps.login" enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
-          login-view.full-height(:dhoName="dhoname" :pk="stepPK" @onLoginWithPK=" v => stepPK = true")
+          login-view.full-height(:dhoName="dhoname" :pk="stepPK" @onLoginWithPK=" v => stepPK = true" @back="step = steps.welcome")
         transition(v-else-if="step === steps.register" enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
-          register-user-with-captcha-view.full-height(@stepChanged="v => registerStep = v" @onFinish="step = steps.login" @onClickLoginPage="step = steps.login")
+          register-user-with-captcha-view.full-height(@back="step = steps.welcome" @stepChanged="v => registerStep = v" @onFinish="step = steps.login" @onClickLoginPage="step = steps.login")
       bottom-section(:daoSettings="daoSettings" v-if="step === steps.login || step === steps.register && registerStep !== 'finish'" :stepPK="stepPK" :step="step" :steps="steps" @onClickRegisterHere="step = steps.register; stepPK = false" @onClickLogin="stepPK = false" @onClickLoginPage="step = steps.login; stepPK = false")
 
 </template>
@@ -187,31 +184,6 @@ export default {
     position: absolute
     z-index: 2
     opacity: 0.85
-.swirl
-    background: transparent url('../../assets/images/swirl.png')
-    background-repeat: no-repeat
-    background-size: contain
-    position: absolute
-    // background-color: $secondary
-    z-index: 3
-    width: 70%
-    height: 150%
-    transform: matrix(-1, 0, 0, -1, 0, 0) rotate(180deg) translateX(82%);
-    transition: all 1s
-    transition-timing-function: ease-out
-    margin-top: -20%
-.swirl-step-one
-  margin-top: -20%
-  transform: matrix(-1, 0, 0, -1, 0, 0) rotate(180deg) translateX(95%);
-.swirl-step-two
-  margin-top: -38%
-  transform: matrix(-0.99, -0.14, 0.14, -0.99, 0, 0) rotate(188deg) translateX(88%);
-.swirl-step-three
-  margin-top: -80%
-  transform: matrix(-0.87, -0.48, 0.48, -0.87, 0, 0) rotate(195deg) translateX(100%);
-.swirl-step-four
-  margin-top: -135%
-  transform: matrix(-0.68, -0.73, 0.73, -0.68, 0, 0) rotate(199deg) translateX(150%);
 .card-container
     z-index: 5
 .hypha-logo
@@ -228,8 +200,7 @@ export default {
   left: 0
   right: 0
   bottom: 0
-  border-radius: 55px 55px 0 0
-  padding: 54px 45px 30px
+  padding: 30px 20px 30px
   @media (orientation: landscape) and (min-width: 1024px)
     height: auto !important
   @media (max-width: 375px)
@@ -238,7 +209,7 @@ export default {
   @media (max-width: 375px)
     top: auto
 .bottom-card-step-two
-  top: 130px
+  // top: 130px
   transition: all 1s
   transition-timing-function: ease-out
 .left-container
@@ -257,31 +228,6 @@ export default {
   background-position-x: 65%
 .welcome-bg-step-four-mobile
   background-position-x: 70%
-.swirl-mobile
-  background: transparent url('../../assets/images/swirl.png')
-  background-repeat: no-repeat
-  background-size: contain
-  position: absolute
-  // background-color: $secondary
-  z-index: 3
-  width: 300%
-  height: 150%
-  transform: matrix(-1, 0, 0, -1, 0, 0) rotate(180deg) translateX(82%);
-  transition: all 1s
-  transition-timing-function: ease-out
-  margin-top: -85%
-.swirl-step-one-mobile
-  margin-top: -85%
-  transform: matrix(-1, 0, 0, -1, 0, 0) rotate(180deg) translateX(-40%);
-.swirl-step-two-mobile
-  margin-top: -115%
-  transform: matrix(-0.99, -0.14, 0.14, -0.99, 0, 0) rotate(160deg) translateX(-40%);
-.swirl-step-three-mobile
-  margin-top: -115%
-  transform: matrix(-0.99, -0.14, 0.14, -0.99, 0, 0) rotate(160deg) translateX(-42%);
-.swirl-step-four-mobile
-  margin-top: -115%
-  transform: matrix(-0.99, -0.14, 0.14, -0.99, 0, 0) rotate(165deg) translateX(-43%);
 .hyphaLogo
   width: 150px
   margin: 44px 0 0 42px

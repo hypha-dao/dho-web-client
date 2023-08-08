@@ -621,7 +621,8 @@
       "privateKey1": "개인 키",
       "login": "로그인",
       "login1": "{1} 로그인 {2}",
-      "getApp": "앱 다운로드"
+      "getApp": "앱 다운로드",
+      "back": "뒤쪽에"
     },
     "register-user-view": {
       "account": "계정",
@@ -1066,7 +1067,11 @@
       "description": "설명",
       "attachedDocuments": "첨부서류",
       "createdBy": "작성자:",
-      "seeProfile": "프로필 보기"
+      "seeProfile": "프로필 보기",
+      "compensationForOneCycle": "1주기 보상",
+      "compensationForOnePeriod": "한 기간 동안의 보상",
+      "1MoonCycle": "1달 주기는 약 30일",
+      "1MoonPeriod": "1달 주기는 약 7일"
     },
     "quest-progression": {
       "questProgression": "퀘스트 진행"
@@ -1272,7 +1277,9 @@
         "assignments": "과제",
         "badges": "배지",
         "members": "회원",
-        "proposals": "제안"
+        "proposals": "제안",
+        "welcomeToHyphaEvolution": "Hypha 진화에 오신 것을 환영합니다",
+        "atHyphaWere": "Hypha에서는 영향력 있는 조직을 구축하기 위한 솔루션을 공동으로 만들고 있습니다. 우리는 차세대 분산 조직을 설계하기 위해 급진적인 시스템을 발전시켰습니다. 팀을 조정하고, 동기를 부여하고, 재정을 관리하고, 공유된 비전을 향한 효과적인 커뮤니케이션을 촉진하는 방법을 재구성하도록 안내해 드립니다. Hypha와 함께 꿈을 현실로 바꾸십시오!"
       },
       "members": {
         "becomeAMember": "멤버가되다",
@@ -1290,7 +1297,9 @@
         "coreTeam": "핵심 팀",
         "communityMembers": "커뮤니티 구성원",
         "coreAndCommunityMembers": "핵심 및 커뮤니티 구성원",
-        "members": "회원"
+        "members": "회원",
+        "discoverATapestry": "Hypha 회원의 태피스트리를 발견하십시오",
+        "wereBuildingAThriving": "우리는 번성하는 국제 회원 커뮤니티를 구축하고 있습니다. 각자 고유한 개성, 재능 및 강점을 가지고 있으며 공동 가치 창출이라는 단일한 사명에 참여하고 있습니다. 각 회원이 열정적으로 참여하고 있는 일, 보유하고 있는 배지, 기여하고 있는 DAO에 대해 자세히 알아보세요. 새로운 친구, 잠재적 공동 작업자 및 혁신적인 벤처를 찾으십시오."
       },
       "organization": {
         "documentation": "선적 서류 비치",
@@ -1311,7 +1320,9 @@
         "activeBadges2": "활성 배지",
         "daoCircles2": "DAO 서클",
         "archetypes2": "원형",
-        "badges2": "배지"
+        "badges2": "배지",
+        "createMeaningfulImpact": "Hypha로 의미 있는 영향 만들기",
+        "allOfHypha": "Hypha의 모든 혁신적인 솔루션이 여러분을 기다립니다! 우리는 설정에서 토크노믹스, 투표 시스템에 이르기까지 분산된 조직의 모든 측면에서 귀하의 가이드입니다. Hypha로 변화를 가져올 수 있는 방법을 알아보세요."
       },
       "organizationalassets": {
         "noBadges": "배지 없음",
@@ -1501,7 +1512,8 @@
           "youMustSelect": "{1}개 미만의 기간을 선택해야 합니다(현재 {2}개 기간을 선택했습니다).",
           "theStartDate": "시작 날짜는 종료 날짜 이후여야 합니다.",
           "back": "뒤쪽에",
-          "nextStep": "다음 단계"
+          "nextStep": "다음 단계",
+          "1MoonPeriod": "1달 주기는 약 7일"
         },
         "optionsquests": {
           "chooseAQuestType": "퀘스트 유형 선택\n      ",
@@ -1542,7 +1554,9 @@
           "compensationForOneCycle": "1주기 보상",
           "customCompensation": "맞춤형 보상",
           "back": "뒤쪽에",
-          "nextStep": "다음 단계"
+          "nextStep": "다음 단계",
+          "1MoonCycle": "1달 주기는 약 30일",
+          "1MoonPeriod": "1달 주기는 약 7일"
         }
       },
       "proposallist": {
@@ -1564,7 +1578,9 @@
         "isTheMinimumRequiredPercentageOfTotal": "통과되기 위해 투표에 참여하는 전체 구성원의 최소 요구 비율입니다. ",
         "searchProposals": "제안 검색",
         "proposalTypes": "제안 유형",
-        "sortByLastAdded": "마지막으로 추가된 순으로 정렬"
+        "sortByLastAdded": "마지막으로 추가된 순으로 정렬",
+        "yourVoteIsTheVoice": "귀하의 투표는 변화의 목소리입니다",
+        "atHyphaTheFuture": "Hypha의 미래는 공정하고 정당하며 개방적인 분산형 의사 결정을 기반으로 합니다. 우리의 새로운 형태의 거버넌스 every에서 투표는 투표권에 추가되는 음성 토큰을 축적합니다. 80/20 투표 방식과 7일 투표 기간으로 공정하고 평등한 투표 제도를 개척하고 있습니다. 모든 목소리가 중요합니다."
       },
       "proposalhistory": {
         "noProposals": "제안 없음",
