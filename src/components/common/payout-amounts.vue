@@ -38,6 +38,6 @@ export default defineComponent({
 <template lang="pug">
 .full-width(:class="{row: $q.platform.is.desktop}")
   template(v-for="token in tokens")
-    .col(:class="{'col-12': stacked, 'q-mb-md': $q.platform.is.mobile}")
+    .col(v-if="token.value" :class="{'col-12': stacked, 'q-mb-md': $q.platform.is.mobile}")
       token-value(:daoLogo="daoLogo" :multiplier="multiplier" v-bind="token")
 </template>
