@@ -342,6 +342,7 @@ query historyProposals($docId: String!, $first: Int!, $offset: Int!) {
         details_ballotQuorum_i
         details_ballotSupply_a
         details_ballotAlignment_i
+        details_autoApprove_i
         vote {
           vote_voter_n
           vote_vote_s
