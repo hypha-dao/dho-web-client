@@ -622,7 +622,8 @@
       "login": "Acceso",
       "login1": "{1} Iniciar sesión {2}",
       "getApp": "Obtener aplicaciones",
-      "back": "Atrás"
+      "back": "Atrás",
+      "orChooseAPartner": "o elija una billetera de socio"
     },
     "register-user-view": {
       "account": "Cuenta",
