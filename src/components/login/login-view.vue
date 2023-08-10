@@ -29,6 +29,10 @@ export default {
     }
   },
 
+  mounted() {
+    this.selectedAuthenticator = this.authenticators[2]
+  },
+
   computed: {
     ...mapGetters('accounts', ['loading']),
     ...mapGetters('dao', ['daoSettings', 'selectedDao']),
