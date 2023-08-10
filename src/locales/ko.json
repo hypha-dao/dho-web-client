@@ -622,7 +622,8 @@
       "login": "로그인",
       "login1": "{1} 로그인 {2}",
       "getApp": "앱 다운로드",
-      "back": "뒤쪽에"
+      "back": "뒤쪽에",
+      "orChooseAPartner": "또는 파트너 지갑 선택"
     },
     "register-user-view": {
       "account": "계정",
