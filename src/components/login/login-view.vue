@@ -30,7 +30,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters('accounts', ['loading']),
+    ...mapGetters('accounts', ['loading', 'isAuthenticated']),
     ...mapGetters('dao', ['daoSettings', 'selectedDao']),
     authenticators () {
       return this.$ual.authenticators.map((wallet, idx) => {
@@ -48,7 +48,9 @@ export default {
     async onLoginWallet (idx) {
       if (this.$router.currentRoute.name === 'create-your-dao') {
         await this.loginWallet({ idx, returnUrl: 'create-your-dao' })
-        this.$emit('transitionToRegister')
+        if (this.isAuthenticated) {
+          this.$emit('transitionToRegister')
+        }
       } else {
         await this.loginWallet({ idx, returnUrl: this.isOnboarding ? 'create' : this.$route.query.returnUrl || 'home' })
       }
