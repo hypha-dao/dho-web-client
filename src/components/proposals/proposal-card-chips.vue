@@ -46,9 +46,9 @@ export default {
         result.push(
           { color: 'primary', label: this.$t('proposals.proposal-card-chips.quest') },
           { color: 'primary', outline: true, label: this.$t('proposals.proposal-card-chips.start') },
-          ...(this.proposal.circles
+          ...(this.proposal?.circles
             ? [
-                ...this.proposal.circles.map(_ => ({
+                ...this.proposal?.circles?.map(_ => ({
                   color: 'secondary',
                   outline: false,
                   label: `${_.name} CIRCLE`
