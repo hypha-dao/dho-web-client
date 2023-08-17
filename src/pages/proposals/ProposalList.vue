@@ -230,6 +230,7 @@ const STAGED_PROPOSALS_QUERY = `
         }
         details_startPeriod_i
         details_assignee_n
+        details_autoApprove_i
         creator
         createdDate
         cmntsect {

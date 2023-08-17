@@ -100,7 +100,8 @@ export default {
       },
       searchInput: '',
       left: true,
-      right: false,
+      right: true,
+      showNotificationsBar: false,
       title: undefined,
       showMinimizedMenu: false,
       isActivated: false,
@@ -144,8 +145,7 @@ export default {
           value: 'zh',
           image: require('assets/images/locales/zh.png')
         }
-      ],
-      showNotificationsBar: false
+      ]
     }
   },
 
@@ -522,23 +522,7 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
                 type="radio"
                 :style="{ 'width': '20px', 'height': '20px', 'accent-color': '#242f5d', 'cursor': 'pointer' }"
               )
-      //- .translation-box.q-pa-sm(:style="{ 'position': 'absolute', 'bottom': '30px', 'right': '30px', 'left': '30px' }")
-      //-   .row.items-center.q-mb-md.justify-between
-      //-     .row
-      //-       img.q-mr-sm(:src="require('assets/images/locales/translation.png')" :style="{ 'width': '26px', 'height': '26px' }")
-      //-       .h-b2.text-bold(:style="{ 'font-size': '14px' }") Translation
-      //-     q-toggle(v-model="autoTranslate" color="secondary" keep-color)
-      //-   .h-b2 Automatically translate proposals and Projects to your default language
-  q-drawer(v-model="right" side="right" :width="$q.screen.gt.lg ? 370 : ($q.screen.md ? 400 : ($q.screen.gt.sm ?  140 : $q.screen.width))" v-if="$q.screen.gt.lg || account || !$q.screen.gt.sm" persistent).full-width
-    .row.full-width.full-height.flex.items-center.justify-center(v-if="loadingAccount")
-      loading-spinner(size="120px")
-    profile-sidebar(v-if="account" :profile="profile" :announcement="announcement" :dhoTitle="dhoTitle" :daoName="daoName" @close="right = false" :isMember="isMember" :isAuthenticated="isAuthenticated" :compact="!$q.screen.gt.lg && $q.screen.gt.md" :isMobile="!$q.screen.gt.md")
-    profile-sidebar-guest(v-if="!account && ($q.screen.gt.lg || !$q.screen.gt.sm) && !loadingAccount" :dhoTitle="dhoTitle" :daoName="daoName" @close="right = false" :registrationEnabled="daoSettings.registrationEnabled")
-  q-footer.bg-white(v-if="$q.screen.lt.lg" :style="{ height: '74px' }")
-    bottom-navigation
-  q-drawer(v-else v-model="left" side="left" :width="80" persistent="persistent" :show-if-above="true")
-    left-navigation(:dho="dho" :dhos="getDaos($apolloData.data.member)")
-  q-drawer(v-model="showNotificationsBar" overlay side="right" :width="$q.screen.gt.lg ? 370 : ($q.screen.md || $q.screen.gt.sm ? 400 : $q.screen.width)").full-width
+  q-drawer(v-model="showNotificationsBar" overlay side="right" :width="$q.screen.gt.lg ? 370 : ($q.screen.md || $q.screen.gt.sm ? 400 : $q.screen.width)" persistent).full-width
     div.q-pa-xl.full-height
       .row
         .flex.full-width.justify-between.no-wrap
@@ -557,6 +541,22 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
                 .h-b2.text-italic {{ parsedNotification(notification).createdDate }}
           .row.bg-white.full-width(v-if="notifications?.length" :style="{ 'position': 'fixed', 'bottom': '0', 'padding-right': '60px', 'padding-bottom': '20px', 'padding-top': '20px' }")
             q-btn.full-width.q-px-xl(@click="clearAllNotifications()" color="primary" :label="$t('notifications.clearAll')" no-caps outline rounded unelevated)
+      //- .translation-box.q-pa-sm(:style="{ 'position': 'absolute', 'bottom': '30px', 'right': '30px', 'left': '30px' }")
+      //-   .row.items-center.q-mb-md.justify-between
+      //-     .row
+      //-       img.q-mr-sm(:src="require('assets/images/locales/translation.png')" :style="{ 'width': '26px', 'height': '26px' }")
+      //-       .h-b2.text-bold(:style="{ 'font-size': '14px' }") Translation
+      //-     q-toggle(v-model="autoTranslate" color="secondary" keep-color)
+      //-   .h-b2 Automatically translate proposals and Projects to your default language
+  q-drawer(v-model="right" side="right" :width="$q.screen.gt.lg ? 370 : ($q.screen.md ? 400 : ($q.screen.gt.sm ?  140 : $q.screen.width))" v-if="$q.screen.gt.lg || account || !$q.screen.gt.sm" persistent).full-width
+    .row.full-width.full-height.flex.items-center.justify-center(v-if="loadingAccount")
+      loading-spinner(size="120px")
+    profile-sidebar(v-if="account" :profile="profile" :announcement="announcement" :dhoTitle="dhoTitle" :daoName="daoName" @close="right = false" :isMember="isMember" :isAuthenticated="isAuthenticated" :compact="!$q.screen.gt.lg && $q.screen.gt.md" :isMobile="!$q.screen.gt.md")
+    profile-sidebar-guest(v-if="!account && ($q.screen.gt.lg || !$q.screen.gt.sm) && !loadingAccount" :dhoTitle="dhoTitle" :daoName="daoName" @close="right = false" :registrationEnabled="daoSettings.registrationEnabled")
+  q-footer.bg-white(v-if="$q.screen.lt.lg" :style="{ height: '74px' }")
+    bottom-navigation
+  q-drawer(v-else v-model="left" side="left" :width="80" persistent="persistent" :show-if-above="true")
+    left-navigation(:dho="dho" :dhos="getDaos($apolloData.data.member)")
 </template>
 <style lang="stylus" scoped>
 .rounded-border

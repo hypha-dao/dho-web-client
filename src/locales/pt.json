@@ -622,7 +622,8 @@
       "login": "Conecte-se",
       "login1": "{1} Entrar {2}",
       "getApp": "Adquirir aplicativo",
-      "back": "Voltar"
+      "back": "Voltar",
+      "orChooseAPartner": "ou escolha uma carteira de parceiro"
     },
     "register-user-view": {
       "account": "Conta",

@@ -357,13 +357,19 @@ export default {
     dho () {
       if (this.dao && this.dao.length) {
         return {
-          name: this.dao[0].details_daoName_n,
-          title: this.dao[0].settings[0].settings_daoTitle_s,
-          icon: this.dao[0].settings[0].settings_logo_s,
-          isHypha: this.dao[0].settings[0].settings_isHypha_i
+          name: this.dao[0]?.details_daoName_n || '',
+          title: this.dao[0]?.settings[0]?.settings_daoTitle_s || '',
+          icon: this.dao[0]?.settings[0]?.settings_logo_s || '',
+          isHypha: this.dao[0]?.settings[0]?.settings_isHypha_i || ''
         }
       }
-      return undefined
+
+      return {
+        name: '',
+        title: '',
+        icon: '',
+        isHypha: ''
+      }
     },
 
     useCreateLayout () { return this.$q.screen.lt.md && this.$route.meta && this.$route.meta.layout && this.$route.meta.layout.mobile === 'create' },
@@ -377,7 +383,7 @@ export default {
 .dho-selector
   create-layout(v-if="useCreateLayout")
   login-layout(v-if="useLoginLayout")
-  multi-dho-layout(v-if="useMultiDHOLayout" :dho="dho" :daoName="dhoname" :dhoTitle="dho.title")
+  multi-dho-layout(v-if="useMultiDHOLayout" :dho="dho" :daoName="dhoname" :dhoTitle="dho?.title")
   proposal-layout(v-if="useMobileProposalLayout && $q.platform.is.desktop")
 </template>
 

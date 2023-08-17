@@ -80,19 +80,20 @@ export default {
               .full-width(:key="dao.name")
                 dho-btn(v-if="dho.name != dao.name" v-bind="dao" :logo="dao.icon" @click="switchDao(dao.url)")
         .full-width.border-bot
-    #nav-buttons.col-4.fixed-center
-      .row.justify-center(v-if="!expanded")
-        q-btn.q-ma-md(:class="{'active': activeTab=== 'dashboard'}" :flat="activeTab !== 'dashboard'" unelevated rounded padding="12px" icon="fas fa-home" size="sm" :color="activeTab === 'dashboard' ? 'primary' : 'disabled'" :to="{ name: 'dashboard' }")
-        q-btn.q-ma-md(:class="{'active': activeTab=== 'proposals'}" :flat="activeTab !== 'proposals'" unelevated rounded padding="12px" icon="far fa-file-alt" size="sm" :color="activeTab === 'proposals' ? 'primary' : 'disabled'" :to="{ name: 'proposals' }")
-          q-tooltip(anchor="center right" self="center left" :content-style="{ 'font-size': '1em' }") {{ $t('navigation.left-navigation.proposals') }}
-        q-btn.q-ma-md(:class="{'active': activeTab=== 'members'}" :flat="activeTab !== 'members'" unelevated rounded padding="12px" icon="fas fa-users" size="sm" :color="activeTab === 'members' ? 'primary' : 'disabled'" :to="{ name: 'members' }")
-          q-tooltip(anchor="center right" self="center left" :content-style="{ 'font-size': '1em' }") {{ $t('navigation.left-navigation.members') }}
-        q-btn.q-ma-md(:class="{'active': activeTab=== 'organization'}" :flat="activeTab !== 'organization'" unelevated rounded padding="12px" icon="fas fa-building" size="sm" :color="activeTab === 'organization' ? 'primary' : 'disabled'" :to="{ name: 'organization' }")
-          q-tooltip(anchor="center right" self="center left" :content-style="{ 'font-size': '1em' }") {{ $t('navigation.left-navigation.organization') }}
-    .col.fixed-bottom.flex.items-end
-      .row.justify-center.items-end.q-pb-lg
-        q-btn.q-ma-md(:class="{'active': activeTab=== 'explore'}" :flat="activeTab !== 'explore'" unelevated rounded padding="12px" icon="fas fa-globe" size="sm" :color="activeTab === 'explore' ? 'primary' : 'disabled'" :to="{ name: 'explore' }")
-          q-tooltip(anchor="center right" self="center left" :content-style="{ 'font-size': '1em' }") {{ $t('navigation.left-navigation.explore') }}
+    template(v-if="!expanded")
+      #nav-buttons.col-4.fixed-center
+        .row.justify-center
+          q-btn.q-ma-md(:class="{'active': activeTab=== 'dashboard'}" :flat="activeTab !== 'dashboard'" unelevated rounded padding="12px" icon="fas fa-home" size="sm" :color="activeTab === 'dashboard' ? 'primary' : 'disabled'" :to="{ name: 'dashboard' }")
+          q-btn.q-ma-md(:class="{'active': activeTab=== 'proposals'}" :flat="activeTab !== 'proposals'" unelevated rounded padding="12px" icon="far fa-file-alt" size="sm" :color="activeTab === 'proposals' ? 'primary' : 'disabled'" :to="{ name: 'proposals' }")
+            q-tooltip(anchor="center right" self="center left" :content-style="{ 'font-size': '1em' }") {{ $t('navigation.left-navigation.proposals') }}
+          q-btn.q-ma-md(:class="{'active': activeTab=== 'members'}" :flat="activeTab !== 'members'" unelevated rounded padding="12px" icon="fas fa-users" size="sm" :color="activeTab === 'members' ? 'primary' : 'disabled'" :to="{ name: 'members' }")
+            q-tooltip(anchor="center right" self="center left" :content-style="{ 'font-size': '1em' }") {{ $t('navigation.left-navigation.members') }}
+          q-btn.q-ma-md(:class="{'active': activeTab=== 'organization'}" :flat="activeTab !== 'organization'" unelevated rounded padding="12px" icon="fas fa-building" size="sm" :color="activeTab === 'organization' ? 'primary' : 'disabled'" :to="{ name: 'organization' }")
+            q-tooltip(anchor="center right" self="center left" :content-style="{ 'font-size': '1em' }") {{ $t('navigation.left-navigation.organization') }}
+      .col.fixed-bottom.flex.items-end
+        .row.justify-center.items-end.q-pb-lg
+          q-btn.q-ma-md(:class="{'active': activeTab=== 'explore'}" :flat="activeTab !== 'explore'" unelevated rounded padding="12px" icon="fas fa-globe" size="sm" :color="activeTab === 'explore' ? 'primary' : 'disabled'" :to="{ name: 'explore' }")
+            q-tooltip(anchor="center right" self="center left" :content-style="{ 'font-size': '1em' }") {{ $t('navigation.left-navigation.explore') }}
 
 </template>
 

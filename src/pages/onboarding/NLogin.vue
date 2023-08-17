@@ -18,10 +18,11 @@ export default {
         login: 'login',
         register: 'register'
       },
-      registerStep: 'swirl-step-two',
+      registerStep: this.isAuthenticated ? 'create' : 'captcha',
       stepPK: undefined,
       showingCard: true,
-      dhoname: undefined
+      dhoname: undefined,
+      inviteLink: null
     }
   },
   mounted () {
@@ -40,9 +41,9 @@ export default {
           return 'swirl-step-two'
         case 'register':
           // ('animationSwirl')
-          if (this.registerStep === 'phoneNumber') {
+          if (this.registerStep === 'captcha') {
             return 'swirl-step-two'
-          } else if (this.registerStep === 'keys') {
+          } else if (this.registerStep === 'inviteLink') {
             return 'swirl-step-three'
           } else if (this.registerStep === 'finish') {
             return 'swirl-step-four'
@@ -60,9 +61,9 @@ export default {
           return 'swirl-step-two-mobile'
         case 'register':
           // ('animationSwirl')
-          if (this.registerStep === 'phoneNumber') {
+          if (this.registerStep === 'captcha') {
             return 'swirl-step-two-mobile'
-          } else if (this.registerStep === 'keys') {
+          } else if (this.registerStep === 'inviteLink') {
             return 'swirl-step-three-mobile'
           } else if (this.registerStep === 'finish') {
             return 'swirl-step-four-mobile'
@@ -79,9 +80,9 @@ export default {
         case 'login':
           return 'welcome-bg-step-two'
         case 'register':
-          if (this.registerStep === 'phoneNumber') {
+          if (this.registerStep === 'captcha') {
             return 'welcome-bg-step-two'
-          } else if (this.registerStep === 'keys') {
+          } else if (this.registerStep === 'inviteLink') {
             return 'welcome-bg-step-three'
           } else if (this.registerStep === 'finish') {
             return 'welcome-bg-step-four'
@@ -98,9 +99,9 @@ export default {
         case 'login':
           return 'welcome-bg-step-two-mobile'
         case 'register':
-          if (this.registerStep === 'phoneNumber') {
+          if (this.registerStep === 'captcha') {
             return 'welcome-bg-step-two-mobile'
-          } else if (this.registerStep === 'keys') {
+          } else if (this.registerStep === 'inviteLink') {
             return 'welcome-bg-step-three-mobile'
           } else if (this.registerStep === 'finish') {
             return 'welcome-bg-step-four-mobile'
@@ -137,9 +138,9 @@ export default {
           transition(v-if="step === steps.welcome" enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
             welcome-view.full-width(@onLoginClick="step = steps.login" @onRegisterClick="step = steps.register" v-bind="{ isOnboarding }")
           transition(v-else-if="step === steps.login" enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
-            login-view(:dhoName="dhoname" :pk="stepPK" @transitionToRegister="step = steps.register" @onLoginWithPK=" v => stepPK = true" @back="step = steps.welcome" v-bind="{ isOnboarding }")
+            login-view(:dhoName="dhoname" :pk="stepPK" @transitionToRegister="step = steps.register" @onLoginWithPK=" v => stepPK = true" @back="step = steps.welcome, inviteLink = null" v-bind="{ isOnboarding }")
           transition(v-else-if="step === steps.register" enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
-            register-user-with-captcha-view(@stepChanged="v => registerStep = v" @onFinish="step = steps.login" @back="step = steps.welcome" v-bind="{ isOnboarding }")
+            register-user-with-captcha-view(@setInviteLink="v => inviteLink = v" :inviteLink="inviteLink" :step="registerStep" @stepChanged="v => registerStep = v" @onFinish="step = steps.login" @back="step = steps.welcome, inviteLink = null" v-bind="{ isOnboarding }")
       .col.full-height.card-container.relative-position.gt-xs
         .welcome-info.absolute-center
           ipfs-image-viewer(:ipfsCid="selectedDao.logo" showDefault :defaultLabel="daoName" size="300px")
@@ -152,9 +153,9 @@ export default {
         transition(v-if="step === steps.welcome" enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
           welcome-view.full-width.full-height(@onLoginClick="step = steps.login" @onRegisterClick="step = steps.register")
         transition(v-else-if="step === steps.login" enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
-          login-view.full-height(:dhoName="dhoname" :pk="stepPK" @onLoginWithPK=" v => stepPK = true" @back="step = steps.welcome")
+          login-view.full-height(:dhoName="dhoname" :pk="stepPK" @onLoginWithPK=" v => stepPK = true" @back="step = steps.welcome, inviteLink = null")
         transition(v-else-if="step === steps.register" enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
-          register-user-with-captcha-view.full-height(@back="step = steps.welcome" @stepChanged="v => registerStep = v" @onFinish="step = steps.login" @onClickLoginPage="step = steps.login")
+          register-user-with-captcha-view.full-height(@setInviteLink="v => inviteLink = v" :inviteLink="inviteLink" :step="registerStep" @back="step = steps.welcome, inviteLink = null" @stepChanged="v => registerStep = v" @onFinish="step = steps.login" @onClickLoginPage="step = steps.login")
       bottom-section(:daoSettings="daoSettings" v-if="step === steps.login || step === steps.register && registerStep !== 'finish'" :stepPK="stepPK" :step="step" :steps="steps" @onClickRegisterHere="step = steps.register; stepPK = false" @onClickLogin="stepPK = false" @onClickLoginPage="step = steps.login; stepPK = false")
 
 </template>

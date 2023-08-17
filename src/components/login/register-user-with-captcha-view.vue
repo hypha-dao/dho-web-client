@@ -16,6 +16,8 @@ export default {
     QrcodeVue
   },
   props: {
+    step: String,
+    inviteLink: String
   },
 
   data() {
@@ -48,8 +50,6 @@ export default {
       }
     }
     return {
-      inviteLink: null,
-      step: steps.captcha.name,
       stepIndex: {
         captcha: 1,
         inviteLink: 2,
@@ -103,9 +103,9 @@ export default {
   },
   async mounted() {
     if (this.isAuthenticated) {
-      this.step = this.steps.create.name
+      this.$emit('stepChanged', this.step)
     } else {
-      this.$emit('stepChanged', 'captcha')
+      this.$emit('stepChanged', this.step)
     }
   },
   computed: {
@@ -134,8 +134,6 @@ export default {
     async next() {
       const currentStep = this.steps[this.step]
 
-      this.step = currentStep.nextStep
-
       await currentStep.action()
     },
     async onLoginWallet(idx) {
@@ -143,7 +141,7 @@ export default {
         try {
           await this.loginWallet({ idx })
           if (this.account) {
-            this.step = this.steps.create.name
+            this.$emit('stepChanged', this.steps.create.name)
           }
         } catch (e) {
         }
@@ -152,7 +150,7 @@ export default {
       }
     },
     async setCaptchaResponse(data) {
-      this.inviteLink = data.inviteLink
+      this.$emit('setInviteLink', data.inviteLink)
     },
     copyText() {
       const storage = document.createElement('textarea')
@@ -178,7 +176,7 @@ export default {
           isDraft
         })
 
-        this.step = this.steps.loading.name
+        this.$emit('stepChanged', this.steps.loading.name)
 
         const query = await this.$apollo.watchQuery({
           query: require('~/query/dao-created.gql'),
@@ -231,12 +229,12 @@ export default {
             .font-lato.text-heading.text-weight-bolder(:style="{ 'font-size': '34px' }") {{ $t('login.register-user-with-captcha-view.createNew') }}
           .text-medium.q-mt-md {{ $t('login.register-user-with-captcha-view.pleaseVerifyYou') }}
           .flex.justify-center(:style="{ 'margin-top': '80px' }")
-            captcha(vue-recaptcha="vue-recaptcha" sitekey="6LfPcOUkAAAAAEXUdeFqdsJUob93TpWFEoHdj_yF" @setCaptchaResponse="this.setCaptchaResponse" ev-bind:callback="callback")
+            captcha(ref="captcha" vue-recaptcha="vue-recaptcha" sitekey="6LfPcOUkAAAAAEXUdeFqdsJUob93TpWFEoHdj_yF" @setCaptchaResponse="this.setCaptchaResponse" ev-bind:callback="callback")
 
         #form2.flex.column.justify-between.no-wrap(v-show="step === this.steps.inviteLink.name")
           template
             div.full-height.column.justify-center
-              .row.flex.items-center.cursor-pointer(@click="step = steps.captcha.name")
+              .row.flex.items-center.cursor-pointer(@click="$emit('stepChanged', steps.captcha.name)")
                 q-icon.q-mr-xxs(name="fas fa-arrow-left" color="primary" size="14px")
                 .text-bold.text-primary {{ $t('login.login-view.back') }}
               .row
@@ -255,15 +253,19 @@ export default {
         #form3.flex.column.justify-center(v-show="step === this.steps.finish.name")
           template
             div.full-height.column.justify-center
-              .row.flex.items-center.cursor-pointer(@click="step = steps.inviteLink.name")
+              .row.flex.items-center.cursor-pointer(@click="$emit('stepChanged', steps.inviteLink.name)")
                 q-icon.q-mr-xxs(name="fas fa-arrow-left" color="primary" size="14px")
                 .text-bold.text-primary {{ $t('login.login-view.back') }}
-              .font-lato.text-heading.text-weight-bolder(:style="{ 'font-size': '34px' }") {{ $t('login.register-user-with-captcha-view.loginWith') }}
-              .text-bold.text-black.q-mt-md {{ $t('login.register-user-with-captcha-view.signYourFirstTransaction') }}
-              p.text-normal.q-mt-xs {{ $t('login.register-user-with-captcha-view.didYouCreate') }}
-              .row.flex.justify-center.items-center.q-mt-xl
-                img(:style="{ 'width': 'fit-content' }" src="~/assets/images/onboarding-mobile.svg")
-                img.q-ml-md(:style="{ 'width': 'fit-content', 'height': 'fit-content' }" src="~/assets/images/onboarding-code.svg")
+              .font-lato.text-heading.text-weight-bolder.q-mb-md(:style="{ 'font-size': '34px' }") {{ $t('login.register-user-with-captcha-view.loginWith') }}
+              .q-mt-md
+                .row
+                  .col-3
+                    img(:style="{ 'width': 'fit-content' }" src="~/assets/images/onboarding-mobile.svg")
+                  .col.q-ml-md
+                    .text-bold.text-black.q-mt-md {{ $t('login.register-user-with-captcha-view.signYourFirstTransaction') }}
+                    p.text-normal.q-mt-xs {{ $t('login.register-user-with-captcha-view.didYouCreate') }}
+                    .row.flex.justify-center.items-center.q-mt-xl
+                    .text-primary.text-bold.cursor-pointer(@click="next") {{ $t('login.register-user-with-captcha-view.needHelp') }}
         #form4.flex.column.justify-between.no-wrap.full-height(v-show="step === this.steps.create.name")
           div.full-height.column.justify-end
             .font-lato.text-heading.text-weight-bolder(:style="{ 'font-size': '34px' }") {{ $t('login.register-user-with-captcha-view.createYourDao') }}
@@ -302,7 +304,7 @@ export default {
             .ellipse-border(:class="step === this.steps.finish.name && 'ellipse-filled'")
         .col-10.no-wrap.flex.justify-end.items-center
           q-btn(v-if="step === this.steps.inviteLink.name" :label="$t('login.register-user-with-captcha-view.copyInviteLink')" color="primary" outline unelevated @click="copyText()" rounded no-caps)
-          q-btn.q-mx-md.q-px-md(:style="{ 'height': 'fit-content' }" :label="step === 'finish' ? 'Need Help?' : 'Next'" color="primary" unelevated @click="next" :disable="!this.inviteLink" :loading="submitting" :outline="step === this.steps.finish.name" rounded no-caps)
+          q-btn(v-if="step !== this.steps.finish.name").q-mx-md.q-px-md(:style="{ 'height': 'fit-content' }" :label="step === 'finish' ? 'Need Help?' : 'Next'" color="primary" unelevated @click="next" :disable="!this.inviteLink" :loading="submitting" :outline="step === this.steps.finish.name" rounded no-caps)
           q-list(v-if="step === steps.finish.name")
             q-item.wallet.q-my-xs(v-for="(wallet, idx) in this.hyphaAuthenticators" :key="wallet.getStyle().text" v-ripple :style="{ background: wallet.getStyle().background, color: wallet.getStyle().textColor }")
               q-item-section.cursor-pointer(avatar @click="onLoginWallet(idx)")
