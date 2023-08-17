@@ -61,7 +61,8 @@ export default defineComponent({
 
     split: Boolean,
     compact: Boolean,
-    contentFullWidth: Boolean
+    contentFullWidth: Boolean,
+    upvoteBanner: Boolean
   },
 
   methods: {
@@ -73,7 +74,7 @@ export default defineComponent({
 <template lang="pug">
 .base-banner.full-width.rounded-full.relative-position.overflow-hidden(:class="{'compact-banner': compact}" :style="{background: color}")
   #banner-pattern.absolute(:style="{background: `url('${pattern}') repeat`, 'background-size': '200px'}" v-if="pattern")
-  #banner-image.absolute(:style="{background: `url('${background}') no-repeat`, 'background-size': 'cover'}" v-if="background")
+  #banner-image.absolute(:style="{background: `url('${background}') no-repeat`, 'background-size': 'cover'}" :class="{ 'upvote-banner': upvoteBanner }" v-if="background")
   #linear-gradient.absolute.z-40(v-if="gradient")
   .content.relative-position.z-50.full-height.q-pa-xl(:class="{'q-pa-xxxl': $q.screen.gt.sm}")
     .absolute-top-right.z-50.q-pa-sm(v-if="hasListener('onClose') || hasSlot('top-right')")
@@ -108,4 +109,7 @@ export default defineComponent({
   background-repeat: no-repeat
   background-size: cover
   background-position-x right
+
+.upvote-banner
+  opacity: .3
 </style>

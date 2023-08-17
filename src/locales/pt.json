@@ -1268,6 +1268,10 @@
         "hour": "hora",
         "mins": "minutos",
         "min": "min",
+        "sec": "segundo",
+        "participants": "Participantes",
+        "treasury": "Tesouraria",
+        "timeLeftForSigningUp": "Tempo restante para inscrição",
         "moreInformationAbout": "Mais informações sobre a eleição UpVote",
         "here": "aqui",
         "signup": "Inscrever-se",
@@ -1280,7 +1284,10 @@
         "members": "Membros",
         "proposals": "Propostas",
         "welcomeToHyphaEvolution": "Bem-vindo à evolução Hypha",
-        "atHyphaWere": "Na Hypha, estamos cocriando soluções para construir organizações impactantes. Desenvolvemos sistemas radicais para arquitetar a próxima geração de organizações descentralizadas. Deixe-nos guiá-lo para reformular a forma como você coordena equipes, estimula a motivação, gerencia finanças e promove uma comunicação eficaz em direção a uma visão compartilhada. Transforme seus sonhos em realidade com Hypha!"
+        "atHyphaWere": "Na Hypha, estamos cocriando soluções para construir organizações impactantes. Desenvolvemos sistemas radicais para arquitetar a próxima geração de organizações descentralizadas. Deixe-nos guiá-lo para reformular a forma como você coordena equipes, estimula a motivação, gerencia finanças e promove uma comunicação eficaz em direção a uma visão compartilhada. Transforme seus sonhos em realidade com Hypha!",
+        "learnMore": "Saber mais",
+        "communityElectionsAreAbout": "As eleições comunitárias estão prestes a começar",
+        "weUseAFairAndInclusive": "Usamos um mecanismo de votação justo e inclusivo para garantir pontos de vista diversos. O processo de votação é rápido e eficiente. Você está convidado a se inscrever para se nomear como candidato."
       },
       "members": {
         "becomeAMember": "Torne-se um membro",
