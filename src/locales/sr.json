@@ -1643,7 +1643,19 @@
         "sec": "сец",
         "castYourVote": "Дајте свој глас",
         "loremIpsumDolor": "Лорем ипсум долор сит амет, цонсецтетур адиписцинг елит, сед",
-        "electionProcess": "Изборни процес"
+        "electionProcess": "Изборни процес",
+        "signUp": "Пријави се",
+        "signUpForThisElection": "Пријавите се за ове изборе",
+        "telegramHandle": "Телеграм ручка",
+        "thanksForRegistering": "Хвала што сте се пријавили за изборе",
+        "theElectionIsAboutToStart": "Избори ускоро почињу. ",
+        "learnMore": "Сазнајте више",
+        "left": "лево",
+        "youCanVote": "Можете гласати за само једног члана у сваком кругу. ",
+        "toNextRound": "у следећу рунду",
+        "wellDone": "Добро урађено! ",
+        "displacements": "Дисплацементс",
+        "goToMyBadges": "Иди на моје значке"
       },
       "steps": {
         "stepround1": {

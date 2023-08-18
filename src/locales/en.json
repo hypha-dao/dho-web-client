@@ -1650,7 +1650,23 @@
         "sec": "sec",
         "castYourVote": "Cast your vote",
         "loremIpsumDolor": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed",
-        "electionProcess": "Election process"
+        "electionProcess": "Election process",
+        "signUp": "Sign up",
+        "signUpForThisElection": "Sign up for this election",
+        "telegramHandle": "Telegram handle",
+        "thanksForRegistering": "Thanks for registering for the election",
+        "theElectionIsAboutToStart": "The election is about to start. Please check your Telegram and join your group.",
+        "learnMore": "Learn more",
+        "left": "left",
+        "youCanVote": "You can vote for just one member in each round. Your vote can be changed until the timer runs out.",
+        "toNextRound": "to next round",
+        "wellDone": "Well done! You've won enough votes to continue to the next round!",
+        "displacements": "Displacements",
+        "goToMyBadges": "Go to my badges",
+        "headChiefDelegate": "Head Chief Delegate",
+        "chiefDelegate": "Chief Delegate",
+        "delegatel2": "Delegate Lev. 2",
+        "delegatel1": "Delegate Lev. 1"
       },
       "steps": {
         "stepround1": {

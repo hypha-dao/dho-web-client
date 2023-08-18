@@ -149,7 +149,7 @@ export default {
       formatNumber,
       I18n,
       counterdown: undefined,
-      endDate: '2023-08-18',
+      endDate: '2023-08-20',
       pagination: {
         first: 6,
         offset: 0,

@@ -1643,7 +1643,19 @@
         "sec": "segundo",
         "castYourVote": "Emitir su voto",
         "loremIpsumDolor": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed",
-        "electionProcess": "Proceso de elección"
+        "electionProcess": "Proceso de elección",
+        "signUp": "Inscribirse",
+        "signUpForThisElection": "Regístrese para esta elección",
+        "telegramHandle": "identificador de telegrama",
+        "thanksForRegistering": "Gracias por registrarse para las elecciones.",
+        "theElectionIsAboutToStart": "Las elecciones están a punto de comenzar. ",
+        "learnMore": "Aprende más",
+        "left": "izquierda",
+        "youCanVote": "Puede votar por un solo miembro en cada ronda. ",
+        "toNextRound": "a la próxima ronda",
+        "wellDone": "¡Bien hecho! ",
+        "displacements": "Desplazamientos",
+        "goToMyBadges": "Ir a mis insignias"
       },
       "steps": {
         "stepround1": {

@@ -1643,7 +1643,19 @@
         "sec": "秒",
         "castYourVote": "投你的票",
         "loremIpsumDolor": "Lorem ipsum dolor sat amet、consectetur adipiscing elit、sed",
-        "electionProcess": "选举过程"
+        "electionProcess": "选举过程",
+        "signUp": "报名",
+        "signUpForThisElection": "报名参加本次选举",
+        "telegramHandle": "电报句柄",
+        "thanksForRegistering": "感谢您报名参加选举",
+        "theElectionIsAboutToStart": "选举即将开始。",
+        "learnMore": "了解更多",
+        "left": "左边",
+        "youCanVote": "每轮您只能投票给一名成员。",
+        "toNextRound": "到下一轮",
+        "wellDone": "做得好！",
+        "displacements": "位移",
+        "goToMyBadges": "转到我的徽章"
       },
       "steps": {
         "stepround1": {
