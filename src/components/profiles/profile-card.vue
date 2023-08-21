@@ -32,7 +32,8 @@ export default {
     canEnroll: Boolean,
     isCommunityMember: Boolean,
     isCoreMember: Boolean,
-    badges: Array
+    badges: Array,
+    isElection: Boolean
   },
 
   data () {
@@ -268,7 +269,7 @@ widget-editable.q-pa-md(:class="{ 'full-width': list, 'cursor-pointer': !editBut
   .flex.justify-center.q-mb-sm(v-if="isCommunityMember || isCoreMember")
     chips(:tags="[{ outline: false, color: 'secondary', label: $t('profiles.profile-card.community') }]" v-if="isCommunityMember" chipSize="sm")
     chips(:tags="[{ outline: false, color: 'primary', label: $t('profiles.profile-card.coreTeam') }]" v-if="isCoreMember" chipSize="sm")
-  .row.items-arround.flex(v-if="!editable" :style="{ 'height': card ? '324px' : '80px' }")
+  .row.items-arround.flex(v-if="!editable" :style="{ 'height': isElection ? '230px' : card ? '324px' : '80px' }")
     .col-auto(:class="{ 'col-12': card, 'q-pr-xl': list}")
       .column.relative(:class="{ 'items-center': card }")
         profile-picture(:username="username" :size="list ? '82px' : '140px'" ref="profilePic")
@@ -279,14 +280,14 @@ widget-editable.q-pa-md(:class="{ 'full-width': list, 'cursor-pointer': !editBut
           template(v-else)
             img(:src="badges[0].details_icon_s" width="36px" height="36px" :style="{'border': '1px solid white', 'border-radius': '50%'}")
           .absolute.flex.items-center.justify-center.font-lato.text-bold(v-if="badges.length > 1" :style="{'width': '28px', 'height': '28px', 'border-radius': '50%', 'background': '#242F5D', 'color': 'white', 'font-size': '12px', 'border': '1px solid white', 'right': '-20px', 'top': '5px'}") {{ `+ ${badges.length - 1}` }}
-    .col.q-mb-xxs(:class="{ 'col-12': card, 'text-center': card, 'q-mt-lg': card  }")
+    .col.q-mb-xxs(:class="{ 'col-12': card, 'text-center': card, 'q-mt-lg': card && !isElection }")
       .column.flex.justify-center.full-height(:class="{ 'items-center': card }")
         chips(:tags="[{ outline: false, color: 'secondary', label: $t('profiles.profile-card.applicant') }]" v-if="isApplicant" chipSize="sm")
         .h-h3 {{ title }}
 
           q-tooltip {{title}}
         .h-b3.text-weight-thin.text-grey-7 {{ '@' + subtitle }}
-    .col-7.row.items-center(:class="{ 'col-12': card }" v-if="!isApplicant")
+    .col-7.row.items-center(:class="{ 'col-12': card }" v-if="!isApplicant && !isElection")
       .col-4.justify-center(:class="{ 'row items-center': list }")
         .items-center(:class="{ 'row': list, 'column': card }")
           q-icon.q-py-xs(color="grey-7" name="fas fa-calendar-alt")
@@ -314,7 +315,14 @@ widget-editable.q-pa-md(:class="{ 'full-width': list, 'cursor-pointer': !editBut
       croppa.image-selector.q-mb-lg(v-model="image" :show-remove-button="false" :replace-drop="true" :canvas-color="'#3E3B46CC'" :placeholder="'UPLOAD A NEW PROFILE PIC'" :placeholder-font-size="8" :placeholder-color="'#FFFFFF'" :accept="'image/*'" :file-size-limit="4e6" :width="140" :height="140" :quality="1" prevent-white-space="prevent-white-space")
       q-input.full-width.rounded-border.q-mt-xl(ref="name" v-model="form.name" :label="$t('profiles.profile-card.name')" maxlength="200" :rules="[rules.required]" lazy-rules outlined dense)
       q-select.full-width.rounded-border(dropdown-icon="fas fa-map-marker-alt" outlined hide-bottom-space v-model="form.timeZone" use-input="use-input" fill-input="fill-input" hide-selected="hide-selected" dense :label="$t('profiles.profile-card.timeZone')" :options="timeZonesFilteredOptions" @filter="filterTimeZones" option-value="value" :option-label="$t('profiles.profile-card.text')" emit-value map-options)
-
+  .col.text-black.text-bold.q-my-md.q-pt-md(v-if="isElection" :style="{ 'font-weight': '600', 'border-top': '1px solid #CBCDD1' }")
+    .row.q-mb-xs.flex.justify-between.items-center
+      div {{ $t('profiles.profile-card.voteForYourself') }}
+      q-icon(name="fas fa-times" color="grey" size="20px")
+    .row.flex.justify-between.items-center
+      div {{ $t('profiles.profile-card.reachConsensus') }}
+      q-icon(name="fas fa-times" color="grey" size="20px")
+  q-btn.full-width(@click="" color="primary" flat :label="$t('profiles.profile-card.viewMyGroup')" no-caps bordered rounded v-if="isElection" :style="{'border': '1px solid #252f5d'}")
 </template>
 
 <style lang="stylus" scoped>

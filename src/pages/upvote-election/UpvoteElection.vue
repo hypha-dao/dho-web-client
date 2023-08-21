@@ -7,7 +7,9 @@ export default {
   components: {
     Widget: () => import('~/components/common/widget.vue'),
     LoadingSpinner: () => import('~/components/common/loading-spinner.vue'),
-    ProfilePicture: () => import('~/components/profiles/profile-picture.vue')
+    ProfileCard: () => import('~/components/profiles/profile-card.vue'),
+    ProfilePicture: () => import('~/components/profiles/profile-picture.vue'),
+    RoundCard: () => import('./RoundCard.vue')
   },
   data () {
     return {
@@ -23,10 +25,10 @@ export default {
       upvoteWidgetState: 'signup',
       upvoteTimeRemaining: '',
       roundTimeRemaining: '',
-      endDate: 'August 20, 2023 19:00:00', // TODO: waiting API
+      endDate: 'August 21, 2023 19:00:00', // TODO: waiting API
       isRegister: false, // TODO: waiting API
-      endRoundTime: 'August 18, 2023 14:00:00', // TODO: waiting API
-      waitingTime: 'August 18, 2023 14:00:00', // TODO: waiting API
+      endRoundTime: 'August 21, 2023 14:00:00', // TODO: waiting API
+      waitingTime: 'August 21, 2023 14:00:00', // TODO: waiting API
       displacements: { // TODO: waiting API
         headChiefDelegate: 2.528,
         chiefDelegate: 1.731,
@@ -81,7 +83,243 @@ export default {
           joinDate: 'July 14, 2023'
         }
       ],
-      page: 1
+      page: 1,
+      signedUp: false,
+      votingRounds: [ // TODO: waiting API
+        {
+          participants: 126,
+          groups: [
+            {
+              myGroup: false,
+              votes: [
+                {
+                  slot: false,
+                  consensus: false,
+                  vote: true
+                },
+                {
+                  slot: false,
+                  consensus: false,
+                  vote: true
+                },
+                {
+                  slot: false,
+                  consensus: false,
+                  vote: true
+                },
+                {
+                  slot: true,
+                  consensus: false,
+                  vote: false
+                },
+                {
+                  slot: true,
+                  consensus: false,
+                  vote: false
+                },
+                {
+                  slot: true,
+                  consensus: false,
+                  vote: false
+                }
+              ],
+              users: [
+                {
+                  fullName: 'Howard S. Lowe',
+                  account: 'accountname',
+                  votesCount: 3,
+                  telegram: 'telegramhandle'
+                },
+                {
+                  fullName: 'Howard S. Lowe',
+                  account: 'accountname',
+                  votesCount: 3,
+                  telegram: 'telegramhandle'
+                },
+                {
+                  fullName: 'Howard S. Lowe',
+                  account: 'accountname',
+                  votesCount: 3,
+                  telegram: 'telegramhandle'
+                },
+                {
+                  fullName: 'Howard S. Lowe',
+                  account: 'accountname',
+                  votesCount: 3,
+                  telegram: 'telegramhandle'
+                },
+                {
+                  fullName: 'Howard S. Lowe',
+                  account: 'accountname',
+                  votesCount: 3,
+                  telegram: 'telegramhandle'
+                },
+                {
+                  fullName: 'Howard S. Lowe',
+                  account: 'accountname',
+                  votesCount: 3,
+                  telegram: 'telegramhandle'
+                }
+              ]
+            },
+            {
+              myGroup: true,
+              votes: [
+                {
+                  slot: false,
+                  consensus: false,
+                  vote: true
+                },
+                {
+                  slot: false,
+                  consensus: false,
+                  vote: true
+                },
+                {
+                  slot: false,
+                  consensus: false,
+                  vote: true
+                },
+                {
+                  slot: false,
+                  consensus: false,
+                  vote: true
+                },
+                {
+                  slot: false,
+                  consensus: true,
+                  vote: false
+                },
+                {
+                  slot: true,
+                  consensus: false,
+                  vote: false
+                }
+              ],
+              users: [
+                {
+                  fullName: 'Howard S. Lowe',
+                  account: 'accountname',
+                  votesCount: 3,
+                  telegram: 'telegramhandle'
+                },
+                {
+                  fullName: 'Howard S. Lowe',
+                  account: 'accountname',
+                  votesCount: 3,
+                  telegram: 'telegramhandle'
+                },
+                {
+                  fullName: 'Howard S. Lowe',
+                  account: 'accountname',
+                  votesCount: 3,
+                  telegram: 'telegramhandle'
+                },
+                {
+                  fullName: 'Howard S. Lowe',
+                  account: 'accountname',
+                  votesCount: 3,
+                  telegram: 'telegramhandle'
+                },
+                {
+                  fullName: 'Howard S. Lowe',
+                  account: 'accountname',
+                  votesCount: 3,
+                  telegram: 'telegramhandle'
+                },
+                {
+                  fullName: 'Howard S. Lowe',
+                  account: 'accountname',
+                  votesCount: 3,
+                  telegram: 'telegramhandle'
+                }
+              ]
+            }
+          ],
+          l1DelegateBadges: '0/21'
+        },
+        {
+          participants: 126,
+          groups: [
+            {
+              myGroup: true,
+              votes: [
+                {
+                  slot: false,
+                  consensus: false,
+                  vote: true
+                },
+                {
+                  slot: false,
+                  consensus: false,
+                  vote: true
+                },
+                {
+                  slot: false,
+                  consensus: false,
+                  vote: true
+                },
+                {
+                  slot: false,
+                  consensus: false,
+                  vote: true
+                },
+                {
+                  slot: false,
+                  consensus: true,
+                  vote: false
+                },
+                {
+                  slot: true,
+                  consensus: false,
+                  vote: false
+                }
+              ],
+              users: [
+                {
+                  fullName: 'Howard S. Lowe',
+                  account: 'accountname',
+                  votesCount: 3,
+                  telegram: 'telegramhandle'
+                },
+                {
+                  fullName: 'Howard S. Lowe',
+                  account: 'accountname',
+                  votesCount: 3,
+                  telegram: 'telegramhandle'
+                },
+                {
+                  fullName: 'Howard S. Lowe',
+                  account: 'accountname',
+                  votesCount: 3,
+                  telegram: 'telegramhandle'
+                },
+                {
+                  fullName: 'Howard S. Lowe',
+                  account: 'accountname',
+                  votesCount: 3,
+                  telegram: 'telegramhandle'
+                },
+                {
+                  fullName: 'Howard S. Lowe',
+                  account: 'accountname',
+                  votesCount: 3,
+                  telegram: 'telegramhandle'
+                },
+                {
+                  fullName: 'Howard S. Lowe',
+                  account: 'accountname',
+                  votesCount: 3,
+                  telegram: 'telegramhandle'
+                }
+              ]
+            }
+          ],
+          l1DelegateBadges: '4/4'
+        }
+      ],
+      currentState: 'signup',
+      showGroups: false
     }
   },
   apollo: {
@@ -366,7 +604,7 @@ export default {
 .upvote-election
   .row.full-width.q-my-md.q-mt-lg
     .col-9
-      q-card.widget.full-width.q-pa-xl.relative-position.rounded-card(flat)
+      q-card.q-mr-md.widget.q-pa-xl.relative-position.rounded-card(v-if="currentState === 'signup'" flat)
         .title
           .row.flex.items-center.justify-between
             .col.flex.items-center
@@ -415,13 +653,16 @@ export default {
                     .row.flex.items-center
                       q-icon(name="fas fa-paper-plane" size="12px")
                       .q-ml-xs {{ applicant.telegram }}
-                  .col Member since {{ dateToStringShort(applicant.joinDate) }}
+                  .col {{ $t('pages.upvote-election.memberSince', { date: dateToStringShort(applicant.joinDate) } ) }}
                 .row.justify-between.q-pt-sm.items-center
                   q-btn(:disable="page === 1" @click="onPrev()" flat rounded icon="fas fa-chevron-left")
                   .row.flex.items-center
                     div.q-ml-xs(v-for="dot, index in pages" :style="{'width': '10px', 'height': '10px', 'background': '#CAC8B0', 'border-radius': '50%'}" :class="{ 'bg-primary': index === page - 1}")
                   q-btn(:disable="isLastPage" @click="onNext()" flat rounded icon="fas fa-chevron-right")
-    .col-3.q-pl-md
+      template(v-for="round, index in votingRounds" v-if="currentState === 'voting'" flat)
+        round-card.q-mb-md(v-bind="round" :roundNumber="index + 1")
+    .col-3
+      profile-card.q-mb-md(v-if="signedUp" isElection :style="{'grid-area': 'profile'}" :clickable="false" :username="account" view="card" :compact="!$q.screen.gt.md" :tablet="$q.screen.md")
       widget.q-pa-xxl.bg-primary.q-mb-md(:class="{ 'bg-secondary': upvoteWidgetState === 'waiting' }")
         template(v-if="upvoteWidgetState !== 'active' && upvoteWidgetState !== 'waiting'")
           .h-h4.text-white.q-mb-md {{ widgetTitle }}
@@ -467,7 +708,7 @@ export default {
           q-btn.q-px-lg.h-btn1.full-width.q-mb-sm(icon="fas fa-paper-plane" color="white" textColor="grey" :label="$t('pages.upvote-election.upvoteelection.telegramHandle')" no-caps rounded text-color="primary" unelevated)
           q-btn.q-px-lg.h-btn1.full-width(@click="isRegister = true" color="secondary" textColor="white" :label="$t('pages.upvote-election.upvoteelection.signUp')" no-caps rounded text-color="primary" unelevated)
         template(v-else-if="upvoteWidgetState !== 'finish'")
-          q-btn.q-px-lg.h-btn1.full-width(@click="upvoteWidgetState = 'active'" outline color="white" textColor="white" :label="$t('pages.upvote-election.upvoteelection.learnMore')" no-caps rounded text-color="primary" unelevated)
+          q-btn.q-px-lg.h-btn1.full-width(@click="upvoteWidgetState = 'active', signedUp = true, currentState='voting'" outline color="white" textColor="white" :label="$t('pages.upvote-election.upvoteelection.learnMore')" no-caps rounded text-color="primary" unelevated)
         template(v-if="upvoteWidgetState === 'finish'")
           q-btn.q-px-lg.h-btn1.full-width(color="white" textColor="primary" :label="$t('pages.upvote-election.upvoteelection.goToMyBadges')" no-caps rounded text-color="primary" unelevated)
         .timer.row.q-mt-xl.justify-center(v-if="upvoteWidgetState === 'signup'" :style="{ 'color': 'white' }")

@@ -910,6 +910,9 @@
       "youHaveNo": "You have no past achievements"
     },
     "profile-card": {
+      "viewMyGroup": "View my group",
+      "voteForYourself": "Vote for yourself",
+      "reachConsensus": "Reach consensus",
       "voice": "{1} VOICE",
       "name": "Name",
       "timeZone": "Time zone",
@@ -1643,6 +1646,21 @@
       "participants": "Participants",
       "treasury": "Treasury",
       "eachRound": "Each round",
+      "votingRound": "Voting Round",
+      "areYouReadyToBegin": "Are you ready to being the election process and get to know the other participants? Vote wisely so the best candidate can advance.",
+      "groups": "Groups",
+      "l1DelegateBadges": "L1 Delegate Badges",
+      "l2DelegateBadges": "L2 Delegate Badges",
+      "memberSince": "Member since {date}",
+      "group": "Group",
+      "groupcard": {
+        "noRecordingsYet": "No recordings yet",
+        "uploadRecording": "Upload recording",
+        "slots": "Slots",
+        "consensus": "Consensus",
+        "votes": "Votes",
+        "vote": "Vote"
+      },
       "upvoteelection": {
         "timeLeft": "Time left:",
         "days": "days",
