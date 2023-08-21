@@ -1631,6 +1631,11 @@
       }
     },
     "upvote-election": {
+      "applications": "Formulários",
+      "youCanViewTheMembersWho": "Você pode ver os membros que se inscreveram para a eleição abaixo.",
+      "participants": "participantes",
+      "treasury": "Tesouraria",
+      "eachRound": "Cada rodada",
       "upvoteelection": {
         "timeLeft": "Tempo restante:",
         "days": "dias",

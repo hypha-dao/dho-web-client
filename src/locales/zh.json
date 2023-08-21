@@ -1631,6 +1631,11 @@
       }
     },
     "upvote-election": {
+      "applications": "应用领域",
+      "youCanViewTheMembersWho": "您可以在下面查看已报名参加选举的会员。",
+      "participants": "参加者",
+      "treasury": "财政部",
+      "eachRound": "每轮",
       "upvoteelection": {
         "timeLeft": "剩余时间：",
         "days": "天",

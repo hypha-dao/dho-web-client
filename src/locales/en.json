@@ -1638,6 +1638,11 @@
       }
     },
     "upvote-election": {
+      "applications": "Applications",
+      "youCanViewTheMembersWho": "You can view the members who have signed up for the election below.",
+      "participants": "Participants",
+      "treasury": "Treasury",
+      "eachRound": "Each round",
       "upvoteelection": {
         "timeLeft": "Time left:",
         "days": "days",
@@ -1832,7 +1837,7 @@
     "configurationSettings": "Configuration settings",
     "ecosystemDashboard": "Ecosystem Dashboard",
     "checkout": "Checkout",
-    "upvoteElection": "Upvote Election",
+    "upvoteElection": "Community Election",
     "createYourDao": "Create Your DAO"
   },
   "proposal-creation": {

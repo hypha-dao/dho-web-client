@@ -1631,6 +1631,11 @@
       }
     },
     "upvote-election": {
+      "applications": "Апликације",
+      "youCanViewTheMembersWho": "У наставку можете погледати чланове који су се пријавили за изборе.",
+      "participants": "Учесници",
+      "treasury": "Треасури",
+      "eachRound": "Сваки круг",
       "upvoteelection": {
         "timeLeft": "Преостало време:",
         "days": "дана",
