@@ -2,6 +2,7 @@
 import formatNumber from '~/utils/formatNumber'
 import I18n from '~/utils/i18n'
 import { dateToStringShort } from '~/utils/TimeUtils.js'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'election',
@@ -55,6 +56,7 @@ export default {
   },
 
   computed: {
+    ...mapGetters('dao', ['selectedDao']),
     upvoteElectionBanner () {
       return {
         title: this.hasNextElection ? this.I18n.t('pages.dho.home.joinAsADelegate') : this.I18n.t('pages.dho.home.communityElectionsAreAbout'),
@@ -187,7 +189,7 @@ q-page.page-election
         q-btn.q-px-lg.h-btn1(disable :class="{ 'q-mt-sm': $q.screen.lt.xs || $q.screen.xs }" no-caps rounded unelevated :label="$t('pages.dho.home.nextElection', { date: dateToStringShort(nextElectionStartDate) })" color="white" text-color="primary")
   .row
     .col-9.q-mr-md
-      template(v-for="election in elections")
+      template(v-for="election, index in elections")
         q-card.full-width.q-pa-xl.rounded.q-mb-md(flat)
           .row.flex.items-center
             .col.flex.justify-start
@@ -197,7 +199,7 @@ q-page.page-election
             .col.flex.justify-center.text-black(:style="{ 'font-size': '17px' }")
               div {{ election.participants }} {{ $t('pages.dho.election.participants') }}
             .col.flex.justify-end
-              q-btn.q-px-lg.h-btn1(:class="{ 'q-mt-sm': $q.screen.lt.xs || $q.screen.xs }" no-caps rounded unelevated :label="$t('pages.dho.election.seeResults')" color="primary" text-color="white")
+              q-btn.q-px-lg.h-btn1(@click="$router.push({ path: `/${selectedDao.name}/election/${index}` })" :class="{ 'q-mt-sm': $q.screen.lt.xs || $q.screen.xs }" no-caps rounded unelevated :label="$t('pages.dho.election.seeResults')" color="primary" text-color="white")
     .col
       widget(:title="widgetTitle")
         q-carousel.b2.q-mt-md(v-model="slide" swipeable="swipeable" animated="animated" navigation="navigation" :padding="false" height="240px" control-color="primary" ref="carousel")

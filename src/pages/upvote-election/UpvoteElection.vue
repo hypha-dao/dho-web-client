@@ -39,6 +39,8 @@ export default {
       treasury: 34560, // TODO: waiting API
       roundTime: 50, // TODO: waiting API
       showApplications: false,
+      showLearnMoreModal: false,
+      tab: 'VOTING',
       applications: [ // TODO: waiting API
         {
           account: 'accountname',
@@ -632,6 +634,45 @@ export default {
 
 <template lang="pug">
 .upvote-election
+  q-dialog(:value="showLearnMoreModal" @hide="showLearnMoreModal = false")
+    q-card.q-pa-xl.rounded(:style="{ 'width': '640px' }" flat)
+      .h-h3 {{ $t('pages.upvote-election.howCommunityElectionsWork') }}
+      .q-my-md
+        div Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+      q-tabs.q-my-xxl(align="center" active-color="primary" indicator-color="primary" no-caps inline-label mobile-arrows outside-arrows dense v-model="tab")
+        q-tab(:style="{ 'margin': '0' }" name="VOTING" :label="$t('pages.upvote-election.voting')" :ripple="false")
+        q-tab(:style="{ 'margin': '0' }" name="TIMING" :label="$t('pages.upvote-election.timing')" :ripple="false")
+        q-tab(:style="{ 'margin': '0' }" name="RULES" :label="$t('pages.upvote-election.rules')" :ripple="false")
+      template(v-if="tab === 'VOTING'")
+        .row
+          div Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+        .col.text-black.text-bold.q-my-md(:style="{ 'font-weight': '600' }")
+          .row.q-mb-md.flex.justify-between.items-center
+            div {{ $t('pages.dho.election.voteForYourself') }}
+            q-icon(name="fas fa-check" color="positive" size="20px")
+          .row.flex.justify-between.items-center
+            div {{ $t('pages.dho.election.reachConsensus') }}
+            q-icon(name="fas fa-check" color="positive" size="20px")
+      template(v-if="tab === 'TIMING'")
+        .row
+          div Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+        .col.text-black.text-bold.q-my-md(:style="{ 'font-weight': '600' }")
+          .row.q-mb-md.flex.justify-between.items-center
+            div {{ $t('pages.dho.election.voteForYourself') }}
+            q-icon(name="fas fa-check" color="positive" size="20px")
+          .row.flex.justify-between.items-center
+            div {{ $t('pages.dho.election.reachConsensus') }}
+            q-icon(name="fas fa-check" color="positive" size="20px")
+      template(v-if="tab === 'RULES'")
+        .row
+          div Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+        .col.text-black.text-bold.q-my-md(:style="{ 'font-weight': '600' }")
+          .row.q-mb-md.flex.justify-between.items-center
+            div {{ $t('pages.dho.election.voteForYourself') }}
+            q-icon(name="fas fa-check" color="positive" size="20px")
+          .row.flex.justify-between.items-center
+            div {{ $t('pages.dho.election.reachConsensus') }}
+            q-icon(name="fas fa-check" color="positive" size="20px")
   .row.full-width.q-my-md.q-mt-lg
     .col-9
       q-card.q-mr-md.widget.q-pa-xl.relative-position.rounded-card(v-if="currentState === 'signup'" flat)
@@ -675,7 +716,7 @@ export default {
               template(v-if="paginatedApplications.length")
                 .row.q-mb-sm.applicant-row.q-pa-xs(v-for="applicant in paginatedApplications")
                   .col-1
-                    profile-picture(:username="applicant.account" size="24px" :key="applicant")
+                    profile-picture(:username="applicant.account" size="24px" :key="applicant.account")
                   .col
                     .text-bold {{ applicant.fullName }}
                   .col @{{ applicant.account }}
@@ -811,8 +852,8 @@ export default {
           q-btn.q-px-lg.h-btn1.full-width.q-mb-sm(icon="fas fa-paper-plane" color="white" textColor="grey" :label="$t('pages.upvote-election.upvoteelection.telegramHandle')" no-caps rounded text-color="primary" unelevated)
           q-btn.q-px-lg.h-btn1.full-width(@click="isRegister = true" color="secondary" textColor="white" :label="$t('pages.upvote-election.upvoteelection.signUp')" no-caps rounded text-color="primary" unelevated)
         template(v-else-if="upvoteWidgetState !== 'finish'")
-          q-btn.q-px-lg.h-btn1.full-width(@click="upvoteWidgetState = 'active', signedUp = true, currentState='voting'" outline color="white" textColor="white" :label="$t('pages.upvote-election.upvoteelection.learnMore')" no-caps rounded text-color="primary" unelevated)
-          q-btn.q-mt-sm.q-px-lg.h-btn1.full-width(v-if="currentState === 'signup'" @click="" color="white" textColor="negative" :label="$t('pages.upvote-election.upvoteelection.unsubscribe')" no-caps rounded text-color="primary" unelevated)
+          q-btn.q-px-lg.h-btn1.full-width(@click="showLearnMoreModal = true" outline color="white" textColor="white" :label="$t('pages.upvote-election.upvoteelection.learnMore')" no-caps rounded text-color="primary" unelevated)
+          q-btn.q-mt-sm.q-px-lg.h-btn1.full-width(v-if="currentState === 'signup'" @click="upvoteWidgetState = 'active', signedUp = true, currentState='voting'" color="white" textColor="negative" :label="$t('pages.upvote-election.upvoteelection.unsubscribe')" no-caps rounded text-color="primary" unelevated)
         template(v-if="upvoteWidgetState === 'finish'")
           q-btn.q-px-lg.h-btn1.full-width(color="white" textColor="primary" :label="$t('pages.upvote-election.upvoteelection.goToMyBadges')" no-caps rounded text-color="primary" unelevated)
         .timer.row.q-mt-xl.justify-center(v-if="upvoteWidgetState === 'signup'" :style="{ 'color': 'white' }")

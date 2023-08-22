@@ -3,7 +3,8 @@ export default {
   name: 'round-card',
 
   components: {
-    GroupCard: () => import('./GroupCard.vue')
+    GroupCard: () => import('./GroupCard.vue'),
+    ProfilePicture: () => import('~/components/profiles/profile-picture.vue')
   },
 
   props: {
@@ -16,7 +17,8 @@ export default {
 
   data () {
     return {
-      showGroups: false
+      showGroups: false,
+      showDelegatesBadges: false
     }
   }
 
@@ -25,6 +27,27 @@ export default {
 
 <template lang="pug">
 .round-card
+  q-dialog(:value="showDelegatesBadges" @hide="showDelegatesBadges = false")
+    q-card.q-pa-xl.rounded(:style="{ 'width': '640px' }" flat)
+      .h-h3 {{ $t('pages.upvote-election.levDelegateBadges', { level: roundNumber }) }}
+      .q-my-md {{ $t('pages.upvote-election.loremIpsumDolor') }}
+      template(v-for="group in groups")
+        template(v-for="user in group.users")
+          .row.flex.items-center.q-mb-md.justify-between
+            .col
+              .row
+                .col-1.flex.items-center.q-mr-xs
+                  profile-picture(:username="user.account" size="24px")
+                .col
+                  .row.text-bold.text-black {{ user.fullName }}
+                  .row(:style="{ 'font-size': '10px' }") {{ user.telegram }}
+            .row
+              .row.flex.items-center(v-if="roundNumber === 1")
+                .text-secondary.q-mr-sm(:style="{ 'font-size': '12px' }") {{ $t('pages.upvote-election.delegatel1') }}
+                img(width="16px" src="~/assets/icons/delegate-l1.svg")
+              .row.flex.items-center(v-if="roundNumber === 2")
+                .text-secondary.q-mr-sm(:style="{ 'font-size': '12px' }") {{ $t('pages.upvote-election.delegatel2') }}
+                img(width="16px" src="~/assets/icons/delegate-l2.svg")
   q-card.q-mr-md.widget.q-pa-xl.relative-position.rounded-card(flat)
     .title
       .row.flex.items-center.justify-between
@@ -59,8 +82,9 @@ export default {
                 img(v-if="roundNumber === 1" src="~/assets/icons/delegate-l1.svg")
                 img(v-else-if="roundNumber === 2" src="~/assets/icons/delegate-l2.svg")
               .col.q-ml-sm
-                .row
+                .row.flex.justify-between
                   .h-h4 {{ l1DelegateBadges }}
+                  .text-secondary.cursor-pointer(@click="showDelegatesBadges = true" :style="{ 'font-size': '12px' }") {{ $t('pages.upvote-election.seeAll') }}
                 .row(v-if="roundNumber === 1") {{ $t('pages.upvote-election.l1DelegateBadges') }}
                 .row(v-else-if="roundNumber === 2") {{ $t('pages.upvote-election.l2DelegateBadges') }}
     q-slide-transition
