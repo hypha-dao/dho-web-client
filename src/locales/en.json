@@ -722,7 +722,8 @@
       "proposals": "Proposals",
       "members": "Members",
       "organization": "Organization",
-      "explore": "Explore"
+      "explore": "Explore",
+      "election": "Election"
     },
     "navigation-header": {
       "home": "Home",
@@ -1270,6 +1271,15 @@
         "assignments": "Assignments",
         "exportToCsv": "Export to csv"
       },
+      "election": {
+        "participants": "Participants",
+        "rounds": "Rounds",
+        "seeResults": "See results",
+        "howCommunityElectionsWork": "How Community elections work",
+        "loremIpsumDolor":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor",
+        "voteForYourself": "Vote for yourself",
+        "reachConsensus": "Reach consensus"
+      },
       "home": {
         "days": "days",
         "day": "day",
@@ -1296,7 +1306,9 @@
         "atHyphaWere": "At Hypha, we’re co-creating solutions to build impactful organizations. We’ve evolved radical systems to architect the next generation of decentralized organizations. Let us guide you to reshape how you coordinate teams, ignite motivation, manage finances and foster effective communication towards a shared vision. Transform your dreams into a reality with Hypha!",
         "learnMore": "Learn more",
         "communityElectionsAreAbout": "Community elections are about to begin",
-        "weUseAFairAndInclusive": "We use a fair and inclusive voting mechanism to ensure diverse viewpoints. The voting process is quick and efficient. You are welcome to sign up to nominate yourself as a candidate."
+        "weUseAFairAndInclusive": "We use a fair and inclusive voting mechanism to ensure diverse viewpoints. The voting process is quick and efficient. You are welcome to sign up to nominate yourself as a candidate.",
+        "joinAsADelegate": "Join as a delegate and contribute to the growth of the DAO",
+        "nextElection": "Next election {date}"
       },
       "members": {
         "becomeAMember": "Become a member",
@@ -1864,7 +1876,8 @@
     "ecosystemDashboard": "Ecosystem Dashboard",
     "checkout": "Checkout",
     "upvoteElection": "Community Election",
-    "createYourDao": "Create Your DAO"
+    "createYourDao": "Create Your DAO",
+    "election": "Election"
   },
   "proposal-creation": {
     "creation-process": "Creation process",

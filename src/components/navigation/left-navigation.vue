@@ -37,6 +37,7 @@ export default {
       if (this.$route.name === 'dashboard') return 'dashboard'
       if (this.$route.path.includes('proposals')) return 'proposals'
       if (this.$route.path.includes('members')) return 'members'
+      if (this.$route.path.includes('election')) return 'election'
       if (this.$route.path.includes('organization')) return 'organization'
       if (this.$route.path.includes('explore')) return 'explore'
       return null
@@ -88,6 +89,9 @@ export default {
             q-tooltip(anchor="center right" self="center left" :content-style="{ 'font-size': '1em' }") {{ $t('navigation.left-navigation.proposals') }}
           q-btn.q-ma-md(:class="{'active': activeTab=== 'members'}" :flat="activeTab !== 'members'" unelevated rounded padding="12px" icon="fas fa-users" size="sm" :color="activeTab === 'members' ? 'primary' : 'disabled'" :to="{ name: 'members' }")
             q-tooltip(anchor="center right" self="center left" :content-style="{ 'font-size': '1em' }") {{ $t('navigation.left-navigation.members') }}
+          q-btn.q-ma-md(:class="{'active': activeTab=== 'election'}" :flat="activeTab !== 'election'" unelevated rounded padding="12px" size="sm" :color="activeTab === 'election' ? 'primary' : 'disabled'" :to="{ name: 'election' }")
+            img.no-active(:class="{ 'active-btn': activeTab=== 'election' }" :src="activeTab=== 'election' ? require('~/assets/icons/voting-icon-white.svg') : require('~/assets/icons/voting-icon.svg')")
+            q-tooltip(anchor="center right" self="center left" :content-style="{ 'font-size': '1em' }") {{ $t('navigation.left-navigation.election') }}
           q-btn.q-ma-md(:class="{'active': activeTab=== 'organization'}" :flat="activeTab !== 'organization'" unelevated rounded padding="12px" icon="fas fa-building" size="sm" :color="activeTab === 'organization' ? 'primary' : 'disabled'" :to="{ name: 'organization' }")
             q-tooltip(anchor="center right" self="center left" :content-style="{ 'font-size': '1em' }") {{ $t('navigation.left-navigation.organization') }}
       .col.fixed-bottom.flex.items-end
@@ -120,4 +124,8 @@ export default {
     display: none
   .dho-button--main
     padding-top: 0
+.no-active
+  opacity: .5
+.active-btn
+  opacity: 1 !important
 </style>
