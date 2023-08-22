@@ -25,10 +25,10 @@ export default {
       upvoteWidgetState: 'signup',
       upvoteTimeRemaining: '',
       roundTimeRemaining: '',
-      endDate: 'August 21, 2023 19:00:00', // TODO: waiting API
+      endDate: 'August 22, 2023 19:00:00', // TODO: waiting API
       isRegister: false, // TODO: waiting API
-      endRoundTime: 'August 21, 2023 14:00:00', // TODO: waiting API
-      waitingTime: 'August 21, 2023 14:00:00', // TODO: waiting API
+      endRoundTime: 'August 22, 2023 14:00:00', // TODO: waiting API
+      waitingTime: 'August 22, 2023 14:00:00', // TODO: waiting API
       displacements: { // TODO: waiting API
         headChiefDelegate: 2.528,
         chiefDelegate: 1.731,
@@ -319,7 +319,37 @@ export default {
         }
       ],
       currentState: 'signup',
-      showGroups: false
+      showGroups: false,
+      showResults: false,
+      finalRound: { // TODO: waiting API
+        participants: 4,
+        chiefDelegateBadges: 3,
+        headChiefDelegateBadge: 1,
+        results: {
+          headChiefDelegate: {
+            account: 'accountname',
+            fullName: 'Howard S. Lowe',
+            telegram: 'telegramhandle'
+          },
+          chiefDelegates: [
+            {
+              account: 'accountname',
+              fullName: 'Howard S. Lowe',
+              telegram: 'telegramhandle'
+            },
+            {
+              account: 'accountname',
+              fullName: 'Howard S. Lowe',
+              telegram: 'telegramhandle'
+            },
+            {
+              account: 'accountname',
+              fullName: 'Howard S. Lowe',
+              telegram: 'telegramhandle'
+            }
+          ]
+        }
+      }
     }
   },
   apollo: {
@@ -659,10 +689,83 @@ export default {
                   .row.flex.items-center
                     div.q-ml-xs(v-for="dot, index in pages" :style="{'width': '10px', 'height': '10px', 'background': '#CAC8B0', 'border-radius': '50%'}" :class="{ 'bg-primary': index === page - 1}")
                   q-btn(:disable="isLastPage" @click="onNext()" flat rounded icon="fas fa-chevron-right")
-      template(v-for="round, index in votingRounds" v-if="currentState === 'voting'" flat)
+      template(v-for="round, index in votingRounds" v-if="currentState !== 'signup'" flat)
         round-card.q-mb-md(v-bind="round" :roundNumber="index + 1")
+      q-card.q-mr-md.widget.q-pa-xl.relative-position.rounded-card(v-if="currentState === 'finish'" flat)
+        .title
+          .row.flex.items-center.justify-between
+            .col.flex.items-center
+              img(src="~/assets/icons/voting-icon.svg")
+              .h-h4.q-ml-md {{ $t('pages.upvote-election.finalVotingRound') }}
+            q-btn(@click="showResults = !showResults" flat rounded :icon="showResults ? 'fas fa-chevron-up' : 'fas fa-chevron-down'")
+          .row.q-mt-md {{ $t('pages.upvote-election.youAreInTheFinalRound') }}
+          .row.q-mt-md.q-gutter-sm
+            .col
+              q-card.rounded-card.q-pa-lg.applications-metric
+                .row.flex.items-center
+                  .col-2
+                    q-icon(name="fas fa-users" size="24px")
+                  .col.q-ml-sm
+                    .row
+                      .h-h4 {{ finalRound.participants }}
+                    .row {{ $t('pages.upvote-election.participants') }}
+            .col
+              q-card.rounded-card.q-pa-lg.applications-metric
+                .row.flex.items-center
+                  .col-2
+                    img(src="~/assets/icons/chief-delegate.svg")
+                  .col.q-ml-sm
+                    .row
+                      .h-h4 {{ finalRound.chiefDelegateBadges }}
+                    .row {{ $t('pages.upvote-election.chiefDelegateBadges') }}
+            .col
+              q-card.rounded-card.q-pa-lg.applications-metric
+                .row.flex.items-center
+                  .col-2
+                    img(src="~/assets/icons/head-chief.svg")
+                  .col.q-ml-sm
+                    .row
+                      .h-h4 {{ finalRound.headChiefDelegateBadge }}
+                    .row {{ $t('pages.upvote-election.headChiefDelegateBadge') }}
+        q-slide-transition
+          div.q-my-xl.q-pt-xl(v-show="showResults" :style="{ 'border-top': '1px solid #CBCDD1'}")
+            q-card.full-width.rounded-card.q-pa-lg.results-block
+              .row.q-mb-md
+                .h-h5 {{ $t('pages.upvote-election.results') }}
+              .row
+                .col-4.q-mr-md
+                  q-card.rounded-card.q-pa-lg.results-block.flex.justify-center.items-center
+                    profile-picture(:username="finalRound.results.headChiefDelegate.account" size="140px")
+                    .h-h4.q-mt-md {{ finalRound.results.headChiefDelegate.fullName }}
+                    .text-secondary {{ $t('pages.upvote-election.headChiefDelegate') }}
+                .col
+                  .row.flex.items-center.q-mb-md
+                    .col
+                      .row
+                        .col-1.flex.items-center.q-mr-xs
+                          profile-picture(:username="finalRound.results.headChiefDelegate.account" size="24px")
+                        .col
+                          .row.text-bold.text-black {{ finalRound.results.headChiefDelegate.fullName }}
+                          .row(:style="{ 'font-size': '10px' }") {{ finalRound.results.headChiefDelegate.telegram }}
+                    .row
+                      .row.flex.items-center
+                        .text-secondary.q-mr-sm(:style="{ 'font-size': '12px' }") {{ $t('pages.upvote-election.headChiefDelegate') }}
+                        img(width="16px" src="~/assets/icons/head-chief.svg")
+                  template(v-for="user in finalRound.results.chiefDelegates")
+                    .row.flex.items-center.q-mb-md.justify-between
+                      .col
+                        .row
+                          .col-1.flex.items-center.q-mr-xs
+                            profile-picture(:username="user.account" size="24px")
+                          .col
+                            .row.text-bold.text-black {{ user.fullName }}
+                            .row(:style="{ 'font-size': '10px' }") {{ user.telegram }}
+                      .row
+                        .row.flex.items-center
+                          .text-secondary.q-mr-sm(:style="{ 'font-size': '12px' }") {{ $t('pages.upvote-election.chiefDelegate') }}
+                          img(width="16px" src="~/assets/icons/chief-delegate.svg")
     .col-3
-      profile-card.q-mb-md(v-if="signedUp" isElection :style="{'grid-area': 'profile'}" :clickable="false" :username="account" view="card" :compact="!$q.screen.gt.md" :tablet="$q.screen.md")
+      profile-card.q-mb-md(v-if="signedUp" :electionState="currentState" isElection :style="{'grid-area': 'profile'}" :clickable="false" :username="account" view="card" :compact="!$q.screen.gt.md" :tablet="$q.screen.md")
       widget.q-pa-xxl.bg-primary.q-mb-md(:class="{ 'bg-secondary': upvoteWidgetState === 'waiting' }")
         template(v-if="upvoteWidgetState !== 'active' && upvoteWidgetState !== 'waiting'")
           .h-h4.text-white.q-mb-md {{ widgetTitle }}
@@ -709,6 +812,7 @@ export default {
           q-btn.q-px-lg.h-btn1.full-width(@click="isRegister = true" color="secondary" textColor="white" :label="$t('pages.upvote-election.upvoteelection.signUp')" no-caps rounded text-color="primary" unelevated)
         template(v-else-if="upvoteWidgetState !== 'finish'")
           q-btn.q-px-lg.h-btn1.full-width(@click="upvoteWidgetState = 'active', signedUp = true, currentState='voting'" outline color="white" textColor="white" :label="$t('pages.upvote-election.upvoteelection.learnMore')" no-caps rounded text-color="primary" unelevated)
+          q-btn.q-mt-sm.q-px-lg.h-btn1.full-width(v-if="currentState === 'signup'" @click="" color="white" textColor="negative" :label="$t('pages.upvote-election.upvoteelection.unsubscribe')" no-caps rounded text-color="primary" unelevated)
         template(v-if="upvoteWidgetState === 'finish'")
           q-btn.q-px-lg.h-btn1.full-width(color="white" textColor="primary" :label="$t('pages.upvote-election.upvoteelection.goToMyBadges')" no-caps rounded text-color="primary" unelevated)
         .timer.row.q-mt-xl.justify-center(v-if="upvoteWidgetState === 'signup'" :style="{ 'color': 'white' }")
@@ -730,14 +834,14 @@ export default {
             .q-mx-xxs(v-if="upvoteTimeRemaining.sec > 1") {{ $t('pages.upvote-election.upvoteelection.sec') }}
             .q-mx-xxs(v-else) {{ $t('pages.upvote-election.upvoteelection.sec') }}
         div(v-if="upvoteWidgetState === 'active'" @click="upvoteWidgetState = 'waiting'") waiting
-        div(v-if="upvoteWidgetState === 'waiting'" @click="upvoteWidgetState = 'finish'") finish
+        div(v-if="upvoteWidgetState === 'waiting'" @click="upvoteWidgetState = 'finish', currentState = 'finish'") finish
 </template>
 
 <style lang="sass" scoped>
 .applicant-row:hover
   background: #f1f1f3
   border-radius: 15px
-.applications-metric
+.applications-metric, .results-block
   box-shadow: 0px 0px 16px -3px rgba(34, 60, 80, 0.2)
 .rounded-card
   border-radius: 15px

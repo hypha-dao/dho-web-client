@@ -33,7 +33,8 @@ export default {
     isCommunityMember: Boolean,
     isCoreMember: Boolean,
     badges: Array,
-    isElection: Boolean
+    isElection: Boolean,
+    electionState: String
   },
 
   data () {
@@ -315,14 +316,14 @@ widget-editable.q-pa-md(:class="{ 'full-width': list, 'cursor-pointer': !editBut
       croppa.image-selector.q-mb-lg(v-model="image" :show-remove-button="false" :replace-drop="true" :canvas-color="'#3E3B46CC'" :placeholder="'UPLOAD A NEW PROFILE PIC'" :placeholder-font-size="8" :placeholder-color="'#FFFFFF'" :accept="'image/*'" :file-size-limit="4e6" :width="140" :height="140" :quality="1" prevent-white-space="prevent-white-space")
       q-input.full-width.rounded-border.q-mt-xl(ref="name" v-model="form.name" :label="$t('profiles.profile-card.name')" maxlength="200" :rules="[rules.required]" lazy-rules outlined dense)
       q-select.full-width.rounded-border(dropdown-icon="fas fa-map-marker-alt" outlined hide-bottom-space v-model="form.timeZone" use-input="use-input" fill-input="fill-input" hide-selected="hide-selected" dense :label="$t('profiles.profile-card.timeZone')" :options="timeZonesFilteredOptions" @filter="filterTimeZones" option-value="value" :option-label="$t('profiles.profile-card.text')" emit-value map-options)
-  .col.text-black.text-bold.q-my-md.q-pt-md(v-if="isElection" :style="{ 'font-weight': '600', 'border-top': '1px solid #CBCDD1' }")
+  .col.text-black.text-bold.q-my-md.q-pt-md(v-if="isElection && electionState !== 'finish'" :style="{ 'font-weight': '600', 'border-top': '1px solid #CBCDD1' }")
     .row.q-mb-xs.flex.justify-between.items-center
       div {{ $t('profiles.profile-card.voteForYourself') }}
       q-icon(name="fas fa-times" color="grey" size="20px")
     .row.flex.justify-between.items-center
       div {{ $t('profiles.profile-card.reachConsensus') }}
       q-icon(name="fas fa-times" color="grey" size="20px")
-  q-btn.full-width(@click="" color="primary" flat :label="$t('profiles.profile-card.viewMyGroup')" no-caps bordered rounded v-if="isElection" :style="{'border': '1px solid #252f5d'}")
+  q-btn.full-width(@click="" color="primary" flat :label="$t('profiles.profile-card.viewMyGroup')" no-caps bordered rounded v-if="isElection && electionState !== 'finish'" :style="{'border': '1px solid #252f5d'}")
 </template>
 
 <style lang="stylus" scoped>

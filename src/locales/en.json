@@ -1653,6 +1653,13 @@
       "l2DelegateBadges": "L2 Delegate Badges",
       "memberSince": "Member since {date}",
       "group": "Group",
+      "finalVotingRound": "Final Voting Round",
+      "youAreInTheFinalRound": "You're in the final round! Following the same election process as before, you can vote for the best candidate. The winner of the round will then be chosen.",
+      "chiefDelegateBadges": "Chief Delegate badges",
+      "headChiefDelegateBadge": "Head Chief Delegate badge",
+      "headChiefDelegate": "Head Chief Delegate",
+      "chiefDelegate": "Chief Delegate",
+      "results": "Results",
       "groupcard": {
         "noRecordingsYet": "No recordings yet",
         "uploadRecording": "Upload recording",
@@ -1689,7 +1696,8 @@
         "headChiefDelegate": "Head Chief Delegate",
         "chiefDelegate": "Chief Delegate",
         "delegatel2": "Delegate Lev. 2",
-        "delegatel1": "Delegate Lev. 1"
+        "delegatel1": "Delegate Lev. 1",
+        "unsubscribe": "Unsubscribe"
       },
       "steps": {
         "stepround1": {
