@@ -102,7 +102,8 @@ widget.bg-internal-bg.q-my-xxs.cursor-pointer(noPadding)
         q-avatar(size="lg" v-else-if="iconDetails && iconDetails.type === 'img'")
           img.icon-img(:src="iconDetails.name")
         ipfs-image-viewer(size="lg" :ipfsCid="iconDetails.cid" v-else-if="iconDetails && iconDetails.type === 'ipfs'")
-        .h-h5.q-ml-xl(:class="{ 'q-ml-md': !compact, 'h-h7': compact }") {{title}}
+        .h-h5.q-ml-xl(:style="{ 'width': '100px', 'white-space': 'nowrap', 'text-overflow': 'ellipsis', 'overflow': 'hidden' }" :class="{ 'q-ml-md': !compact, 'h-h7': compact }") {{title}}
+          q-tooltip {{ title }}
     .col(v-if="!compact")
       .h-b2.text-weight-thin.text-body  {{description.substr(0,150) + (description.length > 150 ? '...' : '')}}
     .col-3(v-if="!compact")
