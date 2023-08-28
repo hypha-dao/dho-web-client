@@ -67,8 +67,7 @@ jobs:
           HYPHA_TOKEN_SALES_ENCODE_KEY: ${{ secrets.HYPHA_TOKEN_SALES_ENCODE_KEY }}
           HYPHA_TOKEN_SALES_URL: ${{ vars.HYPHA_TOKEN_SALES_URL }}
           HYPHA_TOKEN_SALES_API_URL: 'http://api-tokensale.hypha.earth'
-          HYPHA_TOKEN_SALES_RPC_URL: 'https://mainnet.telos.net
-'
+          HYPHA_TOKEN_SALES_RPC_URL: 'https://mainnet.telos.net'
 
           CAPTCHA_PUBLIC_KEY: ${{ vars.CAPTCHA_PUBLIC_KEY }}
           CAPTCHA_HOST: ${{ vars.CAPTCHA_HOST }}
