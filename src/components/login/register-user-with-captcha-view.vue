@@ -103,7 +103,7 @@ export default {
   },
   async mounted() {
     if (this.isAuthenticated) {
-      this.$emit('stepChanged', this.step)
+      this.$emit('stepChanged', this.steps.create.name)
     } else {
       this.$emit('stepChanged', this.step)
     }
