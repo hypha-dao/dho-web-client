@@ -3,5 +3,11 @@ query daoPolicyVersionHistory ($daoId: Int64!, $id: String!) {
     docId
     system_originalApprovedDate_t
     details_state_s
+    masterpolicy {
+      docId
+      system_nodeLabel_s
+      system_originalApprovedDate_t
+      details_state_s
+    }
   }
 }

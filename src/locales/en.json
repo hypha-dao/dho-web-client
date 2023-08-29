@@ -200,8 +200,8 @@
     },
     "settings-voting": {
       "core": {
-        "title": "Core Team voting methods",
-        "description": "Votes must meet the criteria for the percentage of required agreement (unity) and the percentage of required voice (quorum).",
+        "title": "Core team voting methods",
+        "description": "Every DAO can shape their own voting system, allowing core team members to make collective decisions.",
         "form": {
           "unity": {
             "label": "Unity - Percentage of required agreement"
