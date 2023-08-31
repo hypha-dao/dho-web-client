@@ -32,9 +32,9 @@ export const createDAO = async function (context, { data, isDraft }) {
           { label: 'voice_token_decay_period', value: ['int64', 604800] },
           { label: 'voice_token_decay_per_period_x10M', value: ['int64', 100000] },
 
-          { label: 'reward_token_multiplier_x100', value: ['int64', data?.utilityTokenMultiplier] },
-          { label: 'voice_token_multiplier_x100', value: ['int64', data?.voiceTokenMultiplier] },
-          { label: 'peg_token_multiplier_x100', value: ['int64', data?.treasuryTokenMultiplier] },
+          { label: 'utility_token_multiplier', value: ['int64', data?.utilityTokenMultiplier] },
+          { label: 'voice_token_multiplier', value: ['int64', data?.voiceTokenMultiplier] },
+          { label: 'treasury_token_multiplier', value: ['int64', data?.treasuryTokenMultiplier] },
 
           { label: 'onboarder_account', value: ['name', data?.onboarder_account] },
 
