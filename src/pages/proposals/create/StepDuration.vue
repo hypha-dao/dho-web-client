@@ -22,8 +22,8 @@ export default {
 
   apollo: {
     periods: {
-      query: require('../../../query/periods-upcoming.gql'),
-      update: data => data.getDao,
+      query: require('~/query/periods-upcoming.gql'),
+      update: data => data?.getDao?.calendar[0]?.period || [],
       variables () {
         return {
           daoId: this.selectedDao?.docId,
@@ -34,7 +34,7 @@ export default {
         return this.selectedDao?.docId === undefined
       },
       result (res) {
-        const v = res.data.getDao.period
+        const v = res.data.getDao.calendar[0].period
         this.periodCount = this.isExtension ? DEFAULT_PERIOD_COUNT : DEFAULT_PERIOD_COUNT
         if ((this.isFromDraft && v?.length > 0 && !this.resetPeriods) || this.isExtension) {
           const startPeriod = this.$store.state.proposals.draft.startPeriod
@@ -121,8 +121,8 @@ export default {
       if (this.startIndex === -1 || this.endIndex === -1) {
         return ''
       }
-      const start = new Date(this.start(this.periods.period[this.startIndex]))
-      const end = new Date(this.start(this.periods.period[this.endIndex + 1]))
+      const start = new Date(this.start(this.periods[this.startIndex]))
+      const end = new Date(this.start(this.periods[this.endIndex + 1]))
       return `from ${dateToString(start, start.getFullYear() !== end.getFullYear())} to ${dateToString(end)}`
     },
 
@@ -133,10 +133,10 @@ export default {
   watch: {
     dateString (v) {
       if (v.length > 0 && this.periodCount > 0) {
-        if (this.periods && this.periods.period) {
-          this.$store.commit('proposals/setStartPeriod', this.periods.period[this.startIndex])
+        if (this.periods && this.periods) {
+          this.$store.commit('proposals/setStartPeriod', this.periods[this.startIndex])
           if (this.isExtension) {
-            this.startValue = date.formatDate(this.periods.period[this.startIndex].details_startTime_t, 'YYYY/MM/DD')
+            this.startValue = date.formatDate(this.periods[this.startIndex].details_startTime_t, 'YYYY/MM/DD')
           }
         }
         this.$store.commit('proposals/setPeriodCount', this.periodCount)
@@ -151,7 +151,7 @@ export default {
     startValue: {
       handler: function () {
         if (this.startValue) {
-          const startIndex = this.periods.period.findIndex(
+          const startIndex = this.periods.findIndex(
             el => new Date(el.details_startTime_t).toDateString() === new Date(this.startValue).toDateString()
           )
           this.startIndex = startIndex
@@ -198,7 +198,7 @@ export default {
     // TODO: This can be optimized
     enableOnlyPeriods (date) {
       if (!this.periods) return false
-      const periodArray = this.periods.period
+      const periodArray = this.periods
       const todayDate = new Date(date)
       todayDate.setHours(0, 0, 0, 0)
       for (let index = 0; index < periodArray.length; index++) {

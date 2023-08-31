@@ -29,10 +29,7 @@ export default {
         }
       },
       skip () { return !this.selectedDao?.docId || !this.proposalId },
-      variables () { return { daoId: this.selectedDao.docId, id: this.proposalId } },
-      result (res) {
-        console.log(res)
-      }
+      variables () { return { daoId: this.selectedDao.docId, id: this.proposalId } }
     }
   },
 
