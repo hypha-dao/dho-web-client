@@ -1,5 +1,43 @@
 # Changelog
 
+## [2.32.0](https://github.com/hypha-dao/dho-web-client/compare/v2.31.5...v2.32.0) (2023-08-31)
+
+
+### Features
+
+* new onboarding UI ([#2370](https://github.com/hypha-dao/dho-web-client/issues/2370)) ([b5f67b7](https://github.com/hypha-dao/dho-web-client/commit/b5f67b78746cc93f4353711bccc8cb7c81ac43b8))
+
+
+### Bug Fixes
+
+* **badge-card:** long title (#DEV-909) ([#2392](https://github.com/hypha-dao/dho-web-client/issues/2392)) ([ad31f12](https://github.com/hypha-dao/dho-web-client/commit/ad31f12f4d6a4342360d62ccfbd526c7e66f5a31))
+* **copy:** changes v3 ([#2376](https://github.com/hypha-dao/dho-web-client/issues/2376)) ([b5446c6](https://github.com/hypha-dao/dho-web-client/commit/b5446c6535871e920954bb084c05a29cdff67a07))
+* **copy:** ux copy changes (#DEV-883) ([#2371](https://github.com/hypha-dao/dho-web-client/issues/2371)) ([1bb0540](https://github.com/hypha-dao/dho-web-client/commit/1bb0540d4424a2baa9fe9f080599da6ea0ca7e5f))
+* **copy:** ux copy v4 ([#2388](https://github.com/hypha-dao/dho-web-client/issues/2388)) ([f7d2e84](https://github.com/hypha-dao/dho-web-client/commit/f7d2e841275a0c495b423b72ec5170584d4e60da))
+* **copy:** voting settings description translation ([#2394](https://github.com/hypha-dao/dho-web-client/issues/2394)) ([993cc9c](https://github.com/hypha-dao/dho-web-client/commit/993cc9c7a6a83fed0e137c8d532e3c76a72ceafc))
+* **create-dao:** add correct vars ([46cacae](https://github.com/hypha-dao/dho-web-client/commit/46cacae154772d209cec5a7821bf56bc397dfa9b))
+* **create-dao:** add correct vars ([a3b4ec8](https://github.com/hypha-dao/dho-web-client/commit/a3b4ec811e2639a41fdc13dea497173159f86ecc))
+* **dho-selector:** add check for dho object ([255da39](https://github.com/hypha-dao/dho-web-client/commit/255da396d44c655f2a921f7a5655c4d5761a4afa))
+* eos mainnet config ([9648ab7](https://github.com/hypha-dao/dho-web-client/commit/9648ab750135905d2ec89fcdcb3da966aaf33daa))
+* **layouts:** multi-dho-layout improvements ([#2385](https://github.com/hypha-dao/dho-web-client/issues/2385)) ([1e15b42](https://github.com/hypha-dao/dho-web-client/commit/1e15b42b6b7a6bd9a316e6000bfcbca7efc887d2))
+* **left-navigation:** click last dao (#DEV-901) ([#2380](https://github.com/hypha-dao/dho-web-client/issues/2380)) ([3b1af91](https://github.com/hypha-dao/dho-web-client/commit/3b1af916466028ac82e3a65128e2c9014e2d48e8))
+* **notifications:** integrated archived state ([#2373](https://github.com/hypha-dao/dho-web-client/issues/2373)) ([81cf3f9](https://github.com/hypha-dao/dho-web-client/commit/81cf3f98514929fd36cd6c16486f2aa1d8ca6a7a))
+* **onboarding:** auto change of onboarding step ([#2383](https://github.com/hypha-dao/dho-web-client/issues/2383)) ([6622653](https://github.com/hypha-dao/dho-web-client/commit/66226537bbd12c8dcffc99ea3c5e14a659e45150))
+* **onboarding:** bug when user go to create dao without login ([#2387](https://github.com/hypha-dao/dho-web-client/issues/2387)) ([31f47da](https://github.com/hypha-dao/dho-web-client/commit/31f47da82b8c0ba71b97d97da88a5e68749ffe3b))
+* **onboarding:** finish step ([#2389](https://github.com/hypha-dao/dho-web-client/issues/2389)) ([4aabf88](https://github.com/hypha-dao/dho-web-client/commit/4aabf88cbd4fa3ed9bb4f35df063b235c79805d5))
+* **onboarding:** partner wallets default value ([#2384](https://github.com/hypha-dao/dho-web-client/issues/2384)) ([8bbacb1](https://github.com/hypha-dao/dho-web-client/commit/8bbacb1ea2725d7e9aba916466032257626469b4))
+* **onboarding:** switch to correct step if isAuthenticated ([9f8fe65](https://github.com/hypha-dao/dho-web-client/commit/9f8fe654cf9cd583ede80f19bc713f6df6413756))
+* **onboarding:** switch to correct step if isAuthenticated ([b37af79](https://github.com/hypha-dao/dho-web-client/commit/b37af795dc9440b158c89e85b6634c851d0c4b74))
+* **payout-amounts:** hide token with null value (#DEV-898) ([#2382](https://github.com/hypha-dao/dho-web-client/issues/2382)) ([5669926](https://github.com/hypha-dao/dho-web-client/commit/56699267685935bfb6e5e46578749171aec9b5d4))
+* **profile:** displaying quests in profile page (#DEV-904) ([#2386](https://github.com/hypha-dao/dho-web-client/issues/2386)) ([e992a70](https://github.com/hypha-dao/dho-web-client/commit/e992a7043b69f96a05b6179ee3e29813286ba2ea))
+* **proposal-creation:** added custom reward for founder role (#DEV-892) ([#2375](https://github.com/hypha-dao/dho-web-client/issues/2375)) ([594985c](https://github.com/hypha-dao/dho-web-client/commit/594985c8d577741637d5dbd4b6070eb917be4ebd))
+* **proposals-history:** hide system proposals (#DEV-902) ([#2381](https://github.com/hypha-dao/dho-web-client/issues/2381)) ([8d4994f](https://github.com/hypha-dao/dho-web-client/commit/8d4994fbd8b81fb7021b5978d68e119949dfb98b))
+* **right-bar:** auto open ([#2372](https://github.com/hypha-dao/dho-web-client/issues/2372)) ([d7013a9](https://github.com/hypha-dao/dho-web-client/commit/d7013a9ae80649e07e3c2aa267d05da3f22c6b01))
+* **roles:** hide founders role and tier (#DEV-893) ([#2374](https://github.com/hypha-dao/dho-web-client/issues/2374)) ([a0a1290](https://github.com/hypha-dao/dho-web-client/commit/a0a12901dabed05f88e1ac4c87b83bf8b5be9602))
+* **step-duration:** add new periods query ([c2c67dc](https://github.com/hypha-dao/dho-web-client/commit/c2c67dca656ab07533b2b80ac238828df6098ff1))
+* **step-duration:** add new periods query ([8f98c11](https://github.com/hypha-dao/dho-web-client/commit/8f98c11bf2655df86b76f969c618d4c0e5e51327))
+* **version-history:** uncorrect history (#DEV-907) ([#2393](https://github.com/hypha-dao/dho-web-client/issues/2393)) ([9be5944](https://github.com/hypha-dao/dho-web-client/commit/9be5944d86b29eca8ac7805fdcc5dd8eb18c5d8b))
+
 ## [2.31.5](https://github.com/hypha-dao/dho-web-client/compare/v2.31.4...v2.31.5) (2023-07-28)
 
 
