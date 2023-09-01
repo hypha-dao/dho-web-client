@@ -1002,3 +1002,45 @@ export const deleteCircle = async function ({ state, rootState }, id) {
 
   return this.$api.signTransaction(actions)
 }
+
+export const createTokens = async function ({ state, rootState }, data) {
+  const actions = [
+    {
+      account: this.$config.contracts.dao,
+      name: 'createtokens',
+      data: {
+        dao_id: rootState.dao.docId,
+        tokens_info: [
+          // payout token
+          [
+            { label: 'content_group_label', value: ['string', 'peg_details'] },
+            { label: 'peg_token_name', value: ['string', data?.treasuryName] }, // -> Optional, if omitted, name will be taken from reward_token symbol
+            { label: 'peg_token', value: ['asset', `${parseFloat(1).toFixed(data?.treasuryDigits)} ${data?.treasurySymbol}`] },
+            { label: 'treasury_currency', value: ['string', data?.treasuryCurrency.value] },
+            { label: 'treasury_token_multiplier', value: ['int64', data?.treasuryTokenMultiplier] }
+          ],
+
+          // utility token
+          [
+            { label: 'content_group_label', value: ['string', 'reward_details'] },
+            { label: 'reward_token_name', value: ['string', data?.utilityName] },
+            { label: 'reward_token', value: ['asset', `${parseFloat(1).toFixed(data?.utilityDigits)} ${data?.utilitySymbol}`] },
+            { label: 'reward_token_max_supply', value: ['asset', `${parseFloat(-1).toFixed(data?.utilityDigits)} ${data?.utilitySymbol}`] },
+            { label: 'reward_to_peg_ratio', value: ['asset', `${parseFloat(1).toFixed(data?.treasuryDigits)} ${data?.treasurySymbol}`] },
+            { label: 'utility_token_multiplier', value: ['int64', data?.utilityTokenMultiplier] }
+          ],
+
+          // voice token
+          [
+            { label: 'content_group_label', value: ['string', 'voice_details'] },
+            { label: 'voice_token_decay_period', value: ['int64', 604800] },
+            { label: 'voice_token_decay_per_period_x10M', value: ['int64', 100000] },
+            { label: 'voice_token_multiplier', value: ['int64', data?.voiceTokenMultiplier] }
+          ]
+        ]
+      }
+    }
+  ]
+
+  return this.$api.signTransaction(actions)
+}

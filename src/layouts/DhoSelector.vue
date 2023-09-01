@@ -178,13 +178,24 @@ const DAO_ACTIVE_QUERY = `
       settings_daoTitle_s
       settings_daoDescription_s
       settings_governanceTokenContract_n
+      
+      settings_pegTokenName_s
       settings_pegToken_a
       settings_pegTokenContract_n
+      settings_treasuryTokenMultiplier_i
+      settings_treasuryContract_n
+
+      settings_rewardTokenName_s
       settings_rewardToken_a
       settings_rewardTokenContract_n
       settings_rewardToPegRatio_a
-      settings_treasuryContract_n
+      settings_rewardTokenMaxSupply_a
+      settings_utilityTokenMultiplier_i
+
       settings_voiceToken_a
+      settings_voiceTokenDecayPeriod_i
+      settings_voiceTokenDecayPerPeriodX10M_i
+      settings_voiceTokenMultiplier_i
 
       settings_socialChat_s
       settings_documentationButtonText_s
