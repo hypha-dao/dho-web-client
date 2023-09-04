@@ -1,5 +1,15 @@
 # Changelog
 
+## [2.32.1](https://github.com/hypha-dao/dho-web-client/compare/v2.32.0...v2.32.1) (2023-09-04)
+
+
+### Bug Fixes
+
+* **copy:** ux copy v5 ([#2403](https://github.com/hypha-dao/dho-web-client/issues/2403)) ([a7c20fc](https://github.com/hypha-dao/dho-web-client/commit/a7c20fcf9af8464042c165716ecc7bfb17312060))
+* **periods-range:** add calendar to the periods ([94a2c53](https://github.com/hypha-dao/dho-web-client/commit/94a2c53b75fa0bb8106e2bc3d4f6f1125224227e))
+* **profile:** remove fetchProfile from isOwenr watcher ([8ac82da](https://github.com/hypha-dao/dho-web-client/commit/8ac82daaac138c27c40e1328dfdabc1118fa3f34))
+* **proposal:** add check for usd salary ([98768ab](https://github.com/hypha-dao/dho-web-client/commit/98768aba495c497e4c0642c4b8ad544045c9a160))
+
 ## [2.32.0](https://github.com/hypha-dao/dho-web-client/compare/v2.31.5...v2.32.0) (2023-08-31)
 
 
