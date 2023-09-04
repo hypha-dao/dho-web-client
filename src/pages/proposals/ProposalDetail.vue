@@ -1203,7 +1203,7 @@ export default {
         // this.$store.commit('proposals/setNext', true)
         this.$store.commit('proposals/setType', CONFIG.options.recurring.options.assignment.type)
         this.$store.commit('proposals/setCategory', { key: CONFIG.options.recurring.options.assignment.key, title: CONFIG.options.recurring.options.assignment.title })
-        const salary = parseFloat(proposal.details_annualUsdSalary_a)
+        const salary = parseFloat(proposal?.details_annualUsdSalary_a)
         const salaryBucket = this.getSalaryBucket(salary)
         this.$store.commit('proposals/setRole', {
           docId: proposal.docId,
