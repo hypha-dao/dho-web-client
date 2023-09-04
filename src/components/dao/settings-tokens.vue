@@ -188,7 +188,7 @@ export default {
                   rounded
                   v-model='tokens.treasuryName'
                 )
-                q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!selectedDao.hasCustomToken") Only DAO admins can change the settings
+                q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!selectedDao.hasCustomToken") {{ $t('common.onlyDaoAdmins') }}
 
               .col-12.col-md-6
                 label.h-label {{ $t('configuration.settings-tokens.tresury.form.symbol.label') }}
@@ -201,7 +201,7 @@ export default {
                   rounded
                   v-model='tokens.treasurySymbol'
                 )
-                q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!selectedDao.hasCustomToken") Only DAO admins can change the settings
+                q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!selectedDao.hasCustomToken") {{ $t('common.onlyDaoAdmins') }}
 
             .col-12(:class="{ 'invisible': selectedDao.hasCustomToken }")
               label.h-label {{ $t('configuration.settings-tokens.tresury.form.currency.label') }}
@@ -217,7 +217,7 @@ export default {
                 rounded
                 v-model="tokens.treasuryCurrency"
               )
-              q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!selectedDao.hasCustomToken") Only DAO admins can change the settings
+              q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!selectedDao.hasCustomToken") {{ $t('common.onlyDaoAdmins') }}
 
             .col-12.invisible
               label.h-label {{ $t('configuration.settings-tokens.tresury.form.multiplier.label') }}
@@ -236,7 +236,7 @@ export default {
                 suffix="x"
                 v-model='tokens.treasuryTokenMultiplier'
               )
-              q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!selectedDao.hasCustomToken") Only DAO admins can change the settings
+              q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!selectedDao.hasCustomToken") {{ $t('common.onlyDaoAdmins') }}
 
             .col-12
               label.h-label {{ $t('configuration.settings-tokens.tresury.form.digits.label') }}
@@ -274,7 +274,7 @@ export default {
                   rounded
                   v-model='tokens.utilityName'
                 )
-                q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!selectedDao.hasCustomToken") Only DAO admins can change the settings
+                q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!selectedDao.hasCustomToken") {{ $t('common.onlyDaoAdmins') }}
 
               .col-12.col-md-6
                 label.h-label {{ $t('configuration.settings-tokens.utility.form.symbol.label') }}
@@ -293,7 +293,7 @@ export default {
                   rounded
                   v-model="tokens.utilitySymbol"
                 )
-                q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!selectedDao.hasCustomToken") Only DAO admins can change the settings
+                q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!selectedDao.hasCustomToken") {{ $t('common.onlyDaoAdmins') }}
 
             .col-12
               label.h-label {{ $t('configuration.settings-tokens.utility.form.value.label') }}
@@ -311,7 +311,7 @@ export default {
                 rounded
                 v-model='tokens.utilityAmount'
               )
-              q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!selectedDao.hasCustomToken") Only DAO admins can change the settings
+              q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!selectedDao.hasCustomToken") {{ $t('common.onlyDaoAdmins') }}
 
             .col-12
               label.h-label {{ $t('configuration.settings-tokens.utility.form.multiplier.label') }}
@@ -329,7 +329,7 @@ export default {
                 suffix="x"
                 v-model='tokens.utilityTokenMultiplier'
               )
-              q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!selectedDao.hasCustomToken") Only DAO admins can change the settings
+              q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!selectedDao.hasCustomToken") {{ $t('common.onlyDaoAdmins') }}
 
             .col-12
               label.h-label {{ $t('configuration.settings-tokens.utility.form.digits.label') }}
@@ -364,7 +364,7 @@ export default {
                   rounded
                   v-model='tokens.voiceName'
                 )
-                q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!selectedDao.hasCustomToken") Only DAO admins can change the settings
+                q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!selectedDao.hasCustomToken") {{ $t('common.onlyDaoAdmins') }}
 
               .col-12.col-md-6(:class="{'q-mt-sm': !$q.screen.gt.md}")
                 label.h-label {{ $t('configuration.settings-tokens.voice.form.symbol.label') }}
@@ -379,13 +379,13 @@ export default {
                   rounded
                   v-model='tokens.voiceSymbol'
                 )
-                q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!selectedDao.hasCustomToken") Only DAO admins can change the settings
+                q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!selectedDao.hasCustomToken") {{ $t('common.onlyDaoAdmins') }}
 
             .row.q-col-gutter-md
               .col-12.col-md-8(:class="{'q-mt-sm': !$q.screen.gt.md}")
                 label.h-label {{ $t('configuration.settings-tokens.voice.form.decayPeriod.label') }}
                 custom-period-input.q-my-xs(:disable="selectedDao.hasCustomToken" v-model='tokens.voiceDecayPeriod')
-                q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!selectedDao.hasCustomToken") Only DAO admins can change the settings
+                q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!selectedDao.hasCustomToken") {{ $t('common.onlyDaoAdmins') }}
 
               .col-12.col-md-4(:class="{'q-mt-sm': !$q.screen.gt.md}")
                 label.h-label {{ $t('configuration.settings-tokens.voice.form.decayPercent.label') }}
@@ -405,7 +405,7 @@ export default {
                   type="number"
                   v-model='tokens.voiceDecayPercent'
                 )
-                q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!selectedDao.hasCustomToken") Only DAO admins can change the settings
+                q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!selectedDao.hasCustomToken") {{ $t('common.onlyDaoAdmins') }}
 
             .col-12
               label.h-label {{ $t('configuration.settings-tokens.voice.form.multiplier.label') }}
@@ -423,7 +423,7 @@ export default {
                 suffix="x"
                 v-model='tokens.voiceTokenMultiplier'
               )
-              q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!selectedDao.hasCustomToken") Only DAO admins can change the settings
+              q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!selectedDao.hasCustomToken") {{ $t('common.onlyDaoAdmins') }}
 
             .col-12
               label.h-label {{ $t('configuration.settings-tokens.voice.form.digits.label') }}

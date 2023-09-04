@@ -399,6 +399,7 @@
     }
   },
   "common": {
+    "onlyDaoAdmins": "Only DAO admins can change the settings",
     "button-card": {
       "until": "Until"
     },
