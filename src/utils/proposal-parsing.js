@@ -661,7 +661,6 @@ export async function getPeriods (data, selectedDao, daoSettings, apollo) {
         count: data.details_periodCount_i
       }
     })
-    console.log(JSON.stringify(periodResponse))
     firstPeriod = periodResponse.data.getDao.calendar[0].period[0]
     periodResponse = periodResponse.data.getDao.calendar[0].period.map((value, index) => {
       return {
