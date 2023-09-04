@@ -263,9 +263,7 @@ export default {
     ...mapGetters('dao', ['selectedDao', 'daoSettings', 'votingPercentages']),
     ...mapGetters('ballots', ['supply']),
 
-    isOwner () {
-      return this.username === this.account
-    }
+    isOwner () { return this?.username === this?.account }
   },
 
   async mounted () {
@@ -276,7 +274,7 @@ export default {
 
   watch: {
     $route: 'fetchProfile',
-    isOwner: 'fetchProfile',
+    // isOwner: 'fetchProfile',
     organizations: {
       handler () {
         if (this.organizations.length === this.organizationsPagination.count) {
