@@ -408,19 +408,22 @@ widget(:class="{ 'disable-step': currentStepName !== 'step-payout' && $q.screen.
     label.text-bold {{ toggle ? $t('pages.proposals.create.steppayout.compensationForOnePeriod') : $t('pages.proposals.create.steppayout.compensationForOneCycle') }}
   .q-col-gutter-xs.q-mt-sm(:class="{ 'q-mt-xxl':$q.screen.lt.md || $q.screen.md, 'row':$q.screen.gt.md }")
     .col-4(:class="{ 'q-mt-md':$q.screen.lt.md || $q.screen.md }" v-if="fields.reward")
-      label.h-label {{ `${fields.reward.label} (${$store.state.dao.settings.rewardToken})` }}
+      label.h-label(v-if="$store.state.dao.settings.rewardToken !== 'HYPHA'") {{ `${fields.reward.label} (${$store.state.dao.settings.rewardToken})` }}
+      label.h-label(v-else) {{ `${fields.reward.label}` }}
       .row.full-width.items-center.q-mt-xs
         token-logo.q-mr-xs(size="40px" type="utility" :daoLogo="daoSettings.logo")
         q-input.rounded-border.col(dense :readonly="!custom" outlined v-model="utilityToken" rounded v-if="isAssignment && !isFounderRole")
         q-input.rounded-border.col(dense :readonly="!custom" outlined v-model="reward" rounded v-else)
     .col-4(:class="{ 'q-mt-md':$q.screen.lt.md || $q.screen.md }" v-if="fields.peg")
-      label.h-label {{ `${fields.peg.label} (${$store.state.dao.settings.pegToken})` }}
+      label.h-label(v-if="$store.state.dao.settings.pegToken !== 'HUSD'") {{ `${fields.peg.label} (${$store.state.dao.settings.pegToken})` }}
+      label.h-label(v-else) {{ `${fields.peg.label}` }}
       .row.full-width.items-center.q-mt-xs
         token-logo.q-mr-xs(size="40px" type="cash" :daoLogo="daoSettings.logo")
         q-input.rounded-border.col(dense :readonly="!custom" outlined v-model="cashToken" rounded v-if="isAssignment && !isFounderRole")
         q-input.rounded-border.col(dense :readonly="!custom || !daoSettings.cashClaimsEnabled" outlined v-model="peg" rounded v-else)
     .col-4(:class="{ 'q-mt-md':$q.screen.lt.md || $q.screen.md }" v-if="fields.voice")
-      label.h-label {{ `${fields.voice.label} (${$store.state.dao.settings.voiceToken})` }}
+      label.h-label(v-if="$store.state.dao.settings.voiceToken !== 'HVOICE'") {{ `${fields.voice.label} (${$store.state.dao.settings.voiceToken})` }}
+      label.h-label(v-else) {{ `${fields.voice.label}` }}
       .row.full-width.items-center.q-mt-xs
         token-logo.q-mr-xs(size="40px" type="voice" :daoLogo="daoSettings.logo")
         q-input.rounded-border.col(dense :readonly="!custom" outlined v-model="voiceToken" rounded v-if="isAssignment && !isFounderRole")
@@ -442,21 +445,24 @@ widget(:class="{ 'disable-step': currentStepName !== 'step-payout' && $q.screen.
     .full-width(v-if="fields.rewardCoefficient || fields.voiceCoefficient || fields.pegCoefficient")
       .row
         .col(v-if="fields.rewardCoefficient")
-          label.h-label {{ `${fields.rewardCoefficient.label} (${$store.state.dao.settings.rewardToken})` }}
+          label.h-label(v-if="$store.state.dao.settings.rewardToken !== 'HYPHA'") {{ `${fields.rewardCoefficient.label} (${$store.state.dao.settings.rewardToken})` }}
+          label.h-label(v-else) {{ `${fields.rewardCoefficient.label}` }}
           .row.items-center
             .col
               q-input.q-my-sm.rounded-border(v-model="rewardCoefficientLabel" outlined suffix="%" :prefix="fields.rewardCoefficient.disabled ? 'x' : rewardCoefficientLabel > 9 ? 'x1.' : 'x1.0'" :readonly="fields.rewardCoefficient.disabled" :rules="[rules.lessOrEqualThan(20), rules.greaterThanOrEqual(-20)]")
                 template(v-slot:prepend)
                   token-logo.logo-border(size="md" type="utility" :daoLogo="daoSettings.logo")
         .col(v-if="fields.pegCoefficient")
-          label.h-label {{ `${fields.pegCoefficient.label} (${$store.state.dao.settings.pegToken})` }}
+          label.h-label(v-if="$store.state.dao.settings.pegToken !== 'HUSD'") {{ `${fields.pegCoefficient.label} (${$store.state.dao.settings.pegToken})` }}
+          label.h-label(v-else) {{ `${fields.pegCoefficient.label}` }}
           .row.items-center
             .col
               q-input.q-my-sm.rounded-border(v-model="pegCoefficientLabel" outlined suffix="%" :prefix="fields.pegCoefficient.disabled ? 'x' : pegCoefficientLabel > 9 ? 'x1.' : 'x1.0'" :readonly="fields.pegCoefficient.disabled" :rules="[rules.lessOrEqualThan(20), rules.greaterThanOrEqual(-20)]")
                 template(v-slot:prepend)
                   token-logo.logo-border(size="md" type="cash" :daoLogo="daoSettings.logo")
         .col(v-if="fields.voiceCoefficient")
-          label.h-label {{ `${fields.voiceCoefficient.label} (${$store.state.dao.settings.voiceToken})` }}
+          label.h-label(v-if="$store.state.dao.settings.voiceToken !== 'HVOICE'") {{ `${fields.voiceCoefficient.label} (${$store.state.dao.settings.voiceToken})` }}
+          label.h-label(v-else) {{ `${fields.voiceCoefficient.label}` }}
           .row.items-center
             .col
               q-input.q-my-sm.rounded-border(v-model="voiceCoefficientLabel" outlined suffix="%" :prefix="fields.voiceCoefficient.disabled ? 'x' : voiceCoefficientLabel > 9 ? 'x1.' : 'x1.0'" :readonly="fields.voiceCoefficient.disabled" :rules="[rules.lessOrEqualThan(20), rules.greaterThanOrEqual(-20)]")

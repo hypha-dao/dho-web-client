@@ -237,7 +237,7 @@ widget.proposal-view.q-mb-sm
               .text-secondary.text-body2.q-ml-xxs.inline(v-if="ownAssignment && commitDifference") {{commitDifference}}
                 | %
               .dynamic-popup(v-if="showCommitPopup")
-                proposal-dynamic-popup.q-pa-xxl.absolute(:title="$t('proposals.proposal-view.adjustCommitment')" description="Multiple adjustments to your commitment will be included in the calculation." :step="5" :min="commit.min" :max="commit.max" :initialValue="commit.value" @close="showCommitPopup = false" @save="onCommitmentEdit")
+                proposal-dynamic-popup.q-pa-xxl.absolute(:title="$t('proposals.proposal-view.adjustCommitment')" :description="$t('proposals.proposal-view.multipleAdjustmentsToYourCommitment')" :step="5" :min="commit.min" :max="commit.max" :initialValue="commit.value" @close="showCommitPopup = false" @save="onCommitmentEdit")
               q-btn.q-ml-xxxl(flat round size="sm" icon="fas fa-pen" color="primary" v-if="ownAssignment && status === PROPOSAL_STATE.APPROVED" @click="showCommitPopup = true; showDefferredPopup = false")
                 q-tooltip {{ $t('proposals.proposal-view.edit') }}
         .col-6(v-if="deferred !== undefined && type !== PROPOSAL_TYPE.PAYOUT")
@@ -246,7 +246,7 @@ widget.proposal-view.q-mb-sm
             .text-grey-7.text-body2 {{ deferred.value + '%' }}
 
               .dynamic-popup(v-if="showDefferredPopup")
-                proposal-dynamic-popup.q-pa-xxl.absolute(:title="$t('proposals.proposal-view.adjustDeferred')" description="The % deferral will be immediately reflected on your next claim" :step="1" :min="deferred.min" :max="deferred.max" :initialValue="deferred.value" @close="showDefferredPopup = false" @save="onDeferredEdit")
+                proposal-dynamic-popup.q-pa-xxl.absolute(:title="$t('proposals.proposal-view.adjustDeferred')" :description="$t('proposals.proposal-view.thePercentDeferralWillBe')" :step="1" :min="deferred.min" :max="deferred.max" :initialValue="deferred.value" @close="showDefferredPopup = false" @save="onDeferredEdit")
               q-btn.q-ml-xxxl(flat round size="sm" icon="fas fa-pen" color="primary" v-if="ownAssignment && status === PROPOSAL_STATE.APPROVED || status === PROPOSAL_TYPE.ARCHIVED" @click="showDefferredPopup = true; showCommitPopup = false")
                 q-tooltip {{ $t('proposals.proposal-view.edit1') }}
   .q-my-sm(:class="{ 'row':$q.screen.gt.md }" v-if="type === PROPOSAL_TYPE.ARCHETYPE")

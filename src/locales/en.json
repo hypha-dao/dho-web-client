@@ -1056,9 +1056,11 @@
       "votingSystem": "Voting system",
       "commitmentLevel": "Commitment level",
       "adjustCommitment": "Adjust Commitment",
+      "multipleAdjustmentsToYourCommitment": "Multiple adjustments to your commitment will be included in the calculation.",
       "edit": "Edit",
       "deferredAmount": "Token mix percentage (utility vs payout)",
-      "adjustDeferred": "Adjust Deferred",
+      "adjustDeferred": "Adjust Token Mix",
+      "thePercentDeferralWillBe": "The new percentage will immediately reflect during your next claim.",
       "edit1": "Edit",
       "salaryBand": "Reward Tier",
       "equivalentPerYear": "{1} equivalent per year",
@@ -1471,13 +1473,13 @@
               "label":"Select role"
             },
             "tier": {
-              "label": "Select role tier"
+              "label": "Select reward tier"
             }
           },
           "chooseARoleArchetype": "Choose role",
           "noArchetypesExistYet": "No archetypes exist yet.",
           "pleaseCreateThemHere": "Please create them here.",
-          "chooseARoleTier": "Choose a role tier"
+          "chooseARoleTier": "Choose reward tier"
         },
         "optionsassignments": {
           "chooseARecent": "Choose a recent assignment to calculate a bridge payout"
@@ -1549,14 +1551,14 @@
           "payout": "Payout",
           "pleaseEnterTheUSDEquivalentAnd1": "Please enter the USD equivalent and % deferral for this contribution – the more you defer to a later date, the higher the bonus will be (see actual salary calculation below or use our calculator). The bottom fields compute the actual payout in SEEDS, HVOICE, HYPHA and HUSD.",
           "pleaseEnterTheUsd": "Please enter the HUSD amount (i.e. USD equivalent) for your reward. You can use the slider to select the reward percentage you will be deferring.",
-          "typeTheAmountOfUsd": "Type the amount of HUSD",
+          "typeTheAmountOfUsd": "Type the USD equivalent",
           "commitmentMustBeGreater": "Commitment must be greater than or equal to the role configuration. Role value for min commitment is",
           "defferedMustBeGreater": "Due to the role setup you’ll have to choose a greater percentage to continue",
           "salaryCompensationForOneYear": "Reward for one year ( ${value} )",
           "salaryCompensationForOneYearUsd": "Reward for one year ( ${value} ) USD",
           "compensation": "Reward Calculation",
           "compensation1": "Reward",
-          "pleaseEnterTheUSD": "Please enter the USD equivalent (i.e. HUSD amount) for your reward. Moving the second slider will let you select your token percentage (utility vs payout).",
+          "pleaseEnterTheUSD": "Please enter the USD equivalent for your reward. Moving the second slider will let you select your token percentage (utility vs payout).",
           "belowYouCanSeeTheActual": "The calculator will compute the token numbers when you adjust the sliders.",
           "compensationForOnePeriod": "Reward for one period",
           "compensationForOneCycle": "Reward for one cycle",
