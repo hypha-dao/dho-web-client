@@ -16,8 +16,8 @@ export default async function generateSecret () {
 
   // verify here:
   // https://emn178.github.io/online-tools/sha256.html - set input type to "hex"
-  console.log('Generated Secret:', secretChecksum256)
-  console.log('Hashed Secret:', hashedSecret)
+  // console.log('Generated Secret:', secretChecksum256)
+  // console.log('Hashed Secret:', hashedSecret)
 
   return {
     secret: secretChecksum256,

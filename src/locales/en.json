@@ -2,6 +2,9 @@
   "actions": {
     "delete": "Delete"
   },
+  "messages": {
+    "linkCopied":"The link has been copied"
+  },
   "periods": {
     "hour": "Hour",
     "hours": "Hours",

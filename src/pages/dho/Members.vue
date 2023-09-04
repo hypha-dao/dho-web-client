@@ -80,7 +80,7 @@ export default {
       STATES,
       state: STATES.WAITING,
 
-      inviteURL: 'https://join.hypha.earth/',
+      inviteURL: process.env.JOIN_URI,
 
       applicantsCount: 0,
       applicantsPagination: {
@@ -307,8 +307,8 @@ export default {
 
     filterObject () { return this.textFilter ? { details_member_n: { regexp: `/${this.textFilter}/i` } } : null },
     memberTypeFilter () { return this.filters.filter(_ => _.enabled).map(_ => _.value) },
-    showCommunityMembers () { return this.memberTypeFilter.includes('ALL') || this.memberTypeFilter.includes('COMMUNITY') },
-    showCoreMembers () { return this.memberTypeFilter.includes('ALL') || this.memberTypeFilter.includes('CORE') },
+    showCommunityMembers () { return this.memberTypeFilter.includes(MEMBER_TYPE.ALL) || this.memberTypeFilter.includes(MEMBER_TYPE.COMMUNITY) },
+    showCoreMembers () { return this.memberTypeFilter.includes(MEMBER_TYPE.ALL) || this.memberTypeFilter.includes(MEMBER_TYPE.CORE) },
     isInviteModalOpen () {
       return [
         STATES.CREATING_LINK,
@@ -351,7 +351,7 @@ export default {
       try {
         await copyToClipboard(this.inviteURL)
         this.showNotification({
-          message: 'The link has been copied',
+          message: this.$('messages.linkCopied'),
           color: 'secondary',
           icon: 'far fa-copy'
         })
