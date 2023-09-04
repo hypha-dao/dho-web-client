@@ -54,6 +54,12 @@ const DAO_CORE_MEMBERS_QUERY = `
 
 `
 
+const STATES = Object.freeze({
+  WAITING: 'WAITING',
+  CREATING_LINK: 'CREATING_LINK',
+  CREATED_LINK: 'CREATED_LINK'
+})
+
 export default {
   name: 'page-members',
   mixins: [documents],
@@ -62,6 +68,7 @@ export default {
     FilterOpenButton: () => import('~/components/filters/filter-open-button.vue'),
     FilterWidget: () => import('~/components/filters/filter-widget.vue'),
     FilterWidgetMobile: () => import('~/components/filters/filter-widget-mobile.vue'),
+    LoadingSpinner: () => import('~/components/common/loading-spinner.vue'),
     MembersList: () => import('~/components/profiles/members-list.vue'),
     ProfileCard: () => import('~/components/profiles/profile-card.vue'),
     UpvoteDelegateWidget: () => import('~/components/common/upvote-delegate-widget.vue'),
@@ -70,6 +77,11 @@ export default {
 
   data () {
     return {
+      STATES,
+      state: STATES.WAITING,
+
+      inviteURL: 'https://join.hypha.earth/',
+
       applicantsCount: 0,
       applicantsPagination: {
         fetchMore: true,
@@ -296,7 +308,13 @@ export default {
     filterObject () { return this.textFilter ? { details_member_n: { regexp: `/${this.textFilter}/i` } } : null },
     memberTypeFilter () { return this.filters.filter(_ => _.enabled).map(_ => _.value) },
     showCommunityMembers () { return this.memberTypeFilter.includes('ALL') || this.memberTypeFilter.includes('COMMUNITY') },
-    showCoreMembers () { return this.memberTypeFilter.includes('ALL') || this.memberTypeFilter.includes('CORE') }
+    showCoreMembers () { return this.memberTypeFilter.includes('ALL') || this.memberTypeFilter.includes('CORE') },
+    isInviteModalOpen () {
+      return [
+        STATES.CREATING_LINK,
+        STATES.CREATED_LINK
+      ].includes(this.state)
+    }
   },
 
   mounted () {
@@ -309,6 +327,43 @@ export default {
 
   methods: {
     ...mapActions('accounts', ['applyMember']),
+    ...mapActions('dao', ['createInviteLink']),
+
+    async _createInviteLink () {
+      try {
+        this.state = STATES.CREATING_LINK
+        const invite = await this.createInviteLink()
+        const url = new URL(process.env.JOIN_URI)
+
+        Object.keys(invite).forEach(key => {
+          url.searchParams.set(key, invite[key])
+        })
+
+        this.inviteURL = url.toString()
+        this.state = STATES.CREATED_LINK
+      } catch (e) {
+        const message = e.message || e.cause.message
+        this.showNotification({ message, color: 'red' })
+      }
+    },
+
+    async _copyToClipBoard () {
+      try {
+        await copyToClipboard(this.inviteURL)
+        this.showNotification({
+          message: 'The link has been copied',
+          color: 'secondary',
+          icon: 'far fa-copy'
+        })
+      } catch (error) {
+        this.showNotification({
+          message: 'Error',
+          textColor: 'white',
+          color: 'negative',
+          icon: 'far fa-copy'
+        })
+      }
+    },
 
     pollData () {
       setTimeout(() => {
@@ -376,27 +431,6 @@ export default {
       }
       this.coreMembersPagination.fetchMore = !this.showApplicants
       this.applicantsPagination.fetchMore = this.showApplicants
-    },
-
-    async copyToClipBoard () {
-      try {
-        const resolved = this.$router.resolve({ name: 'login', params: { dhoname: this.daoSettings.url } })
-        const host = window.location.host
-        const url = `${host}${resolved.href}`
-        await copyToClipboard(url)
-        this.showNotification({
-          message: 'The link has been copied',
-          color: 'secondary',
-          icon: 'far fa-copy'
-        })
-      } catch (error) {
-        this.showNotification({
-          message: 'Error',
-          textColor: 'white',
-          color: 'negative',
-          icon: 'far fa-copy'
-        })
-      }
     },
 
     onChange (name, value) { this.$set(this, name, value) },
@@ -476,13 +510,33 @@ q-page.page-members
   base-banner(:compact="!$q.screen.gt.sm" :split="$q.screen.gt.md" v-bind="banner" v-if="isMembersBannerVisible")
     template(v-slot:buttons)
       nav.row.items-center
-        .row.inline.q-pr-md(v-if="!isMember && !isApplicant && account && !loadingAccount")
+        .row.inline.q-pr-md(v-if="!isMember && !isApplicant && account")
           q-btn.q-px-lg.h-btn1(:disable="!daoSettings.registrationEnabled" @click="onApply" color="secondary" :label="$t('pages.dho.members.becomeAMember')" no-caps="no-caps" rounded text-color="white" unelevated="unelevated")
           q-tooltip(v-if="!daoSettings.registrationEnabled") {{ $t('pages.dho.members.registrationIsTemporarilyDisabled') }}
-        q-btn.q-px-lg.h-btn1(:flat="!account" @click="copyToClipBoard" color="secondary" :label="$t('pages.dho.members.copyInviteLink')" no-caps="no-caps" rounded text-color="white" unelevated="unelevated")
+        q-btn.q-px-lg.h-btn1(:flat="!account" @click="_createInviteLink" color="secondary" :label="$t('pages.dho.members.copyInviteLink')" no-caps="no-caps" rounded text-color="white" unelevated="unelevated")
           q-tooltip {{ $t('pages.dho.members.sendALink') }}
 
   //- upvote-delegate-widget(endDate="2023-05-29" :users="tempUsersForVotes")
+
+  q-dialog(:value="isInviteModalOpen")
+    .row.justify-center.items-center
+      div.q-pa-xl(v-if="state === STATES.CREATING_LINK")
+        loading-spinner(color="primary" size="72px")
+      div.bg-white.rounded-full.q-pa-xl(v-if="state === STATES.CREATED_LINK" :style="{'min-width': '480px'}")
+        header
+          h3.q-pa-none.q-ma-none.h-h4.text-weight-700 {{ $t('pages.dho.members.copyInviteLink') }}
+        section.q-mt-xl
+          .row.full-width.q-my-xs.relative-position
+            q-input.full-width(dense disable filled rounded v-model='inviteURL')
+            q-btn.q-px-lg.absolute-right(
+              :label="$t('pages.dho.members.copy')"
+              @click="_copyToClipBoard"
+              color="secondary"
+              no-caps="no-caps"
+              rounded
+              text-color="white"
+              unelevated="unelevated"
+            )
 
   .row.q-py-md
     div.col-9(:class="{'full-width': $q.screen.lt.md}")

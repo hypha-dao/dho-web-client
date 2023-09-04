@@ -1299,6 +1299,7 @@
         "daoApplicants1": "Applicants",
         "filterByAccountName": "Filter by account name",
         "sortBy": "Sort by",
+        "copy": "Copy",
         "joinDateDescending": "Join date descending",
         "joinDateAscending": "Join date ascending",
         "alphabetically": "Alphabetically (A-Z)",
