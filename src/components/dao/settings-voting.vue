@@ -62,7 +62,7 @@ export default {
                 suffix="%"
                 v-model.number="form.votingAlignmentPercent"
               )
-            q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
+            q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") {{ $t('common.onlyDaoAdmins') }}
 
         .col-12.col-md-4
           label.h-label {{ $t('configuration.settings-voting.core.form.quorum.label') }}
@@ -86,12 +86,12 @@ export default {
                 suffix="%"
                 v-model.number="form.votingQuorumPercent"
               )
-            q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
+            q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") {{ $t('common.onlyDaoAdmins') }}
 
         .col-12.col-md-4
           label.h-label {{ $t('configuration.settings-voting.core.form.duration.label') }}
           custom-period-input.q-py-sm(:disable="!isAdmin" v-model='form.votingDurationSec')
-          q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
+          q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") {{ $t('common.onlyDaoAdmins') }}
 
       section.row.q-mt-xl.q-col-gutter-x-md.q-mb-xl(v-show="$q.screen.gt.sm")
         template(v-for="item in $t('configuration.settings-voting.core.showcase')")
@@ -132,7 +132,7 @@ export default {
   //-               suffix="%"
   //-               v-model.number="form.communityVotingAlignmentPercent"
   //-             )
-  //-           q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
+  //-           q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") {{ $t('common.onlyDaoAdmins') }}
 
   //-       .col-12.col-md-4
   //-         label.h-label {{ $t('configuration.settings-voting.community.form.quorum.label') }}
@@ -156,12 +156,12 @@ export default {
   //-               suffix="%"
   //-               v-model.number="form.communityVotingQuorumPercent"
   //-             )
-  //-           q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
+  //-           q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") {{ $t('common.onlyDaoAdmins') }}
 
   //-       .col-12.col-md-4
   //-         label.h-label {{ $t('configuration.settings-voting.community.form.duration.label') }}
   //-         custom-period-input(:disable="!isAdmin" v-model='form.communityVotingDurationSec')
-  //-         q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
+  //-         q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") {{ $t('common.onlyDaoAdmins') }}
 
   //-     section.row.q-mt-xl.q-col-gutter-x-md.q-mb-xl(v-show="$q.screen.gt.sm")
   //-       template(v-for="item in $t('configuration.settings-voting.community.showcase')")
