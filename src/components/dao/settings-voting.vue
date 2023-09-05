@@ -90,7 +90,7 @@ export default {
 
         .col-12.col-md-4
           label.h-label {{ $t('configuration.settings-voting.core.form.duration.label') }}
-          custom-period-input(:disable="!isAdmin" v-model='form.votingDurationSec')
+          custom-period-input.q-py-sm(:disable="!isAdmin" v-model='form.votingDurationSec')
           q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
 
       section.row.q-mt-xl.q-col-gutter-x-md.q-mb-xl(v-show="$q.screen.gt.sm")

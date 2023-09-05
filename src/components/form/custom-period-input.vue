@@ -76,15 +76,16 @@ export default {
 div.custom-period-input
   .row.full-width.items-center
     .col.row.q-mr-sm
-      q-input.full-width.q-py-sm(
+      q-input.full-width(
         :disable="disable"
+        :filled="disable"
         dense
         outlined
         rounded
         v-model.number="valueFormated"
       )
-    .col-3
-      q-btn-dropdown.full-width(:label="label"  outline no-caps rounded unelevated)
+    .col-6
+      q-btn-dropdown.full-width(:disable="disable" :label="label" outline no-caps rounded unelevated)
         q-list
           q-item(clickable v-close-popup @click="period = 'hours'")
             q-item-section

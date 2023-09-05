@@ -81,7 +81,8 @@
     "tabs": {
       "general": "General",
       "structure": "Structure",
-      "voting": "Voting"
+      "voting": "Voting",
+      "tokens": "Tokens"
     },
     "nav": {
       "reset": "Reset changes",
@@ -269,9 +270,136 @@
           }
         }
       }
+    },
+    "settings-tokens": {
+      "title": "Tokens",
+      "description": "You can use these 3 different kinds of tokens to create a great rewards system for your members. Set up the reward system by deciding what percentage of each token members will get per payout. You will not be able to change these values later.",
+
+      "tresury": {
+        "title": "Payout Token",
+        "description":"Payout tokens can be redeemed for liquid payouts from the DAO.",
+
+        "form": {
+          "name": {
+            "label": "Token Name",
+            "placeholder": "HUSD Token"
+          },
+          "symbol": {
+            "label": "Symbol",
+            "placeholder": "HUSD"
+          },
+          "currency": {
+            "label": "Default currency"
+          },
+          "digits": {
+            "label": "Digits",
+            "morePrecise": "More precise",
+            "lessPrecise": "Less precise"
+          },
+          "multiplier": {
+            "label": "Multiplier"
+          }
+        }
+      },
+
+      "utility": {
+        "title": "Utility Token",
+        "description":"Utility tokens reward contributors with value other than cash payments for example access to features.",
+
+        "form": {
+          "name": {
+            "label": "Token Name",
+            "placeholder": ""
+          },
+          "symbol": {
+            "label": "Symbol",
+            "placeholder": ""
+          },
+          "value": {
+            "label": "Supply",
+            "placeholder": "∞"
+          },
+          "digits": {
+            "label": "Digits",
+            "morePrecise": "More precise",
+            "lessPrecise": "Less precise"
+          },
+          "multiplier": {
+            "label": "Multiplier"
+          }
+        }
+      },
+
+      "voice": {
+        "title": "Voice Token",
+        "description":"Assign voice tokens to members when they vote to increase their voting power.",
+
+        "form": {
+          "name": {
+            "label": "Token Name",
+            "placeholder": "Voice Token"
+          },
+          "symbol": {
+            "label": "Symbol",
+            "placeholder": "VOICE"
+          },
+          "decayPeriod": {
+            "label": "Decay Period",
+            "placeholder": ""
+          },
+          "decayPercent": {
+            "label": "Decay %",
+            "placeholder": ""
+          },
+          "digits": {
+            "label": "Digits",
+            "morePrecise": "More precise",
+            "lessPrecise": "Less precise"
+          },
+          "multiplier": {
+            "label": "Multiplier"
+          }
+        }
+      },
+
+      "form": {
+        "logo": {
+          "label": "Logo"
+        },
+        "upload": {
+          "label": "Upload an image (max. 3MB)"
+        },
+        "name": {
+          "label": "Name"
+        },
+        "url": {
+          "label": "Custom URL"
+        },
+        "purpose": {
+          "label": "Purpose"
+        },
+        "primary-color": {
+          "label": "Primary color"
+        },
+        "secondary-color": {
+          "label": "Secondary color"
+        },
+        "text-color": {
+          "label": "Text color"
+        },
+        "sample-text": "This text must be visible in both colors"
+      },
+
+      "nav": {
+        "show-more": "Show more options",
+        "show-less": "Show less options",
+        "cancel":"Cancel",
+        "submit":"Submit"
+      }
     }
   },
   "common": {
+    "onlyDaoAdmins": "Only DAO admins can change the settings",
     "button-card": {
       "until": "Until"
     },

@@ -20,7 +20,8 @@ export const selectedDao = (state) => ({
   description: state.settings ? state.settings.description : undefined,
   logo: state.settings ? state.settings.logo : undefined,
   createdDate: state.createdDate,
-  foundedBy: state.settings ? state.settings.onboarderAccount : undefined
+  foundedBy: state.settings ? state.settings.onboarderAccount : undefined,
+  hasCustomToken: state.settings.settings_rewardToken_a !== null && state.settings.settings_pegToken_a !== null
 })
 
 export const selectedDaoPlan = ({ isWaitingEcosystem, plan }) => {
