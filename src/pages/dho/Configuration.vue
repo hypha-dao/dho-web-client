@@ -76,7 +76,8 @@ const defaultSettings = {
 const TABS = Object.freeze({
   GENERAL: 'GENERAL',
   STRUCTURE: 'STRUCTURE',
-  VOTING: 'VOTING'
+  VOTING: 'VOTING',
+  TOKENS: 'TOKENS'
 })
 
 export default {
@@ -87,7 +88,8 @@ export default {
 
     SettingsGeneral: () => import('~/components/dao/settings-general.vue'),
     SettingsStructure: () => import('~/components/dao/settings-structure.vue'),
-    SettingsVoting: () => import('~/components/dao/settings-voting.vue')
+    SettingsVoting: () => import('~/components/dao/settings-voting.vue'),
+    SettingsTokens: () => import('~/components/dao/settings-tokens.vue')
 
   },
 
@@ -127,10 +129,6 @@ export default {
         primaryColor: this.daoSettings?.primaryColor ? this.daoSettings?.primaryColor : defaultSettings.primaryColor,
         secondaryColor: this.daoSettings?.secondaryColor ? this.daoSettings?.secondaryColor : defaultSettings.secondaryColor,
         textColor: this.daoSettings?.textColor ? this.daoSettings?.textColor : defaultSettings.textColor,
-
-        // Structure
-        // roles: this.daoSettings?.roles ? this.daoSettings?.roles : defaultSettings.roles,
-        // levels: this.daoSettings?.levels ? this.daoSettings?.levels : defaultSettings.levels,
 
         // Voting
         proposalsCreationEnabled: this.daoSettings?.proposalsCreationEnabled !== null ? this.daoSettings?.proposalsCreationEnabled : defaultSettings.proposalsCreationEnabled,
@@ -403,10 +401,12 @@ q-page.page-configuration
     q-tab(:name="TABS.GENERAL" :label="$t('configuration.tabs.general')" :ripple="false")
     q-tab(:name="TABS.STRUCTURE" :label="$t('configuration.tabs.structure')" :ripple="false")
     q-tab(:name="TABS.VOTING" :label="$t('configuration.tabs.voting')" :ripple="false")
+    q-tab(:name="TABS.TOKENS" :label="$t('configuration.tabs.tokens')" :ripple="false")
 
   settings-general(v-show="tab === TABS.GENERAL" v-bind="{ form, isAdmin, isHypha }" @change="onChange").q-mt-xl
   settings-structure(v-show="tab === TABS.STRUCTURE" v-bind="{ form, isAdmin, isHypha }" @change="onChange").q-mt-xl
   settings-voting(v-show="tab === TABS.VOTING" v-bind="{ form, isAdmin, isHypha }" @change="onChange").q-mt-xl
+  settings-tokens(v-show="tab === TABS.TOKENS" v-bind="{ form, isAdmin, isHypha }" @change="onChange").q-mt-xl
 
   //- NAVIGATION SETTINGS
   nav.full-width.q-my-xl.row.justify-end(v-show="isAdmin && !activeMultisig")
