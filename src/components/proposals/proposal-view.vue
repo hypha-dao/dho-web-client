@@ -294,7 +294,7 @@ widget.proposal-view.q-mb-sm
     .row.q-mb-lg {{ masterPolicy.label }}
   .text-grey.text-italic(v-if="descriptionWithoutSpecialCharacters" :style="{ 'font-size': '12px' }" :class="{ 'q-mt-lg': !purpose }") {{ $t('proposals.proposal-view.description') }}
   .row
-    q-markdown(:src="descriptionWithoutSpecialCharacters")
+    q-markdown(:style="'width: -webkit-fill-available;'" :src="descriptionWithoutSpecialCharacters")
   .text-grey.text-italic.q-mb-sm(v-if="url" :style="{ 'font-size': '12px' }") {{ $t('proposals.proposal-view.attachedDocuments') }}
   .row.items-center.q-mb-md.bg-internal-bg.relative(v-if="url" :style="{ 'padding': '7px 10px', 'border-radius': '15px' }")
     q-icon(name="far fa-file" size="xs" color="primary")
