@@ -62,6 +62,7 @@ export default {
               ref="logo"
               v-show="false"
             )
+        q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
 
       .col-12.col-md-4(:class="{'q-mt-sm': !$q.screen.gt.md}")
         label.h-label {{ $t('configuration.settings-general.form.name.label') }}
@@ -118,6 +119,7 @@ export default {
           type="textarea"
           v-model='form.purpose'
         )
+        q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
 
     section.row.justify-between.q-col-gutter-x-xl(v-if="isShowingMore")
         .col-12.col-md-4(:class="{'q-mt-sm': !$q.screen.gt.md}")
