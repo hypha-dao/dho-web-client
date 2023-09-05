@@ -42,7 +42,7 @@ export default {
 </script>
 
 <template lang="pug">
-.proposal-list.row.q-col-gutter-md.q-mr-md
+.proposal-list.row.q-col-gutter-md(:class="{ 'q-mr-md': $q.screen.gt.md }")
   .template.flex.justify-center(v-for="p in proposals" :class="{ 'col-6 q-px-xs': $q.screen.md, 'col-4': view === 'card' && !compact, 'col-12': view === 'card' && compact && !$q.screen.md, 'full-width': view === 'list'}")
     proposal-card.q-mb-md(:fullWidth="compact" :style="{width: '100%'}" :view="view" :key="p.hash" :proposal="p")
 
