@@ -101,7 +101,7 @@ export default {
     async _createCircle (data) {
       try {
         await this.createCircle({ data })
-        this.cirlce = { ...CIRCLE }
+        this.circle = { ...CIRCLE }
         this.subcricle = { ...SUB_CIRCLE }
       } catch (e) {
         const message = e.message || e.cause.message
@@ -276,7 +276,7 @@ widget(:title="$t('configuration.settings-structure.circles.title')" titleImage=
           dense
           lazy-rules
           outlined
-          ref="name"
+          ref="circleName"
           rounded
           v-model='circle.name'
         )
@@ -293,7 +293,7 @@ widget(:title="$t('configuration.settings-structure.circles.title')" titleImage=
           lazy-rules
           maxlength="300"
           outlined
-          ref="nickname"
+          ref="circleDescription"
           rounded
           rows="3"
           type="textarea"
