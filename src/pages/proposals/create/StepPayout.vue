@@ -54,7 +54,6 @@ export default {
     usdAmount: {
       immediate: true,
       handler () {
-        console.log('usdAmount')
         this.calculateTokens()
       }
     },
@@ -63,8 +62,7 @@ export default {
       deep: true,
       immediate: true,
       handler () {
-        // console.log('annualUsdSalary')
-        // setTimeout(() => { this.calculateTokens() }, 33)
+        this.calculateTokens()
       }
     },
 
