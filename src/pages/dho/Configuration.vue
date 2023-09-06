@@ -75,9 +75,10 @@ const defaultSettings = {
 
 const TABS = Object.freeze({
   GENERAL: 'GENERAL',
+  PLANS_AND_BILLING: 'PLANS_AND_BILLING',
   STRUCTURE: 'STRUCTURE',
-  VOTING: 'VOTING',
-  TOKENS: 'TOKENS'
+  TOKENS: 'TOKENS',
+  VOTING: 'VOTING'
 })
 
 export default {
@@ -87,10 +88,10 @@ export default {
     MultisigModal: () => import('~/components/dao/multisig-modal.vue'),
 
     SettingsGeneral: () => import('~/components/dao/settings-general.vue'),
+    SettingsPlansBilling: () => import('~/components/dao/settings-plans-billing.vue'),
     SettingsStructure: () => import('~/components/dao/settings-structure.vue'),
-    SettingsVoting: () => import('~/components/dao/settings-voting.vue'),
-    SettingsTokens: () => import('~/components/dao/settings-tokens.vue')
-
+    SettingsTokens: () => import('~/components/dao/settings-tokens.vue'),
+    SettingsVoting: () => import('~/components/dao/settings-voting.vue')
   },
 
   data () {
@@ -103,6 +104,7 @@ export default {
 
       state: CONFIGURATION_STATE.WAITING,
 
+      // tab: TABS.GENERAL
       tab: TABS.GENERAL
     }
   },
@@ -358,9 +360,10 @@ export default {
   watch: {
     '$route.query.tab': {
       handler: function (tab) {
-        if (tab && this.tabs[tab]) {
-          this.tab = tab
+        if (tab && TABS[tab]) {
+          this.tab = TABS[tab]
         }
+
         this.$router.replace({ query: {} })
       },
       deep: true,
@@ -399,14 +402,16 @@ q-page.page-configuration
     v-model="tab"
   )
     q-tab(:name="TABS.GENERAL" :label="$t('configuration.tabs.general')" :ripple="false")
+    q-tab(:name="TABS.PLANS_AND_BILLING" :label="$t('configuration.tabs.plans_and_billing')" :ripple="false")
     q-tab(:name="TABS.STRUCTURE" :label="$t('configuration.tabs.structure')" :ripple="false")
-    q-tab(:name="TABS.VOTING" :label="$t('configuration.tabs.voting')" :ripple="false")
     q-tab(:name="TABS.TOKENS" :label="$t('configuration.tabs.tokens')" :ripple="false")
+    q-tab(:name="TABS.VOTING" :label="$t('configuration.tabs.voting')" :ripple="false")
 
   settings-general(v-show="tab === TABS.GENERAL" v-bind="{ form, isAdmin, isHypha }" @change="onChange").q-mt-xl
+  settings-plans-billing(v-show="tab === TABS.PLANS_AND_BILLING" v-bind="{ form, isAdmin, isHypha }" @change="onChange").q-mt-xl
   settings-structure(v-show="tab === TABS.STRUCTURE" v-bind="{ form, isAdmin, isHypha }" @change="onChange").q-mt-xl
-  settings-voting(v-show="tab === TABS.VOTING" v-bind="{ form, isAdmin, isHypha }" @change="onChange").q-mt-xl
   settings-tokens(v-show="tab === TABS.TOKENS" v-bind="{ form, isAdmin, isHypha }" @change="onChange").q-mt-xl
+  settings-voting(v-show="tab === TABS.VOTING" v-bind="{ form, isAdmin, isHypha }" @change="onChange").q-mt-xl
 
   //- NAVIGATION SETTINGS
   nav.full-width.q-my-xl.row.justify-end(v-show="isAdmin && !activeMultisig")
