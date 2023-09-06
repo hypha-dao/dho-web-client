@@ -744,6 +744,18 @@ export default {
             ]
             break
 
+          case PROPOSAL_TYPE.ASSIGNBADGE:
+            content = [
+              { label: 'content_group_label', value: ['string', 'details'] },
+              { label: 'assignee', value: ['name', rootState.accounts.account] },
+              { label: 'title', value: ['string', draft.title] },
+              { label: 'description', value: ['string', draft.description] },
+              { label: 'badge', value: ['int64', draft.badge.docId] },
+              { label: 'start_period', value: ['int64', draft.startPeriod.docId] },
+              { label: 'period_count', value: ['int64', draft.periodCount] }
+            ]
+            break
+
           case PROPOSAL_TYPE.ARCHETYPE:
             content = [
               { label: 'content_group_label', value: ['string', 'details'] },

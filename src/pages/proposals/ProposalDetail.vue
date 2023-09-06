@@ -1336,8 +1336,8 @@ export default {
         // this.$store.commit('proposals/setMinDeferred', this.proposal?.role[0]?.details_minDeferredX100_i)
       }
 
-      if (this.proposal.__typename === PROPOSAL_TYPE.ABILITY) { // Badge Assignment
-        this.$store.commit('proposals/setBadge', this?.proposal.badge)
+      if (this.proposal.__typename === PROPOSAL_TYPE.ABILITY || this.proposal.__typename === PROPOSAL_TYPE.ASSIGNBADGE) { // Badge Assignment
+        this.$store.commit('proposals/setBadge', this?.proposal.badge?.[0])
         this.$store.commit('proposals/setStartPeriod', this.proposal?.start[0])
         this.$store.commit('proposals/setPeriodCount', this.proposal?.details_periodCount_i)
       }

@@ -160,10 +160,10 @@ widget
   section.q-mt-xl
     .col.q-mt-sm(v-if="fields.title")
       label.h-label {{ fields.title.label }}
-      q-input.q-mt-xs.rounded-border(:disable="isEditing || isProposalType(PROPOSAL_TYPE.ABILITY)" :placeholder="fields.title.placeholder" :rules="[val => !!val || $t('pages.proposals.create.stepdetails.titleIsRequired'), val => (val.length <= TITLE_MAX_LENGTH) || $t('pages.proposals.create.stepdetails.proposalTitleLengthHasToBeLess', { TITLE_MAX_LENGTH: TITLE_MAX_LENGTH, length: title.length })]" dense outlined v-model="title")
+      q-input.q-mt-xs.rounded-border(:disable="isEditing || isProposalType(PROPOSAL_TYPE.ABILITY) || isProposalType(PROPOSAL_TYPE.ASSIGNBADGE)" :placeholder="fields.title.placeholder" :rules="[val => !!val || $t('pages.proposals.create.stepdetails.titleIsRequired'), val => (val.length <= TITLE_MAX_LENGTH) || $t('pages.proposals.create.stepdetails.proposalTitleLengthHasToBeLess', { TITLE_MAX_LENGTH: TITLE_MAX_LENGTH, length: title.length })]" dense outlined v-model="title")
     .col.q-mt-sm(v-if="fields.description")
       label.h-label {{ fields.description.label }}
-      q-field.q-mt-xs.rounded-border(:rules="[rules.required, val => this.$sanitize(val, { allowedTags: [] }).length < DESCRIPTION_MAX_LENGTH || $t('pages.proposals.create.stepdetails.theDescriptionMustContainLess', { DESCRIPTION_MAX_LENGTH: DESCRIPTION_MAX_LENGTH, length: this.$sanitize(description, { allowedTags: [] }).length })]" dense maxlength="4000" outlined ref="bio" stack-label v-model="description" :disable="isProposalType(PROPOSAL_TYPE.ABILITY)")
+      q-field.q-mt-xs.rounded-border(:rules="[rules.required, val => this.$sanitize(val, { allowedTags: [] }).length < DESCRIPTION_MAX_LENGTH || $t('pages.proposals.create.stepdetails.theDescriptionMustContainLess', { DESCRIPTION_MAX_LENGTH: DESCRIPTION_MAX_LENGTH, length: this.$sanitize(description, { allowedTags: [] }).length })]" dense maxlength="4000" outlined ref="bio" stack-label v-model="description" :disable="isProposalType(PROPOSAL_TYPE.ABILITY) || isProposalType(PROPOSAL_TYPE.ASSIGNBADGE)")
         input-editor.full-width(:placeholder="fields.description.placeholder" :toolbar="[['bold', 'italic', /*'strike', 'underline'*/],['token', 'hr', 'link', 'custom_btn'],['quote', 'unordered', 'ordered']]" flat ref="editorRef" v-model="description")
     .col.q-mt-sm(v-if="fields.circle")
       label.h-label {{ fields.circle.label }}
