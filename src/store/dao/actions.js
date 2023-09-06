@@ -1033,8 +1033,8 @@ export const createTokens = async function ({ state, rootState }, data) {
           // voice token
           [
             { label: 'content_group_label', value: ['string', 'voice_details'] },
-            { label: 'voice_token_decay_period', value: ['int64', 604800] },
-            { label: 'voice_token_decay_per_period_x10M', value: ['int64', 100000] },
+            { label: 'voice_token_decay_period', value: ['int64', data?.voiceDecayPeriod] },
+            { label: 'voice_token_decay_per_period_x10M', value: ['int64', data?.voiceDecayPercent] },
             { label: 'voice_token_multiplier', value: ['int64', data?.voiceTokenMultiplier] }
           ]
         ]

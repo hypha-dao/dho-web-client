@@ -95,6 +95,7 @@ export default {
       const [treasuryDigits, treasurySymbol] = this.daoSettings.settings_pegToken_a.split(' ')
       const [utilityDigits, utilitySymbol] = this.daoSettings.settings_rewardToken_a.split(' ')
       const [voiceDigits, voiceSymbol] = this.daoSettings.settings_voiceToken_a.split(' ')
+      const [utilityAmount] = this.daoSettings?.settings_rewardTokenMaxSupply_a?.split(' ')
 
       this.tokens = {
         // ...this.tokens,
@@ -113,7 +114,7 @@ export default {
         utilitySymbol,
         utilityDigits: utilityDigits.split('.')[1].length, // 1.0, 1.00, 1.000, // 1.0, 1.00, 1.000
         utilityTokenMultiplier: this.daoSettings.settings_utilityTokenMultiplier_i,
-        utilityAmount: this.daoSettings.settings_rewardTokenMaxSupply_a, // i.e 100000 or -1 for infinite supply
+        utilityAmount: parseInt(utilityAmount) === -1 ? '∞' : utilityAmount, // i.e 100000 or -1 for infinite supply
         // // utilityValue: '1', // The equivalent value of 1 token in USD
 
         // // Voice token
@@ -145,17 +146,17 @@ export default {
         }
       },
       immediate: true
-    },
-
-    'tokens.treasuryCurrency': {
-      handler: function (value) {
-        if (value) {
-          this.tokens.treasuryName = value?.name
-          this.tokens.treasurySymbol = value?.code
-        }
-      },
-      immediate: true
     }
+
+    // 'tokens.treasuryCurrency': {
+    //   handler: function (value) {
+    //     if (value) {
+    //       this.tokens.treasuryName = value?.name
+    //       this.tokens.treasurySymbol = value?.code
+    //     }
+    //   },
+    //   immediate: true
+    // }
 
   }
 
@@ -180,11 +181,16 @@ export default {
               .col-12.col-md-6
                 label.h-label {{ $t('configuration.settings-tokens.tresury.form.name.label') }}
                 q-input.q-my-xs(
+                  :debounce="200"
+                  :disable="selectedDao.hasCustomToken"
+                  :filled="selectedDao.hasCustomToken"
+                  :placeholder="$t('configuration.settings-tokens.utility.form.name.placeholder')"
                   :rules="[rules.required]"
+                  color="accent"
                   dense
-                  disable
-                  filled
                   lazy-rules
+                  outlined
+                  ref="treasuryName"
                   rounded
                   v-model='tokens.treasuryName'
                 )
@@ -193,13 +199,19 @@ export default {
               .col-12.col-md-6
                 label.h-label {{ $t('configuration.settings-tokens.tresury.form.symbol.label') }}
                 q-input.q-my-xs(
-                  :rules="[rules.required]"
+                  :debounce="200"
+                  :disable="selectedDao.hasCustomToken"
+                  :filled="selectedDao.hasCustomToken"
+                  :placeholder="$t('configuration.settings-tokens.utility.form.symbol.placeholder')"
+                  :rules="[rules.required, rules.isTokenAvailable]"
                   dense
-                  disable
-                  filled
                   lazy-rules
+                  mask="AAAAAAAA"
+                  maxlength="7"
+                  outlined
+                  ref="treasurySymbol"
                   rounded
-                  v-model='tokens.treasurySymbol'
+                  v-model="tokens.treasurySymbol"
                 )
                 q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!selectedDao.hasCustomToken") {{ $t('common.onlyDaoAdmins') }}
 
