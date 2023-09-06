@@ -243,7 +243,7 @@ widget
           q-input.rounded-border.col.q-mt-xs(dense outlined rounded v-model="startValue")
             template(v-slot:append)
               q-icon(size="xs" name="fa fa-calendar-alt")
-          q-date.bg-internal-bg.calendar.absolute.z-top(:options="datePickerOptions" minimal="minimal" ref="calendar" v-model="startValue" rounded)
+          q-date.bg-internal-bg.calendar.absolute.z-top(no-unset :options="datePickerOptions" minimal="minimal" ref="calendar" v-model="startValue" rounded)
         .col
           label.h-h7 {{ $t('pages.proposals.create.stepduration.periods') }}
           q-input.rounded-border.col.q-mt-xs(dense outlined rounded v-model="periodCount")
