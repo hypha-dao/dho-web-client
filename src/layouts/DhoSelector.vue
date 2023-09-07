@@ -1,6 +1,8 @@
 <script>
 import gql from 'graphql-tag'
 
+const MAX_NUM_OF_RETIRES = 10
+
 const DAO_ACTIVE_QUERY = `
 
   queryDao @cascade(fields: ["settings"]) {
@@ -321,8 +323,14 @@ export default {
 
       result (res) {
         const data = res.data?.queryDao
+
         if (!(data.length)) {
-          this.$router.push({ path: '/not-found' })
+          this.daoQueryNumberOfRetires++
+          if (this.daoQueryNumberOfRetires > MAX_NUM_OF_RETIRES) {
+            this.$router.push({ path: '/not-found' })
+          } else {
+            this.$apollo.queries.dao.refetch()
+          }
         }
 
         this.$store.dispatch('accounts/checkMembership')
@@ -360,6 +368,12 @@ export default {
       fetchPolicy: 'no-cache'
     }
 
+  },
+
+  data () {
+    return {
+      daoQueryNumberOfRetires: 0
+    }
   },
 
   computed: {
