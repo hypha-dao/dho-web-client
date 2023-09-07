@@ -3,6 +3,8 @@
     "delete": "Delete"
   },
   "periods": {
+    "minute": "Minute",
+    "minutes": "Minutes",
     "hour": "Hour",
     "hours": "Hours",
     "day": "Day",
