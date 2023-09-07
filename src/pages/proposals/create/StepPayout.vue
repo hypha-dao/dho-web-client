@@ -1,12 +1,12 @@
 <script>
 import { mapGetters } from 'vuex'
-import { DEFAULT_TIER, PROPOSAL_TYPE } from '~/const'
-import { format } from '~/mixins/format'
 import { validation } from '~/mixins/validation'
+import { format } from '~/mixins/format'
+import { PROPOSAL_TYPE } from '~/const'
 
 export default {
   name: 'step-payout',
-  mixins: [format, validation],
+  mixins: [validation, format],
   components: {
     InfoTooltip: () => import('~/components/common/info-tooltip.vue'),
     PayoutAmounts: () => import('~/components/common/payout-amounts.vue'),
@@ -58,14 +58,6 @@ export default {
       }
     },
 
-    annualUsdSalary: {
-      deep: true,
-      immediate: true,
-      handler () {
-        this.calculateTokens()
-      }
-    },
-
     deferred: {
       immediate: true,
       handler () {
@@ -75,7 +67,6 @@ export default {
         }
       }
     },
-
     commitment: {
       immediate: true,
       handler () {
@@ -84,38 +75,22 @@ export default {
           this.firstPaintCommitment = false
         }
       }
+    },
+
+    '$store.state.proposals.draft.annualUsdSalary': {
+      immediate: true,
+      handler (val) {
+        if (!this.custom) {
+          if (val === 0) {
+            this.salaryOption = null
+          }
+          this.calculateTokens()
+        }
+      }
     }
-
-    // '$store.state.proposals.draft.type': {
-    //   immediate: true,
-    //   handler () {
-    //     this.custom = false
-    //   }
-    // },
-
-    // '$store.state.proposals.draft.annualUsdSalary': {
-    //   immediate: true,
-    //   handler (val) {
-    //     if (!this.custom) {
-    //       if (val === 0) {
-    //         this.salaryOption = null
-    //       }
-    //       this.calculateTokens()
-    //     }
-    //   }
-    // }
   },
 
   mounted () {
-    // if (!this.pegCoefficientLabel) {
-    //   this.$store.commit('proposals/setPegCoefficientLabel', 0)
-    //   this.$store.commit('proposals/setPegCoefficient', this.calculateCoefficient(0))
-    // }
-
-    // if (this.isDefaultTier) {
-    //   this.custom = true
-    // }
-
     if (!this.daoSettings.cashClaimsEnabled && this.isContribution) {
       this.deferred = 100
     }
@@ -142,11 +117,7 @@ export default {
       } else if (proposalType === 'contribution' && (!this.usdAmount || this.usdAmount <= 0) && !this.custom) {
         return true
       }
-      // if (!this.usdAmount && this.$store.state.proposals.draft.category.key !== 'assignment') {
-      //   return true
-      // } else if (!this.annualUsdSalary && this.$store.state.proposals.draft.category.key !== 'archetype') {
-      //   return true
-      // }
+
       return false
     },
 
@@ -312,8 +283,7 @@ export default {
     isContribution () {
       const proposalType = this.$store.state.proposals.draft.category.key
       return proposalType === 'contribution'
-    },
-    isDefaultTier () { return this.$store.state.proposals.draft.tier.value.name === DEFAULT_TIER }
+    }
   },
 
   methods: {
@@ -351,7 +321,6 @@ export default {
     },
 
     calculateCoefficient (coefficient) {
-      // if (!coefficient || coefficient === 0) return 0
       return ((coefficient * 100) + 10000)
     }
   }
@@ -366,13 +335,6 @@ widget(:class="{ 'disable-step': currentStepName !== 'step-payout' && $q.screen.
     .text-body2.text-grey-7(v-if="fields.stepCompensationTitle && fields.stepCompensationTitle.description") {{ fields.stepCompensationTitle.description }}
   .text-body2.text-grey-7.q-mb-xl(v-if="$q.screen.lt.md || $q.screen.md") {{ $t('pages.proposals.create.steppayout.pleaseEnterTheUsd') }}
   .q-col-gutter-sm(:class="{ 'row':$q.screen.gt.md, 'q-mt-xl':$q.screen.gt.md }")
-    .col(v-if="isDefaultTier" :class="{ 'q-mb-xxl':$q.screen.lt.md || $q.screen.md }")
-      label.h-label {{ fields.annualUsdSalaryCustom.label }}
-      .text-body2.text-grey-7.q-my-md(v-if="fields.annualUsdSalaryCustom.description") {{ fields.annualUsdSalaryCustom.description }}
-      .row.full-width.items-center.q-mt-xs
-        q-avatar.q-mr-xs(size="40px")
-          img(src="~assets/icons/usd.svg")
-        q-input.rounded-border.col(:disable="custom" dense outlined rounded suffix="$" type="number" v-model="annualUsdSalary" :placeholder="$t('pages.proposals.create.steppayout.typeTheAmountOfUsd')")
     .col(v-if="fields.usdAmount" :class="{ 'q-mb-xxl':$q.screen.lt.md || $q.screen.md }")
       label.h-label {{ fields.usdAmount.label }}
       .text-body2.text-grey-7.q-my-md(v-if="fields.usdAmount.description") {{ fields.usdAmount.description }}
