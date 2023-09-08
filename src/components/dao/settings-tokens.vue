@@ -51,7 +51,6 @@ export default {
         utilityDigits: 2, // 1.0, 1.00, 1.000
         utilityTokenMultiplier: 1,
         utilityAmount: null, // i.e 100000 or -1 for infinite supply
-        // utilityValue: '1', // The equivalent value of 1 token in USD
 
         // Voice token (aka voice_token = voiceDigits voiceSymbol)
         voiceName: 'Voice Token',
@@ -103,11 +102,6 @@ export default {
         treasurySymbol,
         treasuryDigits: treasuryDigits.split('.')[1].length, // 1.0, 1.00, 1.000
         treasuryTokenMultiplier: this.daoSettings.settings_treasuryTokenMultiplier_i,
-        // treasuryCurrency: {
-        //   label: `${currency.USD?.symbol} - ${currency.USD?.name}`,
-        //   value: currency.USD.code,
-        //   ...currency.USD
-        // },
 
         // // Utility token
         utilityName: this.daoSettings.settings_rewardTokenName_s || utilitySymbol,
@@ -115,7 +109,6 @@ export default {
         utilityDigits: utilityDigits.split('.')[1].length, // 1.0, 1.00, 1.000, // 1.0, 1.00, 1.000
         utilityTokenMultiplier: this.daoSettings.settings_utilityTokenMultiplier_i,
         utilityAmount: parseInt(utilityAmount) === -1 ? '∞' : utilityAmount, // i.e 100000 or -1 for infinite supply
-        // // utilityValue: '1', // The equivalent value of 1 token in USD
 
         // // Voice token
         voiceName: voiceSymbol,
