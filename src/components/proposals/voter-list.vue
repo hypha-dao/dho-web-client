@@ -63,22 +63,23 @@ export default {
         this.voteCount = data?.getDocument?.voteAggregate?.count
       },
       fetchPolicy: 'no-cache',
-      subscribeToMore: {
-        document: gql`subscription proposalVotes($docId: String!, $first: Int, $offset: Int) { ${PROPOSAL_VOTES_QUERY} }`,
-        skip () { return !this.proposalId },
-        variables () { return { docId: this.proposalId } },
-        updateQuery: (previousResult, { subscriptionData }) => {
-          if (!subscriptionData.data) {
-            return previousResult
-          }
-          if (!previousResult) {
-            return undefined
-          }
+      pollInterval: 1000
+      // subscribeToMore: {
+      //   document: gql`subscription proposalVotes($docId: String!, $first: Int, $offset: Int) { ${PROPOSAL_VOTES_QUERY} }`,
+      //   skip () { return !this.proposalId },
+      //   variables () { return { docId: this.proposalId } },
+      //   updateQuery: (previousResult, { subscriptionData }) => {
+      //     if (!subscriptionData.data) {
+      //       return previousResult
+      //     }
+      //     if (!previousResult) {
+      //       return undefined
+      //     }
 
-          return subscriptionData.data
-        }
+      //     return subscriptionData.data
+      //   }
 
-      }
+      // }
 
     }
   },
