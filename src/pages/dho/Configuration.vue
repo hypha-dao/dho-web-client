@@ -104,7 +104,6 @@ export default {
 
       state: CONFIGURATION_STATE.WAITING,
 
-      // tab: TABS.GENERAL
       tab: TABS.GENERAL
     }
   },

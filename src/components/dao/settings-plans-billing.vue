@@ -145,8 +145,6 @@ export default {
             unelevated
             label="Yearly"
           )
-          //- q-radio(dense v-model="paymentInterval" val="month" label="Monthly")
-          //- q-radio(dense v-model="paymentInterval" val="year" label="Yearly")
 
       .row.q-mt-xl
         template(v-for='(plan,index) in plans')
@@ -194,6 +192,7 @@ export default {
             div
               .text-xl.text-weight-600.text-primary {{  $t(`plans.${selectedDaoPlan.id}`) }}
               p.q-pa-none.q-ma-none.text-3xl.text-primary.text-bold ${{ formatMoney(selectedDaoPlan.amountUSD) }}
+                //- TODO: Return after beta
                 //- span.q-ml-xxs.text-sm.text-weight-500 / {{ $('periods.month') }}
             div
               q-chip(dense color="positive" text-color="white")
