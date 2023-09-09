@@ -77,13 +77,6 @@ export default {
       }
     },
 
-    // '$store.state.proposals.draft.type': {
-    //   immediate: true,
-    //   handler () {
-    //     this.custom = false
-    //   }
-    // },
-
     '$store.state.proposals.draft.annualUsdSalary': {
       immediate: true,
       handler (val) {
@@ -124,11 +117,7 @@ export default {
       } else if (proposalType === 'contribution' && (!this.usdAmount || this.usdAmount <= 0) && !this.custom) {
         return true
       }
-      // if (!this.usdAmount && this.$store.state.proposals.draft.category.key !== 'assignment') {
-      //   return true
-      // } else if (!this.annualUsdSalary && this.$store.state.proposals.draft.category.key !== 'archetype') {
-      //   return true
-      // }
+
       return false
     },
 
@@ -296,12 +285,6 @@ export default {
       return proposalType === 'contribution'
     }
   },
-  // mounted () {
-  //   if (!this.pegCoefficientLabel) {
-  //     this.$store.commit('proposals/setPegCoefficientLabel', 0)
-  //     this.$store.commit('proposals/setPegCoefficient', this.calculateCoefficient(0))
-  //   }
-  // },
 
   methods: {
     isValidCommitment (commitment) {
@@ -338,7 +321,6 @@ export default {
     },
 
     calculateCoefficient (coefficient) {
-      // if (!coefficient || coefficient === 0) return 0
       return ((coefficient * 100) + 10000)
     }
   }

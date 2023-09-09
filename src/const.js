@@ -88,3 +88,5 @@ export const PERIOD_NUMBERS = Object.freeze({
   SECS_PER_YEAR: 31557600,
   CYCLE_DURATION_SEC: 2629800
 })
+
+export const DEFAULT_TIER = 'Custom Reward'
