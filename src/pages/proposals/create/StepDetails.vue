@@ -65,7 +65,7 @@ export default {
       return [
         this.title !== '',
         this.description !== '',
-        this.sanitizeDescription.length < DESCRIPTION_MAX_LENGTH
+        this.sanitizeDescription.length >= DESCRIPTION_MAX_LENGTH
       ].every(_ => _)
     },
 
