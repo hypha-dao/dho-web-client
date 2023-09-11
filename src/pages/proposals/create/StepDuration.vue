@@ -234,7 +234,7 @@ export default {
 
 <template lang="pug">
 widget
-  label.h-h4 {{ fields.stepDurationTitle.label }}
+  label.h-h4 {{ fields.stepDurationTitle?.label }}
   div
     .q-mt-md
       .q-gutter-sm(:class="{ 'row': $q.screen.gt.md }")

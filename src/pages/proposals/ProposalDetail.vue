@@ -1284,9 +1284,10 @@ export default {
         Circle: { key: 'circle', title: 'Circle' },
         Policy: { key: 'policy', title: 'Policy' },
         Quest: { key: 'quest', title: 'Quest' },
+        Queststart: { key: 'quest', title: 'Quest' },
+        Questcomplet: { key: 'quest', title: 'Quest' },
         Budget: { key: 'circlebudget', title: 'Budget' }
       }[this.proposal.__typename]
-
       this.$store.commit('proposals/setStepIndex', 1)
       this.$store.commit('proposals/setCategory', category)
       this.$store.commit('proposals/setType', this.proposal.__typename)
@@ -1358,6 +1359,15 @@ export default {
         this.$store.commit('proposals/setVoiceCoefficient', this?.proposal?.details_voiceCoefficientX10000_i)
         this.$store.commit('proposals/setPegCoefficientLabel', (this?.proposal?.details_pegCoefficientX10000_i - 10000) / 100)
         this.$store.commit('proposals/setPegCoefficient', this?.proposal?.details_pegCoefficientX10000_i)
+      }
+
+      if (this.proposal.__typename === PROPOSAL_TYPE.QUEST_START || this.proposal.__typename === PROPOSAL_TYPE.QUEST_PAYOUT) {
+        this.$store.commit('proposals/setUrl', this.proposal?.details_url_s)
+        this.$store.commit('proposals/setStartPeriod', this.proposal?.start?.[0])
+        this.$store.commit('proposals/setPeriodCount', this.proposal?.details_periodCount_i)
+        this.$store.commit('proposals/setPeg', this.proposal?.details_pegAmount_a.split(' ')[0])
+        this.$store.commit('proposals/setReward', this.proposal?.details_rewardAmount_a.split(' ')[0])
+        this.$store.commit('proposals/setVoice', this.proposal?.details_voiceAmount_a.split(' ')[0])
       }
 
       const draftId = Date.now()
