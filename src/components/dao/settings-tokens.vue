@@ -2,12 +2,16 @@
 import { mapActions, mapGetters } from 'vuex'
 import { validation } from '~/mixins/validation'
 import currency from 'src/data/currency.json'
+import map from '~/utils/map'
 
 const mapCurrency = (currency) => (_) => ({
   label: `${currency[_]?.symbol} - ${currency[_]?.name}`,
   value: currency[_].code,
   ...currency[_]
 })
+
+const MIN_DECAY = 0
+const MAX_DECAY = 10000000
 
 export default {
   name: 'settings-token',
@@ -79,7 +83,10 @@ export default {
       try {
         const isValid = await this.validate(this.tokens)
         if (isValid) {
-          await this.createTokens({ ...this.tokens })
+          await this.createTokens({
+            ...this.tokens,
+            voiceDecayPercent: map(this.tokens.voiceDecayPercent, 0, 100, MIN_DECAY, MAX_DECAY)
+          })
         }
       } catch (e) {
         const message = e.message || e.cause.message
@@ -115,7 +122,7 @@ export default {
         voiceDigits: voiceDigits.split('.')[1].length,
         voiceTokenMultiplier: this.daoSettings.settings_voiceTokenMultiplier_i,
         voiceDecayPeriod: this.daoSettings.settings_voiceTokenDecayPeriod_i,
-        voiceDecayPercent: this.daoSettings.settings_voiceTokenDecayPerPeriodX10M_i
+        voiceDecayPercent: map(this.daoSettings.settings_voiceTokenDecayPerPeriodX10M_i, MIN_DECAY, MAX_DECAY, 0, 100)
 
       }
     }
@@ -400,7 +407,7 @@ export default {
                   :max="100"
                   :min="0"
                   :placeholder="$t('configuration.settings-tokens.voice.form.decayPercent.placeholder')"
-                  :rules="[rules.required]"
+                  :rules="[rules.required, rules.greaterThan(0), rules.lessOrEqualThan(100)]"
                   color="accent"
                   dense
                   lazy-rules
