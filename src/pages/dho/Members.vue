@@ -170,7 +170,9 @@ export default {
 
       result ({ data }) {
         this.applicantsCount = data?.getDao?.applicantAggregate?.count
-      }
+      },
+
+      pollInterval: 1000 // TODO: Swap with subscribe once dgraph is ready
     },
 
     daoCoreMembers: {
@@ -196,7 +198,9 @@ export default {
 
       result ({ data }) {
         this.coreMembersCount = data?.getDao?.memberAggregate?.count
-      }
+      },
+
+      pollInterval: 1000 // TODO: Swap with subscribe once dgraph is ready
     }
 
     // daoCommunityMembers: {
