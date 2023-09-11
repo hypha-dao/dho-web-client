@@ -55,7 +55,7 @@ export default {
         this.$q.notify({
           color: 'secondary',
           textColor: 'white',
-          message: 'The link has been copied',
+          message: this.$('messages.linkCopied'),
           icon: 'far fa-copy',
           timeout: 5000,
           actions: [{ icon: 'fas fa-times', color: 'white' }]

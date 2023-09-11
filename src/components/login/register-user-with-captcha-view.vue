@@ -6,6 +6,8 @@ import ipfsy from '~/utils/ipfsy'
 import { Notify } from 'quasar'
 import slugify from '~/utils/slugify'
 
+const HELP_LINK = 'https://help.hypha.earth/hc/2431449449'
+
 export default {
   name: 'register-user-with-captcha-view',
   mixins: [validation],
@@ -50,6 +52,7 @@ export default {
       }
     }
     return {
+      HELP_LINK: HELP_LINK,
       stepIndex: {
         captcha: 1,
         inviteLink: 2,
@@ -205,6 +208,9 @@ export default {
           ]
         })
       }
+    },
+    goToDocumentation() {
+      window.location.href = this.HELP_LINK
     }
   }
 }
@@ -265,7 +271,7 @@ export default {
                     .text-bold.text-black.q-mt-md {{ $t('login.register-user-with-captcha-view.signYourFirstTransaction') }}
                     p.text-normal.q-mt-xs {{ $t('login.register-user-with-captcha-view.didYouCreate') }}
                     .row.flex.justify-center.items-center.q-mt-xl
-                    .text-primary.text-bold.cursor-pointer(@click="next") {{ $t('login.register-user-with-captcha-view.needHelp') }}
+                    .text-primary.text-bold.cursor-pointer(@click="goToDocumentation()") {{ $t('login.register-user-with-captcha-view.needHelp') }}
         #form4.flex.column.justify-between.no-wrap.full-height(v-show="step === this.steps.create.name")
           div.full-height.column.justify-end
             .font-lato.text-heading.text-weight-bolder(:style="{ 'font-size': '34px' }") {{ $t('login.register-user-with-captcha-view.createYourDao') }}

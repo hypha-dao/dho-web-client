@@ -1,5 +1,5 @@
 import Storage from '~/localStorage/storage'
-import { PROPOSAL_TYPE, PERIOD_NUMBERS } from '~/const'
+import { PROPOSAL_TYPE, PERIOD_NUMBERS, DEFAULT_TIER } from '~/const'
 /**
  * This vuex data store contains the data needed in the proposal creation wizard.
  */
@@ -514,11 +514,15 @@ export default {
                 { label: 'description', value: ['string', draft.description] },
                 { label: 'url', value: ['string', draft.url] },
 
-                { label: 'salary_band_id', value: ['int64', draft.tier.value.id] },
-                // TODO: if salary_band_id is not present these are required
-                // { label: 'annual_usd_salary', value: ['asset', `${parseFloat(draft.annualUsdSalary).toFixed(2)} USD`] },
-                // { label: 'fulltime_capacity_x100', value: ['int64', Math.round(parseFloat(draft.roleCapacity) * 100)] },
-                // { label: 'min_deferred_x100', value: ['int64', Math.round(parseFloat(draft.minDeferred))] },
+                ...(draft.tier.value.name !== DEFAULT_TIER
+                  ? [
+                      { label: 'salary_band_id', value: ['int64', draft.tier.value.id] }
+                    ]
+                  : [
+                      { label: 'annual_usd_salary', value: ['asset', `${parseFloat(draft.annualUsdSalary).toFixed(2)} USD`] },
+                      { label: 'fulltime_capacity_x100', value: ['int64', Math.round(parseFloat(draft.roleCapacity) * 100)] },
+                      { label: 'min_deferred_x100', value: ['int64', Math.round(parseFloat(draft.minDeferred))] }
+                    ]),
 
                 { label: 'time_share_x100', value: ['int64', draft.commitment] },
                 { label: 'deferred_perc_x100', value: ['int64', draft.deferred] },
@@ -733,6 +737,18 @@ export default {
             break
 
           case PROPOSAL_TYPE.ABILITY:
+            content = [
+              { label: 'content_group_label', value: ['string', 'details'] },
+              { label: 'assignee', value: ['name', rootState.accounts.account] },
+              { label: 'title', value: ['string', draft.title] },
+              { label: 'description', value: ['string', draft.description] },
+              { label: 'badge', value: ['int64', draft.badge.docId] },
+              { label: 'start_period', value: ['int64', draft.startPeriod.docId] },
+              { label: 'period_count', value: ['int64', draft.periodCount] }
+            ]
+            break
+
+          case PROPOSAL_TYPE.ASSIGNBADGE:
             content = [
               { label: 'content_group_label', value: ['string', 'details'] },
               { label: 'assignee', value: ['name', rootState.accounts.account] },

@@ -78,7 +78,8 @@ export default {
     parentQuest: Object,
     votingMethod: String,
     circle: Object,
-    parentCircle: Array
+    parentCircle: Array,
+    hidePolicyHistory: Boolean
   },
   data () {
     return {
@@ -213,7 +214,7 @@ widget.proposal-view.q-mb-sm
     .column
       .text-h5.text-bold {{ title }}
       .text-italic.text-body {{ subtitle }}
-  version-history(v-if="type === PROPOSAL_TYPE.POLICY" :proposalId="proposal?.docId ? proposal.docId : docId")
+  version-history(v-if="type === PROPOSAL_TYPE.POLICY && !hidePolicyHistory" :proposalId="proposal?.docId ? proposal.docId : docId")
   quest-progression(v-if="type === PROPOSAL_TYPE.QUEST_START" :proposalId="proposal?.docId ? proposal.docId : docId")
   .q-my-sm(:class="{ 'row':$q.screen.gt.md }" v-if="type === PROPOSAL_TYPE.ROLE || type === PROPOSAL_TYPE.EDIT || type === PROPOSAL_TYPE.PAYOUT || type === PROPOSAL_TYPE.ABILITY || type === PROPOSAL_TYPE.BADGE")
     .col.bg-internal-bg.rounded-border(:class="{ 'q-mr-xs':$q.screen.gt.md, 'q-mb-sm':$q.screen.lt.md || $q.screen.md }" v-if="icon")

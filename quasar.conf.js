@@ -107,7 +107,9 @@ module.exports = function (ctx) {
         CAPTCHA_PUBLIC_KEY: process.env.CAPTCHA_PUBLIC_KEY,
         CAPTCHA_HOST: process.env.CAPTCHA_HOST,
         CAPTCHA_NETWORK: process.env.CAPTCHA_NETWORK || 'telosTestnet',
-        LOGIN_CONTRACT: process.env.LOGIN_CONTRACT
+        LOGIN_CONTRACT: process.env.LOGIN_CONTRACT,
+        JOIN_CONTRACT: process.env.JOIN_CONTRACT,
+        JOIN_URI: process.env.JOIN_URI
       },
 
       scopeHoisting: true,

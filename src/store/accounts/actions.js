@@ -151,7 +151,7 @@ export const sendOTP = async function ({ commit }, form) {
   }
 }
 
-export const verifyOTP = async function ({ commit, dispatch, state }, { smsOtp, smsNumber, telosAccount, publicKey, privateKey, reason }) {
+export const verifyOTP = async function ({ commit, dispatch, state, rootState }, { smsOtp, smsNumber, telosAccount, publicKey, privateKey, reason }) {
   const { error } = await this.$accountApi.post('/v1/accounts', {
     smsOtp,
     smsNumber,
@@ -186,7 +186,6 @@ export const verifyOTP = async function ({ commit, dispatch, state }, { smsOtp, 
 
   const actions = []
 
-  const selectedDao = this.getters['dao/selectedDao']
   actions.push({
     account: this.$config.contracts.dao,
     name: 'apply',
@@ -197,7 +196,7 @@ export const verifyOTP = async function ({ commit, dispatch, state }, { smsOtp, 
     data: {
       applicant: telosAccount,
       content: reason,
-      dao_id: selectedDao.docId
+      dao_id: rootState.dao.docId
     }
   })
 
@@ -209,18 +208,17 @@ export const verifyOTP = async function ({ commit, dispatch, state }, { smsOtp, 
 }
 
 export const applyMember = async function ({ state, rootState, commit }, { content }) {
-  const actions = []
-  const selectedDao = this.getters['dao/selectedDao']
-
-  actions.push({
-    account: this.$config.contracts.dao,
-    name: 'apply',
-    data: {
-      applicant: rootState.accounts.account,
-      dao_id: selectedDao.docId,
-      content
+  const actions = [
+    {
+      account: this.$config.contracts.dao,
+      name: 'apply',
+      data: {
+        applicant: rootState.accounts.account,
+        dao_id: rootState.dao.docId,
+        content
+      }
     }
-  })
+  ]
 
   const result = await this.$api.signTransaction(actions)
   if (result) {
@@ -230,13 +228,12 @@ export const applyMember = async function ({ state, rootState, commit }, { conte
 }
 
 export const removeApplicant = async function ({ commit, rootState }, { applicant }) {
-  const selectedDao = this.getters['dao/selectedDao']
   const actions = [{
     account: this.$config.contracts.dao,
     name: 'remapplicant',
     data: {
       applicant_names: [applicant],
-      dao_id: selectedDao.docId
+      dao_id: rootState.dao.docId
     }
   }]
   const result = await this.$api.signTransaction(actions)
@@ -244,15 +241,13 @@ export const removeApplicant = async function ({ commit, rootState }, { applican
 }
 
 export const enrollMember = async function ({ commit, rootState }, { applicant, content }) {
-  const selectedDao = this.getters['dao/selectedDao']
-
   const actions = [{
     account: this.$config.contracts.dao,
     name: 'enroll',
     data: {
       enroller: rootState.accounts.account,
       applicant,
-      dao_id: selectedDao.docId,
+      dao_id: rootState.dao.docId,
       content
     }
   }]
@@ -260,20 +255,19 @@ export const enrollMember = async function ({ commit, rootState }, { applicant, 
   return result
 }
 
-export const checkMembership = async function ({ commit, state, dispatch }) {
-  const selectedDao = this.getters['dao/selectedDao']
-  if (!selectedDao.docId) return
+export const checkMembership = async function ({ commit, state, dispatch, rootState }) {
+  if (!rootState.dao.docId) return
   const [memberResponse, applicantResponse] = await Promise.all([this.$apollo.query({
     query: require('~/query/account/dao-member.gql'),
     variables: {
-      daoId: selectedDao.docId,
+      daoId: rootState.dao.docId,
       username: state.account
     }
   }),
   this.$apollo.query({
     query: require('~/query/account/dao-applicant.gql'),
     variables: {
-      daoId: selectedDao.docId,
+      daoId: rootState.dao.docId,
       username: state.account
     }
   })])
@@ -290,20 +284,18 @@ export const checkMembership = async function ({ commit, state, dispatch }) {
   }
 }
 
-export const checkPermissions = async function ({ commit, state }) {
-  const selectedDao = this.getters['dao/selectedDao']
-
+export const checkPermissions = async function ({ commit, state, rootState }) {
   const [adminResponse, enrollerResponse] = await Promise.all([this.$apollo.query({
     query: require('~/query/account/dao-admin.gql'),
     variables: {
-      daoId: selectedDao.docId,
+      daoId: rootState.dao.docId,
       username: state.account
     }
   }),
   this.$apollo.query({
     query: require('~/query/account/dao-enroller.gql'),
     variables: {
-      daoId: selectedDao.docId,
+      daoId: rootState.dao.docId,
       username: state.account
     }
   })])
@@ -314,20 +306,19 @@ export const checkPermissions = async function ({ commit, state }) {
   commit('setEnroller', isEnroller)
 }
 
-export const checkMemberType = async function ({ commit, state }) {
-  const selectedDao = this.getters['dao/selectedDao']
-  if (!selectedDao.docId) return
+export const checkMemberType = async function ({ commit, state, rootState }) {
+  if (!rootState.dao.docId) return
   const [coreResponse, communityResponse] = await Promise.all([this.$apollo.query({
     query: require('~/query/account/dao-core-member.gql'),
     variables: {
-      daoId: selectedDao.docId,
+      daoId: rootState.dao.docId,
       username: state.account
     }
   }),
   this.$apollo.query({
     query: require('~/query/account/dao-community-member.gql'),
     variables: {
-      daoId: selectedDao.docId,
+      daoId: rootState.dao.docId,
       username: state.account
     }
   })])

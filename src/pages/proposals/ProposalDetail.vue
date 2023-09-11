@@ -940,22 +940,23 @@ export default {
       variables () { return { docId: this.docId } },
       fetchPolicy: 'no-cache',
 
-      subscribeToMore: {
-        document: gql`subscription proposalDetail($docId: String!) { ${PROPOSAL_QUERY} }`,
-        skip () { return !this.docId },
-        variables () { return { docId: this.docId } },
-        updateQuery: (previousResult, { subscriptionData }) => {
-          if (!subscriptionData.data) {
-            return previousResult
-          }
-          if (!previousResult) {
-            return undefined
-          }
+      pollInterval: 1000, // TODO: Swap with subscribe once dgraph is ready
+      // subscribeToMore: {
+      //   document: gql`subscription proposalDetail($docId: String!) { ${PROPOSAL_QUERY} }`,
+      //   skip () { return !this.docId },
+      //   variables () { return { docId: this.docId } },
+      //   updateQuery: (previousResult, { subscriptionData }) => {
+      //     if (!subscriptionData.data) {
+      //       return previousResult
+      //     }
+      //     if (!previousResult) {
+      //       return undefined
+      //     }
 
-          return subscriptionData.data
-        }
+      //     return subscriptionData.data
+      //   }
 
-      },
+      // },
 
       result (data) {
         if ((data.data.getDocument.dao[0].details_daoName_n !== this.selectedDao.name) && !this.isBadge) {
@@ -1336,8 +1337,8 @@ export default {
         // this.$store.commit('proposals/setMinDeferred', this.proposal?.role[0]?.details_minDeferredX100_i)
       }
 
-      if (this.proposal.__typename === PROPOSAL_TYPE.ABILITY) { // Badge Assignment
-        this.$store.commit('proposals/setBadge', this?.proposal.badge)
+      if (this.proposal.__typename === PROPOSAL_TYPE.ABILITY || this.proposal.__typename === PROPOSAL_TYPE.ASSIGNBADGE) { // Badge Assignment
+        this.$store.commit('proposals/setBadge', this?.proposal.badge?.[0])
         this.$store.commit('proposals/setStartPeriod', this.proposal?.start[0])
         this.$store.commit('proposals/setPeriodCount', this.proposal?.details_periodCount_i)
       }

@@ -77,13 +77,6 @@ export default {
       }
     },
 
-    // '$store.state.proposals.draft.type': {
-    //   immediate: true,
-    //   handler () {
-    //     this.custom = false
-    //   }
-    // },
-
     '$store.state.proposals.draft.annualUsdSalary': {
       immediate: true,
       handler (val) {
@@ -104,7 +97,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters('dao', ['daoSettings']),
+    ...mapGetters('dao', ['daoSettings', 'selectedDao']),
     nextDisabled () {
       const proposalType = this.$store.state.proposals.draft.category.key
 
@@ -124,11 +117,7 @@ export default {
       } else if (proposalType === 'contribution' && (!this.usdAmount || this.usdAmount <= 0) && !this.custom) {
         return true
       }
-      // if (!this.usdAmount && this.$store.state.proposals.draft.category.key !== 'assignment') {
-      //   return true
-      // } else if (!this.annualUsdSalary && this.$store.state.proposals.draft.category.key !== 'archetype') {
-      //   return true
-      // }
+
       return false
     },
 
@@ -296,12 +285,6 @@ export default {
       return proposalType === 'contribution'
     }
   },
-  // mounted () {
-  //   if (!this.pegCoefficientLabel) {
-  //     this.$store.commit('proposals/setPegCoefficientLabel', 0)
-  //     this.$store.commit('proposals/setPegCoefficient', this.calculateCoefficient(0))
-  //   }
-  // },
 
   methods: {
     isValidCommitment (commitment) {
@@ -338,7 +321,6 @@ export default {
     },
 
     calculateCoefficient (coefficient) {
-      // if (!coefficient || coefficient === 0) return 0
       return ((coefficient * 100) + 10000)
     }
   }
@@ -407,7 +389,7 @@ widget(:class="{ 'disable-step': currentStepName !== 'step-payout' && $q.screen.
   .row(v-if="isAssignment")
     label.text-bold {{ toggle ? $t('pages.proposals.create.steppayout.compensationForOnePeriod') : $t('pages.proposals.create.steppayout.compensationForOneCycle') }}
   .q-col-gutter-xs.q-mt-sm(:class="{ 'q-mt-xxl':$q.screen.lt.md || $q.screen.md, 'row':$q.screen.gt.md }")
-    .col-4(:class="{ 'q-mt-md':$q.screen.lt.md || $q.screen.md }" v-if="fields.reward")
+    .col-4(:class="{ 'q-mt-md':$q.screen.lt.md || $q.screen.md }" v-if="fields.reward && selectedDao.hasCustomToken")
       label.h-label(v-if="$store.state.dao.settings.rewardToken !== 'HYPHA'") {{ `${fields.reward.label} (${$store.state.dao.settings.rewardToken})` }}
       label.h-label(v-else) {{ `${fields.reward.label}` }}
       .row.full-width.items-center.q-mt-xs
@@ -415,7 +397,7 @@ widget(:class="{ 'disable-step': currentStepName !== 'step-payout' && $q.screen.
         q-input.rounded-border.col(dense :readonly="!custom" outlined v-model="utilityToken" rounded v-if="isAssignment && !isFounderRole")
         q-input.rounded-border.col(dense :readonly="!custom" outlined v-model="reward" rounded v-else)
     .col-4(:class="{ 'q-mt-md':$q.screen.lt.md || $q.screen.md }" v-if="fields.peg")
-      label.h-label(v-if="$store.state.dao.settings.pegToken !== 'HUSD'") {{ `${fields.peg.label} (${$store.state.dao.settings.pegToken})` }}
+      label.h-label(v-if="$store.state.dao.settings.pegToken !== 'HUSD'") {{ `${fields.peg.label} ${$store.state.dao.settings.pegToken ? `(${$store.state.dao.settings.pegToken})`:''}`}}
       label.h-label(v-else) {{ `${fields.peg.label}` }}
       .row.full-width.items-center.q-mt-xs
         token-logo.q-mr-xs(size="40px" type="cash" :daoLogo="daoSettings.logo")
