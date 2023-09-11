@@ -32,7 +32,6 @@ export default {
 
   data () {
     return {
-
       tokens: {
         // Treasury token (aka peg_token = treasuryDigits treasurySymbol)
         treasuryName: null,
@@ -246,7 +245,7 @@ export default {
             .col-12
               label.h-label {{ $t('configuration.settings-tokens.tresury.form.digits.label') }}
               input-slider(
-                :disable="selectedDao.hasCustomToken"
+                :disable="selectedDao.hasCustomToken || !isAdmin"
                 :max="3"
                 :maxLabel="$t('configuration.settings-tokens.tresury.form.digits.morePrecise')"
                 :min="1"
@@ -267,8 +266,8 @@ export default {
                 label.h-label {{ $t('configuration.settings-tokens.utility.form.name.label') }}
                 q-input.q-my-xs(
                   :debounce="200"
-                  :disable="selectedDao.hasCustomToken"
-                  :filled="selectedDao.hasCustomToken"
+                  :disable="selectedDao.hasCustomToken || !isAdmin"
+                  :filled="selectedDao.hasCustomToken || !isAdmin"
                   :placeholder="$t('configuration.settings-tokens.utility.form.name.placeholder')"
                   :rules="[rules.required]"
                   color="accent"
@@ -285,8 +284,8 @@ export default {
                 label.h-label {{ $t('configuration.settings-tokens.utility.form.symbol.label') }}
                 q-input.q-my-xs(
                   :debounce="200"
-                  :disable="selectedDao.hasCustomToken"
-                  :filled="selectedDao.hasCustomToken"
+                  :disable="selectedDao.hasCustomToken || !isAdmin"
+                  :filled="selectedDao.hasCustomToken || !isAdmin"
                   :placeholder="$t('configuration.settings-tokens.utility.form.symbol.placeholder')"
                   :rules="[rules.required, rules.isTokenAvailable]"
                   dense
@@ -304,8 +303,8 @@ export default {
               label.h-label {{ $t('configuration.settings-tokens.utility.form.value.label') }}
               q-input.q-my-xs(
                 :debounce="200"
-                :disable="selectedDao.hasCustomToken"
-                :filled="selectedDao.hasCustomToken"
+                :disable="selectedDao.hasCustomToken || !isAdmin"
+                :filled="selectedDao.hasCustomToken || !isAdmin"
                 :placeholder="$t('configuration.settings-tokens.utility.form.value.placeholder')"
                 :rules="[rules.requiredIf(tokens.utilityAmount > 0)]"
                 color="accent"
@@ -322,8 +321,8 @@ export default {
               label.h-label {{ $t('configuration.settings-tokens.utility.form.multiplier.label') }}
               q-input.q-my-xs(
                 :debounce="200"
-                :disable="selectedDao.hasCustomToken"
-                :filled="selectedDao.hasCustomToken"
+                :disable="selectedDao.hasCustomToken || !isAdmin"
+                :filled="selectedDao.hasCustomToken || !isAdmin"
                 :rules="[rules.required]"
                 color="accent"
                 dense
@@ -339,7 +338,7 @@ export default {
             .col-12
               label.h-label {{ $t('configuration.settings-tokens.utility.form.digits.label') }}
               input-slider(
-                :disable="selectedDao.hasCustomToken"
+                :disable="selectedDao.hasCustomToken || !isAdmin"
                 :max="3"
                 :maxLabel="$t('configuration.settings-tokens.tresury.form.digits.morePrecise')"
                 :min="1"
@@ -389,15 +388,17 @@ export default {
             .row.q-col-gutter-md
               .col-12.col-md-8(:class="{'q-mt-sm': !$q.screen.gt.md}")
                 label.h-label {{ $t('configuration.settings-tokens.voice.form.decayPeriod.label') }}
-                custom-period-input.q-my-xs(:disable="selectedDao.hasCustomToken" v-model='tokens.voiceDecayPeriod')
+                custom-period-input.q-my-xs(:disable="selectedDao.hasCustomToken || !isAdmin" v-model='tokens.voiceDecayPeriod')
                 q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!selectedDao.hasCustomToken") {{ $t('common.onlyDaoAdmins') }}
 
               .col-12.col-md-4(:class="{'q-mt-sm': !$q.screen.gt.md}")
                 label.h-label {{ $t('configuration.settings-tokens.voice.form.decayPercent.label') }}
                 q-input.q-my-xs(
                   :debounce="200"
-                  :disable="selectedDao.hasCustomToken"
-                  :filled="selectedDao.hasCustomToken"
+                  :disable="selectedDao.hasCustomToken || !isAdmin"
+                  :filled="selectedDao.hasCustomToken || !isAdmin"
+                  :max="100"
+                  :min="0"
                   :placeholder="$t('configuration.settings-tokens.voice.form.decayPercent.placeholder')"
                   :rules="[rules.required]"
                   color="accent"
@@ -416,8 +417,8 @@ export default {
               label.h-label {{ $t('configuration.settings-tokens.voice.form.multiplier.label') }}
               q-input.q-my-xs(
                 :debounce="200"
-                :disable="selectedDao.hasCustomToken"
-                :filled="selectedDao.hasCustomToken"
+                :disable="selectedDao.hasCustomToken || !isAdmin"
+                :filled="selectedDao.hasCustomToken || !isAdmin"
                 :rules="[rules.required]"
                 color="accent"
                 dense
@@ -433,7 +434,7 @@ export default {
             .col-12
               label.h-label {{ $t('configuration.settings-tokens.voice.form.digits.label') }}
               input-slider(
-                :disable="selectedDao.hasCustomToken"
+                :disable="selectedDao.hasCustomToken || !isAdmin"
                 :max="3"
                 :maxLabel="$t('configuration.settings-tokens.tresury.form.digits.morePrecise')"
                 :min="1"
