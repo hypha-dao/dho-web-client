@@ -66,15 +66,15 @@ export default {
       .div.row(v-if="!searching")
         //- TODO: temporarily commented
         //- q-btn.q-mr-xxs.icon(flat unelevated rounded padding="12px" icon="fas fa-search"  size="sm" color="white" text-color="primary" @click="searching=!searching")
-        .notifications-icon
+        //- .notifications-icon // TODO: temporarily commented
           .notifications-icon__counter(v-if="unreadNotifications > 0") {{ unreadNotifications }}
           q-btn.q-mr-xs(@click="$emit('openNotifications')" unelevated rounded padding="12px" icon="far fa-bell"  size="sm" :color="'white'" :text-color="'primary'")
         router-link(:to="{ name: 'configuration' }")
           q-btn.q-mr-xs(unelevated rounded padding="12px" icon="fas fa-cog"  size="sm" :color="isActiveRoute('configuration') ? 'primary' : 'white'" :text-color="isActiveRoute('configuration') ? 'white' : 'primary'")
         router-link(:to="{ name: 'support' }")
          q-btn.q-mr-xxs.icon(unelevated rounded padding="12px" icon="far fa-question-circle"  size="sm" :color="isActiveRoute('support') ? 'primary' : 'white'" :text-color="isActiveRoute('support') ? 'white' : 'primary'")
-        router-link(:to="{ name: 'plan-manager' }")
-          q-btn.q-mr-xs(v-if="selectedDaoPlan.isActivated" unelevated rounded padding="12px" icon="fas fa-rocket"  size="sm" :color="isActiveRoute('plan-manager') ? 'primary' : 'white'" :text-color="isActiveRoute('plan-manager') ? 'white' : 'primary'")
+        //- router-link(:to="{ name: 'plan-manager' }") // TODO: temporarily commented
+        //-   q-btn.q-mr-xs(v-if="selectedDaoPlan.isActivated" unelevated rounded padding="12px" icon="fas fa-rocket"  size="sm" :color="isActiveRoute('plan-manager') ? 'primary' : 'white'" :text-color="isActiveRoute('plan-manager') ? 'white' : 'primary'")
         q-btn.q-mr-xs(@click="$emit('showLangSettings')" unelevated rounded padding="12px" icon="fas fa-globe"  size="sm" :color="'white'" :text-color="'primary'")
       //- TODO: temporarily commented
       //- q-input.q-mr-md.search.inline(
