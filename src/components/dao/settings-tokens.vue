@@ -181,8 +181,8 @@ export default {
                 label.h-label {{ $t('configuration.settings-tokens.tresury.form.name.label') }}
                 q-input.q-my-xs(
                   :debounce="200"
-                  :disable="selectedDao.hasCustomToken"
-                  :filled="selectedDao.hasCustomToken"
+                  :disable="selectedDao.hasCustomToken || !isAdmin"
+                  :filled="selectedDao.hasCustomToken || !isAdmin"
                   :placeholder="$t('configuration.settings-tokens.utility.form.name.placeholder')"
                   :rules="[rules.required]"
                   color="accent"
@@ -199,8 +199,8 @@ export default {
                 label.h-label {{ $t('configuration.settings-tokens.tresury.form.symbol.label') }}
                 q-input.q-my-xs(
                   :debounce="200"
-                  :disable="selectedDao.hasCustomToken"
-                  :filled="selectedDao.hasCustomToken"
+                  :disable="selectedDao.hasCustomToken || !isAdmin"
+                  :filled="selectedDao.hasCustomToken || !isAdmin"
                   :placeholder="$t('configuration.settings-tokens.utility.form.symbol.placeholder')"
                   :rules="[rules.required, rules.isTokenAvailable]"
                   dense
@@ -217,6 +217,7 @@ export default {
             .col-12(:class="{ 'invisible': selectedDao.hasCustomToken }")
               label.h-label {{ $t('configuration.settings-tokens.tresury.form.currency.label') }}
               q-select.q-my-xs(
+                :disable="!isAdmin"
                 :options="currencies"
                 :rules="[rules.required]"
                 :style='{"min-height":"60px"}'
