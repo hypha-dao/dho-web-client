@@ -388,14 +388,14 @@ widget(:class="{ 'disable-step': currentStepName !== 'step-payout' && $q.screen.
   .row(v-if="isAssignment")
     label.text-bold {{ toggle ? $t('pages.proposals.create.steppayout.compensationForOnePeriod') : $t('pages.proposals.create.steppayout.compensationForOneCycle') }}
   .q-col-gutter-xs.q-mt-sm(:class="{ 'q-mt-xxl':$q.screen.lt.md || $q.screen.md, 'row':$q.screen.gt.md }")
-    .col-4(:class="{ 'q-mt-md':$q.screen.lt.md || $q.screen.md }" v-if="fields.reward && selectedDao.hasCustomToken")
+    .col-4(:class="{ 'q-mt-md':$q.screen.lt.md || $q.screen.md }" v-if="fields.reward && selectedDao.hasCustomToken && $store.state.dao.settings.rewardToken")
       label.h-label(v-if="$store.state.dao.settings.rewardToken !== 'HYPHA'") {{ `${fields.reward.label} (${$store.state.dao.settings.rewardToken})` }}
       label.h-label(v-else) {{ `${fields.reward.label}` }}
       .row.full-width.items-center.q-mt-xs
         token-logo.q-mr-xs(size="40px" type="utility" :daoLogo="daoSettings.logo")
         q-input.rounded-border.col(dense :readonly="!custom" outlined v-model="utilityToken" rounded v-if="isAssignment && !isFounderRole")
         q-input.rounded-border.col(dense :readonly="!custom" outlined v-model="reward" rounded v-else)
-    .col-4(:class="{ 'q-mt-md':$q.screen.lt.md || $q.screen.md }" v-if="fields.peg")
+    .col-4(:class="{ 'q-mt-md':$q.screen.lt.md || $q.screen.md }" v-if="fields.peg && $store.state.dao.settings.pegToken")
       label.h-label(v-if="$store.state.dao.settings.pegToken !== 'HUSD'") {{ `${fields.peg.label} ${$store.state.dao.settings.pegToken ? `(${$store.state.dao.settings.pegToken})`:''}`}}
       label.h-label(v-else) {{ `${fields.peg.label}` }}
       .row.full-width.items-center.q-mt-xs
@@ -425,7 +425,7 @@ widget(:class="{ 'disable-step': currentStepName !== 'step-payout' && $q.screen.
     // Multiplier
     .full-width(v-if="fields.rewardCoefficient || fields.voiceCoefficient || fields.pegCoefficient")
       .row
-        .col(v-if="fields.rewardCoefficient")
+        .col(v-if="fields.rewardCoefficient && $store.state.dao.settings.rewardToken")
           label.h-label(v-if="$store.state.dao.settings.rewardToken !== 'HYPHA'") {{ `${fields.rewardCoefficient.label} (${$store.state.dao.settings.rewardToken})` }}
           label.h-label(v-else) {{ `${fields.rewardCoefficient.label}` }}
           .row.items-center
@@ -433,7 +433,7 @@ widget(:class="{ 'disable-step': currentStepName !== 'step-payout' && $q.screen.
               q-input.q-my-sm.rounded-border(v-model="rewardCoefficientLabel" outlined suffix="%" :prefix="fields.rewardCoefficient.disabled ? 'x' : rewardCoefficientLabel > 9 ? 'x1.' : 'x1.0'" :readonly="fields.rewardCoefficient.disabled" :rules="[rules.lessOrEqualThan(20), rules.greaterThanOrEqual(-20)]")
                 template(v-slot:prepend)
                   token-logo.logo-border(size="md" type="utility" :daoLogo="daoSettings.logo")
-        .col(v-if="fields.pegCoefficient")
+        .col(v-if="fields.pegCoefficient && $store.state.dao.settings.pegToken")
           label.h-label(v-if="$store.state.dao.settings.pegToken !== 'HUSD'") {{ `${fields.pegCoefficient.label} (${$store.state.dao.settings.pegToken})` }}
           label.h-label(v-else) {{ `${fields.pegCoefficient.label}` }}
           .row.items-center
