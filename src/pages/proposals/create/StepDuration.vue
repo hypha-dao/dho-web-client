@@ -156,10 +156,6 @@ export default {
 
     isDateAvaiable (date) { return this.availableDates ? this.availableDates.includes(date) : true },
 
-    onDateChanged (value, reason, details) {
-      console.log({ value, reason, details })
-    },
-
     onDateNavigate ({ month, year }) {
       const newStartPeriodsDate = new Date(this.startDate)
       // newStartPeriodsDate.setDate(1)
@@ -171,66 +167,48 @@ export default {
       const page = Math.floor(diffrenceInMonths / 5.5555)
       if (this.page !== page) {
         this.page = page
-        this.$apollo.queries.periods.fetchMore({
-        // New variables
-          variables: {
-            page: this.page * this.size
-          },
-          // Transform the previous result with new data
-          updateQuery: (previousResult, { fetchMoreResult }) => {
-            console.log(previousResult)
-            console.log({
-              getDao: {
-                calendar: [
-                  {
-                    period: [
-                      ...previousResult.getDao.calendar[0].period,
-                      ...fetchMoreResult.getDao.calendar[0].period
-                    ]
-                  }
-                ]
+        // this.$apollo.queries.periods.fetchMore({
+        // // New variables
+        //   variables: {
+        //     page: this.page * this.size
+        //   },
+        //   // Transform the previous result with new data
+        //   updateQuery: (previousResult, { fetchMoreResult }) => {
+        //     return {
+        //       getDao: {
+        //         ...previousResult.getDao,
+        //         calendar: [
+        //           {
+        //             period: [
+        //               ...previousResult.getDao.calendar[0].period
+        //               // ...fetchMoreResult.getDao.calendar[0].period
+        //             ]
+        //           }
+        //         ]
 
-              }
-            })
-            return {
-              getDao: {
-                ...previousResult.getDao,
-                calendar: [
-                  {
-                    period: [
-                      ...previousResult.getDao.calendar[0].period
-                      // ...fetchMoreResult.getDao.calendar[0].period
-                    ]
-                  }
-                ]
+        //       }
 
-              }
+        //     }
+        //     // const newTags = fetchMoreResult.tagsPage.tags
+        //     // const hasMore = fetchMoreResult.tagsPage.hasMore
 
-            }
-            // const newTags = fetchMoreResult.tagsPage.tags
-            // const hasMore = fetchMoreResult.tagsPage.hasMore
+        //     // this.showMoreEnabled = hasMore
 
-            // this.showMoreEnabled = hasMore
+        //     // data.getDao.calendar[0].period
 
-            // data.getDao.calendar[0].period
-
-          // return {
-          //   tagsPage: {
-          //     __typename: previousResult.tagsPage.__typename,
-          //     // Merging the tag list
-          //     tags: [...previousResult.tagsPage.tags, ...newTags],
-          //     hasMore,
-          //   },
-          // }
-          }
-        })
+        //   // return {
+        //   //   tagsPage: {
+        //   //     __typename: previousResult.tagsPage.__typename,
+        //   //     // Merging the tag list
+        //   //     tags: [...previousResult.tagsPage.tags, ...newTags],
+        //   //     hasMore,
+        //   //   },
+        //   // }
+        //   }
+        // })
       }
     }
 
-  },
-
-  updated () {
-    console.log(JSON.stringify(this.periods.length))
   }
 
 }

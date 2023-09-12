@@ -54,7 +54,6 @@ export default {
     usdAmount: {
       immediate: true,
       handler () {
-        console.log('usdAmount')
         this.calculateTokens()
       }
     },
