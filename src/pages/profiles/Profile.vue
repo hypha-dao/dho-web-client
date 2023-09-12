@@ -1,5 +1,5 @@
 <script>
-import { mapActions, mapGetters, mapMutations } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import ipfsy from '~/utils/ipfsy'
 import { daoRouting } from '~/mixins/dao-routing'
 import { screenSizes } from '~/mixins/screen-sizes'
@@ -18,17 +18,17 @@ export default {
   name: 'page-profile',
   mixins: [daoRouting, screenSizes],
   components: {
-    ProfileCard: () => import('~/components/profiles/profile-card.vue'),
     About: () => import('~/components/profiles/about.vue'),
     ActiveAssignments: () => import('~/components/profiles/active-assignments.vue'),
+    BadgesWidget: () => import('~/components/organization/badges-widget.vue'),
+    BasePlaceholder: () => import('~/components/placeholders/base-placeholder.vue'),
+    LoadingSpinner: () => import('~/components/common/loading-spinner.vue'),
+    MultiSig: () => import('~/components/profiles/multi-sig.vue'),
+    Organizations: () => import('~/components/profiles/organizations.vue'),
+    ProfileCard: () => import('~/components/profiles/profile-card.vue'),
     VotingHistory: () => import('~/components/profiles/voting-history.vue'),
     Wallet: () => import('~/components/profiles/wallet.vue'),
     WalletAdresses: () => import('~/components/profiles/wallet-adresses.vue'),
-    BadgesWidget: () => import('~/components/organization/badges-widget.vue'),
-    Organizations: () => import('~/components/profiles/organizations.vue'),
-    BasePlaceholder: () => import('~/components/placeholders/base-placeholder.vue'),
-    MultiSig: () => import('~/components/profiles/multi-sig.vue'),
-    LoadingSpinner: () => import('~/components/common/loading-spinner.vue'),
     Widget: () => import('~/components/common/widget.vue')
   },
   apollo: {
@@ -157,8 +157,11 @@ export default {
     organizations: {
       query: require('../../query/profile/profile-dhos.gql'),
       update (data) {
-        this.organizationsPagination.count = data.getMember.memberofAggregate.count
-        return data.getMember.memberof
+        const member = data.getMember
+        if (member) {
+          this.organizationsPagination.count = member?.memberofAggregate?.count || 0
+          return member.memberof
+        }
       },
       variables () {
         return {
@@ -174,7 +177,10 @@ export default {
     profileStats: {
       query: require('~/query/profile/profile-stats.gql'),
       update: data => {
-        return { payoutAggregate: data.getMember.payoutAggregate, votableAggregate: data.getDao.votableAggregate }
+        return {
+          payoutAggregate: data?.getMember?.payoutAggregate,
+          votableAggregate: data?.getDao?.votableAggregate
+        }
       },
       variables () {
         return {
@@ -187,8 +193,8 @@ export default {
         return !this.username || !this.selectedDao || !this.selectedDao.docId
       },
       result (data) {
-        const assignmentCount = data.data.getDao.votableAggregate.count
-        const payoutCount = data.data.getMember.payoutAggregate.count
+        const assignmentCount = data?.data?.getDao?.votableAggregate?.count
+        const payoutCount = data?.data?.getMember?.payoutAggregate?.count
         if (assignmentCount <= this.assignmentsPagination.first + this.assignmentsPagination.offset) {
           this.assignmentsPagination.fetchMore = false
         }
@@ -212,9 +218,6 @@ export default {
       loading: true,
       submitting: false,
       limit: 5,
-      emailInfo: null,
-      smsInfo: null,
-      commPref: null,
       walletAddressForm: {
         btcAddress: null,
         ethAddress: null,
@@ -267,14 +270,11 @@ export default {
   },
 
   async mounted () {
-    this.setBreadcrumbs([])
-    this.resetPagination(false)
     this.fetchProfile()
   },
 
   watch: {
-    $route: 'fetchProfile',
-    // isOwner: 'fetchProfile',
+
     organizations: {
       handler () {
         if (this.organizations.length === this.organizationsPagination.count) {
@@ -286,8 +286,8 @@ export default {
     },
 
     profile: {
-      handler () {
-        if (this.profile.publicData.name) {
+      handler (profile) {
+        if (profile.publicData.name) {
           document.title = `${this.profile.publicData.name}'s Profile`
         }
       }
@@ -295,12 +295,15 @@ export default {
   },
 
   methods: {
-    ...mapActions('profiles', ['getPublicProfile', 'connectProfileApi', 'getProfile',
-      'saveBio', 'saveAddresses', 'saveProfileCard', 'getWalletAdresses']),
-    ...mapMutations('layout', ['setBreadcrumbs', 'setShowRightSidebar', 'setRightSidebarType']),
-
-    // TODO: Remove this when transitioning to new profile edit
-    ...mapMutations('profiles', ['setView']),
+    ...mapActions('profiles', [
+      'connectProfileApi',
+      'getProfile',
+      'getPublicProfile',
+      'getWalletAdresses',
+      'saveAddresses',
+      'saveBio',
+      'saveProfileCard'
+    ]),
 
     resetPagination (forceOffset) {
       if (forceOffset) {
@@ -486,57 +489,30 @@ export default {
     },
 
     /**
-     * Refresh the member data after a small timeout
-     */
-    refresh () {
-
-    },
-
-    /**
      * Kicks off the various fetch operations needed to retrieve this user's data
      */
     async fetchProfile () {
       if (this.username) {
         this.loading = true
+
         if (this.isOwner) {
-          await this.loadProfile()
+          await this.getProfile(this.account)
+
+          try {
+            this.walletAddressForm = await this.getWalletAdresses(this.account)
+          } catch (error) {
+          }
         } else {
-          await this.loadPublicProfile()
+          await this.getPublicProfile(this.username)
         }
+
         this.loading = false
       }
-    },
-
-    /**
-     * Retrieve the user's public profile using the profile service
-     * When this data is retrieved, the loading state is canceled
-     */
-    async loadPublicProfile () {
-      this.setView(null)
-      // this.publicData = null
-      const profile = await this.getPublicProfile(this.username)
-      if (profile) {
-        this.setView(profile)
-        // this.publicData = profile.publicData
-      }
-    },
-
-    async loadProfile () {
-      const profile = await this.getProfile(this.account)
-      this.setView(null)
-      if (profile) {
-        this.setView(profile)
-        this.smsInfo = profile.smsInfo
-        this.emailInfo = profile.emailInfo
-        this.commPref = profile.commPref
-      }
-      this.walletAddressForm = await this.getWalletAdresses(this.account)
     },
 
     async onSaveProfileCard (data, success, fail) {
       try {
         await this.saveProfileCard(data)
-        this.setView(await this.getProfile(this.account))
         success()
       } catch (error) {
         fail('Something went wrong ' + error)
@@ -546,7 +522,6 @@ export default {
     async onSaveBio (data, success, fail) {
       try {
         await this.saveBio(data.bio)
-        this.setView(await this.getProfile(this.account))
         success()
       } catch (error) {
         fail(error)
@@ -566,7 +541,6 @@ export default {
       try {
         await this.saveAddresses({ newData: data, oldData: this.walletAddressForm })
         this.walletAddressForm = data
-        this.setView(await this.getProfile(this.account))
         success()
       } catch (error) {
         fail(error)
