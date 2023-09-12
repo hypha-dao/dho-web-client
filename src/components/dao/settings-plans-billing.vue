@@ -211,6 +211,7 @@ export default {
 
         nav.q-mt-xl.full-width.row.justify-end
             q-btn.q-px-xl.rounded-border.text-bold.q-ml-xs(
+              :disable="!isAdmin"
               :label="$t('configuration.settings-plans-billing.plan.cta')"
               @click="state = STATES.UPDATING_PLAIN"
               color="secondary"
