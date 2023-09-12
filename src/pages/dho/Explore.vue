@@ -35,8 +35,8 @@ export default {
       textFilter: null,
       optionArray: [
         { label: this.$t('pages.dho.explore.sortBy'), disable: true },
-        this.$t('pages.dho.explore.oldestFirst'),
         this.$t('pages.dho.explore.newestFirst'),
+        this.$t('pages.dho.explore.oldestFirst'),
         this.$t('pages.dho.explore.alphabetically')
       ],
       showApplicants: false,
@@ -125,8 +125,8 @@ export default {
     },
 
     order () {
-      if (this.optionArray[1] === this.sort) return { asc: 'createdDate' }
-      if (this.optionArray[2] === this.sort) return { desc: 'createdDate' }
+      if (this.optionArray[1] === this.sort) return { desc: 'createdDate' }
+      if (this.optionArray[2] === this.sort) return { asc: 'createdDate' }
       if (this.optionArray[3] === this.sort) return { asc: 'details_daoName_n' }
 
       return null
