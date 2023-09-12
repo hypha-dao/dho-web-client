@@ -445,6 +445,8 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
           q-btn.q-px-xl.rounded-border.text-bold.full-width(@click="downgradePlan" :label="$t('layouts.multidholayout.downgradeMeTo')" no-caps outline rounded text-color="white" unelevated)
         .col-6.q-pl-xs
           q-btn.q-px-xl.rounded-border.text-bold.full-width(:to="{ name: 'configuration', query: { tab: 'PLAN' } }" color="white" text-color="negative" :label="$t('layouts.multidholayout.renewMyCurrentPlan')" no-caps rounded unelevated)
+  //- Because iOS z-index doesn`t work
+  router-view(v-if="$router.currentRoute.name === 'proposal-create'")
   q-header.bg-white(v-if="$q.screen.lt.lg && $route.name !== 'proposal-detail'")
     top-navigation(:unreadNotifications="countObjectsWithKeyValue(notifications, 'read', false)" :notifications="notifications" @openNotifications="languageSettings = false, right = false, showNotificationsBar = true" @isActiveRoute="isActiveRoute" @showLangSettings="languageSettings = true, right = false" :showTopButtons="showTopBarItems" :profile="profile" @toggle-sidebar="!$q.screen.md ? right = true : showMinimizedMenu = true" @search="onSearch" :dho="dho" :dhos="getDaos($apolloData.data.member)" :selectedDaoPlan="selectedDaoPlan")
   q-page-container.bg-white.window-height.q-py-sm(:class="{ 'q-pr-sm': $q.screen.gt.md, 'q-px-xs': !$q.screen.gt.md}")
