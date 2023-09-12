@@ -51,9 +51,8 @@ export default {
 
   apollo: {
     dhos: {
-      query () {
-        return require('~/query/dao/dao-list.gql')
-      },
+      query () { return require('~/query/dao/dao-list.gql') },
+
       update: data => {
         return data?.queryDao?.map(dao => {
           return {
@@ -70,6 +69,7 @@ export default {
           }
         })
       },
+
       variables () {
         return {
           order: this.order,
@@ -77,9 +77,12 @@ export default {
           first: this.first,
           offset: 0
         }
-      }
+      },
+
+      pollInterval: 1000
 
     },
+
     ecosystemsList: {
       query () {
         return require('~/query/ecosystem/ecosystems-list.gql')
