@@ -258,13 +258,13 @@ export default {
       return (this.cycleDurationSec / this.daoSettings.periodDurationSec).toFixed(2)
     },
     cashToken () {
-      return !this.toggle ? this.getFormatedTokenAmount(this.peg, Number.MAX_VALUE) : this.getFormatedTokenAmount((this.peg / this.periodsOnCycle).toFixed(2), Number.MAX_VALUE)
+      return !this.toggle ? this.getFormatedTokenAmount(this.peg * this.$store.state.dao.settings.settings_treasuryTokenMultiplier_i, Number.MAX_VALUE) : this.getFormatedTokenAmount((this.peg * this.$store.state.dao.settings.settings_treasuryTokenMultiplier_i / this.periodsOnCycle).toFixed(2), Number.MAX_VALUE)
     },
     utilityToken () {
-      return !this.toggle ? this.getFormatedTokenAmount(this.reward, Number.MAX_VALUE) : this.getFormatedTokenAmount((this.reward / this.periodsOnCycle).toFixed(2), Number.MAX_VALUE)
+      return !this.toggle ? this.getFormatedTokenAmount(this.reward * this.$store.state.dao.settings.settings_utilityTokenMultiplier_i, Number.MAX_VALUE) : this.getFormatedTokenAmount((this.reward * this.$store.state.dao.settings.settings_utilityTokenMultiplier_i / this.periodsOnCycle).toFixed(2), Number.MAX_VALUE)
     },
     voiceToken () {
-      return !this.toggle ? this.getFormatedTokenAmount(this.voice, Number.MAX_VALUE) : this.getFormatedTokenAmount((this.voice / this.periodsOnCycle).toFixed(2), Number.MAX_VALUE)
+      return !this.toggle ? this.getFormatedTokenAmount(this.voice * this.$store.state.dao.settings.settings_voiceTokenMultiplier_i, Number.MAX_VALUE) : this.getFormatedTokenAmount((this.voice * this.$store.state.dao.settings.settings_voiceTokenMultiplier_i / this.periodsOnCycle).toFixed(2), Number.MAX_VALUE)
     },
     isAssignment () {
       const proposalType = this.$store.state.proposals.draft.category.key

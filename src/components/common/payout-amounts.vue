@@ -41,6 +41,17 @@ export default defineComponent({
       } else {
         return true
       }
+    },
+
+    settingsMultiplier(label) {
+      switch (label) {
+        case 'Cash Token':
+          return this.$store.state.dao.settings.settings_treasuryTokenMultiplier_i
+        case 'Voice Token':
+          return this.$store.state.dao.settings.settings_voiceTokenMultiplier_i
+        case 'Utility Token':
+          return this.$store.state.dao.settings.settings_utilityTokenMultiplier_i
+      }
     }
   }
 })
@@ -50,5 +61,5 @@ export default defineComponent({
 .full-width(:class="{row: $q.platform.is.desktop}")
   template(v-for="token in tokens")
     .col(v-if="token.value" :class="{'col-12': stacked, 'q-mb-md': $q.platform.is.mobile}")
-      token-value(v-if="settingsHasToken(token.label)" :daoLogo="daoLogo" :multiplier="multiplier" v-bind="token")
+      token-value(:daoLogo="daoLogo" :multiplier="settingsMultiplier(token.label)" v-bind="token")
 </template>
