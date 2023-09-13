@@ -35,9 +35,12 @@ export default defineComponent({
 
   methods: {
     settingsHasToken(token) {
-      if (token !== 'Voice Token') {
-        const cleanTokenName = token.split(' ')?.[2]?.replace('(', '').replace(')', '')
-        return cleanTokenName === this.$store.state.dao.settings.pegToken || cleanTokenName === this.$store.state.dao.settings.rewardToken
+      if (token !== 'VOICE') {
+        if (this.$store.state.dao.settings.pegToken && this.$store.state.dao.settings.rewardToken) {
+          return token === this.$store.state.dao.settings.pegToken || token === this.$store.state.dao.settings.rewardToken
+        } else {
+          return false
+        }
       } else {
         return true
       }
@@ -50,5 +53,5 @@ export default defineComponent({
 .full-width(:class="{row: $q.platform.is.desktop}")
   template(v-for="token in tokens")
     .col(v-if="token.value" :class="{'col-12': stacked, 'q-mb-md': $q.platform.is.mobile}")
-      token-value(v-if="settingsHasToken(token.label)" :daoLogo="daoLogo" :multiplier="multiplier" v-bind="token")
+      token-value(v-if="settingsHasToken(token.symbol)" :daoLogo="daoLogo" :multiplier="multiplier" v-bind="token")
 </template>
