@@ -3,6 +3,7 @@ import { mapActions, mapGetters } from 'vuex'
 import { validation } from '~/mixins/validation'
 import currency from 'src/data/currency.json'
 import map from '~/utils/map'
+import { MIN_TOKEN_MULTIPLIER, MAX_TOKEN_MULTIPLIER } from '~/const'
 
 const mapCurrency = (currency) => (_) => ({
   label: `${currency[_]?.symbol} - ${currency[_]?.name}`,
@@ -85,6 +86,11 @@ export default {
         if (isValid) {
           await this.createTokens({
             ...this.tokens,
+
+            utilityTokenMultiplier: map(this.tokens.utilityTokenMultiplier, 0, 100, MIN_TOKEN_MULTIPLIER, MAX_TOKEN_MULTIPLIER),
+            voiceTokenMultiplier: map(this.tokens.voiceTokenMultiplier, 0, 100, MIN_TOKEN_MULTIPLIER, MAX_TOKEN_MULTIPLIER),
+            treasuryTokenMultiplier: map(this.tokens.treasuryTokenMultiplier, 0, 100, MIN_TOKEN_MULTIPLIER, MAX_TOKEN_MULTIPLIER),
+
             voiceDecayPercent: map(this.tokens.voiceDecayPercent, 0, 100, MIN_DECAY, MAX_DECAY)
           })
         }
@@ -236,8 +242,10 @@ export default {
               q-input.q-my-xs(
                 :debounce="200"
                 :disable="!selectedDao.hasCustomToken"
+                :max="100"
+                :min="0"
                 :placeholder="$t('configuration.settings-tokens.tresury.form.value.placeholder')"
-                :rules="[rules.required]"
+                :rules="[rules.required, rules.greaterThan(0), rules.lessOrEqualThan(100)]"
                 bg-color="white"
                 color="accent"
                 dense
@@ -331,7 +339,9 @@ export default {
                 :debounce="200"
                 :disable="selectedDao.hasCustomToken || !isAdmin"
                 :filled="selectedDao.hasCustomToken || !isAdmin"
-                :rules="[rules.required]"
+                :max="100"
+                :min="0"
+                :rules="[rules.required, rules.greaterThan(0), rules.lessOrEqualThan(100)]"
                 color="accent"
                 dense
                 lazy-rules
@@ -427,7 +437,9 @@ export default {
                 :debounce="200"
                 :disable="selectedDao.hasCustomToken || !isAdmin"
                 :filled="selectedDao.hasCustomToken || !isAdmin"
-                :rules="[rules.required]"
+                :max="100"
+                :min="0"
+                :rules="[rules.required, rules.greaterThan(0), rules.lessOrEqualThan(100)]"
                 color="accent"
                 dense
                 lazy-rules
