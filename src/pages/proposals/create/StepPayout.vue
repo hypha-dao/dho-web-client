@@ -51,6 +51,13 @@ export default {
       }
     },
 
+    annualUsdSalary: {
+      immediate: true,
+      handler () {
+        this.calculateTokens()
+      }
+    },
+
     usdAmount: {
       immediate: true,
       handler () {
