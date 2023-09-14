@@ -266,7 +266,8 @@ export default {
     ...mapGetters('dao', ['selectedDao', 'daoSettings', 'votingPercentages']),
     ...mapGetters('ballots', ['supply']),
 
-    isOwner () { return this?.username === this?.account }
+    isOwner () { return this?.username === this?.account },
+    isMember () { return this.organizations.length > 0 }
   },
 
   async mounted () {
@@ -565,9 +566,16 @@ q-page.full-width.page-profile
       profile-card.profile(v-if="tab === Tabs.INFO || isTabletOrGreater" :style="{'grid-area': 'profile'}" :clickable="false" :username="username" :joinedDate="member && member.createdDate" view="card" :editButton="isOwner" @onSave="onSaveProfileCard" :compact="!$q.screen.gt.md" :tablet="$q.screen.md")
       organizations.org(v-if="tab === Tabs.INFO || isTabletOrGreater && organizationsList.length" :organizations="organizationsList" @onSeeMore="loadMoreOrganizations" :hasMore="organizationsPagination.fetchMore" :tablet="$q.screen.md" :style="$q.screen.md? {'grid-area': 'org', 'height': '100px'} : {'grid-area': 'org'}")
       .badges(v-if="tab === Tabs.INFO || isTabletOrGreater" :style="{'grid-area': 'badges'}")
-        base-placeholder(compact v-if="!memberBadges && isOwner" :title="$t('pages.profiles.profile.badges')" :subtitle=" isOwner ? $t('pages.profiles.profile.noBadgesYesApplyFor') : $t('pages.profiles.profile.noBadgesToSeeHere')" icon="fas fa-id-badge" :actionButtons="isOwner ? [{label: $t('pages.profiles.profile.apply'), color: 'primary', onClick: () => routeTo('proposals/create')}] : []")
+        base-placeholder(
+          :actionButtons="isOwner ? [{label: $t('pages.profiles.profile.apply'), disable: !isMember, color: 'primary', onClick: () => routeTo('proposals/create')}] : []"
+          :subtitle=" isOwner ? $t('pages.profiles.profile.noBadgesYesApplyFor') : $t('pages.profiles.profile.noBadgesToSeeHere')"
+          :title="$t('pages.profiles.profile.badges')"
+          compact
+          icon="fas fa-id-badge"
+          v-if="!memberBadges && isOwner"
+        )
         badges-widget(:badges="memberBadges" compact v-if="memberBadges" fromProfile)
-      wallet.wallet(v-if="tab === Tabs.INFO || isTabletOrGreater" :style="{'grid-area': 'wallet'}" ref="wallet" :more="isOwner" :username="username")
+      wallet.wallet(v-if="isMember && (tab === Tabs.INFO || isTabletOrGreater)" :style="{'grid-area': 'wallet'}" ref="wallet" :more="isOwner" :username="username")
       wallet-adresses.walletadd(:style="{'grid-area': 'walletadd'}" :walletAdresses="walletAddressForm" @onSave="onSaveWalletAddresses" v-if="isOwner && (tab==='INFO' || isTabletOrGreater)" :isHypha="daoSettings.isHypha")
       multi-sig.msig(v-if="tab==='INFO' || isTabletOrGreater" :style="{'grid-area': 'msig'}" v-show="isHyphaOwner" :numberOfPRToSign="numberOfPRToSign")
     .right.q-gutter-md(:style="$q.screen.gt.md && {'grid-area': 'right'}")
@@ -577,19 +585,54 @@ q-page.full-width.page-profile
           q-tab.full-width(:name="Tabs.CONTRIBUTIONS" :label="$t('pages.profiles.profile.contributions')" :ripple="false")
           q-tab.full-width(:name="Tabs.QUESTS" :label="$t('pages.profiles.profile.quests')" :ripple="false")
         .assignments(v-if="tab === Tabs.ASSIGNMENTS || tab === Tabs.PROJECTS" :style="{'grid-area': 'assignments'}")
-          base-placeholder(v-if="!(assignments && assignments.length)" :compact="isMobile" :title="isTabletOrGreater ? '' : $t('pages.profiles.profile.assignments')" :subtitle=" isOwner ? $t('pages.profiles.profile.looksLikeYouDontHaveAnyActiveAssignments') : $t('pages.profiles.profile.noActiveOrArchivedAssignments')" icon="fas fa-file-medical" :actionButtons="isOwner ? [{label: $t('pages.profiles.profile.createAssignment'), color: 'primary', onClick: () => routeTo('proposals/create')}] : [] ")
+          base-placeholder(
+            :actionButtons="isOwner ? [{label: $t('pages.profiles.profile.createAssignment'), color: 'primary', disable: !isMember, onClick: () => routeTo('proposals/create')}] : [] "
+            :compact="isMobile"
+            :subtitle=" isOwner ? $t('pages.profiles.profile.looksLikeYouDontHaveAnyActiveAssignments') : $t('pages.profiles.profile.noActiveOrArchivedAssignments')"
+            :title="isTabletOrGreater ? '' : $t('pages.profiles.profile.assignments')"
+            icon="fas fa-file-medical"
+            v-if="!(assignments && assignments.length)"
+          )
           active-assignments(v-if="assignments && assignments.length" :assignments="assignments" :owner="isOwner" :hasMore="assignmentsPagination.fetchMore" @claim-all="$refs.wallet.fetchTokens()" @change-deferred="refresh" @onMore="loadMoreAssingments" :daoSettings="daoSettings" :selectedDao="selectedDao" :supply="supply" :votingPercentages="votingPercentages" :compact="isMobile")
         .contributions(v-if="tab === Tabs.CONTRIBUTIONS || tab === Tabs.PROJECTS" :style="{'grid-area': 'contributions'}")
-          base-placeholder(v-if="!(contributions && contributions.length)" :compact="isMobile" :title="isTabletOrGreater ? '' : $t('pages.profiles.profile.contributions')" :subtitle=" isOwner ? $t('pages.profiles.profile.looksLikeYouDontHaveAnyContributions') : $t('pages.profiles.profile.noContributionsToSeeHere')" icon="fas fa-file-medical" :actionButtons="isOwner ? [{label: $t('pages.profiles.profile.createContribution'), color: 'primary', onClick: () => routeTo('proposals/create')}] : []")
+          base-placeholder(
+            :actionButtons="isOwner ? [{label: $t('pages.profiles.profile.createContribution'), color: 'primary', disable: !isMember, onClick: () => routeTo('proposals/create')}] : []"
+            :compact="isMobile"
+            :subtitle=" isOwner ? $t('pages.profiles.profile.looksLikeYouDontHaveAnyContributions') : $t('pages.profiles.profile.noContributionsToSeeHere')"
+            :title="isTabletOrGreater ? '' : $t('pages.profiles.profile.contributions')"
+            icon="fas fa-file-medical"
+            v-if="!(contributions && contributions.length)"
+          )
           active-assignments(v-if="contributions && contributions.length" :contributions="contributions" :owner="isOwner" :hasMore="contributionsPagination.fetchMore" @claim-all="$refs.wallet.fetchTokens()" @change-deferred="refresh" @onMore="loadMoreContributions" :daoSettings="daoSettings" :selectedDao="selectedDao" :supply="supply" :votingPercentages="votingPercentages" :compact="isMobile")
         .quests(v-if="tab === Tabs.QUESTS" :style="{'grid-area': 'quests'}")
-          base-placeholder(v-if="!(quests && quests.length)" :compact="isMobile" :title="isTabletOrGreater ? '' : $t('pages.profiles.profile.quests')" :subtitle=" isOwner ? $t('pages.profiles.profile.looksLikeYouDontHaveAnyQuests') : $t('pages.profiles.profile.noQuestsToSeeHere')" icon="fas fa-file-medical" :actionButtons="isOwner ? [{label: $t('pages.profiles.profile.createQuest'), color: 'primary', onClick: () => routeTo('proposals/create')}] : []")
+          base-placeholder(
+            :actionButtons="isOwner ? [{label: $t('pages.profiles.profile.createQuest'), color: 'primary', disable: !isMember, onClick: () => routeTo('proposals/create')}] : []"
+            :compact="isMobile"
+            :subtitle=" isOwner ? $t('pages.profiles.profile.looksLikeYouDontHaveAnyQuests') : $t('pages.profiles.profile.noQuestsToSeeHere')"
+            :title="isTabletOrGreater ? '' : $t('pages.profiles.profile.quests')"
+            icon="fas fa-file-medical"
+            v-if="!(quests && quests.length)"
+          )
           active-assignments(v-if="quests && quests.length" :contributions="quests" :owner="isOwner" :hasMore="questsPagination.fetchMore" @claim-all="$refs.wallet.fetchTokens()" @change-deferred="refresh" @onMore="loadMoreQuests" :daoSettings="daoSettings" :selectedDao="selectedDao" :supply="supply" :votingPercentages="votingPercentages" :compact="isMobile")
       .about(v-if="tab === Tabs.ABOUT || isTabletOrGreater" :style="{'grid-area': 'about'}")
-        base-placeholder(:compact="isMobile" v-if="!(profile && profile.publicData && profile.publicData.bio) && showBioPlaceholder" :title="$t('pages.profiles.profile.biography')" :subtitle=" isOwner ? $t('pages.profiles.profile.writeSomethingAboutYourself') : $t('pages.profiles.profile.looksLikeDidntWrite', { username: this.username })" icon="fas fa-user-edit" :actionButtons="isOwner ? [{label: $t('pages.profiles.profile.writeBiography'), color: 'primary', onClick: () => {$refs.about.openEdit(); showBioPlaceholder = false }}] : []")
+        base-placeholder(
+          :actionButtons="isOwner ? [{label: $t('pages.profiles.profile.writeBiography'), color: 'primary', onClick: () => {$refs.about.openEdit(); showBioPlaceholder = false }}] : []"
+          :compact="isMobile"
+          :subtitle=" isOwner ? $t('pages.profiles.profile.writeSomethingAboutYourself') : $t('pages.profiles.profile.looksLikeDidntWrite', { username: this.username })"
+          :title="$t('pages.profiles.profile.biography')"
+          icon="fas fa-user-edit"
+          v-if="!(profile && profile.publicData && profile.publicData.bio) && showBioPlaceholder"
+        )
         about.about(v-show="(profile && profile.publicData && profile.publicData.bio) || (!showBioPlaceholder)" :bio="(profile && profile.publicData) ? (profile.publicData.bio || '') : $t('pages.profiles.profile.retrievingBio')" @onSave="onSaveBio" @onCancel="onCancelBio" :editButton="isOwner" ref="about")
       .votes(v-if="tab === Tabs.VOTES || isTabletOrGreater" :style="{'grid-area': 'votes'}")
-        base-placeholder(:compact="isMobile" v-if="!(votes && votes.length)" :title="$t('pages.profiles.profile.recentVotes')" :subtitle=" isOwner ? $t('pages.profiles.profile.youHaventCast') : $t('pages.profiles.profile.noVotesCastedYet')" icon="fas fa-vote-yea" :actionButtons="isOwner ? [{label: $t('pages.profiles.profile.vote'), color: 'primary', onClick: () => routeTo('proposals')}] : []")
+        base-placeholder(
+          :actionButtons="isOwner ? [{label: $t('pages.profiles.profile.vote'), color: 'primary', disable: !isMember, onClick: () => routeTo('proposals')}] : []"
+          :compact="isMobile"
+          :subtitle=" isOwner ? $t('pages.profiles.profile.youHaventCast') : $t('pages.profiles.profile.noVotesCastedYet')"
+          :title="$t('pages.profiles.profile.recentVotes')"
+          icon="fas fa-vote-yea"
+          v-if="!(votes && votes.length)"
+        )
         voting-history(v-if="votes && votes.length" :name="(profile && profile.publicData) ? profile.publicData.name : username" :votes="votes" @onMore="loadMoreVotes")
 
 </template>
