@@ -90,3 +90,9 @@ export const PERIOD_NUMBERS = Object.freeze({
 })
 
 export const DEFAULT_TIER = 'Custom Reward'
+
+export const TOKEN_TYPES = Object.freeze({
+  CASH_TOKEN: 'Cash Token',
+  UTILITY_TOKEN: 'Utility Token',
+  VOICE_TOKEN: 'Voice Token'
+})

@@ -2,6 +2,7 @@
 import { defineComponent } from 'vue'
 import { PropType } from 'vue/types/v3-component-props'
 import TokenValue from './token-value.vue'
+import { TOKEN_TYPES } from '~/const'
 
 type TokenProps = Omit<
   InstanceType<typeof TokenValue>['$props'],
@@ -35,7 +36,7 @@ export default defineComponent({
 
   methods: {
     settingsHasToken(token) {
-      if (token !== 'Voice Token') {
+      if (token !== TOKEN_TYPES.VOICE_TOKEN) {
         const cleanTokenName = token.split(' ')?.[2]?.replace('(', '').replace(')', '')
         return cleanTokenName === this.$store.state.dao.settings.pegToken || cleanTokenName === this.$store.state.dao.settings.rewardToken
       } else {
@@ -45,11 +46,11 @@ export default defineComponent({
 
     settingsMultiplier(label) {
       switch (label) {
-        case 'Cash Token':
+        case TOKEN_TYPES.CASH_TOKEN:
           return this.$store.state.dao.settings.settings_treasuryTokenMultiplier_i
-        case 'Voice Token':
+        case TOKEN_TYPES.VOICE_TOKEN:
           return this.$store.state.dao.settings.settings_voiceTokenMultiplier_i
-        case 'Utility Token':
+        case TOKEN_TYPES.UTILITY_TOKEN:
           return this.$store.state.dao.settings.settings_utilityTokenMultiplier_i
       }
     }
