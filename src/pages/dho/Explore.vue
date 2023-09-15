@@ -265,7 +265,7 @@ q-page.page-explore
       filter-widget.sticky(:debounce="1000" :defaultOption="1" :optionArray.sync="optionArray" :showCircle="false" :showToggle="false" :sort.sync="sort" :textFilter.sync="textFilter" :toggle.sync="showApplicants" :toggleDefault="false" :toggleLabel="'Show daos'" :showViewSelector="false" :filterTitle="filterPlacehoder")
     div(v-else)
       filter-open-button(@open="mobileFilterOpen = true")
-      filter-widget-mobile(:debounce="1000" :defaultOption="1" :optionArray.sync="optionArray" :showCircle="false" :showToggle="false" :showViewSelector="false" @close="mobileFilterOpen = false" @update:sort="updateSort" @update:textFilter="updateDaoName" :filterTitle="filterPlacehoder" v-show="mobileFilterOpen" :style="mobileFilterStyles")
+      filter-widget-mobile(:debounce="1000" :defaultOption="1" :optionArray.sync="optionArray" :showCircle="false" :showToggle="false" :sort.sync="sort" :textFilter.sync="textFilter" :toggle.sync="showApplicants" :showViewSelector="false" @close="mobileFilterOpen = false" @update:sort="updateSort" @update:textFilter="updateDaoName" :filterTitle="filterPlacehoder" v-show="mobileFilterOpen" :style="mobileFilterStyles")
 
 </template>
 <style lang="stylus" scoped>
