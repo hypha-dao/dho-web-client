@@ -96,3 +96,6 @@ export const TOKEN_TYPES = Object.freeze({
   UTILITY_TOKEN: 'Utility Token',
   VOICE_TOKEN: 'Voice Token'
 })
+
+export const MIN_TOKEN_MULTIPLIER = 0
+export const MAX_TOKEN_MULTIPLIER = 1

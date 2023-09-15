@@ -5,6 +5,8 @@ import QrcodeVue from 'qrcode.vue'
 import ipfsy from '~/utils/ipfsy'
 import { Notify } from 'quasar'
 import slugify from '~/utils/slugify'
+import map from '~/utils/map'
+import { MIN_TOKEN_MULTIPLIER, MAX_TOKEN_MULTIPLIER } from '~/const'
 
 const HELP_LINK = 'https://help.hypha.earth/hc/2431449449'
 
@@ -171,10 +173,14 @@ export default {
         await this.createDAO({
           data: {
             ...this.form,
+
+            daoUrl,
             onboarder_account: this.account,
             parentId: this.$route.query.parentId,
             skipTokens: true,
-            daoUrl: daoUrl
+            utilityTokenMultiplier: map(this.form.utilityTokenMultiplier, 0, 100, MIN_TOKEN_MULTIPLIER, MAX_TOKEN_MULTIPLIER),
+            voiceTokenMultiplier: map(this.form.voiceTokenMultiplier, 0, 100, MIN_TOKEN_MULTIPLIER, MAX_TOKEN_MULTIPLIER),
+            treasuryTokenMultiplier: map(this.form.treasuryTokenMultiplier, 0, 100, MIN_TOKEN_MULTIPLIER, MAX_TOKEN_MULTIPLIER)
           },
           isDraft
         })
