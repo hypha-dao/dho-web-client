@@ -65,7 +65,7 @@ export default {
       skip () { return !this.selectedDao?.docId },
       variables () {
         return {
-          start: new Date(this.startDate),
+          start: new Date(),
           count: this.size,
           daoId: this.selectedDao.docId,
           page: 0
@@ -75,7 +75,7 @@ export default {
         const periods = res.data.getDao.calendar[0].period
 
         if (!this.periodCount) this.periodCount = DEFAULT_PERIOD_COUNT
-        if (!this.startDate) this.startDate = periods[0].details_startTime_t
+        if (!this.startDate) this.startDate = periods[0]?.details_startTime_t
       },
       fetchPolicy: 'no-cache'
     }
@@ -109,7 +109,7 @@ export default {
 
     startDate: {
       get () {
-        return date.formatDate(this?.$store?.state?.proposals?.draft?.startPeriod?.details_startTime_t || new Date(), 'YYYY/MM/DD')
+        return date.formatDate(this?.$store?.state?.proposals?.draft?.startPeriod?.details_startTime_t, 'YYYY/MM/DD') || ''
       },
 
       set (value) {
@@ -134,10 +134,6 @@ export default {
       }
       return ''
     }
-
-  },
-
-  watch: {
 
   },
 
@@ -167,6 +163,7 @@ export default {
       const page = Math.floor(diffrenceInMonths / 5.5555)
       if (this.page !== page) {
         this.page = page
+        // TODO: Add pagination post beta
         // this.$apollo.queries.periods.fetchMore({
         // // New variables
         //   variables: {
