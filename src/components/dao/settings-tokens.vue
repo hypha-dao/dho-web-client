@@ -3,7 +3,6 @@ import { mapActions, mapGetters } from 'vuex'
 import { validation } from '~/mixins/validation'
 import currency from 'src/data/currency.json'
 import map from '~/utils/map'
-import { MIN_TOKEN_MULTIPLIER, MAX_TOKEN_MULTIPLIER } from '~/const'
 
 const mapCurrency = (currency) => (_) => ({
   label: `${currency[_]?.symbol} - ${currency[_]?.name}`,
@@ -87,10 +86,6 @@ export default {
           await this.createTokens({
             ...this.tokens,
 
-            utilityTokenMultiplier: map(this.tokens.utilityTokenMultiplier, 0, 100, MIN_TOKEN_MULTIPLIER, MAX_TOKEN_MULTIPLIER),
-            voiceTokenMultiplier: map(this.tokens.voiceTokenMultiplier, 0, 100, MIN_TOKEN_MULTIPLIER, MAX_TOKEN_MULTIPLIER),
-            treasuryTokenMultiplier: map(this.tokens.treasuryTokenMultiplier, 0, 100, MIN_TOKEN_MULTIPLIER, MAX_TOKEN_MULTIPLIER),
-
             voiceDecayPercent: map(this.tokens.voiceDecayPercent, 0, 100, MIN_DECAY, MAX_DECAY)
           })
         }
@@ -113,20 +108,20 @@ export default {
         treasuryName: this.daoSettings.settings_pegTokenName_s || treasurySymbol,
         treasurySymbol,
         treasuryDigits: treasuryDigits.split('.')[1].length, // 1.0, 1.00, 1.000
-        treasuryTokenMultiplier: this.daoSettings.settings_treasuryTokenMultiplier_i,
+        treasuryTokenMultiplier: this.daoSettings.settings_treasuryTokenMultiplier_i / 100,
 
         // // Utility token
         utilityName: this.daoSettings.settings_rewardTokenName_s || utilitySymbol,
         utilitySymbol,
         utilityDigits: utilityDigits.split('.')[1].length, // 1.0, 1.00, 1.000, // 1.0, 1.00, 1.000
-        utilityTokenMultiplier: this.daoSettings.settings_utilityTokenMultiplier_i,
+        utilityTokenMultiplier: this.daoSettings.settings_utilityTokenMultiplier_i / 100,
         utilityAmount: parseInt(utilityAmount) === -1 ? '∞' : utilityAmount, // i.e 100000 or -1 for infinite supply
 
         // // Voice token
         voiceName: voiceSymbol,
         voiceSymbol,
         voiceDigits: voiceDigits.split('.')[1].length,
-        voiceTokenMultiplier: this.daoSettings.settings_voiceTokenMultiplier_i,
+        voiceTokenMultiplier: this.daoSettings.settings_voiceTokenMultiplier_i / 100,
         voiceDecayPeriod: this.daoSettings.settings_voiceTokenDecayPeriod_i,
         voiceDecayPercent: map(this.daoSettings.settings_voiceTokenDecayPerPeriodX10M_i, MIN_DECAY, MAX_DECAY, 0, 100)
 
