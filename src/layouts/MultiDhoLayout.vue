@@ -409,10 +409,6 @@ export default {
         this.$router.push({ path: `/${this.selectedDao?.name}/proposals/${proposal}` })
       }
     }
-  },
-
-  updated () {
-    console.log(JSON.stringify(this.member))
   }
 
 }
@@ -420,10 +416,10 @@ export default {
 
 <template lang="pug">
 .multi-dho-layout
-  div(v-if="isLoading").absolute.full-width.full-height.row.justify-center.items-center
-    loading-spinner(size="120px")
+  //- div(v-if="isLoading").absolute.full-width.full-height.row.justify-center.items-center
+  //-   loading-spinner(size="120px")
 
-  q-layout(v-else :style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout")
+  q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout")
     q-dialog(:value="selectedDaoPlan.hasExpired && $route.name !== 'configuration' && $route.name !== 'login'" persistent="persistent")
     div.absolute.full-width.full-height.bg-black(v-if="languageSettings" @click="languageSettings = false" :style="{ 'opacity': '.4', 'z-index': '2000' }")
     div.absolute.full-width.full-height.bg-black(v-if="showNotificationsBar" @click="showNotificationsBar = false" :style="{ 'opacity': '.4', 'z-index': '2000' }")

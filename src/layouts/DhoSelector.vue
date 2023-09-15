@@ -310,10 +310,10 @@ export default {
           }
         }
 
+        this.$store.dispatch('accounts/checkMembership')
         this.$store.commit('dao/switchDao', data)
         this.$store.dispatch('dao/setTheme')
         this.$store.dispatch('ballots/getSupply')
-        this.$store.dispatch('accounts/checkMembership')
       },
 
       fetchPolicy: 'no-cache',
