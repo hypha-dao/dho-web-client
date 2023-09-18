@@ -217,6 +217,13 @@ export default {
     },
     goToDocumentation() {
       window.location.href = this.HELP_LINK
+    },
+    downloadWallet() {
+      if (navigator.userAgent.toLowerCase().indexOf('iphone') > -1) {
+        window.location.href = process.env.DOWNLOAD_WALLET_LINK_IOS
+      } else if (navigator.userAgent.toLowerCase().indexOf('android') > -1) {
+        window.location.href = process.env.DOWNLOAD_WALLET_LINK_ANDROID
+      }
     }
   }
 }
@@ -315,7 +322,8 @@ export default {
             .ellipse-border(:class="(step === this.steps.inviteLink.name || step === this.steps.finish.name ) && 'ellipse-filled'")
             .ellipse-border(:class="step === this.steps.finish.name && 'ellipse-filled'")
         .col-10.no-wrap.flex.justify-end.items-center
-          q-btn(v-if="step === this.steps.inviteLink.name" :label="$t('login.register-user-with-captcha-view.copyInviteLink')" color="primary" outline unelevated @click="copyText()" rounded no-caps)
+          q-btn(v-if="step === this.steps.inviteLink.name && !$q.screen.gt.md" :label="$t('login.register-user-with-captcha-view.downloadWallet')" color="primary" outline unelevated @click="downloadWallet()" rounded no-caps)
+          q-btn(v-if="step === this.steps.inviteLink.name && $q.screen.gt.md" :label="$t('login.register-user-with-captcha-view.copyInviteLink')" color="primary" outline unelevated @click="copyText()" rounded no-caps)
           q-btn(v-if="step !== this.steps.finish.name").q-mx-md.q-px-md(:style="{ 'height': 'fit-content' }" :label="step === 'finish' ? 'Need Help?' : 'Next'" color="primary" unelevated @click="next" :disable="!this.inviteLink" :loading="submitting" :outline="step === this.steps.finish.name" rounded no-caps)
           q-list(v-if="step === steps.finish.name")
             q-item.wallet.q-my-xs(v-for="(wallet, idx) in this.hyphaAuthenticators" :key="wallet.getStyle().text" v-ripple :style="{ background: wallet.getStyle().background, color: wallet.getStyle().textColor }")

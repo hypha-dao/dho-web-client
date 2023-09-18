@@ -859,7 +859,8 @@
         "createYourDao":"Create Your DAO",
         "goAheadAndAddYour":"Go ahead and add your DAO's name and upload a logo. You can also also list your DAO's purpose and the impact it envisions making.",
         "publishYourDao":"Publish your DAO",
-        "needHelp":"Need help?"
+        "needHelp":"Need help?",
+        "downloadWallet": "Download Wallet"
      },
      "welcome-view":{
         "youNeedAn":"You need an Hypha Account to interact with Hypha Ecosystem and create a DAO.",
