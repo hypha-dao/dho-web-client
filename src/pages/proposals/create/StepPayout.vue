@@ -265,13 +265,31 @@ export default {
       return (this.cycleDurationSec / this.daoSettings.periodDurationSec).toFixed(2)
     },
     cashToken () {
-      return !this.toggle ? this.getFormatedTokenAmount(this.peg * (this.$store.state.dao.settings.settings_treasuryTokenMultiplier_i ? this.$store.state.dao.settings.settings_treasuryTokenMultiplier_i : 1), Number.MAX_VALUE) : this.getFormatedTokenAmount((this.peg * (this.$store.state.dao.settings.settings_treasuryTokenMultiplier_i ? this.$store.state.dao.settings.settings_treasuryTokenMultiplier_i : 1) / this.periodsOnCycle).toFixed(2), Number.MAX_VALUE)
+      return !this.toggle
+        ? this.getFormatedTokenAmount(this.peg * (this.daoSettings.treasuryTokenMultiplier
+          ? this.daoSettings.treasuryTokenMultiplier
+          : 1), Number.MAX_VALUE)
+        : this.getFormatedTokenAmount((this.peg * (this.daoSettings.treasuryTokenMultiplier
+          ? this.daoSettings.treasuryTokenMultiplier
+          : 1) / this.periodsOnCycle).toFixed(2), Number.MAX_VALUE)
     },
     utilityToken () {
-      return !this.toggle ? this.getFormatedTokenAmount(this.reward * (this.$store.state.dao.settings.settings_utilityTokenMultiplier_i ? this.$store.state.dao.settings.settings_utilityTokenMultiplier_i : 1), Number.MAX_VALUE) : this.getFormatedTokenAmount((this.reward * (this.$store.state.dao.settings.settings_utilityTokenMultiplier_i ? this.$store.state.dao.settings.settings_utilityTokenMultiplier_i : 1) / this.periodsOnCycle).toFixed(2), Number.MAX_VALUE)
+      return !this.toggle
+        ? this.getFormatedTokenAmount(this.peg * (this.daoSettings.utilityTokenMultiplier
+          ? this.daoSettings.utilityTokenMultiplier
+          : 1), Number.MAX_VALUE)
+        : this.getFormatedTokenAmount((this.peg * (this.daoSettings.utilityTokenMultiplier
+          ? this.daoSettings.utilityTokenMultiplier
+          : 1) / this.periodsOnCycle).toFixed(2), Number.MAX_VALUE)
     },
     voiceToken () {
-      return !this.toggle ? this.getFormatedTokenAmount(this.voice * (this.$store.state.dao.settings.settings_voiceTokenMultiplier_i ? this.$store.state.dao.settings.settings_voiceTokenMultiplier_i : 1), Number.MAX_VALUE) : this.getFormatedTokenAmount((this.voice * (this.$store.state.dao.settings.settings_voiceTokenMultiplier_i ? this.$store.state.dao.settings.settings_voiceTokenMultiplier_i : 1) / this.periodsOnCycle).toFixed(2), Number.MAX_VALUE)
+      return !this.toggle
+        ? this.getFormatedTokenAmount(this.peg * (this.daoSettings.voiceTokenMultiplier
+          ? this.daoSettings.voiceTokenMultiplier
+          : 1), Number.MAX_VALUE)
+        : this.getFormatedTokenAmount((this.peg * (this.daoSettings.voiceTokenMultiplier
+          ? this.daoSettings.voiceTokenMultiplier
+          : 1) / this.periodsOnCycle).toFixed(2), Number.MAX_VALUE)
     },
     isAssignment () {
       const proposalType = this.$store.state.proposals.draft.category.key
