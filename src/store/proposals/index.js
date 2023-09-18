@@ -608,8 +608,14 @@ export default {
                 { label: 'min_deferred_x100', value: ['int64', Math.round(parseFloat(draft.minDeferred))] },
 
                 { label: 'voice_amount', value: ['asset', `${parseFloat(draft.voice).toFixed(rootState.dao.settings.voiceTokenDecimals)} ${rootState.dao.settings.voiceToken}`] },
-                { label: 'reward_amount', value: ['asset', `${parseFloat(draft.reward).toFixed(rootState.dao.settings.rewardTokenDecimals)} ${rootState.dao.settings.rewardToken}`] },
-                { label: 'peg_amount', value: ['asset', `${parseFloat(draft.peg).toFixed(rootState.dao.settings.pegTokenDecimals)} ${rootState.dao.settings.pegToken}`] },
+                ...(rootState.dao.settings.rewardToken
+                  ? [{ label: 'reward_amount', value: ['asset', `${parseFloat(draft.reward).toFixed(rootState.dao.settings.rewardTokenDecimals)} ${rootState.dao.settings.rewardToken}`] }]
+                  : []
+                ),
+                ...(rootState.dao.settings.pegToken
+                  ? [{ label: 'peg_amount', value: ['asset', `${parseFloat(draft.peg).toFixed(rootState.dao.settings.pegTokenDecimals)} ${rootState.dao.settings.pegToken}`] }]
+                  : []
+                ),
 
                 { label: 'start_period', value: ['int64', draft.startPeriod.docId] },
                 { label: 'period_count', value: ['int64', draft.periodCount] },
@@ -659,6 +665,7 @@ export default {
               publish: !publishToStaging
             }
           }]
+          console.log(JSON.stringify(actions))
           return this.$api.signTransaction(actions)
         }
       } catch (e) {
