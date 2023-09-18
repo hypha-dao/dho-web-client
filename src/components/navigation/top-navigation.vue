@@ -47,7 +47,7 @@ export default {
       return require('~/assets/logos/' + img)
     },
     expandDhoList () {
-      if (this.dhos.length) { this.expanded = !this.expanded }
+      if (this.dhos?.length) { this.expanded = !this.expanded }
     }
   }
 }
