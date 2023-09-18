@@ -334,7 +334,7 @@ q-page.page-ecosystem
         create-dho-widget(@create="onCreateDAO")
     div(v-else)
       filter-open-button(@open="mobileFilterOpen = true")
-      filter-widget-mobile(:debounce="1000" :defaultOption="1" :optionArray.sync="optionArray" :showCircle="false" :showToggle="false" :showViewSelector="false" @close="mobileFilterOpen = false" @update:sort="updateSort" @update:textFilter="updateDaoName" :filterTitle="$t('pages.dho.ecosystem.searchDHOs')" v-show="mobileFilterOpen" :style="mobileFilterStyles")
+      filter-widget-mobile(:debounce="1000" :defaultOption="1" :optionArray.sync="optionArray" :showCircle="false" :showToggle="false" :showViewSelector="false" :filters.sync="filters" @close="mobileFilterOpen = false" @update:sort="updateSort" :sort.sync="sort" @update:textFilter="updateDaoName" :filterTitle="$t('pages.dho.ecosystem.searchDHOs')" v-show="mobileFilterOpen" :style="mobileFilterStyles")
 
 </template>
 <style lang="stylus" scoped>
