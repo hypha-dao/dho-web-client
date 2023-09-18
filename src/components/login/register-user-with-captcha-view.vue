@@ -271,7 +271,7 @@ export default {
               .font-lato.text-heading.text-weight-bolder.q-mb-md(:style="{ 'font-size': '34px' }") {{ $t('login.register-user-with-captcha-view.loginWith') }}
               .q-mt-md
                 .row
-                  .col-3
+                  .col-4.q-mr-sm(:style="'min-width: 120px'")
                     img(:style="{ 'width': 'fit-content' }" src="~/assets/images/onboarding-mobile.svg")
                   .col.q-ml-md
                     .text-bold.text-black.q-mt-md {{ $t('login.register-user-with-captcha-view.signYourFirstTransaction') }}
