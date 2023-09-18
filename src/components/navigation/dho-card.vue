@@ -37,7 +37,7 @@ export default {
         this.$q.notify({
           color: 'secondary',
           textColor: 'white',
-          message: this.$('messages.linkCopied'),
+          message: this.$t('messages.linkCopied'),
           icon: 'far fa-copy',
           timeout: 5000,
           actions: [{ icon: 'fas fa-times', color: 'white' }]

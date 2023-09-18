@@ -355,17 +355,13 @@ export default {
       try {
         await copyToClipboard(this.inviteURL)
         this.showNotification({
-          message: this.$('messages.linkCopied'),
+          message: this.$t('messages.linkCopied'),
           color: 'secondary',
           icon: 'far fa-copy'
         })
-      } catch (error) {
-        this.showNotification({
-          message: 'Error',
-          textColor: 'white',
-          color: 'negative',
-          icon: 'far fa-copy'
-        })
+      } catch (e) {
+        const message = e.message || e.cause.message
+        this.showNotification({ message, color: 'red' })
       }
     },
 
