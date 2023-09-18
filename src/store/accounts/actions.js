@@ -1,6 +1,7 @@
 import { Api, JsonRpc } from 'eosjs'
 import { JsSignatureProvider } from 'eosjs/dist/eosjs-jssig'
 import { MEMBER_TYPE } from '~/const'
+import gql from 'graphql-tag'
 
 export const lightWalletLogin = async function ({ commit, dispatch }, { returnUrl }) {
   try {
@@ -256,76 +257,93 @@ export const enrollMember = async function ({ commit, rootState }, { applicant, 
 }
 
 export const checkMembership = async function ({ commit, state, dispatch, rootState }) {
-  if (!rootState.dao.docId) return
-  const [memberResponse, applicantResponse] = await Promise.all([this.$apollo.query({
-    query: require('~/query/account/dao-member.gql'),
-    variables: {
-      daoId: rootState.dao.docId,
-      username: state.account
-    }
-  }),
-  this.$apollo.query({
-    query: require('~/query/account/dao-applicant.gql'),
-    variables: {
-      daoId: rootState.dao.docId,
-      username: state.account
-    }
-  })])
+  if (!rootState.dao.docId && !state.account) return
+  console.log('checkMembership')
 
-  const isMember = memberResponse.data.getDao.member.length === 1
-  const isApplicant = applicantResponse.data.getDao.applicant.length === 1
+  const member = await this.$apollo.query({
+    query: gql`
+      query member($daoId: String!, $username: String!) {
+        getMember(details_member_n: $username) {
+          applicantof(filter: { docId: { eq: $daoId } }) {
+            docId
+          }
+          memberof (filter: { docId: { eq: $daoId } }) {
+            docId
+          }
+          adminbdg (filter: { docId: { eq: $daoId } }) {
+            docId
+          }
+          enrollerbdg (filter: { docId: { eq: $daoId } }) {
+            docId
+          }
+        }
+      }
+      `,
+    variables: {
+      daoId: rootState.dao.docId,
+      username: state.account
+    },
+    fetchPolicy: 'no-cache'
+  })
+
+  console.log(JSON.stringify(member))
+  const { applicantof, memberof, adminbdg, enrollerbdg } = member.data.getMember
+
+  const isApplicant = applicantof.length === 1
+  const isMember = memberof.length === 1
+  const isAdmin = adminbdg.length === 1
+  const isEnroller = enrollerbdg.length === 1
 
   commit('setApplicant', isApplicant)
   commit('setMembership', isMember)
-  localStorage.setItem('isMember', isMember)
-  if (isMember) {
-    await dispatch('checkMemberType')
-    await dispatch('checkPermissions')
-  }
-}
-
-export const checkPermissions = async function ({ commit, state, rootState }) {
-  const [adminResponse, enrollerResponse] = await Promise.all([this.$apollo.query({
-    query: require('~/query/account/dao-admin.gql'),
-    variables: {
-      daoId: rootState.dao.docId,
-      username: state.account
-    }
-  }),
-  this.$apollo.query({
-    query: require('~/query/account/dao-enroller.gql'),
-    variables: {
-      daoId: rootState.dao.docId,
-      username: state.account
-    }
-  })])
-
-  const isAdmin = adminResponse.data.getDao.admin.length === 1
-  const isEnroller = enrollerResponse.data.getDao.enroller.length === 1
   commit('setAdmin', isAdmin)
   commit('setEnroller', isEnroller)
+  commit('setMemberType', MEMBER_TYPE.CORE)
+  localStorage.setItem('isMember', isMember)
 }
 
-export const checkMemberType = async function ({ commit, state, rootState }) {
-  if (!rootState.dao.docId) return
-  const [coreResponse, communityResponse] = await Promise.all([this.$apollo.query({
-    query: require('~/query/account/dao-core-member.gql'),
-    variables: {
-      daoId: rootState.dao.docId,
-      username: state.account
-    }
-  }),
-  this.$apollo.query({
-    query: require('~/query/account/dao-community-member.gql'),
-    variables: {
-      daoId: rootState.dao.docId,
-      username: state.account
-    }
-  })])
+// export const checkPermissions = async function ({ commit, state, rootState }) {
+//   const [adminResponse, enrollerResponse] = await Promise.all([this.$apollo.query({
+//     query: require('~/query/account/dao-admin.gql'),
+//     variables: {
+//       daoId: rootState.dao.docId,
+//       username: state.account
+//     }
+//   }),
+//   this.$apollo.query({
+//     query: require('~/query/account/dao-enroller.gql'),
+//     variables: {
+//       daoId: rootState.dao.docId,
+//       username: state.account
+//     }
+//   })])
 
-  const isCoreMember = coreResponse.data.getDao.member.length === 1
-  const isCommunity = communityResponse.data.getDao.commember.length === 1
-  const memberType = isCoreMember ? MEMBER_TYPE.CORE : isCommunity ? MEMBER_TYPE.COMMUNITY : ''
-  localStorage.setItem('memberType', memberType)
-  commit('setMemberType', memberType)
-}
+//   const isAdmin = adminResponse.data.getDao.admin.length === 1
+//   const isEnroller = enrollerResponse.data.getDao.enroller.length === 1
+//   commit('setAdmin', isAdmin)
+//   commit('setEnroller', isEnroller)
+// }
+
+// export const checkMemberType = async function ({ commit, state, rootState }) {
+//   if (!rootState.dao.docId) return
+//   const [coreResponse, communityResponse] = await Promise.all([this.$apollo.query({
+//     query: require('~/query/account/dao-core-member.gql'),
+//     variables: {
+//       daoId: rootState.dao.docId,
+//       username: state.account
+//     }
+//   }),
+//   this.$apollo.query({
+//     query: require('~/query/account/dao-community-member.gql'),
+//     variables: {
+//       daoId: rootState.dao.docId,
+//       username: state.account
+//     }
+//   })])
+
+//   const isCoreMember = coreResponse.data.getDao.member.length === 1
+//   const isCommunity = communityResponse.data.getDao.commember.length === 1
+//   const memberType = isCoreMember ? MEMBER_TYPE.CORE : isCommunity ? MEMBER_TYPE.COMMUNITY : ''
+//   localStorage.setItem('memberType', memberType)
+//   commit('setMemberType', memberType)
+// }
