@@ -1288,7 +1288,7 @@ export default {
         Budget: { key: 'circlebudget', title: 'Budget' }
       }[this.proposal?.__typename]
 
-      this.$store.commit('proposals/setStepIndex', 0)
+      this.$store.commit('proposals/setStepIndex', 1)
       this.$store.commit('proposals/setCategory', category)
       this.$store.commit('proposals/setType', this.proposal?.__typename)
 
