@@ -4,6 +4,7 @@ import BrowserIpfs from '~/ipfs/browser-ipfs.js'
 import gql from 'graphql-tag'
 import { timeago } from '~/utils/TimeUtils'
 import { parsedNotification } from '~/utils/notifications-utils'
+import { ROUTE_NAMES } from '~/const'
 
 // const NOTIFICATIONS_QUERY = `
 //   queryNotification(order: { desc: time }) {
@@ -90,6 +91,7 @@ export default {
 
   data () {
     return {
+      ROUTE_NAMES,
       timeago,
       parsedNotification,
       notifications: [],
@@ -447,7 +449,7 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
           q-btn.q-px-xl.rounded-border.text-bold.full-width(:to="{ name: 'configuration', query: { tab: 'PLAN' } }" color="white" text-color="negative" :label="$t('layouts.multidholayout.renewMyCurrentPlan')" no-caps rounded unelevated)
   //- Because iOS z-index doesn`t work
   router-view(v-if="$router.currentRoute.name === 'proposal-create' && $q.screen.lt.md")
-  q-header.bg-white(v-if="$q.screen.lt.lg && $route.name !== 'proposal-detail' && $route.name !== 'create-your-dao'")
+  q-header.bg-white(v-if="$q.screen.lt.lg && $route.name !== ROUTE_NAMES.PROPOSAL_DETAIL && $route.name !== ROUTE_NAMES.CREATE_YOUR_DAO")
     top-navigation(:unreadNotifications="countObjectsWithKeyValue(notifications, 'read', false)" :notifications="notifications" @openNotifications="languageSettings = false, right = false, showNotificationsBar = true" @isActiveRoute="isActiveRoute" @showLangSettings="languageSettings = true, right = false" :showTopButtons="showTopBarItems" :profile="profile" @toggle-sidebar="!$q.screen.md ? right = true : showMinimizedMenu = true" @search="onSearch" :dho="dho" :dhos="getDaos($apolloData.data.member)" :selectedDaoPlan="selectedDaoPlan")
   q-page-container.bg-white.window-height.q-py-sm(:class="{ 'q-pr-sm': $q.screen.gt.md, 'q-px-xs': !$q.screen.gt.md}")
     .bg-internal-bg.content.full-height
@@ -555,7 +557,7 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
       loading-spinner(size="120px")
     profile-sidebar(v-if="account" :profile="profile" :announcement="announcement" :dhoTitle="dhoTitle" :daoName="daoName" @close="right = false" :isMember="isMember" :isAuthenticated="isAuthenticated" :compact="!$q.screen.gt.lg && $q.screen.gt.md" :isMobile="!$q.screen.gt.md")
     profile-sidebar-guest(v-if="!account && ($q.screen.gt.lg || !$q.screen.gt.sm) && !loadingAccount" :dhoTitle="dhoTitle" :daoName="daoName" @close="right = false" :registrationEnabled="daoSettings.registrationEnabled")
-  q-footer.bg-white(v-if="$q.screen.lt.lg && $route.name !== 'proposal-detail' && $route.name !== 'create-your-dao'" :style="{ height: '74px' }")
+  q-footer.bg-white(v-if="$q.screen.lt.lg && $route.name !== ROUTE_NAMES.PROPOSAL_DETAIL && $route.name !== ROUTE_NAMES.CREATE_YOUR_DAO" :style="{ height: '74px' }")
     bottom-navigation
   q-drawer(v-else v-model="left" side="left" :width="80" persistent="persistent" :show-if-above="true")
     left-navigation(:dho="dho" :dhos="getDaos($apolloData.data.member)")

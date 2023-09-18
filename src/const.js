@@ -93,3 +93,8 @@ export const DEFAULT_TIER = 'Custom Reward'
 
 export const MIN_TOKEN_MULTIPLIER = 0
 export const MAX_TOKEN_MULTIPLIER = 1
+
+export const ROUTE_NAMES = Object.freeze({
+  CREATE_YOUR_DAO: 'create-your-dao',
+  PROPOSAL_DETAIL: 'proposal-detail'
+})
