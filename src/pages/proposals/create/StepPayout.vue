@@ -281,7 +281,7 @@ export default {
       const proposalType = this.$store.state.proposals.draft.category.key
       return proposalType === 'contribution'
     },
-    isDefaultTier () { return this.$store.state.proposals.draft.tier.value.name === DEFAULT_TIER }
+    isDefaultTier () { return this.$store.state.proposals.draft.tier?.value?.name === DEFAULT_TIER }
   },
 
   methods: {
