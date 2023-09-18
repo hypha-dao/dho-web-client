@@ -197,6 +197,7 @@ export default {
         query.subscribe(({ data, loading }) => {
           const value = data.queryDao
           if (value.length > 0) {
+            this.$store.dispatch('accounts/checkMembership')
             this.$router.push({ path: `/${daoUrl}/` })
           }
         })
