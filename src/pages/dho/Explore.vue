@@ -198,6 +198,10 @@ export default {
     ipfsy,
 
     async resetPagination () {
+      this.restart = true
+      this.offset = 0
+      this.more = true
+
       await this.$nextTick()
       this.$refs.scroll.stop()
       await this.$nextTick()
@@ -212,15 +216,19 @@ export default {
   },
 
   watch: {
+
+    textFilter: {
+      handler: async function (value) {
+        this.resetPagination()
+      },
+      immediate: false
+    },
+
     sort: {
       handler: async function (value) {
         // const index = this.optionArray.findIndex(option => option === value)
         // this.order = ordersMap[index]
         // this.shouldReset = true
-
-        this.restart = true
-        this.offset = 0
-        this.more = true
         this.resetPagination()
       },
       immediate: false
