@@ -220,9 +220,9 @@ export default {
     },
     downloadWallet() {
       if (navigator.userAgent.toLowerCase().indexOf('iphone') > -1) {
-        window.location.href = 'http://itunes.apple.com/lb/app/id1659926348'
+        window.location.href = process.env.DOWNLOAD_WALLET_LINK_IOS
       } else if (navigator.userAgent.toLowerCase().indexOf('android') > -1) {
-        window.location.href = 'http://play.google.com/store/apps/details?id=earth.hypha.wallet.hypha_wallet'
+        window.location.href = process.env.DOWNLOAD_WALLET_LINK_ANDROID
       }
     }
   }
