@@ -45,6 +45,9 @@ export default {
     },
     imgSrc (img) {
       return require('~/assets/logos/' + img)
+    },
+    expandDhoList () {
+      if (this.dhos.length) { this.expanded = !this.expanded }
     }
   }
 }
@@ -54,7 +57,7 @@ export default {
 .top-navigation.full-width.full-height
   .row.items-center
     .col-auto
-      dho-btn(:name="dho.name" :title="dho.title" :logo="dho.icon" :disable="disabledSelector" @click="expanded=!expanded")
+      dho-btn(:name="dho.name" :title="dho.title" :logo="dho.icon" :disable="disabledSelector" @click="expandDhoList")
     .col(v-if="expanded")
       .dao-container
         .col-auto(v-for="dao in dhos")
