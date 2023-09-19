@@ -310,29 +310,30 @@ export default {
           }
         }
 
-        this.$store.dispatch('accounts/checkMembership')
         this.$store.commit('dao/switchDao', data)
         this.$store.dispatch('dao/setTheme')
         this.$store.dispatch('ballots/getSupply')
+        this.$store.dispatch('accounts/checkMembership')
       },
 
       fetchPolicy: 'no-cache',
-      subscribeToMore: {
-        document: gql`subscription activeDao($regexp: String!) { ${DAO_ACTIVE_QUERY} }`,
-        skip () { return !this.dhoname || !this.daoRegexp },
-        variables () { return { regexp: this.daoRegexp } },
-        updateQuery: (previousResult, { subscriptionData }) => {
-          if (!subscriptionData.data) {
-            return previousResult
-          }
-          if (!previousResult) {
-            return undefined
-          }
+      pollInterval: 1000 // TODO: Swap with subscribe once dgraph is ready
+      // subscribeToMore: {
+      //   document: gql`subscription activeDao($regexp: String!) { ${DAO_ACTIVE_QUERY} }`,
+      //   skip () { return !this.dhoname || !this.daoRegexp },
+      //   variables () { return { regexp: this.daoRegexp } },
+      //   updateQuery: (previousResult, { subscriptionData }) => {
+      //     if (!subscriptionData.data) {
+      //       return previousResult
+      //     }
+      //     if (!previousResult) {
+      //       return undefined
+      //     }
 
-          return subscriptionData.data
-        }
+      //     return subscriptionData.data
+      //   }
 
-      }
+      // }
 
     },
 
