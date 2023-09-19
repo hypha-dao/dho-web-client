@@ -1,6 +1,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import gql from 'graphql-tag'
+import { ORIGIN } from '~/const'
 
 const STATES = Object.freeze({
   WAITING: 'WAITING',
@@ -81,7 +82,7 @@ export default {
         `,
         variables: {
           priceId: id,
-          redirectDomain: 'http://localhost:8080',
+          redirectDomain: ORIGIN,
           successUrl: '/hypha/configuration?tab=PLANS_AND_BILLING'
         }
       })
