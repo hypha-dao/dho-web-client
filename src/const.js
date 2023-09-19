@@ -104,3 +104,5 @@ export const ROUTE_NAMES = Object.freeze({
   CREATE_YOUR_DAO: 'create-your-dao',
   PROPOSAL_DETAIL: 'proposal-detail'
 })
+
+export const ORIGIN = window.location.origin

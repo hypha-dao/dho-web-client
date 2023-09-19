@@ -1,6 +1,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import gql from 'graphql-tag'
+import { ORIGIN } from '~/const'
 
 const STATES = Object.freeze({
   WAITING: 'WAITING',
@@ -63,13 +64,27 @@ export default {
       this.state = STATES.CREATING_SESSION
 
       const res = await this.$apollo.mutate({
-        mutation: gql`mutation createSession($priceId: String!, $redirectDomain: String) {
-            createCheckoutSession(priceId: $priceId, redirectDomain: $redirectDomain) {
+        mutation: gql`
+          mutation createSession(
+            $priceId: String!
+            $redirectDomain: String!
+            $successUrl: String!
+          ) {
+            createCheckoutSession(
+              priceId: $priceId
+              redirectDomain: $redirectDomain
+              successUrl: $successUrl
+            ) {
               id
               url
+            }
           }
-      }`,
-        variables: { priceId: id }
+        `,
+        variables: {
+          priceId: id,
+          redirectDomain: ORIGIN,
+          successUrl: '/hypha/configuration?tab=PLANS_AND_BILLING'
+        }
       })
 
       if (res?.data?.createCheckoutSession?.url) {
@@ -106,7 +121,7 @@ export default {
 
 <template lang="pug">
 .tab
-  q-dialog(:value="isPlanModalOpen" full-width="full-width")
+  q-dialog(:value="isPlanModalOpen" @before-hide="state = STATES.WAITING" full-width="full-width")
     widget.relative.wrapper(
       v-if="state === STATES.UPDATING_PLAIN"
       :title="$t('configuration.settings-plans-billing.plan.modal.title')"

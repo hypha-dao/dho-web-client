@@ -32,7 +32,7 @@ export const selectedDaoPlan = ({ isWaitingEcosystem, plan }) => {
 
     id: 'founder',
     status: 'active',
-    amountUSD: 90,
+    amountUSD: 0,
     coreMembersCount: 5,
     communityMembersCount: 0,
 
