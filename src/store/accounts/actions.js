@@ -312,7 +312,9 @@ export const checkMembership = async function ({ commit, state, dispatch, rootSt
     commit('setEnroller', isEnroller)
 
     commit('setMemberType', MEMBER_TYPE.CORE)
+
     localStorage.setItem('isMember', isMember)
+    localStorage.setItem('memberType', MEMBER_TYPE.CORE)
   }
 
   // TODO: Add when community is ready
