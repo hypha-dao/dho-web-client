@@ -83,7 +83,8 @@ export default {
         variables: {
           priceId: id,
           redirectDomain: ORIGIN,
-          successUrl: '/hypha/configuration?tab=PLANS_AND_BILLING'
+
+          successUrl: `/${this.daoSettings.url}/configuration?tab=PLANS_AND_BILLING`
         }
       })
 
@@ -96,7 +97,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters('dao', ['selectedDaoPlan']),
+    ...mapGetters('dao', ['daoSettings', 'selectedDaoPlan']),
 
     isPlanModalOpen () { return [STATES.UPDATING_PLAIN, STATES.CREATING_SESSION].includes(this.state) },
 
