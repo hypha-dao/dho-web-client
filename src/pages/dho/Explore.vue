@@ -77,9 +77,9 @@ export default {
           first: this.first,
           offset: 0
         }
-      },
+      }
 
-      pollInterval: 1000
+      // pollInterval: 1000
 
     },
 
