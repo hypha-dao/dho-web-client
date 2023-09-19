@@ -298,50 +298,11 @@ export const checkMembership = async function ({ commit, state, dispatch, rootSt
   commit('setEnroller', isEnroller)
   commit('setMemberType', MEMBER_TYPE.CORE)
   localStorage.setItem('isMember', isMember)
+
+  // TODO: Add when community is ready
+  //   const isCoreMember = coreResponse.data.getDao.member.length === 1
+  //   const isCommunity = communityResponse.data.getDao.commember.length === 1
+  //   const memberType = isCoreMember ? MEMBER_TYPE.CORE : isCommunity ? MEMBER_TYPE.COMMUNITY : ''
+  //   localStorage.setItem('memberType', memberType)
+  //   commit('setMemberType', memberType)
 }
-
-// export const checkPermissions = async function ({ commit, state, rootState }) {
-//   const [adminResponse, enrollerResponse] = await Promise.all([this.$apollo.query({
-//     query: require('~/query/account/dao-admin.gql'),
-//     variables: {
-//       daoId: rootState.dao.docId,
-//       username: state.account
-//     }
-//   }),
-//   this.$apollo.query({
-//     query: require('~/query/account/dao-enroller.gql'),
-//     variables: {
-//       daoId: rootState.dao.docId,
-//       username: state.account
-//     }
-//   })])
-
-//   const isAdmin = adminResponse.data.getDao.admin.length === 1
-//   const isEnroller = enrollerResponse.data.getDao.enroller.length === 1
-//   commit('setAdmin', isAdmin)
-//   commit('setEnroller', isEnroller)
-// }
-
-// export const checkMemberType = async function ({ commit, state, rootState }) {
-//   if (!rootState.dao.docId) return
-//   const [coreResponse, communityResponse] = await Promise.all([this.$apollo.query({
-//     query: require('~/query/account/dao-core-member.gql'),
-//     variables: {
-//       daoId: rootState.dao.docId,
-//       username: state.account
-//     }
-//   }),
-//   this.$apollo.query({
-//     query: require('~/query/account/dao-community-member.gql'),
-//     variables: {
-//       daoId: rootState.dao.docId,
-//       username: state.account
-//     }
-//   })])
-
-//   const isCoreMember = coreResponse.data.getDao.member.length === 1
-//   const isCommunity = communityResponse.data.getDao.commember.length === 1
-//   const memberType = isCoreMember ? MEMBER_TYPE.CORE : isCommunity ? MEMBER_TYPE.COMMUNITY : ''
-//   localStorage.setItem('memberType', memberType)
-//   commit('setMemberType', memberType)
-// }
