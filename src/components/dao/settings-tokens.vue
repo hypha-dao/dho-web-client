@@ -240,7 +240,7 @@ export default {
                 :max="100"
                 :min="0"
                 :placeholder="$t('configuration.settings-tokens.tresury.form.value.placeholder')"
-                :rules="[rules.required, rules.greaterThan(0), rules.lessOrEqualThan(100)]"
+                :rules="[rules.required, rules.greaterThanOrEqual(0), rules.lessOrEqualThan(100)]"
                 bg-color="white"
                 color="accent"
                 dense
@@ -336,7 +336,7 @@ export default {
                 :filled="selectedDao.hasCustomToken || !isAdmin"
                 :max="100"
                 :min="0"
-                :rules="[rules.required, rules.greaterThan(0), rules.lessOrEqualThan(100)]"
+                :rules="[rules.required, rules.greaterThanOrEqual(0), rules.lessOrEqualThan(100)]"
                 color="accent"
                 dense
                 lazy-rules
@@ -413,7 +413,7 @@ export default {
                   :max="100"
                   :min="0"
                   :placeholder="$t('configuration.settings-tokens.voice.form.decayPercent.placeholder')"
-                  :rules="[rules.required, rules.greaterThan(0), rules.lessOrEqualThan(100)]"
+                  :rules="[rules.required, rules.greaterThanOrEqual(0), rules.lessOrEqualThan(100)]"
                   color="accent"
                   dense
                   lazy-rules
@@ -434,7 +434,7 @@ export default {
                 :filled="selectedDao.hasCustomToken || !isAdmin"
                 :max="100"
                 :min="0"
-                :rules="[rules.required, rules.greaterThan(0), rules.lessOrEqualThan(100)]"
+                :rules="[rules.required, rules.greaterThanOrEqual(0), rules.lessOrEqualThan(100)]"
                 color="accent"
                 dense
                 lazy-rules
