@@ -295,8 +295,6 @@ export const checkMembership = async function ({ commit, state, dispatch, rootSt
     fetchPolicy: 'no-cache'
   })
 
-  console.log(JSON.stringify(member))
-
   if (member?.data?.getMember) {
     const { applicantof, memberof } = member?.data?.getMember || {}
 
