@@ -258,7 +258,6 @@ export const enrollMember = async function ({ commit, rootState }, { applicant, 
 
 export const checkMembership = async function ({ commit, state, dispatch, rootState }) {
   if (!rootState.dao.docId && !state.account) return
-  console.log('checkMembership')
 
   const member = await this.$apollo.query({
     query: gql`
@@ -286,7 +285,6 @@ export const checkMembership = async function ({ commit, state, dispatch, rootSt
     fetchPolicy: 'no-cache'
   })
 
-  console.log(JSON.stringify(member))
   const { applicantof, memberof, adminbdg, enrollerbdg } = member.data.getMember
 
   const isApplicant = applicantof.length === 1
