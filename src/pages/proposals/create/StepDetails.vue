@@ -65,7 +65,8 @@ export default {
       return [
         this.title !== '',
         this.description !== '',
-        this.sanitizeDescription.length >= DESCRIPTION_MAX_LENGTH
+        this.sanitizeDescription !== '',
+        DESCRIPTION_MAX_LENGTH >= this.sanitizeDescription.length
       ].every(_ => _)
     },
 
@@ -222,7 +223,7 @@ widget
       input-file-ipfs(@uploading="uploading = true" @uploadedFile="url = arguments[0], uploading = false, originalUploadedFile = arguments[1]" ref="url" v-show="false")
   nav.q-mt-xl.row.justify-end.q-gutter-xs(v-if="$q.screen.gt.md")
     q-btn.q-px-xl(@click="$emit('prev')" color="primary" flat :label="$t('pages.proposals.create.stepdetails.back')" no-caps outline rounded v-if="!disablePrevButton")
-    q-btn.q-px-xl(:disable="canGoNext" @click="onNext" color="primary" :label="$t('pages.proposals.create.stepdetails.nextStep')" no-caps rounded unelevated)
+    q-btn.q-px-xl(:disable="!canGoNext" @click="onNext" color="primary" :label="$t('pages.proposals.create.stepdetails.nextStep')" no-caps rounded unelevated)
   template(v-if="$q.screen.lt.md || $q.screen.md")
     q-card(:style="'border-radius: 25px; box-shadow: none; z-index: 7000; position: fixed; bottom: -20px; left: 0; right: 0; box-shadow: 0px 0px 26px 0px rgba(0, 0, 41, 0.2);'")
       creation-stepper(
