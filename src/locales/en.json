@@ -497,7 +497,8 @@
      "widget":{
         "seeAll":"See all",
         "seeAll1":"See all"
-     }
+     },
+     "onlyDaoAdmins": "Only DAO admins can change the settings"
   },
   "contributions":{
      "payout":{
