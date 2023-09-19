@@ -257,7 +257,7 @@ export const enrollMember = async function ({ commit, rootState }, { applicant, 
 }
 
 export const checkMembership = async function ({ commit, state, dispatch, rootState }) {
-  if (!rootState.dao.docId && !state.account) return
+  if (!rootState?.dao?.docId || state.account === null) return
 
   const member = await this.$apollo.query({
     query: gql`
@@ -285,19 +285,22 @@ export const checkMembership = async function ({ commit, state, dispatch, rootSt
     fetchPolicy: 'no-cache'
   })
 
-  const { applicantof, memberof, adminbdg, enrollerbdg } = member.data.getMember
+  if (member?.data?.getMember) {
+    const { applicantof, memberof, adminbdg, enrollerbdg } = member?.data?.getMember || {}
 
-  const isApplicant = applicantof.length === 1
-  const isMember = memberof.length === 1
-  const isAdmin = adminbdg.length === 1
-  const isEnroller = enrollerbdg.length === 1
+    const isApplicant = applicantof?.length === 1
+    const isMember = memberof?.length === 1
+    const isAdmin = adminbdg?.length === 1
+    const isEnroller = enrollerbdg?.length === 1
 
-  commit('setApplicant', isApplicant)
-  commit('setMembership', isMember)
-  commit('setAdmin', isAdmin)
-  commit('setEnroller', isEnroller)
-  commit('setMemberType', MEMBER_TYPE.CORE)
-  localStorage.setItem('isMember', isMember)
+    commit('setApplicant', isApplicant)
+    commit('setMembership', isMember)
+    commit('setAdmin', isAdmin)
+    commit('setEnroller', isEnroller)
+
+    commit('setMemberType', MEMBER_TYPE.CORE)
+    localStorage.setItem('isMember', isMember)
+  }
 
   // TODO: Add when community is ready
   //   const isCoreMember = coreResponse.data.getDao.member.length === 1
