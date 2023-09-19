@@ -280,7 +280,6 @@ export default {
 
   methods: {
     calculateToken (token, tokenMultiplier) {
-      console.log(tokenMultiplier)
       return !this.toggle
         ? this.getFormatedTokenAmount(token * (tokenMultiplier || 1), Number.MAX_VALUE)
         : this.getFormatedTokenAmount((token * (tokenMultiplier || 1) / this.periodsOnCycle).toFixed(2), Number.MAX_VALUE)
