@@ -51,6 +51,13 @@ export default {
   },
 
   apollo: {
+    member: {
+      query: require('../query/profile/profile-dhos.gql'),
+      update: data => { return data.getMember },
+      skip () { return !this.account },
+      variables () { return { username: this.account } }
+    }
+
     // notifications: {
     //   query: gql`query notifications { ${NOTIFICATIONS_QUERY} }`,
     //   update: data => data.queryNotification.filter(notification => !notification.archived),
