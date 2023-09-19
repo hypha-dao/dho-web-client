@@ -292,29 +292,6 @@ export default {
   },
 
   apollo: {
-
-    roles: {
-      query: gql`query ROLES($daoId: Int64!) { ${DAO_ACTIVE_QUERY} }`,
-      update: data => data.queryRole,
-      skip () { return !this.selectedDao?.docId },
-      variables () { return { daoId: this.selectedDao.docId } },
-      subscribeToMore: {
-        document: gql`subscription ROLES($daoId: Int64!) { ${DAO_ACTIVE_QUERY} }`,
-        skip () { return !this.selectedDao?.docId },
-        variables () { return { daoId: this.selectedDao.docId } },
-        updateQuery: (previousResult, { subscriptionData }) => {
-          if (!subscriptionData.data) {
-            return previousResult
-          }
-          if (!previousResult) {
-            return undefined
-          }
-
-          return subscriptionData.data
-        }
-      }
-    },
-
     dao: {
       query: gql`query activeDao($regexp: String!) { ${DAO_ACTIVE_QUERY} }`,
       update: data => data.queryDao,
@@ -333,29 +310,30 @@ export default {
           }
         }
 
-        this.$store.dispatch('accounts/checkMembership')
         this.$store.commit('dao/switchDao', data)
         this.$store.dispatch('dao/setTheme')
         this.$store.dispatch('ballots/getSupply')
+        this.$store.dispatch('accounts/checkMembership')
       },
 
       fetchPolicy: 'no-cache',
-      subscribeToMore: {
-        document: gql`subscription activeDao($regexp: String!) { ${DAO_ACTIVE_QUERY} }`,
-        skip () { return !this.dhoname || !this.daoRegexp },
-        variables () { return { regexp: this.daoRegexp } },
-        updateQuery: (previousResult, { subscriptionData }) => {
-          if (!subscriptionData.data) {
-            return previousResult
-          }
-          if (!previousResult) {
-            return undefined
-          }
+      pollInterval: 1000 // TODO: Swap with subscribe once dgraph is ready
+      // subscribeToMore: {
+      //   document: gql`subscription activeDao($regexp: String!) { ${DAO_ACTIVE_QUERY} }`,
+      //   skip () { return !this.dhoname || !this.daoRegexp },
+      //   variables () { return { regexp: this.daoRegexp } },
+      //   updateQuery: (previousResult, { subscriptionData }) => {
+      //     if (!subscriptionData.data) {
+      //       return previousResult
+      //     }
+      //     if (!previousResult) {
+      //       return undefined
+      //     }
 
-          return subscriptionData.data
-        }
+      //     return subscriptionData.data
+      //   }
 
-      }
+      // }
 
     },
 
@@ -402,6 +380,7 @@ export default {
     useMobileProposalLayout () { return this.$q.screen.lt.md && this.$route.meta && this.$route.meta.layout === 'proposal' },
     useMultiDHOLayout () { return this.$route.name !== 'login' }
   }
+
 }
 </script>
 <template lang="pug">

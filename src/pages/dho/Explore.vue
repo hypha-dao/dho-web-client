@@ -35,8 +35,8 @@ export default {
       textFilter: null,
       optionArray: [
         { label: this.$t('pages.dho.explore.sortBy'), disable: true },
-        this.$t('pages.dho.explore.oldestFirst'),
         this.$t('pages.dho.explore.newestFirst'),
+        this.$t('pages.dho.explore.oldestFirst'),
         this.$t('pages.dho.explore.alphabetically')
       ],
       showApplicants: false,
@@ -51,9 +51,8 @@ export default {
 
   apollo: {
     dhos: {
-      query () {
-        return require('~/query/dao/dao-list.gql')
-      },
+      query () { return require('~/query/dao/dao-list.gql') },
+
       update: data => {
         return data?.queryDao?.map(dao => {
           return {
@@ -70,6 +69,7 @@ export default {
           }
         })
       },
+
       variables () {
         return {
           order: this.order,
@@ -79,7 +79,10 @@ export default {
         }
       }
 
+      // pollInterval: 1000
+
     },
+
     ecosystemsList: {
       query () {
         return require('~/query/ecosystem/ecosystems-list.gql')
@@ -125,8 +128,8 @@ export default {
     },
 
     order () {
-      if (this.optionArray[1] === this.sort) return { asc: 'createdDate' }
-      if (this.optionArray[2] === this.sort) return { desc: 'createdDate' }
+      if (this.optionArray[1] === this.sort) return { desc: 'createdDate' }
+      if (this.optionArray[2] === this.sort) return { asc: 'createdDate' }
       if (this.optionArray[3] === this.sort) return { asc: 'details_daoName_n' }
 
       return null
@@ -195,6 +198,10 @@ export default {
     ipfsy,
 
     async resetPagination () {
+      this.restart = true
+      this.offset = 0
+      this.more = true
+
       await this.$nextTick()
       this.$refs.scroll.stop()
       await this.$nextTick()
@@ -209,15 +216,19 @@ export default {
   },
 
   watch: {
+
+    textFilter: {
+      handler: async function (value) {
+        this.resetPagination()
+      },
+      immediate: false
+    },
+
     sort: {
       handler: async function (value) {
         // const index = this.optionArray.findIndex(option => option === value)
         // this.order = ordersMap[index]
         // this.shouldReset = true
-
-        this.restart = true
-        this.offset = 0
-        this.more = true
         this.resetPagination()
       },
       immediate: false
@@ -234,11 +245,11 @@ q-page.page-explore
       template(v-slot:buttons)
         a(target="_tab" href="https://hypha.earth/")
           q-btn.q-px-lg.h-btn1(no-caps rounded unelevated color="secondary" href="https://hypha.earth/" target="_blank") {{ $t('pages.dho.explore.discoverMore') }}
-  .row.q-py-md
+  .row.q-py-md(:class="{ 'block': $q.screen.lt.sm }")
     .col-sm-12.col-md-12.col-lg-9(ref="scrollContainer" v-if="exploreBy === EXPLORE_BY.DAOS")
       q-infinite-scroll(@load="onLoad" :offset="250" :scroll-target="$refs.scrollContainer" ref="scroll")
         .row
-          .col-4.q-mb-md(v-for="(dho,index) in dhos" :key="dho.name" :class="{ 'col-6': $q.screen.lt.lg, 'q-pr-md': $q.screen.lt.sm ? false : $q.screen.gt.md ? true : index % 2 === 0, 'full-width':  view === 'list' || $q.screen.lt.sm}")
+          .col-4.q-mb-md(v-for="(dho,index) in dhos" :key="dho.name" :class="{'col-6': $q.screen.lt.lg, 'q-pr-md': $q.screen.lt.sm ? false : $q.screen.gt.md ? true : index % 2 === 0, 'full-width':  view === 'list' || $q.screen.lt.sm}")
             dho-card.full-width(v-bind="dho" :view="view" useIpfsy ellipsis)
               template(v-slot:footer)
                 footer.full-width.row.items-center
@@ -262,7 +273,7 @@ q-page.page-explore
       filter-widget.sticky(:debounce="1000" :defaultOption="1" :optionArray.sync="optionArray" :showCircle="false" :showToggle="false" :sort.sync="sort" :textFilter.sync="textFilter" :toggle.sync="showApplicants" :toggleDefault="false" :toggleLabel="'Show daos'" :showViewSelector="false" :filterTitle="filterPlacehoder")
     div(v-else)
       filter-open-button(@open="mobileFilterOpen = true")
-      filter-widget-mobile(:debounce="1000" :defaultOption="1" :optionArray.sync="optionArray" :showCircle="false" :showToggle="false" :showViewSelector="false" @close="mobileFilterOpen = false" @update:sort="updateSort" @update:textFilter="updateDaoName" :filterTitle="filterPlacehoder" v-show="mobileFilterOpen" :style="mobileFilterStyles")
+      filter-widget-mobile(:debounce="1000" :defaultOption="1" :optionArray.sync="optionArray" :showCircle="false" :showToggle="false" :sort.sync="sort" :textFilter.sync="textFilter" :toggle.sync="showApplicants" :showViewSelector="false" @close="mobileFilterOpen = false" @update:sort="updateSort" @update:textFilter="updateDaoName" :filterTitle="filterPlacehoder" v-show="mobileFilterOpen" :style="mobileFilterStyles")
 
 </template>
 <style lang="stylus" scoped>

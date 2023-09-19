@@ -127,7 +127,7 @@ export default {
       return !this.toggle ? this.$t('proposals.proposal-view.compensationForOneCycle') : this.$t('proposals.proposal-view.compensationForOnePeriod')
     },
     tokensByCycle () {
-      return this.tokens.map(token => ({ ...token, value: (token.value || 0) / this.periodsOnCycle }))
+      return this.tokens.map(token => ({ ...token, value: (token?.value || 0) / this.periodsOnCycle }))
     },
     periodsOnCycle () {
       return (this.cycleDurationSec / this.daoSettings.periodDurationSec).toFixed(2)
@@ -191,9 +191,9 @@ export default {
         const circle = data.getDocument
         return [circle]
       },
-      skip () { return !this.circle.value },
+      skip () { return !this.circle?.value },
       variables () {
-        return { docId: this.circle.value }
+        return { docId: this.circle?.value }
       }
     }
   }
@@ -233,21 +233,21 @@ widget.proposal-view.q-mb-sm
         .col-6(v-if="commit !== undefined")
           .text-bold.q-mb-xs {{ $t('proposals.proposal-view.commitmentLevel') }}
           widget.q-mr-sm(:style="{ 'padding': '12px 15px', 'border-radius': '15px' }")
-            .text-grey-7.text-body2 {{ (commit.value) + '%' }}
+            .text-grey-7.text-body2 {{ (commit?.value) + '%' }}
 
               .text-secondary.text-body2.q-ml-xxs.inline(v-if="ownAssignment && commitDifference") {{commitDifference}}
                 | %
               .dynamic-popup(v-if="showCommitPopup")
-                proposal-dynamic-popup.q-pa-xxl.absolute(:title="$t('proposals.proposal-view.adjustCommitment')" :description="$t('proposals.proposal-view.multipleAdjustmentsToYourCommitment')" :step="5" :min="commit.min" :max="commit.max" :initialValue="commit.value" @close="showCommitPopup = false" @save="onCommitmentEdit")
+                proposal-dynamic-popup.q-pa-xxl.absolute(:title="$t('proposals.proposal-view.adjustCommitment')" :description="$t('proposals.proposal-view.multipleAdjustmentsToYourCommitment')" :step="5" :min="commit.min" :max="commit.max" :initialValue="commit?.value" @close="showCommitPopup = false" @save="onCommitmentEdit")
               q-btn.q-ml-xxxl(flat round size="sm" icon="fas fa-pen" color="primary" v-if="ownAssignment && status === PROPOSAL_STATE.APPROVED" @click="showCommitPopup = true; showDefferredPopup = false")
                 q-tooltip {{ $t('proposals.proposal-view.edit') }}
         .col-6(v-if="deferred !== undefined && type !== PROPOSAL_TYPE.PAYOUT")
           .text-bold.q-mb-xs {{ $t('proposals.proposal-view.deferredAmount') }}
           widget(:style="{ 'padding': '12px 15px', 'border-radius': '15px' }")
-            .text-grey-7.text-body2 {{ deferred.value + '%' }}
+            .text-grey-7.text-body2 {{ deferred?.value + '%' }}
 
               .dynamic-popup(v-if="showDefferredPopup")
-                proposal-dynamic-popup.q-pa-xxl.absolute(:title="$t('proposals.proposal-view.adjustDeferred')" :description="$t('proposals.proposal-view.thePercentDeferralWillBe')" :step="1" :min="deferred.min" :max="deferred.max" :initialValue="deferred.value" @close="showDefferredPopup = false" @save="onDeferredEdit")
+                proposal-dynamic-popup.q-pa-xxl.absolute(:title="$t('proposals.proposal-view.adjustDeferred')" :description="$t('proposals.proposal-view.thePercentDeferralWillBe')" :step="1" :min="deferred.min" :max="deferred.max" :initialValue="deferred?.value" @close="showDefferredPopup = false" @save="onDeferredEdit")
               q-btn.q-ml-xxxl(flat round size="sm" icon="fas fa-pen" color="primary" v-if="ownAssignment && status === PROPOSAL_STATE.APPROVED || status === PROPOSAL_TYPE.ARCHIVED" @click="showDefferredPopup = true; showCommitPopup = false")
                 q-tooltip {{ $t('proposals.proposal-view.edit1') }}
   .q-my-sm(:class="{ 'row':$q.screen.gt.md }" v-if="type === PROPOSAL_TYPE.ARCHETYPE")
@@ -277,12 +277,12 @@ widget.proposal-view.q-mb-sm
             q-toggle(v-model="toggle" size="md")
           .col.q-mt-xxs {{ $t('proposals.proposal-view.showCompensationFor') }}
             q-tooltip(anchor="center start") {{ $t('proposals.proposal-view.1MoonPeriod') }}
-      .col-3.bg-internal-bg.q-py-md.q-pa-md(:style="{ 'border-radius': '25px' }" :class="{ 'q-ml-xxs':$q.screen.gt.md, 'q-mt-md':$q.screen.lt.md || $q.screen.md }" v-if="type === PROPOSAL_TYPE.PAYOUT && deferred && deferred.value >= 0")
+      .col-3.bg-internal-bg.q-py-md.q-pa-md(:style="{ 'border-radius': '25px' }" :class="{ 'q-ml-xxs':$q.screen.gt.md, 'q-mt-md':$q.screen.lt.md || $q.screen.md }" v-if="type === PROPOSAL_TYPE.PAYOUT && deferred && deferred?.value >= 0")
         .row.q-mb-sm
           .col.text-bold {{ $t('proposals.proposal-view.deferredAmount1') }}
         widget.q-pt-xs(:style="{ 'padding': '12px 15px', 'border-radius': '15px' }")
           .row
-            .text-grey-7.text-body2 {{ deferred.value + '%' }}
+            .text-grey-7.text-body2 {{ deferred?.value + '%' }}
   template(v-if="parentCircle?.length")
     .text-xs.text-grey.text-italic {{ $t('proposals.proposal-view.parentCircle') }}
     circles-widget(:circles="parentCircle" singleCircle)

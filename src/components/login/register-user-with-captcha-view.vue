@@ -5,6 +5,8 @@ import QrcodeVue from 'qrcode.vue'
 import ipfsy from '~/utils/ipfsy'
 import { Notify } from 'quasar'
 import slugify from '~/utils/slugify'
+import map from '~/utils/map'
+import { MIN_TOKEN_MULTIPLIER, MAX_TOKEN_MULTIPLIER } from '~/const'
 
 const HELP_LINK = 'https://help.hypha.earth/hc/2431449449'
 
@@ -171,10 +173,14 @@ export default {
         await this.createDAO({
           data: {
             ...this.form,
+
+            daoUrl,
             onboarder_account: this.account,
             parentId: this.$route.query.parentId,
             skipTokens: true,
-            daoUrl: daoUrl
+            utilityTokenMultiplier: map(this.form.utilityTokenMultiplier, 0, 100, MIN_TOKEN_MULTIPLIER, MAX_TOKEN_MULTIPLIER),
+            voiceTokenMultiplier: map(this.form.voiceTokenMultiplier, 0, 100, MIN_TOKEN_MULTIPLIER, MAX_TOKEN_MULTIPLIER),
+            treasuryTokenMultiplier: map(this.form.treasuryTokenMultiplier, 0, 100, MIN_TOKEN_MULTIPLIER, MAX_TOKEN_MULTIPLIER)
           },
           isDraft
         })
@@ -191,6 +197,7 @@ export default {
         query.subscribe(({ data, loading }) => {
           const value = data.queryDao
           if (value.length > 0) {
+            this.$store.dispatch('accounts/checkMembership')
             this.$router.push({ path: `/${daoUrl}/` })
           }
         })
@@ -211,6 +218,13 @@ export default {
     },
     goToDocumentation() {
       window.location.href = this.HELP_LINK
+    },
+    downloadWallet() {
+      if (navigator.userAgent.toLowerCase().indexOf('iphone') > -1) {
+        window.location.href = process.env.DOWNLOAD_WALLET_LINK_IOS
+      } else if (navigator.userAgent.toLowerCase().indexOf('android') > -1) {
+        window.location.href = process.env.DOWNLOAD_WALLET_LINK_ANDROID
+      }
     }
   }
 }
@@ -265,7 +279,7 @@ export default {
               .font-lato.text-heading.text-weight-bolder.q-mb-md(:style="{ 'font-size': '34px' }") {{ $t('login.register-user-with-captcha-view.loginWith') }}
               .q-mt-md
                 .row
-                  .col-3
+                  .col-4.q-mr-sm(:style="'min-width: 120px'")
                     img(:style="{ 'width': 'fit-content' }" src="~/assets/images/onboarding-mobile.svg")
                   .col.q-ml-md
                     .text-bold.text-black.q-mt-md {{ $t('login.register-user-with-captcha-view.signYourFirstTransaction') }}
@@ -309,7 +323,8 @@ export default {
             .ellipse-border(:class="(step === this.steps.inviteLink.name || step === this.steps.finish.name ) && 'ellipse-filled'")
             .ellipse-border(:class="step === this.steps.finish.name && 'ellipse-filled'")
         .col-10.no-wrap.flex.justify-end.items-center
-          q-btn(v-if="step === this.steps.inviteLink.name" :label="$t('login.register-user-with-captcha-view.copyInviteLink')" color="primary" outline unelevated @click="copyText()" rounded no-caps)
+          q-btn(v-if="step === this.steps.inviteLink.name && !$q.screen.gt.md" :label="$t('login.register-user-with-captcha-view.downloadWallet')" color="primary" outline unelevated @click="downloadWallet()" rounded no-caps)
+          q-btn(v-if="step === this.steps.inviteLink.name && $q.screen.gt.md" :label="$t('login.register-user-with-captcha-view.copyInviteLink')" color="primary" outline unelevated @click="copyText()" rounded no-caps)
           q-btn(v-if="step !== this.steps.finish.name").q-mx-md.q-px-md(:style="{ 'height': 'fit-content' }" :label="step === 'finish' ? 'Need Help?' : 'Next'" color="primary" unelevated @click="next" :disable="!this.inviteLink" :loading="submitting" :outline="step === this.steps.finish.name" rounded no-caps)
           q-list(v-if="step === steps.finish.name")
             q-item.wallet.q-my-xs(v-for="(wallet, idx) in this.hyphaAuthenticators" :key="wallet.getStyle().text" v-ripple :style="{ background: wallet.getStyle().background, color: wallet.getStyle().textColor }")

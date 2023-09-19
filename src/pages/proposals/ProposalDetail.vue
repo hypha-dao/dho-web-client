@@ -886,7 +886,7 @@ export default {
     docId: String
   },
 
-  data () {
+  data() {
     return {
       optimisticProposal: undefined,
       proposalParsing: proposalParsing,
@@ -919,12 +919,12 @@ export default {
           upcomingElection: data.getDao.upcomingelct
         }
       },
-      variables () {
+      variables() {
         return {
           daoName: this.selectedDao.name
         }
       },
-      result (data) {
+      result(data) {
         this.upvoteElectionData = {
           currentRound: data.data.getDao.ongoingelct[0]?.currentround[0].details_type_s,
           nextRound: data.data.getDao.ongoingelct[0]?.currentround[0].nextround,
@@ -936,29 +936,30 @@ export default {
     proposal: {
       query: gql`query proposalDetail($docId: String!) { ${PROPOSAL_QUERY} }`,
       update: data => data.getDocument,
-      skip () { return !this.docId },
-      variables () { return { docId: this.docId } },
+      skip() { return !this.docId },
+      variables() { return { docId: this.docId } },
       fetchPolicy: 'no-cache',
 
-      subscribeToMore: {
-        document: gql`subscription proposalDetail($docId: String!) { ${PROPOSAL_QUERY} }`,
-        skip () { return !this.docId },
-        variables () { return { docId: this.docId } },
-        updateQuery: (previousResult, { subscriptionData }) => {
-          if (!subscriptionData.data) {
-            return previousResult
-          }
-          if (!previousResult) {
-            return undefined
-          }
+      pollInterval: 1000, // TODO: Swap with subscribe once dgraph is ready
+      // subscribeToMore: {
+      //   document: gql`subscription proposalDetail($docId: String!) { ${PROPOSAL_QUERY} }`,
+      //   skip () { return !this.docId },
+      //   variables () { return { docId: this.docId } },
+      //   updateQuery: (previousResult, { subscriptionData }) => {
+      //     if (!subscriptionData.data) {
+      //       return previousResult
+      //     }
+      //     if (!previousResult) {
+      //       return undefined
+      //     }
 
-          return subscriptionData.data
-        }
+      //     return subscriptionData.data
+      //   }
 
-      },
+      // },
 
-      result (data) {
-        if ((data.data.getDocument.dao[0].details_daoName_n !== this.selectedDao.name) && !this.isBadge) {
+      result(data) {
+        if ((data?.data?.getDocument?.dao[0]?.details_daoName_n !== this?.selectedDao?.name) && !this.isBadge) {
           this.$router.push({ name: '404-not-found' })
         }
       }
@@ -968,8 +969,8 @@ export default {
     claimPayments: {
       query: require('~/query/quests/dao-quest-complete-info.gql'),
       update: data => data.queryQuestcomplet,
-      skip () { return !this.proposal?.docId },
-      variables () { return { id: this.proposal?.docId } }
+      skip() { return !this.proposal?.docId },
+      variables() { return { id: this.proposal?.docId } }
     },
 
     tiers: {
@@ -978,12 +979,12 @@ export default {
         label: level?.name,
         value: { ...level }
       })),
-      skip () { return !this.selectedDao?.docId },
-      variables () { return { daoId: this.selectedDao.docId } },
+      skip() { return !this.selectedDao?.docId },
+      variables() { return { daoId: this.selectedDao.docId } },
       subscribeToMore: {
         document: gql`subscription TIERS($daoId: Int64!) { ${TIERS_QUERY} }`,
-        skip () { return !this.selectedDao?.docId },
-        variables () { return { daoId: this.selectedDao.docId } },
+        skip() { return !this.selectedDao?.docId },
+        variables() { return { daoId: this.selectedDao.docId } },
         updateQuery: (previousResult, { subscriptionData }) => {
           if (!subscriptionData.data) {
             return previousResult
@@ -1003,12 +1004,12 @@ export default {
         label: archetype?.name,
         value: { ...archetype }
       })),
-      skip () { return !this.selectedDao?.docId },
-      variables () { return { daoId: this.selectedDao.docId } },
+      skip() { return !this.selectedDao?.docId },
+      variables() { return { daoId: this.selectedDao.docId } },
       subscribeToMore: {
         document: gql`subscription ROLES($daoId: Int64!) { ${ROLES_QUERY} }`,
-        skip () { return !this.selectedDao?.docId },
-        variables () { return { daoId: this.selectedDao.docId } },
+        skip() { return !this.selectedDao?.docId },
+        variables() { return { daoId: this.selectedDao.docId } },
         updateQuery: (previousResult, { subscriptionData }) => {
           if (!subscriptionData.data) {
             return previousResult
@@ -1030,7 +1031,7 @@ export default {
     ...mapGetters('accounts', ['account', 'isMember']),
     ...mapGetters('dao', ['daoSettings', 'selectedDao', 'votingPercentages']),
 
-    comments () {
+    comments() {
       const mapComment = comment => ({
         ...comment,
         reactions: {
@@ -1050,71 +1051,71 @@ export default {
       return comments.filter(comment => comment.deletedStatus !== 1)
     },
 
-    commentSectionId () { return this?.proposal?.cmntsect[0].docId },
+    commentSectionId() { return this?.proposal?.cmntsect[0].docId },
 
-    ownAssignment () {
-      return (this.proposal.__typename === PROPOSAL_TYPE.ROLE || this.proposal.__typename === PROPOSAL_TYPE.ABILITY) &&
+    ownAssignment() {
+      return (this?.proposal?.__typename === PROPOSAL_TYPE.ROLE || this?.proposal?.__typename === PROPOSAL_TYPE.ABILITY) &&
         this.proposal.details_assignee_n === this.account &&
         proposalParsing.status(this.proposal) !== PROPOSAL_STATE.PROPOSED &&
         proposalParsing.status(this.proposal) !== PROPOSAL_STATE.REJECTED &&
         proposalParsing.status(this.proposal) !== PROPOSAL_STATE.DRAFTED
     },
-    isCreator () {
+    isCreator() {
       return this.account === proposalParsing.creator(this.proposal)
     },
-    voteSize () {
+    voteSize() {
       if (this.proposal && this.proposal.voteAggregate) {
         return this.proposal.voteAggregate.count || 0
       }
       return 0
     },
 
-    expired () { return this.timeLeft < 0 },
+    expired() { return this.timeLeft < 0 },
 
-    timeLeft () {
+    timeLeft() {
       const end = new Date(`${this.proposal.ballot_expiration_t}`).getTime()
       const now = Date.now()
       const t = end - now
       return t
     },
 
-    periodsOnCycle () {
+    periodsOnCycle() {
       return (this.cycleDurationSec / this.daoSettings.periodDurationSec).toFixed(2)
     },
 
-    isDefaultBadgeMultiplier () {
+    isDefaultBadgeMultiplier() {
       return true
     },
 
-    loading () { return this.$apollo.queries.proposal.loading },
+    loading() { return this.$apollo.queries.proposal.loading },
 
-    isBadge () { return this.proposal.__typename === PROPOSAL_TYPE.BADGE },
+    isBadge() { return this.proposal?.__typename === PROPOSAL_TYPE.BADGE },
 
-    badgeHolders () {
+    badgeHolders() {
       const uniqueHolders = lodash.uniqBy(this.proposal.assignment, 'details_assignee_n')
       return uniqueHolders.filter(holder => holder.dao[0].details_daoName_n === this.selectedDao.name)
     },
 
-    hideVoting () {
+    hideVoting() {
       return this.isBadge && proposalParsing.status(this.proposal) === PROPOSAL_STATE.APPROVED
     },
 
-    pages () {
+    pages() {
       return Math.ceil(this.badgeHolders.length / 3)
     },
 
-    paginatedHolders () {
+    paginatedHolders() {
       return this.badgeHolders.slice((this.page - 1) * 3, this.page * 3)
     },
-    getPaginationText () {
+    getPaginationText() {
       if (this.pages === 0) return ''
       return `${this.page} of ${this.pages}`
     },
-    isLastPage () {
+    isLastPage() {
       if (this.pages === 0) return true
       return this.page === this.pages
     },
-    currentElectionIndex () {
+    currentElectionIndex() {
       let stepIndex = null
       if (this.upvoteElectionData.upcomingElection?.length) {
         stepIndex = 0
@@ -1136,7 +1137,7 @@ export default {
       return stepIndex
     },
 
-    QUEST_STATE () {
+    QUEST_STATE() {
       const isApproved = this.proposal.details_state_s === PROPOSAL_STATE.APPROVED
       if (isApproved && this.proposal.lockedby.length > 0) { return 'PAYOUT_VOTING' }
       if (isApproved && this.proposal.completedby.length > 0) { return 'COMPLETED' }
@@ -1145,7 +1146,7 @@ export default {
   },
 
   watch: {
-    proposal () {
+    proposal() {
       this.proposal.cmntsect[0]?.comment.forEach(comment => {
         this.$set(this.commentByIds, comment.id, comment)
         if (this.rootCommentIds.includes(comment.id)) return
@@ -1172,11 +1173,11 @@ export default {
       'withdrawProposal'
     ]),
 
-    onVoting () {
+    onVoting() {
     },
 
-    onApply (proposal) {
-      if (proposal.__typename === PROPOSAL_TYPE.BADGE) {
+    onApply(proposal) {
+      if (proposal?.__typename === PROPOSAL_TYPE.BADGE) {
         proposal.type = PROPOSAL_TYPE.BADGE
         // this.$store.commit('proposals/setNext', true)
 
@@ -1198,7 +1199,7 @@ export default {
         this.saveDraft()
         this.$router.push({ name: 'proposal-create', params: { draftId } })
       }
-      if (proposal.__typename === PROPOSAL_TYPE.ARCHETYPE) {
+      if (proposal?.__typename === PROPOSAL_TYPE.ARCHETYPE) {
         proposal.type = PROPOSAL_TYPE.ARCHETYPE
         // this.$store.commit('proposals/setNext', true)
         this.$store.commit('proposals/setType', CONFIG.options.recurring.options.assignment.type)
@@ -1224,7 +1225,7 @@ export default {
         this.$router.push({ name: 'proposal-create', params: { draftId } })
       }
     },
-    async onSuspend (proposal) {
+    async onSuspend(proposal) {
       try {
         await this.suspendProposal(proposal.docId)
         this.$router.push({ name: 'proposals' })
@@ -1236,7 +1237,7 @@ export default {
         })
       }
     },
-    async onActive (proposal) {
+    async onActive(proposal) {
       try {
         await this.activeProposal(proposal.docId)
       } catch (e) {
@@ -1247,7 +1248,7 @@ export default {
         })
       }
     },
-    async onWithDraw (proposal) {
+    async onWithDraw(proposal) {
       try {
         await this.withdrawProposal(proposal.docId)
       } catch (e) {
@@ -1259,7 +1260,7 @@ export default {
       }
     },
 
-    async onPublish (proposal) {
+    async onPublish(proposal) {
       try {
         await this.publishProposal(proposal.docId)
         this.state = 'PUBLISHING'
@@ -1271,7 +1272,7 @@ export default {
       }
     },
 
-    async onEdit () {
+    async onEdit() {
       const category = {
         Payout: { key: 'contribution', title: 'Generic Contribution' },
 
@@ -1287,40 +1288,40 @@ export default {
         Queststart: { key: 'quest', title: 'Quest' },
         Questcomplet: { key: 'quest', title: 'Quest' },
         Budget: { key: 'circlebudget', title: 'Budget' }
-      }[this.proposal.__typename]
+      }[this.proposal?.__typename]
+
       this.$store.commit('proposals/setStepIndex', 1)
       this.$store.commit('proposals/setCategory', category)
-      this.$store.commit('proposals/setType', this.proposal.__typename)
+      this.$store.commit('proposals/setType', this.proposal?.__typename)
 
       this.$store.commit('proposals/setState', this.proposal?.details_state_s)
       this.$store.commit('proposals/setProposalId', this.proposal?.docId)
 
       this.$store.commit('proposals/setTitle', this.proposal?.details_title_s)
       this.$store.commit('proposals/setDescription', this.proposal?.details_description_s)
+      // this.$store.commit('proposals/setCircle', this.proposal?.details_description_s)
 
       this.$store.commit('proposals/setUsdAmount', parseFloat(this?.proposal?.details_usdAmount_a))
       this.$store.commit('proposals/setCommitment', parseFloat(this?.proposal?.details_timeShareX100_i))
       this.$store.commit('proposals/setDeferred', parseFloat(this?.proposal?.details_deferredPercX100_i))
 
-      if (this.proposal.__typename === PROPOSAL_TYPE.CIRCLE) {
+      this.$store.commit('proposals/setUrl', this.proposal?.details_url_s)
+
+      if (this.proposal?.__typename === PROPOSAL_TYPE.CIRCLE) {
         this.$store.commit('proposals/setCircle', {
           label: this.proposal?.parentcircle[0]?.name,
           value: this.proposal?.parentcircle[0]?.id
         })
       }
 
-      if (this.proposal.__typename === PROPOSAL_TYPE.POLICY) {
+      if (this.proposal?.__typename === PROPOSAL_TYPE.POLICY) {
         this.$store.commit('proposals/setCircle', {
           label: this.proposal?.parentcircle[0]?.name,
           value: this.proposal?.parentcircle[0]?.id
         })
       }
 
-      if (this.proposal.__typename === PROPOSAL_TYPE.PAYOUT) {
-        this.$store.commit('proposals/setUrl', this.proposal?.details_url_s)
-      }
-
-      if (this.proposal.__typename === PROPOSAL_TYPE.ROLE) { // Role Assignment
+      if (this.proposal?.__typename === PROPOSAL_TYPE.ROLE) { // Role Assignment
         const tier = this.tiers.find(tier => tier.label === this.proposal?.salaryband?.[0]?.details_name_s)
         const archetype = this.archetypes.find(archetype => archetype.label === this.proposal?.salaryband?.[0]?.assignment?.[0]?.role?.[0]?.system_nodeLabel_s)
         this.$store.commit('proposals/setRole', archetype)
@@ -1330,26 +1331,27 @@ export default {
         this.$store.commit('proposals/setMinDeferred', tier?.value?.minDeferred || 0)
         this.$store.commit('proposals/setMinCommitment', 0)
 
-        this.$store.commit('proposals/setCommitment', parseFloat(1))
-        this.$store.commit('proposals/setDeferred', parseFloat(tier.value.minDeferred))
+        this.$store.commit('proposals/setCommitment', this.proposal?.details_timeShareX100_i)
+        this.$store.commit('proposals/setDeferred', parseFloat(this.proposal?.details_deferredPercX100_i))
         this.$store.commit('proposals/setStartPeriod', this.proposal?.start[0])
+        // this.$store.commit('proposals/setStartDate', this.proposal?.start[0]?.details_startTime_t)
         this.$store.commit('proposals/setPeriodCount', this.proposal?.details_periodCount_i)
         // this.$store.commit('proposals/setMinDeferred', this.proposal?.role[0]?.details_minDeferredX100_i)
       }
 
-      if (this.proposal.__typename === PROPOSAL_TYPE.ABILITY || this.proposal.__typename === PROPOSAL_TYPE.ASSIGNBADGE) { // Badge Assignment
+      if (this.proposal?.__typename === PROPOSAL_TYPE.ABILITY || this.proposal?.__typename === PROPOSAL_TYPE.ASSIGNBADGE) { // Badge Assignment
         this.$store.commit('proposals/setBadge', this?.proposal.badge?.[0])
         this.$store.commit('proposals/setStartPeriod', this.proposal?.start[0])
         this.$store.commit('proposals/setPeriodCount', this.proposal?.details_periodCount_i)
       }
 
-      if (this.proposal.__typename === PROPOSAL_TYPE.ARCHETYPE) {
+      if (this.proposal?.__typename === PROPOSAL_TYPE.ARCHETYPE) {
         this.$store.commit('proposals/setAnnualUsdSalary', parseInt(this.proposal?.details_annualUsdSalary_a.split(' ').shift()))
         this.$store.commit('proposals/setRoleCapacity', this.proposal?.details_fulltimeCapacityX100_i)
         this.$store.commit('proposals/setMinDeferred', this.proposal?.details_minDeferredX100_i)
       }
 
-      if (this.proposal.__typename === PROPOSAL_TYPE.BADGE) {
+      if (this.proposal?.__typename === PROPOSAL_TYPE.BADGE) {
         this.$store.commit('proposals/setBadge', this?.proposal)
         this.$store.commit('proposals/setPurpose', this.proposal?.details_purpose_s)
         this.$store.commit('proposals/setIcon', this.proposal?.details_icon_s)
@@ -1376,7 +1378,7 @@ export default {
       this.$router.push({ name: 'proposal-create', params: { draftId } })
     },
 
-    async onDelete (proposal) {
+    async onDelete(proposal) {
       try {
         this.state = 'DELETING'
         await this.deleteProposal(proposal.docId)
@@ -1388,7 +1390,7 @@ export default {
       }
     },
 
-    async onQuestPayout () {
+    async onQuestPayout() {
       try {
         await this.createQuestPayout({
           title: `${this.proposal.details_title_s} [COMPLETION]`,
@@ -1414,15 +1416,15 @@ export default {
       }
     },
 
-    async modifyData (changeToSuspension) {
+    async modifyData(changeToSuspension) {
       this.proposal.toSuspend = changeToSuspension
       await this.$forceUpdate()
     },
-    toggle (proposal) {
-      return proposal.__typename === PROPOSAL_TYPE.ROLE || proposal.__typename === PROPOSAL_TYPE.ARCHETYPE || (proposal.__typename === PROPOSAL_TYPE.EDIT && proposal.original?.[0].role)
+    toggle(proposal) {
+      return proposal?.__typename === PROPOSAL_TYPE.ROLE || proposal?.__typename === PROPOSAL_TYPE.ARCHETYPE || (proposal?.__typename === PROPOSAL_TYPE.EDIT && proposal.original?.[0].role)
     },
 
-    async fetchComment (commentId) {
+    async fetchComment(commentId) {
       try {
         const { data: { getComment: comment } } = await this.$apollo.query({
           query: require('~/query/proposals/dao-proposal-comment.gql'),
@@ -1433,10 +1435,10 @@ export default {
           this.$set(this.commentByIds, comment.id, comment)
         })
         this.commentByIds[commentId] = { ...comment }
-      } catch (e) {}
+      } catch (e) { }
     },
 
-    async createComment ({ parentId, content }) {
+    async createComment({ parentId, content }) {
       try {
         await this.createProposalComment({
           parentId: parentId || this.commentSectionId,
@@ -1447,7 +1449,7 @@ export default {
         this.showNotification({ message, color: 'red' })
       }
     },
-    async updateComment ({ commentId, content }) {
+    async updateComment({ commentId, content }) {
       try {
         await this.updateProposalComment({ commentId, content })
       } catch (e) {
@@ -1455,7 +1457,7 @@ export default {
         this.showNotification({ message, color: 'red' })
       }
     },
-    async deleteComment (commentId) {
+    async deleteComment(commentId) {
       try {
         await this.deleteProposalComment(commentId)
       } catch (e) {
@@ -1464,7 +1466,7 @@ export default {
       }
     },
 
-    async likeComment (commentId) {
+    async likeComment(commentId) {
       try {
         await this.reactProposalComment({ commentId, reaction: 'liked' })
       } catch (e) {
@@ -1472,7 +1474,7 @@ export default {
         this.showNotification({ message, color: 'red' })
       }
     },
-    async unlikeComment (commentId) {
+    async unlikeComment(commentId) {
       try {
         await this.unreactProposalComment({ commentId })
       } catch (e) {
@@ -1480,16 +1482,16 @@ export default {
         this.showNotification({ message, color: 'red' })
       }
     },
-    onPrev () {
+    onPrev() {
       this.page--
     },
-    onNext () {
+    onNext() {
       this.page++
     },
-    onCommitUpdate (val) {
+    onCommitUpdate(val) {
       this.optimisticProposal = { ...this.optimisticProposal, ...{ lastimeshare: [{ details_timeShareX100_i: val }] } }
     },
-    onDeferredUpdate (val) {
+    onDeferredUpdate(val) {
       this.optimisticProposal = { ...this.optimisticProposal, details_deferredPercX100_i: val }
     }
   }
@@ -1510,7 +1512,7 @@ export default {
           proposal-item.bottom-no-rounded(v-if="ownAssignment" background="white" :proposal="proposal" :clickable="ownAssignment" :expandable="true" :owner="true" :moons="true" @claim-all="$emit('claim-all')" @change-deferred="(val) => $emit('change-deferred', val)" :selectedDao="selectedDao" :daoSettings="daoSettings" :votingPercentages="votingPercentages")
           .separator-container(v-if="ownAssignment")
             q-separator(color="grey-3" inset)
-          proposal-view(:proposal="optimisticProposal ? optimisticProposal : proposal" :ownAssignment="ownAssignment" :class="{'top-no-rounded': ownAssignment}" :withToggle="toggle(proposal)" :created="proposalParsing.created(proposal)" :restrictions="proposalParsing.restrictions(proposal)" :status="proposalParsing.status(proposal)" :docId="proposalParsing.docId(proposal)" :creator="proposalParsing.creator(proposal)" :capacity="proposalParsing.capacity(proposal)" :deferred="proposalParsing.deferred(proposal)" :description="proposalParsing.description(proposal)" :periodCount="proposalParsing.periodCount(proposal)" :salary="proposalParsing.salary(proposal)" :start="proposalParsing.start(proposal)" :subtitle="!ownAssignment ? proposalParsing.subtitle(proposal) : undefined" :title="!ownAssignment ? proposalParsing.title(proposal) : undefined" :type="proposal.__typename === 'Suspend' ? proposal.suspend[0].__typename : proposal.__typename" :url="proposalParsing.url(proposal)" :icon="proposalParsing.icon(proposal)" :commit="proposalParsing.commit(optimisticProposal ? optimisticProposal : proposal)" :compensation="proposalParsing.compensation(optimisticProposal ? optimisticProposal : proposal, daoSettings)" :tokens="proposalParsing.tokens(optimisticProposal ? optimisticProposal : proposal, periodsOnCycle, daoSettings, isDefaultBadgeMultiplier)" :isBadge="isBadge" :pastQuorum="proposalParsing.pastQuorum(proposal)" :pastUnity="proposalParsing.pastUnity(proposal)" :votingMethod="proposalParsing.votingMethod(proposal)" :parentCircle="proposalParsing.parentCircle(proposal)" @change-deferred="onDeferredUpdate" @change-commit="onCommitUpdate")
+          proposal-view(:proposal="optimisticProposal ? optimisticProposal : proposal" :ownAssignment="ownAssignment" :class="{'top-no-rounded': ownAssignment}" :withToggle="toggle(proposal)" :created="proposalParsing.created(proposal)" :restrictions="proposalParsing.restrictions(proposal)" :status="proposalParsing.status(proposal)" :docId="proposalParsing.docId(proposal)" :creator="proposalParsing.creator(proposal)" :capacity="proposalParsing.capacity(proposal)" :deferred="proposalParsing.deferred(proposal)" :description="proposalParsing.description(proposal)" :periodCount="proposalParsing.periodCount(proposal)" :salary="proposalParsing.salary(proposal)" :start="proposalParsing.start(proposal)" :subtitle="!ownAssignment ? proposalParsing.subtitle(proposal) : undefined" :title="!ownAssignment ? proposalParsing.title(proposal) : undefined" :type="proposal?.__typename === 'Suspend' ? proposal.suspend[0].__typename : proposal?.__typename" :url="proposalParsing.url(proposal)" :icon="proposalParsing.icon(proposal)" :commit="proposalParsing.commit(optimisticProposal ? optimisticProposal : proposal)" :compensation="proposalParsing.compensation(optimisticProposal ? optimisticProposal : proposal, daoSettings)" :tokens="proposalParsing.tokens(optimisticProposal ? optimisticProposal : proposal, periodsOnCycle, daoSettings, isDefaultBadgeMultiplier)" :isBadge="isBadge" :pastQuorum="proposalParsing.pastQuorum(proposal)" :pastUnity="proposalParsing.pastUnity(proposal)" :votingMethod="proposalParsing.votingMethod(proposal)" :parentCircle="proposalParsing.parentCircle(proposal)" @change-deferred="onDeferredUpdate" @change-commit="onCommitUpdate")
           comments-widget(v-if="!isBadge" :comments="comments" :disable="expired" @create="createComment" @update="updateComment" @delete="deleteComment" @like="likeComment" @unlike="unlikeComment" @load-comment="fetchComment")
         .col-12.col-lg-3(v-if="!isBadge" :class="{ 'q-pl-md': $q.screen.gt.md }")
           widget.bg-primary(v-if="proposalParsing.status(proposal) === PROPOSAL_STATE.DRAFTED && isCreator && state === 'WAITING'")
@@ -1568,10 +1570,10 @@ export default {
       )
       .separator-container(v-if="ownAssignment")
         q-separator(color="grey-3" inset)
-      proposal-view(:proposal="optimisticProposal ? optimisticProposal : proposal" :ownAssignment="ownAssignment" :class="{'top-no-rounded': ownAssignment}" :withToggle="toggle(proposal)" :created="proposalParsing.created(proposal)" :restrictions="proposalParsing.restrictions(proposal)" :status="proposalParsing.status(proposal)" :docId="proposalParsing.docId(proposal)" :creator="proposalParsing.creator(proposal)" :capacity="proposalParsing.capacity(proposal)" :deferred="proposalParsing.deferred(proposal)" :description="proposalParsing.description(proposal)" :periodCount="proposalParsing.periodCount(proposal)" :salary="proposalParsing.salary(proposal)" :start="proposalParsing.start(proposal)" :subtitle="!ownAssignment ? proposalParsing.subtitle(proposal) : undefined" :title="!ownAssignment ? proposalParsing.title(proposal) : undefined" :type="proposal.__typename === 'Suspend' ? proposal.suspend[0].__typename : proposal.__typename" :url="proposalParsing.url(proposal)" :icon="proposalParsing.icon(proposal)" :commit="proposalParsing.commit(optimisticProposal ? optimisticProposal : proposal)" :compensation="proposalParsing.compensation(optimisticProposal ? optimisticProposal : proposal, daoSettings)" :tokens="proposalParsing.tokens(optimisticProposal ? optimisticProposal : proposal, periodsOnCycle, daoSettings, isDefaultBadgeMultiplier)" :isBadge="isBadge" :pastQuorum="proposalParsing.pastQuorum(proposal)" :pastUnity="proposalParsing.pastUnity(proposal)" :purpose="proposalParsing.purpose(proposal)" :votingMethod="proposalParsing.votingMethod(proposal)" :parentCircle="proposalParsing.parentCircle(proposal)" @change-deferred="onDeferredUpdate" @change-commit="onCommitUpdate")
+      proposal-view(:proposal="optimisticProposal ? optimisticProposal : proposal" :ownAssignment="ownAssignment" :class="{'top-no-rounded': ownAssignment}" :withToggle="toggle(proposal)" :created="proposalParsing.created(proposal)" :restrictions="proposalParsing.restrictions(proposal)" :status="proposalParsing.status(proposal)" :docId="proposalParsing.docId(proposal)" :creator="proposalParsing.creator(proposal)" :capacity="proposalParsing.capacity(proposal)" :deferred="proposalParsing.deferred(proposal)" :description="proposalParsing.description(proposal)" :periodCount="proposalParsing.periodCount(proposal)" :salary="proposalParsing.salary(proposal)" :start="proposalParsing.start(proposal)" :subtitle="!ownAssignment ? proposalParsing.subtitle(proposal) : undefined" :title="!ownAssignment ? proposalParsing.title(proposal) : undefined" :type="proposal?.__typename === 'Suspend' ? proposal.suspend[0].__typename : proposal?.__typename" :url="proposalParsing.url(proposal)" :icon="proposalParsing.icon(proposal)" :commit="proposalParsing.commit(optimisticProposal ? optimisticProposal : proposal)" :compensation="proposalParsing.compensation(optimisticProposal ? optimisticProposal : proposal, daoSettings)" :tokens="proposalParsing.tokens(optimisticProposal ? optimisticProposal : proposal, periodsOnCycle, daoSettings, isDefaultBadgeMultiplier)" :isBadge="isBadge" :pastQuorum="proposalParsing.pastQuorum(proposal)" :pastUnity="proposalParsing.pastUnity(proposal)" :purpose="proposalParsing.purpose(proposal)" :votingMethod="proposalParsing.votingMethod(proposal)" :parentCircle="proposalParsing.parentCircle(proposal)" @change-deferred="onDeferredUpdate" @change-commit="onCommitUpdate")
       comments-widget(v-if="!isBadge" :comments="comments" :disable="expired" @create="createComment" @update="updateComment" @delete="deleteComment" @like="likeComment" @unlike="unlikeComment" @load-comment="fetchComment")
     .col-12.col-sm-3(:class="{ 'q-pl-md': $q.screen.gt.sm }")
-      widget.q-mb-md.position-relative(v-if="proposalParsing.status(proposal) === PROPOSAL_STATE.APPROVED && proposal.__typename === PROPOSAL_TYPE.QUEST_START && !claimPayments.length" :title="$t('pages.proposals.proposaldetail.questCompletion')")
+      widget.q-mb-md.position-relative(v-if="proposalParsing.status(proposal) === PROPOSAL_STATE.APPROVED && proposal?.__typename === PROPOSAL_TYPE.QUEST_START && !claimPayments.length" :title="$t('pages.proposals.proposaldetail.questCompletion')")
         .text-ellipsis.text-body.q-my-xl {{ $t('pages.proposals.proposaldetail.didYouFinish') }}
         q-btn.full-width.q-mt-xl.q-px-lg(rounded color="primary" no-caps @click="onQuestPayout") {{ $t('pages.proposals.proposaldetail.claimYourPayment') }}
       widget.bg-primary(v-if="proposalParsing.status(proposal) === PROPOSAL_STATE.DRAFTED && isCreator && state === 'WAITING'")
