@@ -262,6 +262,16 @@ export const checkMembership = async function ({ commit, state, dispatch, rootSt
   const member = await this.$apollo.query({
     query: gql`
       query member($daoId: String!, $username: String!) {
+        getDao (docId: $daoId) {
+          docId
+          admin (filter :{details_member_n: {eq: $username}}){
+            docId
+          }
+          enroller (filter :{details_member_n: {eq: $username}}){
+            docId
+          }
+        }
+
         getMember(details_member_n: $username) {
           applicantof(filter: { docId: { eq: $daoId } }) {
             docId
@@ -285,13 +295,18 @@ export const checkMembership = async function ({ commit, state, dispatch, rootSt
     fetchPolicy: 'no-cache'
   })
 
+  console.log(JSON.stringify(member))
+
   if (member?.data?.getMember) {
-    const { applicantof, memberof, adminbdg, enrollerbdg } = member?.data?.getMember || {}
+    const { applicantof, memberof } = member?.data?.getMember || {}
 
     const isApplicant = applicantof?.length === 1
     const isMember = memberof?.length === 1
-    const isAdmin = adminbdg?.length === 1
-    const isEnroller = enrollerbdg?.length === 1
+    // const isAdmin = adminbdg?.length === 1
+    // const isEnroller = enrollerbdg?.length === 1
+
+    const isAdmin = member.data.getDao.admin.length === 1
+    const isEnroller = member.data.getDao.enroller.length === 1
 
     commit('setApplicant', isApplicant)
     commit('setMembership', isMember)
