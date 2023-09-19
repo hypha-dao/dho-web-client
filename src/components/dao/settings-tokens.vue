@@ -108,20 +108,20 @@ export default {
         treasuryName: this.daoSettings.settings_pegTokenName_s || treasurySymbol,
         treasurySymbol,
         treasuryDigits: treasuryDigits.split('.')[1].length, // 1.0, 1.00, 1.000
-        treasuryTokenMultiplier: this.daoSettings.settings_treasuryTokenMultiplier_i / 100,
+        treasuryTokenMultiplier: this.daoSettings.treasuryTokenMultiplier,
 
         // // Utility token
         utilityName: this.daoSettings.settings_rewardTokenName_s || utilitySymbol,
         utilitySymbol,
         utilityDigits: utilityDigits.split('.')[1].length, // 1.0, 1.00, 1.000, // 1.0, 1.00, 1.000
-        utilityTokenMultiplier: this.daoSettings.settings_utilityTokenMultiplier_i / 100,
+        utilityTokenMultiplier: this.daoSettings.utilityTokenMultiplier,
         utilityAmount: parseInt(utilityAmount) === -1 ? '∞' : utilityAmount, // i.e 100000 or -1 for infinite supply
 
         // // Voice token
         voiceName: voiceSymbol,
         voiceSymbol,
         voiceDigits: voiceDigits.split('.')[1].length,
-        voiceTokenMultiplier: this.daoSettings.settings_voiceTokenMultiplier_i / 100,
+        voiceTokenMultiplier: this.daoSettings.voiceTokenMultiplier,
         voiceDecayPeriod: this.daoSettings.settings_voiceTokenDecayPeriod_i,
         voiceDecayPercent: map(this.daoSettings.settings_voiceTokenDecayPerPeriodX10M_i, MIN_DECAY, MAX_DECAY, 0, 100)
 

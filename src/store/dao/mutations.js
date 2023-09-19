@@ -50,6 +50,10 @@ const settingsMapper = (settings) => {
     communityVotingAlignmentPercent: settings?.settings_communityVotingAlignmentPercent_i,
     communityVotingQuorumPercent: settings?.settings_communityVotingQuorumPercent_i,
 
+    treasuryTokenMultiplier: settings?.settings_treasuryTokenMultiplier_i / 100,
+    utilityTokenMultiplier: settings?.settings_utilityTokenMultiplier_i / 100,
+    voiceTokenMultiplier: settings?.settings_voiceTokenMultiplier_i / 100,
+
     communityVotingMethod: settings?.settings_communityVotingMethod_s,
     upvoteStartDateTime: new Date(settings?.settings_upvoteStartDateTime_s).toLocaleString(),
     upvoteStartDate: new Date(settings?.settings_upvoteStartDateTime_s).toLocaleDateString('en-ZA'),
