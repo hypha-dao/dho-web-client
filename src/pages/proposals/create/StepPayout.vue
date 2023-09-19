@@ -264,33 +264,9 @@ export default {
     periodsOnCycle () {
       return (this.cycleDurationSec / this.daoSettings.periodDurationSec).toFixed(2)
     },
-    cashToken () {
-      return !this.toggle
-        ? this.getFormatedTokenAmount(this.peg * (this.daoSettings.treasuryTokenMultiplier
-          ? this.daoSettings.treasuryTokenMultiplier
-          : 1), Number.MAX_VALUE)
-        : this.getFormatedTokenAmount((this.peg * (this.daoSettings.treasuryTokenMultiplier
-          ? this.daoSettings.treasuryTokenMultiplier
-          : 1) / this.periodsOnCycle).toFixed(2), Number.MAX_VALUE)
-    },
-    utilityToken () {
-      return !this.toggle
-        ? this.getFormatedTokenAmount(this.peg * (this.daoSettings.utilityTokenMultiplier
-          ? this.daoSettings.utilityTokenMultiplier
-          : 1), Number.MAX_VALUE)
-        : this.getFormatedTokenAmount((this.peg * (this.daoSettings.utilityTokenMultiplier
-          ? this.daoSettings.utilityTokenMultiplier
-          : 1) / this.periodsOnCycle).toFixed(2), Number.MAX_VALUE)
-    },
-    voiceToken () {
-      return !this.toggle
-        ? this.getFormatedTokenAmount(this.peg * (this.daoSettings.voiceTokenMultiplier
-          ? this.daoSettings.voiceTokenMultiplier
-          : 1), Number.MAX_VALUE)
-        : this.getFormatedTokenAmount((this.peg * (this.daoSettings.voiceTokenMultiplier
-          ? this.daoSettings.voiceTokenMultiplier
-          : 1) / this.periodsOnCycle).toFixed(2), Number.MAX_VALUE)
-    },
+    cashToken () { return this.calculateToken(this.daoSettings.treasuryTokenMultiplier) },
+    utilityToken () { return this.calculateToken(this.daoSettings.utilityTokenMultiplier) },
+    voiceToken () { return this.calculateToken(this.daoSettings.voiceTokenMultiplier) },
     isAssignment () {
       const proposalType = this.$store.state.proposals.draft.category.key
       return proposalType === 'assignment' || proposalType === 'archetype'
@@ -303,6 +279,12 @@ export default {
   },
 
   methods: {
+    calculateToken (tokenMultiplier) {
+      return !this.toggle
+        ? this.getFormatedTokenAmount(this.peg * (tokenMultiplier || 1), Number.MAX_VALUE)
+        : this.getFormatedTokenAmount((this.peg * (tokenMultiplier || 1) / this.periodsOnCycle).toFixed(2), Number.MAX_VALUE)
+    },
+
     isValidCommitment (commitment) {
       const proposalType = this.$store.state.proposals.draft.category.key
       if (proposalType === 'assignment') {
