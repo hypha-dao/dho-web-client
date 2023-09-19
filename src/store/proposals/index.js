@@ -413,10 +413,11 @@ export default {
         ratioUsdEquity = parseFloat(state.draft.annualUsdSalary || 0) / 12
         deferredSan = isNaN(state.draft.minDeferred) ? 0 : parseFloat(state.draft.minDeferred || 0)
       }
+
       // TO DO dividir entre 12 para mostrar por mes, mostrar uun lbael para informar que es mensual solo para assignmnt, y archertypes
-      commit('setPeg', (ratioUsdEquity * (1 - deferredSan / 100)).toFixed(0))
-      commit('setReward', (ratioUsdEquity * (deferredSan / 100) / rootState.dao.settings.rewardToPegRatio).toFixed(0))
-      commit('setVoice', ratioUsdEquity.toFixed(0) * 2)
+      commit('setPeg', (ratioUsdEquity * (1 - deferredSan / 100)).toFixed(0) * rootState.dao.settings.treasuryTokenMultiplier)
+      commit('setReward', ((ratioUsdEquity * (deferredSan / 100)).toFixed(0)) * rootState.dao.settings.utilityTokenMultiplier)
+      commit('setVoice', ratioUsdEquity.toFixed(0) * rootState.dao.settings.voiceTokenMultiplier)
 
       // Para badges multiply multiplicar x 100 y sumar 10,000
     },
