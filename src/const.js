@@ -106,3 +106,8 @@ export const ROUTE_NAMES = Object.freeze({
 })
 
 export const ORIGIN = window.location.origin
+
+export const PLAN_TYPE = Object.freeze({
+  EAAS: 'EAAS',
+  SAAS: 'SAAS'
+})
