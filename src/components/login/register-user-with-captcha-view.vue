@@ -96,9 +96,9 @@ export default {
         periodDurationSec: 604800, // 1 week
         votingAlignmentPercent: 80, // 80% of yes votes
         votingQuorumPercent: 20, // 20% of people needs to vote
-        utilityTokenMultiplier: 1,
-        voiceTokenMultiplier: 1,
-        treasuryTokenMultiplier: 1,
+        utilityTokenMultiplier: 100,
+        voiceTokenMultiplier: 100,
+        treasuryTokenMultiplier: 100,
         logo: '',
         primaryColor: '#242f5d',
         secondaryColor: '#3f64ee',
