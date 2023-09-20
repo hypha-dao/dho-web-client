@@ -1,4 +1,4 @@
-<script lang="ts">
+<script>
 import { defineComponent } from 'vue'
 import Widget from '~/components/common/widget.vue'
 import IpfsImageViewer from '~/components/ipfs/ipfs-image-viewer.vue'
