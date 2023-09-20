@@ -266,10 +266,11 @@ export default {
                   .p-onboarding {{ $t('login.register-user-with-captcha-view.itContainsThe') }}
                   .p-onboarding.bold {{ $t('login.register-user-with-captcha-view.onceTheAccount') }}
                   .p-onboarding {{ $t('login.register-user-with-captcha-view.youAreSet') }}
-            .row.justify-center.items-center(:style="{ 'margin-bottom': '60px' }")
+            .row.justify-center.items-center(v-if="$q.screen.gt.md" :style="{ 'margin-bottom': '60px' }")
               .qr-code-wrapper
-                qrcode-vue(:value="inviteLink" size="125")
+                qrcode-vue(:value="inviteLink" size="150")
               img.q-ml-xl(:style="{ 'width': '150px', 'height': '150px' }" src="~/assets/images/onboarding-hypha-logo.png")
+            .row(v-else :style="{ 'margin-bottom': '200px' }")
         #form3.flex.column.justify-center(v-show="step === this.steps.finish.name")
           template
             div.full-height.column.justify-center
@@ -317,13 +318,13 @@ export default {
           loading-spinner(color="primary" size="72px")
 
       #bottom-indicator.row.items-center(v-if="![this.steps.create.name, this.steps.loading.name].includes(step)")
-        .col
+        .col(v-if="$q.screen.gt.md")
           .row.q-gutter-sm(v-if="$q.screen.gt.md")
             .ellipse-border(:class="'ellipse-filled'")
             .ellipse-border(:class="(step === this.steps.inviteLink.name || step === this.steps.finish.name ) && 'ellipse-filled'")
             .ellipse-border(:class="step === this.steps.finish.name && 'ellipse-filled'")
-        .col-10.no-wrap.flex.justify-end.items-center
-          q-btn(v-if="step === this.steps.inviteLink.name && !$q.screen.gt.md" :label="$t('login.register-user-with-captcha-view.downloadWallet')" color="primary" outline unelevated @click="downloadWallet()" rounded no-caps)
+        .no-wrap.flex.justify-end.items-center(:class="{ 'col-10': $q.screen.gt.md, 'col': !$q.screen.gt.md, 'full-width': !$q.screen.gt.md}")
+          q-btn.full-width(v-if="step === this.steps.inviteLink.name && !$q.screen.gt.md" :label="$t('login.register-user-with-captcha-view.downloadWallet')" color="primary" outline unelevated @click="downloadWallet()" rounded no-caps)
           q-btn(v-if="step === this.steps.inviteLink.name && $q.screen.gt.md" :label="$t('login.register-user-with-captcha-view.copyInviteLink')" color="primary" outline unelevated @click="copyText()" rounded no-caps)
           q-btn(v-if="step !== this.steps.finish.name").q-mx-md.q-px-md(:style="{ 'height': 'fit-content' }" :label="step === 'finish' ? 'Need Help?' : 'Next'" color="primary" unelevated @click="next" :disable="!this.inviteLink" :loading="submitting" :outline="step === this.steps.finish.name" rounded no-caps)
           q-list(v-if="step === steps.finish.name")
