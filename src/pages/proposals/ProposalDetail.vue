@@ -56,6 +56,16 @@ const PROPOSAL_QUERY = `
       details_ballotSupply_a
       details_ballotAlignment_i
 
+      votetally {
+        docId
+        ... on VoteTally {
+          docId
+          pass_votePower_a
+          fail_votePower_a
+          abstain_votePower_a
+        }
+      }
+
       cmntsect {
         docId
 
@@ -91,6 +101,17 @@ const PROPOSAL_QUERY = `
         details_ballotQuorum_i
         details_ballotSupply_a
         details_ballotAlignment_i
+
+      votetally {
+        docId
+        ... on VoteTally {
+          docId
+          pass_votePower_a
+          fail_votePower_a
+          abstain_votePower_a
+        }
+      }
+
         circle {
           ... on Circle {
             id: docId
@@ -163,6 +184,16 @@ const PROPOSAL_QUERY = `
       details_ballotAlignment_i
       details_url_s
 
+      votetally {
+        docId
+        ... on VoteTally {
+          docId
+          pass_votePower_a
+          fail_votePower_a
+          abstain_votePower_a
+        }
+      }
+
       start {
         details_startTime_t
       }
@@ -223,6 +254,16 @@ const PROPOSAL_QUERY = `
       details_ballotSupply_a
       details_ballotAlignment_i
 
+      votetally {
+        docId
+        ... on VoteTally {
+          docId
+          pass_votePower_a
+          fail_votePower_a
+          abstain_votePower_a
+        }
+      }
+
       queststart {
         details_title_s
         system_description_s
@@ -282,6 +323,16 @@ const PROPOSAL_QUERY = `
 
       details_url_s
 
+      votetally {
+        docId
+        ... on VoteTally {
+          docId
+          pass_votePower_a
+          fail_votePower_a
+          abstain_votePower_a
+        }
+      }
+
       parentcircle {
         ... on Circle {
           id: docId
@@ -336,6 +387,16 @@ const PROPOSAL_QUERY = `
       details_ballotQuorum_i
       details_ballotSupply_a
       details_ballotAlignment_i
+
+      votetally {
+        docId
+        ... on VoteTally {
+          docId
+          pass_votePower_a
+          fail_votePower_a
+          abstain_votePower_a
+        }
+      }
       
       parentcircle {
         ... on Circle {
@@ -414,6 +475,16 @@ const PROPOSAL_QUERY = `
       details_owner_n
       details_url_s
 
+      votetally {
+        docId
+        ... on VoteTally {
+          docId
+          pass_votePower_a
+          fail_votePower_a
+          abstain_votePower_a
+        }
+      }
+
       dao {
         details_daoName_n
       }
@@ -454,6 +525,16 @@ const PROPOSAL_QUERY = `
       details_url_s
       dao {
         details_daoName_n
+      }
+
+      votetally {
+        docId
+        ... on VoteTally {
+          docId
+          pass_votePower_a
+          fail_votePower_a
+          abstain_votePower_a
+        }
       }
       original {
         __typename
@@ -548,6 +629,17 @@ const PROPOSAL_QUERY = `
       details_ballotQuorum_i
       details_ballotSupply_a
       details_ballotAlignment_i
+
+      votetally {
+        docId
+        ... on VoteTally {
+          docId
+          pass_votePower_a
+          fail_votePower_a
+          abstain_votePower_a
+        }
+      }
+
       salaryband {
         details_annualUsdSalary_a
         details_name_s
@@ -633,6 +725,16 @@ const PROPOSAL_QUERY = `
       details_ballotSupply_a
       details_ballotAlignment_i
       creator
+
+      votetally {
+        docId
+        ... on VoteTally {
+          docId
+          pass_votePower_a
+          fail_votePower_a
+          abstain_votePower_a
+        }
+      }
       start {
         details_startTime_t
       }
@@ -702,6 +804,16 @@ const PROPOSAL_QUERY = `
       details_minTimeShareX100_i
       details_owner_n
 
+      votetally {
+        docId
+        ... on VoteTally {
+          docId
+          pass_votePower_a
+          fail_votePower_a
+          abstain_votePower_a
+        }
+      }
+
       details_url_s
       dao {
         details_daoName_n
@@ -724,6 +836,16 @@ const PROPOSAL_QUERY = `
       details_ballotAlignment_i
       details_purpose_s
       system_proposer_n
+
+      votetally {
+        docId
+        ... on VoteTally {
+          docId
+          pass_votePower_a
+          fail_votePower_a
+          abstain_votePower_a
+        }
+      }
       assignment {
         details_assignee_n
         dao {
@@ -773,6 +895,17 @@ const PROPOSAL_QUERY = `
       dao {
         details_daoName_n
       }
+
+      votetally {
+        docId
+        ... on VoteTally {
+          docId
+          pass_votePower_a
+          fail_votePower_a
+          abstain_votePower_a
+        }
+      }
+
       suspend {
         ... on Role {
           ballot_expiration_t
@@ -847,7 +980,10 @@ const PROPOSAL_QUERY = `
     }
     ... on Votable {
       votetally {
+         docId
+
         ... on VoteTally {
+           docId
           pass_votePower_a
           fail_votePower_a
           abstain_votePower_a
@@ -921,28 +1057,6 @@ export default {
   },
 
   apollo: {
-    upvoteElectionQuery: {
-      query: require('~/query/upvote-election-data.gql'),
-      update: data => {
-        return {
-          currentRound: data.getDao.ongoingelct[0]?.currentround[0].details_type_s,
-          nextRound: data.getDao.ongoingelct[0]?.currentround[0].nextround,
-          upcomingElection: data.getDao.upcomingelct
-        }
-      },
-      variables () {
-        return {
-          daoName: this.selectedDao.name
-        }
-      },
-      result (data) {
-        this.upvoteElectionData = {
-          currentRound: data.data.getDao.ongoingelct[0]?.currentround[0].details_type_s,
-          nextRound: data.data.getDao.ongoingelct[0]?.currentround[0].nextround,
-          upcomingElection: data.data.getDao.upcomingelct
-        }
-      }
-    },
 
     proposal: {
       query: gql`query proposalDetail($docId: String!) { ${PROPOSAL_QUERY} }`,
