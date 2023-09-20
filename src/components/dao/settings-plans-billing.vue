@@ -1,7 +1,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import gql from 'graphql-tag'
-import { ORIGIN } from '~/const'
+import { ORIGIN, PLAN_TYPE } from '~/const'
 
 const STATES = Object.freeze({
   WAITING: 'WAITING',
@@ -55,7 +55,9 @@ export default {
       state: STATES.WAITING,
 
       paymentInterval: 'year',
-      planType: 'SAAS'
+
+      PLAN_TYPE,
+      planType: PLAN_TYPE.SAAS
     }
   },
 
@@ -131,9 +133,9 @@ export default {
     ).q-pa-none
       template(v-slot:header)
         q-btn.q-px-xl.rounded-border.text-bold(
-          :color="planType === 'EAAS' ? 'primary' : 'secondary'"
-          :label="planType === 'EAAS' ? 'Single' : 'Ecosystem'"
-          @click="planType = 'EAAS', paymentInterval = null"
+          :color="planType === PLAN_TYPE.EAAS ? 'primary' : 'secondary'"
+          :label="planType === PLAN_TYPE.EAAS ? 'Single' : 'Ecosystem'"
+          @click="planType = PLAN_TYPE.EAAS, paymentInterval = null"
           no-caps
           rounded
           unelevated
@@ -144,7 +146,7 @@ export default {
       .hr.q-my-md
 
       section
-        nav.full-width.row.justify-center.items-center(v-if="planType ==='SAAS'")
+        nav.full-width.row.justify-center.items-center(v-if="planType === PLAN_TYPE.SAAS")
           q-btn.q-px-xl.rounded-border.text-bold(
             @click="paymentInterval = 'month'"
             :color="paymentInterval === 'month' ? 'primary' : 'secondary'"
