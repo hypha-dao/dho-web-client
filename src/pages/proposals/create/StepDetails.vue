@@ -229,7 +229,7 @@ widget
       creation-stepper(
         :activeStepIndex="stepIndex"
         :steps="steps"
-        :nextDisabled="canGoNext"
+        :nextDisabled="!canGoNext"
         @publish="$emit('publish')"
         @save="$emit('save')"
         @next="$emit('next')"
