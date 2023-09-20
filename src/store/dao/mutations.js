@@ -104,67 +104,68 @@ const settingsMapper = (settings) => {
   }
 }
 
-export const switchDao = (state, daos) => {
-  // Called by DhoSelector.vue after the apollo query
-  if (daos && daos.length === 1) {
-    const dao = daos[0]
-    state.name = dao.details_daoName_n
-    state.hash = dao.hash
-    state.docId = dao.docId
+// Called by DhoSelector.vue after the apollo query
+export const switchDao = (state, data) => {
+  const dao = data?.queryDao[0]
+  const plan = data?.activePlan
 
+  state.name = dao.details_daoName_n
+  state.hash = dao.hash
+  state.docId = dao.docId
+
+  state.announcements = [...dao.announcements].map(_ => ({ ..._, enabled: Boolean(_.enabled) }))
+
+  state.meta = {
+    memberCount: dao.memberAggregate.count
+  }
+
+  state.plan = {
+    ...plan,
+    amountUSD: plan.price / 100,
+    currentCoreMembersCount: dao?.memberAggregate?.count || 0
+    // id: 'founder',
+    // status: 'active',
+    // amountUSD: 0,
+    // coreMembersCount: 5,
+    // communityMembersCount: 0,
+
+    // const daysLeft = date.getDateDiff(new Date(plan.expirationDate), new Date(), 'days')
+    // const gracePeriodDays = 7
     // dao.details_daoType_s = 'anchor'
     // dao.details_isWaitingEcosystem_i = Boolean(dao.details_isWaitingEcosystem_i)
 
-    const isWaitingEcosystem = Boolean(dao.details_isWaitingEcosystem_i)
-    const isEcosystemActivated = dao.details_isWaitingEcosystem_i === 0
-    const isEcosystem = dao.details_daoType_s === 'anchor' || isWaitingEcosystem
+    // const isWaitingEcosystem = Boolean(dao.details_isWaitingEcosystem_i)
+    // const isEcosystemActivated = dao.details_isWaitingEcosystem_i === 0
+    // const isEcosystem = dao.details_daoType_s === 'anchor' || isWaitingEcosystem
+    // isActivated: true,
+    // isEcosystem,
+    // isEcosystemActivated,
+    // isWaitingEcosystem,
+    // maxUsers: lastb
 
-    state.announcements = [...dao.announcements].map(_ => ({ ..._, enabled: Boolean(_.enabled) }))
+    // daysLeft: plan.name === 'Founders' ? -1 : (daysLeft - gracePeriodDays) < 0 ? 0 : (daysLeft - gracePeriodDays),
+    // graceDaysLeft: plan.name === 'Founders' ? -1 : daysLeft < 0 ? 0 : daysLeft,
+    // hasExpired: plan.isInfinite ? false : daysLeft <= 0 && plan.name !== 'Founders',
+    // isExpiring: daysLeft <= gracePeriodDays && plan.name !== 'Founders'
+  }
 
-    state.meta = {
-      memberCount: dao.memberAggregate.count
-    }
+  const multisigs = dao.multisigs
+  state.multisigs = multisigs && multisigs.length > 0 ? multisigs.map(settingsMapper) : []
 
-    const planmanager = dao && dao.planmanager && dao.planmanager.length > 0 ? dao.planmanager[0] : null
-    const lastbill = planmanager ? planmanager.lastbill[0] : {}
-    const plan = planmanager
-      ? {
-          ...lastbill,
-          isActivated: true,
-          isEcosystem,
-          isEcosystemActivated,
-          isWaitingEcosystem,
-          maxUsers: lastbill && lastbill?.pricingplan && lastbill?.pricingplan[0].maxMemberCount
-        }
-      : {
-          isActivated: false,
-          isEcosystem,
-          isEcosystemActivated,
-          isWaitingEcosystem
-        }
+  const settings = dao.settings[0]
 
-    state.plan = {
-      ...plan
-    }
+  state.ecosystem = {
+    name: settings?.ecosystem_name_s,
+    logo: settings?.ecosystem_logo_s,
+    domain: settings?.ecosystem_domain_s,
+    purpose: settings?.ecosystem_purpose_s
+    // isActivated: isEcosystemActivated
+  }
 
-    const multisigs = dao.multisigs
-    state.multisigs = multisigs && multisigs.length > 0 ? multisigs.map(settingsMapper) : []
-
-    const settings = dao.settings[0]
-
-    state.ecosystem = {
-      name: settings?.ecosystem_name_s,
-      logo: settings?.ecosystem_logo_s,
-      domain: settings?.ecosystem_domain_s,
-      purpose: settings?.ecosystem_purpose_s,
-      isActivated: isEcosystemActivated
-    }
-
-    state.settings = {
-      ...settingsMapper(settings),
-      levels: [...dao?.levels],
-      upvoteElectionId: dao?.upcomingelct?.[0]?.docId
-    }
+  state.settings = {
+    ...settingsMapper(settings),
+    levels: [...dao?.levels],
+    upvoteElectionId: dao?.upcomingelct?.[0]?.docId
   }
 }
 

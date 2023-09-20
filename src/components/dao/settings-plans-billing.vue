@@ -65,14 +65,31 @@ export default {
     async checkout (id) {
       this.state = STATES.CREATING_SESSION
 
+      console.log(JSON.stringify(
+        {
+          daoId: this.selectedDao.docId,
+          daoName: this.selectedDao.title,
+          daoType: this.planType,
+          priceId: id,
+          redirectDomain: ORIGIN,
+          successUrl: `/${this.selectedDao.url}/configuration?tab=PLANS_AND_BILLING`
+        }
+      ))
+
       const res = await this.$apollo.mutate({
         mutation: gql`
           mutation createSession(
+            $daoId: String!
+            $daoName: String!
+            $daoType: String!
             $priceId: String!
             $redirectDomain: String!
             $successUrl: String!
           ) {
             createCheckoutSession(
+              daoId: $daoId
+              daoName: $daoName
+              daoType: $daoType
               priceId: $priceId
               redirectDomain: $redirectDomain
               successUrl: $successUrl
@@ -83,10 +100,12 @@ export default {
           }
         `,
         variables: {
+          daoId: this.selectedDao.docId,
+          daoName: this.selectedDao.title,
+          daoType: this.planType,
           priceId: id,
           redirectDomain: ORIGIN,
-
-          successUrl: `/${this.daoSettings.url}/configuration?tab=PLANS_AND_BILLING`
+          successUrl: `/${this.selectedDao.url}/configuration?tab=PLANS_AND_BILLING`
         }
       })
 
@@ -95,11 +114,27 @@ export default {
       }
     },
 
+    onPlanDialogClose () {
+      // this.state = STATES.WAITING
+      // this.planType = PLAN_TYPE.SAAS
+      // this.paymentInterval = 'year'
+    },
+
+    switchPlanType () {
+      // if (this.planType === PLAN_TYPE.SAAS) {
+      //   this.planType = PLAN_TYPE.EAAS
+      //   this.paymentInterval = null
+      // } else {
+      //   this.planType = PLAN_TYPE.SAAS
+      //   this.paymentInterval = 'year'
+      // }
+    },
+
     formatMoney (amount) { return amount ? new Intl.NumberFormat().format(parseInt(amount), { style: 'currency' }) : 0 }
   },
 
   computed: {
-    ...mapGetters('dao', ['daoSettings', 'selectedDaoPlan']),
+    ...mapGetters('dao', ['daoSettings', 'selectedDao', 'selectedDaoPlan']),
 
     isPlanModalOpen () { return [STATES.UPDATING_PLAIN, STATES.CREATING_SESSION].includes(this.state) },
 
@@ -124,7 +159,7 @@ export default {
 
 <template lang="pug">
 .tab
-  q-dialog(:value="isPlanModalOpen" @before-hide="state = STATES.WAITING" full-width="full-width")
+  q-dialog(:value="isPlanModalOpen" @before-hide="onPlanDialogClose" full-width="full-width")
     widget.relative.wrapper(
       v-if="state === STATES.UPDATING_PLAIN"
       :title="$t('configuration.settings-plans-billing.plan.modal.title')"
@@ -135,7 +170,7 @@ export default {
         q-btn.q-px-xl.rounded-border.text-bold(
           :color="planType === PLAN_TYPE.EAAS ? 'primary' : 'secondary'"
           :label="planType === PLAN_TYPE.EAAS ? 'Single' : 'Ecosystem'"
-          @click="planType = PLAN_TYPE.EAAS, paymentInterval = null"
+          @click="switchPlanType"
           no-caps
           rounded
           unelevated
@@ -179,8 +214,8 @@ export default {
 
               footer
                 div.row.justify-between
-                  p.q-pa-none.q-ma-none.text-sm.text-h-gray.leading-loose Core Members
-                  p.q-pa-none.q-ma-none.text-sm.text-h-gray.leading-loose {{ plan.coreMembersCount }}
+                  //- p.q-pa-none.q-ma-none.text-sm.text-h-gray.leading-loose Core Members
+                  //- p.q-pa-none.q-ma-none.text-sm.text-h-gray.leading-loose {{ plan.currentCoreMembersCount }} {{ plan.coreMembersCount }}
                 //- TODO: Return after beta
                 //- div.row.justify-between.q-mt-xs
                 //-   p.q-pa-none.q-ma-none.text-sm.text-h-gray.leading-loose Community Members
@@ -221,7 +256,7 @@ export default {
           footer
             div.row.justify-between
               p.q-pa-none.q-ma-none.text-sm.text-h-gray.leading-loose Core Members
-              p.q-pa-none.q-ma-none.text-sm.text-h-gray.leading-loose {{ selectedDaoPlan.coreMembersCount }}
+              p.q-pa-none.q-ma-none.text-sm.text-h-gray.leading-loose {{ selectedDaoPlan.currentCoreMembersCount }} / {{ selectedDaoPlan.coreMembersCount }}
             //- TODO: Return after beta
             //- div.row.justify-between.q-mt-xs
             //-   p.q-pa-none.q-ma-none.text-sm.text-h-gray.leading-loose Community Members

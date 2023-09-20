@@ -4,7 +4,18 @@ import gql from 'graphql-tag'
 const MAX_NUM_OF_RETIRES = 10
 
 const DAO_ACTIVE_QUERY = `
-
+  activePlan(daoId: $daoId) {
+    id: planId
+    status: subscriptionStatus
+    currency
+    currentPeriodEnd
+    currentPeriodStart
+    coreMembersCount
+    communityMembersCount
+    price
+    subscriptionId
+  }
+  
   queryDao @cascade(fields: ["settings"]) {
     docId
     details_daoName_n
@@ -166,7 +177,7 @@ const DAO_ACTIVE_QUERY = `
       settings_documentationURL_s
     }
 
-    settings(filter: { settings_daoUrl_s: { regexp: $regexp } }) {
+    settings(filter: {  settings_daoUrl_s: { regexp: $regexp } }) {
       ecosystem_name_s
       ecosystem_logo_s
       ecosystem_domain_s
@@ -180,7 +191,7 @@ const DAO_ACTIVE_QUERY = `
       settings_daoTitle_s
       settings_daoDescription_s
       settings_governanceTokenContract_n
-      
+
       settings_pegTokenName_s
       settings_pegToken_a
       settings_pegTokenContract_n
@@ -293,21 +304,22 @@ export default {
 
   apollo: {
     dao: {
-      query: gql`query activeDao($regexp: String!) { ${DAO_ACTIVE_QUERY} }`,
+      query: gql`query activeDao($daoId: ID!, $regexp: String!) { ${DAO_ACTIVE_QUERY} }`,
       update: data => data.queryDao,
       skip () { return !this.dhoname || !this.daoRegexp },
-      variables () { return { regexp: this.daoRegexp } },
+      variables () { return { regexp: this.daoRegexp, daoId: '39485' } },
 
       result (res) {
-        const data = res.data?.queryDao
+        const data = res?.data
 
-        if (!(data?.length)) {
+        if (!data?.queryDao?.length) {
           this.daoQueryNumberOfRetires++
           if (this.daoQueryNumberOfRetires > MAX_NUM_OF_RETIRES) {
             this.$router.push({ path: '/not-found' })
           } else {
             this.$apollo.queries.dao.refetch()
           }
+          return
         }
 
         this.$store.commit('dao/switchDao', data)
