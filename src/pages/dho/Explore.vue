@@ -239,13 +239,13 @@ export default {
 
 </script>
 <template lang="pug">
-q-page.page-explore
+q-page.page-explore(:style="'overflow-x: hidden'")
   .row.full-width(v-if="isExploreBannerVisible")
     base-banner(v-bind="banner" @onClose="hideExploreBanner" :compact="!$q.screen.gt.sm")
       template(v-slot:buttons)
         a(target="_tab" href="https://hypha.earth/")
           q-btn.q-px-lg.h-btn1(no-caps rounded unelevated color="secondary" href="https://hypha.earth/" target="_blank") {{ $t('pages.dho.explore.discoverMore') }}
-  .row.q-py-md(:class="{ 'block': $q.screen.lt.sm }")
+  .row.q-py-md(:class="{ 'block': $q.screen.lt.sm, 'overflow-x': 'hidden' }")
     .col-sm-12.col-md-12.col-lg-9(ref="scrollContainer" v-if="exploreBy === EXPLORE_BY.DAOS")
       q-infinite-scroll(@load="onLoad" :offset="250" :scroll-target="$refs.scrollContainer" ref="scroll")
         .row
