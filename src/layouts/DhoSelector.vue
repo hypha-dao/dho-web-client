@@ -301,7 +301,7 @@ export default {
       result (res) {
         const data = res.data?.queryDao
 
-        if (!(data.length)) {
+        if (!(data?.length)) {
           this.daoQueryNumberOfRetires++
           if (this.daoQueryNumberOfRetires > MAX_NUM_OF_RETIRES) {
             this.$router.push({ path: '/not-found' })

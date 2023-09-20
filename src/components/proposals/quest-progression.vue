@@ -117,9 +117,9 @@ export default {
     .q-mr-md.q-mb-md.rounded-border.q-pa-md(:style="{ 'min-width': '160px', 'max-width': '160px' }" :class="cardColor(currentQuest?.status)")
       .icon-container(:class="{ 'bg-primary': currentQuest?.status === PROPOSAL_STATE.PENDING }")
         q-icon(name="fa fa-map-marker" :color="iconColor(currentQuest?.status)")
-      .h-h5.text-white(:style="{ 'white-space': 'nowrap', 'text-overflow': 'ellipsis', 'overflow': 'hidden' }") {{ currentQuest.title }}
+      .h-h5.text-white(:style="{ 'white-space': 'nowrap', 'text-overflow': 'ellipsis', 'overflow': 'hidden' }") {{ currentQuest?.title }}
+        q-tooltip {{ currentQuest?.title }}
 
-        q-tooltip {{ currentQuest.title }}
       .h-h7.text-white.q-mt-md(:class="{ 'text-grey': currentQuest?.status === PROPOSAL_STATE.PENDING}") {{ cardStatus(currentQuest) }}
     template(v-if="claimPayments?.length" v-for="card in claimPayments")
       .q-mr-md.q-mb-md.rounded-border.q-pa-md(:style="{ 'min-width': '160px', 'max-width': '160px' }" :class="cardColor(card?.status)")

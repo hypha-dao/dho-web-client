@@ -197,7 +197,7 @@ export default {
   padding 50px 80px
 .bottom-card
   position: absolute
-  top: 220px
+  top: 120px
   left: 0
   right: 0
   bottom: 0
