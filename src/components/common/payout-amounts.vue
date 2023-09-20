@@ -1,26 +1,16 @@
-<script lang="ts">
+<script>
 import { defineComponent } from 'vue'
-import { PropType } from 'vue/types/v3-component-props'
-import TokenValue from './token-value.vue'
 import { TOKEN_TYPES } from '~/const'
 
-type TokenProps = Omit<
-  InstanceType<typeof TokenValue>['$props'],
-  'daoLogo' | 'multiplier'
->
-
-/**
- * Displays the amounts of tokens earned for a contribution.
- */
 export default defineComponent({
   name: 'payout-amounts',
   components: {
-    TokenValue
+    TokenValue: () => import('./token-value.vue')
   },
 
   props: {
     tokens: {
-      type: Array as PropType<TokenProps[]>,
+      type: Array,
       default: () => []
     },
     multiplier: {
@@ -35,35 +25,24 @@ export default defineComponent({
   },
 
   methods: {
-    settingsHasToken(token) {
-      if (token !== 'VOICE') {
-        if (this.$store.state.dao.settings.pegToken && this.$store.state.dao.settings.rewardToken) {
-          return token === this.$store.state.dao.settings.pegToken || token === this.$store.state.dao.settings.rewardToken
-        } else {
-          return false
-        }
-      } else {
-        return true
-      }
-    },
-
     settingsMultiplier(label) {
       switch (label) {
-        case TOKEN_TYPES.CASH_TOKEN:
-          return this.$store.state.dao.settings.settings_treasuryTokenMultiplier_i
-        case TOKEN_TYPES.VOICE_TOKEN:
-          return this.$store.state.dao.settings.settings_voiceTokenMultiplier_i
         case TOKEN_TYPES.UTILITY_TOKEN:
-          return this.$store.state.dao.settings.settings_utilityTokenMultiplier_i
+          return this.$store.state.dao.settings.utilityTokenMultiplier
+        case TOKEN_TYPES.CASH_TOKEN:
+          return this.$store.state.dao.settings.treasuryTokenMultiplier
+        case TOKEN_TYPES.VOICE_TOKEN:
+          return this.$store.state.dao.settings.voiceTokenMultiplier
       }
     }
   }
+
 })
 </script>
 
 <template lang="pug">
 .full-width(:class="{row: $q.platform.is.desktop}")
   template(v-for="token in tokens")
-    .col(v-if="token.value" :class="{'col-12': stacked, 'q-mb-md': $q.platform.is.mobile}")
-      token-value(v-if="settingsHasToken(token.symbol)" :daoLogo="daoLogo" :multiplier="settingsMultiplier(token.label)" v-bind="token")
+    .col(v-if="token?.value" :class="{'col-12': stacked, 'q-mb-md': $q.platform.is.mobile}")
+      token-value(:daoLogo="daoLogo" :multiplier="settingsMultiplier(token?.label)" v-bind="token")
 </template>
