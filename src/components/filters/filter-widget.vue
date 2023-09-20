@@ -19,6 +19,7 @@ export default {
   },
 
   props: {
+    mobile: Boolean,
     optionArray: Array,
     circleArray: Array,
     filters: Array,
@@ -126,6 +127,7 @@ export default {
 
 <template lang="pug">
 widget(:title="$t('filters.filter-widget.filters')")
+  q-btn.close-btn--mobile.absolute(v-if="mobile" color="internal-bg" text-color="primary" rounded unelevated size="sm" padding="12px" icon="fas fa-times" @click="$emit('close-window')")
   .row.items-center.justify-between.q-py-sm(v-if="showTextFilter")
     q-input.text-filter.rounded-border.full-width(outlined v-model="textFilter" :placeholder="filterTitle" :debounce="debounce" dense)
       template(v-slot:append v-if="textFilter")
@@ -171,4 +173,8 @@ widget(:title="$t('filters.filter-widget.filters')")
     padding-top 5px
     align-items center
     overflow hidden
+
+.close-btn--mobile
+  right: 0
+  top: -2px
 </style>

@@ -109,7 +109,9 @@ module.exports = function (ctx) {
         CAPTCHA_NETWORK: process.env.CAPTCHA_NETWORK || 'telosTestnet',
         LOGIN_CONTRACT: process.env.LOGIN_CONTRACT,
         JOIN_CONTRACT: process.env.JOIN_CONTRACT,
-        JOIN_URI: process.env.JOIN_URI
+        JOIN_URI: process.env.JOIN_URI,
+        DOWNLOAD_WALLET_LINK_IOS: process.env.DOWNLOAD_WALLET_LINK_IOS,
+        DOWNLOAD_WALLET_LINK_ANDROID: process.env.DOWNLOAD_WALLET_LINK_ANDROID
       },
 
       scopeHoisting: true,

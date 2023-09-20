@@ -62,20 +62,12 @@ export default {
     sanitizeDescription () { return this.$sanitize(this.description, { allowedTags: [] }) },
 
     canGoNext () {
-      if (this.$store.state.proposals.draft.edit) {
-        if (this.sanitizeDescription.length < DESCRIPTION_MAX_LENGTH) {
-          if (this.fields.purpose && this.purpose.length === 0) {
-            return true
-          }
-          return false
-        }
-      } else if (this.sanitizeDescription.length > 0 && this.title.length > 0 && this.sanitizeDescription.length < DESCRIPTION_MAX_LENGTH && this.title.length <= TITLE_MAX_LENGTH) {
-        if (this.fields.purpose && this.purpose.length === 0) {
-          return true
-        }
-        return false
-      }
-      return true
+      return [
+        this.title !== '',
+        this.description !== '',
+        this.sanitizeDescription !== '',
+        DESCRIPTION_MAX_LENGTH >= this.sanitizeDescription.length
+      ].every(_ => _)
     },
 
     title: {
@@ -99,9 +91,7 @@ export default {
       set (value) { this.$store.commit('proposals/setVotingMethod', value) }
     },
 
-    isEditing () {
-      return this.$store.state.proposals.draft.edit
-    }
+    isEditing () { return this.$store.state.proposals.draft.edit }
   },
 
   created () {
@@ -163,7 +153,16 @@ widget
       q-input.q-mt-xs.rounded-border(:disable="isEditing || isProposalType(PROPOSAL_TYPE.ABILITY) || isProposalType(PROPOSAL_TYPE.ASSIGNBADGE)" :placeholder="fields.title.placeholder" :rules="[val => !!val || $t('pages.proposals.create.stepdetails.titleIsRequired'), val => (val.length <= TITLE_MAX_LENGTH) || $t('pages.proposals.create.stepdetails.proposalTitleLengthHasToBeLess', { TITLE_MAX_LENGTH: TITLE_MAX_LENGTH, length: title.length })]" dense outlined v-model="title")
     .col.q-mt-sm(v-if="fields.description")
       label.h-label {{ fields.description.label }}
-      q-field.q-mt-xs.rounded-border(:rules="[rules.required, val => this.$sanitize(val, { allowedTags: [] }).length < DESCRIPTION_MAX_LENGTH || $t('pages.proposals.create.stepdetails.theDescriptionMustContainLess', { DESCRIPTION_MAX_LENGTH: DESCRIPTION_MAX_LENGTH, length: this.$sanitize(description, { allowedTags: [] }).length })]" dense maxlength="4000" outlined ref="bio" stack-label v-model="description" :disable="isProposalType(PROPOSAL_TYPE.ABILITY) || isProposalType(PROPOSAL_TYPE.ASSIGNBADGE)")
+      q-field.q-mt-xs.rounded-border(
+        :disable="isProposalType(PROPOSAL_TYPE.ABILITY) || isProposalType(PROPOSAL_TYPE.ASSIGNBADGE)"
+        :rules="[rules.required, val => this.$sanitize(val, { allowedTags: [] }).length < DESCRIPTION_MAX_LENGTH || $t('pages.proposals.create.stepdetails.theDescriptionMustContainLess', { DESCRIPTION_MAX_LENGTH: DESCRIPTION_MAX_LENGTH, length: this.$sanitize(description, { allowedTags: [] }).length })]"
+        dense
+        maxlength="4000"
+        outlined
+        ref="description"
+        stack-label
+        v-model="description"
+      )
         input-editor.full-width(:placeholder="fields.description.placeholder" :toolbar="[['bold', 'italic', /*'strike', 'underline'*/],['token', 'hr', 'link', 'custom_btn'],['quote', 'unordered', 'ordered']]" flat ref="editorRef" v-model="description")
     .col.q-mt-sm(v-if="fields.circle")
       label.h-label {{ fields.circle.label }}
@@ -224,18 +223,17 @@ widget
       input-file-ipfs(@uploading="uploading = true" @uploadedFile="url = arguments[0], uploading = false, originalUploadedFile = arguments[1]" ref="url" v-show="false")
   nav.q-mt-xl.row.justify-end.q-gutter-xs(v-if="$q.screen.gt.md")
     q-btn.q-px-xl(@click="$emit('prev')" color="primary" flat :label="$t('pages.proposals.create.stepdetails.back')" no-caps outline rounded v-if="!disablePrevButton")
-    q-btn.q-px-xl(:disable="canGoNext" @click="onNext" color="primary" :label="$t('pages.proposals.create.stepdetails.nextStep')" no-caps rounded unelevated)
+    q-btn.q-px-xl(:disable="!canGoNext" @click="onNext" color="primary" :label="$t('pages.proposals.create.stepdetails.nextStep')" no-caps rounded unelevated)
   template(v-if="$q.screen.lt.md || $q.screen.md")
     q-card(:style="'border-radius: 25px; box-shadow: none; z-index: 7000; position: fixed; bottom: -20px; left: 0; right: 0; box-shadow: 0px 0px 26px 0px rgba(0, 0, 41, 0.2);'")
       creation-stepper(
         :activeStepIndex="stepIndex"
         :steps="steps"
-        :nextDisabled="canGoNext"
+        :nextDisabled="!canGoNext"
         @publish="$emit('publish')"
         @save="$emit('save')"
         @next="$emit('next')"
       )
-</template>
 </template>
 
 <style lang="stylus" scoped>

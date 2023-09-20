@@ -413,10 +413,11 @@ export default {
         ratioUsdEquity = parseFloat(state.draft.annualUsdSalary || 0) / 12
         deferredSan = isNaN(state.draft.minDeferred) ? 0 : parseFloat(state.draft.minDeferred || 0)
       }
+
       // TO DO dividir entre 12 para mostrar por mes, mostrar uun lbael para informar que es mensual solo para assignmnt, y archertypes
-      commit('setPeg', (ratioUsdEquity * (1 - deferredSan / 100)).toFixed(0))
-      commit('setReward', (ratioUsdEquity * (deferredSan / 100) / rootState.dao.settings.rewardToPegRatio).toFixed(0))
-      commit('setVoice', ratioUsdEquity.toFixed(0) * 2)
+      commit('setPeg', (ratioUsdEquity * (1 - deferredSan / 100)).toFixed(0) * rootState.dao.settings.treasuryTokenMultiplier)
+      commit('setReward', ((ratioUsdEquity * (deferredSan / 100)).toFixed(0)) * rootState.dao.settings.utilityTokenMultiplier)
+      commit('setVoice', ratioUsdEquity.toFixed(0) * rootState.dao.settings.voiceTokenMultiplier)
 
       // Para badges multiply multiplicar x 100 y sumar 10,000
     },
@@ -607,8 +608,14 @@ export default {
                 { label: 'min_deferred_x100', value: ['int64', Math.round(parseFloat(draft.minDeferred))] },
 
                 { label: 'voice_amount', value: ['asset', `${parseFloat(draft.voice).toFixed(rootState.dao.settings.voiceTokenDecimals)} ${rootState.dao.settings.voiceToken}`] },
-                { label: 'reward_amount', value: ['asset', `${parseFloat(draft.reward).toFixed(rootState.dao.settings.rewardTokenDecimals)} ${rootState.dao.settings.rewardToken}`] },
-                { label: 'peg_amount', value: ['asset', `${parseFloat(draft.peg).toFixed(rootState.dao.settings.pegTokenDecimals)} ${rootState.dao.settings.pegToken}`] },
+                ...(rootState.dao.settings.rewardToken
+                  ? [{ label: 'reward_amount', value: ['asset', `${parseFloat(draft.reward).toFixed(rootState.dao.settings.rewardTokenDecimals)} ${rootState.dao.settings.rewardToken}`] }]
+                  : []
+                ),
+                ...(rootState.dao.settings.pegToken
+                  ? [{ label: 'peg_amount', value: ['asset', `${parseFloat(draft.peg).toFixed(rootState.dao.settings.pegTokenDecimals)} ${rootState.dao.settings.pegToken}`] }]
+                  : []
+                ),
 
                 { label: 'start_period', value: ['int64', draft.startPeriod.docId] },
                 { label: 'period_count', value: ['int64', draft.periodCount] },
@@ -658,6 +665,7 @@ export default {
               publish: !publishToStaging
             }
           }]
+
           return this.$api.signTransaction(actions)
         }
       } catch (e) {
@@ -724,7 +732,7 @@ export default {
               { label: 'assignee', value: ['name', rootState.accounts.account] },
               { label: 'title', value: ['string', draft.title] },
               { label: 'description', value: ['string', draft.description] },
-              // { label: 'url', value: ['string', draft.url] },
+              { label: 'url', value: ['string', draft.url] },
               // { label: 'annual_usd_salary', value: ['asset', `${parseFloat(draft.annualUsdSalary).toFixed(2)} USD`] },
               { label: 'time_share_x100', value: ['int64', draft.commitment] },
               { label: 'deferred_perc_x100', value: ['int64', draft.deferred] },
@@ -741,6 +749,7 @@ export default {
               { label: 'assignee', value: ['name', rootState.accounts.account] },
               { label: 'title', value: ['string', draft.title] },
               { label: 'description', value: ['string', draft.description] },
+              { label: 'url', value: ['string', draft.url] },
               { label: 'badge', value: ['int64', draft.badge.docId] },
               { label: 'start_period', value: ['int64', draft.startPeriod.docId] },
               { label: 'period_count', value: ['int64', draft.periodCount] }
@@ -753,6 +762,7 @@ export default {
               { label: 'assignee', value: ['name', rootState.accounts.account] },
               { label: 'title', value: ['string', draft.title] },
               { label: 'description', value: ['string', draft.description] },
+              { label: 'url', value: ['string', draft.url] },
               { label: 'badge', value: ['int64', draft.badge.docId] },
               { label: 'start_period', value: ['int64', draft.startPeriod.docId] },
               { label: 'period_count', value: ['int64', draft.periodCount] }
@@ -776,6 +786,7 @@ export default {
               { label: 'content_group_label', value: ['string', 'details'] },
               { label: 'title', value: ['string', draft.title] },
               { label: 'description', value: ['string', draft.description] },
+              { label: 'url', value: ['string', draft.url] },
               { label: 'icon', value: ['string', draft.icon] },
               { label: 'voice_coefficient_x10000', value: ['int64', parseFloat(draft.voiceCoefficient.value)] },
               { label: 'reward_coefficient_x10000', value: ['int64', parseFloat(draft.rewardCoefficient.value)] },
@@ -789,6 +800,7 @@ export default {
               { label: 'content_group_label', value: ['string', 'details'] },
               { label: 'title', value: ['string', draft.title] },
               { label: 'description', value: ['string', draft.description] },
+              { label: 'url', value: ['string', draft.url] },
               { label: 'deferred_perc_x100', value: ['int64', draft.deferred] },
               { label: 'voice_amount', value: ['asset', `${parseFloat(draft.voice).toFixed(rootState.dao.settings.voiceTokenDecimals)} ${rootState.dao.settings.voiceToken}`] },
               { label: 'reward_amount', value: ['asset', `${parseFloat(draft.reward).toFixed(rootState.dao.settings.rewardTokenDecimals)} ${rootState.dao.settings.rewardToken}`] },

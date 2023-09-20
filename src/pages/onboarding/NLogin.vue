@@ -206,7 +206,7 @@ export default {
     height: auto !important
   @media (max-width: 375px)
     height: 100% !important
-    max-height: calc(100vh - 130px)
+    max-height: calc(90vh - 130px)
   @media (max-width: 375px)
     top: auto
 .bottom-card-step-two

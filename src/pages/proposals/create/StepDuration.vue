@@ -1,18 +1,56 @@
 <script>
-import { date } from 'quasar'
 import { mapGetters } from 'vuex'
+import gql from 'graphql-tag'
+import { date } from 'quasar'
 import { dateToString } from '~/utils/TimeUtils'
 
 const MAX_PERIODS = 26
 const DEFAULT_PERIOD_COUNT = 12
 
+function monthDiff(_dateFrom, _dateTo) {
+  const dateFrom = new Date(_dateFrom)
+  const dateTo = new Date(_dateTo)
+  return dateTo.getMonth() - dateFrom.getMonth() +
+   (12 * (dateTo.getFullYear() - dateFrom.getFullYear()))
+}
+
+const UPCOMING_PERIODS_QUERY = `
+  getDao(docId: $daoId) {
+    __typename
+    id: docId
+
+    calendar {
+      __typename
+      id: docId
+
+      period(
+        filter: { details_startTime_t: { ge: $start } }
+        first: $count
+        offset: $page
+      ) {
+        __typename
+        id: docId
+        details_label_s
+        details_startTime_t
+        docId
+        next {
+          __typename
+          id: docId
+          end: details_startTime_t
+        }
+      }
+    }
+  }
+`
+
 export default {
   name: 'step-duration',
   components: {
+    CreationStepper: () => import('~/components/proposals/creation-stepper.vue'),
     LoadingSpinner: () => import('~/components/common/loading-spinner.vue'),
-    Widget: () => import('~/components/common/widget.vue'),
-    CreationStepper: () => import('~/components/proposals/creation-stepper.vue')
+    Widget: () => import('~/components/common/widget.vue')
   },
+
   props: {
     disablePrevButton: Boolean,
     fields: Object,
@@ -22,35 +60,22 @@ export default {
 
   apollo: {
     periods: {
-      query: require('~/query/periods-upcoming.gql'),
-      update: data => data?.getDao?.calendar[0]?.period || [],
+      query: gql`query periodsUpcoming($daoId: String!, $start: DateTime!, $count: Int!, $page: Int) { ${UPCOMING_PERIODS_QUERY} }`,
+      update: data => data.getDao.calendar[0].period,
+      skip () { return !this.selectedDao?.docId },
       variables () {
         return {
-          daoId: this.selectedDao?.docId,
-          after: this.periodAfterDate
+          start: new Date(),
+          count: this.size,
+          daoId: this.selectedDao.docId,
+          page: 0
         }
-      },
-      skip () {
-        return this.selectedDao?.docId === undefined
       },
       result (res) {
-        const v = res.data.getDao.calendar[0].period
-        this.periodCount = this.isExtension ? DEFAULT_PERIOD_COUNT : DEFAULT_PERIOD_COUNT
-        if ((this.isFromDraft && v?.length > 0 && !this.resetPeriods) || this.isExtension) {
-          const startPeriod = this.$store.state.proposals.draft.startPeriod
-          const periodCount = this.$store.state.proposals.draft.periodCount
-          const index = v.findIndex(el => el.docId === startPeriod.docId)
-          this.startIndex = index
-          this.endIndex = index + periodCount - 1
-          this.originalEndIndex = this.endIndex
-          const start = new Date(this.start(v[this.startIndex]))
-          const from = date.formatDate(start, 'YYYY/MM/DD')
-          const to = this.endIndex
-          this.setRangeToCalendar(from, to)
-        }
-        if (!this.isExtension) {
-          this.startValue = date.formatDate(v?.[0].details_startTime_t, 'YYYY/MM/DD')
-        }
+        const periods = res.data.getDao.calendar[0].period
+
+        if (!this.periodCount) this.periodCount = DEFAULT_PERIOD_COUNT
+        if (!this.startDate) this.startDate = periods[0]?.details_startTime_t
       },
       fetchPolicy: 'no-cache'
     }
@@ -59,176 +84,130 @@ export default {
   data () {
     return {
       MAX_PERIODS: MAX_PERIODS,
-      extendedPeriods: 0,
-      isFromDraft: false,
-      originalEndIndex: undefined,
-      startIndex: 1,
-      endIndex: -1,
-      resetPeriods: false,
-      dateDuration: {
-        from: Date.now().toString(),
-        to: Date.now().toString()
-      },
-      startValue: ''
+      size: MAX_PERIODS * 2,
+      page: 0
     }
   },
-  async mounted () {
-    await this._initParams()
-  },
-  async activated () {
-    await this._initParams()
-  },
+
   computed: {
     ...mapGetters('dao', ['selectedDao']),
-    periodAfterDate () {
-      if (this.isFromDraft) {
-        return this.startDate
-      }
-      return new Date().toISOString()
+
+    availableDates () {
+      return this.periods && this.periods.map(_ => date.formatDate(_.details_startTime_t, 'YYYY/MM/DD'))
     },
-    originalPeriodCount () {
-      return this.$store.state.proposals.draft.original?.details_periodCount_i || 0
-    },
-    lastOriginalIndex () {
-      return this.startIndex + this.originalPeriodCount - 1
-    },
+
     nextDisabled () {
-      return (this.periodCount - this.originalPeriodCount) < 1 || (this.periodCount - this.originalPeriodCount) >= MAX_PERIODS
+      return this.periodCount < 1 || this.periodCount >= MAX_PERIODS
     },
+
+    durationString () {
+      const start = new Date(this.startDate)
+      const end = new Date(this.endDate)
+
+      return `from ${dateToString(start, start.getFullYear() !== end.getFullYear())} to ${dateToString(end)}`
+    },
+
     startDate: {
       get () {
-        return this.$store.state.proposals.draft.startDate || ''
+        return date.formatDate(this?.$store?.state?.proposals?.draft?.startPeriod?.details_startTime_t, 'YYYY/MM/DD') || ''
       },
 
       set (value) {
-        this.$store.commit('proposals/setStartDate', value)
+        this.$store.commit('proposals/setStartPeriod', this.periods[this.getStartIndex(value)])
       }
     },
+
     periodCount: {
       get () {
-        if (this.startIndex === -1 || this.endIndex === -1) {
-          return 0
-        }
-        return this.endIndex - this.startIndex + 1
+        return this.$store.state.proposals.draft.periodCount
       },
+
       set (value) {
-        this.setEndIndex(Number(value) + this.startIndex - 1)
         this.$store.commit('proposals/setPeriodCount', Number(value))
       }
     },
 
-    dateString () {
-      if (this.startIndex === -1 || this.endIndex === -1) {
-        return ''
+    endDate () {
+      const index = this.getEndIndex()
+      if (this.periods && this.periods.length - 1 >= index) {
+        return this.periods[index].details_startTime_t
       }
-      const start = new Date(this.start(this.periods[this.startIndex]))
-      const end = new Date(this.start(this.periods[this.endIndex + 1]))
-      return `from ${dateToString(start, start.getFullYear() !== end.getFullYear())} to ${dateToString(end)}`
-    },
+      return ''
+    }
 
-    isExtension () {
-      return this.$store.state.proposals.draft.isExtension
-    }
-  },
-  watch: {
-    dateString (v) {
-      if (v.length > 0 && this.periodCount > 0) {
-        if (this.periods && this.periods) {
-          this.$store.commit('proposals/setStartPeriod', this.periods[this.startIndex])
-          if (this.isExtension) {
-            this.startValue = date.formatDate(this.periods[this.startIndex].details_startTime_t, 'YYYY/MM/DD')
-          }
-        }
-        this.$store.commit('proposals/setPeriodCount', this.periodCount)
-        this.$store.commit('proposals/setDetailsPeriod', {
-          dateString: v
-        })
-      }
-    },
-    extendedPeriods () {
-      this.endIndex = this.lastOriginalIndex + this.extendedPeriods
-    },
-    startValue: {
-      handler: function () {
-        if (this.startValue) {
-          const startIndex = this.periods.findIndex(
-            el => new Date(el.details_startTime_t).toDateString() === new Date(this.startValue).toDateString()
-          )
-          this.startIndex = startIndex
-          this.periodCount = this.$store.state.proposals.draft.periodCount
-        } else {
-          this.startIndex = -1
-        }
-      }
-    }
   },
 
-  // TODO: Move to shared place?
   methods: {
-    async _initParams () {
-      this.isFromDraft = false
-      this.startDate = undefined
-      this.originalEndIndex = undefined
-      const startPeriod = this.$store.state.proposals.draft.startPeriod
-      const endIndex = this.$store.state.proposals.draft.endIndex
-      // const periodCount = this.$store.state.proposals.draft.periodCount
-      await this.$nextTick()
-      if (startPeriod && endIndex) {
-        this.isFromDraft = true
-        this.startDate = startPeriod.details_startTime_t
-        this.endIndex = endIndex
-      }
-    },
-    isInvalidDate (date) {
-      return date.includes('/')
-    },
-    getFormatDate (_date) {
-      const date = new Date(new Date(_date) + (this.$store.state.dao.settings.votingDurationSec * 1000))
-      // const dateString = `${date.getFullYear()}-${('0' + (date.getMonth() + 1)).slice(-2)}-${('0' + date.getDate()).slice(-2)}`
-      // return dateString
-      return date.toISOString()
-    },
-    datePickerOptions (date) {
-      return this.enableOnlyPeriods(date) && this.disableOldDates(date)
-    },
-    disableOldDates (date) {
-      const today = new Date().toISOString().split('T')[0].replaceAll('-', '/')
-      return date >= today
-    },
-    // TODO: This can be optimized
-    enableOnlyPeriods (date) {
-      if (!this.periods) return false
-      const periodArray = this.periods
-      const todayDate = new Date(date)
-      todayDate.setHours(0, 0, 0, 0)
-      for (let index = 0; index < periodArray.length; index++) {
-        const element = periodArray[index]
-        const elementDate = new Date(element.details_startTime_t)
-        elementDate.setHours(0, 0, 0, 0)
-        if (+todayDate === +elementDate) {
-          return true
-        }
-      }
-      return false
-    },
-    async setRangeToCalendar (from, to) {
-      await this.$nextTick()
-      this.startValue = from
-      this.endIndex = to
-    },
-    title (period) {
-      return 'Until'
-      // return period && period.details_label_s
+    formatDate: date.formatDate,
+
+    getStartIndex (startDate) {
+      return this.periods && startDate && this.periods.findIndex(
+        _ => new Date(_.details_startTime_t).toDateString() === new Date(startDate).toDateString()
+      )
     },
 
-    start (period) {
-      return period && new Date(period.details_startTime_t)
+    getEndIndex () {
+      return this.getStartIndex(this.startDate) + this.periodCount
     },
-    setEndIndex (index) {
-      this.endIndex = index
-      this.$store.commit('proposals/setEndIndex', this.endIndex)
+
+    isDateAvaiable (date) { return this.availableDates ? this.availableDates.includes(date) : true },
+
+    onDateNavigate ({ month, year }) {
+      const newStartPeriodsDate = new Date(this.startDate)
+      // newStartPeriodsDate.setDate(1)
+      newStartPeriodsDate.setMonth(month - 1)
+      newStartPeriodsDate.setFullYear(year)
+
+      const diffrenceInMonths = monthDiff(this.startDate, newStartPeriodsDate)
+
+      const page = Math.floor(diffrenceInMonths / 5.5555)
+      if (this.page !== page) {
+        this.page = page
+        // TODO: Add pagination post beta
+        // this.$apollo.queries.periods.fetchMore({
+        // // New variables
+        //   variables: {
+        //     page: this.page * this.size
+        //   },
+        //   // Transform the previous result with new data
+        //   updateQuery: (previousResult, { fetchMoreResult }) => {
+        //     return {
+        //       getDao: {
+        //         ...previousResult.getDao,
+        //         calendar: [
+        //           {
+        //             period: [
+        //               ...previousResult.getDao.calendar[0].period
+        //               // ...fetchMoreResult.getDao.calendar[0].period
+        //             ]
+        //           }
+        //         ]
+
+        //       }
+
+        //     }
+        //     // const newTags = fetchMoreResult.tagsPage.tags
+        //     // const hasMore = fetchMoreResult.tagsPage.hasMore
+
+        //     // this.showMoreEnabled = hasMore
+
+        //     // data.getDao.calendar[0].period
+
+        //   // return {
+        //   //   tagsPage: {
+        //   //     __typename: previousResult.tagsPage.__typename,
+        //   //     // Merging the tag list
+        //   //     tags: [...previousResult.tagsPage.tags, ...newTags],
+        //   //     hasMore,
+        //   //   },
+        //   // }
+        //   }
+        // })
+      }
     }
+
   }
+
 }
 </script>
 
@@ -240,22 +219,35 @@ widget
       .q-gutter-sm(:class="{ 'row': $q.screen.gt.md }")
         .col.select-date-block.relative
           label.h-h7 {{ $t('pages.proposals.create.stepduration.startDate') }}
-          q-input.rounded-border.col.q-mt-xs(dense outlined rounded v-model="startValue")
+          q-input.rounded-border.col.q-mt-xs(dense outlined rounded v-model="startDate")
             template(v-slot:append)
               q-icon(size="xs" name="fa fa-calendar-alt")
-          q-date.bg-internal-bg.calendar.absolute.z-top(no-unset :options="datePickerOptions" minimal="minimal" ref="calendar" v-model="startValue" rounded)
+          q-date.bg-internal-bg.calendar.absolute.z-top(
+            :options="isDateAvaiable"
+            @input="onDateChanged"
+            @navigation="onDateNavigate"
+            minimal="minimal"
+            ref="calendar"
+            rounded
+            v-model="startDate"
+          )
+
         .col
           label.h-h7 {{ $t('pages.proposals.create.stepduration.periods') }}
-          q-input.rounded-border.col.q-mt-xs(dense outlined rounded v-model="periodCount")
+          q-input.rounded-border.col.q-mt-xs(dense outlined rounded v-model="periodCount" :max="MAX_PERIODS")
           q-tooltip {{ $t('pages.proposals.create.stepduration.1MoonPeriod') }}
+
         .col
           label.h-h7 {{ $t('pages.proposals.create.stepduration.endDate') }}
-          q-input.rounded-border.col.q-mt-xs(dense filled rounded disable v-model="dateString")
+          q-input.rounded-border.col.q-mt-xs(dense filled rounded disable v-model="durationString")
+
     .row.justify-center(v-if="$apolloData.queries.periods.loading")
       q-spinner-tail(size="md")
-  .confirm.q-mt-xl(v-if="startIndex >= 0 && endIndex >= 0")
+
+  .confirm.q-mt-xl
     .text-negative.h-b2.q-ml-xs.text-center(v-if="periodCount >= MAX_PERIODS") {{ $t('pages.proposals.create.stepduration.youMustSelect', { '1': MAX_PERIODS, '2': periodCount }) }}
     .text-negative.h-b2.q-ml-xs.text-center(v-if="periodCount < 0") {{ $t('pages.proposals.create.stepduration.theStartDate') }}
+
   .next-step.q-mt-xl
     .row.items-center(:class="{'justify-between': !$store.state.proposals.draft.edit, 'justify-end': $store.state.proposals.draft.edit}")
       nav.row.justify-end.full-width.q-gutter-xs(v-if="$q.screen.gt.md")
