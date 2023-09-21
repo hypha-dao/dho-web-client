@@ -147,7 +147,7 @@ export default {
   .relative-position.full-height.full-width.custom-scroll-area(v-if="$q.screen.lt.md || $q.screen.md")
     .welcome-bg-mobile.full-height.full-width(:class="animationBGMobile")
     .welcome-fg.full-height.full-width
-    img.hyphaLogo(src="~assets/logos/hypha-logo-full.svg")
+    img.hyphaLogo(src="~assets/logos/hypha-horizontal-light.png")
     q-card.card-container.bottom-card(:class="animationCardMobile")
       q-scroll-area.full-width.full-height(:thumb-style="{ 'opacity': '0'}" :content-style="{ 'height': '100%' }" ref="scrollArea")
         transition(v-if="step === steps.welcome" enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
@@ -196,17 +196,18 @@ export default {
 .left-card
   padding 50px 80px
 .bottom-card
+  border-radius: 25px 25px 0 0
   position: absolute
   top: 120px
   left: 0
   right: 0
   bottom: 0
-  padding: 30px 20px 30px
+  padding: 30px
   @media (orientation: landscape) and (min-width: 1024px)
     height: auto !important
   @media (max-width: 375px)
     height: 100% !important
-    max-height: calc(90vh - 130px)
+    max-height: 88%
   @media (max-width: 375px)
     top: auto
 .bottom-card-step-two
@@ -231,7 +232,7 @@ export default {
   background-position-x: 70%
 .hyphaLogo
   width: 150px
-  margin: 44px 0 0 42px
+  margin: 20px 0 0 20px
   z-index: 10
   position: relative
 .custom-scroll-area

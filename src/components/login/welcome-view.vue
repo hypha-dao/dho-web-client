@@ -21,16 +21,16 @@ export default {
   .full-width.full-height.flex.column.justify-between.no-wrap(:style="{ 'padding-bottom': '50px' }")
     .full-height.flex.justify-center.column
       .row(v-if="$router.currentRoute.name === 'create-your-dao'")
-        .font-lato.text-heading.text-weight-bolder(:style="{ 'font-size': '34px' }") {{ $t('login.welcome-view.launchYourFirst') }}
+        .font-lato.text-heading.text-bold(:style="{ 'font-size': '34px' }") {{ $t('login.welcome-view.launchYourFirst') }}
         .h-h7.color-black.q-mt-md {{ $t('login.welcome-view.youNeedAHyphaAccount') }}
-      .row(v-else)
-        .font-lato.text-heading.text-weight-bolder(:style="{ 'font-size': '34px' }") {{ isOnboarding ? 'Launch your' : 'Welcome to' }}
-        .font-lato.text-heading.text-weight-bolder(:style="{ 'font-size': '34px' }" :class="{ 'q-ml-xs': !$q.screen.lt.sm }") {{ isOnboarding ? 'first DAO' : selectedDao?.title?.replace(/^\w/, (c) => c.toUpperCase()) }}
+      .row(v-else :style="'line-height: 44px'")
+        .font-lato.text-heading.text-bold(:style="{ 'font-size': '34px' }") {{ isOnboarding ? 'Launch your' : 'Welcome to' }}
+        .font-lato.text-heading.text-bold(:style="{ 'font-size': '34px' }" :class="{ 'q-ml-xs': !$q.screen.lt.sm }") {{ isOnboarding ? 'first DAO' : selectedDao?.title?.replace(/^\w/, (c) => c.toUpperCase()) }}
       .h-h4.color-secondary.q-my-xxxl(v-if="$q.screen.gt.md && isOnboarding") {{ $t('login.welcome-view.youNeedAn') }}
       .h-b1-signup.text-h-gray.q-py-xxs.leading-loose(v-if="$q.screen.gt.md && !isOnboarding")
         template(v-if="$router.currentRoute.name === 'create-your-dao'") {{ $t('login.welcome-view.ifYouAlreadyHaveAHyphaAccount') }}
         template(v-else) {{ $t('login.welcome-view.isonboarding') }}
-      .h-b1-signup.color-secondary.text-weight-thin.q-mt-lg.q-mb-lg.text-grey.custom-calc-margin(v-if="!$q.screen.gt.md") {{ $t('login.welcome-view.theDhoDecentralized') }}
+      .h-b1-signup.color-secondary.q-mt-lg.q-mb-lg.text-grey.custom-calc-margin(v-if="!$q.screen.gt.md") {{ $t('login.welcome-view.theDhoDecentralized') }}
     div
       q-btn.full-width.q-mt-xl.text-bold(:disable="false" @click="$emit('onRegisterClick')" color="primary" :label="$t('login.welcome-view.createNewHyphaAccount')" no-caps rounded unelevated)
         q-tooltip(v-if="false" anchor="top middle") {{ $t('login.welcome-view.registrationIsTemporarilyDisabled') }}
