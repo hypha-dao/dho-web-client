@@ -1,7 +1,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import gql from 'graphql-tag'
-import { ORIGIN, PLAN_TYPE } from '~/const'
+import { ORIGIN, PLAN_TYPE, PAYMENT_INTERVAL } from '~/const'
 
 const STATES = Object.freeze({
   WAITING: 'WAITING',
@@ -54,7 +54,8 @@ export default {
       STATES,
       state: STATES.WAITING,
 
-      paymentInterval: 'year',
+      PAYMENT_INTERVAL,
+      paymentInterval: PAYMENT_INTERVAL.YEAR,
 
       PLAN_TYPE,
       planType: PLAN_TYPE.SAAS
@@ -68,11 +69,19 @@ export default {
       const res = await this.$apollo.mutate({
         mutation: gql`
           mutation createSession(
+            $daoId: String!
+            $daoName: String!
+            $daoType: String!
+            $daoUrl: String!
             $priceId: String!
             $redirectDomain: String!
             $successUrl: String!
           ) {
             createCheckoutSession(
+              daoId: $daoId
+              daoName: $daoName
+              daoType: $daoType
+              daoUrl: $daoUrl
               priceId: $priceId
               redirectDomain: $redirectDomain
               successUrl: $successUrl
@@ -83,9 +92,12 @@ export default {
           }
         `,
         variables: {
+          daoId: this.selectedDao.docId,
+          daoName: this.selectedDao.title,
+          daoType: this.planType,
+          daoUrl: this.daoSettings.url,
           priceId: id,
           redirectDomain: ORIGIN,
-
           successUrl: `/${this.daoSettings.url}/configuration?tab=PLANS_AND_BILLING`
         }
       })
@@ -95,12 +107,60 @@ export default {
       }
     },
 
+    async upgrade  (id) {
+      this.state = STATES.CREATING_SESSION
+
+      const res = await this.$apollo.mutate({
+        mutation: gql`
+          mutation updateSubscription(
+            $subscriptionId: String!
+            $subscriptionItemId: String!
+            $priceId: String!
+          ) {
+            updateSubscription(
+              subscriptionId: $subscriptionId
+              subscriptionItemId: $subscriptionItemId
+              priceId: $priceId
+            ) {
+              id: planId
+            }
+        }
+        `,
+        variables: {
+          subscriptionId: this.selectedDaoPlan.subscriptionId,
+          subscriptionItemId: this.selectedDaoPlan.subscriptionItemId,
+          priceId: id
+        }
+      })
+
+      if (res) {
+        this.state = STATES.WAITING
+      }
+    },
+
+    onPlanDialogClose () {
+      this.state = STATES.WAITING
+      this.planType = PLAN_TYPE.SAAS
+      this.paymentInterval = PAYMENT_INTERVAL.YEAR
+    },
+
+    switchPlanType () {
+      if (this.planType === PLAN_TYPE.SAAS) {
+        this.planType = PLAN_TYPE.EAAS
+        this.paymentInterval = null
+      } else {
+        this.planType = PLAN_TYPE.SAAS
+        this.paymentInterval = PAYMENT_INTERVAL.YEAR
+      }
+    },
+
     formatMoney (amount) { return amount ? new Intl.NumberFormat().format(parseInt(amount), { style: 'currency' }) : 0 }
   },
 
   computed: {
-    ...mapGetters('dao', ['daoSettings', 'selectedDaoPlan']),
+    ...mapGetters('dao', ['daoSettings', 'selectedDao', 'selectedDaoPlan']),
 
+    isFreePlan () { return !this.selectedDaoPlan.id },
     isPlanModalOpen () { return [STATES.UPDATING_PLAIN, STATES.CREATING_SESSION].includes(this.state) },
 
     plans () {
@@ -109,7 +169,7 @@ export default {
           ..._,
           id: _.id,
           name: _.productName.toLowerCase(),
-          amountUSD: _.amount / 100 / (_.recurringInterval === 'year' ? 12 : 1),
+          amountUSD: _.amount / 100 / (_.recurringInterval === PAYMENT_INTERVAL.YEAR ? 12 : 1),
           interval: _.recurringInterval
         }))
         .filter(_ => _.planType === this.planType)
@@ -124,7 +184,7 @@ export default {
 
 <template lang="pug">
 .tab
-  q-dialog(:value="isPlanModalOpen" @before-hide="state = STATES.WAITING" full-width="full-width")
+  q-dialog(:value="isPlanModalOpen" @before-hide="onPlanDialogClose" full-width="full-width")
     widget.relative.wrapper(
       v-if="state === STATES.UPDATING_PLAIN"
       :title="$t('configuration.settings-plans-billing.plan.modal.title')"
@@ -135,7 +195,7 @@ export default {
         q-btn.q-px-xl.rounded-border.text-bold(
           :color="planType === PLAN_TYPE.EAAS ? 'primary' : 'secondary'"
           :label="planType === PLAN_TYPE.EAAS ? 'Single' : 'Ecosystem'"
-          @click="planType = PLAN_TYPE.EAAS, paymentInterval = null"
+          @click="switchPlanType"
           no-caps
           rounded
           unelevated
@@ -148,16 +208,16 @@ export default {
       section
         nav.full-width.row.justify-center.items-center(v-if="planType === PLAN_TYPE.SAAS")
           q-btn.q-px-xl.rounded-border.text-bold(
-            @click="paymentInterval = 'month'"
-            :color="paymentInterval === 'month' ? 'primary' : 'secondary'"
+            @click="paymentInterval = PAYMENT_INTERVAL.MONTH"
+            :color="paymentInterval === PAYMENT_INTERVAL.MONTH ? 'primary' : 'secondary'"
             no-caps
             rounded
             unelevated
             label="Monthly"
           )
           q-btn.q-px-xl.rounded-border.text-bold(
-            @click="paymentInterval = 'year'"
-            :color="paymentInterval === 'year' ? 'primary' : 'secondary'"
+            @click="paymentInterval = PAYMENT_INTERVAL.YEAR"
+            :color="paymentInterval === PAYMENT_INTERVAL.YEAR ? 'primary' : 'secondary'"
             no-caps
             rounded
             unelevated
@@ -192,7 +252,7 @@ export default {
                 q-btn.q-px-xl.rounded-border.text-bold.q-ml-xs(
                   :disable="selectedDaoPlan.id === plan.id"
                   :label="$t('configuration.settings-plans-billing.plan.modal.cta')"
-                  @click="checkout(plan.id)"
+                  @click="isFreePlan ? checkout(plan.id) : upgrade(plan.id)"
                   color="secondary"
                   no-caps
                   rounded
@@ -208,7 +268,7 @@ export default {
         widget.q-mt-xl(bar shadow)
           header.row.justify-between
             div
-              .text-xl.text-weight-600.text-primary {{  $t(`plans.${selectedDaoPlan.id}`) }}
+              .text-xl.text-weight-600.text-primary {{  $t(`plans.${selectedDaoPlan.name}`) }}
               p.q-pa-none.q-ma-none.text-3xl.text-primary.text-bold ${{ formatMoney(selectedDaoPlan.amountUSD) }}
                 //- TODO: Return after beta
                 //- span.q-ml-xxs.text-sm.text-weight-500 / {{ $('periods.month') }}
@@ -221,7 +281,7 @@ export default {
           footer
             div.row.justify-between
               p.q-pa-none.q-ma-none.text-sm.text-h-gray.leading-loose Core Members
-              p.q-pa-none.q-ma-none.text-sm.text-h-gray.leading-loose {{ selectedDaoPlan.coreMembersCount }}
+              p.q-pa-none.q-ma-none.text-sm.text-h-gray.leading-loose {{ selectedDaoPlan.currentCoreMembersCount }} / {{ selectedDaoPlan.coreMembersCount }}
             //- TODO: Return after beta
             //- div.row.justify-between.q-mt-xs
             //-   p.q-pa-none.q-ma-none.text-sm.text-h-gray.leading-loose Community Members
