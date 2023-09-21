@@ -19,7 +19,7 @@ export default {
 <template lang="pug">
 .full-width.full-height.flex(:class="{ 'items-start':!$q.screen.gt.md, 'items-center':$q.screen.gt.md }")
   .full-width.full-height.flex.column.justify-between.no-wrap(:style="{ 'padding-bottom': '50px' }")
-    .full-height.flex.justify-center.column
+    .full-height.flex.column(:class="{ 'justify-start': !$q.screen.gt.md, 'justify-center': $q.screen.gt.md }")
       .row(v-if="$router.currentRoute.name === 'create-your-dao'")
         .font-lato.text-heading.text-bold(:style="{ 'font-size': '34px' }") {{ $t('login.welcome-view.launchYourFirst') }}
         .h-h7.color-black.q-mt-md {{ $t('login.welcome-view.youNeedAHyphaAccount') }}
