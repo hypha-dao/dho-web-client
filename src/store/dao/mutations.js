@@ -119,8 +119,6 @@ export const switchDao = (state, data) => {
     memberCount: dao.memberAggregate.count
   }
 
-  console.log(JSON.stringify(data))
-
   state.plan = {
     ...plan,
     // id: 'founder',
