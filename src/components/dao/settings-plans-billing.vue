@@ -71,6 +71,7 @@ export default {
             $daoId: String!
             $daoName: String!
             $daoType: String!
+            $daoUrl: String!
             $priceId: String!
             $redirectDomain: String!
             $successUrl: String!
@@ -79,6 +80,7 @@ export default {
               daoId: $daoId
               daoName: $daoName
               daoType: $daoType
+              daoUrl: $daoUrl
               priceId: $priceId
               redirectDomain: $redirectDomain
               successUrl: $successUrl
@@ -92,6 +94,7 @@ export default {
           daoId: this.selectedDao.docId,
           daoName: this.selectedDao.title,
           daoType: this.planType,
+          daoUrl: this.daoSettings.url,
           priceId: id,
           redirectDomain: ORIGIN,
           successUrl: `/${this.daoSettings.url}/configuration?tab=PLANS_AND_BILLING`
@@ -100,6 +103,37 @@ export default {
 
       if (res?.data?.createCheckoutSession?.url) {
         window.open(res.data.createCheckoutSession.url, '_self')
+      }
+    },
+
+    async upgrade  (id) {
+      this.state = STATES.CREATING_SESSION
+
+      const res = await this.$apollo.mutate({
+        mutation: gql`
+          mutation updateSubscription(
+            $subscriptionId: String!
+            $subscriptionItemId: String!
+            $priceId: String!
+          ) {
+            updateSubscription(
+              subscriptionId: $subscriptionId
+              subscriptionItemId: $subscriptionItemId
+              priceId: $priceId
+            ) {
+              id: planId
+            }
+        }
+        `,
+        variables: {
+          subscriptionId: this.selectedDaoPlan.subscriptionId,
+          subscriptionItemId: this.selectedDaoPlan.subscriptionItemId,
+          priceId: id
+        }
+      })
+
+      if (res) {
+        this.state = STATES.WAITING
       }
     },
 
@@ -125,6 +159,7 @@ export default {
   computed: {
     ...mapGetters('dao', ['daoSettings', 'selectedDao', 'selectedDaoPlan']),
 
+    isFreePlan () { return this.selectedDaoPlan.price === 0 },
     isPlanModalOpen () { return [STATES.UPDATING_PLAIN, STATES.CREATING_SESSION].includes(this.state) },
 
     plans () {
@@ -216,7 +251,7 @@ export default {
                 q-btn.q-px-xl.rounded-border.text-bold.q-ml-xs(
                   :disable="selectedDaoPlan.id === plan.id"
                   :label="$t('configuration.settings-plans-billing.plan.modal.cta')"
-                  @click="checkout(plan.id)"
+                  @click="upgrade(plan.id)"
                   color="secondary"
                   no-caps
                   rounded
