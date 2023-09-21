@@ -6,6 +6,7 @@ const MAX_NUM_OF_RETIRES = 10
 const DAO_ACTIVE_QUERY = `
   activePlan(daoId: $daoId) {
     id: planId
+    name: planName
     status: subscriptionStatus
     currency
     currentPeriodEnd

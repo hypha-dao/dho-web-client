@@ -65,17 +65,6 @@ export default {
     async checkout (id) {
       this.state = STATES.CREATING_SESSION
 
-      console.log(JSON.stringify(
-        {
-          daoId: this.selectedDao.docId,
-          daoName: this.selectedDao.title,
-          daoType: this.planType,
-          priceId: id,
-          redirectDomain: ORIGIN,
-          successUrl: `/${this.selectedDao.url}/configuration?tab=PLANS_AND_BILLING`
-        }
-      ))
-
       const res = await this.$apollo.mutate({
         mutation: gql`
           mutation createSession(
@@ -105,7 +94,7 @@ export default {
           daoType: this.planType,
           priceId: id,
           redirectDomain: ORIGIN,
-          successUrl: `/${this.selectedDao.url}/configuration?tab=PLANS_AND_BILLING`
+          successUrl: `/${this.daoSettings.url}/configuration?tab=PLANS_AND_BILLING`
         }
       })
 
@@ -115,19 +104,19 @@ export default {
     },
 
     onPlanDialogClose () {
-      // this.state = STATES.WAITING
-      // this.planType = PLAN_TYPE.SAAS
-      // this.paymentInterval = 'year'
+      this.state = STATES.WAITING
+      this.planType = PLAN_TYPE.SAAS
+      this.paymentInterval = 'year'
     },
 
     switchPlanType () {
-      // if (this.planType === PLAN_TYPE.SAAS) {
-      //   this.planType = PLAN_TYPE.EAAS
-      //   this.paymentInterval = null
-      // } else {
-      //   this.planType = PLAN_TYPE.SAAS
-      //   this.paymentInterval = 'year'
-      // }
+      if (this.planType === PLAN_TYPE.SAAS) {
+        this.planType = PLAN_TYPE.EAAS
+        this.paymentInterval = null
+      } else {
+        this.planType = PLAN_TYPE.SAAS
+        this.paymentInterval = 'year'
+      }
     },
 
     formatMoney (amount) { return amount ? new Intl.NumberFormat().format(parseInt(amount), { style: 'currency' }) : 0 }
@@ -214,8 +203,8 @@ export default {
 
               footer
                 div.row.justify-between
-                  //- p.q-pa-none.q-ma-none.text-sm.text-h-gray.leading-loose Core Members
-                  //- p.q-pa-none.q-ma-none.text-sm.text-h-gray.leading-loose {{ plan.currentCoreMembersCount }} {{ plan.coreMembersCount }}
+                  p.q-pa-none.q-ma-none.text-sm.text-h-gray.leading-loose Core Members
+                  p.q-pa-none.q-ma-none.text-sm.text-h-gray.leading-loose {{ plan.coreMembersCount }}
                 //- TODO: Return after beta
                 //- div.row.justify-between.q-mt-xs
                 //-   p.q-pa-none.q-ma-none.text-sm.text-h-gray.leading-loose Community Members
@@ -243,7 +232,7 @@ export default {
         widget.q-mt-xl(bar shadow)
           header.row.justify-between
             div
-              .text-xl.text-weight-600.text-primary {{  $t(`plans.${selectedDaoPlan.id}`) }}
+              .text-xl.text-weight-600.text-primary {{  $t(`plans.${selectedDaoPlan.name}`) }}
               p.q-pa-none.q-ma-none.text-3xl.text-primary.text-bold ${{ formatMoney(selectedDaoPlan.amountUSD) }}
                 //- TODO: Return after beta
                 //- span.q-ml-xxs.text-sm.text-weight-500 / {{ $('periods.month') }}

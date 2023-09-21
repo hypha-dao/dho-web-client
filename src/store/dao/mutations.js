@@ -106,8 +106,8 @@ const settingsMapper = (settings) => {
 
 // Called by DhoSelector.vue after the apollo query
 export const switchDao = (state, data) => {
-  const dao = data?.queryDao[0]
-  const plan = data?.activePlan
+  const dao = data?.queryDao[0] || {}
+  const plan = data?.activePlan || {}
 
   state.name = dao.details_daoName_n
   state.hash = dao.hash
@@ -119,15 +119,17 @@ export const switchDao = (state, data) => {
     memberCount: dao.memberAggregate.count
   }
 
+  console.log(JSON.stringify(data))
+
   state.plan = {
     ...plan,
-    amountUSD: plan.price / 100,
-    currentCoreMembersCount: dao?.memberAggregate?.count || 0
     // id: 'founder',
-    // status: 'active',
-    // amountUSD: 0,
-    // coreMembersCount: 5,
-    // communityMembersCount: 0,
+    name: (plan?.name || 'founder').toLowerCase(),
+    status: plan?.status || 'active',
+    amountUSD: (plan?.price / 100) / 12,
+    coreMembersCount: plan?.coreMembersCount || 5,
+    communityMembersCount: plan?.communityMembersCount || 0,
+    currentCoreMembersCount: dao?.memberAggregate?.count || 0
 
     // const daysLeft = date.getDateDiff(new Date(plan.expirationDate), new Date(), 'days')
     // const gracePeriodDays = 7
