@@ -15,7 +15,7 @@ const DAO_ACTIVE_QUERY = `
     communityMembersCount
     price
     id: planId
-    planName    
+    name: planName    
   }
   
   queryDao @cascade(fields: ["settings"]) {

@@ -159,7 +159,7 @@ export default {
   computed: {
     ...mapGetters('dao', ['daoSettings', 'selectedDao', 'selectedDaoPlan']),
 
-    isFreePlan () { return this.selectedDaoPlan.price === 0 },
+    isFreePlan () { return !this.selectedDaoPlan.id },
     isPlanModalOpen () { return [STATES.UPDATING_PLAIN, STATES.CREATING_SESSION].includes(this.state) },
 
     plans () {
@@ -251,7 +251,7 @@ export default {
                 q-btn.q-px-xl.rounded-border.text-bold.q-ml-xs(
                   :disable="selectedDaoPlan.id === plan.id"
                   :label="$t('configuration.settings-plans-billing.plan.modal.cta')"
-                  @click="upgrade(plan.id)"
+                  @click="isFreePlan ? checkout(plan.id) : upgrade(plan.id)"
                   color="secondary"
                   no-caps
                   rounded
