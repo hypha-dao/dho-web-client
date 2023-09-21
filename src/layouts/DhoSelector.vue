@@ -4,17 +4,18 @@ import gql from 'graphql-tag'
 const MAX_NUM_OF_RETIRES = 10
 
 const DAO_ACTIVE_QUERY = `
-  activePlan(daoId: $daoId) {
-    id: planId
-    name: planName
-    status: subscriptionStatus
+  activePlan(daoUrl: $daoUrl) {
+    subscriptionId
+    subscriptionItemId
+    subscriptionStatus
     currency
     currentPeriodEnd
     currentPeriodStart
     coreMembersCount
     communityMembersCount
     price
-    subscriptionId
+    id: planId
+    planName    
   }
   
   queryDao @cascade(fields: ["settings"]) {
@@ -305,10 +306,10 @@ export default {
 
   apollo: {
     dao: {
-      query: gql`query activeDao($daoId: ID!, $regexp: String!) { ${DAO_ACTIVE_QUERY} }`,
+      query: gql`query activeDao($daoUrl: String!, $regexp: String!) { ${DAO_ACTIVE_QUERY} }`,
       update: data => data.queryDao,
       skip () { return !this.dhoname || !this.daoRegexp },
-      variables () { return { regexp: this.daoRegexp, daoId: '39485' } },
+      variables () { return { regexp: this.daoRegexp, daoUrl: this.dhoname } },
 
       result (res) {
         const data = res?.data
