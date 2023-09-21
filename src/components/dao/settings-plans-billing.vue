@@ -1,7 +1,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import gql from 'graphql-tag'
-import { ORIGIN, PLAN_TYPE } from '~/const'
+import { ORIGIN, PLAN_TYPE, PAYMENT_INTERVAL } from '~/const'
 
 const STATES = Object.freeze({
   WAITING: 'WAITING',
@@ -54,7 +54,8 @@ export default {
       STATES,
       state: STATES.WAITING,
 
-      paymentInterval: 'year',
+      PAYMENT_INTERVAL,
+      paymentInterval: PAYMENT_INTERVAL.YEAR,
 
       PLAN_TYPE,
       planType: PLAN_TYPE.SAAS
@@ -140,7 +141,7 @@ export default {
     onPlanDialogClose () {
       this.state = STATES.WAITING
       this.planType = PLAN_TYPE.SAAS
-      this.paymentInterval = 'year'
+      this.paymentInterval = PAYMENT_INTERVAL.YEAR
     },
 
     switchPlanType () {
@@ -149,7 +150,7 @@ export default {
         this.paymentInterval = null
       } else {
         this.planType = PLAN_TYPE.SAAS
-        this.paymentInterval = 'year'
+        this.paymentInterval = PAYMENT_INTERVAL.YEAR
       }
     },
 
@@ -168,7 +169,7 @@ export default {
           ..._,
           id: _.id,
           name: _.productName.toLowerCase(),
-          amountUSD: _.amount / 100 / (_.recurringInterval === 'year' ? 12 : 1),
+          amountUSD: _.amount / 100 / (_.recurringInterval === PAYMENT_INTERVAL.YEAR ? 12 : 1),
           interval: _.recurringInterval
         }))
         .filter(_ => _.planType === this.planType)
@@ -207,16 +208,16 @@ export default {
       section
         nav.full-width.row.justify-center.items-center(v-if="planType === PLAN_TYPE.SAAS")
           q-btn.q-px-xl.rounded-border.text-bold(
-            @click="paymentInterval = 'month'"
-            :color="paymentInterval === 'month' ? 'primary' : 'secondary'"
+            @click="paymentInterval = PAYMENT_INTERVAL.MONTH"
+            :color="paymentInterval === PAYMENT_INTERVAL.MONTH ? 'primary' : 'secondary'"
             no-caps
             rounded
             unelevated
             label="Monthly"
           )
           q-btn.q-px-xl.rounded-border.text-bold(
-            @click="paymentInterval = 'year'"
-            :color="paymentInterval === 'year' ? 'primary' : 'secondary'"
+            @click="paymentInterval = PAYMENT_INTERVAL.YEAR"
+            :color="paymentInterval === PAYMENT_INTERVAL.YEAR ? 'primary' : 'secondary'"
             no-caps
             rounded
             unelevated

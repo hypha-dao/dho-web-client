@@ -111,3 +111,8 @@ export const PLAN_TYPE = Object.freeze({
   EAAS: 'EAAS',
   SAAS: 'SAAS'
 })
+
+export const PAYMENT_INTERVAL = Object.freeze({
+  YEAR: 'year',
+  MONTH: 'month'
+})
