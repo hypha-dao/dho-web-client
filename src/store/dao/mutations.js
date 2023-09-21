@@ -121,7 +121,6 @@ export const switchDao = (state, data) => {
 
   state.plan = {
     ...plan,
-    // id: 'founder',
     name: (plan?.name || 'founder').toLowerCase(),
     status: plan?.status || 'active',
     amountUSD: (plan?.price / 100) / 12,
@@ -129,24 +128,6 @@ export const switchDao = (state, data) => {
     communityMembersCount: plan?.communityMembersCount || 0,
     currentCoreMembersCount: dao?.memberAggregate?.count || 0
 
-    // const daysLeft = date.getDateDiff(new Date(plan.expirationDate), new Date(), 'days')
-    // const gracePeriodDays = 7
-    // dao.details_daoType_s = 'anchor'
-    // dao.details_isWaitingEcosystem_i = Boolean(dao.details_isWaitingEcosystem_i)
-
-    // const isWaitingEcosystem = Boolean(dao.details_isWaitingEcosystem_i)
-    // const isEcosystemActivated = dao.details_isWaitingEcosystem_i === 0
-    // const isEcosystem = dao.details_daoType_s === 'anchor' || isWaitingEcosystem
-    // isActivated: true,
-    // isEcosystem,
-    // isEcosystemActivated,
-    // isWaitingEcosystem,
-    // maxUsers: lastb
-
-    // daysLeft: plan.name === 'Founders' ? -1 : (daysLeft - gracePeriodDays) < 0 ? 0 : (daysLeft - gracePeriodDays),
-    // graceDaysLeft: plan.name === 'Founders' ? -1 : daysLeft < 0 ? 0 : daysLeft,
-    // hasExpired: plan.isInfinite ? false : daysLeft <= 0 && plan.name !== 'Founders',
-    // isExpiring: daysLeft <= gracePeriodDays && plan.name !== 'Founders'
   }
 
   const multisigs = dao.multisigs
@@ -159,7 +140,6 @@ export const switchDao = (state, data) => {
     logo: settings?.ecosystem_logo_s,
     domain: settings?.ecosystem_domain_s,
     purpose: settings?.ecosystem_purpose_s
-    // isActivated: isEcosystemActivated
   }
 
   state.settings = {
