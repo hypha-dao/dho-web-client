@@ -1,3 +1,4 @@
+import { PLAN, PLAN_STATUS } from '~/const'
 export const setDho = (state, dho) => {
   if (dho && dho.length === 1) {
     state.dho = {
@@ -121,8 +122,8 @@ export const switchDao = (state, data) => {
 
   state.plan = {
     ...plan,
-    name: (plan?.name || 'founder').toLowerCase(),
-    status: plan?.status || 'active',
+    name: (plan?.name || PLAN.FOUNDER).toLowerCase(),
+    status: plan?.status || PLAN_STATUS.ACTIVE,
     amountUSD: (plan?.price / 100) / 12,
     coreMembersCount: plan?.coreMembersCount || 5,
     communityMembersCount: plan?.communityMembersCount || 0,
