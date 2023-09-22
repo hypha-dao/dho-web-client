@@ -292,7 +292,7 @@ export default {
             .font-lato.text-heading.text-bold(:style="{ 'font-size': '34px' }") {{ $t('login.register-user-with-captcha-view.createYourDao') }}
             .q-mt-md {{ $t('login.register-user-with-captcha-view.goAheadAndAddYour') }}
           div
-            div.full-width.justify-between.q-mt-xl(:class="{ 'col': !$q.screen.gt.md, 'row': $q.screen.gt.md }")
+            div.full-width.justify-between(:class="{ 'col': !$q.screen.gt.md, 'row': $q.screen.gt.md, 'q-mt-xl': $q.screen.gt.md, 'q-mt-xs': !$q.screen.gt.md }")
               .col(:class="{ 'full-width q-pt-md': !$q.screen.gt.md }")
                 .row.justify-center.items-end
                   .col-auto.q-mb-xxxs
@@ -308,7 +308,7 @@ export default {
                 label.h-label {{ $t('pages.onboarding.name') }}
                 q-input.q-mt-xs.rounded-border(:rules="[rules.required, rules.min(3)]" dense lazy-rules="ondemand" maxlength="50" outlined :placeholder="$t('pages.onboarding.theDisplayNameOfYourDao')" ref="title" v-model="form.title")
             .row.full-width.justify-between
-              .col-12.q-mt-md(:class="{ 'full-width': !$q.screen.gt.md }")
+              .col-12(:class="{ 'full-width': !$q.screen.gt.md, 'q-mt-md': $q.screen.gt.md }")
                 label.h-label {{ $t('pages.onboarding.purpose') }}
                 q-input.q-mt-xs.rounded-border(:input-style="{ 'resize': 'none' }" :rules="[rules.required]" dense lazy-rules="ondemand" maxlength="300" outlined :placeholder="$t('pages.onboarding.brieflyExplainWhatYourDao')" ref="description" rows="10" type="textarea" v-model="form.description")
             nav.row.justify-end.q-mt-xl.q-gutter-xs
@@ -360,6 +360,11 @@ export default {
                       loading-spinner(v-if="loading === wallet.getStyle().text" :color="wallet.getStyle().textColor" size="2em")
                       q-btn(v-else :color="wallet.getStyle().textColor" icon="fas fa-cloud-download-alt" @click="openUrl(wallet.getOnboardingLink())" target="_blank" dense flat size="10px")
                         q-tooltip {{ $t('login.register-user-with-captcha-view.getApp') }}
+          template(v-if="step === this.steps.create.name")
+            .row
+              .col
+              .col-7.flex.justify-end
+                q-btn.q-px-xl(@click="onSubmit" color="primary" :label="$t('login.register-user-with-captcha-view.publishYourDao')" no-caps rounded unelevated)
 </template>
 
 <style lang="stylus" scoped>
