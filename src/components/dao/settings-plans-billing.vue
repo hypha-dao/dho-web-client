@@ -64,7 +64,7 @@ export default {
   },
 
   methods: {
-    async checkout (id) {
+    async _createCheckoutSession (id) {
       this.state = STATES.CREATING_SESSION
 
       const res = await this.$apollo.mutate({
@@ -108,29 +108,32 @@ export default {
       }
     },
 
-    async upgrade  (id) {
+    async _updateSubscription  (id) {
       this.state = STATES.CREATING_SESSION
 
       const res = await this.$apollo.mutate({
         mutation: gql`
           mutation updateSubscription(
+            $daoType: String!
+            $priceId: String!
             $subscriptionId: String!
             $subscriptionItemId: String!
-            $priceId: String!
           ) {
             updateSubscription(
+              daoType: $daoType
+              priceId: $priceId
               subscriptionId: $subscriptionId
               subscriptionItemId: $subscriptionItemId
-              priceId: $priceId
             ) {
               id: planId
             }
         }
         `,
         variables: {
+          daoType: this.planType,
+          priceId: id,
           subscriptionId: this.selectedDaoPlan.subscriptionId,
-          subscriptionItemId: this.selectedDaoPlan.subscriptionItemId,
-          priceId: id
+          subscriptionItemId: this.selectedDaoPlan.subscriptionItemId
         }
       })
 
@@ -253,7 +256,7 @@ export default {
                 q-btn.q-px-xl.rounded-border.text-bold.q-ml-xs(
                   :disable="selectedDaoPlan.id === plan.id"
                   :label="$t('configuration.settings-plans-billing.plan.modal.cta')"
-                  @click="isFreePlan ? checkout(plan.id) : upgrade(plan.id)"
+                  @click="isFreePlan ? _createCheckoutSession(plan.id) : _updateSubscription(plan.id)"
                   color="secondary"
                   no-caps
                   rounded
