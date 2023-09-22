@@ -81,6 +81,7 @@ export default {
 
       inviteURL: process.env.JOIN_URI,
 
+      isLoadingDaoApplicants: true,
       applicantsCount: 0,
       applicantsPagination: {
         fetchMore: true,
@@ -88,6 +89,7 @@ export default {
         size: 3
       },
 
+      isLoadingDaoCoreMembers: true,
       coreMembersCount: 0,
       coreMembersPagination: {
         fetchMore: true,
@@ -156,6 +158,7 @@ export default {
           username: user.details_member_n
         }
       }),
+      skip () { return !this.selectedDao || !this.selectedDao.docId },
       variables () {
         return {
           first: this.applicantsPagination.size,
@@ -165,13 +168,13 @@ export default {
           filter: this.filterObject
         }
       },
-      skip () { return !this.selectedDao || !this.selectedDao.docId },
 
       result ({ data }) {
         this.applicantsCount = data?.getDao?.applicantAggregate?.count
-      },
+        this.isLoadingDaoApplicants = false
+      }
 
-      pollInterval: 1000 // TODO: Swap with subscribe once dgraph is ready
+      // pollInterval: 1000 // TODO: Swap with subscribe once dgraph is ready
     },
 
     daoCoreMembers: {
@@ -184,6 +187,7 @@ export default {
           badges: user.holdsbadge
         }
       }),
+      skip () { return !this.selectedDao || !this.selectedDao.docId },
       variables () {
         return {
           first: this.coreMembersPagination.size,
@@ -193,10 +197,10 @@ export default {
           filter: this.filterObject
         }
       },
-      skip () { return !this.selectedDao || !this.selectedDao.docId },
 
       result ({ data }) {
         this.coreMembersCount = data?.getDao?.memberAggregate?.count
+        this.isLoadingDaoCoreMembers = false
       }
 
       // pollInterval: 1000 // TODO: Swap with subscribe once dgraph is ready
@@ -318,11 +322,23 @@ export default {
         STATES.CREATED_LINK
       ].includes(this.state)
     }
+
   },
 
   methods: {
     ...mapActions('accounts', ['applyMember']),
     ...mapActions('dao', ['createInviteLink']),
+
+    async _applyMember () {
+      try {
+        this.state = STATES.CREATING_LINK
+        await this.applyMember({ content: 'DAO Applicant' })
+        this.state = STATES.CREATED_LINK
+      } catch (e) {
+        const message = e.message || e.cause.message
+        this.showNotification({ message, color: 'red' })
+      }
+    },
 
     async _createInviteLink () {
       try {
@@ -346,7 +362,7 @@ export default {
       }
     },
 
-    async _copyToClipBoard () {
+    async copyToClipBoard () {
       try {
         await copyToClipboard(this.inviteURL)
         this.showNotification({
@@ -378,8 +394,7 @@ export default {
 
     loadMoreDaoApplicants (page, done) {
       if (this.daoApplicants?.length === this.applicantsCount) {
-        return
-        // done(true)
+        done(true)
       }
 
       this.applicantsPagination.page += 1
@@ -393,7 +408,7 @@ export default {
           filter: this.filterObject
         },
         updateQuery: (previousResult, { fetchMoreResult }) => {
-          // done()
+          done()
 
           return {
             getDao: {
@@ -451,7 +466,7 @@ q-page.page-members
     template(v-slot:buttons)
       nav.row.items-center
         .row.inline.q-pr-md(v-if="!isMember && !isApplicant && account")
-          q-btn.q-px-lg.h-btn1(:disable="!daoSettings.registrationEnabled" @click="onApply" color="secondary" :label="$t('pages.dho.members.becomeAMember')" no-caps="no-caps" rounded text-color="white" unelevated="unelevated")
+          q-btn.q-px-lg.h-btn1(:disable="!daoSettings.registrationEnabled" @click="_applyMember" color="secondary" :label="$t('pages.dho.members.becomeAMember')" no-caps="no-caps" rounded text-color="white" unelevated="unelevated")
           q-tooltip(v-if="!daoSettings.registrationEnabled") {{ $t('pages.dho.members.registrationIsTemporarilyDisabled') }}
         q-btn.q-px-lg.h-btn1(:flat="!account" @click="_createInviteLink" color="secondary" :label="$t('pages.dho.members.copyInviteLink')" no-caps="no-caps" rounded text-color="white" unelevated="unelevated")
           q-tooltip {{ $t('pages.dho.members.sendALink') }}
@@ -468,7 +483,7 @@ q-page.page-members
             q-input.full-width(dense disable filled rounded v-model='inviteURL')
             q-btn.q-px-lg.absolute-right(
               :label="$t('pages.dho.members.copy')"
-              @click="_copyToClipBoard"
+              @click="copyToClipBoard"
               color="secondary"
               no-caps="no-caps"
               rounded
@@ -482,7 +497,7 @@ q-page.page-members
       section#applicants
         header.row.q-mb-md
           .h-h4 {{ $t('pages.dho.members.daoApplicants') }}
-          .h-h4-regular.q-ml-xs ({{ daoApplicants?.length }}/{{ applicantsCount }})
+          .h-h4-regular.q-ml-xs(v-if="!isLoadingDaoApplicants") ({{ daoApplicants?.length }}/{{ applicantsCount }})
 
         .row.q-mr-md
           template.full-width(v-for="applicant in daoApplicants")
@@ -490,11 +505,11 @@ q-page.page-members
               :canEnroll="canEnroll"
               :compact="true"
               :key="applicant.hash"
-              v-bind="applicant"
               :view="$q.screen.gt.md ?  'list' : 'card'"
+              v-bind="applicant"
             )
 
-        footer.row.justify-center.text-center
+        footer.row.justify-center.text-center(v-if="!isLoadingDaoApplicants")
           p.full-width.text-sm.text-h-gray.leading-loose ({{ daoApplicants?.length }}/{{ applicantsCount }})
           q-btn.full-width.q-pa-xxs(
             :label="$t('common.widget-more-btn.seeMore')"
@@ -510,21 +525,20 @@ q-page.page-members
       section#core-members.q-mt-xl
         header.row.q-mb-md
           .h-h4 {{ $t('pages.dho.members.members') }}
-          .h-h4-regular.q-ml-xs ({{ members?.length }}/{{ coreMembersCount }})
+          .h-h4-regular.q-ml-xs(v-if="!isLoadingDaoCoreMembers") ({{ members?.length }}/{{ coreMembersCount }})
 
         members-list(
           :compact="$q.screen.gt.md ? false : true"
-          :lastResult="hasLastResult"
+          :loading="isLoadingDaoCoreMembers"
           :members="members"
           @loadMore="loadMoreDaoCoreMembers"
           v-bind="{ canEnroll }"
-          view="card"
         )
 
-        footer.row.justify-center.text-center
+        footer.row.justify-center.text-center(v-if="!isLoadingDaoCoreMembers")
           p.full-width.text-sm.text-h-gray.leading-loose ({{ members?.length }}/{{ coreMembersCount }})
 
-    div.col-3(:class="{'full-width': $q.screen.lt.md}")
+    aside.col-3(:class="{'full-width': $q.screen.lt.md}")
       filter-widget.sticky(v-if="$q.screen.gt.md" :circle.sync="circle" :circleArray.sync="circleArray" :defaultOption="1" :optionArray.sync="optionArray" :showCircle="false" :sort.sync="sort" :textFilter.sync="textFilter" :filterTitle="$t('pages.dho.members.filterByAccountName')" :filters.sync="filters" :showViewSelector="false" @update:filters="value => onChange('filters', value)")
 
       filter-open-button(v-if="$q.screen.lt.md" @open="mobileFilterOpen = true")
