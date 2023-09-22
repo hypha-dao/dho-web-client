@@ -1,7 +1,7 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import { copyToClipboard } from 'quasar'
-import { MEMBER_TYPE } from '~/const'
+import { MEMBER_TYPE, ORIGIN } from '~/const'
 import { documents } from '~/mixins/documents'
 import ipfsy from '~/utils/ipfsy'
 import gql from 'graphql-tag'
@@ -71,7 +71,6 @@ export default {
     LoadingSpinner: () => import('~/components/common/loading-spinner.vue'),
     MembersList: () => import('~/components/profiles/members-list.vue'),
     ProfileCard: () => import('~/components/profiles/profile-card.vue'),
-    UpvoteDelegateWidget: () => import('~/components/common/upvote-delegate-widget.vue'),
     Widget: () => import('~/components/common/widget.vue')
   },
 
@@ -224,7 +223,6 @@ export default {
     //   skip () { return !this.selectedDao || !this.selectedDao.docId },
     //   debounce: 500
     // }
-
   },
 
   watch: {
@@ -310,6 +308,7 @@ export default {
     },
 
     filterObject () { return this.textFilter ? { details_member_n: { regexp: `/${this.textFilter}/i` } } : null },
+    hasLastResult () { return this.$apollo.queries.daoApplicants.observer?.lastResult },
     memberTypeFilter () { return this.filters.filter(_ => _.enabled).map(_ => _.value) },
     showCommunityMembers () { return this.memberTypeFilter.includes(MEMBER_TYPE.ALL) || this.memberTypeFilter.includes(MEMBER_TYPE.COMMUNITY) },
     showCoreMembers () { return this.memberTypeFilter.includes(MEMBER_TYPE.ALL) || this.memberTypeFilter.includes(MEMBER_TYPE.CORE) },
@@ -321,14 +320,6 @@ export default {
     }
   },
 
-  mounted () {
-    this.$EventBus.$on('membersUpdated', this.pollData)
-  },
-
-  beforeDestroy () {
-    this.$EventBus.$off('membersUpdated')
-  },
-
   methods: {
     ...mapActions('accounts', ['applyMember']),
     ...mapActions('dao', ['createInviteLink']),
@@ -336,14 +327,18 @@ export default {
     async _createInviteLink () {
       try {
         this.state = STATES.CREATING_LINK
-        const invite = await this.createInviteLink()
-        const url = new URL(process.env.JOIN_URI)
+        // TODO: Remove when wallet is ready
+        const { dhoname } = this.$router.history.current.params
+        this.inviteURL = `${ORIGIN}/${dhoname}/login`
 
-        Object.keys(invite).forEach(key => {
-          url.searchParams.set(key, invite[key])
-        })
+        // const invite = await this.createInviteLink()
+        // const url = new URL(process.env.JOIN_URI)
 
-        this.inviteURL = url.toString()
+        // Object.keys(invite).forEach(key => {
+        //   url.searchParams.set(key, invite[key])
+        // })
+
+        // this.inviteURL = url.toString()
         this.state = STATES.CREATED_LINK
       } catch (e) {
         const message = e.message || e.cause.message
@@ -365,60 +360,6 @@ export default {
       }
     },
 
-    pollData () {
-      setTimeout(() => {
-        this.$apollo.queries.daoApplicants?.fetchMore({
-          variables: {
-            first: this.applicantsPagination.size,
-            offset: this.applicantsPagination.page * this.applicantsPagination.size,
-            daoId: this.selectedDao.docId,
-            order: this.order,
-            filter: this.filterObject
-          },
-          updateQuery: (previousResult, { fetchMoreResult }) => {
-            return {
-              getDao: {
-                __typename: fetchMoreResult.getDao.__typename,
-                docId: fetchMoreResult.getDao.docId,
-                applicants: [
-                  ...(fetchMoreResult ? fetchMoreResult.getDao.applicants : [])
-                ]
-              }
-            }
-          }
-        })
-
-        this.$apollo.queries.daoCoreMembers?.fetchMore({
-          variables: {
-            first: this.coreMembersPagination.size,
-            offset: this.coreMembersPagination.page * this.coreMembersPagination.size,
-            daoId: this.selectedDao.docId,
-            order: this.order,
-            filter: this.filterObject
-          },
-          updateQuery: (previousResult, { fetchMoreResult }) => {
-            return {
-              getDao: {
-                __typename: fetchMoreResult.getDao.__typename,
-                docId: fetchMoreResult.getDao.docId,
-                members: [
-                  ...(fetchMoreResult ? fetchMoreResult.getDao.members : [])
-                ]
-              }
-            }
-          }
-        })
-      }, 1250)
-    },
-
-    async onApply () {
-      this.$EventBus.$emit('membersUpdated')
-      const res = await this.applyMember({ content: 'DAO Applicant' })
-      if (res) {
-        this.$EventBus.$emit('membersUpdated')
-      }
-    },
-
     resetPagination (forceOffset) {
       if (forceOffset) {
         this.applicantsPagination.page = 0
@@ -434,8 +375,6 @@ export default {
     },
 
     onChange (name, value) { this.$set(this, name, value) },
-
-    hasLastResult () { return this.$apollo.queries.daoApplicants.observer?.lastResult },
 
     loadMoreDaoApplicants (page, done) {
       if (this.daoApplicants?.length === this.applicantsCount) {
@@ -502,6 +441,7 @@ export default {
       })
     }
   }
+
 }
 </script>
 
@@ -515,8 +455,6 @@ q-page.page-members
           q-tooltip(v-if="!daoSettings.registrationEnabled") {{ $t('pages.dho.members.registrationIsTemporarilyDisabled') }}
         q-btn.q-px-lg.h-btn1(:flat="!account" @click="_createInviteLink" color="secondary" :label="$t('pages.dho.members.copyInviteLink')" no-caps="no-caps" rounded text-color="white" unelevated="unelevated")
           q-tooltip {{ $t('pages.dho.members.sendALink') }}
-
-  //- upvote-delegate-widget(endDate="2023-05-29" :users="tempUsersForVotes")
 
   q-dialog(:value="isInviteModalOpen")
     .row.justify-center.items-center
@@ -575,12 +513,12 @@ q-page.page-members
           .h-h4-regular.q-ml-xs ({{ members?.length }}/{{ coreMembersCount }})
 
         members-list(
-          :lastResult="hasLastResult()"
           :compact="$q.screen.gt.md ? false : true"
+          :lastResult="hasLastResult"
           :members="members"
-          view="card"
           @loadMore="loadMoreDaoCoreMembers"
           v-bind="{ canEnroll }"
+          view="card"
         )
 
         footer.row.justify-center.text-center
