@@ -44,7 +44,8 @@ export default {
   apollo: {
     _plans: {
       query: gql`query PLANS { ${PLANS_QUERY} }`,
-      update: data => data.getStripePrices
+      update: data => data.getStripePrices,
+      fetchPolicy: 'no-cache'
     }
 
   },
