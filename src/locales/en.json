@@ -839,7 +839,7 @@
         "createDao":"Create DAO"
      },
      "register-user-with-captcha-view":{
-        "createNew":"Create New Hypha Account\n            ",
+        "createNew":"Create New \nHypha Account\n            ",
         "hyphaAccount":"Hypha Account",
         "pleaseVerifyYou":"Please verify you are not a BOT",
         "proceedWith":"Proceed with Hypha Wallet\n                ",
@@ -854,6 +854,7 @@
         "signYourFirstTransaction":"Sign your first transaction",
         "didYouCreate":"Did you create your Hypha Account inside the Hypha Wallet? Great! Now click the button below and generate your first log-in transaction request, sign-it and you are good to go!",
         "login":"{1} Login {2}",
+        "loginMobile": "Log in",
         "getApp":"Get app",
         "areYouAMember":"Are you a member?",
         "loginHere":"Login here",
@@ -861,7 +862,7 @@
         "goAheadAndAddYour":"Go ahead and add your DAO's name and upload a logo. You can also also list your DAO's purpose and the impact it envisions making.",
         "publishYourDao":"Publish your DAO",
         "needHelp":"Need help?",
-        "downloadWallet": "Download Wallet"
+        "downloadWallet": "Download Hypha Wallet app"
      },
      "welcome-view":{
         "youNeedAn":"You need an Hypha Account to interact with Hypha Ecosystem and create a DAO.",

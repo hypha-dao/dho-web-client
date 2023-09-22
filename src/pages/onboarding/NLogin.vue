@@ -202,7 +202,6 @@ export default {
   left: 0
   right: 0
   bottom: 0
-  padding: 30px
   @media (orientation: landscape) and (min-width: 1024px)
     height: auto !important
   @media (max-width: 375px)

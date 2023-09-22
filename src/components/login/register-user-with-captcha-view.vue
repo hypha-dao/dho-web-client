@@ -231,23 +231,18 @@ export default {
 
 </script>
 <template lang="pug">
-.full-width.full-height.flex.items-start.main-container
-  #top-indicator(v-if="step !== this.steps.create.name" ref="root")
-    .indicator.row.q-gutter-sm.justify-center(v-if="$q.screen.lt.md || $q.screen.md")
-      .ellipse-border(:class="step === 'captcha' && 'ellipse-filled'")
-      .ellipse-border(:class="step === 'inviteLink' && 'ellipse-filled'")
-      .ellipse-border(:class="step === 'finish' && 'ellipse-filled'")
+.full-width.full-height.flex.items-start.main-container.q-pa-xl
   #form-container.full-width.full-height(:thumb-style=" { 'opacity': '0' }")
     .q-mb-xxs
     .full-width.full-height.flex.column.justify-between.no-wrap(:style="{ 'padding-bottom': '50px' }")
       #internal-container.flex.justify-center.full-height
-        #form1.flex.column.justify-center(v-show="step === this.steps.captcha.name")
+        #form1.flex.column(v-show="step === this.steps.captcha.name" :class="{ 'justify-start': !$q.screen.gt.md, 'justify-center': $q.screen.gt.md }")
           .row.flex.items-center.cursor-pointer(@click="$emit('back')")
-            q-icon.q-mr-xxs(name="fas fa-arrow-left" color="primary" size="14px")
+            q-icon.q-mr-xxs(name="fas fa-chevron-left" color="primary" size="14px")
             .text-bold.text-primary {{ $t('login.login-view.back') }}
           template
-            .font-lato.text-heading.text-weight-bolder(:style="{ 'font-size': '34px' }") {{ $t('login.register-user-with-captcha-view.createNew') }}
-          .text-medium.q-mt-md {{ $t('login.register-user-with-captcha-view.pleaseVerifyYou') }}
+            .font-lato.text-heading.text-bold(:style="{ 'font-size': '34px' }") {{ $t('login.register-user-with-captcha-view.createNew') }}
+          .text-medium.q-mt-md(:class="{ 'text-bold': !$q.screen.gt.md, 'text-heading': !$q.screen.gt.md, 'h3': !$q.screen.gt.md }") {{ $t('login.register-user-with-captcha-view.pleaseVerifyYou') }}
           .flex.justify-center(:style="{ 'margin-top': '80px' }")
             captcha(ref="captcha" vue-recaptcha="vue-recaptcha" sitekey="6LfPcOUkAAAAAEXUdeFqdsJUob93TpWFEoHdj_yF" @setCaptchaResponse="this.setCaptchaResponse" ev-bind:callback="callback")
 
@@ -255,17 +250,18 @@ export default {
           template
             div.full-height.column.justify-center
               .row.flex.items-center.cursor-pointer(@click="$emit('stepChanged', steps.captcha.name)")
-                q-icon.q-mr-xxs(name="fas fa-arrow-left" color="primary" size="14px")
+                q-icon.q-mr-xxs(name="fas fa-chevron-left" color="primary" size="14px")
                 .text-bold.text-primary {{ $t('login.login-view.back') }}
               .row
                 .row
-                  .font-lato.text-heading.text-weight-bolder(:style="{ 'font-size': '34px' }") {{ $t('login.register-user-with-captcha-view.proceedWith') }}
+                  .font-lato.text-heading.text-bold(:style="{ 'font-size': '34px', 'line-height': '44px' }") {{ $t('login.register-user-with-captcha-view.proceedWith') }}
               .row.q-mt-sm
-                .col.font-lato
+                .col.font-lato.text-heading
                   .p-onboarding.bold {{ $t('login.register-user-with-captcha-view.scanTheQr') }}
                   .p-onboarding {{ $t('login.register-user-with-captcha-view.itContainsThe') }}
                   .p-onboarding.bold {{ $t('login.register-user-with-captcha-view.onceTheAccount') }}
                   .p-onboarding {{ $t('login.register-user-with-captcha-view.youAreSet') }}
+            q-btn.full-width.text-bold.q-mt-xxl(v-if="!$q.screen.gt.md" :icon="`img:${require('~/assets/icons/hypha-round-light.png')}`" :label="$t('login.register-user-with-captcha-view.downloadWallet')" color="primary" unelevated @click="downloadWallet()" rounded no-caps)
             .row.justify-center.items-center(v-if="$q.screen.gt.md" :style="{ 'margin-bottom': '60px' }")
               .qr-code-wrapper
                 qrcode-vue(:value="inviteLink" size="150")
@@ -275,21 +271,25 @@ export default {
           template
             div.full-height.column.justify-center
               .row.flex.items-center.cursor-pointer(@click="$emit('stepChanged', steps.inviteLink.name)")
-                q-icon.q-mr-xxs(name="fas fa-arrow-left" color="primary" size="14px")
+                q-icon.q-mr-xxs(name="fas fa-chevron-left" color="primary" size="14px")
                 .text-bold.text-primary {{ $t('login.login-view.back') }}
-              .font-lato.text-heading.text-weight-bolder.q-mb-md(:style="{ 'font-size': '34px' }") {{ $t('login.register-user-with-captcha-view.loginWith') }}
-              .q-mt-md
+              .font-lato.text-heading.text-bold.q-mb-md(:style="{ 'font-size': '34px' }") {{ $t('login.register-user-with-captcha-view.loginWith') }}
+              .q-mt-md(v-if="$q.screen.gt.md")
                 .row
                   .col-4.q-mr-sm(:style="'min-width: 120px'")
                     img(:style="{ 'width': 'fit-content' }" src="~/assets/images/onboarding-mobile.svg")
                   .col.q-ml-md
-                    .text-bold.text-black.q-mt-md {{ $t('login.register-user-with-captcha-view.signYourFirstTransaction') }}
+                    .text-bold.text-heading.q-mt-md {{ $t('login.register-user-with-captcha-view.signYourFirstTransaction') }}
                     p.text-normal.q-mt-xs {{ $t('login.register-user-with-captcha-view.didYouCreate') }}
                     .row.flex.justify-center.items-center.q-mt-xl
                     .text-primary.text-bold.cursor-pointer(@click="goToDocumentation()") {{ $t('login.register-user-with-captcha-view.needHelp') }}
+              .col(v-else)
+                .text-bold.text-heading(:style="'font-size: 22px'") {{ $t('login.register-user-with-captcha-view.signYourFirstTransaction') }}
+                p.text-normal.q-mt-xs {{ $t('login.register-user-with-captcha-view.didYouCreate') }}
+                .row.flex.justify-center.items-center.q-mt-xl
         #form4.flex.column.justify-between.no-wrap.full-height(v-show="step === this.steps.create.name")
           div.full-height.column.justify-end
-            .font-lato.text-heading.text-weight-bolder(:style="{ 'font-size': '34px' }") {{ $t('login.register-user-with-captcha-view.createYourDao') }}
+            .font-lato.text-heading.text-bold(:style="{ 'font-size': '34px' }") {{ $t('login.register-user-with-captcha-view.createYourDao') }}
             .q-mt-md {{ $t('login.register-user-with-captcha-view.goAheadAndAddYour') }}
           div
             div.full-width.justify-between.q-mt-xl(:class="{ 'col': !$q.screen.gt.md, 'row': $q.screen.gt.md }")
@@ -316,30 +316,50 @@ export default {
 
         #form5.flex.items-center.justify-center.no-wrap(v-show="step === this.steps.loading.name")
           loading-spinner(color="primary" size="72px")
-
-      #bottom-indicator.row.items-center(v-if="![this.steps.create.name, this.steps.loading.name].includes(step)")
-        .col(v-if="$q.screen.gt.md")
-          .row.q-gutter-sm(v-if="$q.screen.gt.md")
-            .ellipse-border(:class="'ellipse-filled'")
-            .ellipse-border(:class="(step === this.steps.inviteLink.name || step === this.steps.finish.name ) && 'ellipse-filled'")
-            .ellipse-border(:class="step === this.steps.finish.name && 'ellipse-filled'")
-        .no-wrap.flex.justify-end.items-center(:class="{ 'col-10': $q.screen.gt.md, 'col': !$q.screen.gt.md, 'full-width': !$q.screen.gt.md}")
-          q-btn.full-width(v-if="step === this.steps.inviteLink.name && !$q.screen.gt.md" :label="$t('login.register-user-with-captcha-view.downloadWallet')" color="primary" outline unelevated @click="downloadWallet()" rounded no-caps)
-          q-btn(v-if="step === this.steps.inviteLink.name && $q.screen.gt.md" :label="$t('login.register-user-with-captcha-view.copyInviteLink')" color="primary" outline unelevated @click="copyText()" rounded no-caps)
-          q-btn(v-if="step !== this.steps.finish.name").q-mx-md.q-px-md(:style="{ 'height': 'fit-content' }" :label="step === 'finish' ? 'Need Help?' : 'Next'" color="primary" unelevated @click="next" :disable="!this.inviteLink" :loading="submitting" :outline="step === this.steps.finish.name" rounded no-caps)
-          q-list(v-if="step === steps.finish.name")
-            q-item.wallet.q-my-xs(v-for="(wallet, idx) in this.hyphaAuthenticators" :key="wallet.getStyle().text" v-ripple :style="{ background: wallet.getStyle().background, color: wallet.getStyle().textColor }")
-              q-item-section.cursor-pointer(avatar @click="onLoginWallet(idx)")
-                img(:src="wallet.getStyle().icon" width="20")
-              q-item-section.cursor-pointer.text-center(@click="onLoginWallet(idx)") {{ $t('login.register-user-with-captcha-view.login', { '1': wallet.getStyle().text, '2': wallet.getStyle().text === 'Seeds' ? '(beta)' : '' }) }}
-              q-item-section(avatar)
-                .flex
-                  loading-spinner(v-if="loading === wallet.getStyle().text" :color="wallet.getStyle().textColor" size="2em")
-                  q-btn(v-else :color="wallet.getStyle().textColor" icon="fas fa-cloud-download-alt" @click="openUrl(wallet.getOnboardingLink())" target="_blank" dense flat size="10px")
-                    q-tooltip {{ $t('login.register-user-with-captcha-view.getApp') }}
-          //- .h-b3-signup.color-secondary.flex.column(v-if="!$q.screen.gt.md") {{ $t('login.register-user-with-captcha-view.areYouAMember') }}
-          //-   span.h-b3-signup.text-primary.cursor-pointer(style="text-decoration: underline" @click="$emit('onClickLoginPage')") {{ $t('login.register-user-with-captcha-view.loginHere') }}
-
+      template(v-if="$q.screen.gt.md")
+        #bottom-indicator.row.items-center(v-if="![this.steps.create.name, this.steps.loading.name].includes(step)")
+          .col
+            .row.q-gutter-sm
+              .ellipse-border(:class="'ellipse-filled'")
+              .ellipse-border(:class="(step === this.steps.inviteLink.name || step === this.steps.finish.name ) && 'ellipse-filled'")
+              .ellipse-border(:class="step === this.steps.finish.name && 'ellipse-filled'")
+          .no-wrap.flex.justify-end.items-center(:class="{ 'col-10': $q.screen.gt.md, 'col': !$q.screen.gt.md, 'full-width': !$q.screen.gt.md}")
+            q-btn.full-width(v-if="step === this.steps.inviteLink.name && !$q.screen.gt.md" :label="$t('login.register-user-with-captcha-view.downloadWallet')" color="primary" outline unelevated @click="downloadWallet()" rounded no-caps)
+            q-btn(v-if="step === this.steps.inviteLink.name && $q.screen.gt.md" :label="$t('login.register-user-with-captcha-view.copyInviteLink')" color="primary" outline unelevated @click="copyText()" rounded no-caps)
+            q-btn(v-if="step !== this.steps.finish.name").q-mx-md.q-px-md(:style="{ 'height': 'fit-content' }" :label="step === 'finish' ? 'Need Help?' : 'Next'" color="primary" unelevated @click="next" :disable="!this.inviteLink" :loading="submitting" :outline="step === this.steps.finish.name" rounded no-caps)
+            q-list(v-if="step === steps.finish.name")
+              q-item.wallet.q-my-xs(v-for="(wallet, idx) in this.hyphaAuthenticators" :key="wallet.getStyle().text" v-ripple :style="{ background: wallet.getStyle().background, color: wallet.getStyle().textColor }")
+                q-item-section.cursor-pointer(avatar @click="onLoginWallet(idx)")
+                  img(:src="wallet.getStyle().icon" width="20")
+                q-item-section.cursor-pointer.text-center(@click="onLoginWallet(idx)") {{ $t('login.register-user-with-captcha-view.login', { '1': wallet.getStyle().text, '2': wallet.getStyle().text === 'Seeds' ? '(beta)' : '' }) }}
+                q-item-section(avatar)
+                  .flex
+                    loading-spinner(v-if="loading === wallet.getStyle().text" :color="wallet.getStyle().textColor" size="2em")
+                    q-btn(v-else :color="wallet.getStyle().textColor" icon="fas fa-cloud-download-alt" @click="openUrl(wallet.getOnboardingLink())" target="_blank" dense flat size="10px")
+                      q-tooltip {{ $t('login.register-user-with-captcha-view.getApp') }}
+            //- .h-b3-signup.color-secondary.flex.column(v-if="!$q.screen.gt.md") {{ $t('login.register-user-with-captcha-view.areYouAMember') }}
+            //-   span.h-b3-signup.text-primary.cursor-pointer(style="text-decoration: underline" @click="$emit('onClickLoginPage')") {{ $t('login.register-user-with-captcha-view.loginHere') }}
+      template(v-else)
+        q-card.full-width.q-pa-xl(:style="'border-radius: 25px 25px 0 0; box-shadow: none; z-index: 9000; position: fixed; bottom: 0px; left: 0; right: 0; box-shadow: 0px 0px 26px 0px rgba(0, 0, 41, 0.2);'")
+          .row.items-center(v-if="![this.steps.create.name, this.steps.loading.name].includes(step)")
+            .col
+              .row.q-gutter-sm
+                .ellipse-border(:class="'ellipse-filled'")
+                .ellipse-border(:class="(step === this.steps.inviteLink.name || step === this.steps.finish.name ) && 'ellipse-filled'")
+                .ellipse-border(:class="step === this.steps.finish.name && 'ellipse-filled'")
+            .no-wrap.flex.justify-end.items-center(:class="{ 'col-10': $q.screen.gt.md, 'col': !$q.screen.gt.md, 'full-width': !$q.screen.gt.md}")
+              q-btn(v-if="step === this.steps.inviteLink.name && $q.screen.gt.md" :label="$t('login.register-user-with-captcha-view.copyInviteLink')" color="primary" outline unelevated @click="copyText()" rounded no-caps)
+              q-btn(v-if="step !== this.steps.finish.name").q-mx-md.q-px-md.full-width(:style="{ 'height': 'fit-content' }" :label="step === 'finish' ? 'Need Help?' : 'Next'" color="primary" unelevated @click="next" :disable="!this.inviteLink" :loading="submitting" :outline="step === this.steps.finish.name" rounded no-caps)
+              q-list(v-if="step === steps.finish.name")
+                q-item.wallet.q-my-xs.text-bold(v-for="(wallet, idx) in this.hyphaAuthenticators" :key="wallet.getStyle().text" v-ripple :style="{ background: wallet.getStyle().background, color: wallet.getStyle().textColor, 'white-space': 'nowrap' }")
+                  q-item-section.cursor-pointer(avatar @click="onLoginWallet(idx)")
+                    img(:src="wallet.getStyle().icon" width="20")
+                  q-item-section.cursor-pointer.text-center(@click="onLoginWallet(idx)") {{ $t('login.register-user-with-captcha-view.loginMobile') }}
+                  q-item-section(avatar)
+                    .flex
+                      loading-spinner(v-if="loading === wallet.getStyle().text" :color="wallet.getStyle().textColor" size="2em")
+                      q-btn(v-else :color="wallet.getStyle().textColor" icon="fas fa-cloud-download-alt" @click="openUrl(wallet.getOnboardingLink())" target="_blank" dense flat size="10px")
+                        q-tooltip {{ $t('login.register-user-with-captcha-view.getApp') }}
 </template>
 
 <style lang="stylus" scoped>
@@ -397,5 +417,6 @@ export default {
 
 .h-h1-signup
   margin-top: 20px
-
+.h3
+  font-size: 18px
 </style>
