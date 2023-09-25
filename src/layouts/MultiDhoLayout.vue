@@ -749,14 +749,6 @@ export default {
         this.$router.push({ path: `/${this.selectedDao?.name}/proposals/${proposal}` })
       }
     }
-  },
-
-  // created () {
-  //   this.state = STATE.LOADING
-  // },
-  updated () {
-    console.log(JSON.stringify(this.$apollo.queries.dao.loading))
-    console.log(JSON.stringify(this.account))
   }
 
 }
