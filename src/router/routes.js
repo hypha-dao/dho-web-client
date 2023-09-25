@@ -34,7 +34,8 @@ const routes = [
         name: 'create-your-dao',
         meta: {
           title: I18n.t('routes.createYourDao'),
-          hideForAuth: false
+          hideForAuth: false,
+          layout: () => import('layouts/LoginLayout.vue')
         },
         component: () => import('pages/onboarding/NLogin.vue')
       },
@@ -120,7 +121,7 @@ const routes = [
                   link: { name: 'proposals' }
                 }
               },
-              layout: 'proposal',
+              // layout: 'proposal',
               title: I18n.t('routes.proposalDetails')
             },
             component: () => import('pages/proposals/ProposalDetail.vue'),

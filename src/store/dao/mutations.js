@@ -1,11 +1,4 @@
 import { PLAN, PLAN_STATUS } from '~/const'
-export const setDho = (state, dho) => {
-  if (dho && dho.length === 1) {
-    state.dho = {
-      ...dho[0].settings[0]
-    }
-  }
-}
 
 const settingsMapper = (settings) => {
   return {
@@ -105,51 +98,6 @@ const settingsMapper = (settings) => {
   }
 }
 
-// Called by DhoSelector.vue after the apollo query
-export const switchDao = (state, data) => {
-  const dao = data?.queryDao[0] || {}
-  const plan = data?.activePlan || {}
-
-  state.name = dao.details_daoName_n
-  state.hash = dao.hash
-  state.docId = dao.docId
-
-  state.announcements = [...dao.announcements].map(_ => ({ ..._, enabled: Boolean(_.enabled) }))
-
-  state.meta = {
-    memberCount: dao.memberAggregate.count
-  }
-
-  state.plan = {
-    ...plan,
-    name: (plan?.name || PLAN.FOUNDER).toLowerCase(),
-    status: plan?.status || PLAN_STATUS.ACTIVE,
-    amountUSD: (plan?.price / 100) / 12,
-    coreMembersCount: plan?.coreMembersCount || 5,
-    communityMembersCount: plan?.communityMembersCount || 0,
-    currentCoreMembersCount: dao?.memberAggregate?.count || 0
-
-  }
-
-  const multisigs = dao.multisigs
-  state.multisigs = multisigs && multisigs.length > 0 ? multisigs.map(settingsMapper) : []
-
-  const settings = dao.settings[0]
-
-  state.ecosystem = {
-    name: settings?.ecosystem_name_s,
-    logo: settings?.ecosystem_logo_s,
-    domain: settings?.ecosystem_domain_s,
-    purpose: settings?.ecosystem_purpose_s
-  }
-
-  state.settings = {
-    ...settingsMapper(settings),
-    levels: [...dao?.levels],
-    upvoteElectionId: dao?.upcomingelct?.[0]?.docId
-  }
-}
-
 export const setAlerts = (state, data) => {
   state.alerts = [...data]
 }
@@ -158,5 +106,42 @@ export const setConfigs = (state, data) => {
   state.configs = {
     ...state.configs,
     ...data
+  }
+}
+
+export const setDAO = (state, dao) => {
+  state.name = dao.details_daoName_n
+  state.hash = dao.hash
+  state.docId = dao.docId
+
+  state.meta = {
+    memberCount: dao.memberAggregate.count
+  }
+
+  const settings = dao.settings[0]
+
+  state.settings = {
+    ...settingsMapper(settings)
+  }
+}
+
+export const setDho = (state, dho) => {
+  if (dho && dho.length === 1) {
+    state.dho = {
+      ...dho[0].settings[0]
+    }
+  }
+}
+
+export const setPlan = (state, plan) => {
+  state.plan = {
+    ...plan,
+    name: (plan?.name || PLAN.FOUNDER).toLowerCase(),
+    status: plan?.status || PLAN_STATUS.ACTIVE,
+    amountUSD: (plan?.price / 100) / 12,
+    coreMembersCount: plan?.coreMembersCount || 5,
+    communityMembersCount: plan?.communityMembersCount || 0,
+    currentCoreMembersCount: state?.meta?.memberCount || 0
+
   }
 }

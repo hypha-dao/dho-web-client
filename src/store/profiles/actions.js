@@ -50,12 +50,12 @@ export const getPublicProfile = async function ({ commit, state, rootGetters }, 
     commit('addProfile', { profile, username })
     return null
   }
-  // if (profile.publicData.avatar) {
-  //   profile.publicData.avatar = await this.$ppp.profileApi().getImageUrl(profile.publicData.avatar, profile.publicData.s3Identity)
-  // }
-  // if (profile.publicData.cover) {
-  //   profile.publicData.cover = await this.$ppp.profileApi().getImageUrl(profile.publicData.cover, profile.publicData.s3Identity)
-  // }
+  if (profile.publicData.avatar) {
+    profile.publicData.avatar = await this.$ppp.profileApi().getImageUrl(profile.publicData.avatar, profile.publicData.s3Identity)
+  }
+  if (profile.publicData.cover) {
+    profile.publicData.cover = await this.$ppp.profileApi().getImageUrl(profile.publicData.cover, profile.publicData.s3Identity)
+  }
   commit('addProfile', { profile, username })
   return profile
 }

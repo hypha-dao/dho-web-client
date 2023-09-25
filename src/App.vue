@@ -23,7 +23,7 @@ export default {
     account: {
       async handler (value) {
         if (value) {
-          await this.getPublicProfile(this.account)
+          await this.getPublicProfile(value)
         }
       },
       immediate: true
