@@ -171,7 +171,7 @@ widget
       label.h-label {{ fields.url.label }}
       .row.q-pb-md.q-mt-xxs.q-gutter-md
         .col
-          .row
+          div(:class="{'col': !$q.screen.gt.md, 'row': $q.screen.gt.md}")
             .col-2.q-mr-xs
               .flex.items-center.justify-center.bg-primary(:style="{ 'width': '40px', 'height': '40px', 'border-radius': '50%' }")
                 img(src="~/assets/icons/attachments/picture.svg")
@@ -179,7 +179,7 @@ widget
               .h-h7(:style="{ 'font-size': '13px' }") {{ $t('pages.proposals.create.stepdetails.images') }}
               .h-b2.text-italic {{ $t('pages.proposals.create.stepdetails.pngJpegInApp') }}
         .col
-          .row
+          div(:class="{'col': !$q.screen.gt.md, 'row': $q.screen.gt.md}")
             .col-2.q-mr-xs
               .flex.items-center.justify-center.bg-primary(:style="{ 'width': '40px', 'height': '40px', 'border-radius': '50%' }")
                 img(src="~/assets/icons/attachments/doc.svg")
@@ -187,7 +187,7 @@ widget
               .h-h7(:style="{ 'font-size': '13px' }") {{ $t('pages.proposals.create.stepdetails.documents') }}
               .h-b2.text-italic {{ $t('pages.proposals.create.stepdetails.txtPdfDoc') }}
         .col
-          .row
+          div(:class="{'col': !$q.screen.gt.md, 'row': $q.screen.gt.md}")
             .col-2.q-mr-xs
               .flex.items-center.justify-center.bg-primary(:style="{ 'width': '40px', 'height': '40px', 'border-radius': '50%' }")
                 img(src="~/assets/icons/attachments/camera.svg")

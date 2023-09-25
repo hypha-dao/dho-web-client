@@ -557,8 +557,9 @@ export default {
       profile-sidebar-guest(v-if="!account && ($q.screen.gt.lg || !$q.screen.gt.sm) && !loadingAccount" :dhoTitle="dhoTitle" :daoName="daoName" @close="right = false" :registrationEnabled="daoSettings.registrationEnabled")
     q-footer.bg-white(v-if="$q.screen.lt.lg && $route.name !== ROUTE_NAMES.PROPOSAL_DETAIL && $route.name !== ROUTE_NAMES.CREATE_YOUR_DAO" :style="{ height: '74px' }")
       bottom-navigation
-    q-drawer(v-else v-model="left" side="left" :width="80" persistent="persistent" :show-if-above="true")
-      left-navigation(:dho="dho" :dhos="dhos")
+    q-drawer(v-else-if="$q.screen.gt.md" v-model="left" side="left" :width="80" persistent="persistent" :show-if-above="true")
+      left-navigation(:dho="dho" :dhos="getDaos($apolloData.data.member)")
+
 </template>
 <style lang="stylus" scoped>
 .rounded-border
