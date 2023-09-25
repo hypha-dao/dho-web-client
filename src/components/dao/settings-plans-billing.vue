@@ -295,7 +295,7 @@ export default {
   .row
     .col-12.col-md-6(:class="{ 'q-pr-sm': $q.screen.gt.md, 'q-mt-md': $q.screen.lt.md }")
       widget(:title="$t('configuration.settings-plans-billing.plan.title')" titleImage='/svg/paperplane.svg' bar).q-pa-none
-        p.q-pa-none.q-ma-none.text-sm.text-h-gray.leading-loose.q-mt-sm {{ $t('configuration.settings-plans-billing.plan.description.free') }}
+        p(v-if="isFreePlan").q-pa-none.q-ma-none.text-sm.text-h-gray.leading-loose.q-mt-sm {{ $t('configuration.settings-plans-billing.plan.description.free') }}
 
         widget.q-mt-xl(bar shadow)
           header.row.justify-between
