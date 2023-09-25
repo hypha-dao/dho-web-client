@@ -120,7 +120,7 @@ const routes = [
                   link: { name: 'proposals' }
                 }
               },
-              layout: 'proposal',
+              // layout: 'proposal',
               title: I18n.t('routes.proposalDetails')
             },
             component: () => import('pages/proposals/ProposalDetail.vue'),
