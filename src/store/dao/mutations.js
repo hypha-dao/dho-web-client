@@ -124,7 +124,7 @@ export const switchDao = (state, data) => {
     ...plan,
     name: (plan?.name || PLAN.FOUNDER).toLowerCase(),
     status: plan?.status || PLAN_STATUS.ACTIVE,
-    amountUSD: (plan?.price / 100) / 12,
+    amountUSD: (plan?.price / 100),
     coreMembersCount: plan?.coreMembersCount || 5,
     communityMembersCount: plan?.communityMembersCount || 0,
     currentCoreMembersCount: dao?.memberAggregate?.count || 0
