@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - develop
-      - fix/billing-improvements
 
 jobs:
   build:
