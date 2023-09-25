@@ -308,10 +308,10 @@ export default {
     dao: {
       query: gql`query activeDao($daoUrl: String!, $regexp: String!) { ${DAO_ACTIVE_QUERY} }`,
       update: data => data.queryDao,
-      skip () { return !this.dhoname || !this.daoRegexp },
-      variables () { return { regexp: this.daoRegexp, daoUrl: this.dhoname } },
+      skip() { return !this.dhoname || !this.daoRegexp },
+      variables() { return { regexp: this.daoRegexp, daoUrl: this.dhoname } },
 
-      result (res) {
+      result(res) {
         const data = res?.data
 
         if (!data?.queryDao?.length) {
@@ -330,8 +330,8 @@ export default {
         this.$store.dispatch('accounts/checkMembership')
       },
 
-      fetchPolicy: 'no-cache',
-      pollInterval: 1000 // TODO: Swap with subscribe once dgraph is ready
+      fetchPolicy: 'no-cache'
+      // pollInterval: 1000 // TODO: Swap with subscribe once dgraph is ready
       // subscribeToMore: {
       //   document: gql`subscription activeDao($regexp: String!) { ${DAO_ACTIVE_QUERY} }`,
       //   skip () { return !this.dhoname || !this.daoRegexp },
@@ -354,7 +354,7 @@ export default {
     dho: {
       query: require('~/query/main-dho.gql'),
       update: data => data.queryDho,
-      result (res) {
+      result(res) {
         this.$store.commit('dao/setDho', res.data.queryDho)
       },
       fetchPolicy: 'no-cache'
@@ -362,16 +362,16 @@ export default {
 
   },
 
-  data () {
+  data() {
     return {
       daoQueryNumberOfRetires: 0
     }
   },
 
   computed: {
-    daoRegexp () { return '/^' + this.dhoname + '$/i' },
+    daoRegexp() { return '/^' + this.dhoname + '$/i' },
 
-    dho () {
+    dho() {
       if (this.dao && this.dao.length) {
         return {
           name: this.dao[0]?.details_daoName_n || '',
@@ -389,10 +389,11 @@ export default {
       }
     },
 
-    useCreateLayout () { return this.$q.screen.lt.md && this.$route.meta && this.$route.meta.layout && this.$route.meta.layout.mobile === 'create' },
-    useLoginLayout () { return this.$route.name === 'login' },
-    useMobileProposalLayout () { return this.$q.screen.lt.md && this.$route.meta && this.$route.meta.layout === 'proposal' },
-    useMultiDHOLayout () { return this.$route.name !== 'login' }
+    useCreateLayout() { return this.$q.screen.lt.md && this.$route.meta && this.$route.meta.layout && this.$route.meta.layout.mobile === 'create' },
+    useLoginLayout() { return this.$route.name === 'login' },
+    useMobileProposalLayout() { return this.$q.screen.lt.md && this.$route.meta && this.$route.meta.layout === 'proposal' },
+    useMultiDHOLayout() { return this.$route.name !== 'login' },
+    refetch() { return this.$apollo.queries.dao.refetch }
   }
 
 }
@@ -401,7 +402,7 @@ export default {
 .dho-selector
   create-layout(v-if="useCreateLayout")
   login-layout(v-if="useLoginLayout")
-  multi-dho-layout(v-if="useMultiDHOLayout" :dho="dho" :daoName="dhoname" :dhoTitle="dho?.title")
+  multi-dho-layout(v-if="useMultiDHOLayout" :dho="dho" :daoName="dhoname" :dhoTitle="dho?.title" :refetch="refetch")
   proposal-layout(v-if="useMobileProposalLayout && $q.platform.is.desktop")
 </template>
 

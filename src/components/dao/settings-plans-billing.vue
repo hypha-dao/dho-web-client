@@ -2,6 +2,7 @@
 import { mapGetters } from 'vuex'
 import gql from 'graphql-tag'
 import { ORIGIN, PLAN_TYPE, PAYMENT_INTERVAL } from '~/const'
+import formatPlan from '~/utils/format-plan'
 
 const STATES = Object.freeze({
   WAITING: 'WAITING',
@@ -22,6 +23,22 @@ const PLANS_QUERY = `
   }
 `
 
+const ACTIVE_PLAN_QUERY = `
+  activePlan(daoUrl: $daoUrl) {
+    subscriptionId
+    subscriptionItemId
+    subscriptionStatus
+    currency
+    currentPeriodEnd
+    currentPeriodStart
+    coreMembersCount
+    communityMembersCount
+    price
+    id: planId
+    name: planName    
+  }
+  `
+
 export default {
   name: 'settings-plans-billing',
   components: {
@@ -32,7 +49,7 @@ export default {
   props: {
     form: {
       type: Object,
-      default: () => {}
+      default: () => { }
     },
 
     isAdmin: {
@@ -43,14 +60,20 @@ export default {
 
   apollo: {
     _plans: {
-      query: gql`query PLANS { ${PLANS_QUERY} }`,
+      query: gql`query PLANS{ ${PLANS_QUERY} }`,
       update: data => data.getStripePrices,
+      fetchPolicy: 'no-cache'
+    },
+    activePlan: {
+      variables() { return { daoUrl: this.$route.params.dhoname } },
+      query: gql`query activePlan($daoUrl: String!) { ${ACTIVE_PLAN_QUERY} }`,
+      update: data => formatPlan(data.activePlan),
       fetchPolicy: 'no-cache'
     }
 
   },
 
-  data () {
+  data() {
     return {
       STATES,
       state: STATES.WAITING,
@@ -64,7 +87,7 @@ export default {
   },
 
   methods: {
-    async _createCheckoutSession (id) {
+    async _createCheckoutSession(id) {
       this.state = STATES.CREATING_SESSION
 
       const res = await this.$apollo.mutate({
@@ -108,7 +131,7 @@ export default {
       }
     },
 
-    async _updateSubscription  (id) {
+    async _updateSubscription(id) {
       this.state = STATES.CREATING_SESSION
 
       const res = await this.$apollo.mutate({
@@ -139,16 +162,17 @@ export default {
 
       if (res) {
         this.state = STATES.WAITING
+        this.$apollo.queries.activePlan.refetch()
       }
     },
 
-    onPlanDialogClose () {
+    onPlanDialogClose() {
       this.state = STATES.WAITING
       this.planType = PLAN_TYPE.SAAS
       this.paymentInterval = PAYMENT_INTERVAL.YEAR
     },
 
-    switchPlanType () {
+    switchPlanType() {
       if (this.planType === PLAN_TYPE.SAAS) {
         this.planType = PLAN_TYPE.EAAS
         this.paymentInterval = null
@@ -158,16 +182,20 @@ export default {
       }
     },
 
-    formatMoney (amount) { return amount ? new Intl.NumberFormat().format(parseInt(amount), { style: 'currency' }) : 0 }
+    formatMoney(amount) { return amount ? new Intl.NumberFormat().format(parseInt(amount), { style: 'currency' }) : 0 }
   },
 
   computed: {
     ...mapGetters('dao', ['daoSettings', 'selectedDao', 'selectedDaoPlan']),
 
-    isFreePlan () { return !this.selectedDaoPlan.id },
-    isPlanModalOpen () { return [STATES.UPDATING_PLAIN, STATES.CREATING_SESSION].includes(this.state) },
+    isFreePlan() { return !this.selectedDaoPlan?.id },
+    isPlanModalOpen() { return [STATES.UPDATING_PLAIN, STATES.CREATING_SESSION].includes(this.state) },
 
-    plans () {
+    currentPlan() {
+      return this.activePlan?.id ? this.activePlan : this.selectedDaoPlan
+    },
+
+    plans() {
       return this._plans
         .map(_ => ({
           ..._,
@@ -236,7 +264,7 @@ export default {
                 div
                   .text-xl.text-weight-600.text-primary {{  $t(`plans.${plan.name}`) }}
                   p.q-pa-none.q-ma-none.text-3xl.text-primary.text-bold ${{ formatMoney(plan.amountUSD) }}
-                div(v-if="selectedDaoPlan.id === plan.id")
+                div(v-if="currentPlan?.id === plan.id")
                   q-chip(dense color="positive" text-color="white")
                     span.text-uppercase.text-xxs.text-bold.q-px-xxs {{  $t(`statuses.active`) }}
               .hr.q-mt-md.q-mb-xs
@@ -254,7 +282,7 @@ export default {
 
               nav.q-mt-xl.full-width.row.justify-end
                 q-btn.q-px-xl.rounded-border.text-bold.q-ml-xs(
-                  :disable="selectedDaoPlan.id === plan.id"
+                  :disable="currentPlan?.id === plan.id"
                   :label="$t('configuration.settings-plans-billing.plan.modal.cta')"
                   @click="isFreePlan ? _createCheckoutSession(plan.id) : _updateSubscription(plan.id)"
                   color="secondary"
@@ -267,40 +295,40 @@ export default {
   .row
     .col-12.col-md-6(:class="{ 'q-pr-sm': $q.screen.gt.md, 'q-mt-md': $q.screen.lt.md }")
       widget(:title="$t('configuration.settings-plans-billing.plan.title')" titleImage='/svg/paperplane.svg' bar).q-pa-none
-        p.q-pa-none.q-ma-none.text-sm.text-h-gray.leading-loose.q-mt-sm {{ $t('configuration.settings-plans-billing.plan.description.free') }}
+        p(v-if="isFreePlan").q-pa-none.q-ma-none.text-sm.text-h-gray.leading-loose.q-mt-sm {{ $t('configuration.settings-plans-billing.plan.description.free') }}
 
         widget.q-mt-xl(bar shadow)
           header.row.justify-between
             div
-              .text-xl.text-weight-600.text-primary {{  $t(`plans.${selectedDaoPlan.name}`) }}
-              p.q-pa-none.q-ma-none.text-3xl.text-primary.text-bold ${{ formatMoney(selectedDaoPlan.amountUSD) }}
+              .text-xl.text-weight-600.text-primary {{  $t(`plans.${currentPlan.name}`) }}
+              p.q-pa-none.q-ma-none.text-3xl.text-primary.text-bold ${{ formatMoney(currentPlan.amountUSD) }}
                 //- TODO: Return after beta
                 //- span.q-ml-xxs.text-sm.text-weight-500 / {{ $('periods.month') }}
             div
               q-chip(dense color="positive" text-color="white")
-                span.text-uppercase.text-xxs.text-bold.q-px-xxs {{  $t(`statuses.${selectedDaoPlan.status}`) }}
+                span.text-uppercase.text-xxs.text-bold.q-px-xxs {{  $t(`statuses.${currentPlan.status}`) }}
 
           .hr.q-mt-md.q-mb-xs
 
           footer
             div.row.justify-between
               p.q-pa-none.q-ma-none.text-sm.text-h-gray.leading-loose Core Members
-              p.q-pa-none.q-ma-none.text-sm.text-h-gray.leading-loose {{ selectedDaoPlan.currentCoreMembersCount }} / {{ selectedDaoPlan.coreMembersCount }}
+              p.q-pa-none.q-ma-none.text-sm.text-h-gray.leading-loose {{ selectedDaoPlan.currentCoreMembersCount }} / {{ currentPlan.coreMembersCount }}
             //- TODO: Return after beta
             //- div.row.justify-between.q-mt-xs
             //-   p.q-pa-none.q-ma-none.text-sm.text-h-gray.leading-loose Community Members
             //-   p.q-pa-none.q-ma-none.text-sm.text-h-gray.leading-loose {{ selectedDaoPlan.communityMembersCount }}
 
         nav.q-mt-xl.full-width.row.justify-end
-            q-btn.q-px-xl.rounded-border.text-bold.q-ml-xs(
-              :disable="!isAdmin"
-              :label="$t('configuration.settings-plans-billing.plan.cta')"
-              @click="state = STATES.UPDATING_PLAIN"
-              color="secondary"
-              no-caps
-              rounded
-              unelevated
-            )
+          q-btn.q-px-xl.rounded-border.text-bold.q-ml-xs(
+            :disable="!isAdmin"
+            :label="$t('configuration.settings-plans-billing.plan.cta')"
+            @click="state = STATES.UPDATING_PLAIN"
+            color="secondary"
+            no-caps
+            rounded
+            unelevated
+          )
 
     .col-12.col-md-6(:class="{ 'q-pr-sm': $q.screen.gt.md, 'q-mt-md': $q.screen.lt.md }")
       widget(:title="$t('configuration.settings-plans-billing.history.title')" titleImage='/svg/briefcase.svg' bar).q-pa-none
