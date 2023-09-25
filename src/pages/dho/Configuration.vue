@@ -344,7 +344,6 @@ export default {
 
   async mounted () {
     this.initForm()
-    this.$store.dispatch('accounts/checkMembership')
   },
 
   async beforeRouteLeave (to, from, next) {
