@@ -26,7 +26,7 @@ const routes = [
   },
   {
     path: '/:dhoname',
-    component: () => import('layouts/DhoSelector.vue'),
+    component: () => import('layouts/Layout.vue'),
     props: true,
     children: [
       {
@@ -55,37 +55,12 @@ const routes = [
         component: () => import('pages/dho/Home.vue')
       },
       {
-        path: 'create',
-        name: 'dao-launcher',
-        meta: {
-          breadcrumbs: {
-            tab: {
-              name: I18n.t('routes.explore'),
-              link: { name: 'explore' }
-            }
-          },
-          layout: {
-            desktop: 'default',
-            mobile: 'create'
-          },
-          title: I18n.t('routes.createANewDao')
-          // requiresAuth: true,
-          // requiresAuthMember: true
-        },
-        component: () => import('pages/onboarding/create.vue'),
-        props: true
-      },
-      {
-        path: 'demo-ipfs',
-        name: 'ipfs',
-        component: () => import('pages/dho/DemoIpfs.vue')
-      },
-      {
         path: 'login',
         name: 'login',
         meta: {
           title: I18n.t('routes.login'),
-          hideForAuth: true
+          hideForAuth: true,
+          layout: () => import('layouts/LoginLayout.vue')
         },
         component: () => import('pages/onboarding/NLogin.vue')
       },

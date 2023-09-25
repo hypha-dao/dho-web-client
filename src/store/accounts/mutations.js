@@ -1,3 +1,5 @@
+import { MEMBER_TYPE } from '~/const'
+
 export const setLoadingWallet = (state, wallet) => {
   state.loading = wallet
 }
@@ -39,4 +41,20 @@ export const setIsHyphaOwner = (state, isHyphaOwner) => {
 
 export const setMemberType = (state, memberType) => {
   state.memberType = memberType
+}
+
+export const setMember = (state, dao) => {
+  const isApplicant = dao.applicant.length === 1
+  const isMember = dao.member.length === 1
+  const isAdmin = dao.admin.length === 1
+  const isEnroller = dao.enroller.length === 1
+
+  state.applicant = isApplicant
+  state.membership = isMember
+  state.admin = isAdmin
+  state.enroller = isEnroller
+  state.memberType = MEMBER_TYPE.CORE
+
+  localStorage.setItem('isMember', isMember)
+  localStorage.setItem('memberType', MEMBER_TYPE.CORE)
 }
