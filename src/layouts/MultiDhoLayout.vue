@@ -368,7 +368,7 @@ export default {
           isHypha: dao?.settings[0]?.settings_isHypha_i || ''
         }
       },
-      skip () { return !this.dhoname || !this.account },
+      skip () { return !this.dhoname || this.isLogged ? !this.account : '' },
       variables () {
         return {
           regexp: '/^' + this.dhoname + '$/i',
@@ -588,6 +588,7 @@ export default {
 
     isLoading () { return this.$apollo.queries.dhos.loading },
     status () { return this.$route.meta ? this.$route.meta.status ?? 'red' : 'red' },
+    isLogged () { return localStorage.getItem('autoLogin') },
 
     loadingAccount () { return localStorage?.getItem('autoLogin') && !this.account },
     showTopBarItems () {
