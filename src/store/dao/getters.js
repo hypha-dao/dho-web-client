@@ -1,4 +1,3 @@
-import { date } from 'quasar'
 
 export const announcement = ({ announcements }) => announcements.find(_ => _.enabled)
 
@@ -14,6 +13,7 @@ export const dho = ({ dho }) => dho
 export const ecosystem = ({ ecosystem }) => ecosystem
 
 export const selectedDao = (state) => ({
+  url: state.url,
   name: state.name,
   title: state.settings ? state.settings.title : undefined,
   docId: state.docId,
@@ -24,24 +24,7 @@ export const selectedDao = (state) => ({
   hasCustomToken: state.settings.settings_rewardToken_a !== null && state.settings.settings_pegToken_a !== null
 })
 
-export const selectedDaoPlan = ({ isWaitingEcosystem, plan }) => {
-  const daysLeft = date.getDateDiff(new Date(plan.expirationDate), new Date(), 'days')
-  const gracePeriodDays = 7
-  return {
-    ...plan,
-
-    id: 'founder',
-    status: 'active',
-    amountUSD: 0,
-    coreMembersCount: 5,
-    communityMembersCount: 0,
-
-    daysLeft: plan.name === 'Founders' ? -1 : (daysLeft - gracePeriodDays) < 0 ? 0 : (daysLeft - gracePeriodDays),
-    graceDaysLeft: plan.name === 'Founders' ? -1 : daysLeft < 0 ? 0 : daysLeft,
-    hasExpired: plan.isInfinite ? false : daysLeft <= 0 && plan.name !== 'Founders',
-    isExpiring: daysLeft <= gracePeriodDays && plan.name !== 'Founders'
-  }
-}
+export const selectedDaoPlan = ({ isWaitingEcosystem, plan }) => plan
 
 export const getDaoTokens = (state) => ({
   pegToken: state.settings.pegToken,

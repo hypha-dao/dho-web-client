@@ -107,7 +107,22 @@ export const ROUTE_NAMES = Object.freeze({
 
 export const ORIGIN = window.location.origin
 
+export const PLAN = Object.freeze({
+  FOUNDER: 'founder'
+
+})
+
 export const PLAN_TYPE = Object.freeze({
   EAAS: 'EAAS',
   SAAS: 'SAAS'
+})
+
+export const PAYMENT_INTERVAL = Object.freeze({
+  YEAR: 'year',
+  MONTH: 'month'
+})
+
+export const PLAN_STATUS = Object.freeze({
+  ACTIVE: 'active'
+
 })

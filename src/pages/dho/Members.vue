@@ -1,7 +1,7 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import { copyToClipboard } from 'quasar'
-import { MEMBER_TYPE } from '~/const'
+import { MEMBER_TYPE, ORIGIN } from '~/const'
 import { documents } from '~/mixins/documents'
 import ipfsy from '~/utils/ipfsy'
 import gql from 'graphql-tag'
@@ -71,7 +71,6 @@ export default {
     LoadingSpinner: () => import('~/components/common/loading-spinner.vue'),
     MembersList: () => import('~/components/profiles/members-list.vue'),
     ProfileCard: () => import('~/components/profiles/profile-card.vue'),
-    UpvoteDelegateWidget: () => import('~/components/common/upvote-delegate-widget.vue'),
     Widget: () => import('~/components/common/widget.vue')
   },
 
@@ -82,6 +81,7 @@ export default {
 
       inviteURL: process.env.JOIN_URI,
 
+      isLoadingDaoApplicants: true,
       applicantsCount: 0,
       applicantsPagination: {
         fetchMore: true,
@@ -89,6 +89,7 @@ export default {
         size: 3
       },
 
+      isLoadingDaoCoreMembers: true,
       coreMembersCount: 0,
       coreMembersPagination: {
         fetchMore: true,
@@ -157,6 +158,7 @@ export default {
           username: user.details_member_n
         }
       }),
+      skip () { return !this.selectedDao || !this.selectedDao.docId },
       variables () {
         return {
           first: this.applicantsPagination.size,
@@ -166,13 +168,13 @@ export default {
           filter: this.filterObject
         }
       },
-      skip () { return !this.selectedDao || !this.selectedDao.docId },
 
       result ({ data }) {
         this.applicantsCount = data?.getDao?.applicantAggregate?.count
-      },
+        this.isLoadingDaoApplicants = false
+      }
 
-      pollInterval: 1000 // TODO: Swap with subscribe once dgraph is ready
+      // pollInterval: 1000 // TODO: Swap with subscribe once dgraph is ready
     },
 
     daoCoreMembers: {
@@ -185,6 +187,7 @@ export default {
           badges: user.holdsbadge
         }
       }),
+      skip () { return !this.selectedDao || !this.selectedDao.docId },
       variables () {
         return {
           first: this.coreMembersPagination.size,
@@ -194,10 +197,10 @@ export default {
           filter: this.filterObject
         }
       },
-      skip () { return !this.selectedDao || !this.selectedDao.docId },
 
       result ({ data }) {
         this.coreMembersCount = data?.getDao?.memberAggregate?.count
+        this.isLoadingDaoCoreMembers = false
       }
 
       // pollInterval: 1000 // TODO: Swap with subscribe once dgraph is ready
@@ -224,7 +227,6 @@ export default {
     //   skip () { return !this.selectedDao || !this.selectedDao.docId },
     //   debounce: 500
     // }
-
   },
 
   watch: {
@@ -310,6 +312,7 @@ export default {
     },
 
     filterObject () { return this.textFilter ? { details_member_n: { regexp: `/${this.textFilter}/i` } } : null },
+    hasLastResult () { return this.$apollo.queries.daoApplicants.observer?.lastResult },
     memberTypeFilter () { return this.filters.filter(_ => _.enabled).map(_ => _.value) },
     showCommunityMembers () { return this.memberTypeFilter.includes(MEMBER_TYPE.ALL) || this.memberTypeFilter.includes(MEMBER_TYPE.COMMUNITY) },
     showCoreMembers () { return this.memberTypeFilter.includes(MEMBER_TYPE.ALL) || this.memberTypeFilter.includes(MEMBER_TYPE.CORE) },
@@ -319,31 +322,17 @@ export default {
         STATES.CREATED_LINK
       ].includes(this.state)
     }
-  },
 
-  mounted () {
-    this.$EventBus.$on('membersUpdated', this.pollData)
-  },
-
-  beforeDestroy () {
-    this.$EventBus.$off('membersUpdated')
   },
 
   methods: {
     ...mapActions('accounts', ['applyMember']),
     ...mapActions('dao', ['createInviteLink']),
 
-    async _createInviteLink () {
+    async _applyMember () {
       try {
         this.state = STATES.CREATING_LINK
-        const invite = await this.createInviteLink()
-        const url = new URL(process.env.JOIN_URI)
-
-        Object.keys(invite).forEach(key => {
-          url.searchParams.set(key, invite[key])
-        })
-
-        this.inviteURL = url.toString()
+        await this.applyMember({ content: 'DAO Applicant' })
         this.state = STATES.CREATED_LINK
       } catch (e) {
         const message = e.message || e.cause.message
@@ -351,7 +340,29 @@ export default {
       }
     },
 
-    async _copyToClipBoard () {
+    async _createInviteLink () {
+      try {
+        this.state = STATES.CREATING_LINK
+        // TODO: Remove when wallet is ready
+        const { dhoname } = this.$router.history.current.params
+        this.inviteURL = `${ORIGIN}/${dhoname}/login`
+
+        // const invite = await this.createInviteLink()
+        // const url = new URL(process.env.JOIN_URI)
+
+        // Object.keys(invite).forEach(key => {
+        //   url.searchParams.set(key, invite[key])
+        // })
+
+        // this.inviteURL = url.toString()
+        this.state = STATES.CREATED_LINK
+      } catch (e) {
+        const message = e.message || e.cause.message
+        this.showNotification({ message, color: 'red' })
+      }
+    },
+
+    async copyToClipBoard () {
       try {
         await copyToClipboard(this.inviteURL)
         this.showNotification({
@@ -362,60 +373,6 @@ export default {
       } catch (e) {
         const message = e.message || e.cause.message
         this.showNotification({ message, color: 'red' })
-      }
-    },
-
-    pollData () {
-      setTimeout(() => {
-        this.$apollo.queries.daoApplicants?.fetchMore({
-          variables: {
-            first: this.applicantsPagination.size,
-            offset: this.applicantsPagination.page * this.applicantsPagination.size,
-            daoId: this.selectedDao.docId,
-            order: this.order,
-            filter: this.filterObject
-          },
-          updateQuery: (previousResult, { fetchMoreResult }) => {
-            return {
-              getDao: {
-                __typename: fetchMoreResult.getDao.__typename,
-                docId: fetchMoreResult.getDao.docId,
-                applicants: [
-                  ...(fetchMoreResult ? fetchMoreResult.getDao.applicants : [])
-                ]
-              }
-            }
-          }
-        })
-
-        this.$apollo.queries.daoCoreMembers?.fetchMore({
-          variables: {
-            first: this.coreMembersPagination.size,
-            offset: this.coreMembersPagination.page * this.coreMembersPagination.size,
-            daoId: this.selectedDao.docId,
-            order: this.order,
-            filter: this.filterObject
-          },
-          updateQuery: (previousResult, { fetchMoreResult }) => {
-            return {
-              getDao: {
-                __typename: fetchMoreResult.getDao.__typename,
-                docId: fetchMoreResult.getDao.docId,
-                members: [
-                  ...(fetchMoreResult ? fetchMoreResult.getDao.members : [])
-                ]
-              }
-            }
-          }
-        })
-      }, 1250)
-    },
-
-    async onApply () {
-      this.$EventBus.$emit('membersUpdated')
-      const res = await this.applyMember({ content: 'DAO Applicant' })
-      if (res) {
-        this.$EventBus.$emit('membersUpdated')
       }
     },
 
@@ -435,12 +392,9 @@ export default {
 
     onChange (name, value) { this.$set(this, name, value) },
 
-    hasLastResult () { return this.$apollo.queries.daoApplicants.observer?.lastResult },
-
     loadMoreDaoApplicants (page, done) {
       if (this.daoApplicants?.length === this.applicantsCount) {
-        return
-        // done(true)
+        done(true)
       }
 
       this.applicantsPagination.page += 1
@@ -454,7 +408,7 @@ export default {
           filter: this.filterObject
         },
         updateQuery: (previousResult, { fetchMoreResult }) => {
-          // done()
+          done()
 
           return {
             getDao: {
@@ -502,6 +456,7 @@ export default {
       })
     }
   }
+
 }
 </script>
 
@@ -511,12 +466,10 @@ q-page.page-members
     template(v-slot:buttons)
       nav.row.items-center
         .row.inline.q-pr-md(v-if="!isMember && !isApplicant && account")
-          q-btn.q-px-lg.h-btn1(:disable="!daoSettings.registrationEnabled" @click="onApply" color="secondary" :label="$t('pages.dho.members.becomeAMember')" no-caps="no-caps" rounded text-color="white" unelevated="unelevated")
+          q-btn.q-px-lg.h-btn1(:disable="!daoSettings.registrationEnabled" @click="_applyMember" color="secondary" :label="$t('pages.dho.members.becomeAMember')" no-caps="no-caps" rounded text-color="white" unelevated="unelevated")
           q-tooltip(v-if="!daoSettings.registrationEnabled") {{ $t('pages.dho.members.registrationIsTemporarilyDisabled') }}
         q-btn.q-px-lg.h-btn1(:flat="!account" @click="_createInviteLink" color="secondary" :label="$t('pages.dho.members.copyInviteLink')" no-caps="no-caps" rounded text-color="white" unelevated="unelevated")
           q-tooltip {{ $t('pages.dho.members.sendALink') }}
-
-  //- upvote-delegate-widget(endDate="2023-05-29" :users="tempUsersForVotes")
 
   q-dialog(:value="isInviteModalOpen")
     .row.justify-center.items-center
@@ -530,7 +483,7 @@ q-page.page-members
             q-input.full-width(dense disable filled rounded v-model='inviteURL')
             q-btn.q-px-lg.absolute-right(
               :label="$t('pages.dho.members.copy')"
-              @click="_copyToClipBoard"
+              @click="copyToClipBoard"
               color="secondary"
               no-caps="no-caps"
               rounded
@@ -544,7 +497,7 @@ q-page.page-members
       section#applicants
         header.row.q-mb-md
           .h-h4 {{ $t('pages.dho.members.daoApplicants') }}
-          .h-h4-regular.q-ml-xs ({{ daoApplicants?.length }}/{{ applicantsCount }})
+          .h-h4-regular.q-ml-xs(v-if="!isLoadingDaoApplicants") ({{ daoApplicants?.length }}/{{ applicantsCount }})
 
         .row.q-mr-md
           template.full-width(v-for="applicant in daoApplicants")
@@ -552,11 +505,11 @@ q-page.page-members
               :canEnroll="canEnroll"
               :compact="true"
               :key="applicant.hash"
-              v-bind="applicant"
               :view="$q.screen.gt.md ?  'list' : 'card'"
+              v-bind="applicant"
             )
 
-        footer.row.justify-center.text-center
+        footer.row.justify-center.text-center(v-if="!isLoadingDaoApplicants")
           p.full-width.text-sm.text-h-gray.leading-loose ({{ daoApplicants?.length }}/{{ applicantsCount }})
           q-btn.full-width.q-pa-xxs(
             :label="$t('common.widget-more-btn.seeMore')"
@@ -572,21 +525,20 @@ q-page.page-members
       section#core-members.q-mt-xl
         header.row.q-mb-md
           .h-h4 {{ $t('pages.dho.members.members') }}
-          .h-h4-regular.q-ml-xs ({{ members?.length }}/{{ coreMembersCount }})
+          .h-h4-regular.q-ml-xs(v-if="!isLoadingDaoCoreMembers") ({{ members?.length }}/{{ coreMembersCount }})
 
         members-list(
-          :lastResult="hasLastResult()"
           :compact="$q.screen.gt.md ? false : true"
+          :loading="isLoadingDaoCoreMembers"
           :members="members"
-          view="card"
           @loadMore="loadMoreDaoCoreMembers"
           v-bind="{ canEnroll }"
         )
 
-        footer.row.justify-center.text-center
+        footer.row.justify-center.text-center(v-if="!isLoadingDaoCoreMembers")
           p.full-width.text-sm.text-h-gray.leading-loose ({{ members?.length }}/{{ coreMembersCount }})
 
-    div.col-3(:class="{'full-width': $q.screen.lt.md}")
+    aside.col-3(:class="{'full-width': $q.screen.lt.md}")
       filter-widget.sticky(v-if="$q.screen.gt.md" :circle.sync="circle" :circleArray.sync="circleArray" :defaultOption="1" :optionArray.sync="optionArray" :showCircle="false" :sort.sync="sort" :textFilter.sync="textFilter" :filterTitle="$t('pages.dho.members.filterByAccountName')" :filters.sync="filters" :showViewSelector="false" @update:filters="value => onChange('filters', value)")
 
       filter-open-button(v-if="$q.screen.lt.md" @open="mobileFilterOpen = true")

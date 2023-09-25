@@ -51,9 +51,16 @@ export default {
   },
 
   apollo: {
-    member: {
+    dhos: {
       query: require('../query/profile/profile-dhos.gql'),
-      update: data => { return data.getMember },
+      update: data => data?.getMember?.memberof.map(dao => ({
+        name: dao.details_daoName_n,
+        title: dao.settings[0].settings_daoTitle_s,
+        icon: dao.settings[0].settings_logo_s,
+        logo: dao.settings[0].settings_logo_s,
+        isHypha: dao.settings[0].settings_isHypha_i,
+        url: dao.settings[0].settings_daoUrl_s
+      })),
       skip () { return !this.account },
       variables () { return { username: this.account } }
     }
@@ -229,12 +236,8 @@ export default {
     ...mapGetters('search', ['search']),
 
     breadcrumbs () { return this.$route.meta ? this.$route.meta.breadcrumbs : null },
-    dhos () {
-      const member = (this.$apolloData && this.$apolloData.member) ? this.$apolloData.member : this.member
-      return this.getDaos(member)
-    },
 
-    isLoading () { return this.$apollo.queries.member.loading },
+    isLoading () { return this.$apollo.queries.dhos.loading },
     status () { return this.$route.meta ? this.$route.meta.status ?? 'red' : 'red' },
 
     loadingAccount () { return localStorage?.getItem('autoLogin') && !this.account },
@@ -281,22 +284,7 @@ export default {
         }
       }
     },
-    getDaos (member) {
-      const results = []
-      if (member) {
-        member.memberof?.forEach((dao) => {
-          results.push({
-            name: dao.details_daoName_n,
-            title: dao.settings[0].settings_daoTitle_s,
-            icon: dao.settings[0].settings_logo_s,
-            logo: dao.settings[0].settings_logo_s,
-            isHypha: dao.settings[0].settings_isHypha_i,
-            url: dao.settings[0].settings_daoUrl_s
-          })
-        })
-      }
-      return results
-    },
+
     async getProfile () {
       if (this.account) {
         const profile = await this.getPublicProfile(this.account)
@@ -447,7 +435,20 @@ export default {
     //- Because iOS z-index doesn`t work
     router-view(v-if="$router.currentRoute.name === 'proposal-create' && $q.screen.lt.md")
     q-header.bg-white(v-if="$q.screen.lt.lg && $route.name !== ROUTE_NAMES.PROPOSAL_DETAIL && $route.name !== ROUTE_NAMES.CREATE_YOUR_DAO")
-      top-navigation(:unreadNotifications="countObjectsWithKeyValue(notifications, 'read', false)" :notifications="notifications" @openNotifications="languageSettings = false, right = false, showNotificationsBar = true" @isActiveRoute="isActiveRoute" @showLangSettings="languageSettings = true, right = false" :showTopButtons="showTopBarItems" :profile="profile" @toggle-sidebar="!$q.screen.md ? right = true : showMinimizedMenu = true" @search="onSearch" :dho="dho" :dhos="getDaos($apolloData.data.member)" :selectedDaoPlan="selectedDaoPlan")
+      top-navigation(
+        :dho="dho"
+        :dhos="dhos"
+        :selectedDaoPlan="selectedDaoPlan"
+        @search="onSearch"
+        :notifications="notifications"
+        :profile="profile"
+        :showTopButtons="showTopBarItems"
+        :unreadNotifications="countObjectsWithKeyValue(notifications, 'read', false)"
+        @isActiveRoute="isActiveRoute"
+        @openNotifications="languageSettings = false, right = false, showNotificationsBar = true"
+        @showLangSettings="languageSettings = true, right = false"
+        @toggle-sidebar="!$q.screen.md ? right = true : showMinimizedMenu = true"
+        )
     q-page-container.bg-white.window-height.q-py-sm(:class="{ 'q-pr-sm': $q.screen.gt.md, 'q-px-xs': !$q.screen.gt.md}")
       .bg-internal-bg.content.full-height
         q-resize-observer(@resize="onContainerResize")
@@ -558,6 +559,7 @@ export default {
       bottom-navigation
     q-drawer(v-else-if="$q.screen.gt.md" v-model="left" side="left" :width="80" persistent="persistent" :show-if-above="true")
       left-navigation(:dho="dho" :dhos="getDaos($apolloData.data.member)")
+
 </template>
 <style lang="stylus" scoped>
 .rounded-border

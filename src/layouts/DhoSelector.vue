@@ -4,7 +4,20 @@ import gql from 'graphql-tag'
 const MAX_NUM_OF_RETIRES = 10
 
 const DAO_ACTIVE_QUERY = `
-
+  activePlan(daoUrl: $daoUrl) {
+    subscriptionId
+    subscriptionItemId
+    subscriptionStatus
+    currency
+    currentPeriodEnd
+    currentPeriodStart
+    coreMembersCount
+    communityMembersCount
+    price
+    id: planId
+    name: planName    
+  }
+  
   queryDao @cascade(fields: ["settings"]) {
     docId
     details_daoName_n
@@ -166,7 +179,7 @@ const DAO_ACTIVE_QUERY = `
       settings_documentationURL_s
     }
 
-    settings(filter: { settings_daoUrl_s: { regexp: $regexp } }) {
+    settings(filter: {  settings_daoUrl_s: { regexp: $regexp } }) {
       ecosystem_name_s
       ecosystem_logo_s
       ecosystem_domain_s
@@ -180,7 +193,7 @@ const DAO_ACTIVE_QUERY = `
       settings_daoTitle_s
       settings_daoDescription_s
       settings_governanceTokenContract_n
-      
+
       settings_pegTokenName_s
       settings_pegToken_a
       settings_pegTokenContract_n
@@ -293,21 +306,22 @@ export default {
 
   apollo: {
     dao: {
-      query: gql`query activeDao($regexp: String!) { ${DAO_ACTIVE_QUERY} }`,
+      query: gql`query activeDao($daoUrl: String!, $regexp: String!) { ${DAO_ACTIVE_QUERY} }`,
       update: data => data.queryDao,
-      skip () { return !this.dhoname || !this.daoRegexp },
-      variables () { return { regexp: this.daoRegexp } },
+      skip() { return !this.dhoname || !this.daoRegexp },
+      variables() { return { regexp: this.daoRegexp, daoUrl: this.dhoname } },
 
-      result (res) {
-        const data = res.data?.queryDao
+      result(res) {
+        const data = res?.data
 
-        if (!(data?.length)) {
+        if (!data?.queryDao?.length) {
           this.daoQueryNumberOfRetires++
           if (this.daoQueryNumberOfRetires > MAX_NUM_OF_RETIRES) {
             this.$router.push({ path: '/not-found' })
           } else {
             this.$apollo.queries.dao.refetch()
           }
+          return
         }
 
         this.$store.commit('dao/switchDao', data)
@@ -316,8 +330,8 @@ export default {
         this.$store.dispatch('accounts/checkMembership')
       },
 
-      fetchPolicy: 'no-cache',
-      pollInterval: 1000 // TODO: Swap with subscribe once dgraph is ready
+      fetchPolicy: 'no-cache'
+      // pollInterval: 1000 // TODO: Swap with subscribe once dgraph is ready
       // subscribeToMore: {
       //   document: gql`subscription activeDao($regexp: String!) { ${DAO_ACTIVE_QUERY} }`,
       //   skip () { return !this.dhoname || !this.daoRegexp },
@@ -340,7 +354,7 @@ export default {
     dho: {
       query: require('~/query/main-dho.gql'),
       update: data => data.queryDho,
-      result (res) {
+      result(res) {
         this.$store.commit('dao/setDho', res.data.queryDho)
       },
       fetchPolicy: 'no-cache'
@@ -348,16 +362,16 @@ export default {
 
   },
 
-  data () {
+  data() {
     return {
       daoQueryNumberOfRetires: 0
     }
   },
 
   computed: {
-    daoRegexp () { return '/^' + this.dhoname + '$/i' },
+    daoRegexp() { return '/^' + this.dhoname + '$/i' },
 
-    dho () {
+    dho() {
       if (this.dao && this.dao.length) {
         return {
           name: this.dao[0]?.details_daoName_n || '',
@@ -375,10 +389,11 @@ export default {
       }
     },
 
-    useCreateLayout () { return this.$q.screen.lt.md && this.$route.meta && this.$route.meta.layout && this.$route.meta.layout.mobile === 'create' },
-    useLoginLayout () { return this.$route.name === 'login' },
-    useMobileProposalLayout () { return this.$q.screen.lt.md && this.$route.meta && this.$route.meta.layout === 'proposal' },
-    useMultiDHOLayout () { return this.$route.name !== 'login' }
+    useCreateLayout() { return this.$q.screen.lt.md && this.$route.meta && this.$route.meta.layout && this.$route.meta.layout.mobile === 'create' },
+    useLoginLayout() { return this.$route.name === 'login' },
+    useMobileProposalLayout() { return this.$q.screen.lt.md && this.$route.meta && this.$route.meta.layout === 'proposal' },
+    useMultiDHOLayout() { return this.$route.name !== 'login' },
+    refetch() { return this.$apollo.queries.dao.refetch }
   }
 
 }
@@ -387,7 +402,7 @@ export default {
 .dho-selector
   create-layout(v-if="useCreateLayout")
   login-layout(v-if="useLoginLayout")
-  multi-dho-layout(v-if="useMultiDHOLayout" :dho="dho" :daoName="dhoname" :dhoTitle="dho?.title")
+  multi-dho-layout(v-if="useMultiDHOLayout" :dho="dho" :daoName="dhoname" :dhoTitle="dho?.title" :refetch="refetch")
   proposal-layout(v-if="useMobileProposalLayout && $q.platform.is.desktop")
 </template>
 
