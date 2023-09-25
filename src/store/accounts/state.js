@@ -1,6 +1,6 @@
 export default () => ({
   account: null,
-  membership: false,
+  membership: true,
   applicant: false,
   enroller: false,
   admin: false,

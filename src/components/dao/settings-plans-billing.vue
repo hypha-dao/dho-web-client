@@ -2,7 +2,7 @@
 import { mapGetters } from 'vuex'
 import gql from 'graphql-tag'
 import { ORIGIN, PLAN_TYPE, PAYMENT_INTERVAL } from '~/const'
-import formatPlan from '~/utils/format-plan'
+// import formatPlan from '~/utils/format-plan'
 
 const STATES = Object.freeze({
   WAITING: 'WAITING',
@@ -22,22 +22,6 @@ const PLANS_QUERY = `
     communityMembersCount    
   }
 `
-
-const ACTIVE_PLAN_QUERY = `
-  activePlan(daoUrl: $daoUrl) {
-    subscriptionId
-    subscriptionItemId
-    subscriptionStatus
-    currency
-    currentPeriodEnd
-    currentPeriodStart
-    coreMembersCount
-    communityMembersCount
-    price
-    id: planId
-    name: planName    
-  }
-  `
 
 export default {
   name: 'settings-plans-billing',
@@ -62,12 +46,6 @@ export default {
     _plans: {
       query: gql`query PLANS{ ${PLANS_QUERY} }`,
       update: data => data.getStripePrices,
-      fetchPolicy: 'no-cache'
-    },
-    activePlan: {
-      variables() { return { daoUrl: this.$route.params.dhoname } },
-      query: gql`query activePlan($daoUrl: String!) { ${ACTIVE_PLAN_QUERY} }`,
-      update: data => formatPlan(data.activePlan),
       fetchPolicy: 'no-cache'
     }
 
@@ -191,10 +169,6 @@ export default {
     isFreePlan() { return !this.selectedDaoPlan?.id },
     isPlanModalOpen() { return [STATES.UPDATING_PLAIN, STATES.CREATING_SESSION].includes(this.state) },
 
-    currentPlan() {
-      return this.activePlan?.id ? this.activePlan : this.selectedDaoPlan
-    },
-
     plans() {
       return this._plans
         .map(_ => ({
@@ -264,7 +238,7 @@ export default {
                 div
                   .text-xl.text-weight-600.text-primary {{  $t(`plans.${plan.name}`) }}
                   p.q-pa-none.q-ma-none.text-3xl.text-primary.text-bold ${{ formatMoney(plan.amountUSD) }}
-                div(v-if="currentPlan?.id === plan.id")
+                div(v-if="selectedDaoPlan?.id === plan.id")
                   q-chip(dense color="positive" text-color="white")
                     span.text-uppercase.text-xxs.text-bold.q-px-xxs {{  $t(`statuses.active`) }}
               .hr.q-mt-md.q-mb-xs
@@ -282,7 +256,7 @@ export default {
 
               nav.q-mt-xl.full-width.row.justify-end
                 q-btn.q-px-xl.rounded-border.text-bold.q-ml-xs(
-                  :disable="currentPlan?.id === plan.id"
+                  :disable="selectedDaoPlan?.id === plan.id"
                   :label="$t('configuration.settings-plans-billing.plan.modal.cta')"
                   @click="isFreePlan ? _createCheckoutSession(plan.id) : _updateSubscription(plan.id)"
                   color="secondary"
@@ -300,20 +274,20 @@ export default {
         widget.q-mt-xl(bar shadow)
           header.row.justify-between
             div
-              .text-xl.text-weight-600.text-primary {{  $t(`plans.${currentPlan.name}`) }}
-              p.q-pa-none.q-ma-none.text-3xl.text-primary.text-bold ${{ formatMoney(currentPlan.amountUSD) }}
+              .text-xl.text-weight-600.text-primary {{  $t(`plans.${selectedDaoPlan.name}`) }}
+              p.q-pa-none.q-ma-none.text-3xl.text-primary.text-bold ${{ formatMoney(selectedDaoPlan.amountUSD) }}
                 //- TODO: Return after beta
                 //- span.q-ml-xxs.text-sm.text-weight-500 / {{ $('periods.month') }}
             div
               q-chip(dense color="positive" text-color="white")
-                span.text-uppercase.text-xxs.text-bold.q-px-xxs {{  $t(`statuses.${currentPlan.status}`) }}
+                span.text-uppercase.text-xxs.text-bold.q-px-xxs {{  $t(`statuses.${selectedDaoPlan.status}`) }}
 
           .hr.q-mt-md.q-mb-xs
 
           footer
             div.row.justify-between
               p.q-pa-none.q-ma-none.text-sm.text-h-gray.leading-loose Core Members
-              p.q-pa-none.q-ma-none.text-sm.text-h-gray.leading-loose {{ selectedDaoPlan.currentCoreMembersCount }} / {{ currentPlan.coreMembersCount }}
+              p.q-pa-none.q-ma-none.text-sm.text-h-gray.leading-loose {{ selectedDaoPlan.currentCoreMembersCount }} / {{ selectedDaoPlan.coreMembersCount }}
             //- TODO: Return after beta
             //- div.row.justify-between.q-mt-xs
             //-   p.q-pa-none.q-ma-none.text-sm.text-h-gray.leading-loose Community Members
