@@ -88,14 +88,14 @@ export default {
       .row.flex.items-center.cursor-pointer.q-mb-sm(@click="$emit('back')")
         q-icon.q-mr-xxs(name="fas fa-chevron-left" color="primary" size="14px")
         .text-bold.text-primary {{ $t('login.login-view.back') }}
-      template(v-if="$q.screen.gt.md")
-        .font-lato.text-heading.text-weight-bolder(:style="{ 'font-size': '34px' }") {{ $t('login.login-view.loginTo', { daoName: selectedDao?.title?.replace(/^\w/, (c) => c.toUpperCase()) }) }}
-      template(v-if="!$q.screen.gt.md")
+      //- template(v-if="$q.screen.gt.md")
+      //-   .font-lato.text-heading.text-weight-bolder(:style="{ 'font-size': '34px' }") {{ $t('login.login-view.loginTo', { daoName: selectedDao?.title?.replace(/^\w/, (c) => c.toUpperCase()) }) }}
+      template
         span(:style="'line-height: 44px'")
-          .font-lato.text-heading.text-bold(:style="{ 'font-size': '34px' }") {{ $t('login.login-view.loginTo1') }}
-            .text-bold {{ $t('login.login-view.yourAccount') }}
+          .font-lato.text-heading.text-bold(:class="{ 'desktop-font-size': $q.screen.gt.md }" :style="{ 'font-size': '38px' }") {{ $t('login.login-view.loginTo1') }}
+            .text-bold {{ selectedDao?.title?.replace(/^\w/, (c) => c.toUpperCase()) }}
       .h-b1-signup.text-weight-thin.q-mt-lg.q-mb-lg(v-if="$q.screen.gt.md") {{ $t('login.login-view.youCanEither') }}
-      .h-b1-signup.text-weight-thin.q-mt-lg.q-mb-lg(v-if="!$q.screen.gt.md") {{ $t('login.login-view.pleaseLoginWith') }}
+      .h-b1-signup.q-mt-lg.q-mb-xxs(v-if="!$q.screen.gt.md") {{ $t('login.login-view.pleaseLoginWith') }}
     div
       .col-12(v-if="pkForm && pk")
         .text-h5.text-bold.input-label.q-mb-md {{ $t('login.login-view.account1') }}
@@ -129,7 +129,7 @@ export default {
                     img(:src="scope.opt.icon" width="20" height="20")
                     .q-ml-md {{ scope.opt.label }}
           .col
-            q-btn.q-mt-md.full-width(:disable="!selectedAuthenticator" :style="{ 'height': 'fit-content' }" :label="'Log in'" color="primary" @click="onLoginWallet(selectedAuthenticator.idx)" unelevated rounded no-caps)
+            q-btn.q-mt-md.full-width.text-bold(:disable="!selectedAuthenticator" :style="{ 'height': 'fit-content' }" :label="'Log in'" color="primary" @click="onLoginWallet(selectedAuthenticator.idx)" unelevated rounded outline no-caps)
 </template>
 
 <style lang="stylus" scoped>
@@ -144,4 +144,6 @@ export default {
   border-radius: 25px
   width: 152px
   height: 40px
+.desktop-font-size
+  font-size: 44px !important
 </style>

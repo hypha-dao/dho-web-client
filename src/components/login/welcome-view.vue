@@ -20,12 +20,12 @@ export default {
 .full-width.full-height.flex.q-pa-xl(:class="{ 'items-start':!$q.screen.gt.md, 'items-center':$q.screen.gt.md }")
   .full-width.full-height.flex.column.justify-between.no-wrap(:style="{ 'padding-bottom': '50px' }")
     .full-height.flex.column(:class="{ 'justify-start': !$q.screen.gt.md, 'justify-center': $q.screen.gt.md }")
-      .row(v-if="$router.currentRoute.name === 'create-your-dao'")
-        .font-lato.text-heading.text-bold(:style="{ 'font-size': '34px' }") {{ $t('login.welcome-view.launchYourFirst') }}
-        .h-h7.color-black.q-mt-md {{ $t('login.welcome-view.youNeedAHyphaAccount') }}
-      .row(v-else :style="'line-height: 44px'")
-        .font-lato.text-heading.text-bold(:style="{ 'font-size': '34px' }") {{ isOnboarding ? 'Launch your' : 'Welcome to' }}
-        .font-lato.text-heading.text-bold(:style="{ 'font-size': '34px' }" :class="{ 'q-ml-xs': !$q.screen.lt.sm }") {{ isOnboarding ? 'first DAO' : selectedDao?.title?.replace(/^\w/, (c) => c.toUpperCase()) }}
+      .row(v-if="$router.currentRoute.name === 'create-your-dao'" :class="{ 'q-mb-xxxl': $q.screen.gt.md }")
+        .font-lato.text-heading.text-bold(:class="{ 'desktop-font-size': $q.screen.gt.md }" :style="{ 'font-size': '38px' }") {{ $t('login.welcome-view.launchYourFirst') }}
+        .text-heading.q-mt-md.text-bold(:style="'font-size: 18px'") {{ $t('login.welcome-view.youNeedAHyphaAccount') }}
+      .row(v-else :style="'line-height: 52px; width: 70%;'" :class="{ 'q-mb-xxxl': $q.screen.gt.md }")
+        .font-lato.text-heading.text-bold(:class="{ 'desktop-font-size': $q.screen.gt.md }" :style="{ 'font-size': '38px' }") {{ isOnboarding ? 'Launch your' : 'Welcome to' }}
+        .font-lato.text-heading.text-bold(:class="{ 'desktop-font-size': $q.screen.gt.md }" :style="{ 'font-size': '38px' }") {{ isOnboarding ? 'first DAO' : selectedDao?.title?.replace(/^\w/, (c) => c.toUpperCase()) }}
       .h-h4.color-secondary.q-my-xxxl(v-if="$q.screen.gt.md && isOnboarding") {{ $t('login.welcome-view.youNeedAn') }}
       .h-b1-signup.text-h-gray.q-py-xxs.leading-loose(v-if="$q.screen.gt.md && !isOnboarding")
         template(v-if="$router.currentRoute.name === 'create-your-dao'") {{ $t('login.welcome-view.ifYouAlreadyHaveAHyphaAccount') }}
@@ -44,4 +44,6 @@ export default {
 </template>
 
 <style lang="stylus" scoped>
+.desktop-font-size
+  font-size: 44px !important
 </style>
