@@ -101,7 +101,7 @@ export default {
     async _createCircle (data) {
       try {
         await this.createCircle({ data })
-        this.cirlce = { ...CIRCLE }
+        this.circle = { ...CIRCLE }
         this.subcricle = { ...SUB_CIRCLE }
       } catch (e) {
         const message = e.message || e.cause.message
@@ -270,13 +270,14 @@ widget(:title="$t('configuration.settings-structure.circles.title')" titleImage=
         label.h-label {{ $t('configuration.settings-structure.circles.form.name.label') }}
         q-input.q-my-xs(
           :debounce="200"
+          :disable="!isAdmin"
           :placeholder="$t('configuration.settings-structure.circles.form.name.placeholder')"
           bg-color="white"
           color="accent"
           dense
           lazy-rules
           outlined
-          ref="name"
+          ref="circleName"
           rounded
           v-model='circle.name'
         )
@@ -285,6 +286,7 @@ widget(:title="$t('configuration.settings-structure.circles.title')" titleImage=
         label.h-label {{ $t('configuration.settings-structure.circles.form.description.label') }}
         q-input.q-my-xs(
           :debounce="200"
+          :disable="!isAdmin"
           :input-style="{ 'resize': 'none' }"
           :placeholder="$t('configuration.settings-structure.circles.form.description.placeholder')"
           bg-color="white"
@@ -293,7 +295,7 @@ widget(:title="$t('configuration.settings-structure.circles.title')" titleImage=
           lazy-rules
           maxlength="300"
           outlined
-          ref="nickname"
+          ref="circleDescription"
           rounded
           rows="3"
           type="textarea"
@@ -302,6 +304,7 @@ widget(:title="$t('configuration.settings-structure.circles.title')" titleImage=
 
       nav.full-width.q-my-xl.row.justify-end
         q-btn.col-auto.q-px-xl.rounded-border.text-bold.q-mr-xs(
+          :disable="!isAdmin"
           :label="$t('configuration.settings-structure.circles.form.cancel')"
           @click="state = STATES.WAITING"
           color="white"
@@ -311,6 +314,7 @@ widget(:title="$t('configuration.settings-structure.circles.title')" titleImage=
           unelevated
         )
         q-btn.col-auto.q-px-xl.rounded-border.text-bold.q-ml-xs(
+          :disable="!isAdmin"
           :label="$t('configuration.settings-structure.circles.form.submit')"
           @click="_createCircle({...circle})"
           color="secondary"

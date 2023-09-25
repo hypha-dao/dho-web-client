@@ -64,6 +64,11 @@ jobs:
           CAPTCHA_HOST: ${{ vars.CAPTCHA_HOST }}
           CAPTCHA_NETWORK: ${{ vars.CAPTCHA_NETWORK }}
           LOGIN_CONTRACT: ${{ vars.LOGIN_CONTRACT }}
+          JOIN_CONTRACT: ${{ vars.JOIN_CONTRACT }}
+          JOIN_URI: 'https://join.hypha.earth/'
+
+          DOWNLOAD_WALLET_LINK_IOS: ${{vars.DOWNLOAD_WALLET_LINK_IOS}} || http://itunes.apple.com/lb/app/id1659926348
+          DOWNLOAD_WALLET_LINK_ANDROID: ${{vars.DOWNLOAD_WALLET_LINK_ANDROID}} || http://play.google.com/store/apps/details?id=earth.hypha.wallet.hypha_wallet
 
       - name: S3 sync
         uses: jakejarvis/s3-sync-action@master

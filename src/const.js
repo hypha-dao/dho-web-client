@@ -88,3 +88,41 @@ export const PERIOD_NUMBERS = Object.freeze({
   SECS_PER_YEAR: 31557600,
   CYCLE_DURATION_SEC: 2629800
 })
+
+export const DEFAULT_TIER = 'Custom Reward'
+
+export const TOKEN_TYPES = Object.freeze({
+  CASH_TOKEN: 'Cash Token',
+  UTILITY_TOKEN: 'Utility Token',
+  VOICE_TOKEN: 'Voice Token'
+})
+
+export const MIN_TOKEN_MULTIPLIER = 0
+export const MAX_TOKEN_MULTIPLIER = 1
+
+export const ROUTE_NAMES = Object.freeze({
+  CREATE_YOUR_DAO: 'create-your-dao',
+  PROPOSAL_DETAIL: 'proposal-detail'
+})
+
+export const ORIGIN = window.location.origin
+
+export const PLAN = Object.freeze({
+  FOUNDER: 'founder'
+
+})
+
+export const PLAN_TYPE = Object.freeze({
+  EAAS: 'EAAS',
+  SAAS: 'SAAS'
+})
+
+export const PAYMENT_INTERVAL = Object.freeze({
+  YEAR: 'year',
+  MONTH: 'month'
+})
+
+export const PLAN_STATUS = Object.freeze({
+  ACTIVE: 'active'
+
+})

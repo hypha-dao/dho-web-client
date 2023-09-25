@@ -1,11 +1,9 @@
 <script>
 import { Notify } from 'quasar'
 import { mapActions, mapGetters, mapMutations } from 'vuex'
-import { profileRequired } from '~/mixins/profile-required'
 
 export default {
   name: 'App',
-  mixins: [profileRequired],
 
   computed: {
     ...mapGetters('layout', ['alert'])

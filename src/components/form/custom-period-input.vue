@@ -7,6 +7,7 @@ const secondsToInterval = (seconds) => {
 
   let period = ''
 
+  const minutes = Math.floor(seconds / 60)
   const hours = Math.floor(seconds / 3600)
   const days = Math.floor(seconds / 86400)
   const weeks = Math.floor(seconds / 604800)
@@ -20,16 +21,18 @@ const secondsToInterval = (seconds) => {
     period = 'days'
   } else if (hours > 0) {
     period = 'hours'
+  } else if (minutes > 0) {
+    period = 'minutes'
   }
 
-  return { period, months, weeks, days, hours }
+  return { period, months, weeks, days, hours, minutes }
 }
 
 export default {
   name: 'custom-period-input',
   data () {
     return {
-      period: 'days'
+      period: ''
     }
   },
 
@@ -51,6 +54,7 @@ export default {
       },
       set (value) {
         if (this.type === 'time' && this.period !== '') {
+          if (this.period === 'minutes') { value = (value * 60) }
           if (this.period === 'hours') { value = (value * 60) * 60 }
           if (this.period === 'days') { value = value * 24 * 60 * 60 }
           if (this.period === 'weeks') { value = value * 7 * 24 * 60 * 60 }
@@ -65,8 +69,15 @@ export default {
     label  () { return this.$t(`periods.${this.period}`) }
   },
 
-  mounted () {
-    this.period = secondsToInterval(this.value).period
+  watch: {
+    value: {
+      handler: function (value) {
+        if (value && !this.period) {
+          this.period = secondsToInterval(this.value).period
+        }
+      },
+      immediate: true
+    }
   }
 
 }
@@ -76,17 +87,22 @@ export default {
 div.custom-period-input
   .row.full-width.items-center
     .col.row.q-mr-sm
-      q-input.full-width.q-py-sm(
+      q-input.full-width(
         :disable="disable"
+        :filled="disable"
         dense
         outlined
         rounded
         v-model.number="valueFormated"
       )
-    .col-3
-      q-btn-dropdown.full-width(:label="label"  outline no-caps rounded unelevated)
+    .col-6
+      q-btn-dropdown.full-width(:disable="disable" :label="label" outline no-caps rounded unelevated)
         q-list
-          q-item(clickable v-close-popup @click="period = 'hours'")
+          q-item(clickable v-close-popup @click="period = 'minutes'")
+            q-item-section
+              q-item-label {{ $t('periods.minutes') }}
+
+          q-item(clickable v-close-popup @click="period = 'minutes'")
             q-item-section
               q-item-label {{ $t('periods.hours') }}
 

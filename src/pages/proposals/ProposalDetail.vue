@@ -56,6 +56,16 @@ const PROPOSAL_QUERY = `
       details_ballotSupply_a
       details_ballotAlignment_i
 
+      votetally {
+        docId
+        ... on VoteTally {
+          docId
+          pass_votePower_a
+          fail_votePower_a
+          abstain_votePower_a
+        }
+      }
+
       cmntsect {
         docId
 
@@ -91,6 +101,17 @@ const PROPOSAL_QUERY = `
         details_ballotQuorum_i
         details_ballotSupply_a
         details_ballotAlignment_i
+
+      votetally {
+        docId
+        ... on VoteTally {
+          docId
+          pass_votePower_a
+          fail_votePower_a
+          abstain_votePower_a
+        }
+      }
+
         circle {
           ... on Circle {
             id: docId
@@ -163,6 +184,22 @@ const PROPOSAL_QUERY = `
       details_ballotAlignment_i
       details_url_s
 
+      votetally {
+        docId
+        ... on VoteTally {
+          docId
+          pass_votePower_a
+          fail_votePower_a
+          abstain_votePower_a
+        }
+      }
+
+      start {
+        details_startTime_t
+      }
+
+      details_periodCount_i
+
       lockedby {
         docId
       }
@@ -217,6 +254,16 @@ const PROPOSAL_QUERY = `
       details_ballotSupply_a
       details_ballotAlignment_i
 
+      votetally {
+        docId
+        ... on VoteTally {
+          docId
+          pass_votePower_a
+          fail_votePower_a
+          abstain_votePower_a
+        }
+      }
+
       queststart {
         details_title_s
         system_description_s
@@ -224,6 +271,11 @@ const PROPOSAL_QUERY = `
         details_pegAmount_a
         details_rewardAmount_a
         details_voiceAmount_a
+        start {
+          details_startTime_t
+        }
+
+        details_periodCount_i
       }
 
       dao {
@@ -270,6 +322,16 @@ const PROPOSAL_QUERY = `
       details_ballotAlignment_i
 
       details_url_s
+
+      votetally {
+        docId
+        ... on VoteTally {
+          docId
+          pass_votePower_a
+          fail_votePower_a
+          abstain_votePower_a
+        }
+      }
 
       parentcircle {
         ... on Circle {
@@ -325,6 +387,16 @@ const PROPOSAL_QUERY = `
       details_ballotQuorum_i
       details_ballotSupply_a
       details_ballotAlignment_i
+
+      votetally {
+        docId
+        ... on VoteTally {
+          docId
+          pass_votePower_a
+          fail_votePower_a
+          abstain_votePower_a
+        }
+      }
       
       parentcircle {
         ... on Circle {
@@ -403,6 +475,16 @@ const PROPOSAL_QUERY = `
       details_owner_n
       details_url_s
 
+      votetally {
+        docId
+        ... on VoteTally {
+          docId
+          pass_votePower_a
+          fail_votePower_a
+          abstain_votePower_a
+        }
+      }
+
       dao {
         details_daoName_n
       }
@@ -443,6 +525,16 @@ const PROPOSAL_QUERY = `
       details_url_s
       dao {
         details_daoName_n
+      }
+
+      votetally {
+        docId
+        ... on VoteTally {
+          docId
+          pass_votePower_a
+          fail_votePower_a
+          abstain_votePower_a
+        }
       }
       original {
         __typename
@@ -537,6 +629,17 @@ const PROPOSAL_QUERY = `
       details_ballotQuorum_i
       details_ballotSupply_a
       details_ballotAlignment_i
+
+      votetally {
+        docId
+        ... on VoteTally {
+          docId
+          pass_votePower_a
+          fail_votePower_a
+          abstain_votePower_a
+        }
+      }
+
       salaryband {
         details_annualUsdSalary_a
         details_name_s
@@ -622,6 +725,16 @@ const PROPOSAL_QUERY = `
       details_ballotSupply_a
       details_ballotAlignment_i
       creator
+
+      votetally {
+        docId
+        ... on VoteTally {
+          docId
+          pass_votePower_a
+          fail_votePower_a
+          abstain_votePower_a
+        }
+      }
       start {
         details_startTime_t
       }
@@ -691,6 +804,16 @@ const PROPOSAL_QUERY = `
       details_minTimeShareX100_i
       details_owner_n
 
+      votetally {
+        docId
+        ... on VoteTally {
+          docId
+          pass_votePower_a
+          fail_votePower_a
+          abstain_votePower_a
+        }
+      }
+
       details_url_s
       dao {
         details_daoName_n
@@ -713,6 +836,16 @@ const PROPOSAL_QUERY = `
       details_ballotAlignment_i
       details_purpose_s
       system_proposer_n
+
+      votetally {
+        docId
+        ... on VoteTally {
+          docId
+          pass_votePower_a
+          fail_votePower_a
+          abstain_votePower_a
+        }
+      }
       assignment {
         details_assignee_n
         dao {
@@ -762,6 +895,17 @@ const PROPOSAL_QUERY = `
       dao {
         details_daoName_n
       }
+
+      votetally {
+        docId
+        ... on VoteTally {
+          docId
+          pass_votePower_a
+          fail_votePower_a
+          abstain_votePower_a
+        }
+      }
+
       suspend {
         ... on Role {
           ballot_expiration_t
@@ -836,7 +980,10 @@ const PROPOSAL_QUERY = `
     }
     ... on Votable {
       votetally {
+         docId
+
         ... on VoteTally {
+           docId
           pass_votePower_a
           fail_votePower_a
           abstain_votePower_a
@@ -910,28 +1057,6 @@ export default {
   },
 
   apollo: {
-    upvoteElectionQuery: {
-      query: require('~/query/upvote-election-data.gql'),
-      update: data => {
-        return {
-          currentRound: data.getDao.ongoingelct[0]?.currentround[0].details_type_s,
-          nextRound: data.getDao.ongoingelct[0]?.currentround[0].nextround,
-          upcomingElection: data.getDao.upcomingelct
-        }
-      },
-      variables () {
-        return {
-          daoName: this.selectedDao.name
-        }
-      },
-      result (data) {
-        this.upvoteElectionData = {
-          currentRound: data.data.getDao.ongoingelct[0]?.currentround[0].details_type_s,
-          nextRound: data.data.getDao.ongoingelct[0]?.currentround[0].nextround,
-          upcomingElection: data.data.getDao.upcomingelct
-        }
-      }
-    },
 
     proposal: {
       query: gql`query proposalDetail($docId: String!) { ${PROPOSAL_QUERY} }`,
@@ -940,25 +1065,26 @@ export default {
       variables () { return { docId: this.docId } },
       fetchPolicy: 'no-cache',
 
-      subscribeToMore: {
-        document: gql`subscription proposalDetail($docId: String!) { ${PROPOSAL_QUERY} }`,
-        skip () { return !this.docId },
-        variables () { return { docId: this.docId } },
-        updateQuery: (previousResult, { subscriptionData }) => {
-          if (!subscriptionData.data) {
-            return previousResult
-          }
-          if (!previousResult) {
-            return undefined
-          }
+      pollInterval: 1000, // TODO: Swap with subscribe once dgraph is ready
+      // subscribeToMore: {
+      //   document: gql`subscription proposalDetail($docId: String!) { ${PROPOSAL_QUERY} }`,
+      //   skip () { return !this.docId },
+      //   variables () { return { docId: this.docId } },
+      //   updateQuery: (previousResult, { subscriptionData }) => {
+      //     if (!subscriptionData.data) {
+      //       return previousResult
+      //     }
+      //     if (!previousResult) {
+      //       return undefined
+      //     }
 
-          return subscriptionData.data
-        }
+      //     return subscriptionData.data
+      //   }
 
-      },
+      // },
 
       result (data) {
-        if ((data.data.getDocument.dao[0].details_daoName_n !== this.selectedDao.name) && !this.isBadge) {
+        if ((data?.data?.getDocument?.dao[0]?.details_daoName_n !== this?.selectedDao?.name) && !this.isBadge) {
           this.$router.push({ name: '404-not-found' })
         }
       }
@@ -1053,7 +1179,7 @@ export default {
     commentSectionId () { return this?.proposal?.cmntsect[0].docId },
 
     ownAssignment () {
-      return (this.proposal.__typename === PROPOSAL_TYPE.ROLE || this.proposal.__typename === PROPOSAL_TYPE.ABILITY) &&
+      return (this?.proposal?.__typename === PROPOSAL_TYPE.ROLE || this?.proposal?.__typename === PROPOSAL_TYPE.ABILITY) &&
         this.proposal.details_assignee_n === this.account &&
         proposalParsing.status(this.proposal) !== PROPOSAL_STATE.PROPOSED &&
         proposalParsing.status(this.proposal) !== PROPOSAL_STATE.REJECTED &&
@@ -1088,7 +1214,7 @@ export default {
 
     loading () { return this.$apollo.queries.proposal.loading },
 
-    isBadge () { return this.proposal.__typename === PROPOSAL_TYPE.BADGE },
+    isBadge () { return this.proposal?.__typename === PROPOSAL_TYPE.BADGE },
 
     badgeHolders () {
       const uniqueHolders = lodash.uniqBy(this.proposal.assignment, 'details_assignee_n')
@@ -1176,7 +1302,7 @@ export default {
     },
 
     onApply (proposal) {
-      if (proposal.__typename === PROPOSAL_TYPE.BADGE) {
+      if (proposal?.__typename === PROPOSAL_TYPE.BADGE) {
         proposal.type = PROPOSAL_TYPE.BADGE
         // this.$store.commit('proposals/setNext', true)
 
@@ -1198,7 +1324,7 @@ export default {
         this.saveDraft()
         this.$router.push({ name: 'proposal-create', params: { draftId } })
       }
-      if (proposal.__typename === PROPOSAL_TYPE.ARCHETYPE) {
+      if (proposal?.__typename === PROPOSAL_TYPE.ARCHETYPE) {
         proposal.type = PROPOSAL_TYPE.ARCHETYPE
         // this.$store.commit('proposals/setNext', true)
         this.$store.commit('proposals/setType', CONFIG.options.recurring.options.assignment.type)
@@ -1284,42 +1410,42 @@ export default {
         Circle: { key: 'circle', title: 'Circle' },
         Policy: { key: 'policy', title: 'Policy' },
         Quest: { key: 'quest', title: 'Quest' },
+        Queststart: { key: 'quest', title: 'Quest' },
+        Questcomplet: { key: 'quest', title: 'Quest' },
         Budget: { key: 'circlebudget', title: 'Budget' }
       }[this.proposal.__typename]
-
       this.$store.commit('proposals/setStepIndex', 1)
       this.$store.commit('proposals/setCategory', category)
-      this.$store.commit('proposals/setType', this.proposal.__typename)
+      this.$store.commit('proposals/setType', this.proposal?.__typename)
 
       this.$store.commit('proposals/setState', this.proposal?.details_state_s)
       this.$store.commit('proposals/setProposalId', this.proposal?.docId)
 
       this.$store.commit('proposals/setTitle', this.proposal?.details_title_s)
       this.$store.commit('proposals/setDescription', this.proposal?.details_description_s)
+      // this.$store.commit('proposals/setCircle', this.proposal?.details_description_s)
 
       this.$store.commit('proposals/setUsdAmount', parseFloat(this?.proposal?.details_usdAmount_a))
       this.$store.commit('proposals/setCommitment', parseFloat(this?.proposal?.details_timeShareX100_i))
       this.$store.commit('proposals/setDeferred', parseFloat(this?.proposal?.details_deferredPercX100_i))
 
-      if (this.proposal.__typename === PROPOSAL_TYPE.CIRCLE) {
+      this.$store.commit('proposals/setUrl', this.proposal?.details_url_s)
+
+      if (this.proposal?.__typename === PROPOSAL_TYPE.CIRCLE) {
         this.$store.commit('proposals/setCircle', {
           label: this.proposal?.parentcircle[0]?.name,
           value: this.proposal?.parentcircle[0]?.id
         })
       }
 
-      if (this.proposal.__typename === PROPOSAL_TYPE.POLICY) {
+      if (this.proposal?.__typename === PROPOSAL_TYPE.POLICY) {
         this.$store.commit('proposals/setCircle', {
           label: this.proposal?.parentcircle[0]?.name,
           value: this.proposal?.parentcircle[0]?.id
         })
       }
 
-      if (this.proposal.__typename === PROPOSAL_TYPE.PAYOUT) {
-        this.$store.commit('proposals/setUrl', this.proposal?.details_url_s)
-      }
-
-      if (this.proposal.__typename === PROPOSAL_TYPE.ROLE) { // Role Assignment
+      if (this.proposal?.__typename === PROPOSAL_TYPE.ROLE) { // Role Assignment
         const tier = this.tiers.find(tier => tier.label === this.proposal?.salaryband?.[0]?.details_name_s)
         const archetype = this.archetypes.find(archetype => archetype.label === this.proposal?.salaryband?.[0]?.assignment?.[0]?.role?.[0]?.system_nodeLabel_s)
         this.$store.commit('proposals/setRole', archetype)
@@ -1329,26 +1455,27 @@ export default {
         this.$store.commit('proposals/setMinDeferred', tier?.value?.minDeferred || 0)
         this.$store.commit('proposals/setMinCommitment', 0)
 
-        this.$store.commit('proposals/setCommitment', parseFloat(1))
-        this.$store.commit('proposals/setDeferred', parseFloat(tier.value.minDeferred))
+        this.$store.commit('proposals/setCommitment', this.proposal?.details_timeShareX100_i)
+        this.$store.commit('proposals/setDeferred', parseFloat(this.proposal?.details_deferredPercX100_i))
         this.$store.commit('proposals/setStartPeriod', this.proposal?.start[0])
+        // this.$store.commit('proposals/setStartDate', this.proposal?.start[0]?.details_startTime_t)
         this.$store.commit('proposals/setPeriodCount', this.proposal?.details_periodCount_i)
         // this.$store.commit('proposals/setMinDeferred', this.proposal?.role[0]?.details_minDeferredX100_i)
       }
 
-      if (this.proposal.__typename === PROPOSAL_TYPE.ABILITY) { // Badge Assignment
-        this.$store.commit('proposals/setBadge', this?.proposal.badge)
+      if (this.proposal?.__typename === PROPOSAL_TYPE.ABILITY || this.proposal?.__typename === PROPOSAL_TYPE.ASSIGNBADGE) { // Badge Assignment
+        this.$store.commit('proposals/setBadge', this?.proposal.badge?.[0])
         this.$store.commit('proposals/setStartPeriod', this.proposal?.start[0])
         this.$store.commit('proposals/setPeriodCount', this.proposal?.details_periodCount_i)
       }
 
-      if (this.proposal.__typename === PROPOSAL_TYPE.ARCHETYPE) {
+      if (this.proposal?.__typename === PROPOSAL_TYPE.ARCHETYPE) {
         this.$store.commit('proposals/setAnnualUsdSalary', parseInt(this.proposal?.details_annualUsdSalary_a.split(' ').shift()))
         this.$store.commit('proposals/setRoleCapacity', this.proposal?.details_fulltimeCapacityX100_i)
         this.$store.commit('proposals/setMinDeferred', this.proposal?.details_minDeferredX100_i)
       }
 
-      if (this.proposal.__typename === PROPOSAL_TYPE.BADGE) {
+      if (this.proposal?.__typename === PROPOSAL_TYPE.BADGE) {
         this.$store.commit('proposals/setBadge', this?.proposal)
         this.$store.commit('proposals/setPurpose', this.proposal?.details_purpose_s)
         this.$store.commit('proposals/setIcon', this.proposal?.details_icon_s)
@@ -1358,6 +1485,17 @@ export default {
         this.$store.commit('proposals/setVoiceCoefficient', this?.proposal?.details_voiceCoefficientX10000_i)
         this.$store.commit('proposals/setPegCoefficientLabel', (this?.proposal?.details_pegCoefficientX10000_i - 10000) / 100)
         this.$store.commit('proposals/setPegCoefficient', this?.proposal?.details_pegCoefficientX10000_i)
+      }
+
+      if (this.proposal.__typename === PROPOSAL_TYPE.QUEST_START || this.proposal.__typename === PROPOSAL_TYPE.QUEST_PAYOUT) {
+        this.$store.commit('proposals/setUrl', this.proposal?.details_url_s)
+        this.$store.commit('proposals/setStartPeriod', this.proposal?.start?.[0])
+        this.$store.commit('proposals/setPeriodCount', this.proposal?.details_periodCount_i)
+        this.$store.commit('proposals/setPeg', this.proposal?.details_pegAmount_a.split(' ')[0])
+        this.$store.commit('proposals/setReward', this.proposal?.details_rewardAmount_a.split(' ')[0])
+        this.$store.commit('proposals/setVoice', this.proposal?.details_voiceAmount_a.split(' ')[0])
+        this.$store.commit('proposals/setStartPeriod', this.proposal?.start[0])
+        this.$store.commit('proposals/setPeriodCount', this.proposal?.details_periodCount_i)
       }
 
       const draftId = Date.now()
@@ -1409,7 +1547,7 @@ export default {
       await this.$forceUpdate()
     },
     toggle (proposal) {
-      return proposal.__typename === PROPOSAL_TYPE.ROLE || proposal.__typename === PROPOSAL_TYPE.ARCHETYPE || (proposal.__typename === PROPOSAL_TYPE.EDIT && proposal.original?.[0].role)
+      return proposal?.__typename === PROPOSAL_TYPE.ROLE || proposal?.__typename === PROPOSAL_TYPE.ARCHETYPE || (proposal?.__typename === PROPOSAL_TYPE.EDIT && proposal.original?.[0].role)
     },
 
     async fetchComment (commentId) {
@@ -1500,7 +1638,7 @@ export default {
           proposal-item.bottom-no-rounded(v-if="ownAssignment" background="white" :proposal="proposal" :clickable="ownAssignment" :expandable="true" :owner="true" :moons="true" @claim-all="$emit('claim-all')" @change-deferred="(val) => $emit('change-deferred', val)" :selectedDao="selectedDao" :daoSettings="daoSettings" :votingPercentages="votingPercentages")
           .separator-container(v-if="ownAssignment")
             q-separator(color="grey-3" inset)
-          proposal-view(:proposal="optimisticProposal ? optimisticProposal : proposal" :ownAssignment="ownAssignment" :class="{'top-no-rounded': ownAssignment}" :withToggle="toggle(proposal)" :created="proposalParsing.created(proposal)" :restrictions="proposalParsing.restrictions(proposal)" :status="proposalParsing.status(proposal)" :docId="proposalParsing.docId(proposal)" :creator="proposalParsing.creator(proposal)" :capacity="proposalParsing.capacity(proposal)" :deferred="proposalParsing.deferred(proposal)" :description="proposalParsing.description(proposal)" :periodCount="proposalParsing.periodCount(proposal)" :salary="proposalParsing.salary(proposal)" :start="proposalParsing.start(proposal)" :subtitle="!ownAssignment ? proposalParsing.subtitle(proposal) : undefined" :title="!ownAssignment ? proposalParsing.title(proposal) : undefined" :type="proposal.__typename === 'Suspend' ? proposal.suspend[0].__typename : proposal.__typename" :url="proposalParsing.url(proposal)" :icon="proposalParsing.icon(proposal)" :commit="proposalParsing.commit(optimisticProposal ? optimisticProposal : proposal)" :compensation="proposalParsing.compensation(optimisticProposal ? optimisticProposal : proposal, daoSettings)" :tokens="proposalParsing.tokens(optimisticProposal ? optimisticProposal : proposal, periodsOnCycle, daoSettings, isDefaultBadgeMultiplier)" :isBadge="isBadge" :pastQuorum="proposalParsing.pastQuorum(proposal)" :pastUnity="proposalParsing.pastUnity(proposal)" :votingMethod="proposalParsing.votingMethod(proposal)" :parentCircle="proposalParsing.parentCircle(proposal)" @change-deferred="onDeferredUpdate" @change-commit="onCommitUpdate")
+          proposal-view(:proposal="optimisticProposal ? optimisticProposal : proposal" :ownAssignment="ownAssignment" :class="{'top-no-rounded': ownAssignment}" :withToggle="toggle(proposal)" :created="proposalParsing.created(proposal)" :restrictions="proposalParsing.restrictions(proposal)" :status="proposalParsing.status(proposal)" :docId="proposalParsing.docId(proposal)" :creator="proposalParsing.creator(proposal)" :capacity="proposalParsing.capacity(proposal)" :deferred="proposalParsing.deferred(proposal)" :description="proposalParsing.description(proposal)" :periodCount="proposalParsing.periodCount(proposal)" :salary="proposalParsing.salary(proposal)" :start="proposalParsing.start(proposal)" :subtitle="!ownAssignment ? proposalParsing.subtitle(proposal) : undefined" :title="!ownAssignment ? proposalParsing.title(proposal) : undefined" :type="proposal?.__typename === 'Suspend' ? proposal.suspend[0].__typename : proposal?.__typename" :url="proposalParsing.url(proposal)" :icon="proposalParsing.icon(proposal)" :commit="proposalParsing.commit(optimisticProposal ? optimisticProposal : proposal)" :compensation="proposalParsing.compensation(optimisticProposal ? optimisticProposal : proposal, daoSettings)" :tokens="proposalParsing.tokens(optimisticProposal ? optimisticProposal : proposal, periodsOnCycle, daoSettings, isDefaultBadgeMultiplier)" :isBadge="isBadge" :pastQuorum="proposalParsing.pastQuorum(proposal)" :pastUnity="proposalParsing.pastUnity(proposal)" :votingMethod="proposalParsing.votingMethod(proposal)" :parentCircle="proposalParsing.parentCircle(proposal)" @change-deferred="onDeferredUpdate" @change-commit="onCommitUpdate")
           comments-widget(v-if="!isBadge" :comments="comments" :disable="expired" @create="createComment" @update="updateComment" @delete="deleteComment" @like="likeComment" @unlike="unlikeComment" @load-comment="fetchComment")
         .col-12.col-lg-3(v-if="!isBadge" :class="{ 'q-pl-md': $q.screen.gt.md }")
           widget.bg-primary(v-if="proposalParsing.status(proposal) === PROPOSAL_STATE.DRAFTED && isCreator && state === 'WAITING'")
@@ -1558,10 +1696,10 @@ export default {
       )
       .separator-container(v-if="ownAssignment")
         q-separator(color="grey-3" inset)
-      proposal-view(:proposal="optimisticProposal ? optimisticProposal : proposal" :ownAssignment="ownAssignment" :class="{'top-no-rounded': ownAssignment}" :withToggle="toggle(proposal)" :created="proposalParsing.created(proposal)" :restrictions="proposalParsing.restrictions(proposal)" :status="proposalParsing.status(proposal)" :docId="proposalParsing.docId(proposal)" :creator="proposalParsing.creator(proposal)" :capacity="proposalParsing.capacity(proposal)" :deferred="proposalParsing.deferred(proposal)" :description="proposalParsing.description(proposal)" :periodCount="proposalParsing.periodCount(proposal)" :salary="proposalParsing.salary(proposal)" :start="proposalParsing.start(proposal)" :subtitle="!ownAssignment ? proposalParsing.subtitle(proposal) : undefined" :title="!ownAssignment ? proposalParsing.title(proposal) : undefined" :type="proposal.__typename === 'Suspend' ? proposal.suspend[0].__typename : proposal.__typename" :url="proposalParsing.url(proposal)" :icon="proposalParsing.icon(proposal)" :commit="proposalParsing.commit(optimisticProposal ? optimisticProposal : proposal)" :compensation="proposalParsing.compensation(optimisticProposal ? optimisticProposal : proposal, daoSettings)" :tokens="proposalParsing.tokens(optimisticProposal ? optimisticProposal : proposal, periodsOnCycle, daoSettings, isDefaultBadgeMultiplier)" :isBadge="isBadge" :pastQuorum="proposalParsing.pastQuorum(proposal)" :pastUnity="proposalParsing.pastUnity(proposal)" :purpose="proposalParsing.purpose(proposal)" :votingMethod="proposalParsing.votingMethod(proposal)" :parentCircle="proposalParsing.parentCircle(proposal)" @change-deferred="onDeferredUpdate" @change-commit="onCommitUpdate")
+      proposal-view(:proposal="optimisticProposal ? optimisticProposal : proposal" :ownAssignment="ownAssignment" :class="{'top-no-rounded': ownAssignment}" :withToggle="toggle(proposal)" :created="proposalParsing.created(proposal)" :restrictions="proposalParsing.restrictions(proposal)" :status="proposalParsing.status(proposal)" :docId="proposalParsing.docId(proposal)" :creator="proposalParsing.creator(proposal)" :capacity="proposalParsing.capacity(proposal)" :deferred="proposalParsing.deferred(proposal)" :description="proposalParsing.description(proposal)" :periodCount="proposalParsing.periodCount(proposal)" :salary="proposalParsing.salary(proposal)" :start="proposalParsing.start(proposal)" :subtitle="!ownAssignment ? proposalParsing.subtitle(proposal) : undefined" :title="!ownAssignment ? proposalParsing.title(proposal) : undefined" :type="proposal?.__typename === 'Suspend' ? proposal.suspend[0].__typename : proposal?.__typename" :url="proposalParsing.url(proposal)" :icon="proposalParsing.icon(proposal)" :commit="proposalParsing.commit(optimisticProposal ? optimisticProposal : proposal)" :compensation="proposalParsing.compensation(optimisticProposal ? optimisticProposal : proposal, daoSettings)" :tokens="proposalParsing.tokens(optimisticProposal ? optimisticProposal : proposal, periodsOnCycle, daoSettings, isDefaultBadgeMultiplier)" :isBadge="isBadge" :pastQuorum="proposalParsing.pastQuorum(proposal)" :pastUnity="proposalParsing.pastUnity(proposal)" :purpose="proposalParsing.purpose(proposal)" :votingMethod="proposalParsing.votingMethod(proposal)" :parentCircle="proposalParsing.parentCircle(proposal)" @change-deferred="onDeferredUpdate" @change-commit="onCommitUpdate")
       comments-widget(v-if="!isBadge" :comments="comments" :disable="expired" @create="createComment" @update="updateComment" @delete="deleteComment" @like="likeComment" @unlike="unlikeComment" @load-comment="fetchComment")
     .col-12.col-sm-3(:class="{ 'q-pl-md': $q.screen.gt.sm }")
-      widget.q-mb-md.position-relative(v-if="proposalParsing.status(proposal) === PROPOSAL_STATE.APPROVED && proposal.__typename === PROPOSAL_TYPE.QUEST_START && !claimPayments.length" :title="$t('pages.proposals.proposaldetail.questCompletion')")
+      widget.q-mb-md.position-relative(v-if="proposalParsing.status(proposal) === PROPOSAL_STATE.APPROVED && proposal?.__typename === PROPOSAL_TYPE.QUEST_START && !claimPayments.length" :title="$t('pages.proposals.proposaldetail.questCompletion')")
         .text-ellipsis.text-body.q-my-xl {{ $t('pages.proposals.proposaldetail.didYouFinish') }}
         q-btn.full-width.q-mt-xl.q-px-lg(rounded color="primary" no-caps @click="onQuestPayout") {{ $t('pages.proposals.proposaldetail.claimYourPayment') }}
       widget.bg-primary(v-if="proposalParsing.status(proposal) === PROPOSAL_STATE.DRAFTED && isCreator && state === 'WAITING'")

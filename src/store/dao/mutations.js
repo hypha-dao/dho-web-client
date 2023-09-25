@@ -1,3 +1,4 @@
+import { PLAN, PLAN_STATUS } from '~/const'
 export const setDho = (state, dho) => {
   if (dho && dho.length === 1) {
     state.dho = {
@@ -50,6 +51,10 @@ const settingsMapper = (settings) => {
     communityVotingAlignmentPercent: settings?.settings_communityVotingAlignmentPercent_i,
     communityVotingQuorumPercent: settings?.settings_communityVotingQuorumPercent_i,
 
+    treasuryTokenMultiplier: settings?.settings_treasuryTokenMultiplier_i / 100,
+    utilityTokenMultiplier: settings?.settings_utilityTokenMultiplier_i / 100,
+    voiceTokenMultiplier: settings?.settings_voiceTokenMultiplier_i / 100,
+
     communityVotingMethod: settings?.settings_communityVotingMethod_s,
     upvoteStartDateTime: new Date(settings?.settings_upvoteStartDateTime_s).toLocaleString(),
     upvoteStartDate: new Date(settings?.settings_upvoteStartDateTime_s).toLocaleDateString('en-ZA'),
@@ -100,67 +105,48 @@ const settingsMapper = (settings) => {
   }
 }
 
-export const switchDao = (state, daos) => {
-  // Called by DhoSelector.vue after the apollo query
-  if (daos && daos.length === 1) {
-    const dao = daos[0]
-    state.name = dao.details_daoName_n
-    state.hash = dao.hash
-    state.docId = dao.docId
+// Called by DhoSelector.vue after the apollo query
+export const switchDao = (state, data) => {
+  const dao = data?.queryDao[0] || {}
+  const plan = data?.activePlan || {}
 
-    // dao.details_daoType_s = 'anchor'
-    // dao.details_isWaitingEcosystem_i = Boolean(dao.details_isWaitingEcosystem_i)
+  state.name = dao.details_daoName_n
+  state.hash = dao.hash
+  state.docId = dao.docId
 
-    const isWaitingEcosystem = Boolean(dao.details_isWaitingEcosystem_i)
-    const isEcosystemActivated = dao.details_isWaitingEcosystem_i === 0
-    const isEcosystem = dao.details_daoType_s === 'anchor' || isWaitingEcosystem
+  state.announcements = [...dao.announcements].map(_ => ({ ..._, enabled: Boolean(_.enabled) }))
 
-    state.announcements = [...dao.announcements].map(_ => ({ ..._, enabled: Boolean(_.enabled) }))
+  state.meta = {
+    memberCount: dao.memberAggregate.count
+  }
 
-    state.meta = {
-      memberCount: dao.memberAggregate.count
-    }
+  state.plan = {
+    ...plan,
+    name: (plan?.name || PLAN.FOUNDER).toLowerCase(),
+    status: plan?.status || PLAN_STATUS.ACTIVE,
+    amountUSD: (plan?.price / 100) / 12,
+    coreMembersCount: plan?.coreMembersCount || 5,
+    communityMembersCount: plan?.communityMembersCount || 0,
+    currentCoreMembersCount: dao?.memberAggregate?.count || 0
 
-    const planmanager = dao && dao.planmanager && dao.planmanager.length > 0 ? dao.planmanager[0] : null
-    const lastbill = planmanager ? planmanager.lastbill[0] : {}
-    const plan = planmanager
-      ? {
-          ...lastbill,
-          isActivated: true,
-          isEcosystem,
-          isEcosystemActivated,
-          isWaitingEcosystem,
-          maxUsers: lastbill && lastbill?.pricingplan && lastbill?.pricingplan[0].maxMemberCount
-        }
-      : {
-          isActivated: false,
-          isEcosystem,
-          isEcosystemActivated,
-          isWaitingEcosystem
-        }
+  }
 
-    state.plan = {
-      ...plan
-    }
+  const multisigs = dao.multisigs
+  state.multisigs = multisigs && multisigs.length > 0 ? multisigs.map(settingsMapper) : []
 
-    const multisigs = dao.multisigs
-    state.multisigs = multisigs && multisigs.length > 0 ? multisigs.map(settingsMapper) : []
+  const settings = dao.settings[0]
 
-    const settings = dao.settings[0]
+  state.ecosystem = {
+    name: settings?.ecosystem_name_s,
+    logo: settings?.ecosystem_logo_s,
+    domain: settings?.ecosystem_domain_s,
+    purpose: settings?.ecosystem_purpose_s
+  }
 
-    state.ecosystem = {
-      name: settings?.ecosystem_name_s,
-      logo: settings?.ecosystem_logo_s,
-      domain: settings?.ecosystem_domain_s,
-      purpose: settings?.ecosystem_purpose_s,
-      isActivated: isEcosystemActivated
-    }
-
-    state.settings = {
-      ...settingsMapper(settings),
-      levels: [...dao?.levels],
-      upvoteElectionId: dao?.upcomingelct?.[0]?.docId
-    }
+  state.settings = {
+    ...settingsMapper(settings),
+    levels: [...dao?.levels],
+    upvoteElectionId: dao?.upcomingelct?.[0]?.docId
   }
 }
 

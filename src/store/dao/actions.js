@@ -1,8 +1,12 @@
 /* eslint-disable no-unreachable */
-import camelToSnakeCase from '~/utils/camelToSnakeCase'
 import HyphaTokensSaleUtil from '@hypha-dao/hypha-token-sales-util'
 import { JsonRpc } from 'eosjs'
 import { RPC_ACCOUNTS } from '~/const'
+
+import camelToSnakeCase from '~/utils/camelToSnakeCase'
+import generateRandomString from '~/utils/generateRandomString'
+import generateSecret from '~/utils/generateSecret'
+import ipfsy from '~/utils/ipfsy'
 
 export const createDAO = async function (context, { data, isDraft }) {
   const actions = [{
@@ -1001,4 +1005,84 @@ export const deleteCircle = async function ({ state, rootState }, id) {
   ]
 
   return this.$api.signTransaction(actions)
+}
+
+export const createInviteLink = async function ({ state, rootState }, id) {
+  const CHAIN = process.env.CAPTCHA_NETWORK // telos | telosTestnet | eos | eosTestnet
+  const DAO_ID = rootState.dao.docId
+  const INVITE_CODE = generateRandomString(10)
+  const ENROLL_SECRET = await generateSecret()
+
+  const PAYLOAD = `https://hypha.earth/invite?code=${INVITE_CODE}&chain=${CHAIN}&dao=${DAO_ID}&enroll_secret=${ENROLL_SECRET.secret}`
+  const url = `https://hyphawallet.page.link/?link=${encodeURIComponent(PAYLOAD)}&apn=earth.hypha.wallet.hypha_wallet&isi=1659926348&ibi=earth.hypha.wallet.hyphaWallet&cid=866980350130875998&_osl=https://hyphawallet.page.link/KPo2&_icp=1`
+  const inviter = rootState.profiles.profiles[rootState.accounts.account].publicData
+
+  const actions = [
+    {
+      account: this.$config.contracts.join,
+      name: 'createinvite',
+      data: {
+        dao_id: rootState.dao.docId,
+        dao_name: rootState.dao.settings.settings_daoName_n,
+        dao_fullname: rootState.dao.settings.settings_daoTitle_s,
+        inviter: rootState.accounts.account,
+        hashed_secret: ENROLL_SECRET.hashedSecret
+      }
+    }
+  ]
+
+  await this.$api.signTransaction(actions)
+
+  return {
+    url,
+    daoName: rootState.dao.settings.title,
+    daoDescription: rootState.dao.settings.description,
+    daoLogo: ipfsy(rootState.dao.settings.logo),
+    coreMemberCount: rootState.dao.meta.memberCount,
+    communityMemberCount: 0,
+    inviterName: inviter.name,
+    inviterAvatar: inviter.avatar
+  }
+}
+
+export const createTokens = async function ({ state, rootState }, data) {
+  const actions = [
+    {
+      account: this.$config.contracts.dao,
+      name: 'createtokens',
+      data: {
+        dao_id: rootState.dao.docId,
+        tokens_info: [
+          // payout token
+          [
+            { label: 'content_group_label', value: ['string', 'peg_details'] },
+            { label: 'peg_token_name', value: ['string', data?.treasuryName] }, // -> Optional, if omitted, name will be taken from reward_token symbol
+            { label: 'peg_token', value: ['asset', `${parseFloat(1).toFixed(data?.treasuryDigits)} ${data?.treasurySymbol}`] },
+            { label: 'treasury_currency', value: ['string', data?.treasuryCurrency.value] },
+            { label: 'treasury_token_multiplier', value: ['int64', data?.treasuryTokenMultiplier * 100] }
+          ],
+
+          // utility token
+          [
+            { label: 'content_group_label', value: ['string', 'reward_details'] },
+            { label: 'reward_token_name', value: ['string', data?.utilityName] },
+            { label: 'reward_token', value: ['asset', `${parseFloat(1).toFixed(data?.utilityDigits)} ${data?.utilitySymbol}`] },
+            { label: 'reward_token_max_supply', value: ['asset', `${parseFloat(-1).toFixed(data?.utilityDigits)} ${data?.utilitySymbol}`] },
+            { label: 'reward_to_peg_ratio', value: ['asset', `${parseFloat(1).toFixed(data?.treasuryDigits)} ${data?.treasurySymbol}`] },
+            { label: 'utility_token_multiplier', value: ['int64', data?.utilityTokenMultiplier * 100] }
+          ],
+
+          // voice token
+          [
+            { label: 'content_group_label', value: ['string', 'voice_details'] },
+            { label: 'voice_token_decay_period', value: ['int64', data?.voiceDecayPeriod] },
+            { label: 'voice_token_decay_per_period_x10M', value: ['int64', data?.voiceDecayPercent] },
+            { label: 'voice_token_multiplier', value: ['int64', data?.voiceTokenMultiplier * 100] }
+          ]
+        ]
+      }
+    }
+  ]
+
+  await this.$api.signTransaction(actions)
 }

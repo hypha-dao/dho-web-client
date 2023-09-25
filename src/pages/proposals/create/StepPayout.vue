@@ -1,12 +1,12 @@
 <script>
 import { mapGetters } from 'vuex'
-import { validation } from '~/mixins/validation'
+import { DEFAULT_TIER, PROPOSAL_TYPE } from '~/const'
 import { format } from '~/mixins/format'
-import { PROPOSAL_TYPE } from '~/const'
+import { validation } from '~/mixins/validation'
 
 export default {
   name: 'step-payout',
-  mixins: [validation, format],
+  mixins: [format, validation],
   components: {
     InfoTooltip: () => import('~/components/common/info-tooltip.vue'),
     PayoutAmounts: () => import('~/components/common/payout-amounts.vue'),
@@ -51,6 +51,13 @@ export default {
       }
     },
 
+    annualUsdSalary: {
+      immediate: true,
+      handler () {
+        this.calculateTokens()
+      }
+    },
+
     usdAmount: {
       immediate: true,
       handler () {
@@ -67,6 +74,7 @@ export default {
         }
       }
     },
+
     commitment: {
       immediate: true,
       handler () {
@@ -75,26 +83,8 @@ export default {
           this.firstPaintCommitment = false
         }
       }
-    },
-
-    // '$store.state.proposals.draft.type': {
-    //   immediate: true,
-    //   handler () {
-    //     this.custom = false
-    //   }
-    // },
-
-    '$store.state.proposals.draft.annualUsdSalary': {
-      immediate: true,
-      handler (val) {
-        if (!this.custom) {
-          if (val === 0) {
-            this.salaryOption = null
-          }
-          this.calculateTokens()
-        }
-      }
     }
+
   },
 
   mounted () {
@@ -104,7 +94,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters('dao', ['daoSettings']),
+    ...mapGetters('dao', ['daoSettings', 'selectedDao']),
     nextDisabled () {
       const proposalType = this.$store.state.proposals.draft.category.key
 
@@ -124,11 +114,7 @@ export default {
       } else if (proposalType === 'contribution' && (!this.usdAmount || this.usdAmount <= 0) && !this.custom) {
         return true
       }
-      // if (!this.usdAmount && this.$store.state.proposals.draft.category.key !== 'assignment') {
-      //   return true
-      // } else if (!this.annualUsdSalary && this.$store.state.proposals.draft.category.key !== 'archetype') {
-      //   return true
-      // }
+
       return false
     },
 
@@ -278,15 +264,9 @@ export default {
     periodsOnCycle () {
       return (this.cycleDurationSec / this.daoSettings.periodDurationSec).toFixed(2)
     },
-    cashToken () {
-      return !this.toggle ? this.getFormatedTokenAmount(this.peg, Number.MAX_VALUE) : this.getFormatedTokenAmount((this.peg / this.periodsOnCycle).toFixed(2), Number.MAX_VALUE)
-    },
-    utilityToken () {
-      return !this.toggle ? this.getFormatedTokenAmount(this.reward, Number.MAX_VALUE) : this.getFormatedTokenAmount((this.reward / this.periodsOnCycle).toFixed(2), Number.MAX_VALUE)
-    },
-    voiceToken () {
-      return !this.toggle ? this.getFormatedTokenAmount(this.voice, Number.MAX_VALUE) : this.getFormatedTokenAmount((this.voice / this.periodsOnCycle).toFixed(2), Number.MAX_VALUE)
-    },
+    cashToken () { return this.calculateToken(this.peg, this.daoSettings.treasuryTokenMultiplier) },
+    utilityToken () { return this.calculateToken(this.reward, this.daoSettings.utilityTokenMultiplier) },
+    voiceToken () { return this.calculateToken(this.voice, this.daoSettings.voiceTokenMultiplier) },
     isAssignment () {
       const proposalType = this.$store.state.proposals.draft.category.key
       return proposalType === 'assignment' || proposalType === 'archetype'
@@ -294,16 +274,17 @@ export default {
     isContribution () {
       const proposalType = this.$store.state.proposals.draft.category.key
       return proposalType === 'contribution'
-    }
+    },
+    isDefaultTier () { return this.$store.state.proposals.draft.tier?.value?.name === DEFAULT_TIER }
   },
-  // mounted () {
-  //   if (!this.pegCoefficientLabel) {
-  //     this.$store.commit('proposals/setPegCoefficientLabel', 0)
-  //     this.$store.commit('proposals/setPegCoefficient', this.calculateCoefficient(0))
-  //   }
-  // },
 
   methods: {
+    calculateToken (token, tokenMultiplier) {
+      return !this.toggle
+        ? this.getFormatedTokenAmount(token * (tokenMultiplier || 1), Number.MAX_VALUE)
+        : this.getFormatedTokenAmount((token * (tokenMultiplier || 1) / this.periodsOnCycle).toFixed(2), Number.MAX_VALUE)
+    },
+
     isValidCommitment (commitment) {
       const proposalType = this.$store.state.proposals.draft.category.key
       if (proposalType === 'assignment') {
@@ -338,7 +319,6 @@ export default {
     },
 
     calculateCoefficient (coefficient) {
-      // if (!coefficient || coefficient === 0) return 0
       return ((coefficient * 100) + 10000)
     }
   }
@@ -353,6 +333,13 @@ widget(:class="{ 'disable-step': currentStepName !== 'step-payout' && $q.screen.
     .text-body2.text-grey-7(v-if="fields.stepCompensationTitle && fields.stepCompensationTitle.description") {{ fields.stepCompensationTitle.description }}
   .text-body2.text-grey-7.q-mb-xl(v-if="$q.screen.lt.md || $q.screen.md") {{ $t('pages.proposals.create.steppayout.pleaseEnterTheUsd') }}
   .q-col-gutter-sm(:class="{ 'row':$q.screen.gt.md, 'q-mt-xl':$q.screen.gt.md }")
+    .col(v-if="isDefaultTier" :class="{ 'q-mb-xxl':$q.screen.lt.md || $q.screen.md }")
+      label.h-label {{ fields.annualUsdSalaryCustom.label }}
+      .text-body2.text-grey-7.q-my-md(v-if="fields.annualUsdSalaryCustom.description") {{ fields.annualUsdSalaryCustom.description }}
+      .row.full-width.items-center.q-mt-xs
+        q-avatar.q-mr-xs(size="40px")
+          img(src="~assets/icons/usd.svg")
+        q-input.rounded-border.col(:disable="custom" dense outlined rounded suffix="$" type="number" v-model="annualUsdSalary" :placeholder="$t('pages.proposals.create.steppayout.typeTheAmountOfUsd')")
     .col(v-if="fields.usdAmount" :class="{ 'q-mb-xxl':$q.screen.lt.md || $q.screen.md }")
       label.h-label {{ fields.usdAmount.label }}
       .text-body2.text-grey-7.q-my-md(v-if="fields.usdAmount.description") {{ fields.usdAmount.description }}
@@ -407,15 +394,15 @@ widget(:class="{ 'disable-step': currentStepName !== 'step-payout' && $q.screen.
   .row(v-if="isAssignment")
     label.text-bold {{ toggle ? $t('pages.proposals.create.steppayout.compensationForOnePeriod') : $t('pages.proposals.create.steppayout.compensationForOneCycle') }}
   .q-col-gutter-xs.q-mt-sm(:class="{ 'q-mt-xxl':$q.screen.lt.md || $q.screen.md, 'row':$q.screen.gt.md }")
-    .col-4(:class="{ 'q-mt-md':$q.screen.lt.md || $q.screen.md }" v-if="fields.reward")
+    .col-4(:class="{ 'q-mt-md':$q.screen.lt.md || $q.screen.md }" v-if="fields.reward && selectedDao.hasCustomToken && $store.state.dao.settings.rewardToken")
       label.h-label(v-if="$store.state.dao.settings.rewardToken !== 'HYPHA'") {{ `${fields.reward.label} (${$store.state.dao.settings.rewardToken})` }}
       label.h-label(v-else) {{ `${fields.reward.label}` }}
       .row.full-width.items-center.q-mt-xs
         token-logo.q-mr-xs(size="40px" type="utility" :daoLogo="daoSettings.logo")
         q-input.rounded-border.col(dense :readonly="!custom" outlined v-model="utilityToken" rounded v-if="isAssignment && !isFounderRole")
         q-input.rounded-border.col(dense :readonly="!custom" outlined v-model="reward" rounded v-else)
-    .col-4(:class="{ 'q-mt-md':$q.screen.lt.md || $q.screen.md }" v-if="fields.peg")
-      label.h-label(v-if="$store.state.dao.settings.pegToken !== 'HUSD'") {{ `${fields.peg.label} (${$store.state.dao.settings.pegToken})` }}
+    .col-4(:class="{ 'q-mt-md':$q.screen.lt.md || $q.screen.md }" v-if="fields.peg && $store.state.dao.settings.pegToken")
+      label.h-label(v-if="$store.state.dao.settings.pegToken !== 'HUSD'") {{ `${fields.peg.label} ${$store.state.dao.settings.pegToken ? `(${$store.state.dao.settings.pegToken})`:''}`}}
       label.h-label(v-else) {{ `${fields.peg.label}` }}
       .row.full-width.items-center.q-mt-xs
         token-logo.q-mr-xs(size="40px" type="cash" :daoLogo="daoSettings.logo")
@@ -444,7 +431,7 @@ widget(:class="{ 'disable-step': currentStepName !== 'step-payout' && $q.screen.
     // Multiplier
     .full-width(v-if="fields.rewardCoefficient || fields.voiceCoefficient || fields.pegCoefficient")
       .row
-        .col(v-if="fields.rewardCoefficient")
+        .col(v-if="fields.rewardCoefficient && $store.state.dao.settings.rewardToken")
           label.h-label(v-if="$store.state.dao.settings.rewardToken !== 'HYPHA'") {{ `${fields.rewardCoefficient.label} (${$store.state.dao.settings.rewardToken})` }}
           label.h-label(v-else) {{ `${fields.rewardCoefficient.label}` }}
           .row.items-center
@@ -452,7 +439,7 @@ widget(:class="{ 'disable-step': currentStepName !== 'step-payout' && $q.screen.
               q-input.q-my-sm.rounded-border(v-model="rewardCoefficientLabel" outlined suffix="%" :prefix="fields.rewardCoefficient.disabled ? 'x' : rewardCoefficientLabel > 9 ? 'x1.' : 'x1.0'" :readonly="fields.rewardCoefficient.disabled" :rules="[rules.lessOrEqualThan(20), rules.greaterThanOrEqual(-20)]")
                 template(v-slot:prepend)
                   token-logo.logo-border(size="md" type="utility" :daoLogo="daoSettings.logo")
-        .col(v-if="fields.pegCoefficient")
+        .col(v-if="fields.pegCoefficient && $store.state.dao.settings.pegToken")
           label.h-label(v-if="$store.state.dao.settings.pegToken !== 'HUSD'") {{ `${fields.pegCoefficient.label} (${$store.state.dao.settings.pegToken})` }}
           label.h-label(v-else) {{ `${fields.pegCoefficient.label}` }}
           .row.items-center
