@@ -950,7 +950,6 @@ export default {
               content_groups: [content]
             }
           }]
-          console.log(JSON.parse(JSON.stringify(actions)))
           return this.$api.signTransaction(actions)
         }
       } catch (e) {
