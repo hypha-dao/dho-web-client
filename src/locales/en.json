@@ -1718,7 +1718,7 @@
               "chooseAQuestType":"Choose a quest type\n      ",
               "select":"Select",
               "startANewQuest":"Start a new Quest",
-              "completeAnActiveQuest":"Complete an Active Quest"
+              "completeAnActiveQuest":"Create a quest milestone"
            },
            "stepdetails":{
               "titleIsRequired":"Title is required!",

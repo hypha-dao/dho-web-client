@@ -1713,7 +1713,7 @@
           "chooseAQuestType": "Изаберите тип мисије\n      ",
           "select": "Изаберите",
           "startANewQuest": "Започните нову потрагу",
-          "completeAnActiveQuest": "Завршите активну мисију"
+          "completeAnActiveQuest": "Направите прекретницу у потрази"
         },
         "stepdetails": {
           "titleIsRequired": "Наслов је обавезан!",
