@@ -352,7 +352,8 @@ export default {
   },
 
   props: {
-    dhoname: String
+    dhoname: String,
+    dao: Object
   },
 
   apollo: {

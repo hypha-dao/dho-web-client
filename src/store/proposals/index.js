@@ -527,7 +527,7 @@ export default {
                 { label: 'time_share_x100', value: ['int64', draft.commitment] },
                 { label: 'deferred_perc_x100', value: ['int64', draft.deferred] },
 
-                { label: 'role', value: ['int64', draft.role.value.id] },
+                { label: 'role', value: ['int64', draft.role.value ? draft.role.value.id : draft.role.id] },
                 { label: 'start_period', value: ['int64', draft.startPeriod.docId] },
                 { label: 'period_count', value: ['int64', draft.periodCount] }
 
@@ -603,9 +603,12 @@ export default {
                 { label: 'title', value: ['string', draft.title] },
                 { label: 'description', value: ['string', draft.description] },
                 { label: 'url', value: ['string', draft.url] },
-                { label: 'annual_usd_salary', value: ['asset', `${parseFloat(draft.annualUsdSalary).toFixed(2)} USD`] },
-                { label: 'fulltime_capacity_x100', value: ['int64', Math.round(parseFloat(draft.roleCapacity) * 100)] },
-                { label: 'min_deferred_x100', value: ['int64', Math.round(parseFloat(draft.minDeferred))] },
+
+                { label: 'deferred_perc_x100', value: ['int64', draft?.deferred || 0] },
+                { label: 'usd_amount', value: ['asset', `${parseFloat(draft.usdAmount.toFixed(2))} USD`] },
+                // { label: 'annual_usd_salary', value: ['asset', `${parseFloat(draft.annualUsdSalary).toFixed(2)} USD`] },
+                // { label: 'fulltime_capacity_x100', value: ['int64', Math.round(parseFloat(draft.roleCapacity) * 100)] },
+                // { label: 'min_deferred_x100', value: ['int64', Math.round(parseFloat(draft.minDeferred))] },
 
                 { label: 'voice_amount', value: ['asset', `${parseFloat(draft.voice).toFixed(rootState.dao.settings.voiceTokenDecimals)} ${rootState.dao.settings.voiceToken}`] },
                 ...(rootState.dao.settings.rewardToken
@@ -728,18 +731,30 @@ export default {
           // Role assignment
           case PROPOSAL_TYPE.ROLE:
             content = [
+
               { label: 'content_group_label', value: ['string', 'details'] },
               { label: 'assignee', value: ['name', rootState.accounts.account] },
               { label: 'title', value: ['string', draft.title] },
               { label: 'description', value: ['string', draft.description] },
               { label: 'url', value: ['string', draft.url] },
-              // { label: 'annual_usd_salary', value: ['asset', `${parseFloat(draft.annualUsdSalary).toFixed(2)} USD`] },
+
+              ...(draft.tier.value.name !== DEFAULT_TIER
+                ? [
+                    { label: 'salary_band_id', value: ['int64', draft.tier.value.id] }
+                  ]
+                : [
+                    { label: 'annual_usd_salary', value: ['asset', `${parseFloat(draft.annualUsdSalary).toFixed(2)} USD`] },
+                    { label: 'fulltime_capacity_x100', value: ['int64', Math.round(parseFloat(draft.roleCapacity) * 100)] },
+                    { label: 'min_deferred_x100', value: ['int64', Math.round(parseFloat(draft.minDeferred))] }
+                  ]),
+
               { label: 'time_share_x100', value: ['int64', draft.commitment] },
               { label: 'deferred_perc_x100', value: ['int64', draft.deferred] },
-              { label: 'salary_band_id', value: ['int64', draft.tier.value.id] },
-              { label: 'role', value: ['int64', draft.role.value.id] },
+
+              { label: 'role', value: ['int64', draft.role.value ? draft.role.value.id : draft.role.id] },
               { label: 'start_period', value: ['int64', draft.startPeriod.docId] },
               { label: 'period_count', value: ['int64', draft.periodCount] }
+
             ]
             break
 
@@ -869,18 +884,28 @@ export default {
               { label: 'title', value: ['string', draft.title] },
               { label: 'description', value: ['string', draft.description] },
               { label: 'url', value: ['string', draft.url] },
-              { label: 'annual_usd_salary', value: ['asset', `${parseFloat(draft.annualUsdSalary).toFixed(2)} USD`] },
-              { label: 'fulltime_capacity_x100', value: ['int64', Math.round(parseFloat(draft.roleCapacity) * 100)] },
-              { label: 'min_deferred_x100', value: ['int64', Math.round(parseFloat(draft.minDeferred))] },
+
+              { label: 'deferred_perc_x100', value: ['int64', draft?.deferred || 0] },
+              { label: 'usd_amount', value: ['asset', `${parseFloat(draft.usdAmount.toFixed(2))} USD`] },
+              // { label: 'annual_usd_salary', value: ['asset', `${parseFloat(draft.annualUsdSalary).toFixed(2)} USD`] },
+              // { label: 'fulltime_capacity_x100', value: ['int64', Math.round(parseFloat(draft.roleCapacity) * 100)] },
+              // { label: 'min_deferred_x100', value: ['int64', Math.round(parseFloat(draft.minDeferred))] },
 
               { label: 'voice_amount', value: ['asset', `${parseFloat(draft.voice).toFixed(rootState.dao.settings.voiceTokenDecimals)} ${rootState.dao.settings.voiceToken}`] },
-              { label: 'reward_amount', value: ['asset', `${parseFloat(draft.reward).toFixed(rootState.dao.settings.rewardTokenDecimals)} ${rootState.dao.settings.rewardToken}`] },
-              { label: 'peg_amount', value: ['asset', `${parseFloat(draft.peg).toFixed(rootState.dao.settings.pegTokenDecimals)} ${rootState.dao.settings.pegToken}`] },
+              ...(rootState.dao.settings.rewardToken
+                ? [{ label: 'reward_amount', value: ['asset', `${parseFloat(draft.reward).toFixed(rootState.dao.settings.rewardTokenDecimals)} ${rootState.dao.settings.rewardToken}`] }]
+                : []
+              ),
+              ...(rootState.dao.settings.pegToken
+                ? [{ label: 'peg_amount', value: ['asset', `${parseFloat(draft.peg).toFixed(rootState.dao.settings.pegTokenDecimals)} ${rootState.dao.settings.pegToken}`] }]
+                : []
+              ),
 
               { label: 'start_period', value: ['int64', draft.startPeriod.docId] },
               { label: 'period_count', value: ['int64', draft.periodCount] },
-              { label: 'recipient', value: ['name', rootState.accounts.account] },
-              ...(draft.parentId ? [{ label: 'quest_start', value: ['int64', draft.parentId] }] : [])
+              { label: 'recipient', value: ['name', rootState.accounts.account] }
+              // ...(draft.circle ? [{ label: 'circle_id', value: ['int64', draft.circle.value] }] : []),
+              // ...(draft.parentQuest ? [{ label: 'quest_start', value: ['int64', draft.parentQuest.value] }] : [])
             ]
             break
 
@@ -890,18 +915,28 @@ export default {
               { label: 'title', value: ['string', draft.title] },
               { label: 'description', value: ['string', draft.description] },
               { label: 'url', value: ['string', draft.url] },
-              { label: 'annual_usd_salary', value: ['asset', `${parseFloat(draft.annualUsdSalary).toFixed(2)} USD`] },
-              { label: 'fulltime_capacity_x100', value: ['int64', Math.round(parseFloat(draft.roleCapacity) * 100)] },
-              { label: 'min_deferred_x100', value: ['int64', Math.round(parseFloat(draft.minDeferred))] },
+
+              { label: 'deferred_perc_x100', value: ['int64', draft?.deferred || 0] },
+              { label: 'usd_amount', value: ['asset', `${parseFloat(draft.usdAmount.toFixed(2))} USD`] },
+              // { label: 'annual_usd_salary', value: ['asset', `${parseFloat(draft.annualUsdSalary).toFixed(2)} USD`] },
+              // { label: 'fulltime_capacity_x100', value: ['int64', Math.round(parseFloat(draft.roleCapacity) * 100)] },
+              // { label: 'min_deferred_x100', value: ['int64', Math.round(parseFloat(draft.minDeferred))] },
 
               { label: 'voice_amount', value: ['asset', `${parseFloat(draft.voice).toFixed(rootState.dao.settings.voiceTokenDecimals)} ${rootState.dao.settings.voiceToken}`] },
-              { label: 'reward_amount', value: ['asset', `${parseFloat(draft.reward).toFixed(rootState.dao.settings.rewardTokenDecimals)} ${rootState.dao.settings.rewardToken}`] },
-              { label: 'peg_amount', value: ['asset', `${parseFloat(draft.peg).toFixed(rootState.dao.settings.pegTokenDecimals)} ${rootState.dao.settings.pegToken}`] },
+              ...(rootState.dao.settings.rewardToken
+                ? [{ label: 'reward_amount', value: ['asset', `${parseFloat(draft.reward).toFixed(rootState.dao.settings.rewardTokenDecimals)} ${rootState.dao.settings.rewardToken}`] }]
+                : []
+              ),
+              ...(rootState.dao.settings.pegToken
+                ? [{ label: 'peg_amount', value: ['asset', `${parseFloat(draft.peg).toFixed(rootState.dao.settings.pegTokenDecimals)} ${rootState.dao.settings.pegToken}`] }]
+                : []
+              ),
 
               { label: 'start_period', value: ['int64', draft.startPeriod.docId] },
               { label: 'period_count', value: ['int64', draft.periodCount] },
-              { label: 'recipient', value: ['name', rootState.accounts.account] },
-              ...(draft.parentId ? [{ label: 'quest_start', value: ['int64', draft.parentId] }] : [])
+              { label: 'recipient', value: ['name', rootState.accounts.account] }
+              // ...(draft.circle ? [{ label: 'circle_id', value: ['int64', draft.circle.value] }] : []),
+              // ...(draft.parentQuest ? [{ label: 'quest_start', value: ['int64', draft.parentQuest.value] }] : [])
             ]
             break
         }
