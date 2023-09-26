@@ -174,10 +174,10 @@ const PROPOSAL_QUERY = `
       details_title_s
       details_description_s
 
-      # details_usdAmount_a
       # details_deferredPercX100_i
 
       details_annualUsdSalary_a
+      details_usdAmount_a
 
       details_pegAmount_a
       details_rewardAmount_a
@@ -1461,6 +1461,7 @@ export default {
       }
 
       if (this.proposal?.__typename === PROPOSAL_TYPE.ROLE) { // Role Assignment
+        this.$store.commit('proposals/setStepIndex', 0)
         const tier = this.tiers.find(tier => tier.label === (this.proposal?.salaryband?.[0]?.name || DEFAULT_TIER))
         // const archetype = this.archetypes.find(archetype => archetype.label === this.proposal?.salaryband?.[0]?.assignment?.[0]?.role?.[0]?.system_nodeLabel_s)
 
