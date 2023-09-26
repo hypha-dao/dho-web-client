@@ -234,7 +234,7 @@ export default {
 <template lang="pug">
 .layout
   .spinner(v-if="state === STATE.LOADING")
-  component(v-else :is="layout" v-bind="{ dhoname }")
+  component(v-else :is="layout" v-bind="{ dao, dhoname }")
 </template>
 
 <style scoped lang="stylus">
