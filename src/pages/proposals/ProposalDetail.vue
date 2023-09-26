@@ -3,7 +3,7 @@ import { mapActions, mapGetters } from 'vuex'
 import gql from 'graphql-tag'
 
 import CONFIG from './create/config.js'
-import { PROPOSAL_STATE, PROPOSAL_TYPE } from '~/const'
+import { PROPOSAL_STATE, PROPOSAL_TYPE, DEFAULT_TIER } from '~/const'
 // import { calcVoicePercentage } from '~/utils/eosio'
 
 import { format } from '~/mixins/format'
@@ -94,13 +94,13 @@ const PROPOSAL_QUERY = `
     }
 
     ... on Budget {
-        ballot_expiration_t
-        details_title_s
-        details_description_s
-        details_state_s
-        details_ballotQuorum_i
-        details_ballotSupply_a
-        details_ballotAlignment_i
+      ballot_expiration_t
+      details_title_s
+      details_description_s
+      details_state_s
+      details_ballotQuorum_i
+      details_ballotSupply_a
+      details_ballotAlignment_i
 
       votetally {
         docId
@@ -112,67 +112,72 @@ const PROPOSAL_QUERY = `
         }
       }
 
-        circle {
-          ... on Circle {
+      circle {
+        ... on Circle {
+          id: docId
+          name: details_title_s
+          purpose: details_description_s
+          budget: details_purpose_s
+
+          applicant {
+            username: details_member_n
+          }
+
+          members: member {
+            username: details_member_n
+          }
+
+          subcircles: subcircle {
             id: docId
             name: details_title_s
             purpose: details_description_s
             budget: details_purpose_s
-
-            applicant {
-              username: details_member_n
-            }
-
-            members: member {
-              username: details_member_n
-            }
-
-            subcircles: subcircle {
-              id: docId
-              name: details_title_s
-              purpose: details_description_s
-              budget: details_purpose_s
-            }
-          }
-        }
-        details_pegAmount_a
-        details_voiceAmount_a
-        details_rewardAmount_a
-        creator
-        createdDate
-
-        cmntsect {
-          docId
-
-          comment {
-            id: docId
-            author: comment_author_n
-            content: comment_content_s
-            createdDate
-            deletedStatus: comment_deleted_i
-
-            reactions: reaction {
-              reactionlnkrAggregate {
-                count
-              }
-
-              reactionlnkr {
-                author: details_member_n
-              }
-            }
-
-            commentAggregate {
-              count
-            }
           }
         }
       }
+      details_pegAmount_a
+      details_voiceAmount_a
+      details_rewardAmount_a
+      creator
+      createdDate
+
+      cmntsect {
+        docId
+
+        comment {
+          id: docId
+          author: comment_author_n
+          content: comment_content_s
+          createdDate
+          deletedStatus: comment_deleted_i
+
+          reactions: reaction {
+            reactionlnkrAggregate {
+              count
+            }
+
+            reactionlnkr {
+              author: details_member_n
+            }
+          }
+
+          commentAggregate {
+            count
+          }
+        }
+      }
+    }
 
     ... on Queststart {
       ballot_expiration_t
 
       details_title_s
       details_description_s
+
+      # details_usdAmount_a
+      # details_deferredPercX100_i
+
+      details_annualUsdSalary_a
 
       details_pegAmount_a
       details_rewardAmount_a
@@ -341,8 +346,8 @@ const PROPOSAL_QUERY = `
       }
 
       masterpolicy {
-          details_title_s
-        }
+        details_title_s
+      }
 
       dao {
         details_daoName_n
@@ -397,7 +402,7 @@ const PROPOSAL_QUERY = `
           abstain_votePower_a
         }
       }
-      
+
       parentcircle {
         ... on Circle {
           id: docId
@@ -617,7 +622,6 @@ const PROPOSAL_QUERY = `
       }
     }
     ... on Assignment {
-      details_usdSalaryValuePerPhase_a
       ballot_expiration_t
       details_assignee_n
 
@@ -625,6 +629,13 @@ const PROPOSAL_QUERY = `
       details_description_s
 
       details_periodCount_i
+      details_usdSalaryValuePerPhase_a
+      details_annualUsdSalary_a
+      details_pegSalaryPerPeriod_a
+      details_rewardSalaryPerPeriod_a
+      details_voiceSalaryPerPeriod_a
+      details_timeShareX100_i
+      details_approvedDeferredPercX100_i
 
       details_ballotQuorum_i
       details_ballotSupply_a
@@ -640,9 +651,16 @@ const PROPOSAL_QUERY = `
         }
       }
 
+      role {
+        id: docId
+        name: details_title_s
+      }
       salaryband {
-        details_annualUsdSalary_a
-        details_name_s
+        id: docId
+        name: details_name_s
+        annualAmount: details_annualUsdSalary_a
+        minDeferred: details_minDeferredX100_i
+
         assignment {
           role {
             system_nodeLabel_s
@@ -661,11 +679,7 @@ const PROPOSAL_QUERY = `
       claimed {
         docId
       }
-      details_pegSalaryPerPeriod_a
-      details_rewardSalaryPerPeriod_a
-      details_voiceSalaryPerPeriod_a
-      details_timeShareX100_i
-      details_approvedDeferredPercX100_i
+
       lastimeshare {
         details_timeShareX100_i
       }
@@ -980,10 +994,10 @@ const PROPOSAL_QUERY = `
     }
     ... on Votable {
       votetally {
-         docId
+        docId
 
         ... on VoteTally {
-           docId
+          docId
           pass_votePower_a
           fail_votePower_a
           abstain_votePower_a
@@ -1446,12 +1460,15 @@ export default {
       }
 
       if (this.proposal?.__typename === PROPOSAL_TYPE.ROLE) { // Role Assignment
-        const tier = this.tiers.find(tier => tier.label === this.proposal?.salaryband?.[0]?.details_name_s)
-        const archetype = this.archetypes.find(archetype => archetype.label === this.proposal?.salaryband?.[0]?.assignment?.[0]?.role?.[0]?.system_nodeLabel_s)
-        this.$store.commit('proposals/setRole', archetype)
+        const tier = this.tiers.find(tier => tier.label === (this.proposal?.salaryband?.[0]?.details_name_s || DEFAULT_TIER))
+        // const archetype = this.archetypes.find(archetype => archetype.label === this.proposal?.salaryband?.[0]?.assignment?.[0]?.role?.[0]?.system_nodeLabel_s)
+
+        this.$store.commit('proposals/setRole', { value: this.proposal?.role[0] })
+
+        // this.$store.commit('proposals/setRole', archetype)
         this.$store.commit('proposals/setTier', tier)
 
-        this.$store.commit('proposals/setAnnualUsdSalary', tier?.value?.annualAmount || 0)
+        this.$store.commit('proposals/setAnnualUsdSalary', this.proposal?.details_annualUsdSalary_a.split(' ')[0])
         this.$store.commit('proposals/setMinDeferred', tier?.value?.minDeferred || 0)
         this.$store.commit('proposals/setMinCommitment', 0)
 
@@ -1491,9 +1508,9 @@ export default {
         this.$store.commit('proposals/setUrl', this.proposal?.details_url_s)
         this.$store.commit('proposals/setStartPeriod', this.proposal?.start?.[0])
         this.$store.commit('proposals/setPeriodCount', this.proposal?.details_periodCount_i)
-        this.$store.commit('proposals/setPeg', this.proposal?.details_pegAmount_a.split(' ')[0])
-        this.$store.commit('proposals/setReward', this.proposal?.details_rewardAmount_a.split(' ')[0])
-        this.$store.commit('proposals/setVoice', this.proposal?.details_voiceAmount_a.split(' ')[0])
+        this.$store.commit('proposals/setPeg', this.proposal?.details_pegAmount_a?.split(' ')[0])
+        this.$store.commit('proposals/setReward', this.proposal?.details_rewardAmount_a?.split(' ')[0])
+        this.$store.commit('proposals/setVoice', this.proposal?.details_voiceAmount_a?.split(' ')[0])
         this.$store.commit('proposals/setStartPeriod', this.proposal?.start[0])
         this.$store.commit('proposals/setPeriodCount', this.proposal?.details_periodCount_i)
       }

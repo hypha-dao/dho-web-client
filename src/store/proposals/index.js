@@ -527,7 +527,7 @@ export default {
                 { label: 'time_share_x100', value: ['int64', draft.commitment] },
                 { label: 'deferred_perc_x100', value: ['int64', draft.deferred] },
 
-                { label: 'role', value: ['int64', draft.role.value.id] },
+                { label: 'role', value: ['int64', draft.role.value ? draft.role.value.id : draft.role.id] },
                 { label: 'start_period', value: ['int64', draft.startPeriod.docId] },
                 { label: 'period_count', value: ['int64', draft.periodCount] }
 
@@ -728,18 +728,30 @@ export default {
           // Role assignment
           case PROPOSAL_TYPE.ROLE:
             content = [
+
               { label: 'content_group_label', value: ['string', 'details'] },
               { label: 'assignee', value: ['name', rootState.accounts.account] },
               { label: 'title', value: ['string', draft.title] },
               { label: 'description', value: ['string', draft.description] },
               { label: 'url', value: ['string', draft.url] },
-              // { label: 'annual_usd_salary', value: ['asset', `${parseFloat(draft.annualUsdSalary).toFixed(2)} USD`] },
+
+              ...(draft.tier.value.name !== DEFAULT_TIER
+                ? [
+                    { label: 'salary_band_id', value: ['int64', draft.tier.value.id] }
+                  ]
+                : [
+                    { label: 'annual_usd_salary', value: ['asset', `${parseFloat(draft.annualUsdSalary).toFixed(2)} USD`] },
+                    { label: 'fulltime_capacity_x100', value: ['int64', Math.round(parseFloat(draft.roleCapacity) * 100)] },
+                    { label: 'min_deferred_x100', value: ['int64', Math.round(parseFloat(draft.minDeferred))] }
+                  ]),
+
               { label: 'time_share_x100', value: ['int64', draft.commitment] },
               { label: 'deferred_perc_x100', value: ['int64', draft.deferred] },
-              { label: 'salary_band_id', value: ['int64', draft.tier.value.id] },
-              { label: 'role', value: ['int64', draft.role.value.id] },
+
+              { label: 'role', value: ['int64', draft.role.value ? draft.role.value.id : draft.role.id] },
               { label: 'start_period', value: ['int64', draft.startPeriod.docId] },
               { label: 'period_count', value: ['int64', draft.periodCount] }
+
             ]
             break
 
