@@ -1464,10 +1464,14 @@ export default {
         const tier = this.tiers.find(tier => tier.label === (this.proposal?.salaryband?.[0]?.name || DEFAULT_TIER))
         // const archetype = this.archetypes.find(archetype => archetype.label === this.proposal?.salaryband?.[0]?.assignment?.[0]?.role?.[0]?.system_nodeLabel_s)
 
+        const annualUsdSalary = (tier.label === DEFAULT_TIER
+          ? this?.proposal?.details_annualUsdSalary_a
+          : tier.value.annualAmount).split(' ')[0]
+
         this.$store.commit('proposals/setRole', { value: this.proposal?.role[0] })
         this.$store.commit('proposals/setTier', tier)
 
-        this.$store.commit('proposals/setAnnualUsdSalary', parseFloat(tier.value.annualAmount.split(' ')[0]))
+        this.$store.commit('proposals/setAnnualUsdSalary', annualUsdSalary)
         this.$store.commit('proposals/setMinDeferred', tier?.value?.minDeferred || 0)
         this.$store.commit('proposals/setMinCommitment', 0)
 
