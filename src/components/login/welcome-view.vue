@@ -17,7 +17,7 @@ export default {
 }
 </script>
 <template lang="pug">
-.full-width.full-height.flex.q-pa-xl(:class="{ 'items-start':!$q.screen.gt.md, 'items-center':$q.screen.gt.md }")
+.full-width.full-height.flex(:class="{ 'items-start q-pa-xl':!$q.screen.gt.md, 'items-center':$q.screen.gt.md }")
   .full-width.full-height.flex.column.justify-between.no-wrap(:style="{ 'padding-bottom': '50px' }")
     .full-height.flex.column(:class="{ 'justify-start': !$q.screen.gt.md, 'justify-center': $q.screen.gt.md }")
       .row(v-if="$router.currentRoute.name === 'create-your-dao'" :class="{ 'q-mb-xxxl': $q.screen.gt.md }")
