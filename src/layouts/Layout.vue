@@ -190,8 +190,8 @@ export default {
         this.$store.commit('dao/setDAO', data?.queryDao[0])
         this.$store.dispatch('dao/setTheme')
         this.state = STATE.READY
-      }
-      // fetchPolicy: 'no-cache'
+      },
+      fetchPolicy: 'no-cache'
       // pollInterval: 300 // TODO: Swap with subscribe once dgraph is ready
     },
 
@@ -201,8 +201,8 @@ export default {
       variables() { return { daoUrl: this.dhoname } },
       async result (res) {
         this.$store.commit('dao/setPlan', res?.data?.activePlan)
-      }
-      // fetchPolicy: 'no-cache'
+      },
+      fetchPolicy: 'no-cache'
     }
 
   },
