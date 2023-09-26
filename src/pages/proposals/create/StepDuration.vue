@@ -224,7 +224,6 @@ widget
               q-icon(size="xs" name="fa fa-calendar-alt")
           q-date.bg-internal-bg.calendar.absolute.z-top(
             :options="isDateAvaiable"
-            @input="onDateChanged"
             @navigation="onDateNavigate"
             minimal="minimal"
             ref="calendar"

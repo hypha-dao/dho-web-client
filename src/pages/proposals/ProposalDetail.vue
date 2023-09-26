@@ -200,6 +200,7 @@ const PROPOSAL_QUERY = `
       }
 
       start {
+        docId
         details_startTime_t
       }
 
@@ -1460,15 +1461,13 @@ export default {
       }
 
       if (this.proposal?.__typename === PROPOSAL_TYPE.ROLE) { // Role Assignment
-        const tier = this.tiers.find(tier => tier.label === (this.proposal?.salaryband?.[0]?.details_name_s || DEFAULT_TIER))
+        const tier = this.tiers.find(tier => tier.label === (this.proposal?.salaryband?.[0]?.name || DEFAULT_TIER))
         // const archetype = this.archetypes.find(archetype => archetype.label === this.proposal?.salaryband?.[0]?.assignment?.[0]?.role?.[0]?.system_nodeLabel_s)
 
         this.$store.commit('proposals/setRole', { value: this.proposal?.role[0] })
-
-        // this.$store.commit('proposals/setRole', archetype)
         this.$store.commit('proposals/setTier', tier)
 
-        this.$store.commit('proposals/setAnnualUsdSalary', this.proposal?.details_annualUsdSalary_a.split(' ')[0])
+        this.$store.commit('proposals/setAnnualUsdSalary', parseFloat(tier.value.annualAmount.split(' ')[0]))
         this.$store.commit('proposals/setMinDeferred', tier?.value?.minDeferred || 0)
         this.$store.commit('proposals/setMinCommitment', 0)
 
