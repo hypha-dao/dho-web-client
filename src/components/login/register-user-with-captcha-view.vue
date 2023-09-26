@@ -110,8 +110,8 @@ export default {
     }
   },
   async mounted() {
-    if (this.isAuthenticated) {
-      this.$emit('stepChanged', this.steps.create.name)
+    if (await this.isAuthenticated) {
+      await this.$emit('stepChanged', this.steps.create.name)
     } else {
       this.$emit('stepChanged', this.step)
     }
@@ -149,15 +149,15 @@ export default {
       if (this.$router.currentRoute.name === 'create-your-dao') {
         try {
           await this.loginWallet({ idx })
-          if (this.account) {
-            this.$emit('stepChanged', this.steps.create.name)
+          if (await this.account) {
+            await this.$emit('stepChanged', this.steps.create.name)
           }
         } catch (e) {
         }
       } else {
         await this.loginWallet({ idx })
-        if (this.account) {
-          this.$emit('stepChanged', this.steps.account.name)
+        if (await this.account) {
+          await this.$emit('stepChanged', this.steps.account.name)
         }
       }
     },
