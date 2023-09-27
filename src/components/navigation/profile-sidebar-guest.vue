@@ -41,7 +41,7 @@ export default {
       .sidebar-text
         .h-h5 {{ $t('navigation.profile-sidebar-guest.welcomeTo', { daoName: dhoTitle && dhoTitle.replace(/^\w/, (c) => c.toUpperCase()) })}}
         .h-b2.text-body {{ $t('navigation.profile-sidebar-guest.asAGuest') }}
-      .sidebar-buttons.aling-self-center
+      .sidebar-buttons.aling-self-center(:class="{ 'sidebar-buttons-margin': !$q.screen.gt.md }")
         div
           q-btn.full-width.q-mt-xl(:label="$t('navigation.profile-sidebar-guest.registerNewAccount')" color="primary" rounded no-caps :disable="!registrationEnabled" @click="onLogin")
           q-tooltip(anchor="top middle" v-if="!registrationEnabled") {{ $t('navigation.profile-sidebar-guest.registrationIsTemporarilyDisabled') }}
@@ -52,4 +52,6 @@ export default {
 <style lang="stylus" scoped>
 .scrollable-area
   height 100vh
+.sidebar-buttons-margin
+  margin-bottom: 100px
 </style>
