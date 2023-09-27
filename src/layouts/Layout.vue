@@ -222,6 +222,26 @@ export default {
     layout () { return this.$route?.meta?.layout || 'multi-dho-layout' }
   },
 
+  watch: {
+    '$route.query.refetch': {
+      handler: function (type) {
+        switch (type) {
+          case 'plan':
+            this.$apollo.queries.plan.refetch()
+            break
+
+          default:
+            break
+        }
+
+        this.$router.replace({ query: {} })
+      },
+      deep: true,
+      immediate: true
+    }
+
+  },
+
   updated () {
     if (this.$apollo.queries.dao.loading && this.state !== STATE.LOADING) {
       this.state = STATE.LOADING
