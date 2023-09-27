@@ -41,7 +41,11 @@ export default function ({ store }) {
     const daoName = to.params.dhoname
     // Temporal redirection for hypha explorer page
     if (to.name && to.name === 'root') {
-      next({ path: defaultPath })
+      if (!isAuthenticated) {
+        next({ path: `/${rootDaoSlug}/login` })
+      } else {
+        next({ path: defaultPath })
+      }
     }
     if (to.matched.some(record => record.meta.requiresAuth) || to.matched.some(record => record.meta.requiresAuthMember)) {
       if (!isAuthenticated) {
