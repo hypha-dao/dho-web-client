@@ -228,9 +228,15 @@ export default {
     },
     downloadWallet() {
       if (navigator.userAgent.toLowerCase().indexOf('iphone') > -1) {
-        window.location.href = process.env.DOWNLOAD_WALLET_LINK_IOS
+        window.open(
+          process.env.DOWNLOAD_WALLET_LINK_IOS,
+          '_blank'
+        )
       } else if (navigator.userAgent.toLowerCase().indexOf('android') > -1) {
-        window.location.href = process.env.DOWNLOAD_WALLET_LINK_ANDROID
+        window.open(
+          process.env.DOWNLOAD_WALLET_LINK_ANDROID,
+          '_blank'
+        )
       }
     },
     enterDao() {
