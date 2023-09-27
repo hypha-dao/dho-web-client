@@ -139,7 +139,7 @@ export default {
     quests: {
       query: require('../../query/profile/profile-quests.gql'),
       update: data => {
-        return [...data.queryQueststart, ...data.queryQueststart]
+        return [...data.queryQueststart, ...data.queryQuestcomplet]
       },
       variables () {
         return {
