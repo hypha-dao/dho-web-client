@@ -337,14 +337,7 @@ const routes = [
         component: () => import('pages/ecosystem/EcosystemChekout.vue')
 
       },
-      {
-        path: 'home',
-        name: 'dashboard',
-        meta: {
-          title: I18n.t('routes.dashboard')
-        },
-        component: () => import('pages/dho/Home.vue')
-      },
+
       {
         path: 'upvote-election',
         name: 'upvote-election',
