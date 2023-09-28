@@ -1,6 +1,7 @@
 import { Api, JsonRpc } from 'eosjs'
 import { JsSignatureProvider } from 'eosjs/dist/eosjs-jssig'
 import { MEMBER_TYPE } from '~/const'
+import { Screen } from 'quasar'
 import gql from 'graphql-tag'
 
 export const lightWalletLogin = async function ({ commit, dispatch }, { returnUrl }) {
@@ -26,8 +27,25 @@ export const loginWallet = async function ({ commit, dispatch }, { idx, returnUr
   await authenticator.init()
   let error
   let account
+  let users = null
   try {
-    const users = await authenticator.login()
+    if (authenticator.ualName === 'hypha') {
+      let options = {}
+      if (Screen.gt.md) {
+        options = {
+          text: 'Scan the QR-code with Hypha Wallet on your mobile device in order to sign this transaction request',
+          actionText: 'Launch On Desktop'
+        }
+      } else {
+        options = {
+          text: 'Click this button to open Hypha Wallet on your mobile device and sign this transaction',
+          actionText: 'Open in Hypha Wallet'
+        }
+      }
+      users = await authenticator.login(options)
+    } else {
+      users = await authenticator.login()
+    }
     if (users.length) {
       account = users[0].accountName
       this.$ualUser = users[0]
