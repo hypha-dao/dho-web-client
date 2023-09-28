@@ -138,7 +138,7 @@ export const setPlan = (state, plan = {}) => {
     ...plan,
     name: (plan?.name || PLAN.FOUNDER).toLowerCase(),
     status: plan?.status || PLAN_STATUS.ACTIVE,
-    amountUSD: (plan?.price / 100) / 12,
+    amountUSD: (plan?.price / 100) / (plan.interval === 'year' && plan.planType === 'SAAS' ? 12 : 1),
     coreMembersCount: plan?.coreMembersCount || 5,
     communityMembersCount: plan?.communityMembersCount || 0,
     currentCoreMembersCount: state?.meta?.memberCount || 0

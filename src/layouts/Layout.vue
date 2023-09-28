@@ -136,6 +136,8 @@ const ACTIVE_PLAN_QUERY = `
     price
     id: planId
     name: planName
+    planType
+    interval
   }
 `
 
