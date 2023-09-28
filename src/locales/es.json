@@ -1713,7 +1713,7 @@
           "chooseAQuestType": "Elige un tipo de misión\n      ",
           "select": "Seleccionar",
           "startANewQuest": "Iniciar una nueva misión",
-          "completeAnActiveQuest": "Completa una misión activa"
+          "completeAnActiveQuest": "Crear un hito de misión"
         },
         "stepdetails": {
           "titleIsRequired": "¡Se requiere título!",

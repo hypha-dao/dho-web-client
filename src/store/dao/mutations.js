@@ -133,7 +133,7 @@ export const setDho = (state, dho) => {
   }
 }
 
-export const setPlan = (state, plan) => {
+export const setPlan = (state, plan = {}) => {
   state.plan = {
     ...plan,
     name: (plan?.name || PLAN.FOUNDER).toLowerCase(),

@@ -82,7 +82,7 @@ export default {
 </script>
 
 <template lang="pug">
-.full-width.full-height.flex.q-pa-xl(:class="{ 'items-start':!$q.screen.gt.md, 'items-center':$q.screen.gt.md }")
+.full-width.full-height.flex(:class="{ 'items-start q-pa-xl':!$q.screen.gt.md, 'items-center':$q.screen.gt.md }")
   .full-width.full-height.flex.column.justify-between.no-wrap(:style="{ 'padding-bottom': '140px' }")
     .full-height.flex.column(:class="{ 'justify-start': !$q.screen.gt.md, 'justify-center': $q.screen.gt.md }")
       .row.flex.items-center.cursor-pointer.q-mb-sm(@click="$emit('back')")

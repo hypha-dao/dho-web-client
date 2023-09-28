@@ -186,9 +186,9 @@ export default {
         }
 
         this.$store.commit('accounts/setMember', data?.queryDao[0])
-        this.$store.dispatch('ballots/getSupply')
         this.$store.commit('dao/setDAO', data?.queryDao[0])
         this.$store.dispatch('dao/setTheme')
+        this.$store.dispatch('ballots/getSupply')
         this.state = STATE.READY
       },
       fetchPolicy: 'no-cache'
@@ -220,6 +220,26 @@ export default {
     ...mapGetters('accounts', ['account']),
 
     layout () { return this.$route?.meta?.layout || 'multi-dho-layout' }
+  },
+
+  watch: {
+    '$route.query.refetch': {
+      handler: function (type) {
+        switch (type) {
+          case 'plan':
+            this.$apollo.queries.plan.refetch()
+            break
+
+          default:
+            break
+        }
+
+        this.$router.replace({ query: {} })
+      },
+      deep: true,
+      immediate: true
+    }
+
   },
 
   updated () {

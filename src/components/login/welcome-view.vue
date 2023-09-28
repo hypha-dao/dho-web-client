@@ -13,11 +13,21 @@ export default {
 
   computed: {
     ...mapGetters('dao', ['daoSettings', 'selectedDao'])
+  },
+
+  methods: {
+    goNext() {
+      if (this.$router.currentRoute.name === 'create-your-dao' && localStorage.getItem('autoLogin')) {
+        this.$emit('onRegisterClick')
+      } else {
+        this.$emit('onLoginClick')
+      }
+    }
   }
 }
 </script>
 <template lang="pug">
-.full-width.full-height.flex.q-pa-xl(:class="{ 'items-start':!$q.screen.gt.md, 'items-center':$q.screen.gt.md }")
+.full-width.full-height.flex(:class="{ 'items-start q-pa-xl':!$q.screen.gt.md, 'items-center':$q.screen.gt.md }")
   .full-width.full-height.flex.column.justify-between.no-wrap(:style="{ 'padding-bottom': '50px' }")
     .full-height.flex.column(:class="{ 'justify-start': !$q.screen.gt.md, 'justify-center': $q.screen.gt.md }")
       .row(v-if="$router.currentRoute.name === 'create-your-dao'" :class="{ 'q-mb-xxxl': $q.screen.gt.md }")
@@ -34,7 +44,7 @@ export default {
     div
       q-btn.full-width.q-mt-xl.text-bold(:disable="false" @click="$emit('onRegisterClick')" color="primary" :label="$t('login.welcome-view.createNewHyphaAccount')" no-caps rounded unelevated)
         q-tooltip(v-if="false" anchor="top middle") {{ $t('login.welcome-view.registrationIsTemporarilyDisabled') }}
-      q-btn.full-width.q-mt-sm.text-bold(@click="$emit('onLoginClick')" color="secondary" :label="$t('login.welcome-view.login')" no-caps rounded unelevated)
+      q-btn.full-width.q-mt-sm.text-bold(@click="goNext()" color="secondary" :label="$t('login.welcome-view.login')" no-caps rounded unelevated)
       q-btn.full-width.q-mt-sm.text-bold(:to="{ name:'dashboard' }" color="primary" :label="$t('login.welcome-view.continueAsAGuest')" no-caps outline rounded unelevated v-if="!isOnboarding && $router.currentRoute.name !== 'create-your-dao'")
       .q-py-xl
       //- TODO: temporarily commented (what should happen after clicking)

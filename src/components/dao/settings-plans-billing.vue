@@ -140,7 +140,8 @@ export default {
 
       if (res) {
         this.state = STATES.WAITING
-        this.$apollo.queries.activePlan.refetch()
+        // this.$router.replace({ query: {} })
+        this.$router.push({ query: { refetch: 'plan' } })
       }
     },
 

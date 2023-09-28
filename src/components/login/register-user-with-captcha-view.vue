@@ -110,8 +110,8 @@ export default {
     }
   },
   async mounted() {
-    if (this.isAuthenticated) {
-      this.$emit('stepChanged', this.steps.create.name)
+    if (await this.isAuthenticated) {
+      await this.$emit('stepChanged', this.steps.create.name)
     } else {
       this.$emit('stepChanged', this.step)
     }
@@ -149,15 +149,15 @@ export default {
       if (this.$router.currentRoute.name === 'create-your-dao') {
         try {
           await this.loginWallet({ idx })
-          if (this.account) {
-            this.$emit('stepChanged', this.steps.create.name)
+          if (await this.account) {
+            await this.$emit('stepChanged', this.steps.create.name)
           }
         } catch (e) {
         }
       } else {
         await this.loginWallet({ idx })
-        if (this.account) {
-          this.$emit('stepChanged', this.steps.account.name)
+        if (await this.account) {
+          await this.$emit('stepChanged', this.steps.account.name)
         }
       }
     },
@@ -221,24 +221,33 @@ export default {
       }
     },
     goToDocumentation() {
-      window.location.href = this.HELP_LINK
+      window.open(
+        this.HELP_LINK,
+        '_blank'
+      )
     },
     downloadWallet() {
       if (navigator.userAgent.toLowerCase().indexOf('iphone') > -1) {
-        window.location.href = process.env.DOWNLOAD_WALLET_LINK_IOS
+        window.open(
+          process.env.DOWNLOAD_WALLET_LINK_IOS,
+          '_blank'
+        )
       } else if (navigator.userAgent.toLowerCase().indexOf('android') > -1) {
-        window.location.href = process.env.DOWNLOAD_WALLET_LINK_ANDROID
+        window.open(
+          process.env.DOWNLOAD_WALLET_LINK_ANDROID,
+          '_blank'
+        )
       }
     },
     enterDao() {
-      this.$router.push({ path: `/${this.selectedDao.name}/home` })
+      this.$router.push({ path: `/${this.selectedDao.name}` })
     }
   }
 }
 
 </script>
 <template lang="pug">
-.full-width.full-height.flex.items-start.main-container.q-pa-xl
+.full-width.full-height.flex.items-start.main-container(:class="{ 'q-pa-xl': !$q.screen.gt.md }")
   #form-container.full-width.full-height(:thumb-style=" { 'opacity': '0' }")
     .q-mb-xxs
     .full-width.full-height.flex.column.justify-between.no-wrap(:style="{ 'padding-bottom': '50px' }")
@@ -314,12 +323,12 @@ export default {
               .col.q-ml-md(:class="{ 'full-width q-mt-md': !$q.screen.gt.md, 'q-pr-md': $q.screen.gt.md }")
                 label.h-label {{ $t('pages.onboarding.name') }}
                 q-input.q-mt-xs.rounded-border(:rules="[rules.required, rules.min(3)]" dense lazy-rules="ondemand" maxlength="50" outlined :placeholder="$t('pages.onboarding.theDisplayNameOfYourDao')" ref="title" v-model="form.title")
-            .row.full-width.justify-between
+            .row.full-width.justify-between(:class="{ 'bottom-padding': !$q.screen.gt.md }")
               .col-12(:class="{ 'full-width': !$q.screen.gt.md, 'q-mt-md': $q.screen.gt.md }")
                 label.h-label {{ $t('pages.onboarding.purpose') }}
-                q-input.q-mt-xs.rounded-border(:input-style="{ 'resize': 'none' }" :rules="[rules.required]" dense lazy-rules="ondemand" maxlength="300" outlined :placeholder="$t('pages.onboarding.brieflyExplainWhatYourDao')" ref="description" rows="10" type="textarea" v-model="form.description")
+                q-input.q-mt-xs.rounded-border(:input-style="{ 'resize': 'none' }" :rules="[rules.required]" dense lazy-rules="ondemand" maxlength="300" outlined :placeholder="$t('pages.onboarding.brieflyExplainWhatYourDao')" ref="description" rows="4" type="textarea" v-model="form.description")
             nav.row.justify-end.q-mt-xl.q-gutter-xs
-              q-btn.q-px-xl(@click="onSubmit" color="primary" :label="$t('login.register-user-with-captcha-view.publishYourDao')" no-caps rounded unelevated)
+              q-btn.q-px-xl(v-if="$q.screen.gt.md" @click="onSubmit" color="primary" :label="$t('login.register-user-with-captcha-view.publishYourDao')" no-caps rounded unelevated)
 
         #form5.flex.items-center.justify-center.no-wrap(v-show="step === this.steps.loading.name")
           loading-spinner(color="primary" size="72px")
@@ -459,4 +468,6 @@ export default {
   font-size: 44px !important
 .desktop-line-height
   line-height: 52px !important
+.bottom-padding
+  padding-bottom: 100px
 </style>

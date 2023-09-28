@@ -1713,7 +1713,7 @@
           "chooseAQuestType": "选择任务类型\n      ",
           "select": "选择",
           "startANewQuest": "开始新的任务",
-          "completeAnActiveQuest": "完成主动任务"
+          "completeAnActiveQuest": "创建任务里程碑"
         },
         "stepdetails": {
           "titleIsRequired": "标题为必填项！",

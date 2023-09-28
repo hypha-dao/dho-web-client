@@ -1,6 +1,6 @@
 import { PLAN, PLAN_STATUS } from '~/const'
 
-export default (plan) => ({
+export default (plan = {}) => ({
   ...plan,
   name: (plan?.name || PLAN.FOUNDER).toLowerCase(),
   status: plan?.status || PLAN_STATUS.ACTIVE,

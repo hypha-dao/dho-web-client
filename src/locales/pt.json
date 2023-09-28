@@ -1713,7 +1713,7 @@
           "chooseAQuestType": "Escolha um tipo de missão\n      ",
           "select": "Selecione",
           "startANewQuest": "Comece uma nova missão",
-          "completeAnActiveQuest": "Complete uma missão ativa"
+          "completeAnActiveQuest": "Crie um marco de missão"
         },
         "stepdetails": {
           "titleIsRequired": "O título é obrigatório!",

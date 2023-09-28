@@ -395,7 +395,7 @@ q-page.page-configuration
 
   q-tabs(
     active-color="primary"
-    align="start"
+    align="left"
     indicator-color="primary"
     no-caps
     v-model="tab"

@@ -239,7 +239,6 @@ export default {
                 :disable="!selectedDao.hasCustomToken"
                 :max="100"
                 :min="0"
-                :placeholder="$t('configuration.settings-tokens.tresury.form.value.placeholder')"
                 :rules="[rules.required, rules.greaterThanOrEqual(0), rules.lessOrEqualThan(100)]"
                 bg-color="white"
                 color="accent"

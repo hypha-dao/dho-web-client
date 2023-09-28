@@ -174,10 +174,10 @@ const PROPOSAL_QUERY = `
       details_title_s
       details_description_s
 
-      # details_usdAmount_a
       # details_deferredPercX100_i
 
       details_annualUsdSalary_a
+      details_usdAmount_a
 
       details_pegAmount_a
       details_rewardAmount_a
@@ -1241,7 +1241,7 @@ export default {
     },
 
     pages () {
-      return Math.ceil(this.badgeHolders.length / 3)
+      return Math.ceil(this.badgeHolders?.length / 3)
     },
 
     paginatedHolders () {
@@ -1279,8 +1279,8 @@ export default {
 
     QUEST_STATE () {
       const isApproved = this.proposal.details_state_s === PROPOSAL_STATE.APPROVED
-      if (isApproved && this.proposal.lockedby.length > 0) { return 'PAYOUT_VOTING' }
-      if (isApproved && this.proposal.completedby.length > 0) { return 'COMPLETED' }
+      if (isApproved && this.proposal?.lockedby?.length > 0) { return 'PAYOUT_VOTING' }
+      if (isApproved && this.proposal?.completedby?.length > 0) { return 'COMPLETED' }
       return ''
     }
   },
@@ -1461,13 +1461,18 @@ export default {
       }
 
       if (this.proposal?.__typename === PROPOSAL_TYPE.ROLE) { // Role Assignment
+        this.$store.commit('proposals/setStepIndex', 0)
         const tier = this.tiers.find(tier => tier.label === (this.proposal?.salaryband?.[0]?.name || DEFAULT_TIER))
         // const archetype = this.archetypes.find(archetype => archetype.label === this.proposal?.salaryband?.[0]?.assignment?.[0]?.role?.[0]?.system_nodeLabel_s)
+
+        const annualUsdSalary = (tier.label === DEFAULT_TIER
+          ? this?.proposal?.details_annualUsdSalary_a
+          : tier.value.annualAmount).split(' ')[0]
 
         this.$store.commit('proposals/setRole', { value: this.proposal?.role[0] })
         this.$store.commit('proposals/setTier', tier)
 
-        this.$store.commit('proposals/setAnnualUsdSalary', parseFloat(tier.value.annualAmount.split(' ')[0]))
+        this.$store.commit('proposals/setAnnualUsdSalary', annualUsdSalary)
         this.$store.commit('proposals/setMinDeferred', tier?.value?.minDeferred || 0)
         this.$store.commit('proposals/setMinCommitment', 0)
 
@@ -1682,7 +1687,7 @@ export default {
             )
             voter-list.q-my-md(:proposalId="docId")
         widget.full-width(:style="{ 'margin-top': '-40px'}" v-if="isBadge && proposalParsing.status(proposal) !== PROPOSAL_STATE.DRAFTED" :title="$t('pages.proposals.proposaldetail.badgeHolders')")
-          template(v-if="paginatedHolders.length")
+          template(v-if="paginatedHolders?.length")
             template(v-for="holderName in paginatedHolders")
               profile-picture.q-my-xxxl(:username="holderName" show-name size="40px" limit link)
             q-btn.bg-primary.q-mt-xs.text-bold.full-width(:disable="currentElectionIndex !== 0 && (this.proposal.details_title_s === 'Voter' || this.proposal.details_title_s === 'Delegate')" @click="onApply(proposal)" flat text-color="white" no-caps rounded) {{ $t('pages.proposals.proposaldetail.apply') }}
@@ -1715,7 +1720,7 @@ export default {
       proposal-view(:proposal="optimisticProposal ? optimisticProposal : proposal" :ownAssignment="ownAssignment" :class="{'top-no-rounded': ownAssignment}" :withToggle="toggle(proposal)" :created="proposalParsing.created(proposal)" :restrictions="proposalParsing.restrictions(proposal)" :status="proposalParsing.status(proposal)" :docId="proposalParsing.docId(proposal)" :creator="proposalParsing.creator(proposal)" :capacity="proposalParsing.capacity(proposal)" :deferred="proposalParsing.deferred(proposal)" :description="proposalParsing.description(proposal)" :periodCount="proposalParsing.periodCount(proposal)" :salary="proposalParsing.salary(proposal)" :start="proposalParsing.start(proposal)" :subtitle="!ownAssignment ? proposalParsing.subtitle(proposal) : undefined" :title="!ownAssignment ? proposalParsing.title(proposal) : undefined" :type="proposal?.__typename === 'Suspend' ? proposal.suspend[0].__typename : proposal?.__typename" :url="proposalParsing.url(proposal)" :icon="proposalParsing.icon(proposal)" :commit="proposalParsing.commit(optimisticProposal ? optimisticProposal : proposal)" :compensation="proposalParsing.compensation(optimisticProposal ? optimisticProposal : proposal, daoSettings)" :tokens="proposalParsing.tokens(optimisticProposal ? optimisticProposal : proposal, periodsOnCycle, daoSettings, isDefaultBadgeMultiplier)" :isBadge="isBadge" :pastQuorum="proposalParsing.pastQuorum(proposal)" :pastUnity="proposalParsing.pastUnity(proposal)" :purpose="proposalParsing.purpose(proposal)" :votingMethod="proposalParsing.votingMethod(proposal)" :parentCircle="proposalParsing.parentCircle(proposal)" @change-deferred="onDeferredUpdate" @change-commit="onCommitUpdate")
       comments-widget(v-if="!isBadge" :comments="comments" :disable="expired" @create="createComment" @update="updateComment" @delete="deleteComment" @like="likeComment" @unlike="unlikeComment" @load-comment="fetchComment")
     .col-12.col-sm-3(:class="{ 'q-pl-md': $q.screen.gt.sm }")
-      widget.q-mb-md.position-relative(v-if="proposalParsing.status(proposal) === PROPOSAL_STATE.APPROVED && proposal?.__typename === PROPOSAL_TYPE.QUEST_START && !claimPayments.length" :title="$t('pages.proposals.proposaldetail.questCompletion')")
+      widget.q-mb-md.position-relative(v-if="proposalParsing.status(proposal) === PROPOSAL_STATE.APPROVED && proposal?.__typename === PROPOSAL_TYPE.QUEST_START && !claimPayments?.length" :title="$t('pages.proposals.proposaldetail.questCompletion')")
         .text-ellipsis.text-body.q-my-xl {{ $t('pages.proposals.proposaldetail.didYouFinish') }}
         q-btn.full-width.q-mt-xl.q-px-lg(rounded color="primary" no-caps @click="onQuestPayout") {{ $t('pages.proposals.proposaldetail.claimYourPayment') }}
       widget.bg-primary(v-if="proposalParsing.status(proposal) === PROPOSAL_STATE.DRAFTED && isCreator && state === 'WAITING'")
@@ -1746,7 +1751,7 @@ export default {
         )
         voter-list.q-my-md(:proposalId="docId")
       widget(v-if="isBadge && proposalParsing.status(proposal) !== PROPOSAL_STATE.DRAFTED" :title="$t('pages.proposals.proposaldetail.badgeHolders1')")
-        template(v-if="paginatedHolders.length")
+        template(v-if="paginatedHolders?.length")
           template(v-for="holder in paginatedHolders")
             profile-picture.q-my-xxxl(:username="holder.details_assignee_n" show-name size="40px" limit link)
           q-btn.bg-primary.q-mt-xs.text-bold.full-width(:disable="currentElectionIndex !== 0 && (this.proposal.details_title_s === 'Voter' || this.proposal.details_title_s === 'Delegate')" @click="onApply(proposal)" flat text-color="white" no-caps rounded) {{ $t('pages.proposals.proposaldetail.apply1') }}
