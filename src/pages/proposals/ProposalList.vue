@@ -400,8 +400,8 @@ export default {
           user: this.account
         }
       },
-      fetchPolicy: 'no-cache',
-      pollInterval: 1000 // TODO: Swap with subscribe once dgraph is ready
+      fetchPolicy: 'no-cache'
+      // pollInterval: 1000 // TODO: Swap with subscribe once dgraph is ready
       // subscribeToMore: {
       //   document: require('~/query/proposals/dao-proposals-active-vote-subs.gql'),
       //   variables () {
@@ -436,8 +436,8 @@ export default {
           user: this.account
         }
       },
-      fetchPolicy: 'no-cache',
-      pollInterval: 1000 // TODO: Swap with subscribe once dgraph is ready
+      fetchPolicy: 'no-cache'
+      // pollInterval: 1000 // TODO: Swap with subscribe once dgraph is ready
       // subscribeToMore: {
       //   document: gql`subscription stageProposals($docId: String!, $first: Int, $offset: Int) { ${STAGED_PROPOSALS_QUERY} }`,
       //   skip () { return !this.selectedDao?.docId },
