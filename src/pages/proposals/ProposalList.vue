@@ -400,29 +400,29 @@ export default {
           user: this.account
         }
       },
-      fetchPolicy: 'no-cache',
+      fetchPolicy: 'no-cache'
       // pollInterval: 1000 // TODO: Swap with subscribe once dgraph is ready
-      subscribeToMore: {
-        document: require('~/query/proposals/dao-proposals-active-vote-subs.gql'),
-        variables () {
-          return {
-            // first: (this.pagination.offset + this.pagination.first), // TODO: For some reason this does not work
-            docId: this.selectedDao.docId,
-            user: this.account
-          }
-        },
-        skip () { return !this.selectedDao?.docId },
-        updateQuery: (previousResult, { subscriptionData }) => {
-          if (!subscriptionData?.data) {
-            return previousResult
-          }
-          if (!previousResult?.data) {
-            return undefined
-          }
-          subscriptionData.data.queryDao[0].proposal = [...previousResult.data.queryDao[0].proposal, ...subscriptionData.data.queryDao[0].proposal]
-          return subscriptionData
-        }
-      }
+      // subscribeToMore: {
+      //   document: require('~/query/proposals/dao-proposals-active-vote-subs.gql'),
+      //   variables () {
+      //     return {
+      //       // first: (this.pagination.offset + this.pagination.first), // TODO: For some reason this does not work
+      //       docId: this.selectedDao.docId,
+      //       user: this.account
+      //     }
+      //   },
+      //   skip () { return !this.selectedDao?.docId },
+      //   updateQuery: (previousResult, { subscriptionData }) => {
+      //     if (!subscriptionData?.data) {
+      //       return previousResult
+      //     }
+      //     if (!previousResult?.data) {
+      //       return undefined
+      //     }
+      //     subscriptionData.data.queryDao[0].proposal = [...previousResult.data.queryDao[0].proposal, ...subscriptionData.data.queryDao[0].proposal]
+      //     return subscriptionData
+      //   }
+      // }
     },
     stagedProposals: {
       query: gql`query stageProposals($docId: String!, $first: Int!, $offset: Int!) { ${STAGED_PROPOSALS_QUERY} }`,
@@ -436,28 +436,28 @@ export default {
           user: this.account
         }
       },
-      fetchPolicy: 'no-cache',
+      fetchPolicy: 'no-cache'
       // pollInterval: 1000 // TODO: Swap with subscribe once dgraph is ready
-      subscribeToMore: {
-        document: gql`subscription stageProposals($docId: String!, $first: Int, $offset: Int) { ${STAGED_PROPOSALS_QUERY} }`,
-        skip () { return !this.selectedDao?.docId },
-        variables () {
-          return {
-            docId: this.selectedDao.docId,
-            user: this.account
-          }
-        },
-        updateQuery: (previousResult, { subscriptionData }) => {
-          if (!subscriptionData.data) {
-            return previousResult
-          }
-          if (!previousResult) {
-            return undefined
-          }
+      // subscribeToMore: {
+      //   document: gql`subscription stageProposals($docId: String!, $first: Int, $offset: Int) { ${STAGED_PROPOSALS_QUERY} }`,
+      //   skip () { return !this.selectedDao?.docId },
+      //   variables () {
+      //     return {
+      //       docId: this.selectedDao.docId,
+      //       user: this.account
+      //     }
+      //   },
+      //   updateQuery: (previousResult, { subscriptionData }) => {
+      //     if (!subscriptionData.data) {
+      //       return previousResult
+      //     }
+      //     if (!previousResult) {
+      //       return undefined
+      //     }
 
-          return subscriptionData.data
-        }
-      }
+      //     return subscriptionData.data
+      //   }
+      // }
     },
 
     proposalsCount: {
