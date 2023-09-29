@@ -1080,23 +1080,23 @@ export default {
       variables () { return { docId: this.docId } },
       fetchPolicy: 'no-cache',
 
-      pollInterval: 1000, // TODO: Swap with subscribe once dgraph is ready
-      // subscribeToMore: {
-      //   document: gql`subscription proposalDetail($docId: String!) { ${PROPOSAL_QUERY} }`,
-      //   skip () { return !this.docId },
-      //   variables () { return { docId: this.docId } },
-      //   updateQuery: (previousResult, { subscriptionData }) => {
-      //     if (!subscriptionData.data) {
-      //       return previousResult
-      //     }
-      //     if (!previousResult) {
-      //       return undefined
-      //     }
+      // pollInterval: 1000, // TODO: Swap with subscribe once dgraph is ready
+      subscribeToMore: {
+        document: gql`subscription proposalDetail($docId: String!) { ${PROPOSAL_QUERY} }`,
+        skip () { return !this.docId },
+        variables () { return { docId: this.docId } },
+        updateQuery: (previousResult, { subscriptionData }) => {
+          if (!subscriptionData.data) {
+            return previousResult
+          }
+          if (!previousResult) {
+            return undefined
+          }
 
-      //     return subscriptionData.data
-      //   }
+          return subscriptionData.data
+        }
 
-      // },
+      },
 
       result (data) {
         if ((data?.data?.getDocument?.dao[0]?.details_daoName_n !== this?.selectedDao?.name) && !this.isBadge) {
