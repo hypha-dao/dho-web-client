@@ -171,7 +171,7 @@ export default {
           isHypha: dao?.settings[0]?.settings_isHypha_i || ''
         }
       },
-      skip () { return !this.dhoname || ['create-your-dao', 'login'].includes(this.$route.name) ? '' : !this.account },
+      skip () { return !this.dhoname || this.isAuthenticated ? !this.account : '' },
       variables () { return { regexp: '/^' + this.dhoname + '$/i', username: this.account } },
       async result (res) {
         this.state = STATE.LOADING
@@ -219,7 +219,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters('accounts', ['account']),
+    ...mapGetters('accounts', ['account', 'isAuthenticated']),
 
     layout () { return this.$route?.meta?.layout || 'multi-dho-layout' }
   },
