@@ -2,11 +2,11 @@ name: EOS - Build and Deploy to Staging - MainNet
 
 on:
   push:
-    branches: [ master, feat/deploy-eos-to-staging ]
+    branches: [ master ]
 
 jobs:
   build:
-    name: build-prod
+    name: build-eos-mainnet-staging
     environment: eosMainNet
     runs-on: ubuntu-latest
     steps:
