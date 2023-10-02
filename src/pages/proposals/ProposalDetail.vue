@@ -1080,7 +1080,7 @@ export default {
       variables () { return { docId: this.docId } },
       fetchPolicy: 'no-cache',
 
-      pollInterval: 1000, // TODO: Swap with subscribe once dgraph is ready
+      // pollInterval: 1000, // TODO: Swap with subscribe once dgraph is ready
       // subscribeToMore: {
       //   document: gql`subscription proposalDetail($docId: String!) { ${PROPOSAL_QUERY} }`,
       //   skip () { return !this.docId },
