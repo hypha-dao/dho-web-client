@@ -56,7 +56,7 @@ export default {
           this.$emit('transitionToRegister')
         }
       } else {
-        await this.loginWallet({ idx, returnUrl: this.isOnboarding ? 'create' : this.$route.query.returnUrl || 'home' })
+        await this.loginWallet({ idx, returnUrl: this.isOnboarding ? 'create' : this.$route.query.returnUrl || '/' })
       }
     },
     async onLoginInApp () {
@@ -66,7 +66,7 @@ export default {
       this.submitting = true
       this.errorPrivateKey = await this.loginInApp({
         ...this.form,
-        returnUrl: this.isOnboarding ? 'create' : this.$route.query.returnUrl || 'home'
+        returnUrl: this.isOnboarding ? 'create' : this.$route.query.returnUrl || '/'
       })
       this.submitting = false
     },
