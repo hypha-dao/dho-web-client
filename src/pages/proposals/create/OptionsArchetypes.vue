@@ -19,7 +19,6 @@ const ROLES_QUERY = `
   queryRole(
     filter: { 
       details_dao_i: { in: [0, $daoId] },
-      details_autoApprove_i: { eq: 1 } 
     }
   ) {
     id: docId
