@@ -1,7 +1,11 @@
-query activeDaoCreated($regexp: String!) {
+query activeDaoCreated($regexp: String!, $username: String!) {
   queryDao @cascade(fields: ["settings"]) {
     docId
     details_daoName_n
+    
+     admin(filter: { details_member_n: { eq: $username } }) {
+      docId
+    }
 
 
     settings(filter: { settings_daoUrl_s: { regexp: $regexp } }) {

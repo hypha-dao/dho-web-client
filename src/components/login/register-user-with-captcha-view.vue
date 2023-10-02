@@ -194,14 +194,15 @@ export default {
 
         const query = await this.$apollo.watchQuery({
           query: require('~/query/dao-created.gql'),
-          variables: { regexp: '/^' + daoUrl + '$/i' },
+          variables: { regexp: '/^' + daoUrl + '$/i', username: this.account },
           pollInterval: 100,
           fetchPolicy: 'no-cache'
         })
 
         query.subscribe(({ data, loading }) => {
           const value = data.queryDao
-          if (value.length > 0) {
+
+          if (value.length > 0 && value[0]?.admin?.length > 0) {
             this.$router.push({ path: `/${daoUrl}/` })
           }
         })
