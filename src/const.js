@@ -126,3 +126,5 @@ export const PLAN_STATUS = Object.freeze({
   ACTIVE: 'active'
 
 })
+
+export const NUMBER_OF_SYSTEM_PROPOSALS = 2
