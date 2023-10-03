@@ -32,7 +32,8 @@ export default {
   },
 
   props: {
-    proposalId: String
+    proposalId: String,
+    voteCount: Number
   },
 
   data () {
@@ -40,7 +41,6 @@ export default {
       page: 0,
       size: 5,
       voices: {},
-      voteCount: 0,
       votes: []
     }
   },
@@ -58,9 +58,6 @@ export default {
         }
       },
 
-      result ({ data }) {
-        this.voteCount = data.queryVote[0].voteonAggregate.count
-      },
       // fetchPolicy: 'no-cache',
       pollInterval: 1000
       // subscribeToMore: {

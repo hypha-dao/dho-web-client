@@ -264,9 +264,9 @@ export default {
     periodsOnCycle () {
       return (this.cycleDurationSec / this.daoSettings.periodDurationSec).toFixed(2)
     },
-    cashToken () { return this.calculateToken(this.peg, this.daoSettings.treasuryTokenMultiplier) },
-    utilityToken () { return this.calculateToken(this.reward, this.daoSettings.utilityTokenMultiplier) },
-    voiceToken () { return this.calculateToken(this.voice, this.daoSettings.voiceTokenMultiplier) },
+    cashToken () { return this.getFormatedTokenAmount((this.peg / (this.toggle ? this.periodsOnCycle : 1)).toFixed(2), Number.MAX_VALUE) },
+    utilityToken () { return this.getFormatedTokenAmount((this.reward / (this.toggle ? this.periodsOnCycle : 1)).toFixed(2), Number.MAX_VALUE) },
+    voiceToken () { return this.getFormatedTokenAmount((this.voice / (this.toggle ? this.periodsOnCycle : 1)).toFixed(2), Number.MAX_VALUE) },
     isAssignment () {
       const proposalType = this.$store.state.proposals.draft.category.key
       return proposalType === 'assignment' || proposalType === 'archetype'
@@ -279,11 +279,6 @@ export default {
   },
 
   methods: {
-    calculateToken (token, tokenMultiplier) {
-      return !this.toggle
-        ? this.getFormatedTokenAmount(token * (tokenMultiplier || 1), Number.MAX_VALUE)
-        : this.getFormatedTokenAmount((token * (tokenMultiplier || 1) / this.periodsOnCycle).toFixed(2), Number.MAX_VALUE)
-    },
 
     isValidCommitment (commitment) {
       const proposalType = this.$store.state.proposals.draft.category.key
