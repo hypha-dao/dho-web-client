@@ -78,13 +78,13 @@
     "@graphql-codegen/typescript": "^3.0.3",
     "@graphql-codegen/typescript-vue-apollo-smart-ops": "^2.3.6",
     "@prettier/plugin-pug": "^2.4.2",
-    "@quasar/app": "^2.2.4",
+    "@quasar/app": "^3.3.3",
     "@quasar/quasar-app-extension-apollo": "^1.0.0-beta.8",
     "@quasar/quasar-app-extension-qmarkdown": "^1.4.1",
     "@storybook/addon-actions": "^6.5.12",
     "@storybook/addon-essentials": "^6.5.12",
     "@storybook/addon-links": "^6.5.12",
-    "@storybook/vue": "^6.5.12",
+    "@storybook/vue": "^7.4.6",
     "@typescript-eslint/eslint-plugin": "^5.57.0",
     "@typescript-eslint/parser": "^5.57.0",
     "@volar/vue-language-plugin-pug": "^1.2.0",
@@ -115,7 +115,7 @@
     "style-loader": "^2.0.0",
     "ts-node": "^10.9.1",
     "typescript": "^5.0.4",
-    "vue-loader": "15.9.6"
+    "vue-loader": "17.2.2"
   },
   "husky": {
     "hooks": {
