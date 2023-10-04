@@ -1,3 +1,5 @@
+import { Screen } from 'quasar'
+import I18n from '~/utils/i18n'
 export const getHyphaProposals = async function () {
   const actionProposals = {
     code: process.env.MULTISIG_CONTRACT,
@@ -57,8 +59,21 @@ export const approve = async function ({ rootState }, { proposer, proposalName, 
       }
     }
   }]
-
-  return this.$api.signTransaction(actions)
+  let options = {}
+  if (Screen.gt.md) {
+    options = {
+      title: I18n.t('hypha-wallet-pop-up.signTransaction.desktop.title'),
+      text: I18n.t('hypha-wallet-pop-up.signTransaction.desktop.text'),
+      actionText: I18n.t('hypha-wallet-pop-up.signTransaction.desktop.actionText')
+    }
+  } else {
+    options = {
+      title: I18n.t('hypha-wallet-pop-up.signTransaction.mobile.title'),
+      text: I18n.t('hypha-wallet-pop-up.signTransaction.mobile.text'),
+      actionText: I18n.t('hypha-wallet-pop-up.signTransaction.mobile.actionText')
+    }
+  }
+  return this.$api.signTransaction(actions, options)
 }
 
 export const unapprove = async function ({ rootState }, { proposer, proposalName, level }) {
@@ -75,7 +90,21 @@ export const unapprove = async function ({ rootState }, { proposer, proposalName
     }
   }]
 
-  return this.$api.signTransaction(actions)
+  let options = {}
+  if (Screen.gt.md) {
+    options = {
+      title: I18n.t('hypha-wallet-pop-up.signTransaction.desktop.title'),
+      text: I18n.t('hypha-wallet-pop-up.signTransaction.desktop.text'),
+      actionText: I18n.t('hypha-wallet-pop-up.signTransaction.desktop.actionText')
+    }
+  } else {
+    options = {
+      title: I18n.t('hypha-wallet-pop-up.signTransaction.mobile.title'),
+      text: I18n.t('hypha-wallet-pop-up.signTransaction.mobile.text'),
+      actionText: I18n.t('hypha-wallet-pop-up.signTransaction.mobile.actionText')
+    }
+  }
+  return this.$api.signTransaction(actions, options)
 }
 
 export const execute = async function ({ rootState }, { proposer, proposalName }) {
@@ -89,7 +118,21 @@ export const execute = async function ({ rootState }, { proposer, proposalName }
     }
   }]
 
-  return this.$api.signTransaction(actions)
+  let options = {}
+  if (Screen.gt.md) {
+    options = {
+      title: I18n.t('hypha-wallet-pop-up.signTransaction.desktop.title'),
+      text: I18n.t('hypha-wallet-pop-up.signTransaction.desktop.text'),
+      actionText: I18n.t('hypha-wallet-pop-up.signTransaction.desktop.actionText')
+    }
+  } else {
+    options = {
+      title: I18n.t('hypha-wallet-pop-up.signTransaction.mobile.title'),
+      text: I18n.t('hypha-wallet-pop-up.signTransaction.mobile.text'),
+      actionText: I18n.t('hypha-wallet-pop-up.signTransaction.mobile.actionText')
+    }
+  }
+  return this.$api.signTransaction(actions, options)
 }
 
 export const cancel = async function ({ rootState }, { proposer, proposalName }) {
@@ -103,5 +146,19 @@ export const cancel = async function ({ rootState }, { proposer, proposalName })
     }
   }]
 
-  return this.$api.signTransaction(actions)
+  let options = {}
+  if (Screen.gt.md) {
+    options = {
+      title: I18n.t('hypha-wallet-pop-up.signTransaction.desktop.title'),
+      text: I18n.t('hypha-wallet-pop-up.signTransaction.desktop.text'),
+      actionText: I18n.t('hypha-wallet-pop-up.signTransaction.desktop.actionText')
+    }
+  } else {
+    options = {
+      title: I18n.t('hypha-wallet-pop-up.signTransaction.mobile.title'),
+      text: I18n.t('hypha-wallet-pop-up.signTransaction.mobile.text'),
+      actionText: I18n.t('hypha-wallet-pop-up.signTransaction.mobile.actionText')
+    }
+  }
+  return this.$api.signTransaction(actions, options)
 }

@@ -3,6 +3,7 @@ import { JsSignatureProvider } from 'eosjs/dist/eosjs-jssig'
 import { MEMBER_TYPE } from '~/const'
 import { Screen } from 'quasar'
 import gql from 'graphql-tag'
+import I18n from '~/utils/i18n'
 
 export const lightWalletLogin = async function ({ commit, dispatch }, { returnUrl }) {
   try {
@@ -33,13 +34,15 @@ export const loginWallet = async function ({ commit, dispatch }, { idx, returnUr
       let options = {}
       if (Screen.gt.md) {
         options = {
-          text: 'Scan the QR-code with Hypha Wallet on your mobile device in order to sign this transaction request',
-          actionText: 'Launch On Desktop'
+          title: I18n.t('hypha-wallet-pop-up.signTransaction.desktop.login'),
+          text: I18n.t('hypha-wallet-pop-up.signTransaction.desktop.text'),
+          actionText: I18n.t('hypha-wallet-pop-up.signTransaction.desktop.actionText')
         }
       } else {
         options = {
-          text: 'Click this button to open Hypha Wallet on your mobile device and sign this transaction',
-          actionText: 'Open in Hypha Wallet'
+          title: I18n.t('hypha-wallet-pop-up.signTransaction.mobile.login'),
+          text: I18n.t('hypha-wallet-pop-up.signTransaction.mobile.text'),
+          actionText: I18n.t('hypha-wallet-pop-up.signTransaction.mobile.actionText')
         }
       }
       users = await authenticator.login(options)
@@ -219,7 +222,21 @@ export const verifyOTP = async function ({ commit, dispatch, state, rootState },
     }
   })
 
-  await this.$api.signTransaction(actions)
+  let options = {}
+  if (Screen.gt.md) {
+    options = {
+      title: I18n.t('hypha-wallet-pop-up.signTransaction.desktop.title'),
+      text: I18n.t('hypha-wallet-pop-up.signTransaction.desktop.text'),
+      actionText: I18n.t('hypha-wallet-pop-up.signTransaction.desktop.actionText')
+    }
+  } else {
+    options = {
+      title: I18n.t('hypha-wallet-pop-up.signTransaction.mobile.title'),
+      text: I18n.t('hypha-wallet-pop-up.signTransaction.mobile.text'),
+      actionText: I18n.t('hypha-wallet-pop-up.signTransaction.mobile.actionText')
+    }
+  }
+  await this.$api.signTransaction(actions, options)
 
   return {
     success: true
@@ -238,8 +255,21 @@ export const applyMember = async function ({ state, rootState, commit }, { conte
       }
     }
   ]
-
-  const result = await this.$api.signTransaction(actions)
+  let options = {}
+  if (Screen.gt.md) {
+    options = {
+      title: I18n.t('hypha-wallet-pop-up.signTransaction.desktop.title'),
+      text: I18n.t('hypha-wallet-pop-up.signTransaction.desktop.text'),
+      actionText: I18n.t('hypha-wallet-pop-up.signTransaction.desktop.actionText')
+    }
+  } else {
+    options = {
+      title: I18n.t('hypha-wallet-pop-up.signTransaction.mobile.title'),
+      text: I18n.t('hypha-wallet-pop-up.signTransaction.mobile.text'),
+      actionText: I18n.t('hypha-wallet-pop-up.signTransaction.mobile.actionText')
+    }
+  }
+  const result = await this.$api.signTransaction(actions, options)
   if (result) {
     commit('accounts/setApplicant', true, { root: true })
   }
@@ -255,7 +285,21 @@ export const removeApplicant = async function ({ commit, rootState }, { applican
       dao_id: rootState.dao.docId
     }
   }]
-  const result = await this.$api.signTransaction(actions)
+  let options = {}
+  if (Screen.gt.md) {
+    options = {
+      title: I18n.t('hypha-wallet-pop-up.signTransaction.desktop.title'),
+      text: I18n.t('hypha-wallet-pop-up.signTransaction.desktop.text'),
+      actionText: I18n.t('hypha-wallet-pop-up.signTransaction.desktop.actionText')
+    }
+  } else {
+    options = {
+      title: I18n.t('hypha-wallet-pop-up.signTransaction.mobile.title'),
+      text: I18n.t('hypha-wallet-pop-up.signTransaction.mobile.text'),
+      actionText: I18n.t('hypha-wallet-pop-up.signTransaction.mobile.actionText')
+    }
+  }
+  const result = await this.$api.signTransaction(actions, options)
   return result
 }
 
@@ -270,7 +314,21 @@ export const enrollMember = async function ({ commit, rootState }, { applicant, 
       content
     }
   }]
-  const result = await this.$api.signTransaction(actions)
+  let options = {}
+  if (Screen.gt.md) {
+    options = {
+      title: I18n.t('hypha-wallet-pop-up.signTransaction.desktop.title'),
+      text: I18n.t('hypha-wallet-pop-up.signTransaction.desktop.text'),
+      actionText: I18n.t('hypha-wallet-pop-up.signTransaction.desktop.actionText')
+    }
+  } else {
+    options = {
+      title: I18n.t('hypha-wallet-pop-up.signTransaction.mobile.title'),
+      text: I18n.t('hypha-wallet-pop-up.signTransaction.mobile.text'),
+      actionText: I18n.t('hypha-wallet-pop-up.signTransaction.mobile.actionText')
+    }
+  }
+  const result = await this.$api.signTransaction(actions, options)
   return result
 }
 

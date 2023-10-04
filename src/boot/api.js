@@ -1,8 +1,7 @@
 import { Api, JsonRpc } from 'eosjs'
 import axios from 'axios'
-import { Screen } from 'quasar'
 
-const signTransaction = async function (actions) {
+const signTransaction = async function (actions, options) {
   actions.forEach((action) => {
     if (!action.authorization || !action.authorization.length) {
       action.authorization = [
@@ -17,27 +16,15 @@ const signTransaction = async function (actions) {
   let error = null
   try {
     if (this.$type === 'ual') {
-      let options = {}
-      if (Screen.gt.md) {
-        options = {
-          blocksBehind: 3,
-          expireSeconds: 30,
-          text: 'Scan the QR-code with Hypha Wallet on your mobile device in order to sign this transaction request',
-          actionText: 'Launch On Desktop'
-        }
-      } else {
-        options = {
-          blocksBehind: 3,
-          expireSeconds: 30,
-          text: 'Click this button to open Hypha Wallet on your mobile device and sign this transaction',
-          actionText: 'Open in Hypha Wallet'
-        }
-      }
       const result = await this.$ualUser.signTransaction(
         {
           actions
         },
-        options
+        {
+          blocksBehind: 3,
+          expireSeconds: 30,
+          ...options
+        }
       )
       transactionId = result.transactionId
     } else if (this.$type === 'inApp') {

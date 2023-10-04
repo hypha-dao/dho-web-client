@@ -1,3 +1,6 @@
+import { Screen } from 'quasar'
+import I18n from '~/utils/i18n'
+
 export const claimAssignmentPayment = async function (context, docId) {
   const actions = [{
     account: this.$config.contracts.dao,
@@ -6,7 +9,21 @@ export const claimAssignmentPayment = async function (context, docId) {
       assignment_id: docId
     }
   }]
-  return this.$api.signTransaction(actions)
+  let options = {}
+  if (Screen.gt.md) {
+    options = {
+      title: I18n.t('hypha-wallet-pop-up.signTransaction.desktop.title'),
+      text: I18n.t('hypha-wallet-pop-up.signTransaction.desktop.text'),
+      actionText: I18n.t('hypha-wallet-pop-up.signTransaction.desktop.actionText')
+    }
+  } else {
+    options = {
+      title: I18n.t('hypha-wallet-pop-up.signTransaction.mobile.title'),
+      text: I18n.t('hypha-wallet-pop-up.signTransaction.mobile.text'),
+      actionText: I18n.t('hypha-wallet-pop-up.signTransaction.mobile.actionText')
+    }
+  }
+  return this.$api.signTransaction(actions, options)
 }
 export const claimAllAssignmentPayment = async function (context, { docId, numPeriods }) {
   const actions = []
@@ -19,7 +36,21 @@ export const claimAllAssignmentPayment = async function (context, { docId, numPe
       }
     })
   }
-  return this.$api.signTransaction(actions)
+  let options = {}
+  if (Screen.gt.md) {
+    options = {
+      title: I18n.t('hypha-wallet-pop-up.signTransaction.desktop.title'),
+      text: I18n.t('hypha-wallet-pop-up.signTransaction.desktop.text'),
+      actionText: I18n.t('hypha-wallet-pop-up.signTransaction.desktop.actionText')
+    }
+  } else {
+    options = {
+      title: I18n.t('hypha-wallet-pop-up.signTransaction.mobile.title'),
+      text: I18n.t('hypha-wallet-pop-up.signTransaction.mobile.text'),
+      actionText: I18n.t('hypha-wallet-pop-up.signTransaction.mobile.actionText')
+    }
+  }
+  return this.$api.signTransaction(actions, options)
 }
 
 export const adjustCommitment = async function ({ rootState }, { docId, commitment }) {
@@ -36,8 +67,21 @@ export const adjustCommitment = async function ({ rootState }, { docId, commitme
       ]
     }
   }]
-
-  return this.$api.signTransaction(actions)
+  let options = {}
+  if (Screen.gt.md) {
+    options = {
+      title: I18n.t('hypha-wallet-pop-up.signTransaction.desktop.title'),
+      text: I18n.t('hypha-wallet-pop-up.signTransaction.desktop.text'),
+      actionText: I18n.t('hypha-wallet-pop-up.signTransaction.desktop.actionText')
+    }
+  } else {
+    options = {
+      title: I18n.t('hypha-wallet-pop-up.signTransaction.mobile.title'),
+      text: I18n.t('hypha-wallet-pop-up.signTransaction.mobile.text'),
+      actionText: I18n.t('hypha-wallet-pop-up.signTransaction.mobile.actionText')
+    }
+  }
+  return this.$api.signTransaction(actions, options)
 }
 
 export const adjustDeferred = async function ({ rootState }, { docId, deferred }) {
@@ -50,8 +94,21 @@ export const adjustDeferred = async function ({ rootState }, { docId, deferred }
       new_deferred_perc_x100: deferred
     }
   }]
-
-  return this.$api.signTransaction(actions)
+  let options = {}
+  if (Screen.gt.md) {
+    options = {
+      title: I18n.t('hypha-wallet-pop-up.signTransaction.desktop.title'),
+      text: I18n.t('hypha-wallet-pop-up.signTransaction.desktop.text'),
+      actionText: I18n.t('hypha-wallet-pop-up.signTransaction.desktop.actionText')
+    }
+  } else {
+    options = {
+      title: I18n.t('hypha-wallet-pop-up.signTransaction.mobile.title'),
+      text: I18n.t('hypha-wallet-pop-up.signTransaction.mobile.text'),
+      actionText: I18n.t('hypha-wallet-pop-up.signTransaction.mobile.actionText')
+    }
+  }
+  return this.$api.signTransaction(actions, options)
 }
 
 export const suspendAssignment = async function ({ rootState }, { docId, reason }) {
@@ -64,8 +121,21 @@ export const suspendAssignment = async function ({ rootState }, { docId, reason 
       document_id: docId
     }
   }]
-
-  return this.$api.signTransaction(actions)
+  let options = {}
+  if (Screen.gt.md) {
+    options = {
+      title: I18n.t('hypha-wallet-pop-up.signTransaction.desktop.title'),
+      text: I18n.t('hypha-wallet-pop-up.signTransaction.desktop.text'),
+      actionText: I18n.t('hypha-wallet-pop-up.signTransaction.desktop.actionText')
+    }
+  } else {
+    options = {
+      title: I18n.t('hypha-wallet-pop-up.signTransaction.mobile.title'),
+      text: I18n.t('hypha-wallet-pop-up.signTransaction.mobile.text'),
+      actionText: I18n.t('hypha-wallet-pop-up.signTransaction.mobile.actionText')
+    }
+  }
+  return this.$api.signTransaction(actions, options)
 }
 
 export const withdrawFromAssignment = async function ({ rootState }, { docId, notes }) {
@@ -78,6 +148,19 @@ export const withdrawFromAssignment = async function ({ rootState }, { docId, no
       document_id: docId
     }
   }]
-
-  return this.$api.signTransaction(actions)
+  let options = {}
+  if (Screen.gt.md) {
+    options = {
+      title: I18n.t('hypha-wallet-pop-up.signTransaction.desktop.title'),
+      text: I18n.t('hypha-wallet-pop-up.signTransaction.desktop.text'),
+      actionText: I18n.t('hypha-wallet-pop-up.signTransaction.desktop.actionText')
+    }
+  } else {
+    options = {
+      title: I18n.t('hypha-wallet-pop-up.signTransaction.mobile.title'),
+      text: I18n.t('hypha-wallet-pop-up.signTransaction.mobile.text'),
+      actionText: I18n.t('hypha-wallet-pop-up.signTransaction.mobile.actionText')
+    }
+  }
+  return this.$api.signTransaction(actions, options)
 }

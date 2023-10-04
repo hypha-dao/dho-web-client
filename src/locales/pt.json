@@ -2179,5 +2179,21 @@
     "minimumNumberOfCharacters": "O número mínimo de caracteres é {number}",
     "maximumNumberOfCharacters": "O número máximo de caracteres é {number}",
     "pleaseTypeAValidURL": "Digite um URL válido"
+  },
+  "hypha-wallet-pop-up": {
+    "signTransaction": {
+      "desktop": {
+        "login": "Conecte-se",
+        "title": "Assinar transação",
+        "text": "Digitalize o código QR com Hypha Wallet em seu dispositivo móvel para assinar esta solicitação de transação",
+        "actionText": "Iniciar na área de trabalho"
+      },
+      "mobile": {
+        "login": "Conecte-se",
+        "title": "Assinar transação",
+        "text": "Clique neste botão para abrir a Hypha Wallet no seu dispositivo móvel e assinar esta transação",
+        "actionText": "Abrir na carteira Hypha"
+      }
+    }
   }
 }

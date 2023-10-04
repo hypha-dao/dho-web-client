@@ -2184,5 +2184,21 @@
      "minimumNumberOfCharacters":"Minimum number of characters is {number}",
      "maximumNumberOfCharacters":"Maximum number of characters is {number}",
      "pleaseTypeAValidURL":"Please type a valid URL"
-  }
+  },
+   "hypha-wallet-pop-up": {
+      "signTransaction": {
+         "desktop": {
+            "login": "Login",
+            "title": "Sign Transaction",
+            "text": "Scan the QR-code with Hypha Wallet on your mobile device in order to sign this transaction request",
+            "actionText": "Launch On Desktop"
+         },
+         "mobile": {
+            "login": "Login",
+            "title": "Sign Transaction",
+            "text": "Click this button to open Hypha Wallet on your mobile device and sign this transaction",
+            "actionText": "Open in Hypha Wallet"
+         }
+      }
+   }
 }

@@ -1,6 +1,8 @@
 <script>
 import CONFIG from './config.json'
 import { mapGetters } from 'vuex'
+import { Screen } from 'quasar'
+import I18n from '~/utils/i18n'
 export default {
   name: 'upvote-election',
   components: {
@@ -237,7 +239,21 @@ export default {
           voted: candidatesIds
         }
       }]
-      return await this.$store.$api.signTransaction(actions)
+      let options = {}
+      if (Screen.gt.md) {
+        options = {
+          title: I18n.t('hypha-wallet-pop-up.signTransaction.desktop.title'),
+          text: I18n.t('hypha-wallet-pop-up.signTransaction.desktop.text'),
+          actionText: I18n.t('hypha-wallet-pop-up.signTransaction.desktop.actionText')
+        }
+      } else {
+        options = {
+          title: I18n.t('hypha-wallet-pop-up.signTransaction.mobile.title'),
+          text: I18n.t('hypha-wallet-pop-up.signTransaction.mobile.text'),
+          actionText: I18n.t('hypha-wallet-pop-up.signTransaction.mobile.actionText')
+        }
+      }
+      return await this.$store.$api.signTransaction(actions, options)
     }
 
   },
