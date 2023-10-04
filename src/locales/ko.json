@@ -1142,8 +1142,8 @@
       "redemptionPending": "상환 보류 중",
       "requestor": "요청자",
       "amount": "양",
-      "redeemHusd1": "HUSD 사용",
-      "husdAvailable": "HUSD 이용 가능",
+      "redeemHusd1": "{tokenName} 사용",
+      "husdAvailable": "{tokenName} 이용 가능",
       "amountToRedeem": "상환할 금액",
       "typeAmount": "종류 금액",
       "maxAvailable": "최대 사용 가능",
@@ -1156,7 +1156,7 @@
       "noWalletFound": "지갑을 찾을 수 없습니다.",
       "pendingRedemptions": "보류 중인 사용",
       "details": "세부",
-      "queueHusdRedemption": "구성된 지갑에 대한 국고 지급을 위한 대기열 HUSD 상환",
+      "queueHusdRedemption": "구성된 지갑에 대한 국고 지급을 위한 대기열 {tokeName} 상환",
       "redeem": "상환하다"
     },
     "wallet-hypha": {

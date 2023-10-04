@@ -1147,8 +1147,8 @@
         "redemptionPending":"Redemption pending",
         "requestor":"Requestor",
         "amount":"Amount",
-        "redeemHusd1":"Redeem HUSD",
-        "husdAvailable":"HUSD available",
+        "redeemHusd1":"Redeem {tokenName}",
+        "husdAvailable":"{tokenName} available",
         "amountToRedeem":"Amount to redeem",
         "typeAmount":"Type Amount",
         "maxAvailable":"Max Available",
@@ -1161,7 +1161,7 @@
         "noWalletFound":"No wallet found",
         "pendingRedemptions":"Pending redemptions",
         "details":"Details",
-        "queueHusdRedemption":"Queue HUSD Redemption for Treasury Payout to Configured Wallet",
+        "queueHusdRedemption":"Queue {tokenName} Redemption for Treasury Payout to Configured Wallet",
         "redeem":"Redeem"
      },
      "wallet-hypha":{
