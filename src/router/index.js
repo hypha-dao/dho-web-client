@@ -13,7 +13,7 @@ Vue.use(VueRouter)
 export default function ({ store }) {
   const scrollPositions = Object.create(null)
   const rootDaoSlug = process.env.ROOT_DAO_SLUG || 'hypha'
-  const defaultPath = `/${rootDaoSlug}/explore`
+  // const defaultPath = `/${rootDaoSlug}/explore`
 
   const Router = new VueRouter({
     scrollBehavior (to, from, savedPosition) {
@@ -44,7 +44,7 @@ export default function ({ store }) {
       if (!isAuthenticated) {
         next({ path: `/${rootDaoSlug}/login` })
       } else {
-        next({ path: defaultPath })
+        next({ name: 'dashboard' })
       }
     }
     if (to.matched.some(record => record.meta.requiresAuth) || to.matched.some(record => record.meta.requiresAuthMember)) {
