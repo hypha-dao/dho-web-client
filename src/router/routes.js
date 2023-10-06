@@ -178,14 +178,6 @@ const routes = [
         props: true
       },
       {
-        path: 'explore',
-        name: 'explore',
-        meta: {
-          title: I18n.t('routes.exploreDAOs')
-        },
-        component: () => import('pages/dho/Explore.vue')
-      },
-      {
         path: '@:username',
         name: 'profile',
         meta: {
@@ -364,15 +356,9 @@ const routes = [
   }
 ]
 
-if (process.env.PPP_ENV === 'test') {
-  routes[0].children.push(
-    {
-      path: '/dev/dao',
-      name: 'min-explore',
-      component: () => import('~/pages/dho/MinExplore.vue')
-    }
-  )
-}
+// if (process.env.PPP_ENV === 'test') {
+
+// }
 
 // Always leave this as last one
 if (process.env.MODE !== 'ssr') {
