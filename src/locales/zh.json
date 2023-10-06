@@ -2179,5 +2179,21 @@
     "minimumNumberOfCharacters": "最小字符数为 {number}",
     "maximumNumberOfCharacters": "最大字符数为 {number}",
     "pleaseTypeAValidURL": "请输入有效的网址"
+  },
+  "hypha-wallet-pop-up": {
+    "signTransaction": {
+      "desktop": {
+        "login": "登录",
+        "title": "签署交易",
+        "text": "使用移动设备上的 Hypha 钱包扫描二维码以签署此交易请求",
+        "actionText": "在桌面上启动"
+      },
+      "mobile": {
+        "login": "登录",
+        "title": "签署交易",
+        "text": "单击此按钮可在您的移动设备上打开 Hypha 钱包并签署此交易",
+        "actionText": "在 Hypha 钱包中打开"
+      }
+    }
   }
 }

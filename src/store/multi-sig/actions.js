@@ -57,7 +57,6 @@ export const approve = async function ({ rootState }, { proposer, proposalName, 
       }
     }
   }]
-
   return this.$api.signTransaction(actions)
 }
 

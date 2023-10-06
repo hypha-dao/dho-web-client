@@ -668,7 +668,6 @@ export default {
               publish: !publishToStaging
             }
           }]
-
           return this.$api.signTransaction(actions)
         }
       } catch (e) {
@@ -694,7 +693,6 @@ export default {
           publish: true
         }
       }]
-
       return this.$api.signTransaction(actions)
     },
     // TODO: Refactor this to avoid duplicated code with createProposal
@@ -967,7 +965,6 @@ export default {
             proposal_id: proposalId
           }
         }]
-
         return this.$api.signTransaction(actions)
       } catch (e) {
         throw new Error(e)
@@ -984,7 +981,6 @@ export default {
             proposal_id: proposalId
           }
         }]
-
         return this.$api.signTransaction(actions)
       } catch (e) {
         throw new Error(e)
@@ -1045,7 +1041,6 @@ export default {
           publish: true
         }
       }]
-
       return this.$api.signTransaction(actions)
     },
 
@@ -1059,7 +1054,6 @@ export default {
           comment_or_section_id: Number(parentId)
         }
       }]
-
       return this.$api.signTransaction(actions)
     },
 
@@ -1072,7 +1066,6 @@ export default {
           comment_id: Number(commentId)
         }
       }]
-
       return this.$api.signTransaction(actions)
     },
 
@@ -1084,7 +1077,6 @@ export default {
           comment_id: Number(commentId)
         }
       }]
-
       return this.$api.signTransaction(actions)
     },
 
@@ -1098,7 +1090,6 @@ export default {
           document_id: Number(commentId)
         }
       }]
-
       return this.$api.signTransaction(actions)
     },
 
@@ -1111,7 +1102,6 @@ export default {
           document_id: Number(commentId)
         }
       }]
-
       return this.$api.signTransaction(actions)
     }
 

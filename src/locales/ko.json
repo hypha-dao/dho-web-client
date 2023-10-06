@@ -2179,5 +2179,21 @@
     "minimumNumberOfCharacters": "최소 문자 수는 {number}자입니다.",
     "maximumNumberOfCharacters": "최대 문자 수는 {number}자입니다.",
     "pleaseTypeAValidURL": "유효한 URL을 입력하세요."
+  },
+  "hypha-wallet-pop-up": {
+    "signTransaction": {
+      "desktop": {
+        "login": "로그인",
+        "title": "거래 서명",
+        "text": "이 거래 요청에 서명하려면 모바일 장치에서 Hypha 지갑으로 QR 코드를 스캔하세요.",
+        "actionText": "데스크탑에서 실행"
+      },
+      "mobile": {
+        "login": "로그인",
+        "title": "거래 서명",
+        "text": "모바일 장치에서 Hypha 지갑을 열고 이 거래에 서명하려면 이 버튼을 클릭하세요.",
+        "actionText": "하이파 지갑에서 개설"
+      }
+    }
   }
 }
