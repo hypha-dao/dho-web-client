@@ -1,5 +1,3 @@
-import { Screen } from 'quasar'
-import I18n from '~/utils/i18n'
 export const fetchBallot = async function ({ commit }, ballot) {
   const result = await this.$api.getTableRows({
     code: this.$config.contracts.decide,
@@ -36,21 +34,7 @@ export const castVote = async function ({ rootState, commit }, { id, vote, propo
       options: [vote]
     }
   }]
-  let options = {}
-  if (Screen.gt.md) {
-    options = {
-      title: I18n.t('hypha-wallet-pop-up.signTransaction.desktop.title'),
-      text: I18n.t('hypha-wallet-pop-up.signTransaction.desktop.text'),
-      actionText: I18n.t('hypha-wallet-pop-up.signTransaction.desktop.actionText')
-    }
-  } else {
-    options = {
-      title: I18n.t('hypha-wallet-pop-up.signTransaction.mobile.title'),
-      text: I18n.t('hypha-wallet-pop-up.signTransaction.mobile.text'),
-      actionText: I18n.t('hypha-wallet-pop-up.signTransaction.mobile.actionText')
-    }
-  }
-  const result = await this.$api.signTransaction(actions, options)
+  const result = await this.$api.signTransaction(actions)
   if (result) {
     commit('setLastVote', { vote, proposalId })
   }

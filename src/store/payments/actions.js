@@ -1,5 +1,3 @@
-import { Screen } from 'quasar'
-import I18n from '~/utils/i18n'
 export const fetchData = async function ({ commit, state }, { account }) {
   const options = {
     code: this.$config.contracts.dao,
@@ -120,21 +118,7 @@ export const redeemToken = async function ({ rootState }, { quantity, memo }) {
       }
     }
   ]
-  let options = {}
-  if (Screen.gt.md) {
-    options = {
-      title: I18n.t('hypha-wallet-pop-up.signTransaction.desktop.title'),
-      text: I18n.t('hypha-wallet-pop-up.signTransaction.desktop.text'),
-      actionText: I18n.t('hypha-wallet-pop-up.signTransaction.desktop.actionText')
-    }
-  } else {
-    options = {
-      title: I18n.t('hypha-wallet-pop-up.signTransaction.mobile.title'),
-      text: I18n.t('hypha-wallet-pop-up.signTransaction.mobile.text'),
-      actionText: I18n.t('hypha-wallet-pop-up.signTransaction.mobile.actionText')
-    }
-  }
-  return this.$api.signTransaction(actions, options)
+  return this.$api.signTransaction(actions)
 }
 
 export const redeemAddress = async function ({ rootState }) {
@@ -175,21 +159,7 @@ export const buySeeds = async function ({ rootState }, quantity) {
       }
     }
   ]
-  let options = {}
-  if (Screen.gt.md) {
-    options = {
-      title: I18n.t('hypha-wallet-pop-up.signTransaction.desktop.title'),
-      text: I18n.t('hypha-wallet-pop-up.signTransaction.desktop.text'),
-      actionText: I18n.t('hypha-wallet-pop-up.signTransaction.desktop.actionText')
-    }
-  } else {
-    options = {
-      title: I18n.t('hypha-wallet-pop-up.signTransaction.mobile.title'),
-      text: I18n.t('hypha-wallet-pop-up.signTransaction.mobile.text'),
-      actionText: I18n.t('hypha-wallet-pop-up.signTransaction.mobile.actionText')
-    }
-  }
-  return this.$api.signTransaction(actions, options)
+  return this.$api.signTransaction(actions)
 }
 
 export const buyHypha = async function ({ rootState }, quantity) {
@@ -207,19 +177,5 @@ export const buyHypha = async function ({ rootState }, quantity) {
       }
     }
   ]
-  let options = {}
-  if (Screen.gt.md) {
-    options = {
-      title: I18n.t('hypha-wallet-pop-up.signTransaction.desktop.title'),
-      text: I18n.t('hypha-wallet-pop-up.signTransaction.desktop.text'),
-      actionText: I18n.t('hypha-wallet-pop-up.signTransaction.desktop.actionText')
-    }
-  } else {
-    options = {
-      title: I18n.t('hypha-wallet-pop-up.signTransaction.mobile.title'),
-      text: I18n.t('hypha-wallet-pop-up.signTransaction.mobile.text'),
-      actionText: I18n.t('hypha-wallet-pop-up.signTransaction.mobile.actionText')
-    }
-  }
-  return this.$api.signTransaction(actions, options)
+  return this.$api.signTransaction(actions)
 }

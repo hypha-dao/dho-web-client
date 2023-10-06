@@ -222,21 +222,7 @@ export const verifyOTP = async function ({ commit, dispatch, state, rootState },
     }
   })
 
-  let options = {}
-  if (Screen.gt.md) {
-    options = {
-      title: I18n.t('hypha-wallet-pop-up.signTransaction.desktop.title'),
-      text: I18n.t('hypha-wallet-pop-up.signTransaction.desktop.text'),
-      actionText: I18n.t('hypha-wallet-pop-up.signTransaction.desktop.actionText')
-    }
-  } else {
-    options = {
-      title: I18n.t('hypha-wallet-pop-up.signTransaction.mobile.title'),
-      text: I18n.t('hypha-wallet-pop-up.signTransaction.mobile.text'),
-      actionText: I18n.t('hypha-wallet-pop-up.signTransaction.mobile.actionText')
-    }
-  }
-  await this.$api.signTransaction(actions, options)
+  await this.$api.signTransaction(actions)
 
   return {
     success: true
@@ -255,21 +241,7 @@ export const applyMember = async function ({ state, rootState, commit }, { conte
       }
     }
   ]
-  let options = {}
-  if (Screen.gt.md) {
-    options = {
-      title: I18n.t('hypha-wallet-pop-up.signTransaction.desktop.title'),
-      text: I18n.t('hypha-wallet-pop-up.signTransaction.desktop.text'),
-      actionText: I18n.t('hypha-wallet-pop-up.signTransaction.desktop.actionText')
-    }
-  } else {
-    options = {
-      title: I18n.t('hypha-wallet-pop-up.signTransaction.mobile.title'),
-      text: I18n.t('hypha-wallet-pop-up.signTransaction.mobile.text'),
-      actionText: I18n.t('hypha-wallet-pop-up.signTransaction.mobile.actionText')
-    }
-  }
-  const result = await this.$api.signTransaction(actions, options)
+  const result = await this.$api.signTransaction(actions)
   if (result) {
     commit('accounts/setApplicant', true, { root: true })
   }
@@ -285,21 +257,7 @@ export const removeApplicant = async function ({ commit, rootState }, { applican
       dao_id: rootState.dao.docId
     }
   }]
-  let options = {}
-  if (Screen.gt.md) {
-    options = {
-      title: I18n.t('hypha-wallet-pop-up.signTransaction.desktop.title'),
-      text: I18n.t('hypha-wallet-pop-up.signTransaction.desktop.text'),
-      actionText: I18n.t('hypha-wallet-pop-up.signTransaction.desktop.actionText')
-    }
-  } else {
-    options = {
-      title: I18n.t('hypha-wallet-pop-up.signTransaction.mobile.title'),
-      text: I18n.t('hypha-wallet-pop-up.signTransaction.mobile.text'),
-      actionText: I18n.t('hypha-wallet-pop-up.signTransaction.mobile.actionText')
-    }
-  }
-  const result = await this.$api.signTransaction(actions, options)
+  const result = await this.$api.signTransaction(actions)
   return result
 }
 
@@ -314,21 +272,7 @@ export const enrollMember = async function ({ commit, rootState }, { applicant, 
       content
     }
   }]
-  let options = {}
-  if (Screen.gt.md) {
-    options = {
-      title: I18n.t('hypha-wallet-pop-up.signTransaction.desktop.title'),
-      text: I18n.t('hypha-wallet-pop-up.signTransaction.desktop.text'),
-      actionText: I18n.t('hypha-wallet-pop-up.signTransaction.desktop.actionText')
-    }
-  } else {
-    options = {
-      title: I18n.t('hypha-wallet-pop-up.signTransaction.mobile.title'),
-      text: I18n.t('hypha-wallet-pop-up.signTransaction.mobile.text'),
-      actionText: I18n.t('hypha-wallet-pop-up.signTransaction.mobile.actionText')
-    }
-  }
-  const result = await this.$api.signTransaction(actions, options)
+  const result = await this.$api.signTransaction(actions)
   return result
 }
 

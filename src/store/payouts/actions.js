@@ -1,6 +1,4 @@
 import Turndown from 'turndown'
-import { Screen } from 'quasar'
-import I18n from '~/utils/i18n'
 
 export const savePayoutProposal = async function ({ rootState }, draft) {
   const content = [
@@ -29,21 +27,7 @@ export const savePayoutProposal = async function ({ rootState }, draft) {
       content_groups: [content]
     }
   }]
-  let options = {}
-  if (Screen.gt.md) {
-    options = {
-      title: I18n.t('hypha-wallet-pop-up.signTransaction.desktop.title'),
-      text: I18n.t('hypha-wallet-pop-up.signTransaction.desktop.text'),
-      actionText: I18n.t('hypha-wallet-pop-up.signTransaction.desktop.actionText')
-    }
-  } else {
-    options = {
-      title: I18n.t('hypha-wallet-pop-up.signTransaction.mobile.title'),
-      text: I18n.t('hypha-wallet-pop-up.signTransaction.mobile.text'),
-      actionText: I18n.t('hypha-wallet-pop-up.signTransaction.mobile.actionText')
-    }
-  }
-  return this.$api.signTransaction(actions, options)
+  return this.$api.signTransaction(actions)
 }
 
 export const loadPayouts = async function ({ commit }, { first, offset }) {

@@ -1,6 +1,3 @@
-import { Screen } from 'quasar'
-import I18n from '~/utils/i18n'
-
 export const getSupply = async function () {
   const dho = this.getters['dao/dho']
   const daoTokens = this.getters['dao/getDaoTokens']
@@ -126,21 +123,7 @@ export const sendNewPayment = async function ({ rootState }, { id, amount, netwo
       ]
     }
   }]
-  let options = {}
-  if (Screen.gt.md) {
-    options = {
-      title: I18n.t('hypha-wallet-pop-up.signTransaction.desktop.title'),
-      text: I18n.t('hypha-wallet-pop-up.signTransaction.desktop.text'),
-      actionText: I18n.t('hypha-wallet-pop-up.signTransaction.desktop.actionText')
-    }
-  } else {
-    options = {
-      title: I18n.t('hypha-wallet-pop-up.signTransaction.mobile.title'),
-      text: I18n.t('hypha-wallet-pop-up.signTransaction.mobile.text'),
-      actionText: I18n.t('hypha-wallet-pop-up.signTransaction.mobile.actionText')
-    }
-  }
-  return this.$api.signTransaction(actions, options)
+  return this.$api.signTransaction(actions)
 }
 
 export const endorsePayment = async function ({ rootState }, { redemptionId, amount, paymentId, comment }) {
@@ -157,19 +140,5 @@ export const endorsePayment = async function ({ rootState }, { redemptionId, amo
       ]
     }
   }]
-  let options = {}
-  if (Screen.gt.md) {
-    options = {
-      title: I18n.t('hypha-wallet-pop-up.signTransaction.desktop.title'),
-      text: I18n.t('hypha-wallet-pop-up.signTransaction.desktop.text'),
-      actionText: I18n.t('hypha-wallet-pop-up.signTransaction.desktop.actionText')
-    }
-  } else {
-    options = {
-      title: I18n.t('hypha-wallet-pop-up.signTransaction.mobile.title'),
-      text: I18n.t('hypha-wallet-pop-up.signTransaction.mobile.text'),
-      actionText: I18n.t('hypha-wallet-pop-up.signTransaction.mobile.actionText')
-    }
-  }
-  return this.$api.signTransaction(actions, options)
+  return this.$api.signTransaction(actions)
 }
