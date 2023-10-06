@@ -30,6 +30,14 @@ const routes = [
     props: true,
     children: [
       {
+        path: 'explore',
+        name: 'explore',
+        meta: {
+          title: I18n.t('routes.exploreDAOs')
+        },
+        component: () => import('pages/dho/Explore.vue')
+      },
+      {
         path: 'create-your-dao',
         name: 'create-your-dao',
         meta: {
