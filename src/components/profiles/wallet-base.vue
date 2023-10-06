@@ -8,6 +8,9 @@ import { dateToStringShort } from '~/utils/TimeUtils'
  * Wallet base component that is responsible for rendering wallet items, triggering redemption actions
  * This is a pure component whose state is entirely determined by props and does not query the backend
  */
+
+const DEFAULT_REDEEM_TOKEN = 'HUSD'
+
 export default {
   name: 'wallet-base',
   mixins: [validation, format],
@@ -40,6 +43,7 @@ export default {
 
   data () {
     return {
+      DEFAULT_REDEEM_TOKEN,
       form: {
         amount: null
       },
@@ -100,10 +104,10 @@ export default {
       return this.username === this.account
     },
     tokenName () {
-      return this.$store.state.dao.settings.settings_pegTokenName_s ? this.$store.state.dao.settings.settings_pegTokenName_s : 'HUSD'
+      return this.$store.state.dao.settings.settings_pegTokenName_s ? this.$store.state.dao.settings.settings_pegTokenName_s : DEFAULT_REDEEM_TOKEN
     },
     tokenSymbol () {
-      return this.$store.state.dao.settings.settings_pegToken_a ? this.$store.state.dao.settings.settings_pegToken_a.split(' ')[1] : 'HUSD'
+      return this.$store.state.dao.settings.settings_pegToken_a ? this.$store.state.dao.settings.settings_pegToken_a.split(' ')[1] : DEFAULT_REDEEM_TOKEN
     }
   },
 
