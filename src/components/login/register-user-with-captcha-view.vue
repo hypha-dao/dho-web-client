@@ -241,7 +241,7 @@ export default {
       }
     },
     enterDao() {
-      this.$router.push({ path: `/${this.selectedDao.name}` })
+      this.$router.push({ name: 'explore' })
     }
   }
 }
