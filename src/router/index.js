@@ -12,8 +12,8 @@ Vue.use(VueRouter)
 
 export default function ({ store }) {
   const scrollPositions = Object.create(null)
-  const rootDaoSlug = process.env.ROOT_DAO_SLUG || 'hypha'
-  const defaultPath = `/${rootDaoSlug}/explore`
+  // const rootDaoSlug = process.env.ROOT_DAO_SLUG || 'hypha'
+  // const defaultPath = `/${rootDaoSlug}/explore`
 
   const Router = new VueRouter({
     scrollBehavior (to, from, savedPosition) {
@@ -40,13 +40,13 @@ export default function ({ store }) {
     const memberType = localStorage.getItem('memberType')
     const daoName = to.params.dhoname
     // Temporal redirection for hypha explorer page
-    if (to.name && to.name === 'root') {
-      if (!isAuthenticated) {
-        next({ path: `/${rootDaoSlug}/login` })
-      } else {
-        next({ path: defaultPath })
-      }
-    }
+    // if (to.name && to.name === 'root') {
+    //   if (!isAuthenticated) {
+    //     next({ path: `/${rootDaoSlug}/login` })
+    //   } else {
+    //     next({ name: 'dashboard' })
+    //   }
+    // }
     if (to.matched.some(record => record.meta.requiresAuth) || to.matched.some(record => record.meta.requiresAuthMember)) {
       if (!isAuthenticated) {
         next({ path: `/${daoName}/login` })

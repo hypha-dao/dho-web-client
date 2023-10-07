@@ -1142,8 +1142,8 @@
       "redemptionPending": "Redención pendiente",
       "requestor": "Solicitante",
       "amount": "Cantidad",
-      "redeemHusd1": "Canjear HUSD",
-      "husdAvailable": "HUSD disponible",
+      "redeemHusd1": "Canjear {tokenName}",
+      "husdAvailable": "{tokenName} disponible",
       "amountToRedeem": "Monto a canjear",
       "typeAmount": "Tipo Monto",
       "maxAvailable": "Máximo disponible",
@@ -1156,7 +1156,7 @@
       "noWalletFound": "No se encontró ninguna billetera",
       "pendingRedemptions": "Reembolsos pendientes",
       "details": "Detalles",
-      "queueHusdRedemption": "Haga cola para el canje de HUSD para el pago del Tesoro a la billetera configurada",
+      "queueHusdRedemption": "Haga cola para el canje de {tokenName} para el pago del Tesoro a la billetera configurada",
       "redeem": "Canjear"
     },
     "wallet-hypha": {
@@ -2179,5 +2179,21 @@
     "minimumNumberOfCharacters": "El número mínimo de caracteres es {number}",
     "maximumNumberOfCharacters": "El número máximo de caracteres es {number}",
     "pleaseTypeAValidURL": "Por favor escriba una URL válida"
+  },
+  "hypha-wallet-pop-up": {
+    "signTransaction": {
+      "desktop": {
+        "login": "Acceso",
+        "title": "Transaktion unterzeichnen",
+        "text": "Scannen Sie den QR-Code mit Hypha Wallet auf Ihrem Mobilgerät, um diese Transaktionsanfrage zu signieren",
+        "actionText": "Auf dem Desktop starten"
+      },
+      "mobile": {
+        "login": "Acceso",
+        "title": "Transaktion unterzeichnen",
+        "text": "Klicken Sie auf diese Schaltfläche, um Hypha Wallet auf Ihrem Mobilgerät zu öffnen und diese Transaktion zu signieren",
+        "actionText": "In Hypha Wallet öffnen"
+      }
+    }
   }
 }

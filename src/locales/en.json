@@ -1147,8 +1147,8 @@
         "redemptionPending":"Redemption pending",
         "requestor":"Requestor",
         "amount":"Amount",
-        "redeemHusd1":"Redeem HUSD",
-        "husdAvailable":"HUSD available",
+        "redeemHusd1":"Redeem {tokenName}",
+        "husdAvailable":"{tokenName} available",
         "amountToRedeem":"Amount to redeem",
         "typeAmount":"Type Amount",
         "maxAvailable":"Max Available",
@@ -1161,7 +1161,7 @@
         "noWalletFound":"No wallet found",
         "pendingRedemptions":"Pending redemptions",
         "details":"Details",
-        "queueHusdRedemption":"Queue HUSD Redemption for Treasury Payout to Configured Wallet",
+        "queueHusdRedemption":"Queue {tokenName} Redemption for Treasury Payout to Configured Wallet",
         "redeem":"Redeem"
      },
      "wallet-hypha":{
@@ -2184,5 +2184,21 @@
      "minimumNumberOfCharacters":"Minimum number of characters is {number}",
      "maximumNumberOfCharacters":"Maximum number of characters is {number}",
      "pleaseTypeAValidURL":"Please type a valid URL"
-  }
+  },
+   "hypha-wallet-pop-up": {
+      "signTransaction": {
+         "desktop": {
+            "login": "Login",
+            "title": "Sign Transaction",
+            "text": "Scan the QR-code with Hypha Wallet on your mobile device in order to sign this transaction request",
+            "actionText": "Launch On Desktop"
+         },
+         "mobile": {
+            "login": "Login",
+            "title": "Sign Transaction",
+            "text": "Click this button to open Hypha Wallet on your mobile device and sign this transaction",
+            "actionText": "Open in Hypha Wallet"
+         }
+      }
+   }
 }

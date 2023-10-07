@@ -1142,8 +1142,8 @@
       "redemptionPending": "Исплата је на чекању",
       "requestor": "Захтевалац",
       "amount": "Износ",
-      "redeemHusd1": "Откупите ХУСД",
-      "husdAvailable": "ХУСД доступан",
+      "redeemHusd1": "Откупите {tokenName}",
+      "husdAvailable": "{tokenName} доступан",
       "amountToRedeem": "Износ за откуп",
       "typeAmount": "Унесите износ",
       "maxAvailable": "Мак Аваилабле",
@@ -1156,7 +1156,7 @@
       "noWalletFound": "Новчаник није пронађен",
       "pendingRedemptions": "Исплате на чекању",
       "details": "Детаљи",
-      "queueHusdRedemption": "Ставите у ред откупа ХУСД-а за исплату трезора у конфигурисани новчаник",
+      "queueHusdRedemption": "Ставите у ред откупа {tokenName} за исплату трезора у конфигурисани новчаник",
       "redeem": "Искупити"
     },
     "wallet-hypha": {
@@ -2179,5 +2179,21 @@
     "minimumNumberOfCharacters": "Минимални број знакова је {number}",
     "maximumNumberOfCharacters": "Максималан број знакова је {number}",
     "pleaseTypeAValidURL": "Унесите важећи УРЛ"
+  },
+  "hypha-wallet-pop-up": {
+    "signTransaction": {
+      "desktop": {
+        "login": "Пријавите се",
+        "title": "Потпишите трансакцију",
+        "text": "Скенирајте КР код помоћу Хипха Валлет-а на свом мобилном уређају да бисте потписали овај захтев за трансакцију",
+        "actionText": "Покрените на радној површини"
+      },
+      "mobile": {
+        "login": "Пријавите се",
+        "title": "Потпишите трансакцију",
+        "text": "Кликните на ово дугме да бисте отворили Хипха Валлет на свом мобилном уређају и потписали ову трансакцију",
+        "actionText": "Отворите у Хипха новчанику"
+      }
+    }
   }
 }

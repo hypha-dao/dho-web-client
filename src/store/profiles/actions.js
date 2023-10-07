@@ -523,7 +523,6 @@ export const saveAddresses = async function ({ rootState }, { newData, oldData }
       }
     })
   }
-
   return this.$api.signTransaction(actions)
 }
 

@@ -110,8 +110,8 @@ module.exports = function (ctx) {
         LOGIN_CONTRACT: process.env.LOGIN_CONTRACT,
         JOIN_CONTRACT: process.env.JOIN_CONTRACT,
         JOIN_URI: process.env.JOIN_URI,
-        DOWNLOAD_WALLET_LINK_IOS: process.env.DOWNLOAD_WALLET_LINK_IOS,
-        DOWNLOAD_WALLET_LINK_ANDROID: process.env.DOWNLOAD_WALLET_LINK_ANDROID
+        DOWNLOAD_WALLET_LINK_IOS: process.env.DOWNLOAD_WALLET_LINK_IOS || "http://itunes.apple.com/lb/app/1659926348",
+        DOWNLOAD_WALLET_LINK_ANDROID: process.env.DOWNLOAD_WALLET_LINK_ANDROID || "http://play.google.com/store/apps/details?id=earth.hypha.wallet.hypha_wallet"
       },
 
       scopeHoisting: true,

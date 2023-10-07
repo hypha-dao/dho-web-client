@@ -36,7 +36,6 @@ export const adjustCommitment = async function ({ rootState }, { docId, commitme
       ]
     }
   }]
-
   return this.$api.signTransaction(actions)
 }
 
@@ -50,7 +49,6 @@ export const adjustDeferred = async function ({ rootState }, { docId, deferred }
       new_deferred_perc_x100: deferred
     }
   }]
-
   return this.$api.signTransaction(actions)
 }
 
@@ -64,7 +62,6 @@ export const suspendAssignment = async function ({ rootState }, { docId, reason 
       document_id: docId
     }
   }]
-
   return this.$api.signTransaction(actions)
 }
 
@@ -78,6 +75,5 @@ export const withdrawFromAssignment = async function ({ rootState }, { docId, no
       document_id: docId
     }
   }]
-
   return this.$api.signTransaction(actions)
 }

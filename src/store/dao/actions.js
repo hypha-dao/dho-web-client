@@ -1030,7 +1030,6 @@ export const createInviteLink = async function ({ state, rootState }, id) {
       }
     }
   ]
-
   await this.$api.signTransaction(actions)
 
   return {
@@ -1083,6 +1082,5 @@ export const createTokens = async function ({ state, rootState }, data) {
       }
     }
   ]
-
   await this.$api.signTransaction(actions)
 }
