@@ -1,14 +1,7 @@
 import { Api, JsonRpc } from 'eosjs'
 import axios from 'axios'
-import { Screen } from 'quasar'
-import I18n from '~/utils/i18n'
 
-const DEFAULT_OPTIONS = {
-  title: Screen.gt.md ? I18n.t('hypha-wallet-pop-up.signTransaction.desktop.title') : I18n.t('hypha-wallet-pop-up.signTransaction.mobile.title'),
-  text: Screen.gt.md ? I18n.t('hypha-wallet-pop-up.signTransaction.desktop.text') : I18n.t('hypha-wallet-pop-up.signTransaction.mobile.text'),
-  actionText: Screen.gt.md ? I18n.t('hypha-wallet-pop-up.signTransaction.desktop.actionText') : I18n.t('hypha-wallet-pop-up.signTransaction.mobile.actionText')
-}
-const signTransaction = async function (actions, options = DEFAULT_OPTIONS) {
+const signTransaction = async function (actions, options = {}) {
   actions.forEach((action) => {
     if (!action.authorization || !action.authorization.length) {
       action.authorization = [
