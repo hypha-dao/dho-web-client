@@ -106,7 +106,10 @@ export default {
         primaryColor: '#242f5d',
         secondaryColor: '#3f64ee',
         textColor: '#ffffff'
-      }
+      },
+      showLoadingModal: false,
+      progress: 0,
+      daoCreated: false
     }
   },
   async mounted() {
@@ -122,6 +125,13 @@ export default {
     isImageSelected: {
       cache: false,
       get () { return this.$refs.ipfsInput?.imageURI }
+    }
+  },
+  watch: {
+    progress: function (value) {
+      if (value === 1) {
+        this.daoCreated = true
+      }
     }
   },
   methods: {
@@ -173,6 +183,26 @@ export default {
       document.execCommand('copy')
       this.$refs.root.removeChild(storage)
     },
+    updateProgressBar() {
+      return new Promise((resolve, reject) => {
+        const totalSteps = 10
+        const stepDuration = 500
+
+        let currentStep = 0
+
+        const updateProgress = () => {
+          if (currentStep < totalSteps) {
+            this.progress = (currentStep / totalSteps)
+            currentStep++
+            setTimeout(updateProgress, stepDuration)
+          } else {
+            this.progress = 1
+            resolve()
+          }
+        }
+        setTimeout(updateProgress, stepDuration)
+      })
+    },
     async onSubmit () {
       const isDraft = !!this.$route.query.parentId
       const daoUrl = this.slugify(this.form.title, '-')
@@ -189,8 +219,9 @@ export default {
           },
           isDraft
         })
-
         this.$emit('stepChanged', this.steps.loading.name)
+        this.showLoadingModal = true
+        await this.updateProgressBar()
 
         const query = await this.$apollo.watchQuery({
           query: require('~/query/dao-created.gql'),
@@ -330,9 +361,25 @@ export default {
                 q-input.q-mt-xs.rounded-border(:input-style="{ 'resize': 'none' }" :rules="[rules.required]" dense lazy-rules="ondemand" maxlength="300" outlined :placeholder="$t('pages.onboarding.brieflyExplainWhatYourDao')" ref="description" rows="4" type="textarea" v-model="form.description")
             nav.row.justify-end.q-mt-xl.q-gutter-xs
               q-btn.q-px-xl(v-if="$q.screen.gt.md" @click="onSubmit" color="primary" :label="$t('login.register-user-with-captcha-view.publishYourDao')" no-caps rounded unelevated)
-
         #form5.flex.items-center.justify-center.no-wrap(v-show="step === this.steps.loading.name")
-          loading-spinner(color="primary" size="72px")
+          q-dialog(v-if="$q.screen.gt.md" :value="showLoadingModal" persistent)
+            widget.bg-white.q-pa-xxxl.width-auto.col-auto.full-width(:style="'border-radius: 25px; box-shadow: 0px 0px 26px 0px rgba(0, 0, 41, 0.2); max-width: 1180px;'")
+              .row
+                .col-3
+                  div.flex.justify-center.items-center.bg-positive(v-if="daoCreated === true" :style="'width: 220px; height: 220px; border-radius: 50%;'")
+                    q-icon.text-white(size="90px" name="fas fa-check")
+                  q-avatar.flex.justify-center.items-center(v-else size="220px" color="primary" text-color="white")
+                    img(v-if="isImageSelected" :src="$refs.ipfsInput.imageURI")
+                .col.flex.items-center
+                  .row
+                    .h-h3 Publishing the DAO can take a moment.
+                    .text-grey.q-mt-sm Please bear with us and don’t leave this page in the meantime. We're making sure the DAO is up and running.
+                    q-linear-progress(:value="progress" :color="daoCreated === true ? 'positive' : 'primary'" class="q-mt-md")
+                    .row.q-mt-sm.flex.justify-between.full-width
+                      .text-primary.q-mt-sm.text-bold(v-if="daoCreated === true") All done...
+                      .text-primary.q-mt-sm.text-bold(v-else) Creating slots for {{ form.title }}
+                      .text-primary.text-bold(:class="{ 'text-positive': daoCreated === true }") {{ progress * 100 }}%
+          loading-spinner(v-else color="primary" size="72px")
         #form6.flex.column.justify-center.full-height(v-show="step === this.steps.account.name")
           template
             div.full-height.column.justify-center
