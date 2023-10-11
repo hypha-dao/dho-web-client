@@ -1638,7 +1638,7 @@
            "vote":"Vote"
         },
         "profile-creation":{
-           "profilePicture":"Profile picure",
+           "profilePicture":"Profile picture",
            "makeSureToUpdate":"Make sure to update your profile once you are a member. This will help others to get to know you better and reach out to you. Use your real name and photo, enter your timezone and submit a short bio of yourself.",
            "uploadAnImage":"Upload an image",
            "name":"Name",
