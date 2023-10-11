@@ -1918,7 +1918,11 @@
         "createATeamOfCoreMembersWithAdmin":"Create a team of core members with admin capacity. By default you are the only DAO administrator and core member. TELOS account is required. If the people you want to invite don’t have a TELOS account, no problem, you can invite them to join your DAO and they will create an account there. Later you can set them as core/administrators directly within the DAO settings.",
         "telosAccount":"Telos account",
         "addToTheTeam":"Add to the team +",
-        "daoPublished":"DAO Published!"
+        "daoPublished":"DAO Published!",
+        "publishingTheDao": "Publishing the DAO can take a moment.",
+        "pleaseBearWithUs": "Please bear with us and don’t leave this page in the meantime. We're making sure the DAO is up and running.",
+        "allDone": "All done...",
+        "creatingSlotsFor": "Creating { title }"
      }
   },
   "notifications":{
