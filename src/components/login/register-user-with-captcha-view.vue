@@ -272,7 +272,7 @@ export default {
       }
     },
     enterDao() {
-      this.$router.push({ name: 'explore' })
+      this.$router.push({ name: 'dashboard' })
     }
   }
 }
