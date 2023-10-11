@@ -372,12 +372,12 @@ export default {
                     img(v-if="isImageSelected" :src="$refs.ipfsInput.imageURI")
                 .col.flex.items-center
                   .row
-                    .h-h3 Publishing the DAO can take a moment.
-                    .text-grey.q-mt-sm Please bear with us and don’t leave this page in the meantime. We're making sure the DAO is up and running.
+                    .h-h3 {{ $t('pages.onboarding.publishingTheDao' )}}
+                    .text-grey.q-mt-sm {{ $t('pages.onboarding.pleaseBearWithUs' )}}
                     q-linear-progress(:value="progress" :color="daoCreated === true ? 'positive' : 'primary'" class="q-mt-md")
                     .row.q-mt-sm.flex.justify-between.full-width
-                      .text-primary.q-mt-sm.text-bold(v-if="daoCreated === true") All done...
-                      .text-primary.q-mt-sm.text-bold(v-else) Creating slots for {{ form.title }}
+                      .text-primary.q-mt-sm.text-bold(v-if="daoCreated === true") {{ $t('pages.onboarding.allDone' )}}
+                      .text-primary.q-mt-sm.text-bold(v-else) {{ $t('pages.onboarding.creatingSlotsFor', { title: form.title } )}}
                       .text-primary.text-bold(:class="{ 'text-positive': daoCreated === true }") {{ progress * 100 }}%
           loading-spinner(v-else color="primary" size="72px")
         #form6.flex.column.justify-center.full-height(v-show="step === this.steps.account.name")
