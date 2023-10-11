@@ -259,7 +259,7 @@ export default {
     },
     showToggle () {
       const proposalType = this.$store.state.proposals.draft.category.key
-      return proposalType === 'assignment' || proposalType === 'contribution' || proposalType === 'archetype'
+      return (proposalType === 'assignment' || proposalType === 'contribution' || proposalType === 'archetype') && this.$store.state.dao.settings.settings_pegToken_a
     },
     periodsOnCycle () {
       return (this.cycleDurationSec / this.daoSettings.periodDurationSec).toFixed(2)
