@@ -233,7 +233,8 @@ export default {
         query.subscribe(({ data, loading }) => {
           const value = data.queryDao
 
-          if (value.length > 0 && value[0]?.admin?.length > 0) {
+          // TODO: return after eos fix && value[0]?.admin?.length > 0
+          if (value.length > 0) {
             this.$router.push({ path: `/${daoUrl}/` })
           }
         })
