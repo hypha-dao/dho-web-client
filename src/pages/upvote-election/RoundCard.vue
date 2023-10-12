@@ -8,7 +8,7 @@ export default {
   },
 
   props: {
-    participants: Number,
+    participantsCount: Number,
     groups: Array,
     l1DelegateBadges: String,
     users: Array,
@@ -64,7 +64,7 @@ export default {
                 q-icon(name="fas fa-users" size="24px")
               .col.q-ml-sm
                 .row
-                  .h-h4 {{ participants }}
+                  .h-h4 {{ participantsCount }}
                 .row {{ $t('pages.upvote-election.participants') }}
         .col
           q-card.rounded-card.q-pa-lg.applications-metric
@@ -75,7 +75,7 @@ export default {
                 .row
                   .h-h4 {{ groups.length }}
                 .row {{ $t('pages.upvote-election.groups') }}
-        .col
+        //- .col
           q-card.rounded-card.q-pa-lg.applications-metric
             .row.flex.items-center
               .col-2
@@ -91,7 +91,7 @@ export default {
       div.q-my-xl.q-pt-xl(v-show="showGroups" :style="{ 'border-top': '1px solid #CBCDD1'}")
         .row.q-gutter-col-md
           template(v-for="group, index in groups")
-            group-card.col-6.q-pa-xxs(:users="group.users" :groupNumber="index + 1" :myGroup="group.myGroup", :votes="group.votes")
+            group-card.col-6.q-pa-xxs(:users="group.members" :groupNumber="index + 1" :myGroup="group.myGroup", :votes="group.votes")
 </template>
 
 <style lang="stylus" scoped>

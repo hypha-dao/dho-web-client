@@ -3,6 +3,27 @@ import formatNumber from '~/utils/formatNumber'
 import I18n from '~/utils/i18n'
 import { dateToStringShort } from '~/utils/TimeUtils.js'
 import { mapGetters } from 'vuex'
+import gql from 'graphql-tag'
+
+const ELECTIONS_DATA = `
+getDao(docId: $daoId) {
+  docId
+  ueElection {
+    docId
+    details_endDate_t
+    ueRound {
+      docId
+    }
+    ueStartrnd {
+      ueGroupLnk {
+        ueRdMemberAggregate {
+          count
+        }
+      }
+    }
+  }
+}
+`
 
 export default {
   name: 'election',
@@ -12,6 +33,26 @@ export default {
     Widget: () => import('~/components/common/widget.vue')
   },
 
+  apollo: {
+    elections: {
+      query: gql`query electionsQuery ($daoId: String!) { ${ELECTIONS_DATA} }`,
+      update: data => data.getDao.ueElection.map(election => {
+        return {
+          endDate: election.details_endDate_t,
+          rounds: election.ueRound.length,
+          participants: election.ueStartrnd[0].ueGroupLnk.reduce((sum, group) => sum + group.ueRdMemberAggregate.count, 0),
+          id: election.docId
+        }
+      }),
+      variables () {
+        return {
+          daoId: this.selectedDao.docId
+        }
+      },
+      skip () { return !this.selectedDao || !this.selectedDao.docId }
+    }
+  },
+
   data () {
     return {
       I18n,
@@ -19,33 +60,10 @@ export default {
       dateToStringShort,
       timeRemaining: {},
       counterdown: undefined,
-      participants: 126, // TODO: waiting API
       treasury: 1200000,
       isUpVoteElectionBannerVisible: true, // TODO: waiting API
       endDate: '2023-08-23',
       nextElectionStartDate: '2023-08-29',
-      elections: [
-        {
-          endDate: '2023-08-20',
-          rounds: 3,
-          participants: 126
-        },
-        {
-          endDate: '2023-08-20',
-          rounds: 3,
-          participants: 126
-        },
-        {
-          endDate: '2023-08-20',
-          rounds: 3,
-          participants: 126
-        },
-        {
-          endDate: '2023-08-20',
-          rounds: 3,
-          participants: 126
-        }
-      ],
       slide: '1',
       titles: [
         this.$t('pages.dho.election.howCommunityElectionsWork'),
@@ -83,6 +101,10 @@ export default {
       this.formatTimeLeft()
       this.$forceUpdate()
     }, 1000)
+  },
+
+  async activated () {
+    await this.$apollo.queries.elections.refetch()
   },
 
   beforeDestroy () {
@@ -173,7 +195,7 @@ q-page.page-election
                 .text-secondary {{ $t('pages.dho.home.timeLeftForSigningUp') }}
             .row.q-pt-md
               .col.flex.justify-center(:style="{ 'border-right': '1px solid #242f5d' }")
-                .h-h6 {{ participants }}
+                //- .h-h6 {{ participants }}
                 .full-width.flex.justify-center.text-secondary {{ $t('pages.dho.home.participants') }}
               .col.flex.justify-center
                 .h-h6 $ {{ formatNumber(treasury) }}
@@ -189,7 +211,7 @@ q-page.page-election
         q-btn.q-px-lg.h-btn1(disable :class="{ 'q-mt-sm': $q.screen.lt.xs || $q.screen.xs }" no-caps rounded unelevated :label="$t('pages.dho.home.nextElection', { date: dateToStringShort(nextElectionStartDate) })" color="white" text-color="primary")
   .row
     .col-9.q-mr-md
-      template(v-for="election, index in elections")
+      template(v-for="election in elections")
         q-card.full-width.q-pa-xl.rounded.q-mb-md(flat)
           .row.flex.items-center
             .col.flex.justify-start
@@ -199,7 +221,7 @@ q-page.page-election
             .col.flex.justify-center.text-black(:style="{ 'font-size': '17px' }")
               div {{ election.participants }} {{ $t('pages.dho.election.participants') }}
             .col.flex.justify-end
-              q-btn.q-px-lg.h-btn1(@click="$router.push({ path: `/${selectedDao.name}/election/${index}` })" :class="{ 'q-mt-sm': $q.screen.lt.xs || $q.screen.xs }" no-caps rounded unelevated :label="$t('pages.dho.election.seeResults')" color="primary" text-color="white")
+              q-btn.q-px-lg.h-btn1(@click="$router.push({ path: `/${selectedDao.name}/election/${election.id}` })" :class="{ 'q-mt-sm': $q.screen.lt.xs || $q.screen.xs }" no-caps rounded unelevated :label="$t('pages.dho.election.seeResults')" color="primary" text-color="white")
     .col
       widget(:title="widgetTitle")
         q-carousel.b2.q-mt-md(v-model="slide" swipeable="swipeable" animated="animated" navigation="navigation" :padding="false" height="240px" control-color="primary" ref="carousel")

@@ -2,6 +2,44 @@
 import { mapGetters } from 'vuex'
 import I18n from '~/utils/i18n'
 import { dateToStringShort } from '~/utils/TimeUtils'
+import gql from 'graphql-tag'
+
+const ELECTION_DETAILS = `
+getDao(docId: $daoId) {
+  docId
+  ueElection(filter: $filter) {
+    docId
+    details_roundDuration_i
+    ueStartrnd {
+      ueGroupLnk {
+        ueRdMember {
+          details_member_n
+        }
+        ueRdMemberAggregate {
+          count
+        }
+      }
+    }
+    ueRound {
+      docId
+      ueGroupLnk {
+        ueVote {
+          details_votedId_i
+          details_voterId_i
+        }
+        ueRdMember {
+          docId
+          details_member_n
+        }
+        ueRdMemberAggregate {
+          count
+        }
+      }
+    }
+  }
+}
+`
+
 export default {
   name: 'upvote-election',
   components: {
@@ -35,56 +73,10 @@ export default {
         delegateL2: 512,
         delegateL1: 326
       },
-      participants: 126, // TODO: waiting API
       treasury: 34560, // TODO: waiting API
-      roundTime: 50, // TODO: waiting API
       showApplications: false,
       showLearnMoreModal: false,
       tab: 'VOTING',
-      applications: [ // TODO: waiting API
-        {
-          account: 'accountname',
-          fullName: 'Howard S. Lowe',
-          telegram: 'telegramhandle',
-          joinDate: 'July 14, 2023'
-        },
-        {
-          account: 'accountname',
-          fullName: 'Howard S. Lowe',
-          telegram: 'telegramhandle',
-          joinDate: 'July 14, 2023'
-        },
-        {
-          account: 'accountname',
-          fullName: 'Howard S. Lowe',
-          telegram: 'telegramhandle',
-          joinDate: 'July 14, 2023'
-        },
-        {
-          account: 'accountname',
-          fullName: 'Howard S. Lowe',
-          telegram: 'telegramhandle',
-          joinDate: 'July 14, 2023'
-        },
-        {
-          account: 'accountname',
-          fullName: 'Howard S. Lowe',
-          telegram: 'telegramhandle',
-          joinDate: 'July 14, 2023'
-        },
-        {
-          account: 'accountname',
-          fullName: 'Howard S. Lowe',
-          telegram: 'telegramhandle',
-          joinDate: 'July 14, 2023'
-        },
-        {
-          account: 'accountname',
-          fullName: 'Howard S. Lowe',
-          telegram: 'telegramhandle',
-          joinDate: 'July 14, 2023'
-        }
-      ],
       page: 1,
       signedUp: false,
       votingRounds: [ // TODO: waiting API
@@ -355,110 +347,43 @@ export default {
     }
   },
   apollo: {
-    // upvoteElectionQuery: {
-    //   query: require('~/query/upvote-election-data.gql'),
-    //   update: data => {
-    //     return {
-    //       currentRound: data.getDao.ongoingelct[0]?.currentround[0].details_type_s,
-    //       nextRound: data.getDao.ongoingelct[0]?.currentround[0].nextround,
-    //       upcomingElection: data.getDao.upcomingelct,
-    //       endTime: data.getDao.ongoingelct[0]?.currentround[0]?.details_endDate_t,
-    //       startTime: data.getDao.upcomingelct[0]?.details_startDate_t,
-    //       totalVotersProgressPercentage: data.getDao.voterAggregate.count / data.getDao.ongoingelct[0]?.currentround[0]?.candidate[0]?.voteAggregate.count,
-    //       votersBadgeCount: data.getDao.voterAggregate.count,
-    //       delegatesBadgeCount: data.getDao.ongoingelct[0]?.currentround[0].candidateAggregate.count,
-    //       previousRounds: data.getDao.previouselct[0]?.round,
-    //       totalDelegatesCount: data.getDao.delegateAggregate.count,
-    //       candidates: data.getDao.ongoingelct[0]?.currentround[0]?.candidate,
-    //       currentRoundDocId: data.getDao.ongoingelct[0]?.currentround[0]?.docId,
-    //       passingCount: data.getDao.ongoingelct[0]?.currentround[0]?.details_passingCount_i,
-    //       currentVotedAggregateCount: data.getDao.ongoingelct[0]?.currentround[0]?.votedAggregate.count
-    //     }
-    //   },
-    //   variables () {
-    //     return {
-    //       daoName: this.selectedDao.name
-    //     }
-    //   },
-    //   subscribeToMore: {
-    //     document: require('~/query/upvote-election-data-subs.gql'),
-    //     variables () {
-    //       return {
-    //         daoName: this.selectedDao.name
-    //       }
-    //     },
-    //     updateQuery: (previousResult, { subscriptionData }) => {
-    //       if (!subscriptionData.data) {
-    //         return previousResult
-    //       }
-    //       if (!previousResult) {
-    //         return undefined
-    //       }
-    //       return {
-    //         ...previousResult,
-    //         ...subscriptionData
-    //       }
-    //     }
-    //   },
-    //   result (data) {
-    //     this.upvoteElectionData = {
-    //       currentRound: data.data.getDao.ongoingelct[0]?.currentround[0].details_type_s,
-    //       nextRound: data.data.getDao.ongoingelct[0]?.currentround[0].nextround,
-    //       upcomingElection: data.data.getDao.upcomingelct,
-    //       endTime: data.data.getDao.ongoingelct[0]?.currentround[0].details_endDate_t,
-    //       startTime: data.data.getDao.upcomingelct[0]?.details_startDate_t,
-    //       totalVotersProgressPercentage: data.data.getDao.ongoingelct[0]?.currentround[0]?.candidate[0]?.voteAggregate.count ? data.data.getDao.ongoingelct[0]?.currentround[0]?.candidate[0]?.voteAggregate.count : 0,
-    //       votersBadgeCount: data.data.getDao.voterAggregate.count,
-    //       delegatesBadgeCount: data.data.getDao.ongoingelct[0]?.currentround[0].candidateAggregate.count,
-    //       previousRounds: data.data.getDao.previouselct[0]?.round,
-    //       totalDelegatesCount: data.data.getDao.delegateAggregate.count,
-    //       candidates: data.data.getDao.ongoingelct[0]?.currentround[0]?.candidate,
-    //       currentRoundDocId: data.data.getDao.ongoingelct[0]?.currentround[0]?.docId,
-    //       passingCount: data.data.getDao.ongoingelct[0]?.currentround[0]?.details_passingCount_i,
-    //       currentVotedAggregateCount: data.data.getDao.ongoingelct[0]?.currentround[0]?.votedAggregate.count
-    //     }
-    //   }
-    // },
-    // upvoteElectionVotedUsers: {
-    //   query: require('~/query/upvote-election-voted-users.gql'),
-    //   update: data => { return data },
-    //   variables () {
-    //     return {
-    //       roundId: this.upvoteElectionData.currentRoundDocId,
-    //       account: this.account
-    //     }
-    //   },
-    //   subscribeToMore: {
-    //     document: require('~/query/upvote-election-voted-users-subs.gql'),
-    //     variables () {
-    //       return {
-    //         roundId: this.upvoteElectionData.currentRoundDocId,
-    //         account: this.account
-    //       }
-    //     },
-    //     updateQuery: (previousResult, { subscriptionData }) => {
-    //       if (!subscriptionData.data) {
-    //         return previousResult
-    //       }
-    //       if (!previousResult) {
-    //         return undefined
-    //       }
-    //       return {
-    //         ...previousResult,
-    //         ...subscriptionData
-    //       }
-    //     }
-    //   },
-    //   skip () { return !this.upvoteElectionData.currentRoundDocId || !this.account },
-    //   result (data) {
-    //     data.data.getMember.elctngroup[0]?.vote.forEach(user => {
-    //       if (!this.votedUsers.includes(user.details_member_n)) {
-    //         this.votedUsers.push(user.details_member_n)
-    //       }
-    //     })
-    //   }
-    // }
+    electionDetails: {
+      query: gql`query electionDetailsQuery ($daoId: String!, $filter: UpvtElectnFilter) { ${ELECTION_DETAILS} }`,
+      update: data => {
+        return {
+          id: data.getDao.ueElection[0].docId,
+          roundDuration: data.getDao.ueElection[0].details_roundDuration_i / 60,
+          startRound: {
+            participantsCount: data.getDao.ueElection[0].ueStartrnd[0].ueGroupLnk.reduce((sum, group) => sum + group.ueRdMemberAggregate.count, 0),
+            participants: data.getDao.ueElection[0].ueStartrnd.flatMap(group => group.ueGroupLnk.flatMap(rdMember => rdMember.ueRdMember.map(member => { return { username: member.details_member_n } })))
+          },
+          rounds: data.getDao.ueElection[0].ueRound.map((round) => {
+            return {
+              participantsCount: round.ueGroupLnk.reduce((sum, group) => sum + group.ueRdMemberAggregate.count, 0),
+              groups: round.ueGroupLnk.map(group => {
+                return {
+                  members: group.ueRdMember,
+                  votes: group.ueVote
+                }
+              })
+            }
+          })
+        }
+      },
+      variables () {
+        return {
+          daoId: this.selectedDao.docId,
+          filter: {
+            docId: {
+              eq: this.$router.currentRoute.params.id
+            }
+          }
+        }
+      },
+      skip () { return !this.selectedDao || !this.selectedDao.docId }
+    }
   },
+
   computed: {
     ...mapGetters('dao', ['selectedDao']),
     ...mapGetters('accounts', ['account']),
@@ -486,7 +411,7 @@ export default {
     },
 
     paginatedApplications () {
-      return this.applications.slice((this.page - 1) * 5, this.page * 5)
+      return this.electionDetails.startRound.participants.slice((this.page - 1) * 5, this.page * 5)
     },
 
     isLastPage () {
@@ -495,7 +420,7 @@ export default {
     },
 
     pages () {
-      return Math.ceil(this.applications.length / 5)
+      return Math.ceil(this.electionDetails.startRound.participants.length / 5)
     }
   },
   methods: {
@@ -596,35 +521,35 @@ export default {
 
   },
   async mounted () {
-    if (!this.upvoteElectionData || !this.votedUsers.length) {
-      // await this.$apollo.queries.upvoteElectionQuery.refetch()
-      // await this.$apollo.queries.upvoteElectionVotedUsers.refetch()
-    }
-    this.counterdown = setInterval(() => {
-      this.formatTimeLeft()
-      this.$forceUpdate()
-    }, 1000)
+    // if (!this.upvoteElectionData || !this.votedUsers.length) {
+    // await this.$apollo.queries.electionDetails.refetch()
+    // await this.$apollo.queries.upvoteElectionVotedUsers.refetch()
+    // }
+    // this.counterdown = setInterval(() => {
+    //   this.formatTimeLeft()
+    //   this.$forceUpdate()
+    // }, 1000)
   },
   created () {
-    this.counterdown = setInterval(() => {
-      this.formatTimeLeft()
-      this.$forceUpdate()
-    }, 1000)
+    // this.counterdown = setInterval(() => {
+    //   this.formatTimeLeft()
+    //   this.$forceUpdate()
+    // }, 1000)
   },
   async activated () {
-    this.counterdown = setInterval(() => {
-      this.formatTimeLeft()
-      this.$forceUpdate()
-    }, 1000)
-    if (!this.upvoteElectionData || !this.votedUsers.length) {
-      // await this.$apollo.queries.upvoteElectionQuery.refetch()
-      // await this.$apollo.queries.upvoteElectionVotedUsers.refetch()
-    }
+    // this.counterdown = setInterval(() => {
+    //   this.formatTimeLeft()
+    //   this.$forceUpdate()
+    // }, 1000)
+    // if (!this.upvoteElectionData || !this.votedUsers.length) {
+    // await this.$apollo.queries.electionDetails.refetch()
+    // await this.$apollo.queries.upvoteElectionVotedUsers.refetch()
+    // }
   },
   deactivated () {
     clearInterval(this.counterdown)
   },
-  updated () {
+  async updated () {
     if (this.votedUsers.length) {
       this.votingState = true
     }
@@ -675,7 +600,7 @@ export default {
             q-icon(name="fas fa-check" color="positive" size="20px")
   .row.full-width.q-my-md.q-mt-lg
     .col-9
-      q-card.q-mr-md.widget.q-pa-xl.relative-position.rounded-card(v-if="currentState === 'signup'" flat)
+      q-card.q-mr-md.q-mb-md.widget.q-pa-xl.relative-position.rounded-card(v-if="currentState === 'signup'" flat)
         .title
           .row.flex.items-center.justify-between
             .col.flex.items-center
@@ -691,9 +616,9 @@ export default {
                     q-icon(name="fas fa-users" size="24px")
                   .col.q-ml-sm
                     .row
-                      .h-h4 {{ participants }}
+                      .h-h4 {{ electionDetails?.startRound.participantsCount }}
                     .row {{ $t('pages.upvote-election.participants') }}
-            .col
+            //- .col
               q-card.rounded-card.q-pa-xl.applications-metric
                 .row.flex.items-center
                   .col-2
@@ -709,28 +634,28 @@ export default {
                     q-icon(name="far fa-clock" size="24px")
                   .col.q-ml-sm
                     .row
-                      .h-h4 {{ roundTime }} {{ $t('pages.upvote-election.upvoteelection.min') }}
+                      .h-h4 {{ electionDetails?.roundDuration }} {{ $t('pages.upvote-election.upvoteelection.min') }}
                     .row {{ $t('pages.upvote-election.eachRound') }}
           q-slide-transition
             div.q-my-xl.q-pt-xl(v-show="showApplications" :style="{ 'border-top': '1px solid #CBCDD1'}")
               template(v-if="paginatedApplications.length")
                 .row.q-mb-sm.applicant-row.q-pa-xs(v-for="applicant in paginatedApplications")
                   .col-1
-                    profile-picture(:username="applicant.account" size="24px" :key="applicant.account")
+                    profile-picture(:username="applicant.username" size="24px" :key="applicant.username")
                   .col
-                    .text-bold {{ applicant.fullName }}
-                  .col @{{ applicant.account }}
-                  .col
+                    .text-bold {{ applicant.username }}
+                  .col @{{ applicant.username }}
+                  //- .col
                     .row.flex.items-center
                       q-icon(name="fas fa-paper-plane" size="12px")
                       .q-ml-xs {{ applicant.telegram }}
-                  .col {{ $t('pages.upvote-election.memberSince', { date: dateToStringShort(applicant.joinDate) } ) }}
+                  //- .col {{ $t('pages.upvote-election.memberSince', { date: dateToStringShort(applicant.joinDate) } ) }}
                 .row.justify-between.q-pt-sm.items-center
                   q-btn(:disable="page === 1" @click="onPrev()" flat rounded icon="fas fa-chevron-left")
                   .row.flex.items-center
                     div.q-ml-xs(v-for="dot, index in pages" :style="{'width': '10px', 'height': '10px', 'background': '#CAC8B0', 'border-radius': '50%'}" :class="{ 'bg-primary': index === page - 1}")
                   q-btn(:disable="isLastPage" @click="onNext()" flat rounded icon="fas fa-chevron-right")
-      template(v-for="round, index in votingRounds" v-if="currentState !== 'signup'" flat)
+      template(v-for="round, index in electionDetails.rounds" flat)
         round-card.q-mb-md(v-bind="round" :roundNumber="index + 1")
       q-card.q-mr-md.widget.q-pa-xl.relative-position.rounded-card(v-if="currentState === 'finish'" flat)
         .title
