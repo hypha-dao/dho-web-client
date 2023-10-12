@@ -1,12 +1,10 @@
 <script>
-import clsx from 'clsx'
 import { mapGetters } from 'vuex'
 import { date } from 'quasar'
 
 import ipfsy from '~/utils/ipfsy'
 
 const ordersMap = [{ asc: 'createdDate' }, { desc: 'createdDate' }, { asc: 'details_title_s' }]
-const UPVOTE_DOC_URL = 'https://help.hypha.earth/hc/2431449449/93/community-voting-method?category_id=42'
 
 export default {
   name: 'dashboard',
@@ -116,105 +114,25 @@ export default {
       },
       skip () { return !this.selectedDao || !this.selectedDao.docId },
       variables () { return { daoId: this.selectedDao.docId, first: 4 } }
-    },
-
-    upvoteElection: {
-      query: require('~/query/upvote-election-data.gql'),
-      update: data => {
-        const election = data?.getDao
-        const previousElection = election?.previouselct[0]
-        const ongoingElection = election?.ongoingelct[0]
-        const upcomingElection = election?.upcomingelct[0]
-        const currentRound = ongoingElection?.currentround[0]
-
-        return {
-          isActive: previousElection?.length > 1 || ongoingElection?.length > 1 || upcomingElection?.length > 1,
-          currentRound: currentRound?.details_type_s,
-          nextRound: currentRound?.nextround,
-          startTime: upcomingElection?.details_startDate_t,
-          endTime: currentRound?.details_endDate_t,
-          upcomingElection
-        }
-      },
-      skip () { return !this.selectedDao || !this.selectedDao?.name },
-      variables () { return { daoName: this.selectedDao?.name } }
     }
   },
 
   data () {
     return {
-
-      counterdown: undefined,
-      endDate: '2023-03-20',
       pagination: {
         first: 6,
         offset: 0,
         fetchMore: true
       },
       textFilter: null,
-      order: ordersMap[0],
-      currentUpvoteStep: null,
-      UPVOTE_DOC_URL
+      order: ordersMap[0]
     }
   },
 
   computed: {
     ...mapGetters('dao', ['daoSettings', 'selectedDao', 'selectedDaoPlan']),
 
-    currentStepIndex () {
-      let stepIndex = null
-      if (this.upvoteElection?.upcomingElection?.length) {
-        stepIndex = 0
-      } else if (!this.upvoteElection?.nextRound?.length && this.upvoteElection?.currentRound !== 'head') {
-        stepIndex = 4
-      } else {
-        switch (this.upvoteElection?.currentRound) {
-          case ('delegate'):
-            stepIndex = 1
-            break
-          case ('chief'):
-            stepIndex = 2
-            break
-          case ('head'):
-            stepIndex = 3
-            break
-        }
-      }
-      return stepIndex
-    },
-
-    isUpVoteElectionBannerVisible () { return this.upvoteElection?.isActive },
-
     isWelcomeBannerVisible () { return true },
-
-    upvoteElectionBanner () {
-      // TODO: Refactor i18n. $t('title', this.currentStepIndex === 0)
-      return {
-        title: clsx({
-          'Sign up for the election!': this.currentStepIndex === 0,
-          'The election is on progress': this.currentStepIndex > 0 && this.currentStepIndex < 4,
-          'The election in completed!': this.currentStepIndex === 4
-        }),
-        description: clsx({
-          'Hello Community members! We are soon running our Upvote Election! It will allow everyone in the AwesomeDAO community to actively participate to decision making and building our cool project together! How does it work? In a nutshell: we will run community proposals that can be voted by delegates badge holders. If you feel like being a delegate, apply now for a badge! If want to just vote your favourite delegates, apply for a voter bade!': this.currentStepIndex === 0,
-          'Hello Community members! Our Upvote election is up and running! If you signed up for a Voter Badge, click the button below to go express your vote and select the best delegates to represent your ideas in our lorem ipsum dolor sit amet': this.currentStepIndex > 0 && this.currentStepIndex < 4,
-          'Hurrey! We have our chief delegates and head delegates! go check the results by clicking the link at the bottom!': this.currentStepIndex === 4
-        }),
-        header: clsx({
-          'Upvote Election starting in': this.currentStepIndex === 0,
-          'Upvote Election started!': this.currentStepIndex > 0 && this.currentStepIndex < 3,
-          'Upvote Election': this.currentStepIndex > 3
-        }),
-        round: clsx({
-          'Round - 1': this.currentStepIndex === 1,
-          'Chief Delegate Round': this.currentStepIndex === 2,
-          'Head Delegate Round': this.currentStepIndex === 3,
-          'Completed!': this.currentStepIndex !== 0
-        }),
-        color: this.daoSettings?.secondaryColor,
-        gradient: false
-      }
-    },
 
     welcomeBanner () {
       return {
@@ -230,88 +148,12 @@ export default {
 
   },
 
-  created () {
-    this.counterdown = setInterval(() => {
-      this.formatTimeLeft()
-      this.$forceUpdate()
-    }, 1000)
-    this.$apollo.queries.upvoteElection.refetch()
-  },
-
-  beforeDestroy () {
-    clearInterval(this.counterdown)
-  },
-
-  methods: {
-    formatTimeLeft () {
-      const MS_PER_DAY = 1000 * 60 * 60 * 24
-      const MS_PER_HOUR = 1000 * 60 * 60
-      const MS_PER_MIN = 1000 * 60
-      const timeRemaining = this.votingTimeLeft()
-      if (timeRemaining > 0) {
-        const days = Math.floor(timeRemaining / MS_PER_DAY)
-        let lesstime = timeRemaining - (days * MS_PER_DAY)
-        const hours = Math.floor(lesstime / MS_PER_HOUR)
-        lesstime = lesstime - (hours * MS_PER_HOUR)
-        const min = Math.floor(lesstime / MS_PER_MIN)
-        lesstime = lesstime - (min * MS_PER_MIN)
-        return {
-          days: days,
-          hours: hours,
-          mins: min
-        }
-      }
-      return 0
-    },
-
-    votingTimeLeft () {
-      if (!this.upvoteElection) return 0
-
-      const end = this.upvoteElection?.upcomingElection?.length ? new Date(this.upvoteElection?.startTime) : new Date(this.upvoteElection?.endTime)
-      const now = Date.now()
-      const t = end - now
-      if (t < 0) {
-        this.$apollo.queries.upvoteElection.refetch()
-      }
-      return t
-    }
-  }
+  methods: {}
 }
 </script>
 
 <template lang="pug">
 q-page.page-dashboard
-  base-banner.q-mb-md(v-bind="upvoteElectionBanner" v-if="isUpVoteElectionBannerVisible")
-    template(v-slot:header)
-      header.full-width.q-mb-xl.row.h-h6.text-white
-        .row.items-center.font-lato
-          .flex.items-center.justify-center.q-mr-xs(:style="{ 'background': 'white', 'border-radius': '50%', 'width': '32px', 'height': '32px' }")
-            img(src="/svg/check-to-slot-secondary.svg" width="18px" height="14px")
-          .q-mr-md {{ upvoteElectionBanner.header }}
-          .q-mr-md {{ upvoteElectionBanner.round }}
-          .counter(v-if="currentStepIndex !== 4" :class="{ 'q-mt-md': $q.screen.lt.xs || $q.screen.xs }")
-            .time.row.q-ml-md
-              .row.items-end
-                .days {{ formatTimeLeft().days }}
-                .text-xs.q-mr-sm(v-if="formatTimeLeft().days > 1") {{ $t('pages.dho.home.days') }}
-                .text-xs.q-mr-sm(v-else) {{ $t('pages.dho.home.day') }}
-              .row.items-end
-                .hours {{ formatTimeLeft().hours }}
-                .text-xs.q-mr-sm(v-if="formatTimeLeft().hours > 1") {{ $t('pages.dho.home.hours') }}
-                .text-xs.q-mr-sm(v-else) {{ $t('pages.dho.home.hour') }}
-              .row.items-end
-                .mins {{ formatTimeLeft().mins }}
-                .text-xs.q-mr-sm(v-if="formatTimeLeft().mins > 1") {{ $t('pages.dho.home.mins') }}
-                .text-xs.q-mr-sm(v-else) {{ $t('pages.dho.home.min') }}
-    template(v-slot:buttons)
-      .row.justify-between
-        .flex.items-center
-          h-b1.text-white.text-weight-400 {{ $t('pages.dho.home.moreInformationAbout') }}
-          a(:href="UPVOTE_DOC_URL" target="_blank" :class="{ 'h-b1 text-white text-weight-800': true }" :style="{ 'margin-left': '4px', 'text-decoration': 'underline' }") {{ $t('pages.dho.home.here') }}
-        .flex(:class=" { 'q-mt-md': $q.screen.lt.md, 'justify-end': $q.screen.gt.sm }")
-          q-btn.q-px-lg.h-btn1(v-if="currentStepIndex === 0" :class="{ 'q-mt-sm': $q.screen.lt.xs || $q.screen.xs }" no-caps rounded unelevated :label="$t('pages.dho.home.signup')" color="white" text-color="primary" :to="{ name: 'upvote-election' }")
-          q-btn.q-px-lg.h-btn1(v-if="currentStepIndex > 0 && currentStepIndex < 4" :class="{ 'q-ml-md': $q.screen.gt.xs, 'q-mt-sm': $q.screen.lt.xs || $q.screen.xs }" no-caps rounded unelevated label="Go cast your vote!" color="white" text-color="primary" :to="{ name: 'upvote-election' }")
-          q-btn.q-px-lg.h-btn1(v-if="currentStepIndex === 4" :class="{ 'q-ml-md': $q.screen.gt.xs, 'q-mt-sm': $q.screen.lt.xs || $q.screen.xs }" no-caps rounded unelevated :label="$t('pages.dho.home.checkResults')" color="white" text-color="primary" :to="{ name: 'upvote-election' }")
   base-banner(:compact="!$q.screen.gt.sm" :split="$q.screen.gt.md" v-bind="welcomeBanner" v-if="isWelcomeBannerVisible")
     template(v-slot:buttons)
       router-link(:to="{ name: 'organization' }")
