@@ -118,6 +118,10 @@ export default {
       return false
     },
 
+    settingsTokens () {
+      return this.$store.state.dao.settings.pegToken && this.$store.state.dao.settings.rewardToken
+    },
+
     isFounderRole: {
       get () {
         return this.$store.state.proposals.draft.role.label === 'Founders' &&
@@ -259,7 +263,7 @@ export default {
     },
     showToggle () {
       const proposalType = this.$store.state.proposals.draft.category.key
-      return proposalType === 'assignment' || proposalType === 'contribution' || proposalType === 'archetype'
+      return (proposalType === 'assignment' || proposalType === 'contribution' || proposalType === 'archetype') && this.$store.state.dao.settings.settings_pegToken_a
     },
     periodsOnCycle () {
       return (this.cycleDurationSec / this.daoSettings.periodDurationSec).toFixed(2)
@@ -335,7 +339,7 @@ widget(:class="{ 'disable-step': currentStepName !== 'step-payout' && $q.screen.
         q-avatar.q-mr-xs(size="40px")
           img(src="~assets/icons/usd.svg")
         q-input.rounded-border.col(:disable="custom" dense outlined rounded suffix="$" type="number" v-model="annualUsdSalary" :placeholder="$t('pages.proposals.create.steppayout.typeTheAmountOfUsd')")
-    .col(v-if="fields.usdAmount" :class="{ 'q-mb-xxl':$q.screen.lt.md || $q.screen.md }")
+    .col(v-if="fields.usdAmount" :class="{ 'q-mb-xxl':$q.screen.lt.md || $q.screen.md, 'col-6': !settingsTokens }")
       label.h-label {{ fields.usdAmount.label }}
       .text-body2.text-grey-7.q-my-md(v-if="fields.usdAmount.description") {{ fields.usdAmount.description }}
       .row.full-width.items-center.q-mt-xs
@@ -354,7 +358,7 @@ widget(:class="{ 'disable-step': currentStepName !== 'step-payout' && $q.screen.
         .text-negative.h-b2.q-ml-xs(v-if="!isValidCommitment(commitment) && !firstPaintCommitment") {{ $t('pages.proposals.create.steppayout.commitmentMustBeGreater') }}
           | {{ this.$store.state.proposals.draft.minCommitment }}
           | %
-    .col.q-pl-sm(v-if="fields.deferred")
+    .col.q-pl-sm(v-if="fields.deferred && settingsTokens")
       label.h-label {{ fields.deferred.label }}
       .text-body2.text-grey-7(v-if="fields.deferred.description") {{ fields.deferred.description }}
       .full-width.justify-center.items-center.q-pl-xs.q-pt-xs(:class="{ 'row':$q.screen.gt.md }")

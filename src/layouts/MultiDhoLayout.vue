@@ -841,7 +841,7 @@ export default {
                         //-     q-icon(size="xs" color="primary" name="fas fa-search")
                         //-   template(v-slot:append v-if="searchInput")
                         //-     q-icon(size="xs" name="fas fa-times" @click="clearSearchInput")
-                    guest-menu.q-ml-md(v-if="!account && !loadingAccount && showTopBarItems" :daoName="dao?.title")
+                    guest-menu.q-ml-md(v-if="!account && !loadingAccount && showTopBarItems" :daoName="dao?.url")
                     non-member-menu.q-ml-md(v-if="!isMember && !isApplicant && account && !loadingAccount && showTopBarItems" :registrationEnabled="daoSettings.registrationEnabled")
                     q-btn.profile-button.q-ml-xs.q-mr-md(v-if="$q.screen.gt.md && !right && !loadingAccount" flat round @click="right = true")
                       profile-picture(v-bind="profile" size="36px" v-if="account")
@@ -905,7 +905,7 @@ export default {
         .row.full-width.full-height.flex.items-center.justify-center(v-if="loadingAccount")
           loading-spinner(size="120px")
         profile-sidebar(v-if="account" :profile="profile" :announcement="announcement" :dhoTitle="dao?.title" :daoName="dao?.title" @close="right = false" :isMember="isMember" :isAuthenticated="isAuthenticated" :compact="!$q.screen.gt.lg && $q.screen.gt.md" :isMobile="!$q.screen.gt.md")
-        profile-sidebar-guest(v-if="!account && ($q.screen.gt.lg || !$q.screen.gt.sm) && !loadingAccount" :dhoTitle="dao?.title" :daoName="dao?.title" @close="right = false" :registrationEnabled="daoSettings.registrationEnabled")
+        profile-sidebar-guest(v-if="!account && ($q.screen.gt.lg || !$q.screen.gt.sm) && !loadingAccount" :dhoTitle="dao?.title" :daoName="dao?.url" @close="right = false" :registrationEnabled="daoSettings.registrationEnabled")
       q-footer.bg-white(v-if="$q.screen.lt.lg && $route.name !== ROUTE_NAMES.PROPOSAL_DETAIL && $route.name !== ROUTE_NAMES.CREATE_YOUR_DAO" :style="{ height: '74px' }")
         bottom-navigation
       q-drawer(v-else-if="$q.screen.gt.md" v-model="left" side="left" :width="80" persistent="persistent" :show-if-above="true")

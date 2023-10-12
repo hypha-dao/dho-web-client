@@ -56,7 +56,7 @@ export default {
           this.$emit('transitionToRegister')
         }
       } else {
-        await this.loginWallet({ idx, returnUrl: this.isOnboarding ? 'create' : this.$route.query.returnUrl || '/' })
+        await this.loginWallet({ idx, returnUrl: this.isOnboarding ? 'create' : this.$route.query.returnUrl || `/${this.$route.params.dhoname}` })
       }
     },
     async onLoginInApp () {
