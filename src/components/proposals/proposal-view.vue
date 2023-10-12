@@ -141,6 +141,9 @@ export default {
           return 'CREATING'
       }
       return ''
+    },
+    showDefferedValue () {
+      return this.$store.state.dao.settings.pegToken && this.$store.state.dao.settings.rewardToken
     }
   },
 
@@ -277,7 +280,7 @@ widget.proposal-view.q-mb-sm
             q-toggle(v-model="toggle" size="md")
           .col.q-mt-xxs {{ $t('proposals.proposal-view.showCompensationFor') }}
             q-tooltip(anchor="center start") {{ $t('proposals.proposal-view.1MoonPeriod') }}
-      .col-3.bg-internal-bg.q-py-md.q-pa-md(:style="{ 'border-radius': '25px' }" :class="{ 'q-ml-xxs':$q.screen.gt.md, 'q-mt-md':$q.screen.lt.md || $q.screen.md }" v-if="type === PROPOSAL_TYPE.PAYOUT && deferred && deferred?.value >= 0")
+      .col-3.bg-internal-bg.q-py-md.q-pa-md(:style="{ 'border-radius': '25px' }" :class="{ 'q-ml-xxs':$q.screen.gt.md, 'q-mt-md':$q.screen.lt.md || $q.screen.md }" v-if="type === PROPOSAL_TYPE.PAYOUT && deferred && deferred?.value >= 0 && showDefferedValue")
         .row.q-mb-sm
           .col.text-bold {{ $t('proposals.proposal-view.deferredAmount1') }}
         widget.q-pt-xs(:style="{ 'padding': '12px 15px', 'border-radius': '15px' }")
