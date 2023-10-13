@@ -662,7 +662,7 @@ export default {
       }
     },
 
-    async applyForBadge ({ state, rootState }, type) {
+    async applyForBadge ({ state, rootState }, params) {
       const actions = [{
         account: this.$config.contracts.dao,
         name: 'propose',
@@ -673,9 +673,9 @@ export default {
           content_groups: [[
             { label: 'content_group_label', value: ['string', 'details'] },
             { label: 'assignee', value: ['name', rootState.accounts.account] },
-            { label: 'title', value: ['string', type === 'Voter' ? 'Voter' : 'Delegate'] },
-            { label: 'description', value: ['string', type === 'Voter' ? 'Voter' : 'Delegate'] },
-            { label: 'badge', value: ['int64', state.draft.badge.docId] }
+            { label: 'title', value: ['string', params.type === 'Voter' ? 'Voter' : 'Delegate'] },
+            { label: 'description', value: ['string', params.type === 'Voter' ? 'Voter' : 'Delegate'] },
+            { label: 'badge', value: ['int64', state.draft.badge?.docId || params.docId] }
           ]],
           publish: true
         }

@@ -12,7 +12,9 @@ export default {
     groups: Array,
     l1DelegateBadges: String,
     users: Array,
-    roundNumber: Number
+    roundNumber: Number,
+    electionStatus: String,
+    id: String
   },
 
   data () {
@@ -91,7 +93,7 @@ export default {
       div.q-my-xl.q-pt-xl(v-show="showGroups" :style="{ 'border-top': '1px solid #CBCDD1'}")
         .row.q-gutter-col-md
           template(v-for="group, index in groups")
-            group-card.col-6.q-pa-xxs(:users="group.members" :groupNumber="index + 1" :myGroup="group.myGroup", :votes="group.votes")
+            group-card.col-6.q-pa-xxs(:groupId="group.id" :roundId="id" :electionStatus="electionStatus" :users="group.members" :groupNumber="index + 1" :votes="group.votes")
 </template>
 
 <style lang="stylus" scoped>

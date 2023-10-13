@@ -1,5 +1,5 @@
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import I18n from '~/utils/i18n'
 import { dateToStringShort } from '~/utils/TimeUtils'
 import gql from 'graphql-tag'
@@ -7,12 +7,31 @@ import gql from 'graphql-tag'
 const ELECTION_DETAILS = `
 getDao(docId: $daoId) {
   docId
+  delegate {
+    details_member_n
+    createdDate
+  }
+  ueUpcoming {
+    docId
+    details_startDate_t
+  }
+  ueOngoing {
+    docId
+    details_startDate_t
+  }
   ueElection(filter: $filter) {
+    details_status_s
     docId
     details_roundDuration_i
+    details_startDate_t
+    ueCurrnd {
+      docId
+      details_endDate_t
+    }
     ueStartrnd {
       ueGroupLnk {
         ueRdMember {
+          createdDate
           details_member_n
         }
         ueRdMemberAggregate {
@@ -23,6 +42,7 @@ getDao(docId: $daoId) {
     ueRound {
       docId
       ueGroupLnk {
+        docId
         ueVote {
           details_votedId_i
           details_voterId_i
@@ -33,6 +53,15 @@ getDao(docId: $daoId) {
         }
         ueRdMemberAggregate {
           count
+        }
+        ueGroupWin {
+          docId
+          details_member_n
+          ...on Member {
+            holdsbadge {
+              details_title_s
+            }
+          }
         }
       }
     }
@@ -54,314 +83,101 @@ export default {
       dateToStringShort,
       I18n,
       counterdown: undefined,
-      delegates: 50,
-      headDelegate: 1,
-      upvoteElectionData: {},
       selectedUsers: [],
-      votedUsers: [],
       votingState: false,
       upvoteWidgetState: 'signup',
       upvoteTimeRemaining: '',
       roundTimeRemaining: '',
-      endDate: 'August 22, 2023 19:00:00', // TODO: waiting API
-      isRegister: false, // TODO: waiting API
-      endRoundTime: 'August 22, 2023 14:00:00', // TODO: waiting API
-      waitingTime: 'August 22, 2023 14:00:00', // TODO: waiting API
-      displacements: { // TODO: waiting API
-        headChiefDelegate: 2.528,
-        chiefDelegate: 1.731,
-        delegateL2: 512,
-        delegateL1: 326
-      },
-      treasury: 34560, // TODO: waiting API
+      isRegister: false,
       showApplications: false,
       showLearnMoreModal: false,
       tab: 'VOTING',
       page: 1,
       signedUp: false,
-      votingRounds: [ // TODO: waiting API
-        {
-          participants: 126,
-          groups: [
-            {
-              myGroup: false,
-              votes: [
-                {
-                  slot: false,
-                  consensus: false,
-                  vote: true
-                },
-                {
-                  slot: false,
-                  consensus: false,
-                  vote: true
-                },
-                {
-                  slot: false,
-                  consensus: false,
-                  vote: true
-                },
-                {
-                  slot: true,
-                  consensus: false,
-                  vote: false
-                },
-                {
-                  slot: true,
-                  consensus: false,
-                  vote: false
-                },
-                {
-                  slot: true,
-                  consensus: false,
-                  vote: false
-                }
-              ],
-              users: [
-                {
-                  fullName: 'Howard S. Lowe',
-                  account: 'accountname',
-                  votesCount: 3,
-                  telegram: 'telegramhandle'
-                },
-                {
-                  fullName: 'Howard S. Lowe',
-                  account: 'accountname',
-                  votesCount: 3,
-                  telegram: 'telegramhandle'
-                },
-                {
-                  fullName: 'Howard S. Lowe',
-                  account: 'accountname',
-                  votesCount: 3,
-                  telegram: 'telegramhandle'
-                },
-                {
-                  fullName: 'Howard S. Lowe',
-                  account: 'accountname',
-                  votesCount: 3,
-                  telegram: 'telegramhandle'
-                },
-                {
-                  fullName: 'Howard S. Lowe',
-                  account: 'accountname',
-                  votesCount: 3,
-                  telegram: 'telegramhandle'
-                },
-                {
-                  fullName: 'Howard S. Lowe',
-                  account: 'accountname',
-                  votesCount: 3,
-                  telegram: 'telegramhandle'
-                }
-              ]
-            },
-            {
-              myGroup: true,
-              votes: [
-                {
-                  slot: false,
-                  consensus: false,
-                  vote: true
-                },
-                {
-                  slot: false,
-                  consensus: false,
-                  vote: true
-                },
-                {
-                  slot: false,
-                  consensus: false,
-                  vote: true
-                },
-                {
-                  slot: false,
-                  consensus: false,
-                  vote: true
-                },
-                {
-                  slot: false,
-                  consensus: true,
-                  vote: false
-                },
-                {
-                  slot: true,
-                  consensus: false,
-                  vote: false
-                }
-              ],
-              users: [
-                {
-                  fullName: 'Howard S. Lowe',
-                  account: 'accountname',
-                  votesCount: 3,
-                  telegram: 'telegramhandle'
-                },
-                {
-                  fullName: 'Howard S. Lowe',
-                  account: 'accountname',
-                  votesCount: 3,
-                  telegram: 'telegramhandle'
-                },
-                {
-                  fullName: 'Howard S. Lowe',
-                  account: 'accountname',
-                  votesCount: 3,
-                  telegram: 'telegramhandle'
-                },
-                {
-                  fullName: 'Howard S. Lowe',
-                  account: 'accountname',
-                  votesCount: 3,
-                  telegram: 'telegramhandle'
-                },
-                {
-                  fullName: 'Howard S. Lowe',
-                  account: 'accountname',
-                  votesCount: 3,
-                  telegram: 'telegramhandle'
-                },
-                {
-                  fullName: 'Howard S. Lowe',
-                  account: 'accountname',
-                  votesCount: 3,
-                  telegram: 'telegramhandle'
-                }
-              ]
-            }
-          ],
-          l1DelegateBadges: '0/21'
-        },
-        {
-          participants: 126,
-          groups: [
-            {
-              myGroup: true,
-              votes: [
-                {
-                  slot: false,
-                  consensus: false,
-                  vote: true
-                },
-                {
-                  slot: false,
-                  consensus: false,
-                  vote: true
-                },
-                {
-                  slot: false,
-                  consensus: false,
-                  vote: true
-                },
-                {
-                  slot: false,
-                  consensus: false,
-                  vote: true
-                },
-                {
-                  slot: false,
-                  consensus: true,
-                  vote: false
-                },
-                {
-                  slot: true,
-                  consensus: false,
-                  vote: false
-                }
-              ],
-              users: [
-                {
-                  fullName: 'Howard S. Lowe',
-                  account: 'accountname',
-                  votesCount: 3,
-                  telegram: 'telegramhandle'
-                },
-                {
-                  fullName: 'Howard S. Lowe',
-                  account: 'accountname',
-                  votesCount: 3,
-                  telegram: 'telegramhandle'
-                },
-                {
-                  fullName: 'Howard S. Lowe',
-                  account: 'accountname',
-                  votesCount: 3,
-                  telegram: 'telegramhandle'
-                },
-                {
-                  fullName: 'Howard S. Lowe',
-                  account: 'accountname',
-                  votesCount: 3,
-                  telegram: 'telegramhandle'
-                },
-                {
-                  fullName: 'Howard S. Lowe',
-                  account: 'accountname',
-                  votesCount: 3,
-                  telegram: 'telegramhandle'
-                },
-                {
-                  fullName: 'Howard S. Lowe',
-                  account: 'accountname',
-                  votesCount: 3,
-                  telegram: 'telegramhandle'
-                }
-              ]
-            }
-          ],
-          l1DelegateBadges: '4/4'
-        }
-      ],
       currentState: 'signup',
       showGroups: false,
-      showResults: false,
-      finalRound: { // TODO: waiting API
-        participants: 4,
-        chiefDelegateBadges: 3,
-        headChiefDelegateBadge: 1,
-        results: {
-          headChiefDelegate: {
-            account: 'accountname',
-            fullName: 'Howard S. Lowe',
-            telegram: 'telegramhandle'
-          },
-          chiefDelegates: [
-            {
-              account: 'accountname',
-              fullName: 'Howard S. Lowe',
-              telegram: 'telegramhandle'
-            },
-            {
-              account: 'accountname',
-              fullName: 'Howard S. Lowe',
-              telegram: 'telegramhandle'
-            },
-            {
-              account: 'accountname',
-              fullName: 'Howard S. Lowe',
-              telegram: 'telegramhandle'
-            }
-          ]
-        }
-      }
+      showResults: false
     }
   },
   apollo: {
+    daoBadges: {
+      query: require('~/query/badges/dao-badges.gql'),
+      update: data => {
+        return data.getDao.badge.map(badge => {
+          return {
+            title: badge.details_title_s,
+            description: badge.details_description_s,
+            icon: badge.details_icon_s,
+            assignments: badge.assignment,
+            docId: badge.docId
+          }
+        })
+      },
+      skip () {
+        return !this.selectedDao || !this.selectedDao.docId
+      },
+      variables () {
+        return {
+          daoId: this.selectedDao.docId
+        }
+      }
+    },
+    memberBadges: {
+      query: require('~/query/badges/member-badges.gql'),
+      update: data => {
+        return data.getDao?.badge?.map(badge => {
+          return {
+            title: badge.details_title_s,
+            description: badge.details_description_s,
+            icon: badge.details_icon_s,
+            docId: badge.assignment[0]?.docId,
+            assignments: badge.assignment
+          }
+        })
+      },
+      variables () {
+        return {
+          daoId: this.selectedDao.docId,
+          username: this.account
+        }
+      },
+      skip () {
+        return !this.account || !this.selectedDao || !this.selectedDao.docId
+      },
+      fetchPolicy: 'no-cache'
+    },
     electionDetails: {
       query: gql`query electionDetailsQuery ($daoId: String!, $filter: UpvtElectnFilter) { ${ELECTION_DETAILS} }`,
       update: data => {
         return {
+          currentElections: {
+            startDate: data.getDao.ueOngoing[0]?.details_startDate_t
+          },
+          nextElections: {
+            startDate: data.getDao.ueUpcoming[0]?.details_startDate_t
+          },
+          startDate: data.getDao.ueElection[0]?.details_startDate_t,
+          delegatesList: data.getDao.delegate,
+          status: data.getDao.ueElection[0].details_status_s,
           id: data.getDao.ueElection[0].docId,
           roundDuration: data.getDao.ueElection[0].details_roundDuration_i / 60,
+          chiefDelegates: data.getDao.ueElection[0].ueRound.flatMap(r => r.ueGroupLnk.flatMap(g => g.ueGroupWin.flatMap(w => w.holdsbadge.filter(b => b.details_title_s === 'Chief Delegate').map(b => ({ ...b, member: w.details_member_n }))))),
+          headDelegates: data.getDao.ueElection[0].ueRound.flatMap(r => r.ueGroupLnk.slice(-1).flatMap(g => g.ueGroupWin.flatMap(w => w.holdsbadge.filter(b => b.details_title_s === 'Head Delegate').map(b => ({ ...b, member: w.details_member_n }))))),
+          currentRound: {
+            id: data.getDao.ueElection[0].ueCurrnd?.[0]?.docId,
+            endDate: data.getDao.ueElection[0].ueCurrnd?.[0]?.details_endDate_t
+          },
           startRound: {
             participantsCount: data.getDao.ueElection[0].ueStartrnd[0].ueGroupLnk.reduce((sum, group) => sum + group.ueRdMemberAggregate.count, 0),
-            participants: data.getDao.ueElection[0].ueStartrnd.flatMap(group => group.ueGroupLnk.flatMap(rdMember => rdMember.ueRdMember.map(member => { return { username: member.details_member_n } })))
+            participants: data.getDao.ueElection[0].ueStartrnd.flatMap(group => group.ueGroupLnk.flatMap(rdMember => rdMember.ueRdMember.map(member => { return { username: member.details_member_n, createdDate: member.createdDate } })))
           },
           rounds: data.getDao.ueElection[0].ueRound.map((round) => {
             return {
+              id: round.docId,
               participantsCount: round.ueGroupLnk.reduce((sum, group) => sum + group.ueRdMemberAggregate.count, 0),
               groups: round.ueGroupLnk.map(group => {
                 return {
+                  id: group.docId,
                   members: group.ueRdMember,
                   votes: group.ueVote
                 }
@@ -380,7 +196,13 @@ export default {
           }
         }
       },
-      skip () { return !this.selectedDao || !this.selectedDao.docId }
+      fetchPolicy: 'no-cache',
+      pollInterval: 1500, // THIS IS JUST TEMPORARY UNTIL GRAPHQL SUBSCRIPTION IS READY
+      skip () { return !this.selectedDao || !this.selectedDao.docId },
+      result (res) {
+        this.statusSetUp()
+        this.$forceUpdate()
+      }
     }
   },
 
@@ -411,7 +233,7 @@ export default {
     },
 
     paginatedApplications () {
-      return this.electionDetails.startRound.participants.slice((this.page - 1) * 5, this.page * 5)
+      return this.electionDetails?.delegatesList.slice((this.page - 1) * 5, this.page * 5)
     },
 
     isLastPage () {
@@ -420,10 +242,28 @@ export default {
     },
 
     pages () {
-      return Math.ceil(this.electionDetails.startRound.participants.length / 5)
+      return Math.ceil(this.electionDetails?.delegatesList?.length / 5)
     }
   },
+
   methods: {
+    ...mapActions('proposals', ['saveDraft', 'applyForBadge']),
+    async signUp() {
+      const delegateDocId = this.daoBadges.find(badge => badge.title === 'Delegate').docId
+      await this.applyForBadge({ type: 'Delegate', docId: delegateDocId })
+    },
+    statusSetUp() {
+      if (this.electionDetails.status === 'finished' || this.electionDetails.status === 'canceled') {
+        this.upvoteWidgetState = 'finish'
+        this.currentState = 'finish'
+      } else if (new Date(this.electionDetails.startDate) > new Date()) {
+        this.upvoteWidgetState = 'signup'
+        this.currentState = 'signup'
+      } else if (this.electionDetails.rounds?.length <= 1 && this.electionDetails.rounds?.length < 3) {
+        this.upvoteWidgetState = 'active'
+        this.currentState = 'voting'
+      }
+    },
     onPrev () {
       this.page--
     },
@@ -433,13 +273,9 @@ export default {
     },
 
     votingTimeLeft () {
-      // const end = this.upvoteElectionData.upcomingElection?.length ? new Date(this.upvoteElectionData.startTime) : new Date(this.upvoteElectionData.endTime)
-      const end = this.upvoteWidgetState === 'signup' ? new Date(this.endDate) : this.upvoteWidgetState === 'active' ? new Date(this.endRoundTime) : new Date(this.waitingTime)
+      const end = new Date(this.electionDetails?.currentRound?.endDate ? this.electionDetails?.currentRound?.endDate : this.electionDetails?.startDate)
       const now = Date.now()
       const t = end - now
-      // if (t < 0) {
-      //   this.$apollo.queries.upvoteElectionQuery.refetch()
-      // }
       return t
     },
 
@@ -488,32 +324,15 @@ export default {
         }
       }
     },
-    async vote () {
-      if (!this.votingState) {
-        await this.voteTransact()
-        this.selectedUsers.length = 0
-        // await this.$apollo.queries.upvoteElectionQuery.refetch()
-        // await this.$apollo.queries.upvoteElectionVotedUsers.refetch()
-      } else {
-        this.selectedUsers.length = 0
-        this.votedUsers.length = 0
-        this.votingState = false
-        this.$forceUpdate()
-      }
-    },
-
-    async voteTransact () {
-      const candidatesIds = []
-      this.selectedUsers.forEach(user => {
-        candidatesIds.push(user.docId)
-      })
+    async voteTransact (votedId, groupId) {
       const actions = [{
         account: this.$config.contracts.dao,
-        name: 'castelctnvote',
+        name: 'castupvote',
         data: {
-          round_id: this.upvoteElectionData.currentRoundDocId,
+          round_id: this.electionDetails.currentRound.id,
+          group_id: groupId,
           voter: this.account,
-          voted: candidatesIds
+          voted_id: votedId
         }
       }]
       return await this.$store.$api.signTransaction(actions)
@@ -525,22 +344,22 @@ export default {
     // await this.$apollo.queries.electionDetails.refetch()
     // await this.$apollo.queries.upvoteElectionVotedUsers.refetch()
     // }
-    // this.counterdown = setInterval(() => {
-    //   this.formatTimeLeft()
-    //   this.$forceUpdate()
-    // }, 1000)
+    this.counterdown = setInterval(() => {
+      this.formatTimeLeft()
+      this.$forceUpdate()
+    }, 1000)
   },
   created () {
-    // this.counterdown = setInterval(() => {
-    //   this.formatTimeLeft()
-    //   this.$forceUpdate()
-    // }, 1000)
+    this.counterdown = setInterval(() => {
+      this.formatTimeLeft()
+      this.$forceUpdate()
+    }, 1000)
   },
   async activated () {
-    // this.counterdown = setInterval(() => {
-    //   this.formatTimeLeft()
-    //   this.$forceUpdate()
-    // }, 1000)
+    this.counterdown = setInterval(() => {
+      this.formatTimeLeft()
+      this.$forceUpdate()
+    }, 1000)
     // if (!this.upvoteElectionData || !this.votedUsers.length) {
     // await this.$apollo.queries.electionDetails.refetch()
     // await this.$apollo.queries.upvoteElectionVotedUsers.refetch()
@@ -548,11 +367,6 @@ export default {
   },
   deactivated () {
     clearInterval(this.counterdown)
-  },
-  async updated () {
-    if (this.votedUsers.length) {
-      this.votingState = true
-    }
   }
 }
 </script>
@@ -616,7 +430,7 @@ export default {
                     q-icon(name="fas fa-users" size="24px")
                   .col.q-ml-sm
                     .row
-                      .h-h4 {{ electionDetails?.startRound.participantsCount }}
+                      .h-h4 {{ electionDetails?.delegatesList?.length }}
                     .row {{ $t('pages.upvote-election.participants') }}
             //- .col
               q-card.rounded-card.q-pa-xl.applications-metric
@@ -638,25 +452,25 @@ export default {
                     .row {{ $t('pages.upvote-election.eachRound') }}
           q-slide-transition
             div.q-my-xl.q-pt-xl(v-show="showApplications" :style="{ 'border-top': '1px solid #CBCDD1'}")
-              template(v-if="paginatedApplications.length")
+              template(v-if="paginatedApplications?.length")
                 .row.q-mb-sm.applicant-row.q-pa-xs(v-for="applicant in paginatedApplications")
                   .col-1
-                    profile-picture(:username="applicant.username" size="24px" :key="applicant.username")
+                    profile-picture(:username="applicant.details_member_n" size="24px" :key="applicant.details_member_n")
                   .col
-                    .text-bold {{ applicant.username }}
-                  .col @{{ applicant.username }}
+                    .text-bold {{ applicant.details_member_n }}
+                  .col @{{ applicant.details_member_n }}
                   //- .col
                     .row.flex.items-center
                       q-icon(name="fas fa-paper-plane" size="12px")
                       .q-ml-xs {{ applicant.telegram }}
-                  //- .col {{ $t('pages.upvote-election.memberSince', { date: dateToStringShort(applicant.joinDate) } ) }}
+                  .col {{ $t('pages.upvote-election.memberSince', { date: dateToStringShort(applicant.createdDate) } ) }}
                 .row.justify-between.q-pt-sm.items-center
                   q-btn(:disable="page === 1" @click="onPrev()" flat rounded icon="fas fa-chevron-left")
                   .row.flex.items-center
                     div.q-ml-xs(v-for="dot, index in pages" :style="{'width': '10px', 'height': '10px', 'background': '#CAC8B0', 'border-radius': '50%'}" :class="{ 'bg-primary': index === page - 1}")
                   q-btn(:disable="isLastPage" @click="onNext()" flat rounded icon="fas fa-chevron-right")
-      template(v-for="round, index in electionDetails.rounds" flat)
-        round-card.q-mb-md(v-bind="round" :roundNumber="index + 1")
+      template(v-if="upvoteWidgetState !== 'signup'" v-for="round, index in electionDetails?.rounds" flat)
+        round-card.q-mb-md(v-bind="round" :roundNumber="index + 1" :electionStatus="electionDetails?.status")
       q-card.q-mr-md.widget.q-pa-xl.relative-position.rounded-card(v-if="currentState === 'finish'" flat)
         .title
           .row.flex.items-center.justify-between
@@ -673,7 +487,7 @@ export default {
                     q-icon(name="fas fa-users" size="24px")
                   .col.q-ml-sm
                     .row
-                      .h-h4 {{ finalRound.participants }}
+                      .h-h4 {{ electionDetails.rounds[electionDetails.rounds?.length - 1].participantsCount }}
                     .row {{ $t('pages.upvote-election.participants') }}
             .col
               q-card.rounded-card.q-pa-lg.applications-metric
@@ -682,7 +496,7 @@ export default {
                     img(src="~/assets/icons/chief-delegate.svg")
                   .col.q-ml-sm
                     .row
-                      .h-h4 {{ finalRound.chiefDelegateBadges }}
+                      .h-h4 {{ electionDetails.chiefDelegates?.length }}
                     .row {{ $t('pages.upvote-election.chiefDelegateBadges') }}
             .col
               q-card.rounded-card.q-pa-lg.applications-metric
@@ -691,7 +505,7 @@ export default {
                     img(src="~/assets/icons/head-chief.svg")
                   .col.q-ml-sm
                     .row
-                      .h-h4 {{ finalRound.headChiefDelegateBadge }}
+                      .h-h4 {{ electionDetails.headDelegates?.length }}
                     .row {{ $t('pages.upvote-election.headChiefDelegateBadge') }}
         q-slide-transition
           div.q-my-xl.q-pt-xl(v-show="showResults" :style="{ 'border-top': '1px solid #CBCDD1'}")
@@ -701,38 +515,38 @@ export default {
               .row
                 .col-4.q-mr-md
                   q-card.rounded-card.q-pa-lg.results-block.flex.justify-center.items-center
-                    profile-picture(:username="finalRound.results.headChiefDelegate.account" size="140px")
-                    .h-h4.q-mt-md {{ finalRound.results.headChiefDelegate.fullName }}
+                    profile-picture(:username="electionDetails.headDelegates[0].member" size="140px")
+                    .h-h4.q-mt-md {{ electionDetails.headDelegates[0].member }}
                     .text-secondary {{ $t('pages.upvote-election.headChiefDelegate') }}
                 .col
                   .row.flex.items-center.q-mb-md
                     .col
                       .row
                         .col-1.flex.items-center.q-mr-xs
-                          profile-picture(:username="finalRound.results.headChiefDelegate.account" size="24px")
+                          profile-picture(:username="electionDetails.headDelegates[0].member" size="24px")
                         .col
-                          .row.text-bold.text-black {{ finalRound.results.headChiefDelegate.fullName }}
-                          .row(:style="{ 'font-size': '10px' }") {{ finalRound.results.headChiefDelegate.telegram }}
+                          .row.text-bold.text-black {{ electionDetails.headDelegates[0].member }}
+                          //- .row(:style="{ 'font-size': '10px' }") {{ electionDetails.rounds[electionDetails.rounds.length - 1].results.headChiefDelegate.telegram }}
                     .row
                       .row.flex.items-center
                         .text-secondary.q-mr-sm(:style="{ 'font-size': '12px' }") {{ $t('pages.upvote-election.headChiefDelegate') }}
                         img(width="16px" src="~/assets/icons/head-chief.svg")
-                  template(v-for="user in finalRound.results.chiefDelegates")
+                  template(v-for="user in electionDetails.chiefDelegates")
                     .row.flex.items-center.q-mb-md.justify-between
                       .col
                         .row
                           .col-1.flex.items-center.q-mr-xs
-                            profile-picture(:username="user.account" size="24px")
+                            profile-picture(:username="user.member" size="24px")
                           .col
-                            .row.text-bold.text-black {{ user.fullName }}
-                            .row(:style="{ 'font-size': '10px' }") {{ user.telegram }}
+                            .row.text-bold.text-black {{ user.member }}
+                            //- .row(:style="{ 'font-size': '10px' }") {{ user.telegram }}
                       .row
                         .row.flex.items-center
                           .text-secondary.q-mr-sm(:style="{ 'font-size': '12px' }") {{ $t('pages.upvote-election.chiefDelegate') }}
                           img(width="16px" src="~/assets/icons/chief-delegate.svg")
     .col-3
-      profile-card.q-mb-md(v-if="signedUp" :electionState="currentState" isElection :style="{'grid-area': 'profile'}" :clickable="false" :username="account" view="card" :compact="!$q.screen.gt.md" :tablet="$q.screen.md")
-      widget.q-pa-xxl.bg-primary.q-mb-md(:class="{ 'bg-secondary': upvoteWidgetState === 'waiting' }")
+      //- profile-card.q-mb-md(v-if="signedUp" :electionState="currentState" isElection :style="{'grid-area': 'profile'}" :clickable="false" :username="account" view="card" :compact="!$q.screen.gt.md" :tablet="$q.screen.md")
+      widget.q-pa-xxl.bg-primary.q-mb-md(v-if="electionDetails?.status !== 'finished'" :class="{ 'bg-secondary': upvoteWidgetState === 'waiting' }")
         template(v-if="upvoteWidgetState !== 'active' && upvoteWidgetState !== 'waiting'")
           .h-h4.text-white.q-mb-md {{ widgetTitle }}
         template(v-else-if="upvoteWidgetState === 'active'")
@@ -773,12 +587,12 @@ export default {
               img(src="~/assets/icons/delegate-l1.svg")
             .col.text-white.q-ml-xs {{ $t('pages.upvote-election.upvoteelection.delegatel1') }}
             .col-3.flex.items-center.justify-end.text-white $ {{ displacements.delegateL1 }}
-        template(v-if="!isRegister")
-          q-btn.q-px-lg.h-btn1.full-width.q-mb-sm(icon="fas fa-paper-plane" color="white" textColor="grey" :label="$t('pages.upvote-election.upvoteelection.telegramHandle')" no-caps rounded text-color="primary" unelevated)
-          q-btn.q-px-lg.h-btn1.full-width(@click="isRegister = true" color="secondary" textColor="white" :label="$t('pages.upvote-election.upvoteelection.signUp')" no-caps rounded text-color="primary" unelevated)
+        template(v-if="!memberBadges?.find(badge => badge.title === 'Delegate') && upvoteWidgetState === 'signup'")
+          //- q-btn.q-px-lg.h-btn1.full-width.q-mb-sm(icon="fas fa-paper-plane" color="white" textColor="grey" :label="$t('pages.upvote-election.upvoteelection.telegramHandle')" no-caps rounded text-color="primary" unelevated)
+          q-btn.q-px-lg.h-btn1.full-width(:disable="memberBadges?.findIndex(badge => badge.title === 'Delegate') >= 0" @click="signUp()" color="secondary" textColor="white" :label="$t('pages.upvote-election.upvoteelection.signUp')" no-caps rounded text-color="primary" unelevated)
         template(v-else-if="upvoteWidgetState !== 'finish'")
           q-btn.q-px-lg.h-btn1.full-width(@click="showLearnMoreModal = true" outline color="white" textColor="white" :label="$t('pages.upvote-election.upvoteelection.learnMore')" no-caps rounded text-color="primary" unelevated)
-          q-btn.q-mt-sm.q-px-lg.h-btn1.full-width(v-if="currentState === 'signup'" @click="upvoteWidgetState = 'active', signedUp = true, currentState='voting'" color="white" textColor="negative" :label="$t('pages.upvote-election.upvoteelection.unsubscribe')" no-caps rounded text-color="primary" unelevated)
+          //- q-btn.q-mt-sm.q-px-lg.h-btn1.full-width(v-if="currentState === 'signup' &&  memberBadges.findIndex(badge => badge.title === 'Delegate')" @click="upvoteWidgetState = 'active', signedUp = true, currentState='voting'" color="white" textColor="negative" :label="$t('pages.upvote-election.upvoteelection.unsubscribe')" no-caps rounded text-color="primary" unelevated)
         template(v-if="upvoteWidgetState === 'finish'")
           q-btn.q-px-lg.h-btn1.full-width(color="white" textColor="primary" :label="$t('pages.upvote-election.upvoteelection.goToMyBadges')" no-caps rounded text-color="primary" unelevated)
         .timer.row.q-mt-xl.justify-center(v-if="upvoteWidgetState === 'signup'" :style="{ 'color': 'white' }")
@@ -799,8 +613,6 @@ export default {
             div {{ upvoteTimeRemaining.sec }}
             .q-mx-xxs(v-if="upvoteTimeRemaining.sec > 1") {{ $t('pages.upvote-election.upvoteelection.sec') }}
             .q-mx-xxs(v-else) {{ $t('pages.upvote-election.upvoteelection.sec') }}
-        div(v-if="upvoteWidgetState === 'active'" @click="upvoteWidgetState = 'waiting'") waiting
-        div(v-if="upvoteWidgetState === 'waiting'" @click="upvoteWidgetState = 'finish', currentState = 'finish'") finish
 </template>
 
 <style lang="sass" scoped>

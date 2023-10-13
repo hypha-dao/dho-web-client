@@ -7,10 +7,14 @@ import gql from 'graphql-tag'
 
 const ELECTIONS_DATA = `
 getDao(docId: $daoId) {
+  delegate {
+    details_member_n
+  }
   docId
   ueElection {
     docId
     details_endDate_t
+    details_startDate_t
     ueRound {
       docId
     }
@@ -21,6 +25,25 @@ getDao(docId: $daoId) {
         }
       }
     }
+  }
+}
+`
+
+const ONGOING_ELECTIONS_DATA = `
+getDao(docId: $daoId) {
+  docId
+  ueOngoing {
+    docId
+  }
+}
+`
+
+const UPCOMING_ELECTIONS_DATA = `
+getDao(docId: $daoId) {
+  docId
+  ueUpcoming {
+    docId
+    details_startDate_t
   }
 }
 `
@@ -38,6 +61,7 @@ export default {
       query: gql`query electionsQuery ($daoId: String!) { ${ELECTIONS_DATA} }`,
       update: data => data.getDao.ueElection.map(election => {
         return {
+          delegatesList: data.getDao.delegate,
           endDate: election.details_endDate_t,
           rounds: election.ueRound.length,
           participants: election.ueStartrnd[0].ueGroupLnk.reduce((sum, group) => sum + group.ueRdMemberAggregate.count, 0),
@@ -49,6 +73,32 @@ export default {
           daoId: this.selectedDao.docId
         }
       },
+      fetchPolicy: 'no-cache',
+      pollInterval: 1000, // THIS IS JUST TEMPORARY UNTIL GRAPHQL SUBSCRIPTION IS READY
+      skip () { return !this.selectedDao || !this.selectedDao.docId }
+    },
+    ongoingElection: {
+      query: gql`query electionsQuery ($daoId: String!) { ${ONGOING_ELECTIONS_DATA} }`,
+      update: data => data.getDao.ueOngoing,
+      variables () {
+        return {
+          daoId: this.selectedDao.docId
+        }
+      },
+      fetchPolicy: 'no-cache',
+      pollInterval: 1000, // THIS IS JUST TEMPORARY UNTIL GRAPHQL SUBSCRIPTION IS READY
+      skip () { return !this.selectedDao || !this.selectedDao.docId }
+    },
+    upcomingElection: {
+      query: gql`query electionsQuery ($daoId: String!) { ${UPCOMING_ELECTIONS_DATA} }`,
+      update: data => data.getDao.ueUpcoming?.[0],
+      variables () {
+        return {
+          daoId: this.selectedDao.docId
+        }
+      },
+      fetchPolicy: 'no-cache',
+      pollInterval: 1000, // THIS IS JUST TEMPORARY UNTIL GRAPHQL SUBSCRIPTION IS READY
       skip () { return !this.selectedDao || !this.selectedDao.docId }
     }
   },
@@ -61,9 +111,8 @@ export default {
       timeRemaining: {},
       counterdown: undefined,
       treasury: 1200000,
-      isUpVoteElectionBannerVisible: true, // TODO: waiting API
+      isUpVoteElectionBannerVisible: true,
       endDate: '2023-08-23',
-      nextElectionStartDate: '2023-08-29',
       slide: '1',
       titles: [
         this.$t('pages.dho.election.howCommunityElectionsWork'),
@@ -84,7 +133,7 @@ export default {
 
     hasNextElection: {
       get () {
-        return new Date() < new Date(this.nextElectionStartDate)
+        return new Date() < new Date(this.upcomingElection?.details_startDate_t)
       }
     },
 
@@ -166,7 +215,7 @@ export default {
 </script>
 <template lang="pug">
 q-page.page-election
-  base-banner.q-mb-md(v-bind="upvoteElectionBanner" @onClose="hideUpvoteBanner" upvoteBanner :background="require('~/assets/images/election-banner-bg.jpeg')" v-if="isUpVoteElectionBannerVisible")
+  base-banner.q-mb-md(v-bind="upvoteElectionBanner" @onClose="hideUpvoteBanner" upvoteBanner :background="require('~/assets/images/election-banner-bg.jpeg')" v-if="isUpVoteElectionBannerVisible && !ongoingElection?.length")
     template(v-if="!hasNextElection" v-slot:right)
       .flex.full-width.full-height.items-center.justify-center
         q-card.q-pa-xl(:style="{ 'width': '350px', 'opacity': '.7', 'border-radius': '15px' }")
@@ -194,17 +243,17 @@ q-page.page-election
               .row
                 .text-secondary {{ $t('pages.dho.home.timeLeftForSigningUp') }}
             .row.q-pt-md
-              .col.flex.justify-center(:style="{ 'border-right': '1px solid #242f5d' }")
+              //- .col.flex.justify-center(:style="{ 'border-right': '1px solid #242f5d' }")
                 //- .h-h6 {{ participants }}
                 .full-width.flex.justify-center.text-secondary {{ $t('pages.dho.home.participants') }}
-              .col.flex.justify-center
+              //- .col.flex.justify-center
                 .h-h6 $ {{ formatNumber(treasury) }}
                 .full-width.flex.justify-center.text-secondary {{ $t('pages.dho.home.treasury') }}
     template(v-if="!hasNextElection" v-slot:buttons)
       .row.justify-start
         .flex(:class=" { 'q-mt-md': $q.screen.lt.md, 'justify-end': $q.screen.gt.sm }")
         router-link(:to="{ name: 'upvote-election' }")
-          q-btn.q-px-lg.h-btn1(:class="{ 'q-mt-sm': $q.screen.lt.xs || $q.screen.xs }" no-caps rounded unelevated :label="$t('pages.dho.home.signup')" color="secondary" text-color="white")
+          q-btn.q-px-lg.h-btn1(:disable="!ongoingElection.length" :class="{ 'q-mt-sm': $q.screen.lt.xs || $q.screen.xs }" no-caps rounded unelevated :label="$t('pages.dho.home.signup')" color="secondary" text-color="white")
           q-btn.q-px-lg.h-btn1.q-ml-sm(color="white" flat :label="$t('pages.dho.home.learnMore')" no-caps rounded)
     template(v-else="hasNextElection" v-slot:buttons)
       .row.justify-start
@@ -219,7 +268,7 @@ q-page.page-election
             .col.flex.justify-center.text-black(:style="{ 'font-size': '17px' }")
               div {{ election.rounds }} {{ $t('pages.dho.election.rounds') }}
             .col.flex.justify-center.text-black(:style="{ 'font-size': '17px' }")
-              div {{ election.participants }} {{ $t('pages.dho.election.participants') }}
+              div {{ election.delegatesList.length }} {{ $t('pages.dho.election.participants') }}
             .col.flex.justify-end
               q-btn.q-px-lg.h-btn1(@click="$router.push({ path: `/${selectedDao.name}/election/${election.id}` })" :class="{ 'q-mt-sm': $q.screen.lt.xs || $q.screen.xs }" no-caps rounded unelevated :label="$t('pages.dho.election.seeResults')" color="primary" text-color="white")
     .col
