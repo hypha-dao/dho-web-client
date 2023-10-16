@@ -1,5 +1,5 @@
 import Storage from '~/localStorage/storage'
-import { PROPOSAL_TYPE, PERIOD_NUMBERS } from '~/const'
+import { PROPOSAL_TYPE, PERIOD_NUMBERS, DEFAULT_TIER } from '~/const'
 /**
  * This vuex data store contains the data needed in the proposal creation wizard.
  */
@@ -413,10 +413,11 @@ export default {
         ratioUsdEquity = parseFloat(state.draft.annualUsdSalary || 0) / 12
         deferredSan = isNaN(state.draft.minDeferred) ? 0 : parseFloat(state.draft.minDeferred || 0)
       }
+
       // TO DO dividir entre 12 para mostrar por mes, mostrar uun lbael para informar que es mensual solo para assignmnt, y archertypes
-      commit('setPeg', (ratioUsdEquity * (1 - deferredSan / 100)).toFixed(0))
-      commit('setReward', (ratioUsdEquity * (deferredSan / 100) / rootState.dao.settings.rewardToPegRatio).toFixed(0))
-      commit('setVoice', ratioUsdEquity.toFixed(0) * 2)
+      commit('setPeg', (ratioUsdEquity * (1 - deferredSan / 100)).toFixed(0) * rootState.dao.settings.treasuryTokenMultiplier)
+      commit('setReward', ((ratioUsdEquity * (deferredSan / 100)).toFixed(0)) * rootState.dao.settings.utilityTokenMultiplier)
+      commit('setVoice', ratioUsdEquity.toFixed(0) * rootState.dao.settings.voiceTokenMultiplier)
 
       // Para badges multiply multiplicar x 100 y sumar 10,000
     },
@@ -457,7 +458,6 @@ export default {
         let content
         let proposalType
         let publishToStaging
-
         if (draft.edit) {
           proposalType = 'edit'
           publishToStaging = false
@@ -514,16 +514,20 @@ export default {
                 { label: 'description', value: ['string', draft.description] },
                 { label: 'url', value: ['string', draft.url] },
 
-                { label: 'salary_band_id', value: ['int64', draft.tier.value.id] },
-                // TODO: if salary_band_id is not present these are required
-                // { label: 'annual_usd_salary', value: ['asset', `${parseFloat(draft.annualUsdSalary).toFixed(2)} USD`] },
-                // { label: 'fulltime_capacity_x100', value: ['int64', Math.round(parseFloat(draft.roleCapacity) * 100)] },
-                // { label: 'min_deferred_x100', value: ['int64', Math.round(parseFloat(draft.minDeferred))] },
+                ...(draft.tier.value.name !== DEFAULT_TIER
+                  ? [
+                      { label: 'salary_band_id', value: ['int64', draft.tier.value.id] }
+                    ]
+                  : [
+                      { label: 'annual_usd_salary', value: ['asset', `${parseFloat(draft.annualUsdSalary).toFixed(2)} USD`] },
+                      { label: 'fulltime_capacity_x100', value: ['int64', Math.round(parseFloat(draft.roleCapacity) * 100)] },
+                      { label: 'min_deferred_x100', value: ['int64', Math.round(parseFloat(draft.minDeferred))] }
+                    ]),
 
                 { label: 'time_share_x100', value: ['int64', draft.commitment] },
                 { label: 'deferred_perc_x100', value: ['int64', draft.deferred] },
 
-                { label: 'role', value: ['int64', draft.role.value.id] },
+                { label: 'role', value: ['int64', draft.role.value ? draft.role.value.id : draft.role.id] },
                 { label: 'start_period', value: ['int64', draft.startPeriod.docId] },
                 { label: 'period_count', value: ['int64', draft.periodCount] }
 
@@ -599,13 +603,22 @@ export default {
                 { label: 'title', value: ['string', draft.title] },
                 { label: 'description', value: ['string', draft.description] },
                 { label: 'url', value: ['string', draft.url] },
-                { label: 'annual_usd_salary', value: ['asset', `${parseFloat(draft.annualUsdSalary).toFixed(2)} USD`] },
-                { label: 'fulltime_capacity_x100', value: ['int64', Math.round(parseFloat(draft.roleCapacity) * 100)] },
-                { label: 'min_deferred_x100', value: ['int64', Math.round(parseFloat(draft.minDeferred))] },
+
+                { label: 'deferred_perc_x100', value: ['int64', draft?.deferred || 0] },
+                { label: 'usd_amount', value: ['asset', `${parseFloat(draft.usdAmount.toFixed(2))} USD`] },
+                // { label: 'annual_usd_salary', value: ['asset', `${parseFloat(draft.annualUsdSalary).toFixed(2)} USD`] },
+                // { label: 'fulltime_capacity_x100', value: ['int64', Math.round(parseFloat(draft.roleCapacity) * 100)] },
+                // { label: 'min_deferred_x100', value: ['int64', Math.round(parseFloat(draft.minDeferred))] },
 
                 { label: 'voice_amount', value: ['asset', `${parseFloat(draft.voice).toFixed(rootState.dao.settings.voiceTokenDecimals)} ${rootState.dao.settings.voiceToken}`] },
-                { label: 'reward_amount', value: ['asset', `${parseFloat(draft.reward).toFixed(rootState.dao.settings.rewardTokenDecimals)} ${rootState.dao.settings.rewardToken}`] },
-                { label: 'peg_amount', value: ['asset', `${parseFloat(draft.peg).toFixed(rootState.dao.settings.pegTokenDecimals)} ${rootState.dao.settings.pegToken}`] },
+                ...(rootState.dao.settings.rewardToken
+                  ? [{ label: 'reward_amount', value: ['asset', `${parseFloat(draft.reward).toFixed(rootState.dao.settings.rewardTokenDecimals)} ${rootState.dao.settings.rewardToken}`] }]
+                  : []
+                ),
+                ...(rootState.dao.settings.pegToken
+                  ? [{ label: 'peg_amount', value: ['asset', `${parseFloat(draft.peg).toFixed(rootState.dao.settings.pegTokenDecimals)} ${rootState.dao.settings.pegToken}`] }]
+                  : []
+                ),
 
                 { label: 'start_period', value: ['int64', draft.startPeriod.docId] },
                 { label: 'period_count', value: ['int64', draft.periodCount] },
@@ -680,7 +693,6 @@ export default {
           publish: true
         }
       }]
-
       return this.$api.signTransaction(actions)
     },
     // TODO: Refactor this to avoid duplicated code with createProposal
@@ -717,18 +729,30 @@ export default {
           // Role assignment
           case PROPOSAL_TYPE.ROLE:
             content = [
+
               { label: 'content_group_label', value: ['string', 'details'] },
               { label: 'assignee', value: ['name', rootState.accounts.account] },
               { label: 'title', value: ['string', draft.title] },
               { label: 'description', value: ['string', draft.description] },
-              // { label: 'url', value: ['string', draft.url] },
-              // { label: 'annual_usd_salary', value: ['asset', `${parseFloat(draft.annualUsdSalary).toFixed(2)} USD`] },
+              { label: 'url', value: ['string', draft.url] },
+
+              ...(draft.tier.value.name !== DEFAULT_TIER
+                ? [
+                    { label: 'salary_band_id', value: ['int64', draft.tier.value.id] }
+                  ]
+                : [
+                    { label: 'annual_usd_salary', value: ['asset', `${parseFloat(draft.annualUsdSalary).toFixed(2)} USD`] },
+                    { label: 'fulltime_capacity_x100', value: ['int64', Math.round(parseFloat(draft.roleCapacity) * 100)] },
+                    { label: 'min_deferred_x100', value: ['int64', Math.round(parseFloat(draft.minDeferred))] }
+                  ]),
+
               { label: 'time_share_x100', value: ['int64', draft.commitment] },
               { label: 'deferred_perc_x100', value: ['int64', draft.deferred] },
-              { label: 'salary_band_id', value: ['int64', draft.tier.value.id] },
-              { label: 'role', value: ['int64', draft.role.value.id] },
+
+              { label: 'role', value: ['int64', draft.role.value ? draft.role.value.id : draft.role.id] },
               { label: 'start_period', value: ['int64', draft.startPeriod.docId] },
               { label: 'period_count', value: ['int64', draft.periodCount] }
+
             ]
             break
 
@@ -738,6 +762,20 @@ export default {
               { label: 'assignee', value: ['name', rootState.accounts.account] },
               { label: 'title', value: ['string', draft.title] },
               { label: 'description', value: ['string', draft.description] },
+              { label: 'url', value: ['string', draft.url] },
+              { label: 'badge', value: ['int64', draft.badge.docId] },
+              { label: 'start_period', value: ['int64', draft.startPeriod.docId] },
+              { label: 'period_count', value: ['int64', draft.periodCount] }
+            ]
+            break
+
+          case PROPOSAL_TYPE.ASSIGNBADGE:
+            content = [
+              { label: 'content_group_label', value: ['string', 'details'] },
+              { label: 'assignee', value: ['name', rootState.accounts.account] },
+              { label: 'title', value: ['string', draft.title] },
+              { label: 'description', value: ['string', draft.description] },
+              { label: 'url', value: ['string', draft.url] },
               { label: 'badge', value: ['int64', draft.badge.docId] },
               { label: 'start_period', value: ['int64', draft.startPeriod.docId] },
               { label: 'period_count', value: ['int64', draft.periodCount] }
@@ -761,6 +799,7 @@ export default {
               { label: 'content_group_label', value: ['string', 'details'] },
               { label: 'title', value: ['string', draft.title] },
               { label: 'description', value: ['string', draft.description] },
+              { label: 'url', value: ['string', draft.url] },
               { label: 'icon', value: ['string', draft.icon] },
               { label: 'voice_coefficient_x10000', value: ['int64', parseFloat(draft.voiceCoefficient.value)] },
               { label: 'reward_coefficient_x10000', value: ['int64', parseFloat(draft.rewardCoefficient.value)] },
@@ -774,6 +813,7 @@ export default {
               { label: 'content_group_label', value: ['string', 'details'] },
               { label: 'title', value: ['string', draft.title] },
               { label: 'description', value: ['string', draft.description] },
+              { label: 'url', value: ['string', draft.url] },
               { label: 'deferred_perc_x100', value: ['int64', draft.deferred] },
               { label: 'voice_amount', value: ['asset', `${parseFloat(draft.voice).toFixed(rootState.dao.settings.voiceTokenDecimals)} ${rootState.dao.settings.voiceToken}`] },
               { label: 'reward_amount', value: ['asset', `${parseFloat(draft.reward).toFixed(rootState.dao.settings.rewardTokenDecimals)} ${rootState.dao.settings.rewardToken}`] },
@@ -814,6 +854,89 @@ export default {
               ...(draft.masterPolicy ? [{ label: 'master_policy', value: ['int64', draft.masterPolicy.value] }] : [])
             ]
             break
+
+          case PROPOSAL_TYPE.QUEST_PAYOUT:
+            content = [
+              { label: 'content_group_label', value: ['string', 'details'] },
+              { label: 'title', value: ['string', draft.title] },
+              { label: 'description', value: ['string', draft.description] },
+              { label: 'url', value: ['string', draft.url] },
+              { label: 'annual_usd_salary', value: ['asset', `${parseFloat(draft.annualUsdSalary).toFixed(2)} USD`] },
+              { label: 'fulltime_capacity_x100', value: ['int64', Math.round(parseFloat(draft.roleCapacity) * 100)] },
+              { label: 'min_deferred_x100', value: ['int64', Math.round(parseFloat(draft.minDeferred))] },
+
+              { label: 'voice_amount', value: ['asset', `${parseFloat(draft.voice).toFixed(rootState.dao.settings.voiceTokenDecimals)} ${rootState.dao.settings.voiceToken}`] },
+              { label: 'reward_amount', value: ['asset', `${parseFloat(draft.reward).toFixed(rootState.dao.settings.rewardTokenDecimals)} ${rootState.dao.settings.rewardToken}`] },
+              { label: 'peg_amount', value: ['asset', `${parseFloat(draft.peg).toFixed(rootState.dao.settings.pegTokenDecimals)} ${rootState.dao.settings.pegToken}`] },
+
+              { label: 'start_period', value: ['int64', draft.startPeriod.docId] },
+              { label: 'period_count', value: ['int64', draft.periodCount] },
+              { label: 'recipient', value: ['name', rootState.accounts.account] },
+              ...(draft.parentId ? [{ label: 'quest_start', value: ['int64', draft.parentId] }] : [])
+            ]
+            break
+
+          case PROPOSAL_TYPE.QUEST_START:
+            content = [
+              { label: 'content_group_label', value: ['string', 'details'] },
+              { label: 'title', value: ['string', draft.title] },
+              { label: 'description', value: ['string', draft.description] },
+              { label: 'url', value: ['string', draft.url] },
+
+              { label: 'deferred_perc_x100', value: ['int64', draft?.deferred || 0] },
+              { label: 'usd_amount', value: ['asset', `${parseFloat(draft.usdAmount.toFixed(2))} USD`] },
+              // { label: 'annual_usd_salary', value: ['asset', `${parseFloat(draft.annualUsdSalary).toFixed(2)} USD`] },
+              // { label: 'fulltime_capacity_x100', value: ['int64', Math.round(parseFloat(draft.roleCapacity) * 100)] },
+              // { label: 'min_deferred_x100', value: ['int64', Math.round(parseFloat(draft.minDeferred))] },
+
+              { label: 'voice_amount', value: ['asset', `${parseFloat(draft.voice).toFixed(rootState.dao.settings.voiceTokenDecimals)} ${rootState.dao.settings.voiceToken}`] },
+              ...(rootState.dao.settings.rewardToken
+                ? [{ label: 'reward_amount', value: ['asset', `${parseFloat(draft.reward).toFixed(rootState.dao.settings.rewardTokenDecimals)} ${rootState.dao.settings.rewardToken}`] }]
+                : []
+              ),
+              ...(rootState.dao.settings.pegToken
+                ? [{ label: 'peg_amount', value: ['asset', `${parseFloat(draft.peg).toFixed(rootState.dao.settings.pegTokenDecimals)} ${rootState.dao.settings.pegToken}`] }]
+                : []
+              ),
+
+              { label: 'start_period', value: ['int64', draft.startPeriod.docId] },
+              { label: 'period_count', value: ['int64', draft.periodCount] },
+              { label: 'recipient', value: ['name', rootState.accounts.account] }
+              // ...(draft.circle ? [{ label: 'circle_id', value: ['int64', draft.circle.value] }] : []),
+              // ...(draft.parentQuest ? [{ label: 'quest_start', value: ['int64', draft.parentQuest.value] }] : [])
+            ]
+            break
+
+          case PROPOSAL_TYPE.QUEST :
+            content = [
+              { label: 'content_group_label', value: ['string', 'details'] },
+              { label: 'title', value: ['string', draft.title] },
+              { label: 'description', value: ['string', draft.description] },
+              { label: 'url', value: ['string', draft.url] },
+
+              { label: 'deferred_perc_x100', value: ['int64', draft?.deferred || 0] },
+              { label: 'usd_amount', value: ['asset', `${parseFloat(draft.usdAmount.toFixed(2))} USD`] },
+              // { label: 'annual_usd_salary', value: ['asset', `${parseFloat(draft.annualUsdSalary).toFixed(2)} USD`] },
+              // { label: 'fulltime_capacity_x100', value: ['int64', Math.round(parseFloat(draft.roleCapacity) * 100)] },
+              // { label: 'min_deferred_x100', value: ['int64', Math.round(parseFloat(draft.minDeferred))] },
+
+              { label: 'voice_amount', value: ['asset', `${parseFloat(draft.voice).toFixed(rootState.dao.settings.voiceTokenDecimals)} ${rootState.dao.settings.voiceToken}`] },
+              ...(rootState.dao.settings.rewardToken
+                ? [{ label: 'reward_amount', value: ['asset', `${parseFloat(draft.reward).toFixed(rootState.dao.settings.rewardTokenDecimals)} ${rootState.dao.settings.rewardToken}`] }]
+                : []
+              ),
+              ...(rootState.dao.settings.pegToken
+                ? [{ label: 'peg_amount', value: ['asset', `${parseFloat(draft.peg).toFixed(rootState.dao.settings.pegTokenDecimals)} ${rootState.dao.settings.pegToken}`] }]
+                : []
+              ),
+
+              { label: 'start_period', value: ['int64', draft.startPeriod.docId] },
+              { label: 'period_count', value: ['int64', draft.periodCount] },
+              { label: 'recipient', value: ['name', rootState.accounts.account] }
+              // ...(draft.circle ? [{ label: 'circle_id', value: ['int64', draft.circle.value] }] : []),
+              // ...(draft.parentQuest ? [{ label: 'quest_start', value: ['int64', draft.parentQuest.value] }] : [])
+            ]
+            break
         }
         if (content) {
           const actions = [{
@@ -842,7 +965,6 @@ export default {
             proposal_id: proposalId
           }
         }]
-
         return this.$api.signTransaction(actions)
       } catch (e) {
         throw new Error(e)
@@ -859,7 +981,6 @@ export default {
             proposal_id: proposalId
           }
         }]
-
         return this.$api.signTransaction(actions)
       } catch (e) {
         throw new Error(e)
@@ -920,7 +1041,6 @@ export default {
           publish: true
         }
       }]
-
       return this.$api.signTransaction(actions)
     },
 
@@ -934,7 +1054,6 @@ export default {
           comment_or_section_id: Number(parentId)
         }
       }]
-
       return this.$api.signTransaction(actions)
     },
 
@@ -947,7 +1066,6 @@ export default {
           comment_id: Number(commentId)
         }
       }]
-
       return this.$api.signTransaction(actions)
     },
 
@@ -959,7 +1077,6 @@ export default {
           comment_id: Number(commentId)
         }
       }]
-
       return this.$api.signTransaction(actions)
     },
 
@@ -973,7 +1090,6 @@ export default {
           document_id: Number(commentId)
         }
       }]
-
       return this.$api.signTransaction(actions)
     },
 
@@ -986,7 +1102,6 @@ export default {
           document_id: Number(commentId)
         }
       }]
-
       return this.$api.signTransaction(actions)
     }
 

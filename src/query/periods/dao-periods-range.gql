@@ -1,15 +1,15 @@
 query periodsRange($daoId: String!, $start: DateTime!, $count: Int!) {
   getDao(docId: $daoId) {
     docId
-    period(
-      filter: { details_startTime_t: { ge: $start } }
-      first: $count
-      ) {
-      details_label_s
-      details_startTime_t
-      docId
-      next {
-        end: details_startTime_t
+
+    calendar {
+      period(filter: { details_startTime_t: { ge: $start } }, first: $count) {
+        details_label_s
+        details_startTime_t
+        docId
+        next {
+          end: details_startTime_t
+        }
       }
     }
   }

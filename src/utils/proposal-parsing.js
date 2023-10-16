@@ -393,20 +393,20 @@ export function voting (proposal, supply) {
 export function salary (proposal) {
   if (proposal) {
     if (proposal.__typename === PROPOSAL_TYPE.ARCHETYPE) {
-      return proposal.details_annualUsdSalary_a
+      return proposal?.details_annualUsdSalary_a
     }
     if (proposal.__typename === PROPOSAL_TYPE.SUSPEND && proposal.suspend) {
       const tempProposal = proposal.suspend[0]
       if (tempProposal.__typename === PROPOSAL_TYPE.ARCHETYPE) {
-        return tempProposal.details_annualUsdSalary_a
+        return tempProposal?.details_annualUsdSalary_a
       }
     }
     if (proposal.__typename === PROPOSAL_TYPE.ROLE) {
-      return proposal.role[0].details_annualUsdSalary_a ? proposal.role[0].details_annualUsdSalary_a : proposal?.salaryband?.[0].details_annualUsdSalary_a
+      return proposal?.role[0]?.details_annualUsdSalary_a ? proposal?.role[0]?.details_annualUsdSalary_a : proposal?.salaryband?.[0]?.details_annualUsdSalary_a
     }
     if (proposal.__typename === PROPOSAL_TYPE.EDIT) {
       if (proposal.original[0].__typename === PROPOSAL_TYPE.ROLE) {
-        return proposal.original[0].role[0].details_annualUsdSalary_a
+        return proposal?.original[0]?.role[0]?.details_annualUsdSalary_a
       }
     }
   }
@@ -605,7 +605,7 @@ export function tokens (proposal, periodsOnCycle, daoSettings, isDefaultBadgeMul
       ]
     }
     if (proposal.__typename === PROPOSAL_TYPE.ARCHETYPE) {
-      const [amount] = proposal.details_annualUsdSalary_a.split(' ')
+      const [amount] = proposal?.details_annualUsdSalary_a?.split(' ')
       const usdAmount = amount ? parseFloat(amount) / 12 : 0
       const deferred = parseFloat(proposal.details_minDeferredX100_i || 0)
       utilityValue = (usdAmount * deferred * 0.01 / daoSettings.rewardToPegRatio)
@@ -615,7 +615,7 @@ export function tokens (proposal, periodsOnCycle, daoSettings, isDefaultBadgeMul
     if (proposal.__typename === PROPOSAL_TYPE.SUSPEND) {
       const tempProposal = proposal.suspend[0]
       if (tempProposal.__typename === PROPOSAL_TYPE.ARCHETYPE) {
-        const [amount] = tempProposal.details_annualUsdSalary_a.split(' ')
+        const [amount] = tempProposal?.details_annualUsdSalary_a.split(' ')
         const usdAmount = amount ? parseFloat(amount) / 12 : 0
         const deferred = parseFloat(proposal.details_minDeferredX100_i || 0)
         utilityValue = (usdAmount * deferred * 0.01 / daoSettings.rewardToPegRatio)
@@ -661,8 +661,8 @@ export async function getPeriods (data, selectedDao, daoSettings, apollo) {
         count: data.details_periodCount_i
       }
     })
-    firstPeriod = periodResponse.data.getDao.period[0]
-    periodResponse = periodResponse.data.getDao.period.map((value, index) => {
+    firstPeriod = periodResponse.data.getDao.calendar[0].period[0]
+    periodResponse = periodResponse.data.getDao.calendar[0].period.map((value, index) => {
       return {
         docId: value.docId,
         label: value.details_startTime_t,

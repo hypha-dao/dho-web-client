@@ -197,7 +197,7 @@ export default {
 
 <template lang="pug">
 .step-review
-  proposal-view(preview="preview" v-bind="draft" :withToggle="withToggle" :isBadge="isBadge")
+  proposal-view(preview="preview" v-bind="draft" :withToggle="withToggle" :isBadge="isBadge" hidePolicyHistory)
     template(v-slot:bottom)
       nav.full-width.row.justify-end.q-mt-xl.q-gutter-xs(v-if="$q.screen.gt.md")
         q-btn.h-btn2.q-px-xl(v-if="!disablePrevButton" @click="$emit('prev')" color="primary" :label="$t('pages.proposals.create.stepreview.back')" no-caps outline rounded flat)

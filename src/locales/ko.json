@@ -2,7 +2,12 @@
   "actions": {
     "delete": "삭제"
   },
+  "messages": {
+    "linkCopied": "링크가 복사되었습니다"
+  },
   "periods": {
+    "minute": "분",
+    "minutes": "분",
     "hour": "시간",
     "hours": "시간",
     "day": "낮",
@@ -12,65 +17,75 @@
     "month": "월",
     "months": "개월"
   },
+  "plans": {
+    "founder": "설립자",
+    "starter": "기동기",
+    "growth": "성장",
+    "thrive": "번창하다",
+    "ecosystem": "생태계"
+  },
+  "statuses": {
+    "active": "활동적인"
+  },
   "assignments": {
     "assignment-claim-extend": {
       "claimAll": "모두 청구\n        ",
       "extendAfter": "{date} 이후 연장",
-      "extendBefore": "{date} 이전에 연장",
+      "extendBefore": "{date} 이전까지 연장",
       "youMustReApply": "다시 신청하셔야 합니다"
     },
     "assignment-suspend": {
       "suspend": "유예하다",
-      "thisActionWill": "이 조치는 {1}의 할당 정지를 제안합니다.",
-      "pleaseProvideAReason": "이유를 알려주세요.",
+      "thisActionWill": "이 조치는 {1}의 할당을 정지할 것을 제안합니다",
+      "pleaseProvideAReason": "이유를 입력해 주세요.",
       "reason": "이유",
       "suspend1": "유예하다\n          ",
-      "suspendingSAssignment": "{1}의 할당 일시 중지",
-      "areYouSure": "이 할당의 일시 중지를 제안하시겠습니까?",
+      "suspendingSAssignment": "{1}의 할당을 일시 중지합니다.",
+      "areYouSure": "정말로 이 과제의 정지를 제안하시겠습니까?",
       "reason1": "이유:",
       "cancel": "취소",
       "suspend2": "유예하다"
     },
     "assignment-withdraw": {
       "withdraw": "철회하다",
-      "ifYouWithdraw": "\n          할당을 철회하면 DAO에서 제거됩니다.\n          \n        ",
+      "ifYouWithdraw": "\n          과제를 철회하면 DAO에서 제거됩니다.\n          \n        ",
       "warningThisAction": "경고: 이 작업은 되돌릴 수 없습니다.",
       "notes": "노트",
       "withdraw1": "철회하다\n          ",
-      "withdrawingFromYourAssignment": "임무에서 물러나다",
-      "areYouSure": "이 지정을 취소하시겠습니까?",
+      "withdrawingFromYourAssignment": "임무 철회",
+      "areYouSure": "이 과제를 취소하시겠습니까?",
       "notes1": "노트:",
       "warningThisAction1": "경고: 이 작업은 되돌릴 수 없습니다.",
       "cancel": "취소",
       "withdraw2": "철회하다"
     },
     "dynamic-commit": {
-      "adjustmentsToYour": "할당 조정에는 투표가 필요하지 않습니다.",
+      "adjustmentsToYour": "과제 조정에는 투표가 필요하지 않습니다.",
       "commitment": "약속",
-      "chooseBetween": "{1}%와 {2}% 중에서 선택하십시오.",
-      "multipleAdjustmentsTo": "약정에 대한 여러 조정이 계산에 포함됩니다.",
+      "chooseBetween": "{1}%와 {2}% 중에서 선택하세요.",
+      "multipleAdjustmentsTo": "약정에 대한 여러 조정 사항이 계산에 포함됩니다.",
       "deferral": "연기",
-      "chooseBetween1": "{1}%와 {2}% 중에서 선택하십시오.",
-      "thisDeferralRate": "이 유예율은 귀하가 클레임을 제기한 시점에만 적용됩니다.",
+      "chooseBetween1": "{1}%와 {2}% 중에서 선택하세요.",
+      "thisDeferralRate": "이 연기율은 청구 시점에만 적용됩니다.",
       "confirm": "확인하다"
     },
     "salary": {
       "compensation": "보상",
       "showTokensFor": "전체 음력 주기(약 1개월)에 대한 토큰 표시",
-      "commitmentAndDeferral": "약속 및 연기"
+      "commitmentAndDeferral": "약속과 연기"
     }
   },
   "circles": {
     "circle-card": {
       "productCircle": "제품 서클",
-      "openProposals": "공개 제안서 2개",
+      "openProposals": "공개 제안 2개",
       "activeAssignments": "5개의 활성 과제",
       "more": "2 개 더",
       "thisIsThe": "이것은 가장 멋진 원입니다. ",
       "lastMonth": "지난 달",
-      "husd": "20.000HUSD",
+      "husd": "20,000HUSD",
       "hypha": "1.345 하이파",
-      "hvoice": "45.330 H음성",
+      "hvoice": "45.330 H보이스",
       "more1": "더"
     }
   },
@@ -80,19 +95,21 @@
     },
     "tabs": {
       "general": "일반적인",
+      "plans_and_billing": "계획",
       "structure": "구조",
+      "tokens": "토큰",
       "voting": "투표"
     },
     "nav": {
-      "reset": "변경 사항 재설정",
-      "submit": "에디션 저장",
-      "execute-multisig": "멀티시그 실행",
-      "sign-multisig": "멀티시그 구독",
-      "view-multisig": "멀티시그 보기"
+      "reset": "변경사항 재설정",
+      "submit": "변경 사항을 저장하다",
+      "execute-multisig": "다중서명 실행",
+      "sign-multisig": "다중서명 구독",
+      "view-multisig": "다중서명 보기"
     },
     "settings-general": {
       "title": "일반적인",
-      "description": "일반 설정을 사용하여 기본 협업 공간 및 DAO에 대한 링크와 같은 몇 가지 기본 매개변수를 구성하고 토글을 사용하여 주요 기능을 활성화 또는 비활성화합니다.",
+      "description": "일반 설정을 사용하여 조직 이름, 로고, 맞춤 URL과 같은 기본 정보를 설정하세요.",
       "form": {
         "logo": {
           "label": "심벌 마크"
@@ -118,68 +135,115 @@
         "text-color": {
           "label": "텍스트 색상"
         },
-        "sample-text": "이 텍스트는 두 가지 색상으로 모두 보여야 합니다."
+        "sample-text": "이 텍스트는 두 가지 색상으로 모두 표시되어야 합니다."
       },
       "nav": {
-        "show-more": "자세히보기",
-        "show-less": "간단히 보기"
+        "show-more": "더 많은 옵션 보기",
+        "show-less": "옵션 간략히 표시"
+      }
+    },
+    "settings-plans-billing": {
+      "plan": {
+        "title": "당신의 계획",
+        "description": {
+          "free": "귀하는 현재 무료 Founder Plan을 사용하고 있습니다. "
+        },
+        "cta": "업그레이드 계획",
+        "modal": {
+          "title": "요금제 선택",
+          "description": "귀하의 DAO 요구사항에 가장 적합한 가격 플랜을 선택하세요. ",
+          "cta": "플랜 선택"
+        }
+      },
+      "methods": {
+        "title": "결제 방법",
+        "description": "계속하려면 원하는 결제 수단을 추가하세요.",
+        "cta": "신용카드 추가",
+        "form": {
+          "creditCard": {
+            "name": {
+              "label": "카드에 적힌 이름",
+              "placeholder": "이름을 입력하세요"
+            },
+            "number": {
+              "label": "카드 번호",
+              "placeholder": "1234 1234 1234 1234"
+            },
+            "expiry": {
+              "label": "만료",
+              "placeholder": "월/년"
+            },
+            "cvc": {
+              "label": "CVC",
+              "placeholder": "CVC"
+            },
+            "country": {
+              "label": "국가",
+              "placeholder": "국가"
+            }
+          }
+        }
+      },
+      "history": {
+        "title": "청구 내역",
+        "description": "다음은 결제 및 청구 내역입니다."
       }
     },
     "settings-structure": {
       "roles": {
-        "title": "기능",
-        "description": "여기에서 DAO 기능을 구성할 수 있습니다. ",
+        "title": "역할",
+        "description": "여기에서 DAO의 역할을 설정할 수 있습니다. ",
         "tabs": {
-          "types": "유형",
-          "tiers": "레벨"
+          "types": "역할",
+          "tiers": "보상 등급"
         },
         "type": {
-          "heading": "여기에서 이름과 책임 집합을 추가하여 새 역할 유형을 만들 수 있습니다.",
+          "heading": "여기에서 이름과 책임 세트를 추가하여 새로운 역할 유형을 생성할 수 있습니다.",
           "form": {
             "name": {
               "label": "역할 이름",
               "placeholder": "역할 이름을 입력하세요."
             },
             "description": {
-              "label": "업무 설명서",
+              "label": "역할 설명",
               "placeholder": "역할 설명을 입력하세요."
             },
             "cancel": "취소",
-            "submit": "제출하다"
+            "submit": "완료"
           },
           "nav": {
             "create": "새 역할 만들기"
           }
         },
         "tier": {
-          "heading": "복잡성 또는 비즈니스 기여 측면에서 역할의 수준을 추가합니다.",
+          "heading": "이 역할 유형에 대한 계층을 추가합니다. ",
           "form": {
             "name": {
-              "label": "레벨 이름",
-              "placeholder": "레벨 이름을 입력하세요."
+              "label": "보상 등급 이름",
+              "placeholder": "보상 등급 이름을 입력하세요."
             },
             "yearly-reward": {
               "label": "연간 보상",
               "placeholder": "값을 입력하세요"
             },
             "montly-reward": {
-              "label": "월간 보상"
+              "label": "월별 보상"
             },
             "min-deferred": {
-              "label": "연기된 최소"
+              "label": "토큰 혼합 비율(유틸리티 대 지불금)"
             },
             "cancel": "취소",
-            "submit": "결론"
+            "submit": "완료"
           },
           "nav": {
-            "create": "새 레벨 만들기"
+            "create": "새 등급 만들기"
           }
         }
       },
       "circles": {
         "title": "서클",
-        "description": "여기에서 핵심 팀 또는 서클을 구성할 수 있습니다. ",
-        "heading": "워크플로에 의미 있는 서클이나 팀을 만들어 DAO를 자유롭게 형성하세요.",
+        "description": "여기서 핵심 팀이나 서클을 구성할 수 있습니다. ",
+        "heading": "귀하의 작업 흐름에 의미 있는 서클이나 팀을 만들어 DAO를 자유롭게 구성해 보세요.",
         "form": {
           "name": {
             "label": "서클 이름",
@@ -190,24 +254,24 @@
             "placeholder": "서클 설명을 입력하세요."
           },
           "cancel": "취소",
-          "submit": "제출하다"
+          "submit": "완료"
         },
         "nav": {
           "create": "새 서클 만들기",
-          "create-subcircle": "하위 원 추가"
+          "create-subcircle": "하위원 추가"
         }
       }
     },
     "settings-voting": {
       "core": {
         "title": "핵심 팀 투표 방법",
-        "description": "모든 DAO는 자체적인 투표 시스템을 형성하여 주요 팀 구성원이 공동의 결정을 내릴 수 있도록 합니다. ",
+        "description": "모든 DAO는 자체 투표 시스템을 구성하여 핵심 팀 구성원이 집단적 결정을 내릴 수 있도록 합니다.",
         "form": {
           "unity": {
-            "label": "단위(필요한 목소리의 %)"
+            "label": "Unity - 필수 계약 비율"
           },
           "quorum": {
-            "label": "정족수(필수 참가자 %)"
+            "label": "정족수 - 필요한 목소리의 비율"
           },
           "duration": {
             "label": "투표 기간"
@@ -216,31 +280,31 @@
         "showcase": {
           "1": {
             "title": "HVOICE",
-            "description": "모든 구성원은 HVOICE 거버넌스 토큰을 득표율로 사용할 수 있습니다."
+            "description": "모든 회원은 HVOICE 거버넌스 토큰을 투표 지분으로 사용할 수 있습니다."
           },
           "2": {
             "title": "다중 투표",
             "description": "회원은 투표 기간 동안 여러 번 투표할 수 있습니다."
           },
           "3": {
-            "title": "투표 기간",
-            "description": "기본 투표 기간은 1주일입니다."
+            "title": "투표기간",
+            "description": "기본 투표 기간은 1주입니다."
           },
           "4": {
-            "title": "요구 사항",
-            "description": "제안서에는 필요한 지지율(통합)과 필요한 전체 투표율(정족수)이 있어야 합니다."
+            "title": "요구사항",
+            "description": "제안에는 필요한 동의 비율(단일성)과 필요한 발언권 또는 투표권 비율(정족수)이 있어야 합니다."
           }
         }
       },
       "community": {
         "title": "커뮤니티 투표 방법",
-        "description": "모든 DAO는 자체적인 투표 시스템을 형성하여 주요 팀 구성원이 공동의 결정을 내릴 수 있도록 합니다. ",
+        "description": "모든 DAO는 자체 투표 시스템을 구성하여 핵심 팀원이 집단적 결정을 내릴 수 있도록 합니다. ",
         "form": {
           "unity": {
-            "label": "단위(필요한 목소리의 %)"
+            "label": "단위(필요한 음성의 %)"
           },
           "quorum": {
-            "label": "정족수(필수 참가자 %)"
+            "label": "정족수(필수 참가자의 %)"
           },
           "duration": {
             "label": "투표 기간"
@@ -248,26 +312,144 @@
         },
         "showcase": {
           "1": {
-            "title": "1명 = 1표",
-            "description": "모든 회원은 1인 1표로 투표할 수 있습니다."
+            "title": "회원 1명 = 1표",
+            "description": "모든 회원은 1회원 1표로 투표할 수 있습니다."
           },
           "2": {
-            "title": "대표자 목소리",
-            "description": "회원은 민주적 선거에서 선출된 회원에게 자신의 목소리(또는 의결권)를 부여할 수 있습니다."
+            "title": "대리인의 목소리",
+            "description": "회원은 민주적 선거에서 선출된 회원에게 자신의 목소리(또는 투표권)를 행사할 수 있습니다."
           },
           "3": {
             "title": "다중 투표",
             "description": "회원은 투표 기간 동안 여러 번 투표할 수 있습니다."
           },
           "4": {
-            "title": "투표 기간",
-            "description": "기본 투표 기간은 1주일입니다."
+            "title": "투표기간",
+            "description": "기본 투표 기간은 1주입니다."
           },
           "5": {
-            "title": "요구 사항",
-            "description": "제안은 찬성 투표의 필수 비율(단위)과 모든 투표의 필수 비율(정족수)을 가져야 합니다."
+            "title": "요구사항",
+            "description": "제안서는 필수 찬성표 비율(단위)과 필수 전체 투표 비율(정족수)을 충족해야 합니다."
           }
         }
+      }
+    },
+    "settings-tokens": {
+      "title": "토큰",
+      "description": "이 3가지 종류의 토큰을 사용하여 회원을 위한 훌륭한 보상 시스템을 만들 수 있습니다. ",
+      "tresury": {
+        "title": "지급 토큰",
+        "description": "지급 토큰은 DAO의 유동적 지급으로 상환될 수 있습니다.",
+        "form": {
+          "name": {
+            "label": "토큰 이름",
+            "placeholder": "HUSD 토큰"
+          },
+          "symbol": {
+            "label": "상징",
+            "placeholder": "HUSD"
+          },
+          "currency": {
+            "label": "기본 통화"
+          },
+          "digits": {
+            "label": "숫자",
+            "morePrecise": "더 정확하게",
+            "lessPrecise": "덜 정확함"
+          },
+          "multiplier": {
+            "label": "승수"
+          }
+        }
+      },
+      "utility": {
+        "title": "유틸리티 토큰",
+        "description": "유틸리티 토큰은 기여자에게 현금 지불 이외의 가치(예: 기능 액세스)를 보상합니다.",
+        "form": {
+          "name": {
+            "label": "토큰 이름",
+            "placeholder": ""
+          },
+          "symbol": {
+            "label": "상징",
+            "placeholder": ""
+          },
+          "value": {
+            "label": "공급",
+            "placeholder": "∨"
+          },
+          "digits": {
+            "label": "숫자",
+            "morePrecise": "더 정확하게",
+            "lessPrecise": "덜 정확함"
+          },
+          "multiplier": {
+            "label": "승수"
+          }
+        }
+      },
+      "voice": {
+        "title": "음성 토큰",
+        "description": "회원이 투표할 때 음성 토큰을 할당하여 투표권을 높이세요.",
+        "form": {
+          "name": {
+            "label": "토큰 이름",
+            "placeholder": "음성 토큰"
+          },
+          "symbol": {
+            "label": "상징",
+            "placeholder": "목소리"
+          },
+          "decayPeriod": {
+            "label": "부패 기간",
+            "placeholder": ""
+          },
+          "decayPercent": {
+            "label": "부패 %",
+            "placeholder": ""
+          },
+          "digits": {
+            "label": "숫자",
+            "morePrecise": "더 정확하게",
+            "lessPrecise": "덜 정확함"
+          },
+          "multiplier": {
+            "label": "승수"
+          }
+        }
+      },
+      "form": {
+        "logo": {
+          "label": "심벌 마크"
+        },
+        "upload": {
+          "label": "이미지 업로드(최대 3MB)"
+        },
+        "name": {
+          "label": "이름"
+        },
+        "url": {
+          "label": "사용자 정의 URL"
+        },
+        "purpose": {
+          "label": "목적"
+        },
+        "primary-color": {
+          "label": "원색"
+        },
+        "secondary-color": {
+          "label": "보조 색상"
+        },
+        "text-color": {
+          "label": "텍스트 색상"
+        },
+        "sample-text": "이 텍스트는 두 가지 색상으로 모두 표시되어야 합니다."
+      },
+      "nav": {
+        "show-more": "더 많은 옵션 보기",
+        "show-less": "옵션 간략히 표시",
+        "cancel": "취소",
+        "submit": "제출하다"
       }
     }
   },
@@ -285,26 +467,26 @@
       "save": "구하다"
     },
     "empty-widget-label": {
-      "yourOrganizationDoesnt": "조직에 아직 {1}이(가) 없습니다.",
+      "yourOrganizationDoesnt": "귀하의 조직에는 아직 {1}이(가) 없습니다.",
       "click": "딸깍 하는 소리",
       "here": "여기",
-      "toSetThemUp": "그들을 설정합니다."
+      "toSetThemUp": "설정합니다."
     },
     "explore-by-widget": {
       "daos": "DAO",
       "ecosystems": "생태계",
-      "exploreBy": "탐색:"
+      "exploreBy": "탐색 방법:"
     },
     "upvote-delegate-widget": {
-      "upvoteDelegates": "투표 대의원",
-      "electionValidityExpiresIn": "선거 유효 기간 만료:",
+      "upvoteDelegates": "찬성 투표 대리인",
+      "electionValidityExpiresIn": "선거 유효 기간은 다음 날짜에 만료됩니다:",
       "days": "날",
       "day": "낮",
       "hours": "시간",
       "hour": "시간",
       "mins": "분",
       "min": "분",
-      "headDelegate": "대표단"
+      "headDelegate": "수석대표"
     },
     "widget-editable": {
       "more": "더"
@@ -315,14 +497,15 @@
     "widget": {
       "seeAll": "모두 보기",
       "seeAll1": "모두 보기"
-    }
+    },
+    "onlyDaoAdmins": "DAO 관리자만 설정을 변경할 수 있습니다."
   },
   "contributions": {
     "payout": {
       "payout": "지불금"
     },
     "token-multipliers": {
-      "deferredSeeds": "연기된 종자",
+      "deferredSeeds": "지연된 시드",
       "husd": "HUSD",
       "hvoice": "HVOICE",
       "hypha": "하이파"
@@ -332,12 +515,12 @@
     "member": "회원",
     "settings-communication": {
       "announcements": "공지사항",
-      "postAnAnnouncement": "모든 섹션에 공지를 게시하여 회원들에게 중요한 업데이트에 대해 알립니다.",
+      "postAnAnnouncement": "모든 섹션에 공지사항을 게시하여 회원들에게 중요한 업데이트를 알립니다.",
       "title": "제목",
       "message": "메시지",
-      "removeAnnouncement": "공지사항 삭제 -",
+      "removeAnnouncement": "공지 삭제 -",
       "addMore": "더 추가",
-      "onlyForHypha": "Hypha 전용 - 모든 DAO에 경고를 게시하여 사용자에게 중요한 업데이트에 대해 알립니다.",
+      "onlyForHypha": "Hypha에만 해당 - 모든 DAO에 경고를 게시하여 사용자에게 중요한 업데이트에 대해 알립니다.",
       "alert": "알리다",
       "positive": "긍정적인",
       "negative": "부정적인",
@@ -350,48 +533,48 @@
       "community": "지역 사회",
       "classic": "권위 있는",
       "upvote": "찬성",
-      "doYouWantToExpand": "DAO 커뮤니티 구성원(토큰 보유자)에게 DAO 감각 만들기를 확장하고 싶습니까? ",
+      "doYouWantToExpand": "DAO 커뮤니티 구성원(토큰 보유자)에게 DAO 감각을 확장하고 싶습니까? ",
       "activateCommunityVoting": "커뮤니티 투표 활성화",
       "onlyDaoAdminsCanChange": "DAO 관리자만 설정을 변경할 수 있습니다.",
       "communityVotingMethod": "커뮤니티 투표 방법",
       "theClassicMethodAllowsAll": "클래식 방법을 사용하면 모든 DAO 커뮤니티 구성원이 HVOICE를 사용하여 커뮤니티 제안에 투표할 수 있습니다. ",
-      "upvoteElectionDateAndTime": "투표 날짜 및 시간",
-      "upvoteElectionStartingDate": "찬성 선거 시작일",
-      "upvoteElectionStartingTime": "찬성 선거 시작 시간",
-      "upvoteElectionRounds": "투표 선거 라운드",
+      "upvoteElectionDateAndTime": "찬성 투표 날짜 및 시간",
+      "upvoteElectionStartingDate": "찬성 투표 시작일",
+      "upvoteElectionStartingTime": "찬성 투표 시작 시간",
+      "upvoteElectionRounds": "찬성 투표 선거 라운드",
       "round": "둥근",
       "peoplePassing": "- 지나가는 사람들",
       "duration": "- 지속",
       "removeRound": "라운드 제거 -",
       "addRound": "라운드 추가",
-      "chiefDelegateRoundHowManyChiefDelegates": "수석대표 라운드 > 수석대표는 몇 명입니까?",
-      "chiefDelegatesRoundDuration": "수석대표 라운드 - 기간",
-      "headDelegateRoundDoYouWant": "헤드 델리게이트 라운드 > 헤드 델리게이트 1명을 원하십니까?",
-      "headDelegatesRoundDuration": "헤드 대표단 라운드 - 기간",
-      "upvoteMethodExpirationTime": "Upvote 방법 만료 시간",
-      "afterTheElectionHasBeen": "선거가 성공적으로 완료된 후 EDEN 투표 방법은 특정 시간 동안 지속됩니다. ",
+      "chiefDelegateRoundHowManyChiefDelegates": "수석 대표자 라운드 > 수석 대표자는 몇 명입니까?",
+      "chiefDelegatesRoundDuration": "최고 대표단 라운드 - 기간",
+      "headDelegateRoundDoYouWant": "대표단 라운드 > 대표단 1명을 원하시나요?",
+      "headDelegatesRoundDuration": "대표단 라운드 - 기간",
+      "upvoteMethodExpirationTime": "찬성 투표 방법 만료 시간",
+      "afterTheElectionHasBeen": "선거가 성공적으로 완료된 후 EDEN 투표 방식은 일정 시간 동안 지속됩니다. ",
       "edenVotingMethod": "EDEN 투표 방법 기간",
-      "communityProposalsDiligence": "커뮤니티 제안 실사",
-      "theFollowingSectionAllows": "다음 섹션에서는 커뮤니티 제안에 대해서만 다른 Unity, Quorum 및 기간을 설정할 수 있습니다.",
+      "communityProposalsDiligence": "커뮤니티 제안 근면",
+      "theFollowingSectionAllows": "다음 섹션에서는 커뮤니티 제안에 대해서만 다른 Unity, 정족수 및 기간을 설정할 수 있습니다.",
       "voteAlignment": " 투표 정렬(Unity)",
-      "unityIsTheMinimumRequired": "결속력은 제안이 통과되기 위해 지지(찬성, 반대)하는 회원의 최소 비율입니다. ",
+      "unityIsTheMinimumRequired": "Unity는 제안이 통과되기 위해 지지하는(찬성 투표 또는 반대 투표) 구성원의 최소 요구 비율입니다. ",
       "voteQuorum": "투표 정족수",
-      "quorumIsTheMinimumRequired": "정족수는 통과되기 위해 투표에 참여하는 전체 구성원의 최소 요구 비율입니다.",
+      "quorumIsTheMinimumRequired": "정족수는 투표에 참여하는 전체 회원 중 투표가 통과되기 위해 필요한 최소 비율입니다.",
       "voteDuration": "투표 기간",
-      "isTheDurationPeriod": "투표가 활성화된 기간이며 회원은 하나 이상의 투표를 할 수 있습니다."
+      "isTheDurationPeriod": "투표가 활성화되고 회원이 하나 이상의 투표를 할 수 있는 기간입니다."
     },
     "settings-design": {
       "design": "설계",
-      "useDesignSettingsToChange": "디자인 설정을 사용하여 색상, 로고, 패턴, 배너 및 배경을 포함하여 DAO의 중요한 브랜드 요소를 변경하십시오. ",
+      "useDesignSettingsToChange": "디자인 설정을 사용하여 색상, 로고, 패턴, 배너, 배경 등 DAO의 중요한 브랜드 요소를 변경하세요. ",
       "general": "일반적인",
       "splashpage": "스플래시 페이지",
       "banners": "배너",
       "primaryColor": "원색",
       "onlyDaoAdmins": "DAO 관리자만 설정을 변경할 수 있습니다.",
       "secondaryColor": "보조 색상",
-      "textOnColor": "색상의 텍스트",
+      "textOnColor": "색상에 텍스트",
       "logo": "심벌 마크",
-      "extendedLogo": "확장 로고",
+      "extendedLogo": "확장된 로고",
       "pattern": "무늬",
       "color": "색상",
       "opacity": "불투명",
@@ -407,100 +590,100 @@
       "max140Characters": "최대 140자"
     },
     "multisig-modal": {
-      "multisig": "멀티시그",
+      "multisig": "다중서명",
       "proposal": "제안",
-      "doYouWant": "멀티 시그를 생성하시겠습니까?",
-      "doYouWant1": "변경을 승인하시겠습니까?",
+      "doYouWant": "멀티시그를 생성하시겠습니까?",
+      "doYouWant1": "변경사항을 승인하시겠습니까?",
       "changes": "변경 사항",
       "signers": "서명자",
       "cancelMultiSig": "다중 서명 취소",
-      "resetChanges": "변경 사항 재설정",
-      "createMultiSig": "멀티시그 만들기",
+      "resetChanges": "변경사항 재설정",
+      "createMultiSig": "다중 서명 만들기",
       "deny": "부인하다",
       "approve": "승인하다"
     },
     "settings-voting": {
       "voting": "투표",
-      "useVotingSettings": "투표 설정을 사용하여 단일성(이를 지지하는 회원의 최소 %), 정족수(투표에 참여하는 전체 회원의 최소 %) 및 투표 기간(투표에 대한 업데이트를 포함하여 투표가 열려 있는 기간)을 포함한 투표 매개변수를 설정합니다.",
+      "useVotingSettings": "투표 설정을 사용하여 단결성(지지하는 회원의 최소 %), 정족수(투표에 참여하는 전체 회원의 최소 %) 및 투표 기간(투표 업데이트를 포함하여 투표가 진행되는 기간)을 포함한 투표 매개변수를 설정하세요.",
       "voteAlignmentUnity": "투표 정렬(Unity)",
-      "unityIsThe": "결속력은 제안이 통과되기 위해 지지(찬성, 반대)하는 회원의 최소 비율입니다. ",
+      "unityIsThe": "Unity는 제안이 통과되기 위해 지지하는(찬성 투표 또는 반대 투표) 구성원의 최소 요구 비율입니다. ",
       "val": "= 0 ",
       "onlyDaoAdmins": "DAO 관리자만 설정을 변경할 수 있습니다.",
       "voteQuorum": "투표 정족수",
-      "quorumIsThe": "정족수는 통과되기 위해 투표에 참여하는 전체 구성원의 최소 요구 비율입니다.",
+      "quorumIsThe": "정족수는 투표에 참여하는 전체 회원 중 투표가 통과되기 위해 필요한 최소 비율입니다.",
       "val1": "= 0 ",
       "onlyDaoAdmins1": "DAO 관리자만 설정을 변경할 수 있습니다.",
       "voteDuration": "투표 기간",
-      "isTheDuration": "투표가 활성화된 기간이며 회원은 하나 이상의 투표를 할 수 있습니다.",
+      "isTheDuration": "투표가 활성화되고 회원이 하나 이상의 투표를 할 수 있는 기간입니다.",
       "onlyDaoAdmins2": "DAO 관리자만 설정을 변경할 수 있습니다."
     },
     "settings-general": {
       "general": "일반적인",
-      "useGeneralSettings": "일반 설정을 사용하여 기본 협업 공간 및 DAO에 대한 링크와 같은 몇 가지 기본 매개변수를 설정하고 토글을 사용하여 주요 기능을 활성화 또는 비활성화합니다.",
+      "useGeneralSettings": "일반 설정을 사용하여 기본 협업 공간 및 DAO에 대한 링크와 같은 일부 기본 매개변수를 설정하고 토글을 사용하여 주요 기능을 활성화 또는 비활성화합니다.",
       "daoName": "DAO 이름",
-      "pasteTheUrl": "여기에 URL 주소 붙여넣기",
+      "pasteTheUrl": "여기에 URL 주소를 붙여넣으세요.",
       "onlyDaoAdmins": "DAO 관리자만 설정을 변경할 수 있습니다.",
       "customUrl": "사용자 정의 URL",
       "daohyphaearth": "dao.hypha.earth/",
       "typeYourCustom": "여기에 맞춤 URL을 입력하세요.",
       "onlyDaoAdmins1": "DAO 관리자만 설정을 변경할 수 있습니다.",
       "socialChat": "소셜 채팅",
-      "pasteTheUrl1": "여기에 URL 주소 붙여넣기",
+      "pasteTheUrl1": "여기에 URL 주소를 붙여넣으세요.",
       "onlyDaoAdmins2": "DAO 관리자만 설정을 변경할 수 있습니다.",
       "linkToDocumentation": "문서 링크",
-      "pasteTheUrl2": "여기에 URL 주소 붙여넣기",
+      "pasteTheUrl2": "여기에 URL 주소를 붙여넣으세요.",
       "onlyDaoAdmins3": "DAO 관리자만 설정을 변경할 수 있습니다.",
       "buttonText": "버튼 텍스트",
       "documentation": "선적 서류 비치",
       "onlyDaoAdmins4": "DAO 관리자만 설정을 변경할 수 있습니다.",
-      "proposalsCreation": "제안 작성",
-      "activateOrDeactivate": "제안 생성을 활성화 또는 비활성화합니다.",
+      "proposalsCreation": "제안서 작성",
+      "activateOrDeactivate": "제안서 생성을 활성화 또는 비활성화합니다.",
       "onlyDaoAdmins5": "DAO 관리자만 설정을 변경할 수 있습니다.",
-      "membersApplication": "회원 신청",
-      "activateOrDeactivate1": "회원 애플리케이션을 활성화 또는 비활성화합니다.",
+      "membersApplication": "회원신청",
+      "activateOrDeactivate1": "회원 애플리케이션을 활성화하거나 비활성화합니다.",
       "onlyDaoAdmins6": "DAO 관리자만 설정을 변경할 수 있습니다.",
       "removableBanners": "이동식 배너",
-      "activateOrDeactivate2": "이동식 배너를 활성화 또는 비활성화합니다.",
+      "activateOrDeactivate2": "이동식 배너를 활성화하거나 비활성화합니다.",
       "onlyDaoAdmins7": "DAO 관리자만 설정을 변경할 수 있습니다.",
-      "multisigConfiguration": "멀티시그 구성",
-      "activateOrDeactivateMultisig": "다중 서명을 활성화 또는 비활성화합니다.",
+      "multisigConfiguration": "다중서명 구성",
+      "activateOrDeactivateMultisig": "다중서명을 활성화하거나 비활성화합니다.",
       "onlyDaoAdmins8": "DAO 관리자만 설정을 변경할 수 있습니다."
     },
     "settings-plan": {
-      "selectYourPlan": "플랜 선택",
-      "actionRequired": "조치 필요",
-      "membersMax": "{1} 회원 최대",
-      "billingPeriod": "청구 기간",
+      "selectYourPlan": "계획을 선택하세요",
+      "actionRequired": "필요한 조치",
+      "membersMax": "최대 {1}명의 회원",
+      "billingPeriod": "청구기간",
       "discount": "{1}% 할인!",
       "availableBalance": "사용 가능한 잔액",
-      "notEnoughTokens": "토큰이 충분하지 않습니다",
-      "buyHyphaToken": "Hypha 토큰 구매",
-      "pleaseSelectPlan": "요금제와 기간을 먼저 선택하세요.",
+      "notEnoughTokens": "토큰이 충분하지 않습니다.",
+      "buyHyphaToken": "하이파 토큰 구매",
+      "pleaseSelectPlan": "먼저 요금제와 기간을 선택해주세요.",
       "billingHistory": "청구 내역",
       "suspended": "정지된",
       "expired": "만료됨",
-      "planActive": "활성 계획",
-      "renewPlan": "플랜 갱신 ",
+      "planActive": "계획 활성",
+      "renewPlan": "요금제 갱신 ",
       "activatePlan": "계획 활성화"
     }
   },
   "dashboard": {
     "how-it-works": {
       "readyForVoting": "투표할 준비가 되셨나요?",
-      "proposingAPolicy": "정책을 제안하시겠습니까?",
-      "applyingForARole": "역할에 지원하시겠습니까?",
-      "creatingANewRole": "새 역할을 만드시겠습니까?",
-      "creatingABadge": "배지를 만드시겠습니까?",
-      "launchingAQuest": "퀘스트를 시작하시겠습니까?",
-      "youNeedTo": "정족수(투표에 참여하는 전체 구성원의 최소 %)와 통합(최소 찬성하는 구성원 %)을 모두 통과해야 합니다. ",
-      "createAGeneric": "정책을 구현하는 단계와 함께 설명적인 제목과 정책에 대한 명확한 정의가 포함된 일반적인 기여 제안서를 작성합니다.",
-      "createARecurring": "기존 역할 할당에 대한 반복 활동을 만들고 가능한 한 많은 세부 정보와 함께 적합한 이유를 설명합니다.",
-      "createAProposal": "조직 자산에 대한 제안을 작성하고 설명이 포함된 이름과 책임이 있는 역할의 명확한 정의가 포함된 역할 원형을 선택합니다.",
-      "createAProposal1": "조직 자산에 대한 제안서를 작성하고 이름과 학습에 대한 명확한 인식, 성취 잠금 해제 또는 상태 수준 확인이 포함된 배지 유형을 선택합니다.",
-      "createAGeneric1": "설명이 포함된 제목과 명확한 마일스톤 분석 및 타임라인에 따른 마일스톤당 지불금으로 일반 기부 제안서를 작성합니다."
+      "proposingAPolicy": "정책을 제안하시나요?",
+      "applyingForARole": "역할을 신청하시나요?",
+      "creatingANewRole": "새 과제를 만드시나요?",
+      "creatingABadge": "배지를 만드시나요?",
+      "launchingAQuest": "퀘스트를 시작하시나요?",
+      "youNeedTo": "제안서가 통과되려면 필요한 동의 비율(단일성)과 필요한 의견 비율(정족수)이 모두 있어야 합니다. ",
+      "createAGeneric": "설명적인 제목과 정책 구현 단계와 함께 정책에 대한 명확한 정의가 포함된 기부 제안서를 작성하세요.",
+      "createARecurring": "기존 직위에 지원하고 자신이 해당 직위에 적합한 이유를 가능한 한 많은 세부정보와 함께 설명하세요.",
+      "createAProposal": "직위에 대한 제안을 작성하고 설명적인 이름을 선택하고 책임에 대한 명확한 정의를 선택하십시오.",
+      "createAProposal1": "조직 자산에 대한 제안서를 작성하고 이름과 학습, 성취 달성 또는 상태 수준 확인에 대한 명확한 인식이 포함된 배지 유형을 선택합니다.",
+      "createAGeneric1": "설명적인 제목과 명확한 마일스톤 분석, 요청한 보상을 포함하여 기여 제안서를 작성하세요."
     },
     "news-item": {
-      "posted": "게시된 {1}"
+      "posted": "게시됨 {1}"
     },
     "news-widget": {
       "latestNews": "최근 뉴스"
@@ -508,13 +691,13 @@
     "organization-banner": {
       "thePurposeOf": "목적",
       "hypha": "균사",
-      "loremIpsumDolor": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+      "loremIpsumDolor": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut Labore et dolore magna aliqua.",
       "documentation": "선적 서류 비치"
     },
     "support-widget": {
-      "documentation": "선적 서류 비치",
-      "needSupport": "지원이 필요하십니까?",
-      "pleaseReadOur": "자세한 내용은 설명서를 참조하십시오. "
+      "documentation": "문서 살펴보기",
+      "needSupport": "지원이 필요하신가요?",
+      "pleaseReadOur": "자세한 내용은 설명서를 읽어보세요. "
     }
   },
   "ecosystem": {
@@ -530,12 +713,12 @@
       "onlyDaoAdmins": "DAO 관리자만 설정을 변경할 수 있습니다.",
       "saveEcosystemInformation": "생태계 정보 저장",
       "ecosystemName": "생태계 이름",
-      "typeNameHere": "여기에 이름 입력(최대 30자)",
+      "typeNameHere": "여기에 이름을 입력하세요. (최대 30자)",
       "onlyDaoAdmins1": "DAO 관리자만 설정을 변경할 수 있습니다.",
       "logo": "심벌 마크",
       "uploadAnImage": "이미지 업로드(최대 3MB)",
       "showEcosystemOnMarketplace": "마켓플레이스에 생태계 표시",
-      "findInvestorsWilling": "귀하의 생태계에 자금을 지원할 투자자를 찾으십시오",
+      "findInvestorsWilling": "귀하의 생태계에 자금을 지원할 투자자를 찾으세요",
       "onlyDaoAdmins2": "DAO 관리자만 설정을 변경할 수 있습니다.",
       "ecosystemDomain": "생태계 도메인",
       "ecosystemPurpose": "생태계 목적",
@@ -563,7 +746,7 @@
       "rotate1": "-90도 회전",
       "zoomIn": "확대",
       "zoomOut": "축소",
-      "verticalMirror": "세로 거울",
+      "verticalMirror": "수직거울",
       "horizontalMirror": "수평거울",
       "cancel": "취소",
       "reset": "초기화"
@@ -588,48 +771,48 @@
   "login": {
     "bottom-section": {
       "newUser": "새로운 사용자?",
-      "registerHere": "여기에서 등록\n          ",
+      "registerHere": "여기에서 등록하세요\n          ",
       "registrationIsTemporarilyDisabled": "등록이 일시적으로 비활성화되었습니다.",
       "areYouAMember": "당신은 회원입니까?",
-      "loginHere": "여기에서 로그인",
+      "loginHere": "여기에 로그인하세요",
       "otherwise": "그렇지 않으면",
       "loginWithWallet": "지갑으로 로그인",
       "newUser1": "새로운 사용자?",
-      "registerHere1": "여기에서 등록\n        ",
+      "registerHere1": "여기에서 등록하세요\n        ",
       "registrationIsTemporarilyDisabled1": "등록이 일시적으로 비활성화되었습니다."
     },
     "login-view": {
-      "loginTo": "로그인",
+      "loginTo": "귀하의 {daoName} 계정에 로그인하세요",
       "your": " 당신의",
       "account": "계정",
       "loginTo1": "로그인\n          ",
       "yourAccount": "귀하의 계정",
-      "youCanEither": "SEEDS Light 지갑(",
-      "downloadHere": "여기에서 다운로드",
-      "orAnchor": ") 또는 Anchor는 안전한 오픈 소스 도구로 다운로드할 수 있습니다.",
-      "desktopAppFor": "Windows 및 Mac용 데스크톱 앱",
-      "andAMobile": "그리고 두 가지 모두를 위한 모바일 앱",
+      "youCanEither": "Hypha 지갑 또는 Seeds Light 지갑(iOS 및 Android에서 사용 가능)으로 로그인할 수 있습니다. ",
+      "downloadHere": "여기서 다운로드하세요",
+      "orAnchor": ") 또는 Anchor는 다운로드할 수 있는 안전한 오픈 소스 도구입니다.",
+      "desktopAppFor": "Windows 및 Mac용 데스크탑 앱",
+      "andAMobile": "두 가지 모두를 위한 모바일 앱",
       "android": "기계적 인조 인간",
       "and": " 그리고",
       "nbspios": "",
       "forMore": ". ",
-      "seeTheseSlidesnbsp": "이 슬라이드를 참조하십시오.",
-      "pleaseLoginWith": "지갑 중 하나, 개인 키로 로그인하거나 손님으로 계속하십시오. ",
+      "seeTheseSlidesnbsp": "이 슬라이드를 참조하세요.",
+      "pleaseLoginWith": "지갑 중 하나, 개인 키로 로그인하거나 게스트로 계속 로그인하세요. ",
       "account1": "계정",
       "account2": "계정",
       "privateKey": "개인 키",
       "privateKey1": "개인 키",
       "login": "로그인",
-      "login1": "{1} 로그인 {2}",
-      "getApp": "앱 다운로드",
+      "login1": "{1}로 로그인",
+      "getApp": "앱 받기",
       "back": "뒤쪽에",
-      "orChooseAPartner": "또는 파트너 지갑 선택"
+      "orChooseAPartner": "또는 파트너 지갑을 선택하세요"
     },
     "register-user-view": {
       "account": "계정",
       "information": "정보",
-      "inOrderTo": "의사 결정에 참여하거나 역할에 지원하거나 기부금을 받으려면 등록하고 회원이 되어야 합니다. ",
-      "pleaseUseThe": "새로운 SEEDS 계정 생성 및 회원가입은 안내된 양식을 이용해주세요. ",
+      "inOrderTo": "의사 결정에 참여하거나 역할에 지원하거나 기여를 받으려면 등록하고 회원이 되어야 합니다. ",
+      "pleaseUseThe": "새로운 SEEDS 계정 생성 및 회원가입을 위해서는 안내된 양식을 이용하시기 바랍니다. ",
       "accountName": "계정 이름\n          ",
       "charactersAlphanumeric": "12자, 영숫자 a-z, 1-5",
       "phoneNumber": "전화 번호",
@@ -637,71 +820,78 @@
       "phoneNumber1": "전화 번호",
       "your": "당신의",
       "verificationCode": "확인 코드",
-      "pleaseCheckYour": "휴대전화에서 인증 코드를 확인하세요.",
+      "pleaseCheckYour": "휴대폰에서 인증번호를 확인해주세요",
       "verificationCode1": "확인 코드",
       "charactersAlphanumeric1": "12자, 영숫자 a-z, 1-5",
-      "problemsWithTheCode": "코드에 문제가 있습니까?",
-      "checkYourPhoneNumber": "전화번호 확인",
+      "problemsWithTheCode": "코드에 문제가 있나요?",
+      "checkYourPhoneNumber": "전화번호를 확인하세요",
       "welcome": "환영",
-      "ourAuthenticationMethod": "당사의 인증 방법은 Anchor로 다운로드할 수 있는 안전한 오픈 소스 도구입니다. ",
-      "desktopAppFor": "Windows 및 Mac용 데스크톱 앱",
-      "andAMobile": " 그리고 두 가지 모두를 위한 모바일 앱 ",
+      "ourAuthenticationMethod": "당사의 인증 방법은 다음과 같이 다운로드할 수 있는 안전한 오픈 소스 도구인 Anchor입니다. ",
+      "desktopAppFor": "Windows 및 Mac용 데스크탑 앱",
+      "andAMobile": " 두 가지 모두를 위한 모바일 앱 ",
       "android": "기계적 인조 인간",
       "and": " 그리고 ",
-      "ios": "아이폰 OS",
+      "ios": "iOS",
       "forMore": ".  ",
       "theseSlides": "이 슬라이드",
       "areYouAMember": "당신은 회원입니까?",
-      "loginHere": "여기에서 로그인",
+      "loginHere": "여기에 로그인하세요",
       "createDao": "DAO 생성"
     },
     "register-user-with-captcha-view": {
-      "createNew": "새로 만들기\n            ",
+      "createNew": "새 Hypha 계정 만들기\n            ",
       "hyphaAccount": "하이파 계정",
-      "pleaseVerifyYou": "BOT이 아님을 확인하십시오.",
-      "proceedWith": "진행\n                ",
-      "hyphaWallet": "하이파 지갑",
-      "setupHyphaWallet": "Hypha 지갑 설정",
-      "scanTheQr": "이 페이지의 QR 코드를 스캔하고,",
-      "itContainsThe": " 여기에는 지갑에 Hypha 계정을 만들 수 있는 초대장이 포함되어 있습니다.",
+      "pleaseVerifyYou": "BOT이 아닌지 확인해주세요",
+      "proceedWith": "하이파월렛으로 진행하기\n                ",
+      "setupHyphaWallet": "하이파 지갑 설정",
+      "scanTheQr": "해당 페이지의 QR코드를 스캔하시면,",
+      "itContainsThe": " 여기에는 지갑에 Hypha 계정을 만들 수 있는 초대가 포함되어 있습니다.",
       "onceTheAccount": " 계정이 준비되면",
-      "youAreSet": " 마지막 다음 단계로 설정되었습니다.",
+      "youAreSet": " 마지막 다음 단계가 설정되었습니다.",
       "copyInviteLink": "초대 링크 복사",
-      "loginWith": "로그인\n            ",
+      "loginWith": "하이파 지갑으로 로그인\n            ",
       "hyphaWallet1": "하이파 지갑",
-      "signYourFirstTransaction": "첫 거래 서명",
+      "signYourFirstTransaction": "첫 번째 거래에 서명하세요",
       "didYouCreate": "Hypha 지갑에서 Hypha 계정을 만드셨나요? ",
       "login": "{1} 로그인 {2}",
-      "getApp": "앱 다운로드",
+      "getApp": "앱 받기",
       "areYouAMember": "당신은 회원입니까?",
-      "loginHere": "여기에서 로그인"
+      "loginHere": "여기에 로그인하세요",
+      "createYourDao": "당신의 DAO를 만드세요",
+      "goAheadAndAddYour": "계속해서 DAO의 이름을 추가하고 로고를 업로드하세요. ",
+      "publishYourDao": "DAO 게시",
+      "needHelp": "도움이 필요하다?",
+      "downloadWallet": "지갑 다운로드"
     },
     "welcome-view": {
-      "youNeedAn": "Hypha 생태계와 상호 작용하고 DAO를 생성하려면 Hypha 계정이 필요합니다.",
-      "isonboarding": "{{ isOnboarding ?  ",
-      "ifThisIs": "이곳이 처음이라면,",
+      "youNeedAn": "Hypha 생태계와 상호작용하고 DAO를 생성하려면 Hypha 계정이 필요합니다.",
+      "isonboarding": "이미 Hypha 계정이 있는 경우 로그인 버튼을 클릭하고 지갑으로 거래에 서명한 후 DAO 생성을 시작하세요. ",
+      "ifThisIs": "이번이 처음이라면,",
       "clickCreateNew": " 새 Hypha 계정 만들기를 클릭하고 단계를 따릅니다. ",
-      "ifYouAlready": "Hypha 계정과 Anchor 지갑이 이미 구성되어 있는 경우",
-      "clickThe": ", 로그인 버튼을 클릭하고 Anchor Wallet으로 거래를 확인하고 DAO를 입력하십시오.' ",
-      "theDhoDecentralized": "DHO(Decentralized Human Organization)는 처음부터 유기적이고 참여적인 방식으로 다른 사람들과 함께 조직을 구축하기 위한 프레임워크입니다.",
-      "createNewHyphaAccount": "새 Hypha 계정 만들기",
+      "ifYouAlready": "이미 Hypha 계정과 Anchor 지갑이 구성되어 있는 경우",
+      "clickThe": ", 로그인 버튼을 클릭하고 Anchor Wallet과의 거래를 검증한 후 DAO를 입력하세요.",
+      "theDhoDecentralized": "DHO(Decentralized Human Organization)는 유기적이고 참여적인 방식으로 다른 사람들과 함께 조직을 처음부터 구축하기 위한 프레임워크입니다.",
+      "createNewHyphaAccount": "새로운 Hypha 계정 만들기",
       "registrationIsTemporarilyDisabled": "등록이 일시적으로 비활성화되었습니다.",
       "login": "로그인",
-      "continueAsAGuest": "게스트로 계속하기",
+      "continueAsAGuest": "게스트로 계속",
       "useAnExisting": "기존 사용\n      ",
-      "blockhainAccount": "블록체인 계정"
+      "blockhainAccount": "블록체인 계정",
+      "launchYourFirst": "첫 번째 DAO 실행",
+      "youNeedAHyphaAccount": "Hypha 네트워크와 상호 작용하려면 Hypha 계정이 필요합니다.",
+      "ifYouAlreadyHaveAHyphaAccount": "이미 Hypha 계정이 있는 경우 로그인 버튼을 클릭하고 지갑으로 거래에 서명한 후 DAO 생성을 시작하세요."
     }
   },
   "navigation": {
     "alert-message": {
       "thisIsA": "이것은",
       "versionOfThe": "새로운 Hypha DAO 플랫폼 버전. ",
-      "ratingMeaning": "등급, {1}을 의미합니다. "
+      "ratingMeaning": "등급은 {1}을 의미합니다. "
     },
     "dho-info": {
       "moreInfo": "더 많은 정보",
       "votingDuration": "투표 기간: {1}",
-      "periodDuration": "기간 기간: {1}",
+      "periodDuration": "기간: {1}",
       "admins": "관리자"
     },
     "guest-menu": {
@@ -737,7 +927,7 @@
       "registrationIsTemporarilyDisabled": "등록이 일시적으로 비활성화되었습니다."
     },
     "profile-sidebar-guest": {
-      "asAGuest": "게스트는 DAO의 모든 콘텐츠에 대한 전체 액세스 권한을 가집니다. ",
+      "asAGuest": "게스트로서 귀하는 DAO의 모든 콘텐츠에 대한 전체 액세스 권한을 갖습니다. ",
       "registerNewAccount": "새 계정 등록",
       "registrationIsTemporarilyDisabled": "등록이 일시적으로 비활성화되었습니다.",
       "login": "로그인",
@@ -746,17 +936,17 @@
     "quick-actions": {
       "7432": "2",
       "quickActions": "빠른 작업",
-      "completeDraft": "전체 초안",
+      "completeDraft": "초안 완성",
       "youHaveA": "완료할 초안 제안이 있습니다.",
       "claimPeriods": "청구 기간",
-      "youHave": "청구할 수 있는 기간이 2개 있습니다.",
-      "adjustCommitment": "약정 조정",
+      "youHave": "신청할 수 있는 기간은 2개입니다.",
+      "adjustCommitment": "약속 조정",
       "forASpecific": "특정 기간 동안",
       "extendAssignment": "할당 연장",
-      "extendYourAssignment": "24일 내 과제 연장"
+      "extendYourAssignment": "24일 후에 임무를 연장하세요"
     },
     "quick-links": {
-      "thisDaoConfigured": "제안이 허용되지 않도록 구성된 이 DAO",
+      "thisDaoConfigured": "이 DAO는 제안이 허용되지 않도록 구성되었습니다.",
       "newProposal": "새로운 제안",
       "myProfile": "내 프로필",
       "myWallet": "내 지갑",
@@ -766,16 +956,16 @@
       "weAreCurrently": "현재 귀하의 신청서를 검토하고 있습니다. ",
       "weAreCurrently1": "현재 귀하의 신청서를 검토하고 있습니다. ",
       "niceToSee": "여기서 보니 반갑다. ",
-      "youCanVoteFor": "당신은 투표 할 수 있습니다 ",
+      "youCanVoteFor": "당신은 투표할 수 있습니다 ",
       "proposals": "제안",
       "searchFor": ", 검색 ",
       "members": "회원",
-      "andFindOut": " 그리고 당신을 만드는 것이 무엇인지 알아보십시오 ",
+      "andFindOut": " 무엇이 당신을 만드는지 알아보세요 ",
       "organization": "조직",
       "tick": " 진드기.",
-      "beSureTo": "당신의 ",
+      "beSureTo": "반드시 완료하세요. ",
       "profile": "프로필",
-      "andHaveFun": " DAO 및 서로와 함께 새롭고 흥미로운 것을 함께 만들어가는 재미를 느껴보세요.",
+      "andHaveFun": " DAO와 다른 사람들과 함께 새롭고 흥미로운 것을 공동 창조하는 즐거움을 누려보세요.",
       "welcomeTo": "{daoName}에 오신 것을 환영합니다"
     }
   },
@@ -783,20 +973,20 @@
     "asset-card": {
       "revoke": "취소",
       "seeDetails": "자세히보다",
-      "na": "해당 사항 없음",
+      "na": "해당 없음",
       "apply": "적용하다",
       "applied": "적용된"
     },
     "create-badge-widget": {
-      "newBadgeProposal": "새 배지 제안",
+      "newBadgeProposal": "새로운 배지 제안",
       "createYourBadge": "배지 만들기",
-      "doYouNeedSpecific": "DAO 핵심 구성원 또는 토큰 보유자 커뮤니티를 위한 특정 배지가 필요합니까? "
+      "doYouNeedSpecific": "DAO 핵심 회원이나 토큰 보유자 커뮤니티를 위한 특정 배지가 필요합니까? "
     }
   },
   "organization": {
     "archetypes-widget": {
-      "archetypes": "원형",
-      "archetypesDescribeAccountabilities": "원형은 DAO 구성원에게 할당된 책임 및/또는 주요 작업을 설명합니다. 이러한 원형을 통해 구성원은 역할을 신청할 수 있습니다."
+      "archetypes": "역할",
+      "archetypesDescribeAccountabilities": "원형은 DAO 구성원에게 할당된 책임 및/또는 주요 작업을 설명합니다. "
     },
     "badge-assignments-widget": {
       "badgeAssignments": "배지 할당"
@@ -804,15 +994,15 @@
     "badge-card": " 150? ",
     "badges-widget": {
       "badges": "배지",
-      "badgesAssignedToMembers": "구성원에게 할당된 배지는 특정 기술이나 성과를 인정하고/하거나 상태 수준을 확인합니다. 이 배지는 투표 후 디지털 증거로 사용됩니다."
+      "badgesAssignedToMembers": "회원에게 할당된 배지는 특정 기술이나 성과를 인식하고 상태 수준을 확인합니다. "
     },
     "circle-card": {
       "subCircles": "하위 서클({1})",
-      "showSubcirclesDetails": "하위 서클 세부정보 표시",
+      "showSubcirclesDetails": "하위원 세부정보 표시",
       "goToCircle": "서클로 이동",
-      "members": "구성원({1})",
-      "members1": "구성원({1})",
-      "na": "해당 사항 없음"
+      "members": "회원({1})",
+      "members1": "회원({1})",
+      "na": "해당 없음"
     },
     "circles-widget": {
       "structure": "구조",
@@ -823,12 +1013,12 @@
       "budgetBreakdown": "예산 내역"
     },
     "create-dho-widget": {
-      "createNewDao": "새 DAO 만들기",
-      "createNewDao1": "새 DAO 만들기"
+      "createNewDao": "새로운 DAO 생성",
+      "createNewDao1": "새로운 DAO 생성"
     },
     "payout-card": " 150? ",
     "payouts-widget": {
-      "passedGenericContributions": "통과된 일반 기여"
+      "passedGenericContributions": "통과된 기여"
     },
     "policies-widget": {
       "policies": "정책",
@@ -836,26 +1026,26 @@
     },
     "role-assignment-card": " 150? ",
     "role-assignments-widget": {
-      "activeRoleAssignments": "활성 역할 할당"
+      "activeRoleAssignments": "활성 할당"
     },
     "tokens": {
       "seeMore": "더보기",
       "seeMore1": "더보기",
-      "issuance": "배급"
+      "issuance": "발행된 토큰"
     }
   },
   "plan": {
     "chip-plan": {
       "plan": "{1} 계획",
-      "daysLeft": "남은 일",
-      "daysLeftTo": "계획을 갱신할 일이 남음"
+      "daysLeft": "일 남음",
+      "daysLeftTo": "요금제 갱신까지 일 남았습니다"
     },
     "downgrade-pop-up": {
       "downgradeYourPlan": "요금제 다운그레이드",
-      "areYouSure": "다운그레이드하시겠습니까?",
-      "byDowngradingYou": "다운그레이드하면 활성 계획에 연결된 일부 DAO 기능에 더 이상 액세스할 수 없습니다. ",
-      "pleaseCheckTerms": "자세한 내용은 이용약관을 확인하세요.",
-      "keepMyPlan": "내 계획 유지",
+      "areYouSure": "정말로 다운그레이드하시겠습니까?",
+      "byDowngradingYou": "다운그레이드하면 활성 플랜에 연결된 일부 DAO 기능에 더 이상 액세스할 수 없습니다. ",
+      "pleaseCheckTerms": "자세한 내용은 이용 약관을 확인하세요.",
+      "keepMyPlan": "내 계획을 지켜라",
       "downgrade": "다운그레이드"
     }
   },
@@ -864,10 +1054,10 @@
       "about": "에 대한"
     },
     "active-assignments": {
-      "userHasNoActivity": "사용자 활동 없음",
-      "noActivityMatchingFilter": "일치하는 활동 필터 없음",
-      "userHasNoActivity1": "사용자 활동 없음",
-      "noActivityMatchingFilter1": "일치하는 활동 필터 없음"
+      "userHasNoActivity": "사용자에게 활동이 없습니다",
+      "noActivityMatchingFilter": "활동 일치 필터 없음",
+      "userHasNoActivity1": "사용자에게 활동이 없습니다",
+      "noActivityMatchingFilter1": "활동 일치 필터 없음"
     },
     "contact-info": {
       "contactInfo": "연락처 정보",
@@ -887,22 +1077,22 @@
       "noMembersAt": "현재 회원이 없습니다."
     },
     "multi-sig": {
-      "multiSig": "멀티시그",
-      "clickHereTo": "새 PR에 서명하려면 여기를 클릭하십시오.",
-      "multiSig1": "멀티시그"
+      "multiSig": "다중 서명",
+      "clickHereTo": "새 PR에 서명하려면 여기를 클릭하세요.",
+      "multiSig1": "다중 서명"
     },
     "open-proposals": {
       "openProposals": "공개 제안"
     },
     "organizations": {
-      "otherOrganizations": "기타 조직",
+      "otherOrganizations": "다른 조직",
       "seeMore": "더보기",
       "organizations": "조직",
       "seeMore1": "더보기"
     },
     "past-achievements": {
-      "pastAchievements": "지난 성과",
-      "youHaveNo": "과거 실적이 없습니다."
+      "pastAchievements": "과거 성과",
+      "youHaveNo": "이전 업적이 없습니다."
     },
     "profile-card": {
       "voice": "{1} 음성",
@@ -931,49 +1121,49 @@
     "wallet-adresses": {
       "bitcoin": "비트코인",
       "address": "주소",
-      "btcPayoutsAre": "현재 BTC 지급이 비활성화되어 있습니다.",
+      "btcPayoutsAre": "현재 BTC 지급이 비활성화되어 있습니다",
       "ethereum": "이더 리움",
       "address1": "주소",
       "ethPayoutsAre": "현재 ETH 지급이 비활성화되어 있습니다.",
-      "eos": "이오스",
+      "eos": "EOS",
       "address2": "주소",
       "memo": "메모",
-      "eos1": "이오스",
+      "eos1": "EOS",
       "address3": "주소",
       "memo1": "메모",
       "walletAdresses": "지갑 주소",
-      "onlyVisibleToYou": "당신에게만 보이는"
+      "onlyVisibleToYou": "당신에게만 표시됩니다"
     },
     "wallet-base": {
       "485": "500.00",
       "4842": "1000.00",
       "wallet": "지갑",
-      "redeemHusd": "HUSD 교환",
-      "makeAnotherRedemption": "다른 구속",
-      "redemptionPending": "사용 대기 중",
+      "redeemHusd": "HUSD 사용",
+      "makeAnotherRedemption": "또 다른 상환을 하세요",
+      "redemptionPending": "상환 보류 중",
       "requestor": "요청자",
       "amount": "양",
-      "redeemHusd1": "HUSD 교환",
-      "husdAvailable": "HUSD 사용 가능",
-      "amountToRedeem": "교환할 금액",
-      "typeAmount": "유형 금액",
+      "redeemHusd1": "{tokenName} 사용",
+      "husdAvailable": "{tokenName} 이용 가능",
+      "amountToRedeem": "상환할 금액",
+      "typeAmount": "종류 금액",
       "maxAvailable": "최대 사용 가능",
-      "redeemToAddress": "주소로 교환",
-      "redemptionSuccessful": "구속 성공!",
+      "redeemToAddress": "주소로 사용",
+      "redemptionSuccessful": "상환 성공!",
       "daoid": "DAO_id",
       "requestor1": "요청자",
       "amount1": "양",
-      "asSoonAs": "재무 담당자가 다중 서명 거래를 생성하고 이 요청을 실행하는 즉시 미리보기 단계에 표시된 HUSD 주소로 자금을 직접 받게 됩니다.",
+      "asSoonAs": "재무 담당자가 다중 서명 거래를 생성하고 이 요청을 실행하자마자 귀하는 미리 보기 단계에 표시된 HUSD 주소로 직접 자금을 받게 됩니다.",
       "noWalletFound": "지갑을 찾을 수 없습니다.",
       "pendingRedemptions": "보류 중인 사용",
       "details": "세부",
-      "queueHusdRedemption": "구성된 지갑에 재무부 지급을 위해 HUSD 상환 대기",
+      "queueHusdRedemption": "구성된 지갑에 대한 국고 지급을 위한 대기열 {tokeName} 상환",
       "redeem": "상환하다"
     },
     "wallet-hypha": {
       "availableBalance": "사용 가능한 잔액",
-      "notEnoughTokens": "토큰이 충분하지 않습니다",
-      "buyHyphaToken": "Hypha 토큰 구매"
+      "notEnoughTokens": "토큰이 충분하지 않습니다.",
+      "buyHyphaToken": "하이파 토큰 구매"
     }
   },
   "proposals": {
@@ -988,8 +1178,8 @@
       "youMustBe": "댓글을 남기려면 회원이어야 합니다."
     },
     "comment-item": {
-      "showMore": "더 보기({1})",
-      "showLess": "적게 표시"
+      "showMore": "더 보기 ({1})",
+      "showLess": "간략하게 표시"
     },
     "comments-widget": {
       "comments": "코멘트"
@@ -1000,10 +1190,10 @@
       "publish": "게시"
     },
     "proposal-card": {
-      "comments": "{1} 댓글"
+      "comments": "댓글 {1}개"
     },
     "proposal-draft": {
-      "continueProposal": "제안 계속",
+      "continueProposal": "계속 제안",
       "deleteDraft": "초안 삭제"
     },
     "proposal-dynamic-popup": {
@@ -1011,14 +1201,14 @@
     },
     "proposal-staging": {
       "yourProposalIs": "귀하의 제안이 준비 중입니다.",
-      "publishingYourProposal": "스테이징에 제안을 게시한다는 것은 제안이 아직 실행 중이거나 체인에 연결되어 있지 않음을 의미합니다. ",
+      "publishingYourProposal": "귀하의 제안을 스테이징에 게시한다는 것은 해당 제안이 아직 라이브 또는 체인에 있지 않음을 의미합니다. ",
       "publish": "게시",
       "editProposal": "제안 수정"
     },
     "proposal-suspended": {
-      "thatMeansThat": "즉, 할당이 종료되고 더 이상 청구할 수 없지만 이전에 이행한 기간은 청구할 수 있습니다.",
+      "thatMeansThat": "즉, 할당이 종료되고 더 이상 청구가 불가능하지만 이전에 이행된 기간은 계속 청구할 수 있음을 의미합니다.",
       "publish": "게시",
-      "iChangedMyMind": "나는 마음을 바꿨다"
+      "iChangedMyMind": "마음이 바뀌었어요"
     },
     "proposal-card-chips": {
       "poll": "투표",
@@ -1028,7 +1218,7 @@
       "payout": "지불금",
       "circle": "원",
       "policy": "정책",
-      "genericContribution": "일반 기여",
+      "genericContribution": "기부금",
       "role": "역할",
       "assignment": "과제",
       "extension": "확대",
@@ -1048,32 +1238,34 @@
       "s": " 1 ? ",
       "title": "제목",
       "icon": "상",
-      "votingSystem": "투표 제도",
-      "commitmentLevel": "약정 수준",
+      "votingSystem": "투표 시스템",
+      "commitmentLevel": "헌신 수준",
       "adjustCommitment": "약정 조정",
+      "multipleAdjustmentsToYourCommitment": "약정에 대한 여러 조정 사항이 계산에 포함됩니다.",
       "edit": "편집하다",
-      "deferredAmount": "후불 금액",
-      "adjustDeferred": "지연 조정",
+      "deferredAmount": "토큰 혼합 비율(유틸리티 대 지불금)",
+      "adjustDeferred": "토큰 믹스 조정",
+      "thePercentDeferralWillBe": "새로운 비율은 다음 청구 시 즉시 반영됩니다.",
       "edit1": "편집하다",
-      "salaryBand": "급여 범위",
+      "salaryBand": "보상 등급",
       "equivalentPerYear": "연간 {1} 상당",
-      "minDeferredAmount": "최소 이연 금액",
-      "roleCapacity": "역할 용량",
+      "minDeferredAmount": "토큰 혼합 비율(유틸리티 대 지불금)",
+      "roleCapacity": "역할 역량",
       "compensation": "보상",
       "compensation1": "보상",
       "showCompensationFor": "한 기간 동안 보상 표시",
-      "deferredAmount1": "후불 금액",
-      "parentCircle": "학부모 서클",
-      "parentCircle1": "학부모 서클",
-      "parentPolicy": "상위 정책",
+      "deferredAmount1": "토큰 비율(유틸리티 대 지불금)",
+      "parentCircle": "상위 서클",
+      "parentCircle1": "상위 서클",
+      "parentPolicy": "부모 정책",
       "description": "설명",
       "attachedDocuments": "첨부서류",
       "createdBy": "작성자:",
       "seeProfile": "프로필 보기",
-      "compensationForOneCycle": "1주기 보상",
-      "compensationForOnePeriod": "한 기간 동안의 보상",
-      "1MoonCycle": "1달 주기는 약 30일",
-      "1MoonPeriod": "1달 주기는 약 7일"
+      "compensationForOneCycle": "한 사이클에 대한 보상",
+      "compensationForOnePeriod": "한 기간 동안 보상",
+      "1MoonCycle": "달의 1주기는 약 30일이다.",
+      "1MoonPeriod": "1월의 주기는 약 7일이다."
     },
     "quest-progression": {
       "questProgression": "퀘스트 진행"
@@ -1082,10 +1274,10 @@
       "votes": "투표"
     },
     "voting-option-5-scale": {
-      "hellYa": "헬 야",
+      "hellYa": "헬야",
       "yes": "예",
       "abstain": "삼가다",
-      "hellNo": "지옥 아니오"
+      "hellNo": "도대체 안돼"
     },
     "voting-option-yes-no": {
       "yes": "예",
@@ -1110,22 +1302,22 @@
       "archive": "보관소",
       "apply": "적용하다",
       "suspendAssignment": "할당 일시 중지\n          ",
-      "invokeASuspension": "이 활동에 대한 정지 제안을 요청합니다.",
-      "withdrawAssignment": "양도 철회"
+      "invokeASuspension": "이 활동에 대한 일시 중지 제안 호출",
+      "withdrawAssignment": "과제 철회"
     }
   },
   "templates": {
     "templates-modal": {
-      "customizeYourDao": "DAO를 커스터마이징하세요",
+      "customizeYourDao": "DAO를 사용자 정의하세요",
       "allTemplatesProposals": "모든 템플릿 제안이 성공적으로 게시되었으며 이제 다른 DAO 회원이 투표할 준비가 되었습니다!",
-      "creatingAndPublishing": "모든 템플릿 제안 작성 및 게시 ",
-      "loremIpsumDolor": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ",
+      "creatingAndPublishing": "모든 템플릿 제안을 생성하고 게시합니다. ",
+      "loremIpsumDolor": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut Labore et dolore magna aliqua. ",
       "publishingProcess": "출판 과정:",
-      "chooseADaoTemplate": "DAO 템플릿 선택",
+      "chooseADaoTemplate": "DAO 템플릿을 선택하세요",
       "aDaoTemplate": "DAO 템플릿은 사전 패키지된 제안 세트입니다. ",
       "useATemplate": "템플릿 사용",
-      "startFromScratch": "처음부터 시작",
-      "youCanChoose": "이 옵션을 선택할 때 DAO를 사용자 지정하도록 선택할 수 있습니다. ",
+      "startFromScratch": "처음부터 시작하기",
+      "youCanChoose": "이 옵션을 선택하면 DAO를 사용자 정의하도록 선택할 수 있습니다. ",
       "createYourOwn": "스스로 만드시 오",
       "seeDetails": "자세히보다",
       "select": "선택하다",
@@ -1135,10 +1327,10 @@
       "moreDetails1": "자세한 내용은",
       "daoPolicies": "DAO 정책({1})",
       "moreDetails2": "자세한 내용은",
-      "coreTeamVotingMethod": "핵심 팀 투표 방식",
+      "coreTeamVotingMethod": "핵심팀 투표 방식",
       "unity": "단일성",
       "quorum": "정족수",
-      "communityTeamVotingMethod": "커뮤니티 팀 투표 방법",
+      "communityTeamVotingMethod": "커뮤니티팀 투표 방법",
       "unity1": "단일성",
       "quorum1": "정족수",
       "coreTeamBadges": "핵심 팀 배지({1})",
@@ -1148,22 +1340,22 @@
       "title": "제목",
       "description": "설명",
       "backToTemplates": "템플릿으로 돌아가기",
-      "selectThisTemplate": "이 템플릿 선택",
+      "selectThisTemplate": "이 템플릿을 선택하세요",
       "goToProposalsDashboard": "제안 대시보드로 이동",
       "goToOrganizationDashboard": "조직 대시보드로 이동"
     }
   },
   "layouts": {
     "mainlayout": {
-      "hyphaDao": "하이파 다오"
+      "hyphaDao": "하이파다오"
     },
     "multidholayout": {
       "plan": "{1} 계획",
       "suspended": "정지된",
-      "actionRequired": "조치 필요",
-      "reactivateYourDao": "DAO 재활성화",
+      "actionRequired": "필요한 조치",
+      "reactivateYourDao": "DAO를 재활성화하세요",
       "weHaveTemporarily": "귀하의 DAO 계정을 일시적으로 정지했습니다. ",
-      "downgradeMeTo": "무료 플랜으로 다운그레이드",
+      "downgradeMeTo": "나를 무료 플랜으로 다운그레이드하세요",
       "renewMyCurrentPlan": "현재 요금제 갱신",
       "member": "{1} 회원"
     }
@@ -1174,21 +1366,21 @@
         "transactions": "업무",
         "developer": "개발자",
         "note": "메모",
-        "clickOnYourInitials": "이니셜을 클릭하세요. ",
+        "clickOnYourInitials": "당신의 이니셜을 클릭하세요 ",
         "toSignATransaction": " 거래에 서명하다",
-        "multisigEnablesUs": "Multisig를 사용하면 안전한 방식으로 트랜잭션에 서명할 수 있습니다. ",
-        "doYouReally": "정말 하고 싶니? ",
+        "multisigEnablesUs": "다중서명을 사용하면 안전한 방식으로 거래에 서명할 수 있습니다. ",
+        "doYouReally": "정말로 하고 싶나요? ",
         "signThisTransaction": " 이 거래에 서명하시겠습니까?",
-        "multisigEnablesUs1": "Multisig를 사용하면 안전한 방식으로 트랜잭션에 서명할 수 있습니다. ",
+        "multisigEnablesUs1": "다중서명을 사용하면 안전한 방식으로 거래에 서명할 수 있습니다. ",
         "sign": "징후",
-        "noTransactionsTo": "거래 금지 ",
-        "signAtTheMoment": " 순간에 서명",
-        "multisigEnablesUs2": "Multisig를 사용하면 안전한 방식으로 트랜잭션에 서명할 수 있습니다. "
+        "noTransactionsTo": "거래 없음 ",
+        "signAtTheMoment": " 지금 당장 서명하세요",
+        "multisigEnablesUs2": "다중서명을 사용하면 안전한 방식으로 거래에 서명할 수 있습니다. "
       },
       "circle": {
-        "joinCircle": "서클 가입",
+        "joinCircle": "서클에 가입",
         "budget": "예산",
-        "subcircles": "서브서클",
+        "subcircles": "하위원",
         "applicants": "지원자",
         "members": "회원"
       },
@@ -1203,32 +1395,32 @@
         "communication": "의사소통",
         "design": "설계",
         "planManager": "계획 관리자",
-        "resetChanges": "변경 사항 재설정",
+        "resetChanges": "변경사항 재설정",
         "saveChanges": "변경 사항을 저장하다",
-        "viewMultisig": "멀티시그 보기"
+        "viewMultisig": "다중서명 보기"
       },
       "ecosystem": {
-        "searchDHOs": "DHO 검색",
+        "searchDHOs": "DAO 검색",
         "proposalTypes": "제안 유형",
         "fundsNeeded": "필요한 자금",
         "active": "{1} 활성",
         "daos": "DAO",
         "inactive": "{1} 비활성",
         "daos1": "DAO",
-        "coreMembers": "56 핵심 구성원",
+        "coreMembers": "핵심 멤버 56명",
         "communityMembers": "0 커뮤니티 회원",
         "activate": "활성화",
         "onlyDaoAdmins": "DAO 관리자만 설정을 변경할 수 있습니다.",
         "foundedBy": "의해 설립 된:",
         "activate1": "활성화",
         "members": "회원",
-        "createNewDao": "새 DAO 만들기",
+        "createNewDao": "새로운 DAO 생성",
         "youNeedTo": "하위 DAO를 생성하려면 먼저 앵커 DAO를 활성화해야 합니다.",
         "onlyDaoAdmins1": "DAO 관리자만 설정을 변경할 수 있습니다.",
         "sortBy": "정렬 기준",
-        "oldestFirst": "가장 오래된 것부터",
+        "oldestFirst": "오래된 것부터",
         "newestFirst": "최신순",
-        "alphabetically": "알파벳 순으로",
+        "alphabetically": "알파벳순",
         "all": "모두",
         "ability": "능력",
         "role": "역할",
@@ -1239,26 +1431,26 @@
         "circle": "원",
         "budget": "예산",
         "policy": "정책",
-        "genericcontributions": "일반 기여",
+        "genericcontributions": "기여",
         "suspension": "보류"
       },
       "explore": {
-        "discoverMore": "더 발견하다",
+        "discoverMore": "지금 살펴보세요",
         "members": "회원",
-        "discoverTheHyphaDAONetwork": "Hypha DAO 네트워크 알아보기",
-        "welcomeToTheGlobalDAO": "글로벌 DAO 디렉토리에 오신 것을 환영합니다! ",
-        "searchDHOs": "DHO 검색",
+        "discoverTheHyphaDAONetwork": "글로벌 DAO 네트워크의 힘을 활용하세요!",
+        "welcomeToTheGlobalDAO": "지속적인 가치를 창출하려는 열정을 바탕으로 역동적인 조직의 국제 생태계에 뛰어들어 보세요. ",
+        "searchDHOs": "DAO 검색",
         "searchEcosystems": "검색 생태계",
         "sortBy": "정렬 기준",
-        "oldestFirst": "가장 오래된 것부터",
+        "oldestFirst": "오래된 것부터",
         "newestFirst": "최신순",
-        "alphabetically": "알파벳 순으로"
+        "alphabetically": "알파벳순"
       },
       "finflow": {
-        "totalUnclaimedPeriods": "총 미청구 기간",
-        "totalUnclaimedUtility": "총 미청구 유틸리티",
-        "totalUnclaimedCash": "청구되지 않은 총 현금",
-        "totalUnclaimedVoice": "청구되지 않은 총 음성",
+        "totalUnclaimedPeriods": "총 청구되지 않은 기간",
+        "totalUnclaimedUtility": "총 미청구 효용",
+        "totalUnclaimedCash": "총 미청구 현금",
+        "totalUnclaimedVoice": "소유권이 주장되지 않은 총 음성",
         "assignments": "과제",
         "exportToCsv": "CSV로 내보내기"
       },
@@ -1299,15 +1491,13 @@
         "members": "회원",
         "proposals": "제안",
         "welcomeToHyphaEvolution": "Hypha 진화에 오신 것을 환영합니다",
-        "atHyphaWere": "Hypha에서는 영향력 있는 조직을 구축하기 위한 솔루션을 공동으로 만들고 있습니다. 우리는 차세대 분산 조직을 설계하기 위해 급진적인 시스템을 발전시켰습니다. 팀을 조정하고, 동기를 부여하고, 재정을 관리하고, 공유된 비전을 향한 효과적인 커뮤니케이션을 촉진하는 방법을 재구성하도록 안내해 드립니다. Hypha와 함께 꿈을 현실로 바꾸십시오!",
-        "learnMore": "더 알아보기",
-        "communityElectionsAreAbout": "지역사회 선거가 곧 시작됩니다",
-        "weUseAFairAndInclusive": "우리는 다양한 관점을 보장하기 위해 공정하고 포용적인 투표 메커니즘을 사용합니다. 투표 절차는 빠르고 효율적입니다. 자신을 후보자로 지명하기 위해 등록하는 것을 환영합니다."
+        "atHyphaWere": "Hypha에서는 영향력 있는 조직을 구축하기 위한 솔루션을 공동 개발하고 있습니다. "
       },
       "members": {
         "becomeAMember": "멤버가되다",
         "registrationIsTemporarilyDisabled": "등록이 일시적으로 비활성화되었습니다.",
-        "copyInviteLink": "초대 링크 복사",
+        "copyInviteLink": "친구를 초대하세요",
+        "copy": "복사",
         "sendALink": "친구에게 링크를 보내 이 DAO에 가입하도록 초대하세요.",
         "daoApplicants": "지원자",
         "daoApplicants1": "지원자",
@@ -1318,14 +1508,14 @@
         "alphabetically": "알파벳순(A-Z)",
         "all": "모두",
         "coreTeam": "핵심 팀",
-        "communityMembers": "커뮤니티 구성원",
-        "coreAndCommunityMembers": "핵심 및 커뮤니티 구성원",
+        "communityMembers": "커뮤니티 회원",
+        "coreAndCommunityMembers": "핵심",
         "members": "회원",
-        "discoverATapestry": "Hypha 회원의 태피스트리를 발견하십시오",
-        "wereBuildingAThriving": "우리는 번성하는 국제 회원 커뮤니티를 구축하고 있습니다. 각자 고유한 개성, 재능 및 강점을 가지고 있으며 공동 가치 창출이라는 단일한 사명에 참여하고 있습니다. 각 회원이 열정적으로 참여하고 있는 일, 보유하고 있는 배지, 기여하고 있는 DAO에 대해 자세히 알아보세요. 새로운 친구, 잠재적 공동 작업자 및 혁신적인 벤처를 찾으십시오."
+        "discoverATapestry": "Hypha 멤버들의 태피스트리를 만나보세요",
+        "wereBuildingAThriving": "우리는 번성하는 국제 회원 커뮤니티를 구축하고 있습니다. "
       },
       "organization": {
-        "documentation": "선적 서류 비치",
+        "documentation": "문서 살펴보기",
         "activeAssignments": "활성 할당",
         "payouts": "지불금",
         "activeBadges": "활성 배지",
@@ -1345,50 +1535,50 @@
         "archetypes2": "원형",
         "badges2": "배지",
         "createMeaningfulImpact": "Hypha로 의미 있는 영향 만들기",
-        "allOfHypha": "Hypha의 모든 혁신적인 솔루션이 여러분을 기다립니다! 우리는 설정에서 토크노믹스, 투표 시스템에 이르기까지 분산된 조직의 모든 측면에서 귀하의 가이드입니다. Hypha로 변화를 가져올 수 있는 방법을 알아보세요."
+        "allOfHypha": "Hypha의 모든 혁신적인 솔루션이 여러분을 기다립니다! "
       },
       "organizationalassets": {
         "noBadges": "배지 없음",
         "noBadges1": "배지 없음",
-        "yourOrganizationDoesnt": "조직에 아직 배지가 없습니다. ",
+        "yourOrganizationDoesnt": "귀하의 조직에는 아직 배지가 없습니다. ",
         "searchBadges": "배지 검색",
         "filterByName": "이름으로 필터링",
         "createANewBadge": "새 배지 만들기",
-        "sortByCreateDateAscending": "생성일 오름차순으로 정렬",
-        "sortByCreateDateDescending": "생성 날짜 내림차순으로 정렬",
-        "sortAlpabetically": "알파벳순으로 정렬(A-Z)",
-        "roleArchetypes": "역할 원형",
+        "sortByCreateDateAscending": "생성일 기준 오름차순 정렬",
+        "sortByCreateDateDescending": "생성 날짜를 기준으로 내림차순으로 정렬",
+        "sortAlpabetically": "알파벳순(A-Z)으로 정렬",
+        "roleArchetypes": "역할",
         "badges": "배지"
       },
       "treasury": {
         "transactionReview": "거래 검토",
         "wellDoneMultisigTransaction": "잘하셨어요! ",
-        "youCanNowFindTheMultisig": "이제 멀티시그 트랜잭션 요청을 찾을 수 있습니다.",
-        "other2TreasurersNeeds": "다른 2명의 재무가 서명해야 합니다.",
-        "theTheTransactionIsReady": "그러면 거래가 실행될 준비가 된 것입니다!",
-        "anErrorOccurredPlease": "오류가 발생했습니다. 아래 버튼을 클릭하여 다시 시도해 주세요.",
-        "itWouldBeCoolIfWeCould": "여기에 최종 오류에 대한 정보를 제공할 수 있다면 좋을 것입니다.",
-        "allGoodCreateMultisig": "좋습니다. Multisig를 만드세요.",
+        "youCanNowFindTheMultisig": "이제 다중서명 거래 요청을 다음에서 찾을 수 있습니다.",
+        "other2TreasurersNeeds": "다른 2명의 재무 담당자가 서명해야 합니다.",
+        "theTheTransactionIsReady": "그러면 트랜잭션을 실행할 준비가 되었습니다!",
+        "anErrorOccurredPlease": "에러 발생됨. ",
+        "itWouldBeCoolIfWeCould": "여기서 최종 오류에 대한 정보를 제공할 수 있다면 좋을 것입니다.",
+        "allGoodCreateMultisig": "다 좋아, 다중서명을 만들어라",
         "history": "역사",
-        "allDoneHere": "여기에서 모두 완료",
+        "allDoneHere": "여기서 모두 완료",
         "noPendingPayoutRequest": "현재 보류 중인 지급 요청이 없습니다. ",
         "open": "열려 있는",
         "pending": "보류 중",
         "signedBy": "서명자",
-        "realTokenConversion": "*실제 토큰 전환은 재무 담당자가 지급 거래를 실행할 때 발생합니다.",
-        "hereYouSeeTheConversion": "여기에서 [TOKEN] 현재 시장에 대한 전환을 참조용으로 볼 수 있습니다. ",
+        "realTokenConversion": "*실제 토큰 전환은 회계 담당자가 지급 거래를 실행할 때 발생합니다.",
+        "hereYouSeeTheConversion": "여기서는 참고용으로 [TOKEN] 현재 시장의 변환을 볼 수 있습니다. ",
         "endorsed": "승인",
-        "helloTreasurerThisMultisig": "안녕하세요 재무님! ",
-        "helloTreasurerSelectTheMultisig": "안녕하세요 재무님! ",
-        "helloTreasurerStartAMultisig": "안녕하세요 재무님! ",
-        "allMultisigTransactionHasBeenSuccessfully": "모든 멀티시그. ",
-        "signMultisigTransaction": "멀티시그에 서명합니다. ",
-        "executeMultisigTransaction": "멀티시그를 실행합니다. ",
+        "helloTreasurerThisMultisig": "안녕하세요 재무관님! ",
+        "helloTreasurerSelectTheMultisig": "안녕하세요 재무관님! ",
+        "helloTreasurerStartAMultisig": "안녕하세요 재무관님! ",
+        "allMultisigTransactionHasBeenSuccessfully": "모든 다중서명. ",
+        "signMultisigTransaction": "다중서명에 서명하세요. ",
+        "executeMultisigTransaction": "다중서명을 실행합니다. ",
         "showCompletedTransactions": "완료된 거래 표시",
         "generateMultisigTransaction": "Miltisig를 생성합니다. ",
         "accountAndPaymentStatus": "계정",
         "payoutRequests": "지급 요청",
-        "multisigSignRequests": "다중 서명 요청",
+        "multisigSignRequests": "다중서명 요청",
         "readyToExecute": "실행 준비 완료"
       }
     },
@@ -1411,7 +1601,7 @@
     },
     "error404dho": {
       "7348": "404",
-      "daoIsUnderMaintenance": "DAO는 점검 중입니다."
+      "daoIsUnderMaintenance": "DAO는 점검 중입니다"
     },
     "error404page": {
       "ooops": "이런",
@@ -1426,82 +1616,82 @@
         "date": "날짜",
         "status": "상태",
         "amount": "양",
-        "claimed": "주장"
+        "claimed": "주장하다"
       },
       "profile": {
-        "inlinelabel": "인라인 레이블",
+        "inlinelabel": "인라인 라벨",
         "personalInfo": "개인적인 정보",
         "about": "에 대한",
         "myProjects": "내 프로젝트",
         "votes": "투표",
         "badges": "배지",
-        "inlinelabel1": "인라인 레이블",
+        "inlinelabel1": "인라인 라벨",
         "assignments": "과제",
         "contributions": "기여",
         "quests": "퀘스트",
         "biography": "전기",
         "recentVotes": "최근 투표",
         "noBadgesYesApplyFor": "아직 배지가 없습니다. 여기에서 배지를 신청하세요.",
-        "noBadgesToSeeHere": "여기에 표시할 배지가 없습니다.",
+        "noBadgesToSeeHere": "여기서 볼 수 있는 배지가 없습니다.",
         "apply": "적용하다",
         "looksLikeYouDontHaveAnyActiveAssignments": "활성 할당이 없는 것 같습니다. ",
-        "noActiveOrArchivedAssignments": "여기에 표시할 활성 또는 보관된 과제가 없습니다.",
+        "noActiveOrArchivedAssignments": "여기에서 볼 수 있는 활성 또는 보관된 과제가 없습니다.",
         "createAssignment": "과제 만들기",
-        "looksLikeYouDontHaveAnyContributions": "아직 참여 내역이 없는 것 같습니다. ",
-        "noContributionsToSeeHere": "여기에 표시할 기여가 없습니다.",
+        "looksLikeYouDontHaveAnyContributions": "아직 기여한 내용이 없는 것 같습니다. ",
+        "noContributionsToSeeHere": "여기서 볼 수 있는 기여가 없습니다.",
         "createContribution": "기여 만들기",
         "looksLikeYouDontHaveAnyQuests": "아직 퀘스트가 없는 것 같습니다. ",
         "noQuestsToSeeHere": "여기서 볼 수 있는 퀘스트가 없습니다.",
-        "createQuest": "퀘스트 생성",
-        "writeSomethingAboutYourself": "자신에 대해 작성하고 다른 사용자에게 귀하의 가입 동기를 알리십시오.",
-        "looksLikeDidntWrite": "{username}은(는) 아직 이 DAO에 가입하려는 동기에 대해 아무 것도 쓰지 않은 것 같습니다.",
+        "createQuest": "퀘스트 만들기",
+        "writeSomethingAboutYourself": "자신에 대해 작성하고 다른 사용자에게 가입 동기를 알려주세요.",
+        "looksLikeDidntWrite": "{username}은(는) 아직 이 DAO에 가입하려는 동기에 대해 아무것도 쓰지 않은 것 같습니다.",
         "writeBiography": "전기 쓰기",
         "retrievingBio": "바이오 검색 중...",
         "youHaventCast": "아직 투표하지 않았습니다. ",
-        "noVotesCastedYet": "아직 투표가 없습니다.",
+        "noVotesCastedYet": "아직 투표가 이루어지지 않았습니다.",
         "vote": "투표"
       },
       "profile-creation": {
         "profilePicture": "프로필 사진",
-        "makeSureToUpdate": "회원이 되시면 프로필을 업데이트하십시오. ",
+        "makeSureToUpdate": "회원이 되신 후 프로필을 업데이트하세요. ",
         "uploadAnImage": "이미지 업로드",
         "name": "이름",
         "accountName": "계정 이름",
         "location": "위치",
         "timeZone": "시간대",
         "tellUsSomethingAbout": "당신에 대해 알려주세요",
-        "connectYourPersonalWallet": "개인 지갑 연결",
-        "youCanEnterYourOther": "교환 가능한 토큰을 얻으면 향후 토큰 상환을 위해 다른 지갑 주소를 입력할 수 있습니다. ",
-        "selectThisAsPreferred": "이것을 선호하는 주소로 선택하십시오",
-        "yourContactInfo": "연락처 정보",
+        "connectYourPersonalWallet": "개인 지갑을 연결하세요",
+        "youCanEnterYourOther": "상환 가능한 토큰을 획득한 경우 향후 토큰 상환을 위해 다른 지갑 주소를 입력할 수 있습니다. ",
+        "selectThisAsPreferred": "기본 주소로 선택하세요.",
+        "yourContactInfo": "귀하의 연락처 정보",
         "thisInformationIsOnly": "이 정보는 내부 목적으로만 사용됩니다. ",
-        "selectThisAsPreferredContactMethod": "선호하는 연락 방법으로 선택하세요."
+        "selectThisAsPreferredContactMethod": "선호하는 연락 방법으로 이것을 선택하세요"
       }
     },
     "proposals": {
       "create": {
         "optionsarchetypes": {
-          "form":{
+          "form": {
             "archetype": {
-              "label":"유형 선택"
+              "label": "역할 선택"
             },
             "tier": {
-              "label": "등급 선택"
+              "label": "보상 등급 선택"
             }
           },
-          "chooseARoleArchetype": "역할 원형 선택\n        ",
-          "noArchetypesExistYet": "아직 원형이 없습니다.",
-          "pleaseCreateThemHere": "여기에서 생성하십시오.",
-          "chooseARoleTier": "역할 등급 선택"
+          "chooseARoleArchetype": "역할 선택",
+          "noArchetypesExistYet": "아직 원형이 존재하지 않습니다.",
+          "pleaseCreateThemHere": "여기에서 생성해 주세요.",
+          "chooseARoleTier": "보상 등급 선택"
         },
         "optionsassignments": {
-          "chooseARecent": "브리지 지불금을 계산하려면 최근 할당을 선택하십시오."
+          "chooseARecent": "브리지 지급액을 계산하려면 최근 과제를 선택하세요."
         },
         "optionsbadges": {
-          "select": "선택",
-          "chooseABadge": "배지 선택\n        ",
-          "noArchetypesExistYet": "아직 원형이 없습니다.",
-          "pleaseCreateThemHere": "여기에서 생성하십시오."
+          "select": "선택하다",
+          "chooseABadge": "배지를 선택하세요\n        ",
+          "noArchetypesExistYet": "아직 원형이 존재하지 않습니다.",
+          "pleaseCreateThemHere": "여기에서 생성해 주세요."
         },
         "optionspolicies": {
           "chooseAParentPolicy": "상위 정책 선택\n        ",
@@ -1510,10 +1700,10 @@
         "stepreview": {
           "back": "뒤쪽에",
           "publish": "게시",
-          "publishToStaging": "준비에 게시"
+          "publishToStaging": "스테이징에 게시"
         },
         "stepproposaltype": {
-          "completeYourDraftProposal": "제안서 초안 작성",
+          "completeYourDraftProposal": "제안서 초안을 완성하세요",
           "onetimeContributions": "일회성 기부",
           "recurringAssignments": "반복 할당",
           "organizationalAssets": "조직 자산",
@@ -1532,28 +1722,28 @@
           "startDate": "시작일",
           "periods": "미문",
           "endDate": "종료일",
-          "youMustSelect": "{1}개 미만의 기간을 선택해야 합니다(현재 {2}개 기간을 선택했습니다).",
-          "theStartDate": "시작 날짜는 종료 날짜 이후여야 합니다.",
+          "youMustSelect": "{1}개 미만의 기간을 선택해야 합니다. (현재 {2}개의 기간을 선택했습니다.)",
+          "theStartDate": "시작일은 종료일보다 늦어서는 안 됩니다.",
           "back": "뒤쪽에",
           "nextStep": "다음 단계",
-          "1MoonPeriod": "1달 주기는 약 7일"
+          "1MoonPeriod": "1월의 주기는 약 7일이다."
         },
         "optionsquests": {
-          "chooseAQuestType": "퀘스트 유형 선택\n      ",
-          "select": "선택",
-          "startANewQuest": "새 퀘스트 시작",
-          "completeAnActiveQuest": "활성 퀘스트 완료"
+          "chooseAQuestType": "퀘스트 유형을 선택하세요\n      ",
+          "select": "선택하다",
+          "startANewQuest": "새로운 퀘스트를 시작하세요",
+          "completeAnActiveQuest": "퀘스트 이정표 만들기"
         },
         "stepdetails": {
-          "titleIsRequired": "제목이 필요합니다!",
-          "proposalTitleLengthHasToBeLess": "제안서 제목 길이는 {TITLE_MAX_LENGTH}자 이하여야 합니다(제목에 {length}자 포함).",
+          "titleIsRequired": "제목은 필수입니다!",
+          "proposalTitleLengthHasToBeLess": "제안서 제목 길이는 {TITLE_MAX_LENGTH}자 이하여야 합니다(제목에 {length}자가 포함되어 있음)",
           "theDescriptionMustContainLess": "설명은 {DESCRIPTION_MAX_LENGTH}자 미만이어야 합니다(설명에는 {length}자 포함).",
           "images": "이미지",
-          "pngJpegInApp": "PNG, JPG. ",
+          "pngJpegInApp": "PNG, JPEG. ",
           "documents": "서류",
-          "txtPdfDoc": "Txt, PDF, 문서. ",
+          "txtPdfDoc": "텍스트, PDF, 문서. ",
           "videos": "비디오",
-          "mp4MovMax": "MP4, 이동 ",
+          "mp4MovMax": "MP4, Mov. ",
           "leaveFileHere": "여기에 파일을 남겨주세요",
           "dragAndDrop": "견인",
           "orBrowse": "또는 찾아보기",
@@ -1561,49 +1751,49 @@
           "nextStep": "다음 단계"
         },
         "steppayout": {
-          "pleaseEnterTheUSDEquivalentAnd1": "이 기여금에 대한 USD 등가물과 % 연기금을 입력하십시오. 나중에 더 많이 연기할수록 보너스가 더 높아집니다(아래 실제 급여 계산 참조 또는 계산기 사용). 하단 필드는 SEEDS, HVOICE, HYPHA 및 HUSD의 실제 지불금을 계산합니다.",
           "payout": "지불금",
-          "pleaseEnterTheUsd": "이 기여금에 대한 USD 등가물과 % 연기금을 입력하십시오. 나중에 더 많이 연기할수록 보너스가 더 높아집니다(아래 실제 급여 계산 참조 또는 계산기 사용). ",
-          "typeTheAmountOfUsd": "HUSD 금액 입력",
+          "pleaseEnterTheUSDEquivalentAnd1": "이 기여에 대한 USD 상당 금액과 이연 %를 입력하십시오. 나중에 연기할수록 보너스가 높아집니다(아래 실제 급여 계산을 참조하거나 당사 계산기를 사용하십시오). ",
+          "pleaseEnterTheUsd": "보상을 받을 HUSD 금액(예: USD 상당)을 입력하세요. ",
+          "typeTheAmountOfUsd": "해당 USD를 입력하세요.",
           "commitmentMustBeGreater": "약정은 역할 구성보다 크거나 같아야 합니다. ",
-          "defferedMustBeGreater": "지연은 역할 구성보다 크거나 같아야 합니다. ",
-          "salaryCompensationForOneYear": "1년간 급여 보상 ( ${value} )",
-          "salaryCompensationForOneYearUsd": "1년간 급여 보상 ( ${value} ) USD",
-          "compensation": "보상",
+          "defferedMustBeGreater": "역할 설정으로 인해 계속하려면 더 높은 비율을 선택해야 합니다.",
+          "salaryCompensationForOneYear": "1년 동안의 보상(${value} 상당)",
+          "salaryCompensationForOneYearUsd": "1년 동안의 보상( ${value} ) USD 상당",
+          "compensation": "보상 계산",
           "compensation1": "보상",
-          "belowYouCanSeeTheActual": "아래에서 HVOICE, HYPHA 및 HUSD 보상의 실제 내역을 확인할 수 있습니다.",
-          "pleaseEnterTheUSD": "이 기여금에 대한 USD 등가물과 % 연기금을 입력하십시오. 나중에 더 많이 연기할수록 보너스가 더 높아집니다(아래 실제 급여 계산 참조 또는 계산기 사용). ",
-          "compensationForOnePeriod": "한 기간 동안의 보상",
-          "compensationForOneCycle": "1주기 보상",
-          "customCompensation": "맞춤형 보상",
+          "pleaseEnterTheUSD": "보상에 해당하는 USD 금액을 입력하세요. ",
+          "belowYouCanSeeTheActual": "슬라이더를 조정할 때 계산기는 토큰 번호를 계산합니다.",
+          "compensationForOnePeriod": "한 기간 동안 보상",
+          "compensationForOneCycle": "한 사이클에 대한 보상",
+          "customCompensation": "맞춤 보상",
           "back": "뒤쪽에",
           "nextStep": "다음 단계",
-          "1MoonCycle": "1달 주기는 약 30일",
-          "1MoonPeriod": "1달 주기는 약 7일"
+          "1MoonCycle": "달의 1주기는 약 30일이다.",
+          "1MoonPeriod": "1월의 주기는 약 7일이다."
         }
       },
       "proposallist": {
-        "createProposal": "제안서 만들기",
-        "learnMore": "더 알아보기",
+        "createProposal": "제안서 작성",
+        "learnMore": "문서 살펴보기",
         "unity": "단일성",
         "quorum": "정족수",
         "noProposals": "제안 없음",
         "oopsNothingCould": "죄송합니다. 여기서는 아무것도 찾을 수 없습니다.",
-        "stagingProposals": "스테이징 제안",
+        "stagingProposals": "준비 제안",
         "activeProposals": "활성 제안",
         "noProposals1": "제안 없음",
-        "stagingProposals1": "스테이징 제안",
+        "stagingProposals1": "준비 제안",
         "activeProposals1": "활성 제안",
         "proposalHistory": "제안 내역",
-        "lookingToMonitor": "얼마나 오래된 제안이 진행되었는지 모니터링하고 싶으신가요? ",
+        "lookingToMonitor": "제안서가 얼마나 오래되었는지 모니터링하고 싶으신가요? ",
         "seeHistory": "역사 보기 >",
-        "isTheMinimumRequiredPercentageOfMembers": "제안이 통과되기 위해 승인하는 회원의 최소 요구 비율입니다.",
-        "isTheMinimumRequiredPercentageOfTotal": "통과되기 위해 투표에 참여하는 전체 구성원의 최소 요구 비율입니다. ",
+        "isTheMinimumRequiredPercentageOfMembers": "제안이 통과되기 위해 필요한 합의 비율입니다.",
+        "isTheMinimumRequiredPercentageOfTotal": "투표에 필요한 목소리의 비율입니다.",
         "searchProposals": "제안 검색",
         "proposalTypes": "제안 유형",
-        "sortByLastAdded": "마지막으로 추가된 순으로 정렬",
-        "yourVoteIsTheVoice": "귀하의 투표는 변화의 목소리입니다",
-        "atHyphaTheFuture": "Hypha의 미래는 공정하고 정당하며 개방적인 분산형 의사 결정을 기반으로 합니다. 우리의 새로운 형태의 거버넌스 every에서 투표는 투표권에 추가되는 음성 토큰을 축적합니다. 80/20 투표 방식과 7일 투표 기간으로 공정하고 평등한 투표 제도를 개척하고 있습니다. 모든 목소리가 중요합니다."
+        "sortByLastAdded": "마지막 추가순으로 정렬",
+        "yourVoteIsTheVoice": "여러분의 투표가 변화의 목소리입니다",
+        "atHyphaTheFuture": "Hypha에서 미래는 공정하고 공정하며 개방적인 분산형 의사 결정을 기반으로 구축됩니다. "
       },
       "proposalhistory": {
         "noProposals": "제안 없음",
@@ -1615,22 +1805,22 @@
         "saveDraftAndLeave": "초안을 저장하고 나가기"
       },
       "proposaldetail": {
-        "proposalDetails": "제안 세부정보",
+        "proposalDetails": "제안 내용",
         "yourProposalIs": "귀하의 제안이 준비 중입니다.",
         "thatMeansYour": "이는 귀하의 제안이 아직 블록체인에 게시되지 않았음을 의미합니다. ",
         "publish": "게시",
         "editProposal": "제안 수정",
         "deleteProposal": "제안 삭제",
         "publishing": "출판",
-        "pleaseWait": "...기다리세요...",
-        "deleting": "삭제",
+        "pleaseWait": "기다리세요. ",
+        "deleting": "삭제 중",
         "pleaseWait1": "...기다리세요...",
-        "badgeHolders": "배지 소지자",
+        "badgeHolders": "배지 홀더",
         "apply": "적용하다",
         "thereAreNo": "아직 보유자가 없습니다.",
         "questCompletion": "퀘스트 완료",
-        "didYouFinish": "작업을 완료하고 퀘스트 완료 제안서를 작성할 준비가 되었습니까? ",
-        "claimYourPayment": "결제 요청",
+        "didYouFinish": "작업을 마치고 퀘스트 완료 제안서를 작성할 준비가 되셨나요? ",
+        "claimYourPayment": "지불금 청구",
         "yourProposalIs1": "귀하의 제안이 준비 중입니다.",
         "thatMeansYour1": "이는 귀하의 제안이 아직 블록체인에 게시되지 않았음을 의미합니다. ",
         "publish1": "게시",
@@ -1638,9 +1828,9 @@
         "deleteProposal1": "제안 삭제",
         "publishing1": "출판",
         "pleaseWait2": "...기다리세요...",
-        "deleting1": "삭제",
+        "deleting1": "삭제 중",
         "pleaseWait3": "...기다리세요...",
-        "badgeHolders1": "배지 소지자",
+        "badgeHolders1": "배지 홀더",
         "apply1": "적용하다",
         "thereAreNo1": "아직 보유자가 없습니다."
       }
@@ -1756,13 +1946,13 @@
     "support": {
       "support": {
         "transactions": "업무",
-        "whenYouEncounter": "오류 메시지가 나타나면 트랜잭션을 복사하여 DAO 지원 채널에 붙여넣으십시오.",
-        "transactionLog": "트랜잭션 로그",
-        "copyDataReport": "지원 팀에 데이터 보고서 복사",
+        "whenYouEncounter": "오류 메시지가 나타나면 거래를 DAO 지원 채널에 복사하여 붙여넣으세요.",
+        "transactionLog": "거래 로그",
+        "copyDataReport": "지원팀에 데이터 보고서 복사",
         "displayOnBlockExplorer": "블록 탐색기에 표시",
         "doYouHaveQuestions": "질문이 있으신가요?",
-        "findOurFull": "여기에서 전체 문서를 찾으십시오.",
-        "openWiki": "위키 열기",
+        "findOurFull": "여기에서 전체 문서를 찾아보세요.",
+        "openWiki": "문서 살펴보기",
         "version": "버전"
       }
     },
@@ -1770,63 +1960,63 @@
       "goToDashboard": "대시 보드로 이동",
       "optionalStep": "선택적 단계",
       "inviteMembers": "회원 초대",
-      "youReInTheEndGame": "최종 단계에 있으며 DAO에 회원을 초대할 준비가 되었습니다! ",
-      "optionalStepTelosAccount": "선택적 단계(텔로스 계정 필요)",
-      "launchTeam": "발사팀",
+      "youReInTheEndGame": "당신은 최종 단계에 이르렀고 회원을 DAO에 초대할 준비가 되었습니다! ",
+      "optionalStepTelosAccount": "선택 단계 (텔로스 계정 필요)",
+      "launchTeam": "출시팀",
       "createATeamOfMembersWithAdmin": "관리자 권한이 있는 구성원으로 팀을 만듭니다. ",
-      "createLaunchTeam": "런칭팀 만들기",
+      "createLaunchTeam": "출시 팀 만들기",
       "daoIndentity": "DAO 아이덴티티",
-      "youCanAddYourDaoName": "DAO의 이름을 추가하고 목적을 설명하고 로고를 추가할 수 있습니다. ",
-      "name": "이름",
-      "logoIcon": "로고 / 아이콘",
-      "purpose": "목적",
+      "youCanAddYourDaoName": "DAO의 이름을 추가하고 목적을 설명하며 로고를 추가할 수 있습니다. ",
+      "name": "다오 이름",
+      "logoIcon": "다오 로고",
+      "purpose": "DAO 목적",
       "theDisplayNameOfYourDao": "DAO의 표시 이름(최대 50자)",
-      "uploadAnImage": "이미지 업로드",
-      "brieflyExplainWhatYourDao": "귀하의 DAO가 무엇인지 간략하게 설명하십시오(최대 300자).",
+      "uploadAnImage": "로고 업로드",
+      "brieflyExplainWhatYourDao": "귀하의 DAO가 무엇인지 간략하게 설명하세요(최대 300자).",
       "nextStep": "다음 단계",
       "utilityToken": "유틸리티 토큰",
-      "theUtilityTokenThatRepresents": "DAO 내의 가치를 나타내고 DAO의 특정 서비스 또는 작업에 액세스할 수 있게 해주는 유틸리티 토큰입니다.",
+      "theUtilityTokenThatRepresents": "DAO 내의 가치를 나타내고 DAO의 특정 서비스나 작업에 액세스할 수 있게 해주는 유틸리티 토큰입니다.",
       "max20CharactersExBitcoin": "최대 20자. ",
-      "max7CharactersExBTC": "최대 7자 예. ",
+      "max7CharactersExBTC": "최대 7자(영문 기준) ",
       "symbol": "상징",
-      "treasuryToken": "국채 토큰",
-      "theTreasuryTokenIsAPromise": "재무부 토큰은 획득한 토큰을 공개 거래소에서 명목 화폐로 교환할 수 있는 액체 토큰으로 교환하겠다는 약속입니다.",
+      "treasuryToken": "재무부 토큰",
+      "theTreasuryTokenIsAPromise": "재무부 토큰은 획득한 토큰을 공개 거래소에서 법정화폐로 교환할 수 있는 유동 토큰으로 교환하겠다는 약속입니다.",
       "design": "설계",
       "setUpYourDaoBrand": "여기에서 DAO의 브랜드 색상 팔레트를 설정하세요. ",
       "primaryColor": "원색",
       "secondaryColor": "보조 색상",
       "buttonTextColor": "버튼 텍스트 색상",
       "preview": "시사",
-      "createATeamOfCoreMembersWithAdmin": "관리 능력이 있는 핵심 구성원으로 구성된 팀을 만듭니다. ",
+      "createATeamOfCoreMembersWithAdmin": "관리 역량을 갖춘 핵심 구성원으로 구성된 팀을 만듭니다. ",
       "telosAccount": "텔로스 계정",
       "addToTheTeam": "팀에 추가",
-      "daoPublished": "DAO 출간!"
+      "daoPublished": "DAO가 출시되었습니다!"
     }
   },
   "notifications": {
     "clearAll": "모두 지우기",
     "notifications": "알림",
     "newComment": "새 댓글",
-    "hasJustLeftAComment": "@{accountname}님이 귀하의 제안에 댓글을 남겼습니다.",
+    "hasJustLeftAComment": "@{accountname}님이 방금 귀하의 제안에 댓글을 남겼습니다.",
     "proposalVotingExpire": "제안 투표 만료",
     "proposalIsExpiring": "{proposalId} 제안이 {days}일 후에 만료됩니다.",
-    "proposalPassed": "제안 통과",
+    "proposalPassed": "제안이 통과되었습니다",
     "proposalHasPassed": "{proposalId} 제안이 통과되었습니다.",
-    "proposalRejected": "제안 거부됨",
+    "proposalRejected": "제안이 거부됨",
     "proposalHasntPassed": "{proposalId} 제안이 통과되지 않았습니다.",
-    "claimablePeriod": "청구가능기간",
-    "youHaveClaimablePeriod": "사용 가능한 {value} 기간이 있습니다.",
-    "extendYourAssignment": "임무를 연장하다",
-    "youStillHave": "할당을 연장할 수 있는 {days}일이 아직 남아 있습니다.",
-    "assignmentApproved": "과제 승인됨",
-    "yourAssignmentHasBeenApproved": "할당이 승인되었습니다.",
-    "assignmentRejected": "할당 거부됨",
-    "yourAssignmentHasntBeenApproved": "과제가 승인되지 않았습니다."
+    "claimablePeriod": "청구 가능 기간",
+    "youHaveClaimablePeriod": "귀하는 청구 가능 기간이 {value} 남았습니다.",
+    "extendYourAssignment": "과제를 연장하세요",
+    "youStillHave": "과제를 연장할 수 있는 시간이 아직 {days}일 남았습니다.",
+    "assignmentApproved": "과제가 승인됨",
+    "yourAssignmentHasBeenApproved": "귀하의 과제가 승인되었습니다",
+    "assignmentRejected": "과제가 거부됨",
+    "yourAssignmentHasntBeenApproved": "귀하의 과제가 승인되지 않았습니다"
   },
   "proposalparsing": {
     "createdAgo": "{diff} 전에 생성됨",
-    "closedAgo": "마감 {diff} 전",
-    "thisVoteWillCloseIn": "이 투표는 {dayStr}{hourStr}:{minStr}:{segStr} 후에 마감됩니다.",
+    "closedAgo": "{diff} 전 폐쇄됨",
+    "thisVoteWillCloseIn": "이 투표는 {dayStr}{hourStr}:{minStr}:{segStr} 후에 종료됩니다.",
     "second": " 두번째",
     "seconds": " 초",
     "minutes": " 분",
@@ -1849,12 +2039,12 @@
     "circle": "원",
     "budget": "예산",
     "policy": "정책",
-    "genericcontributions": "일반 기여",
+    "genericcontributions": "기여",
     "suspension": "보류"
   },
   "routes": {
     "exploreDAOs": "DAO 살펴보기",
-    "findOutMoreAboutHowToSetUp": "자신의 DAO 및 Hypha를 설정하는 방법에 대해 자세히 알아보십시오: https://hypha.earth",
+    "findOutMoreAboutHowToSetUp": "여기에서 자신만의 DAO 및 Hypha를 설정하는 방법에 대해 자세히 알아보세요: https://hypha.earth",
     "404NotFound": "404 찾을 수 없음",
     "finflow": "핀플로우",
     "dashboard": "계기반",
@@ -1865,7 +2055,7 @@
     "proposals": "제안",
     "createProposal": "제안서 작성",
     "proposalHistory": "제안 내역",
-    "proposalDetails": "제안 세부정보",
+    "proposalDetails": "제안 내용",
     "organization": "조직",
     "organizationAssets": "조직 자산",
     "organizationBadges": "조직 배지",
@@ -1878,12 +2068,12 @@
     "search": "찾다",
     "support": "지원하다",
     "treasury": "국고",
-    "multiSig": "멀티시그",
+    "multiSig": "다중 서명",
     "configurationSettings": "구성 설정",
     "ecosystemDashboard": "생태계 대시보드",
     "checkout": "점검",
-    "upvoteElection": "찬성 선거",
-    "election": "선거"
+    "upvoteElection": "찬성 투표",
+    "createYourDao": "당신의 DAO를 만드세요"
   },
   "proposal-creation": {
     "creation-process": "생성 과정",
@@ -1893,7 +2083,7 @@
       },
       "description": {
         "label": "세부",
-        "placeholder": "이 기여에 대한 이유를 설명하십시오. "
+        "placeholder": "기부 이유를 알려주세요. "
       },
       "date": {
         "label": "지속"
@@ -1911,137 +2101,138 @@
     "description": "설명",
     "title": "제목",
     "typeTheTitleOfYourProposal": "제안 제목을 입력하세요.",
-    "pleaseStateTheReasonForThisContributionTheMore": "이 기여에 대한 이유를 설명하십시오. ",
+    "pleaseStateTheReasonForThisContributionTheMore": "기부 이유를 알려주세요. ",
     "ability": "능력",
-    "shareTheDetailsOfThisBadgeAssignment": "이 조직의 정책에 따라 이 배지 할당의 세부 정보를 공유하십시오. ",
+    "shareTheDetailsOfThisBadgeAssignment": "이 조직의 정책에 따라 이 배지 할당의 세부 사항을 공유하십시오. ",
     "multiply": "곱하다",
-    "abilityDuration": "능력 지속 시간",
+    "abilityDuration": "능력 지속시간",
     "circle": "원",
-    "selectACircleFromTheList": "목록에서 서클 선택",
+    "selectACircleFromTheList": "목록에서 서클을 선택하세요.",
     "voiceCoefficient": "음성 계수",
     "utilityCoefficient": "유틸리티 계수",
     "cashCoefficient": "현금 계수",
     "payout": "지불금",
-    "compensation": "보상",
-    "pleaseEnterTheUSDEquivalentAnd": "이 기여금에 대한 USD 등가물과 % 연기금을 입력하십시오. 나중에 더 많이 연기할수록 보너스가 더 높아집니다(아래 실제 급여 계산 참조 또는 계산기 사용). ",
-    "typeThePayoutTitle": "지불금 제목을 입력하십시오",
-    "typeThePayoutDescription": "지급 설명 입력",
+    "compensation": "보상을 관리하세요",
+    "pleaseEnterTheUSDEquivalentAnd": "보상에 해당하는 USD 금액(예: HUSD 금액)을 입력하세요. ",
+    "belowYouCanSeeTheActual": "아래에서 HVOICE, HYPHA 및 HUSD의 실제 보상 내역을 볼 수 있습니다.",
+    "typeThePayoutTitle": "지불금 제목을 입력하세요",
+    "typeThePayoutDescription": "지급 설명을 입력하세요.",
     "attachments": "첨부파일",
     "clickToAddFile": "파일을 추가하려면 클릭하세요.",
-    "totalUSDEquivalent": "총 USD 등가물",
-    "chooseTheDeferredAmount": "후불 금액 선택",
+    "totalUSDEquivalent": "총 USD 상당",
+    "chooseTheDeferredAmount": "토큰 비율 선택(유틸리티 대 지불금)",
     "customCompensation": "맞춤형 보상",
-    "cashToken": "현금 토큰",
+    "cashToken": "지급 토큰",
     "utilityToken": "유틸리티 토큰",
-    "voiceToken": "보이스 토큰",
+    "voiceToken": "음성 토큰",
     "poll": "투표",
-    "pollOrSenseCheckWithCommunityMembers": "다른 제안보다 더 강력한 지원을 구축할 수 있는 것이 무엇인지 커뮤니티 구성원과 함께 설문조사 또는 감지 확인하십시오. ",
-    "useThisFieldToDetailTheContentOfYourPoll": "이 필드를 사용하여 설문 조사 내용을 자세히 설명하십시오.",
-    "votingMethod": "투표 방법",
+    "pollOrSenseCheckWithCommunityMembers": "다른 제안보다 더 강력한 지지를 구축할 수 있는 것이 무엇인지 알아보려면 커뮤니티 구성원과 함께 설문 조사를 하거나 확인하십시오. ",
+    "useThisFieldToDetailTheContentOfYourPoll": "이 필드를 사용하여 설문조사 내용을 자세히 설명하세요.",
+    "votingMethod": "투표방법",
     "selectVotingMethod": "투표 방법 선택",
     "content": "콘텐츠",
     "contribution": "기부금",
-    "shareTheDetailsOfYoutContribution": "이 조직의 정책에 따라 기여 세부 정보를 공유하십시오. ",
-    "describeYourProposal": "당신의 제안을 설명하십시오",
-    "chooseYourPayout": "지불금을 선택하십시오",
+    "shareTheDetailsOfYoutContribution": "함께 작업한 서클과 지원 자료를 포함하여 어떻게 가치를 더했는지 공유하세요. ",
+    "describeYourProposal": "기부 제안 세부정보를 추가하세요.",
+    "chooseYourPayout": "보상을 관리하세요",
     "documentation": "선적 서류 비치",
     "quest": "탐구",
-    "aQuestIsA2Step": "퀘스트는 2단계 제안입니다. ",
+    "aQuestIsA2Step": "퀘스트는 2단계 과정입니다. ",
     "createNewQuest": "새 퀘스트 만들기",
-    "typeTheQuestName": "퀘스트 이름 입력",
-    "describeYourQuest": "퀘스트 설명",
+    "typeTheQuestName": "퀘스트 이름을 입력하세요",
+    "describeYourQuest": "당신의 퀘스트를 설명하세요",
     "duration": "지속",
     "type": "유형",
     "selectQuestType": "퀘스트 유형 선택",
     "milestone": "중요한 단계",
     "selectPreviousQuest": "이전 퀘스트 선택",
-    "createNewPoll": "새 투표 만들기",
-    "role": "역할",
-    "applyBySelectingARoleArchetype": "역할 원형(템플릿)과 급여 범위를 선택하여 지원하십시오. ",
-    "applyForTheRole": "역할에 지원",
+    "createNewPoll": "새 설문조사 만들기",
+    "role": "과제",
+    "applyBySelectingARoleArchetype": "할당을 사용하여 DAO에서 작업 약속을 정의합니다. ",
+    "applyForTheRole": "과제 신청",
     "name": "이름",
-    "typeTheRoleName": "역할 이름을 입력하세요.",
-    "typeTheRoleDescription": "역할 설명 입력",
-    "manageYourSalary": "급여 관리",
-    "fieldsBelowDisplayTheMinimum": "아래 필드에는 역할 용량(이 역할에 할당할 수 있는 사람 수) 및 USD 등가물뿐만 아니라 이 역할에 필요한 최소 약정 비율 및 HUSD 토큰 대비 HUSD 토큰 비율이 표시됩니다.",
-    "chooseYourCommitmentLevel": "약정 수준 선택",
+    "typeTheRoleName": "과제 이름을 입력하세요",
+    "typeTheRoleDescription": "과제 설명을 입력하세요.",
+    "manageYourSalary": "보상을 관리하세요",
+    "fieldsBelowDisplayTheMinimum": "첫 번째 슬라이더를 사용하여 과제에 대한 약속 수준을 선택하세요. ",
+    "chooseYourCommitmentLevel": "약속 수준을 선택하세요",
     "badge": "배지",
-    "findHereAvailableBadges": "고유한 범위와 기능이 있는 사용 가능한 배지를 여기에서 찾으십시오. ",
-    "applyForTheNewAbility": "새로운 능력을 신청하십시오",
-    "typeTheAbilityName": "능력 이름 입력",
-    "tellOtherMembersThereReasons": "이 배지를 신청하려는 이유를 다른 회원에게 알리십시오.",
-    "theseAreBasicAccountAbilities": "이는 사용자 역할이 수행할 수 있는 기본 계정 기능입니다. ",
-    "createNewArchetype": "새 원형 만들기",
-    "typeTheArchetypeName": "원형 이름을 입력하십시오",
-    "typeTheArchetypeDescription": "원형 설명을 입력하십시오.",
-    "chooseTheSalaryBand": "급여 범위를 선택하십시오",
-    "enterTheRoleCapacity": "역할 용량을 입력하세요.",
-    "maximumNumberOfPeopleForThisRole": "이 역할의 최대 사용자 수입니다. ",
-    "chooseTheMinimumDeferredAmount": "최소 이체 금액을 선택하세요.",
+    "findHereAvailableBadges": "고유한 범위와 기능을 갖춘 사용 가능한 배지를 여기에서 찾아보세요. ",
+    "applyForTheNewAbility": "새로운 배지를 신청하세요",
+    "typeTheAbilityName": "능력 이름을 입력하세요",
+    "tellOtherMembersThereReasons": "이 배지를 신청하고 싶은 이유를 다른 회원에게 알리세요.",
+    "theseAreBasicAccountAbilities": "이는 사용자 역할이 수행할 수 있는 기본 책임입니다. ",
+    "createNewArchetype": "새로운 원형 생성",
+    "typeTheArchetypeName": "원형 이름을 입력하세요.",
+    "typeTheArchetypeDescription": "원형 설명을 입력하세요.",
+    "chooseTheSalaryBand": "급여 범위를 선택하세요",
+    "enterTheRoleCapacity": "역할 역량을 입력하세요.",
+    "maximumNumberOfPeopleForThisRole": "이 역할의 최대 인원 수입니다. ",
+    "chooseTheMinimumDeferredAmount": "최소 이연 금액을 선택하세요",
     "minimumRequiredPayedOutAsUtilityToken": "유틸리티 토큰으로 지불해야 하는 최소 %",
-    "badgesGiveCertainRightsAndAccountAbilities": "배지는 보유자에게 특정 권리와 계정 능력을 부여합니다. ",
+    "badgesGiveCertainRightsAndAccountAbilities": "배지는 소유자에게 특정 권리와 책임을 부여합니다. ",
     "createNewBadge": "새 배지 만들기",
     "typeTheBadgeName": "배지 이름을 입력하세요.",
-    "typeTheBadgeDescription": "배지 설명 입력",
+    "typeTheBadgeDescription": "배지 설명을 입력하세요.",
     "tokenMultiplier": "토큰 승수",
-    "badgesProvideAnAdditionalMultiplier": "배지는 DAO의 활동을 통해 받은 모든 수입에 추가 승수를 제공합니다. ",
+    "badgesProvideAnAdditionalMultiplier": "배지는 DAO 활동을 통해 얻은 수입에 추가 승수를 제공합니다. ",
     "circleDefineTheDAOsBoundaries": "원은 DAO의 경계와 도메인을 정의합니다. ",
     "createNewCircle": "새 서클 만들기",
     "typeTheCircleName": "서클 이름을 입력하세요.",
     "purpose": "목적",
     "typeTheCircleBudget": "서클 예산을 입력하세요.",
     "parentCircle": "학부모 서클",
-    "selectTheCircleParent": "서클 부모를 선택합니다. ",
+    "selectTheCircleParent": "원 상위를 선택합니다. ",
     "budget": "예산",
-    "requestBudgetAllocation": "이 제안으로 특정 서클에 대한 예산 할당을 요청합니다. ",
+    "requestBudgetAllocation": "이 제안을 통해 특정 서클에 대한 예산 할당을 요청하세요. ",
     "createNewBudget": "새 예산 만들기",
     "typeTheBudgetName": "예산 이름을 입력하세요.",
     "typeHereTheContentOfYourBadge": "여기에 예산 내용을 입력하세요.",
     "policy": "정책",
     "policiesCreateRulesThatDAOMembers": "정책은 DAO 구성원이 따라야 하는 규칙을 만듭니다. ",
     "createNewPolicy": "새 정책 만들기",
-    "typeThePolicyName": "정책 이름을 입력하십시오.",
-    "typeHereTheContentOfYourPolicy": "여기에 귀하의 정책 내용을 입력하십시오",
-    "selectTheCircleParentOrLeaveItBlank": "서클 부모를 선택하거나 비워 둡니다.",
+    "typeThePolicyName": "정책 이름을 입력하세요.",
+    "typeHereTheContentOfYourPolicy": "여기에 정책 내용을 입력하세요.",
+    "selectTheCircleParentOrLeaveItBlank": "원 상위 항목을 선택하거나 비워 두세요.",
     "policyType": "정책 유형",
     "selectThePolicyType": "정책 유형을 선택합니다. "
   },
   "search": {
     "results": {
-      "results": "{value} 결과",
+      "results": "{값} 결과",
       "noResultsFound": "검색 결과가 없습니다",
       "resultsTypes": "결과 유형",
       "all": "모두",
       "members": "회원",
-      "genericContribution": "일반 기여",
-      "roleAssignments": "역할 할당",
-      "roleArchetypes": "역할 원형",
-      "badgeTypes": "배지 유형",
-      "badgeAssignments": "배지 할당",
-      "suspensions": "정지",
+      "genericContribution": "기여",
+      "roleAssignments": "역할",
+      "roleArchetypes": "원형",
+      "badgeTypes": "배지",
+      "badgeAssignments": "능력",
+      "suspensions": "보류",
       "filterBy": "필터링 기준",
       "voting": "투표",
       "active": "활동적인",
       "archived": "보관됨",
       "suspended": "정지된",
       "sortBy": "정렬 기준",
-      "oldestFirst": "가장 오래된 것부터",
+      "oldestFirst": "오래된 것부터",
       "newestFirst": "최신순",
       "alphabetically": "알파벳순(A-Z)",
       "result": {
         "active": "활동적인",
-        "pendingToClose": "종료 대기 중",
+        "pendingToClose": "폐쇄 대기 중",
         "voting": "투표",
         "suspended": "정지된",
         "archived": "보관됨",
         "withdrawn": "빼는",
         "applicant": "응모자",
-        "genericContribution": "일반 기여",
+        "genericContribution": "기부금",
         "extension": "확대",
-        "roleAssignment": "역할 할당",
+        "roleAssignment": "과제",
         "badgeAssignment": "배지 할당",
         "suspension": "보류",
-        "roleArchetype": " 역할 원형",
+        "roleArchetype": " 역할",
         "badge": "배지"
       }
     }
@@ -2049,21 +2240,37 @@
   "validation": {
     "invalidEmailFormat": "잘못된 이메일 형식",
     "invalidPhoneFormat": "잘못된 전화 형식",
-    "invalidDiscordFormat": "잘못된 디스코드 형식입니다. ",
-    "theAccountMustContain": "계정에는 12개의 소문자, 1에서 5 사이의 숫자 또는 마침표만 포함되어야 합니다.",
-    "theAccountMustContain1": "계정에는 소문자 12자와 1에서 5 사이의 숫자만 포함되어야 합니다.",
-    "theAccountMustContain2": "계정은 12자를 포함해야 합니다.",
-    "thisFieldMustContainLessThan": "이 필드는 {val}자 미만이어야 합니다.",
+    "invalidDiscordFormat": "잘못된 불일치 형식입니다. ",
+    "theAccountMustContain": "계정에는 12개의 소문자, 1~5 사이의 숫자 또는 마침표만 포함되어야 합니다.",
+    "theAccountMustContain1": "계정에는 12개의 소문자만 포함되어야 하며 1부터 5까지의 숫자가 포함되어야 합니다.",
+    "theAccountMustContain2": "계정은 12자여야 합니다.",
+    "thisFieldMustContainLessThan": "이 필드는 {val}자 미만을 포함해야 합니다.",
     "theAccountAlreadyExists": "{account} 계정이 이미 존재합니다.",
-    "theAccountDoesntExists": "{account} 계정이 존재하지 않습니다.",
+    "theAccountDoesntExists": "{account} 계정이 존재하지 않습니다",
     "theTokenAlreadyExists": "{token} 토큰이 이미 존재합니다. ",
     "thisFieldIsRequired": "이 필드는 필수입니다",
-    "youMustTypeAPositiveAmount": "양수를 입력해야 합니다.",
+    "youMustTypeAPositiveAmount": "양수 금액을 입력해야 합니다.",
     "theValueMustBeLessThanOrEqual": "값은 {value}보다 작거나 같아야 합니다.",
-    "youValueMustBeGreaterThan": "값은 {value}보다 커야 합니다.",
+    "youValueMustBeGreaterThan": "귀하의 가치는 {value}보다 커야 합니다.",
     "youValueMustBeGreaterThanOrEqual": "값은 {value}보다 크거나 같아야 합니다.",
-    "minimumNumberOfCharacters": "최소 문자 수는 {number}입니다.",
-    "maximumNumberOfCharacters": "최대 문자 수는 {number}입니다.",
+    "minimumNumberOfCharacters": "최소 문자 수는 {number}자입니다.",
+    "maximumNumberOfCharacters": "최대 문자 수는 {number}자입니다.",
     "pleaseTypeAValidURL": "유효한 URL을 입력하세요."
+  },
+  "hypha-wallet-pop-up": {
+    "signTransaction": {
+      "desktop": {
+        "login": "로그인",
+        "title": "거래 서명",
+        "text": "이 거래 요청에 서명하려면 모바일 장치에서 Hypha 지갑으로 QR 코드를 스캔하세요.",
+        "actionText": "데스크탑에서 실행"
+      },
+      "mobile": {
+        "login": "로그인",
+        "title": "거래 서명",
+        "text": "모바일 장치에서 Hypha 지갑을 열고 이 거래에 서명하려면 이 버튼을 클릭하세요.",
+        "actionText": "하이파 지갑에서 개설"
+      }
+    }
   }
 }

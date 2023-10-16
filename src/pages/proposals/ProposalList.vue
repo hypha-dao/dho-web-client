@@ -3,6 +3,7 @@ import { mapGetters } from 'vuex'
 import ipfsy from '~/utils/ipfsy'
 import { getProposalChipFilters } from '../../utils/proposal-filter'
 import gql from 'graphql-tag'
+import { NUMBER_OF_SYSTEM_PROPOSALS } from '~/const'
 
 const STAGED_PROPOSALS_QUERY = `
   queryDao(filter: { docId: { eq: $docId } }) {
@@ -401,12 +402,14 @@ export default {
         }
       },
       fetchPolicy: 'no-cache',
+      // pollInterval: 1000 // TODO: Swap with subscribe once dgraph is ready
       subscribeToMore: {
         document: require('~/query/proposals/dao-proposals-active-vote-subs.gql'),
         variables () {
           return {
-            // first: (this.pagination.offset + this.pagination.first), // TODO: For some reason this does not work
             docId: this.selectedDao.docId,
+            // first: this.pagination.first,
+            // offset: 0,
             user: this.account
           }
         },
@@ -418,7 +421,10 @@ export default {
           if (!previousResult?.data) {
             return undefined
           }
-          subscriptionData.data.queryDao[0].proposal = [...previousResult.data.queryDao[0].proposal, ...subscriptionData.data.queryDao[0].proposal]
+          subscriptionData.data.queryDao[0].proposal = [
+            ...previousResult.data.queryDao[0].proposal,
+            ...subscriptionData.data.queryDao[0].proposal
+          ]
           return subscriptionData
         }
       }
@@ -436,7 +442,7 @@ export default {
         }
       },
       fetchPolicy: 'no-cache',
-
+      // pollInterval: 1000 // TODO: Swap with subscribe once dgraph is ready
       subscribeToMore: {
         document: gql`subscription stageProposals($docId: String!, $first: Int, $offset: Int) { ${STAGED_PROPOSALS_QUERY} }`,
         skip () { return !this.selectedDao?.docId },
@@ -447,14 +453,17 @@ export default {
           }
         },
         updateQuery: (previousResult, { subscriptionData }) => {
-          if (!subscriptionData.data) {
+          if (!subscriptionData?.data) {
             return previousResult
           }
-          if (!previousResult) {
+          if (!previousResult?.data) {
             return undefined
           }
-
-          return subscriptionData.data
+          subscriptionData.data.queryDao[0].stagingprop = [
+            ...previousResult.data.queryDao[0].stagingprop,
+            ...subscriptionData.data.queryDao[0].stagingprop
+          ]
+          return subscriptionData
         }
       }
     },
@@ -465,7 +474,7 @@ export default {
         return {
           active: data.queryDao[0].proposalAggregate.count,
           staging: data.queryDao[0].stagingpropAggregate.count,
-          archived: data.queryDao[0].passedpropsAggregate.count + data.queryDao[0].failedpropsAggregate.count
+          archived: (data.queryDao[0].passedpropsAggregate.count + data.queryDao[0].failedpropsAggregate.count) - NUMBER_OF_SYSTEM_PROPOSALS
         }
       },
       variables () { return { docId: this.selectedDao.docId } },

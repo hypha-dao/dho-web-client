@@ -8,6 +8,9 @@ import { dateToStringShort } from '~/utils/TimeUtils'
  * Wallet base component that is responsible for rendering wallet items, triggering redemption actions
  * This is a pure component whose state is entirely determined by props and does not query the backend
  */
+
+const DEFAULT_REDEEM_TOKEN = 'HUSD'
+
 export default {
   name: 'wallet-base',
   mixins: [validation, format],
@@ -40,6 +43,7 @@ export default {
 
   data () {
     return {
+      DEFAULT_REDEEM_TOKEN,
       form: {
         amount: null
       },
@@ -98,6 +102,12 @@ export default {
     },
     isOwner () {
       return this.username === this.account
+    },
+    tokenName () {
+      return this.$store.state.dao.settings.settings_pegTokenName_s ? this.$store.state.dao.settings.settings_pegTokenName_s : DEFAULT_REDEEM_TOKEN
+    },
+    tokenSymbol () {
+      return this.$store.state.dao.settings.settings_pegToken_a ? this.$store.state.dao.settings.settings_pegToken_a.split(' ')[1] : DEFAULT_REDEEM_TOKEN
     }
   },
 
@@ -138,7 +148,7 @@ export default {
         try {
           await this.redeemToken(
             {
-              quantity: `${parseFloat(this.form.amount).toFixed(2)} HUSD`,
+              quantity: `${parseFloat(this.form.amount).toFixed(2)} ${this.$store.state.dao.settings.settings_pegToken_a.split(' ')[1]}`,
               memo: 'redeem'
             }
           )
@@ -254,7 +264,7 @@ export default {
 <template lang="pug">
 widget.wallet-base(:more="more" :no-title="noTitle" morePosition="top" :title="$t('profiles.wallet-base.wallet')" @more-clicked="$router.push({ path: `/${$route.params.dhoname}/@${username}/wallet` })")
   q-dialog(:value="showDetailsModal" @hide="showDetailsModal = false, currentDetailsObject = {}")
-    widget.full-width.q-pa-md(:title="$t('profiles.wallet-base.redeemHusd')")
+    widget.full-width.q-pa-md(:title="$t('profiles.wallet-base.redeemHusd1', { tokenName: tokenName })")
       .h-b2.text-bold.text-black.q-mb-sm {{ $t('profiles.wallet-base.redemptionPending') }}
       .row.q-mt-sm
         .col-9.q-pr-sm
@@ -267,7 +277,7 @@ widget.wallet-base(:more="more" :no-title="noTitle" morePosition="top" :title="$
               div {{ currentDetailsObject.requestor }}
             .row.justify-between.h-b2.text-bold.text-black.full-width
               div {{ $t('profiles.wallet-base.amount') }}
-              div {{ `${formatCurrency(currentDetailsObject?.amount)} HUSD` }}
+              div {{ `${formatCurrency(currentDetailsObject?.amount)} ${tokenName}` }}
         .col-3
           .flex.items-center.justify-center(:style="{ 'width': '112px', 'height': '112px', 'border-radius': '20px', 'background': '#f99f17' }")
             q-icon(name="far fa-clock" color="white" size="60px")
@@ -276,10 +286,10 @@ widget.wallet-base(:more="more" :no-title="noTitle" morePosition="top" :title="$
         .col.q-mr-sm
           q-btn.h-btn1.full-width(color="primary" outline no-caps unelevated rounded :label="'Close'" :loading="submitting" @click="showDetailsModal = false")
   q-dialog(:value="showPayoutModal" @hide="showPayoutModal = false, resetForm()")
-    widget.full-width.q-pa-md(:title="$t('profiles.wallet-base.redeemHusd1')")
+    widget.full-width.q-pa-md(:title="$t('profiles.wallet-base.redeemHusd1', { tokenName: tokenName })")
       .row.q-mt-md
         .col-6
-          .h-b2.text-bold.text-black.q-mb-sm {{ $t('profiles.wallet-base.husdAvailable') }}
+          .h-b2.text-bold.text-black.q-mb-sm {{ $t('profiles.wallet-base.husdAvailable', { tokenName: tokenName })}}
           .row.no-wrap.items-center
             q-avatar.q-mr-sm(size="40px")
               img(:style="{ 'width': '40px', 'height': '40px' }" src="~/assets/icons/usd.png")
@@ -310,7 +320,7 @@ widget.wallet-base(:more="more" :no-title="noTitle" morePosition="top" :title="$
                 div {{ account }}
               .row.justify-between.h-b2.text-bold.text-black.full-width
                 div {{ $t('profiles.wallet-base.amount1') }}
-                div {{ `${formatCurrency(form.amount)} HUSD` }}
+                div {{ `${formatCurrency(form.amount)} ${tokenName}` }}
           .col-3
             .flex.items-center.justify-center(:style="{ 'width': '112px', 'height': '112px', 'border-radius': '20px', 'background': '#1CB59B' }")
               q-icon(name="fas fa-check" color="white" size="60px")
@@ -320,7 +330,7 @@ widget.wallet-base(:more="more" :no-title="noTitle" morePosition="top" :title="$
           q-btn.h-btn1.full-width(color="primary" outline no-caps unelevated rounded :label="'Close'" :loading="submitting" @click="showPayoutModal = false")
         .col
           q-btn.h-btn1.full-width(v-if="successRedeem" :disable="!form.amount" color="primary" no-caps unelevated rounded :label="$t('profiles.wallet-base.makeAnotherRedemption')" :loading="submitting" @click="successRedeem = false, resetForm()")
-          q-btn.h-btn1.full-width(v-else :disable="!form.amount || form.amount <= 0 || form.amount > pegToken.amount" color="primary" no-caps unelevated rounded :label="$t('profiles.wallet-base.redeemHusd')" :loading="submitting" @click="onRedeemHusd()")
+          q-btn.h-btn1.full-width(v-else :disable="!form.amount || form.amount <= 0 || form.amount > pegToken.amount" color="primary" no-caps unelevated rounded :label="$t('profiles.wallet-base.redeemHusd1', { tokenName: tokenName })" :loading="submitting" @click="onRedeemHusd()")
   .row.justify-center.q-mb-md(v-if="!wallet || wallet?.length === 0")
     loading-spinner(v-if="loading" color="primary" size="40px")
     .h-b2(v-else) {{ $t('profiles.wallet-base.noWalletFound') }}
@@ -360,7 +370,7 @@ widget.wallet-base(:more="more" :no-title="noTitle" morePosition="top" :title="$
         .h-b2.text-primary.text-bold.text-underline(@click="showDetailsModal = true, currentDetailsObject = redemption") {{ $t('profiles.wallet-base.details') }}
   .row.q-pt-xxs.q-mt-md(v-if="canRedeem && isOwner")
     q-btn.h-btn1.full-width(color="primary" no-caps unelevated rounded :label="$t('profiles.wallet-base.redeem')" @click="showPayoutModal = true")
-      q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle") {{ $t('profiles.wallet-base.queueHusdRedemption') }}
+      q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle") {{ $t('profiles.wallet-base.queueHusdRedemption', { tokenName: tokenName }) }}
 
 </template>
 

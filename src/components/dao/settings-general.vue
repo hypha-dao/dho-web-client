@@ -62,6 +62,7 @@ export default {
               ref="logo"
               v-show="false"
             )
+        q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") {{ $t('common.onlyDaoAdmins') }}
 
       .col-12.col-md-4(:class="{'q-mt-sm': !$q.screen.gt.md}")
         label.h-label {{ $t('configuration.settings-general.form.name.label') }}
@@ -78,7 +79,7 @@ export default {
           rounded
           v-model='form.name'
         )
-        q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
+        q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") {{ $t('common.onlyDaoAdmins') }}
 
       .col-12.col-md-4(:class="{'q-mt-sm': !$q.screen.gt.md}")
         label.h-label {{ $t('configuration.settings-general.form.url.label') }}
@@ -97,7 +98,7 @@ export default {
               rounded
               v-model='form.url'
             )
-            q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
+            q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") {{ $t('common.onlyDaoAdmins') }}
 
       .full-width.q-mt-sm
         label.h-label {{ $t('configuration.settings-general.form.purpose.label') }}
@@ -118,6 +119,7 @@ export default {
           type="textarea"
           v-model='form.purpose'
         )
+        q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") {{ $t('common.onlyDaoAdmins') }}
 
     section.row.justify-between.q-col-gutter-x-xl(v-if="isShowingMore")
         .col-12.col-md-4(:class="{'q-mt-sm': !$q.screen.gt.md}")
@@ -141,7 +143,7 @@ export default {
                     rounded
                     v-model="form.primaryColor"
                 )
-            q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
+            q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") {{ $t('common.onlyDaoAdmins') }}
 
         .col-12.col-md-4(:class="{'q-mt-sm': !$q.screen.gt.md}")
             label.h-label {{ $t('configuration.settings-general.form.secondary-color.label') }}
@@ -164,7 +166,7 @@ export default {
                     rounded
                     v-model="form.secondaryColor"
                 )
-            q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
+            q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") {{ $t('common.onlyDaoAdmins') }}
 
         .col-12.col-md-4(:class="{'q-mt-sm': !$q.screen.gt.md}")
             label.h-label {{ $t('configuration.settings-general.form.text-color.label') }}
@@ -187,7 +189,7 @@ export default {
                     rounded
                     v-model="form.textColor"
                 )
-            q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
+            q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") {{ $t('common.onlyDaoAdmins') }}
 
         .row.full-width.q-my-xl.relative-position
           .col-6(:style="{'height':'96px', 'background': form.primaryColor, 'cursor': 'context-menu'}")

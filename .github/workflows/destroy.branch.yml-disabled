@@ -1,3 +1,4 @@
+# TODO: Temporary disabled until fixed
 name: Destroy temporary instance
 
 on:

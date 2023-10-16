@@ -3,7 +3,9 @@ import { mapGetters } from 'vuex'
 
 export default {
   name: 'options-quests',
-  components: {},
+  components: {
+    LoadingSpinner: () => import('~/components/common/loading-spinner.vue')
+  },
 
   props: {},
 

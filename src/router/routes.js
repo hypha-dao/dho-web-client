@@ -26,15 +26,24 @@ const routes = [
   },
   {
     path: '/:dhoname',
-    component: () => import('layouts/DhoSelector.vue'),
+    component: () => import('layouts/Layout.vue'),
     props: true,
     children: [
+      {
+        path: 'explore',
+        name: 'explore',
+        meta: {
+          title: I18n.t('routes.exploreDAOs')
+        },
+        component: () => import('pages/dho/Explore.vue')
+      },
       {
         path: 'create-your-dao',
         name: 'create-your-dao',
         meta: {
           title: I18n.t('routes.createYourDao'),
-          hideForAuth: false
+          hideForAuth: false,
+          layout: () => import('layouts/LoginLayout.vue')
         },
         component: () => import('pages/onboarding/NLogin.vue')
       },
@@ -55,37 +64,12 @@ const routes = [
         component: () => import('pages/dho/Home.vue')
       },
       {
-        path: 'create',
-        name: 'dao-launcher',
-        meta: {
-          breadcrumbs: {
-            tab: {
-              name: I18n.t('routes.explore'),
-              link: { name: 'explore' }
-            }
-          },
-          layout: {
-            desktop: 'default',
-            mobile: 'create'
-          },
-          title: I18n.t('routes.createANewDao')
-          // requiresAuth: true,
-          // requiresAuthMember: true
-        },
-        component: () => import('pages/onboarding/create.vue'),
-        props: true
-      },
-      {
-        path: 'demo-ipfs',
-        name: 'ipfs',
-        component: () => import('pages/dho/DemoIpfs.vue')
-      },
-      {
         path: 'login',
         name: 'login',
         meta: {
           title: I18n.t('routes.login'),
-          hideForAuth: true
+          hideForAuth: true,
+          layout: () => import('layouts/LoginLayout.vue')
         },
         component: () => import('pages/onboarding/NLogin.vue')
       },
@@ -145,7 +129,7 @@ const routes = [
                   link: { name: 'proposals' }
                 }
               },
-              layout: 'proposal',
+              // layout: 'proposal',
               title: I18n.t('routes.proposalDetails')
             },
             component: () => import('pages/proposals/ProposalDetail.vue'),
@@ -200,14 +184,6 @@ const routes = [
         },
         component: () => import('pages/proposals/ProposalDetail.vue'),
         props: true
-      },
-      {
-        path: 'explore',
-        name: 'explore',
-        meta: {
-          title: I18n.t('routes.exploreDAOs')
-        },
-        component: () => import('pages/dho/Explore.vue')
       },
       {
         path: '@:username',
@@ -361,14 +337,7 @@ const routes = [
         component: () => import('pages/ecosystem/EcosystemChekout.vue')
 
       },
-      {
-        path: 'home',
-        name: 'dashboard',
-        meta: {
-          title: I18n.t('routes.dashboard')
-        },
-        component: () => import('pages/dho/Home.vue')
-      },
+
       {
         path: 'election/:id',
         name: 'election-details',
@@ -411,15 +380,9 @@ const routes = [
   }
 ]
 
-if (process.env.PPP_ENV === 'test') {
-  routes[0].children.push(
-    {
-      path: '/dev/dao',
-      name: 'min-explore',
-      component: () => import('~/pages/dho/MinExplore.vue')
-    }
-  )
-}
+// if (process.env.PPP_ENV === 'test') {
+
+// }
 
 // Always leave this as last one
 if (process.env.MODE !== 'ssr') {

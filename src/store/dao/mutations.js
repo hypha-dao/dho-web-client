@@ -1,10 +1,4 @@
-export const setDho = (state, dho) => {
-  if (dho && dho.length === 1) {
-    state.dho = {
-      ...dho[0].settings[0]
-    }
-  }
-}
+import { PLAN, PLAN_STATUS } from '~/const'
 
 const settingsMapper = (settings) => {
   return {
@@ -49,6 +43,10 @@ const settingsMapper = (settings) => {
     communityVotingDurationSec: settings?.settings_communityVotingDurationSec_i,
     communityVotingAlignmentPercent: settings?.settings_communityVotingAlignmentPercent_i,
     communityVotingQuorumPercent: settings?.settings_communityVotingQuorumPercent_i,
+
+    treasuryTokenMultiplier: settings?.settings_treasuryTokenMultiplier_i / 100,
+    utilityTokenMultiplier: settings?.settings_utilityTokenMultiplier_i / 100,
+    voiceTokenMultiplier: settings?.settings_voiceTokenMultiplier_i / 100,
 
     communityVotingMethod: settings?.settings_communityVotingMethod_s,
     upvoteStartDateTime: new Date(settings?.settings_upvoteStartDateTime_s).toLocaleString(),
@@ -100,70 +98,6 @@ const settingsMapper = (settings) => {
   }
 }
 
-export const switchDao = (state, daos) => {
-  // Called by DhoSelector.vue after the apollo query
-  if (daos && daos.length === 1) {
-    const dao = daos[0]
-    state.name = dao.details_daoName_n
-    state.hash = dao.hash
-    state.docId = dao.docId
-
-    // dao.details_daoType_s = 'anchor'
-    // dao.details_isWaitingEcosystem_i = Boolean(dao.details_isWaitingEcosystem_i)
-
-    const isWaitingEcosystem = Boolean(dao.details_isWaitingEcosystem_i)
-    const isEcosystemActivated = dao.details_isWaitingEcosystem_i === 0
-    const isEcosystem = dao.details_daoType_s === 'anchor' || isWaitingEcosystem
-
-    state.announcements = [...dao.announcements].map(_ => ({ ..._, enabled: Boolean(_.enabled) }))
-
-    state.meta = {
-      memberCount: dao.memberAggregate.count
-    }
-
-    const planmanager = dao && dao.planmanager && dao.planmanager.length > 0 ? dao.planmanager[0] : null
-    const lastbill = planmanager ? planmanager.lastbill[0] : {}
-    const plan = planmanager
-      ? {
-          ...lastbill,
-          isActivated: true,
-          isEcosystem,
-          isEcosystemActivated,
-          isWaitingEcosystem,
-          maxUsers: lastbill && lastbill?.pricingplan && lastbill?.pricingplan[0].maxMemberCount
-        }
-      : {
-          isActivated: false,
-          isEcosystem,
-          isEcosystemActivated,
-          isWaitingEcosystem
-        }
-
-    state.plan = {
-      ...plan
-    }
-
-    const multisigs = dao.multisigs
-    state.multisigs = multisigs && multisigs.length > 0 ? multisigs.map(settingsMapper) : []
-
-    const settings = dao.settings[0]
-
-    state.ecosystem = {
-      name: settings?.ecosystem_name_s,
-      logo: settings?.ecosystem_logo_s,
-      domain: settings?.ecosystem_domain_s,
-      purpose: settings?.ecosystem_purpose_s,
-      isActivated: isEcosystemActivated
-    }
-
-    state.settings = {
-      ...settingsMapper(settings),
-      levels: [...dao?.levels],
-      upvoteElectionId: dao?.upcomingelct?.[0]?.docId
-    }
-  }
-}
-
 export const setAlerts = (state, data) => {
   state.alerts = [...data]
 }
@@ -172,5 +106,42 @@ export const setConfigs = (state, data) => {
   state.configs = {
     ...state.configs,
     ...data
+  }
+}
+
+export const setDAO = (state, dao) => {
+  state.name = dao.details_daoName_n
+  state.hash = dao.hash
+  state.docId = dao.docId
+
+  state.meta = {
+    memberCount: dao.memberAggregate.count
+  }
+
+  const settings = dao.settings[0]
+
+  state.settings = {
+    ...settingsMapper(settings)
+  }
+}
+
+export const setDho = (state, dho) => {
+  if (dho && dho.length === 1) {
+    state.dho = {
+      ...dho[0].settings[0]
+    }
+  }
+}
+
+export const setPlan = (state, plan = {}) => {
+  state.plan = {
+    ...plan,
+    name: (plan?.name || PLAN.FOUNDER).toLowerCase(),
+    status: plan?.status || PLAN_STATUS.ACTIVE,
+    amountUSD: (plan?.price / 100) / (plan.interval === 'year' && plan.planType === 'SAAS' ? 12 : 1),
+    coreMembersCount: plan?.coreMembersCount || 5,
+    communityMembersCount: plan?.communityMembersCount || 0,
+    currentCoreMembersCount: state?.meta?.memberCount || 0
+
   }
 }

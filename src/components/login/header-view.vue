@@ -30,6 +30,7 @@ export default {
 .full-width
   .row.justify-between.q-mb-md
     ipfs-image-viewer(:ipfsCid="logo" showDefault :defaultLabel="daoName" :size="height/1.5 + 'px'")
+    .flex.items-center {{ daoName }}
 
 </template>
 

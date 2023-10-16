@@ -4,24 +4,22 @@ import gql from 'graphql-tag'
 import paginate from '~/utils/paginate'
 
 const PROPOSAL_VOTES_QUERY = `
-  getDocument(docId: $docId) {
-    __typename
-    docId
+  queryVote(first: $first, offset: $offset) @cascade {
+    voteon(filter: { docId: { eq: $docId } }) {
+      docId
+      type
+    }
 
-    ... on Votable {
-      __typename
-
-      voteAggregate {
+    voteonAggregate {
         count
       }
 
-      vote(first: $first, offset: $offset, order: { desc: createdDate }) {
-        username: vote_voter_n
-        vote: vote_vote_s
-        strength: vote_votePower_a
-      }
-    }
+    vote: vote_vote_s
+    username: vote_voter_n
+    strength: vote_votePower_a
   }
+
+ 
 `
 
 export default {
@@ -34,7 +32,8 @@ export default {
   },
 
   props: {
-    proposalId: String
+    proposalId: String,
+    voteCount: Number
   },
 
   data () {
@@ -42,14 +41,14 @@ export default {
       page: 0,
       size: 5,
       voices: {},
-      voteCount: 0
+      votes: []
     }
   },
 
   apollo: {
     votes: {
       query: gql`query proposalVotes($docId: String!, $first: Int!, $offset: Int!) { ${PROPOSAL_VOTES_QUERY} }`,
-      update: data => data.getDocument.vote,
+      update: data => data.queryVote,
       skip () { return !this.proposalId },
       variables () {
         return {
@@ -59,26 +58,24 @@ export default {
         }
       },
 
-      result ({ data }) {
-        this.voteCount = data?.getDocument?.voteAggregate?.count
-      },
-      fetchPolicy: 'no-cache',
-      subscribeToMore: {
-        document: gql`subscription proposalVotes($docId: String!, $first: Int, $offset: Int) { ${PROPOSAL_VOTES_QUERY} }`,
-        skip () { return !this.proposalId },
-        variables () { return { docId: this.proposalId } },
-        updateQuery: (previousResult, { subscriptionData }) => {
-          if (!subscriptionData.data) {
-            return previousResult
-          }
-          if (!previousResult) {
-            return undefined
-          }
+      // fetchPolicy: 'no-cache',
+      pollInterval: 1000
+      // subscribeToMore: {
+      //   document: gql`subscription proposalVotes($docId: String!, $first: Int, $offset: Int) { ${PROPOSAL_VOTES_QUERY} }`,
+      //   skip () { return !this.proposalId },
+      //   variables () { return { docId: this.proposalId } },
+      //   updateQuery: (previousResult, { subscriptionData }) => {
+      //     if (!subscriptionData.data) {
+      //       return previousResult
+      //     }
+      //     if (!previousResult) {
+      //       return undefined
+      //     }
 
-          return subscriptionData.data
-        }
+      //     return subscriptionData.data
+      //   }
 
-      }
+      // }
 
     }
   },

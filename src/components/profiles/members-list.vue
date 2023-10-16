@@ -1,6 +1,8 @@
 <script>
+
 export default {
   name: 'members-list',
+
   components: {
     ProfileCard: () => import('./profile-card.vue'),
     LoadingSpinner: () => import('~/components/common/loading-spinner.vue')
@@ -11,10 +13,13 @@ export default {
       type: Array,
       default: () => []
     },
-    view: String,
-    compact: Boolean,
     canEnroll: Boolean,
-    lastResult: Object
+    compact: Boolean,
+    loading: Boolean,
+    view: {
+      type: String,
+      default: 'card'
+    }
   },
 
   methods: {
@@ -28,16 +33,23 @@ export default {
 
 <template lang="pug">
 .members-list
-  .row.justify-center.q-my-md(v-if="!lastResult")
+  .row.justify-center.q-my-md(v-if="loading")
     loading-spinner(color="primary" size="72px")
-  .row.justify-center.q-my-md(v-if="!members.length && lastResult")
+  .row.justify-center.q-my-md(v-if="!loading && members?.length === 0")
     .h-b4 {{ $t('profiles.members-list.noMembersAt') }}
   q-infinite-scroll(@load="onLoad" :offset="1000")
     .row(:class="{'q-mr-md' : view === 'list'}")
-      .template.flex.justify-center(v-for="member in members" :class="{ 'col-6 q-px-xs': $q.screen.md, 'col-4': view === 'card' && !compact, 'col-12': view === 'card' && compact && !$q.screen.md, 'full-width': view === 'list' }")
-        profile-card.q-mb-md(:canEnroll="canEnroll" :compact="compact" :key="member.hash" :view="view" v-bind="member" :style="{width: '100%'}" :class="{'q-mr-md' : !compact}")
-    template(v-slot:loading)
-      .row.justify-center.q-my-md
-        loading-spinner(color="primary" size="40px")
+      .template.flex.justify-center(
+        v-for="member in members"
+        :class="{ 'col-6 q-px-xs': $q.screen.md, 'col-4': view === 'card' && !compact, 'col-12': view === 'card' && compact && !$q.screen.md, 'full-width': view === 'list' }")
+        profile-card.q-mb-md(
+          :canEnroll="canEnroll"
+          :class="{'q-mr-md' : !compact}"
+          :compact="compact"
+          :key="member.hash"
+          :style="{width: '100%'}"
+          :view="view"
+          v-bind="member"
+        )
 
 </template>

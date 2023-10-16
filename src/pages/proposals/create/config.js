@@ -535,6 +535,11 @@ export default {
               label: I18n.t('proposal-creation.manageYourSalary'),
               description: I18n.t('proposal-creation.fieldsBelowDisplayTheMinimum')
             },
+            annualUsdSalaryCustom: {
+              key: 'annualUsdSalaryCustom',
+              label: I18n.t('proposal-creation.totalUSDEquivalent'),
+              type: 'asset'
+            },
             commitment: {
               key: 'commitment',
               label: I18n.t('proposal-creation.chooseYourCommitmentLevel'),

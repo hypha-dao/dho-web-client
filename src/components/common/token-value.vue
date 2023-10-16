@@ -1,4 +1,4 @@
-<script lang="ts">
+<script>
 import { defineComponent } from 'vue'
 import Widget from '~/components/common/widget.vue'
 import IpfsImageViewer from '~/components/ipfs/ipfs-image-viewer.vue'
@@ -95,7 +95,7 @@ export default defineComponent({
       .col
         widget(:style="{padding: '12px 15px', 'border-radius': '15px'}")
           .text-left.inline-block
-            span(v-if="!coefficient") {{getFormatedTokenAmount(value * multiplier, Number.MAX_VALUE)}}
+            span(v-if="!coefficient") {{value}}
             span.text-bold.q-mx-sm(:class="coefficientPercentage && coefficientPercentage >= 0 ? 'text-positive' : 'text-negative'" v-else-if="coefficient && (coefficientPercentage !== undefined || coefficientPercentage !== null)") x
               | {{coefficientPercentage}}
             q-tooltip(:content-style="{'font-size': '1em'}" anchor="top right" self="top right" v-if="tooltip") {{tooltip}}

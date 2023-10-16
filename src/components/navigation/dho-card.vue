@@ -37,7 +37,7 @@ export default {
         this.$q.notify({
           color: 'secondary',
           textColor: 'white',
-          message: 'The link has been copied',
+          message: this.$t('messages.linkCopied'),
           icon: 'far fa-copy',
           timeout: 5000,
           actions: [{ icon: 'fas fa-times', color: 'white' }]
@@ -95,7 +95,7 @@ q-card.dho-card.q-px-md.q-py-md(flat :class="{'dho-card--card': isCardView, 'dho
         img.object-cover(:src="ipfsy(bubble)")
   q-card-section.q-pa-none(@click="goToDaoInNewTab" :class="{ 'col': isCardView, 'col row items-center': isListView, 'full-width': !$q.screen.gt.sm }")
     div(:class="{ 'text-center q-mt-md': isCardView, '': isListView }")
-      .h-h5.text-bold {{ title }}
+      .h-h5.text-bold.overflow-hidden(:style="{ 'text-overflow': 'ellipsis' }") {{ title }}
       .text-xs.text-weight-900.text-secondary.q-mt-xxs(:style="{'height': '16px'}") {{ subtitle }}
       .text-xs.leading-loose.text-h-gray.q-mt-xs(v-if="isCardView" :style="{'height': '104px'}") {{ ellipsisDescription(description) }}
   q-card-section.q-pa-none.row.justify-between.items-center(:class="{ '': isCardView, 'col': isListView, 'full-width q-pt-md': !$q.screen.gt.sm }" :style="[isCardView && $q.screen.gt.xs ? {'height': '80px'} : {}]")

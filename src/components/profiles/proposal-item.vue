@@ -310,7 +310,7 @@ export default {
 <template lang="pug">
 widget.q-px-sm(noPadding :background="background" :class="{ 'cursor-pointer': clickable }" @click.native="clickable && onClick()")
   .flex.justify-center(:class="{item: !expandable, 'item-expandable': expandable, 'compact-card': compact}")
-    one-time-activity-header.q-px-lg(v-if="type === 'Payout' || type === PROPOSAL_TYPE.QUEST_PAYOUT" :votingExpired="isVotingExpired" :accepted="isAccepted" :title="title" :state="status" :compensation="compensation" :created="created" :type="type")
+    one-time-activity-header.q-px-lg(v-if="type === 'Payout' || type === PROPOSAL_TYPE.QUEST_PAYOUT || type === PROPOSAL_TYPE.QUEST_START" :votingExpired="isVotingExpired" :accepted="isAccepted" :title="title" :state="status" :compensation="compensation" :created="created" :type="type")
       template(v-slot:right)
         .q-mt-md(v-if="$q.screen.sm")
         voting-result(:class="{'q-mt-xl': compact}" v-if="isProposed" v-bind="voting" :colorConfig="isVotingExpired || isApproved ? expiredColorConfig : colorConfig" :colorConfigQuorum="isVotingExpired || isApproved ? expiredColorConfig : colorConfigQuorum")
