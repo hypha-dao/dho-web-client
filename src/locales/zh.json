@@ -2073,7 +2073,8 @@
     "ecosystemDashboard": "生态系统仪表板",
     "checkout": "查看",
     "upvoteElection": "投票支持选举",
-    "createYourDao": "创建您的 DAO"
+    "createYourDao": "创建您的 DAO",
+    "election": "选举"
   },
   "proposal-creation": {
     "creation-process": "创作过程",

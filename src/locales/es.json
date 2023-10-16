@@ -2052,7 +2052,8 @@
     "ecosystemDashboard": "Panel del ecosistema",
     "checkout": "Verificar",
     "upvoteElection": "Elección de voto a favor",
-    "createYourDao": "Crea tu DAO"
+    "createYourDao": "Crea tu DAO",
+    "election": "Elección"
   },
   "proposal-creation": {
     "creation-process": "Proceso de creación",

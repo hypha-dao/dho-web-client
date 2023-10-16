@@ -2073,7 +2073,8 @@
     "ecosystemDashboard": "Контролна табла екосистема",
     "checkout": "Провери",
     "upvoteElection": "Избори за гласање",
-    "createYourDao": "Креирајте свој ДАО"
+    "createYourDao": "Креирајте свој ДАО",
+    "election": "Избори"
   },
   "proposal-creation": {
     "creation-process": "Процес стварања",

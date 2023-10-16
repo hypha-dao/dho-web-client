@@ -2073,7 +2073,8 @@
     "ecosystemDashboard": "생태계 대시보드",
     "checkout": "점검",
     "upvoteElection": "찬성 투표",
-    "createYourDao": "당신의 DAO를 만드세요"
+    "createYourDao": "당신의 DAO를 만드세요",
+    "election": "선거"
   },
   "proposal-creation": {
     "creation-process": "생성 과정",
