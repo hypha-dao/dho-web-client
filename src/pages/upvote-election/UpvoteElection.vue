@@ -3,6 +3,7 @@ import { mapGetters, mapActions } from 'vuex'
 import I18n from '~/utils/i18n'
 import { dateToStringShort } from '~/utils/TimeUtils'
 import gql from 'graphql-tag'
+import { ELECTION_STATE, ELECTION_BADGES } from '~/const'
 
 const ELECTION_DETAILS = `
 getDao(docId: $daoId) {
@@ -85,21 +86,20 @@ export default {
   },
   data () {
     return {
+      ELECTION_STATE,
+      ELECTION_BADGES,
       dateToStringShort,
       I18n,
       counterdown: undefined,
-      selectedUsers: [],
-      votingState: false,
-      upvoteWidgetState: 'loading',
+      upvoteWidgetState: ELECTION_STATE.LOADING,
+      currentState: ELECTION_STATE.LOADING,
       upvoteTimeRemaining: '',
       roundTimeRemaining: '',
-      isRegister: false,
+      isRegistered: false,
       showApplications: false,
       showLearnMoreModal: false,
       tab: 'VOTING',
       page: 1,
-      signedUp: false,
-      currentState: 'loading',
       showGroups: false,
       showResults: false
     }
@@ -150,7 +150,12 @@ export default {
         return !this.account || !this.selectedDao || !this.selectedDao.docId
       },
       pollInterval: 1000,
-      fetchPolicy: 'no-cache'
+      fetchPolicy: 'no-cache',
+      result (res) {
+        if (res.data.getDao?.badge?.find(badge => badge.details_title_s === ELECTION_BADGES.DELEGATE)) {
+          this.isRegistered = true
+        }
+      }
     },
     electionDetails: {
       query: gql`query electionDetailsQuery ($daoId: String!, $filter: UpvtElectnFilter) { ${ELECTION_DETAILS} }`,
@@ -167,8 +172,8 @@ export default {
           status: data.getDao.ueElection[0].details_status_s,
           id: data.getDao.ueElection[0].docId,
           roundDuration: data.getDao.ueElection[0].details_roundDuration_i / 60,
-          chiefDelegates: data.getDao.ueElection[0].ueRound.slice(-1).flatMap(r => r.ueGroupLnk.flatMap(g => g.ueRdMember.flatMap(w => w.holdsbadge.filter(b => b.details_title_s === 'Chief Delegate').map(b => ({ ...b, member: w.details_member_n }))))),
-          headDelegates: data.getDao.ueElection[0].ueRound.slice(-1).flatMap(r => r.ueGroupLnk.flatMap(g => g.ueGroupWin.flatMap(w => w.holdsbadge.filter(b => b.details_title_s === 'Head Delegate').map(b => ({ ...b, member: w.details_member_n }))))),
+          chiefDelegates: data.getDao.ueElection[0].ueRound.slice(-1).flatMap(r => r.ueGroupLnk.flatMap(g => g.ueRdMember.flatMap(w => w.holdsbadge.filter(b => b.details_title_s === ELECTION_BADGES.CHIEF_DELEGATE).map(b => ({ ...b, member: w.details_member_n }))))),
+          headDelegates: data.getDao.ueElection[0].ueRound.slice(-1).flatMap(r => r.ueGroupLnk.flatMap(g => g.ueGroupWin.flatMap(w => w.holdsbadge.filter(b => b.details_title_s === ELECTION_BADGES.HEAD_DELEGATE).map(b => ({ ...b, member: w.details_member_n }))))),
           currentRound: {
             id: data.getDao.ueElection[0].ueCurrnd?.[0]?.docId,
             endDate: data.getDao.ueElection[0].ueCurrnd?.[0]?.details_endDate_t
@@ -218,26 +223,26 @@ export default {
     ...mapGetters('accounts', ['account']),
 
     isLoading () {
-      return this.upvoteWidgetState === 'loading' || this.currentState === 'loading'
+      return this.upvoteWidgetState === ELECTION_STATE.LOADING || this.currentState === ELECTION_STATE.LOADING
     },
 
     widgetTitle() {
-      if (this.upvoteWidgetState === 'signup' && this.isRegister) {
+      if (this.upvoteWidgetState === ELECTION_STATE.SIGNUP && this.isRegistered) {
         return this.I18n.t('pages.upvote-election.upvoteelection.thanksForRegistering')
-      } else if (this.upvoteWidgetState === 'signup') {
+      } else if (this.upvoteWidgetState === ELECTION_STATE.SIGNUP) {
         return this.I18n.t('pages.upvote-election.upvoteelection.signUpForThisElection')
-      } else if (this.upvoteWidgetState === 'finish') {
+      } else if (this.upvoteWidgetState === ELECTION_STATE.FINISH) {
         return this.I18n.t('pages.upvote-election.upvoteelection.displacements')
       }
       return ''
     },
 
     widgetDescription() {
-      if (this.upvoteWidgetState === 'signup' && this.isRegister) {
+      if (this.upvoteWidgetState === ELECTION_STATE.SIGNUP && this.isRegistered) {
         return this.I18n.t('pages.upvote-election.upvoteelection.theElectionIsAboutToStart')
-      } else if (this.upvoteWidgetState === 'active') {
+      } else if (this.upvoteWidgetState === ELECTION_STATE.ACTIVE) {
         return this.I18n.t('pages.upvote-election.upvoteelection.youCanVote')
-      } else if (this.upvoteWidgetState === 'waiting') {
+      } else if (this.upvoteWidgetState === ELECTION_STATE.WAITING) {
         return this.I18n.t('pages.upvote-election.upvoteelection.wellDone')
       }
       return ''
@@ -260,21 +265,21 @@ export default {
   methods: {
     ...mapActions('proposals', ['saveDraft', 'applyForBadge']),
     async signUp() {
-      const delegateDocId = this.daoBadges.find(badge => badge.title === 'Delegate').docId
-      await this.applyForBadge({ type: 'Delegate', docId: delegateDocId })
+      const delegateDocId = this.daoBadges.find(badge => badge.title === ELECTION_BADGES.DELEGATE).docId
+      await this.applyForBadge({ type: ELECTION_BADGES.DELEGATE, docId: delegateDocId })
     },
     statusSetUp() {
       if (this.electionDetails.status === 'finished' || this.electionDetails.status === 'canceled') {
-        this.upvoteWidgetState = 'finish'
-        this.currentState = 'finish'
+        this.upvoteWidgetState = ELECTION_STATE.FINISH
+        this.currentState = ELECTION_STATE.FINISH
         this.$forceUpdate()
       } else if (new Date(this.electionDetails.startDate) > new Date()) {
-        this.upvoteWidgetState = 'signup'
-        this.currentState = 'signup'
+        this.upvoteWidgetState = ELECTION_STATE.SIGNUP
+        this.currentState = ELECTION_STATE.SIGNUP
         this.$forceUpdate()
       } else if (this.electionDetails.rounds?.length >= 1) {
-        this.upvoteWidgetState = 'active'
-        this.currentState = 'voting'
+        this.upvoteWidgetState = ELECTION_STATE.ACTIVE
+        this.currentState = ELECTION_STATE.VOTING
         this.$forceUpdate()
       }
     },
@@ -328,16 +333,6 @@ export default {
       }
       return 0
     },
-    selectUser (user) {
-      const existedUser = this.selectedUsers.find(compItem => compItem === user)
-      if (!existedUser && !this.votingState) {
-        this.selectedUsers.push(user)
-      } else {
-        if (this.selectedUsers.indexOf(existedUser) > -1) {
-          this.selectedUsers.splice(this.selectedUsers.indexOf(existedUser), 1)
-        }
-      }
-    },
     async voteTransact (votedId, groupId) {
       const actions = [{
         account: this.$config.contracts.dao,
@@ -354,10 +349,6 @@ export default {
 
   },
   async mounted () {
-    // if (!this.upvoteElectionData || !this.votedUsers.length) {
-    // await this.$apollo.queries.electionDetails.refetch()
-    // await this.$apollo.queries.upvoteElectionVotedUsers.refetch()
-    // }
     this.counterdown = setInterval(() => {
       this.formatTimeLeft()
       this.$forceUpdate()
@@ -374,10 +365,6 @@ export default {
       this.formatTimeLeft()
       this.$forceUpdate()
     }, 1000)
-    // if (!this.upvoteElectionData || !this.votedUsers.length) {
-    // await this.$apollo.queries.electionDetails.refetch()
-    // await this.$apollo.queries.upvoteElectionVotedUsers.refetch()
-    // }
   },
   deactivated () {
     clearInterval(this.counterdown)
@@ -418,7 +405,7 @@ export default {
     loading-spinner(size="80px")
   .row.full-width.q-my-md.q-mt-lg(v-else)
     .col-9
-      q-card.q-mr-md.q-mb-md.widget.q-pa-xl.relative-position.rounded-card(v-if="currentState === 'signup'" flat)
+      q-card.q-mr-md.q-mb-md.widget.q-pa-xl.relative-position.rounded-card(v-if="currentState === ELECTION_STATE.SIGNUP" flat)
         .title
           .row.flex.items-center.justify-between
             .col.flex.items-center
@@ -436,7 +423,7 @@ export default {
                     .row
                       .h-h4 {{ electionDetails?.delegatesList?.length }}
                     .row {{ $t('pages.upvote-election.participants') }}
-            //- .col
+            //- .col // TODO: Waiting api for treasury
               q-card.rounded-card.q-pa-xl.applications-metric
                 .row.flex.items-center
                   .col-2
@@ -463,7 +450,7 @@ export default {
                   .col
                     .text-bold {{ applicant.details_member_n }}
                   .col @{{ applicant.details_member_n }}
-                  //- .col
+                  //- .col // TODO: Waiting api for telegram integration
                     .row.flex.items-center
                       q-icon(name="fas fa-paper-plane" size="12px")
                       .q-ml-xs {{ applicant.telegram }}
@@ -473,9 +460,9 @@ export default {
                   .row.flex.items-center
                     div.q-ml-xs(v-for="dot, index in pages" :style="{'width': '10px', 'height': '10px', 'background': '#CAC8B0', 'border-radius': '50%'}" :class="{ 'bg-primary': index === page - 1}")
                   q-btn(:disable="isLastPage" @click="onNext()" flat rounded icon="fas fa-chevron-right")
-      template(v-if="upvoteWidgetState !== 'signup'" v-for="round, index in electionDetails?.rounds" flat)
+      template(v-if="upvoteWidgetState !== ELECTION_STATE.SIGNUP" v-for="round, index in electionDetails?.rounds" flat)
         round-card.q-mb-md(v-bind="round" :roundNumber="index + 1" :electionStatus="electionDetails?.status")
-      q-card.q-mr-md.widget.q-pa-xl.relative-position.rounded-card(v-if="currentState === 'finish'" flat)
+      q-card.q-mr-md.widget.q-pa-xl.relative-position.rounded-card(v-if="currentState === ELECTION_STATE.FINISH" flat)
         .title
           .row.flex.items-center.justify-between
             .col.flex.items-center
@@ -530,7 +517,7 @@ export default {
                           profile-picture(:username="electionDetails.headDelegates?.[0]?.member" size="24px")
                         .col
                           .row.text-bold.text-black {{ electionDetails.headDelegates?.[0]?.member }}
-                          //- .row(:style="{ 'font-size': '10px' }") {{ electionDetails.rounds[electionDetails.rounds.length - 1].results.headChiefDelegate.telegram }}
+                          //- .row(:style="{ 'font-size': '10px' }") {{ electionDetails.rounds[electionDetails.rounds.length - 1].results.headChiefDelegate.telegram }} // TODO: Waiting api for telegram integration
                     .row
                       .row.flex.items-center
                         .text-secondary.q-mr-sm(:style="{ 'font-size': '12px' }") {{ $t('pages.upvote-election.headChiefDelegate') }}
@@ -549,11 +536,11 @@ export default {
                           .text-secondary.q-mr-sm(:style="{ 'font-size': '12px' }") {{ $t('pages.upvote-election.chiefDelegate') }}
                           img(width="16px" src="~/assets/icons/chief-delegate.svg")
     .col-3
-      //- profile-card.q-mb-md(v-if="signedUp" :electionState="currentState" isElection :style="{'grid-area': 'profile'}" :clickable="false" :username="account" view="card" :compact="!$q.screen.gt.md" :tablet="$q.screen.md")
-      widget.q-pa-xxl.bg-primary.q-mb-md(v-if="electionDetails?.status !== 'finished' && upvoteWidgetState !== 'finish'" :class="{ 'bg-secondary': upvoteWidgetState === 'waiting' }")
-        template(v-if="upvoteWidgetState !== 'active' && upvoteWidgetState !== 'waiting'")
+      //- profile-card.q-mb-md(v-if="signedUp" :electionState="currentState" isElection :style="{'grid-area': 'profile'}" :clickable="false" :username="account" view="card" :compact="!$q.screen.gt.md" :tablet="$q.screen.md") // TODO: Temporarily hide
+      widget.q-pa-xxl.bg-primary.q-mb-md(v-if="electionDetails?.status !== 'finished' && upvoteWidgetState !== ELECTION_STATE.FINISH" :class="{ 'bg-secondary': upvoteWidgetState === ELECTION_STATE.WAITING }")
+        template(v-if="upvoteWidgetState !== ELECTION_STATE.ACTIVE && upvoteWidgetState !== ELECTION_STATE.WAITING")
           .h-h4.text-white.q-mb-md {{ widgetTitle }}
-        template(v-else-if="upvoteWidgetState === 'active'")
+        template(v-else-if="upvoteWidgetState === ELECTION_STATE.ACTIVE")
           .row.items-center.q-mb-md
             .h-h4.text-white {{ roundTimeRemaining.mins }}
             .h-h4.q-mx-xxs.text-white(v-if="roundTimeRemaining.mins > 1") {{ $t('pages.upvote-election.upvoteelection.mins') }}
@@ -563,14 +550,14 @@ export default {
             .h-h4.q-mx-xxs.text-white(v-if="roundTimeRemaining.sec > 1") {{ $t('pages.upvote-election.upvoteelection.sec') }}
             .h-h4.q-mx-xxs.text-white(v-else) {{ $t('pages.upvote-election.upvoteelection.sec') }}
             .h-h4.text-white.text-weight-400 {{ $t('pages.upvote-election.upvoteelection.left') }}
-        template(v-else-if="upvoteWidgetState === 'waiting'")
+        template(v-else-if="upvoteWidgetState === ELECTION_STATE.WAITING")
           .row.q-mb-md
             .h-h4.text-white {{ roundTimeRemaining.sec }}
             .h-h4.q-mx-xxs.text-white(v-if="roundTimeRemaining.sec > 1") {{ $t('pages.upvote-election.upvoteelection.sec') }}
             .h-h4.q-mx-xxs.text-white(v-else) {{ $t('pages.upvote-election.upvoteelection.sec') }}
             .h-h4.text-white.text-weight-400 {{ $t('pages.upvote-election.upvoteelection.toNextRound') }}
         .text-white.q-mb-md {{ widgetDescription }}
-        //- template(v-if="upvoteWidgetState === 'finish'")
+        //- template(v-if="upvoteWidgetState === ELECTION_STATE.FINISH") // TODO: Waiting api for treasury
           .row.q-mb-md.flex.items-center
             .col-2.flex.items-center.justify-center
               img(src="~/assets/icons/head-chief.svg")
@@ -591,15 +578,15 @@ export default {
               img(src="~/assets/icons/delegate-l1.svg")
             .col.text-white.q-ml-xs {{ $t('pages.upvote-election.upvoteelection.delegatel1') }}
             .col-3.flex.items-center.justify-end.text-white $ {{ displacements.delegateL1 }}
-        template(v-if="!memberBadges?.find(badge => badge.title === 'Delegate') && upvoteWidgetState === 'signup'")
-          //- q-btn.q-px-lg.h-btn1.full-width.q-mb-sm(icon="fas fa-paper-plane" color="white" textColor="grey" :label="$t('pages.upvote-election.upvoteelection.telegramHandle')" no-caps rounded text-color="primary" unelevated)
-          q-btn.q-px-lg.h-btn1.full-width(:disable="memberBadges?.findIndex(badge => badge.title === 'Delegate') >= 0" @click="signUp()" color="secondary" textColor="white" :label="$t('pages.upvote-election.upvoteelection.signUp')" no-caps rounded text-color="primary" unelevated)
-        template(v-else-if="upvoteWidgetState !== 'finish'")
+        template(v-if="!memberBadges?.find(badge => badge.title === ELECTION_BADGES.DELEGATE) && upvoteWidgetState === ELECTION_STATE.SIGNUP")
+          //- q-btn.q-px-lg.h-btn1.full-width.q-mb-sm(icon="fas fa-paper-plane" color="white" textColor="grey" :label="$t('pages.upvote-election.upvoteelection.telegramHandle')" no-caps rounded text-color="primary" unelevated) // TODO: Waiting api for telegram integration
+          q-btn.q-px-lg.h-btn1.full-width(:disable="memberBadges?.findIndex(badge => badge.title === ELECTION_BADGES.DELEGATE) >= 0" @click="signUp()" color="secondary" textColor="white" :label="$t('pages.upvote-election.upvoteelection.signUp')" no-caps rounded text-color="primary" unelevated)
+        template(v-else-if="upvoteWidgetState !== ELECTION_STATE.FINISH")
           q-btn.q-px-lg.h-btn1.full-width(@click="showLearnMoreModal = true" outline color="white" textColor="white" :label="$t('pages.upvote-election.upvoteelection.learnMore')" no-caps rounded text-color="primary" unelevated)
-          //- q-btn.q-mt-sm.q-px-lg.h-btn1.full-width(v-if="currentState === 'signup' &&  memberBadges.findIndex(badge => badge.title === 'Delegate')" @click="upvoteWidgetState = 'active', signedUp = true, currentState='voting'" color="white" textColor="negative" :label="$t('pages.upvote-election.upvoteelection.unsubscribe')" no-caps rounded text-color="primary" unelevated)
-        template(v-if="upvoteWidgetState === 'finish'")
+          //- q-btn.q-mt-sm.q-px-lg.h-btn1.full-width(v-if="currentState === ELECTION_STATE.SIGNUP &&  memberBadges.findIndex(badge => badge.title === ELECTION_BADGES.DELEGATE)" @click="upvoteWidgetState = ELECTION_STATE.ACTIVE, signedUp = true, currentState=ELECTION_STATE.VOTING" color="white" textColor="negative" :label="$t('pages.upvote-election.upvoteelection.unsubscribe')" no-caps rounded text-color="primary" unelevated) // TODO: Waiting api for unsubscribe action
+        template(v-if="upvoteWidgetState === ELECTION_STATE.FINISH")
           q-btn.q-px-lg.h-btn1.full-width(color="white" textColor="primary" :label="$t('pages.upvote-election.upvoteelection.goToMyBadges')" no-caps rounded text-color="primary" unelevated)
-        .timer.row.q-mt-xl.justify-center(v-if="upvoteWidgetState === 'signup'" :style="{ 'color': 'white' }")
+        .timer.row.q-mt-xl.justify-center(v-if="upvoteWidgetState === ELECTION_STATE.SIGNUP" :style="{ 'color': 'white' }")
           .row.items-center(v-if="upvoteTimeRemaining.days > 0")
             div {{ upvoteTimeRemaining.days }}
             .q-mx-xxs(v-if="upvoteTimeRemaining.days > 1") {{ $t('pages.upvote-election.upvoteelection.days') }} :

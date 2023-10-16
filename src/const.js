@@ -88,3 +88,18 @@ export const PERIOD_NUMBERS = Object.freeze({
   SECS_PER_YEAR: 31557600,
   CYCLE_DURATION_SEC: 2629800
 })
+
+export const ELECTION_STATE = Object.freeze({
+  LOADING: 'loading',
+  SIGNUP: 'signup',
+  FINISH: 'finish',
+  VOTING: 'voting',
+  WAITING: 'waiting',
+  ACTIVE: 'active'
+})
+
+export const ELECTION_BADGES = Object.freeze({
+  DELEGATE: 'Delegate',
+  CHIEF_DELEGATE: 'Chief Delegate',
+  HEAD_DELEGATE: 'Head Delegate'
+})
