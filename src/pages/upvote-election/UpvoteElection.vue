@@ -50,6 +50,11 @@ getDao(docId: $daoId) {
         ueRdMember {
           docId
           details_member_n
+          ...on Member {
+            holdsbadge {
+              details_title_s
+            }
+          }
         }
         ueRdMemberAggregate {
           count
@@ -85,7 +90,7 @@ export default {
       counterdown: undefined,
       selectedUsers: [],
       votingState: false,
-      upvoteWidgetState: 'signup',
+      upvoteWidgetState: 'loading',
       upvoteTimeRemaining: '',
       roundTimeRemaining: '',
       isRegister: false,
@@ -94,7 +99,7 @@ export default {
       tab: 'VOTING',
       page: 1,
       signedUp: false,
-      currentState: 'signup',
+      currentState: 'loading',
       showGroups: false,
       showResults: false
     }
@@ -144,6 +149,7 @@ export default {
       skip () {
         return !this.account || !this.selectedDao || !this.selectedDao.docId
       },
+      pollInterval: 1000,
       fetchPolicy: 'no-cache'
     },
     electionDetails: {
@@ -161,15 +167,15 @@ export default {
           status: data.getDao.ueElection[0].details_status_s,
           id: data.getDao.ueElection[0].docId,
           roundDuration: data.getDao.ueElection[0].details_roundDuration_i / 60,
-          chiefDelegates: data.getDao.ueElection[0].ueRound.flatMap(r => r.ueGroupLnk.flatMap(g => g.ueGroupWin.flatMap(w => w.holdsbadge.filter(b => b.details_title_s === 'Chief Delegate').map(b => ({ ...b, member: w.details_member_n }))))),
-          headDelegates: data.getDao.ueElection[0].ueRound.flatMap(r => r.ueGroupLnk.slice(-1).flatMap(g => g.ueGroupWin.flatMap(w => w.holdsbadge.filter(b => b.details_title_s === 'Head Delegate').map(b => ({ ...b, member: w.details_member_n }))))),
+          chiefDelegates: data.getDao.ueElection[0].ueRound.slice(-1).flatMap(r => r.ueGroupLnk.flatMap(g => g.ueRdMember.flatMap(w => w.holdsbadge.filter(b => b.details_title_s === 'Chief Delegate').map(b => ({ ...b, member: w.details_member_n }))))),
+          headDelegates: data.getDao.ueElection[0].ueRound.slice(-1).flatMap(r => r.ueGroupLnk.flatMap(g => g.ueGroupWin.flatMap(w => w.holdsbadge.filter(b => b.details_title_s === 'Head Delegate').map(b => ({ ...b, member: w.details_member_n }))))),
           currentRound: {
             id: data.getDao.ueElection[0].ueCurrnd?.[0]?.docId,
             endDate: data.getDao.ueElection[0].ueCurrnd?.[0]?.details_endDate_t
           },
           startRound: {
             participantsCount: data.getDao.ueElection[0].ueStartrnd[0].ueGroupLnk.reduce((sum, group) => sum + group.ueRdMemberAggregate.count, 0),
-            participants: data.getDao.ueElection[0].ueStartrnd.flatMap(group => group.ueGroupLnk.flatMap(rdMember => rdMember.ueRdMember.map(member => { return { username: member.details_member_n, createdDate: member.createdDate } })))
+            participants: data.getDao.ueElection[0].ueStartrnd.flatMap(group => group.ueGroupLnk.flatMap(rdMember => rdMember.ueRdMember.map(member => { return { username: member?.details_member_n, createdDate: member.createdDate } })))
           },
           rounds: data.getDao.ueElection[0].ueRound.map((round) => {
             return {
@@ -179,7 +185,8 @@ export default {
                 return {
                   id: group.docId,
                   members: group.ueRdMember,
-                  votes: group.ueVote
+                  votes: group.ueVote,
+                  winner: group.ueGroupWin?.[0]?.details_member_n
                 }
               })
             }
@@ -197,7 +204,7 @@ export default {
         }
       },
       fetchPolicy: 'no-cache',
-      pollInterval: 1500, // THIS IS JUST TEMPORARY UNTIL GRAPHQL SUBSCRIPTION IS READY
+      pollInterval: 1000, // THIS IS JUST TEMPORARY UNTIL GRAPHQL SUBSCRIPTION IS READY
       skip () { return !this.selectedDao || !this.selectedDao.docId },
       result (res) {
         this.statusSetUp()
@@ -209,6 +216,10 @@ export default {
   computed: {
     ...mapGetters('dao', ['selectedDao']),
     ...mapGetters('accounts', ['account']),
+
+    isLoading () {
+      return this.upvoteWidgetState === 'loading' || this.currentState === 'loading'
+    },
 
     widgetTitle() {
       if (this.upvoteWidgetState === 'signup' && this.isRegister) {
@@ -256,12 +267,15 @@ export default {
       if (this.electionDetails.status === 'finished' || this.electionDetails.status === 'canceled') {
         this.upvoteWidgetState = 'finish'
         this.currentState = 'finish'
+        this.$forceUpdate()
       } else if (new Date(this.electionDetails.startDate) > new Date()) {
         this.upvoteWidgetState = 'signup'
         this.currentState = 'signup'
-      } else if (this.electionDetails.rounds?.length <= 1 && this.electionDetails.rounds?.length < 3) {
+        this.$forceUpdate()
+      } else if (this.electionDetails.rounds?.length >= 1) {
         this.upvoteWidgetState = 'active'
         this.currentState = 'voting'
+        this.$forceUpdate()
       }
     },
     onPrev () {
@@ -377,14 +391,14 @@ export default {
     q-card.q-pa-xl.rounded(:style="{ 'width': '640px' }" flat)
       .h-h3 {{ $t('pages.upvote-election.howCommunityElectionsWork') }}
       .q-my-md
-        div Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+        div {{ $t('pages.upvote-election.thisElectionProcessWillHelp') }}
       q-tabs.q-my-xxl(align="center" active-color="primary" indicator-color="primary" no-caps inline-label mobile-arrows outside-arrows dense v-model="tab")
         q-tab(:style="{ 'margin': '0' }" name="VOTING" :label="$t('pages.upvote-election.voting')" :ripple="false")
         q-tab(:style="{ 'margin': '0' }" name="TIMING" :label="$t('pages.upvote-election.timing')" :ripple="false")
         q-tab(:style="{ 'margin': '0' }" name="RULES" :label="$t('pages.upvote-election.rules')" :ripple="false")
       template(v-if="tab === 'VOTING'")
         .row
-          div Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+          div {{ $t('pages.upvote-election.thereAreThreeRounds') }}
         .col.text-black.text-bold.q-my-md(:style="{ 'font-weight': '600' }")
           .row.q-mb-md.flex.justify-between.items-center
             div {{ $t('pages.dho.election.voteForYourself') }}
@@ -394,25 +408,15 @@ export default {
             q-icon(name="fas fa-check" color="positive" size="20px")
       template(v-if="tab === 'TIMING'")
         .row
-          div Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-        .col.text-black.text-bold.q-my-md(:style="{ 'font-weight': '600' }")
-          .row.q-mb-md.flex.justify-between.items-center
-            div {{ $t('pages.dho.election.voteForYourself') }}
-            q-icon(name="fas fa-check" color="positive" size="20px")
-          .row.flex.justify-between.items-center
-            div {{ $t('pages.dho.election.reachConsensus') }}
-            q-icon(name="fas fa-check" color="positive" size="20px")
+          div {{ $t('pages.upvote-election.thereAreThreeVoting') }}
       template(v-if="tab === 'RULES'")
         .row
-          div Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-        .col.text-black.text-bold.q-my-md(:style="{ 'font-weight': '600' }")
-          .row.q-mb-md.flex.justify-between.items-center
-            div {{ $t('pages.dho.election.voteForYourself') }}
-            q-icon(name="fas fa-check" color="positive" size="20px")
-          .row.flex.justify-between.items-center
-            div {{ $t('pages.dho.election.reachConsensus') }}
-            q-icon(name="fas fa-check" color="positive" size="20px")
-  .row.full-width.q-my-md.q-mt-lg
+          div {{ $t('pages.upvote-election.ifYouNeedMoreInformation') }}
+          .row.flex.justify-end.q-mt-lg.full-width
+            q-btn.h-btn1.q-px-sm(:color="'secondary'" no-caps rounded unelevated) {{ $t('pages.dho.election.visitEdenCommunity') }}
+  .row.full-width.flex.justify-center(v-if="isLoading")
+    loading-spinner(size="80px")
+  .row.full-width.q-my-md.q-mt-lg(v-else)
     .col-9
       q-card.q-mr-md.q-mb-md.widget.q-pa-xl.relative-position.rounded-card(v-if="currentState === 'signup'" flat)
         .title
@@ -496,7 +500,7 @@ export default {
                     img(src="~/assets/icons/chief-delegate.svg")
                   .col.q-ml-sm
                     .row
-                      .h-h4 {{ electionDetails.chiefDelegates?.length }}
+                      .h-h4 {{ electionDetails.chiefDelegates.filter(item => item?.member !== electionDetails.headDelegates?.[0]?.member).length }}
                     .row {{ $t('pages.upvote-election.chiefDelegateBadges') }}
             .col
               q-card.rounded-card.q-pa-lg.applications-metric
@@ -515,30 +519,30 @@ export default {
               .row
                 .col-4.q-mr-md
                   q-card.rounded-card.q-pa-lg.results-block.flex.justify-center.items-center
-                    profile-picture(:username="electionDetails.headDelegates[0].member" size="140px")
-                    .h-h4.q-mt-md {{ electionDetails.headDelegates[0].member }}
+                    profile-picture(:username="electionDetails.headDelegates?.[0]?.member" size="140px")
+                    .h-h4.q-mt-md {{ electionDetails.headDelegates?.[0]?.member }}
                     .text-secondary {{ $t('pages.upvote-election.headChiefDelegate') }}
                 .col
                   .row.flex.items-center.q-mb-md
                     .col
                       .row
                         .col-1.flex.items-center.q-mr-xs
-                          profile-picture(:username="electionDetails.headDelegates[0].member" size="24px")
+                          profile-picture(:username="electionDetails.headDelegates?.[0]?.member" size="24px")
                         .col
-                          .row.text-bold.text-black {{ electionDetails.headDelegates[0].member }}
+                          .row.text-bold.text-black {{ electionDetails.headDelegates?.[0]?.member }}
                           //- .row(:style="{ 'font-size': '10px' }") {{ electionDetails.rounds[electionDetails.rounds.length - 1].results.headChiefDelegate.telegram }}
                     .row
                       .row.flex.items-center
                         .text-secondary.q-mr-sm(:style="{ 'font-size': '12px' }") {{ $t('pages.upvote-election.headChiefDelegate') }}
                         img(width="16px" src="~/assets/icons/head-chief.svg")
-                  template(v-for="user in electionDetails.chiefDelegates")
+                  template(v-for="user in electionDetails.chiefDelegates.filter(item => item?.member !== electionDetails.headDelegates?.[0]?.member)")
                     .row.flex.items-center.q-mb-md.justify-between
                       .col
                         .row
                           .col-1.flex.items-center.q-mr-xs
-                            profile-picture(:username="user.member" size="24px")
+                            profile-picture(:username="user?.member" size="24px")
                           .col
-                            .row.text-bold.text-black {{ user.member }}
+                            .row.text-bold.text-black {{ user?.member }}
                             //- .row(:style="{ 'font-size': '10px' }") {{ user.telegram }}
                       .row
                         .row.flex.items-center
@@ -546,7 +550,7 @@ export default {
                           img(width="16px" src="~/assets/icons/chief-delegate.svg")
     .col-3
       //- profile-card.q-mb-md(v-if="signedUp" :electionState="currentState" isElection :style="{'grid-area': 'profile'}" :clickable="false" :username="account" view="card" :compact="!$q.screen.gt.md" :tablet="$q.screen.md")
-      widget.q-pa-xxl.bg-primary.q-mb-md(v-if="electionDetails?.status !== 'finished'" :class="{ 'bg-secondary': upvoteWidgetState === 'waiting' }")
+      widget.q-pa-xxl.bg-primary.q-mb-md(v-if="electionDetails?.status !== 'finished' && upvoteWidgetState !== 'finish'" :class="{ 'bg-secondary': upvoteWidgetState === 'waiting' }")
         template(v-if="upvoteWidgetState !== 'active' && upvoteWidgetState !== 'waiting'")
           .h-h4.text-white.q-mb-md {{ widgetTitle }}
         template(v-else-if="upvoteWidgetState === 'active'")
@@ -566,7 +570,7 @@ export default {
             .h-h4.q-mx-xxs.text-white(v-else) {{ $t('pages.upvote-election.upvoteelection.sec') }}
             .h-h4.text-white.text-weight-400 {{ $t('pages.upvote-election.upvoteelection.toNextRound') }}
         .text-white.q-mb-md {{ widgetDescription }}
-        template(v-if="upvoteWidgetState === 'finish'")
+        //- template(v-if="upvoteWidgetState === 'finish'")
           .row.q-mb-md.flex.items-center
             .col-2.flex.items-center.justify-center
               img(src="~/assets/icons/head-chief.svg")

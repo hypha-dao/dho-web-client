@@ -716,7 +716,8 @@
       "proposals": "Propostas",
       "members": "Membros",
       "organization": "Organização",
-      "explore": "Explorar"
+      "explore": "Explorar",
+      "election": "Eleição"
     },
     "navigation-header": {
       "home": "Lar",
@@ -1261,6 +1262,19 @@
         "assignments": "atribuições",
         "exportToCsv": "Exportar para csv"
       },
+      "election": {
+        "participants": "Participantes",
+        "rounds": "Rodadas",
+        "seeResults": "Ver resultados",
+        "howCommunityElectionsWork": "Como funcionam as eleições comunitárias",
+        "loremIpsumDolor": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor",
+        "voteForYourself": "Vote em você mesmo",
+        "reachConsensus": "Alcançar consenso",
+        "thereAreThreeRounds": "São três rodadas e cada participante tem um voto. ",
+        "thereAreThreeVoting": "São três rodadas de votação e cada uma dura 50 minutos. ",
+        "ifYouNeedMore": "Se precisar de mais informações, consulte as diretrizes da Comunidade Eden e o material informativo",
+        "visitEdenCommunity": "Visite a Comunidade Éden"
+      },
       "home": {
         "days": "dias",
         "day": "dia",
@@ -1631,11 +1645,46 @@
       }
     },
     "upvote-election": {
+      "thisElectionProcessWillHelp": "Este processo eleitoral ajudará a comunidade a escolher os melhores líderes para facilitar um melhor processo de tomada de decisão.",
+      "thereAreThreeRounds": "São três rodadas e cada participante tem um voto. ",
+      "thereAreThreeVoting": "São três rodadas de votação e cada uma dura 50 minutos. ",
+      "ifYouNeedMoreInformation": "Se precisar de mais informações, consulte as diretrizes da Comunidade Eden e o material informativo",
       "applications": "Formulários",
       "youCanViewTheMembersWho": "Você pode ver os membros que se inscreveram para a eleição abaixo.",
-      "participants": "participantes",
+      "participants": "Participantes",
       "treasury": "Tesouraria",
       "eachRound": "Cada rodada",
+      "votingRound": "Rodada de votação",
+      "areYouReadyToBegin": "Você está pronto para iniciar o processo eleitoral e conhecer os demais participantes? ",
+      "groups": "Grupos",
+      "l1DelegateBadges": "Crachás de Delegado L1",
+      "l2DelegateBadges": "Crachás de Delegado L2",
+      "memberSince": "Membro desde {date}",
+      "group": "Grupo",
+      "finalVotingRound": "Rodada de votação final",
+      "youAreInTheFinalRound": "Você está na rodada final! ",
+      "chiefDelegateBadges": "Crachás de Delegado Chefe",
+      "headChiefDelegateBadge": "Distintivo de Delegado Chefe Chefe",
+      "headChiefDelegate": "Delegado Chefe Chefe",
+      "chiefDelegate": "Delegado Chefe",
+      "results": "Resultados",
+      "seeAll": "Ver tudo",
+      "levDelegateBadges": "Lev. ",
+      "loremIpsumDolor": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed",
+      "delegatel1": "Delegado Lev. ",
+      "delegatel2": "Delegado Lev. ",
+      "howCommunityElectionsWork": "Como funcionam as eleições comunitárias",
+      "voting": "Votação",
+      "timing": "Tempo",
+      "rules": "Regras",
+      "groupcard": {
+        "noRecordingsYet": "Ainda não há gravações",
+        "uploadRecording": "Carregar gravação",
+        "slots": "Caça-níqueis",
+        "consensus": "Consenso",
+        "votes": "Votos",
+        "vote": "Voto"
+      },
       "upvoteelection": {
         "timeLeft": "Tempo restante:",
         "days": "dias",
@@ -1648,10 +1697,10 @@
         "sec": "segundo",
         "castYourVote": "Dê seu voto",
         "loremIpsumDolor": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed",
-        "electionProcess": "processo eleitoral",
+        "electionProcess": "Processo eleitoral",
         "signUp": "Inscrever-se",
-        "signUpForThisElection": "Inscreva-se para esta eleição",
-        "telegramHandle": "identificador de telegrama",
+        "signUpForThisElection": "Inscreva-se nesta eleição",
+        "telegramHandle": "Identificador de telegrama",
         "thanksForRegistering": "Obrigado por se registrar para a eleição",
         "theElectionIsAboutToStart": "A eleição está prestes a começar. ",
         "learnMore": "Saber mais",
@@ -1660,38 +1709,43 @@
         "toNextRound": "para a próxima rodada",
         "wellDone": "Bom trabalho! ",
         "displacements": "Deslocamentos",
-        "goToMyBadges": "Ir para meus emblemas"
+        "goToMyBadges": "Ir para meus emblemas",
+        "headChiefDelegate": "Delegado Chefe Chefe",
+        "chiefDelegate": "Delegado Chefe",
+        "delegatel2": "Delegado Lev. ",
+        "delegatel1": "Delegado Lev. ",
+        "unsubscribe": "Cancelar subscrição"
       },
       "steps": {
         "stepround1": {
-          "voterBadge": "crachá de eleitor",
+          "voterBadge": "Crachá de eleitor",
           "assigned": "Atribuído:",
           "delegates": "Delegados",
           "applicants": "Candidatos:",
-          "totalVoters": "Total de votantes:",
-          "delegatesApplicants": "Candidatos a Delegados"
+          "totalVoters": "Total de eleitores:",
+          "delegatesApplicants": "Delegados Candidatos"
         },
         "stepheaddelegate": {
-          "voterBadge": "crachá de eleitor",
+          "voterBadge": "Crachá de eleitor",
           "assigned": "Atribuído:",
           "memberInThisRound": "Membro nesta rodada",
-          "totalVoters": "Total de votantes:",
-          "eligibleForChief": "Elegível para o distintivo de Delegado Chefe"
+          "totalVoters": "Total de eleitores:",
+          "eligibleForChief": "Elegível para o crachá de Delegado Chefe"
         },
         "stepchiefdelegates": {
-          "voterBadge": "crachá de eleitor",
+          "voterBadge": "Crachá de eleitor",
           "assigned": "Atribuído:",
           "memberInThisRound": "Membro nesta rodada",
-          "totalVoters": "Total de votantes:",
-          "eligibleForChief": "Elegível para o distintivo de Delegado Chefe"
+          "totalVoters": "Total de eleitores:",
+          "eligibleForChief": "Elegível para o crachá de Delegado Chefe"
         },
         "stepresult": {
-          "totalVoters": "Total de votantes:",
-          "totalDelegatesApplicants": "Total de candidatos a delegados:",
-          "round1Voters": "Eleitores do 1º turno:",
+          "totalVoters": "Total de eleitores:",
+          "totalDelegatesApplicants": "Total de delegados candidatos:",
+          "round1Voters": "Eleitores da primeira rodada:",
           "chiefDVoters": "Chefe D. Eleitores:",
-          "headDVoters": "Head D. Eleitores:",
-          "headDelegate": "Chefe Delegado",
+          "headDVoters": "Chefe D. Eleitores:",
+          "headDelegate": "Delegado Chefe",
           "HEADDELEGATE": "DELEGADO CHEFE",
           "chiefDelegates": "Delegados Chefes"
         }
@@ -1826,7 +1880,8 @@
     "configurationSettings": "Definições de configuração",
     "ecosystemDashboard": "Painel do Ecossistema",
     "checkout": "Confira",
-    "upvoteElection": "Votar a favor da eleição"
+    "upvoteElection": "Votar a favor da eleição",
+    "election": "Eleição"
   },
   "proposal-creation": {
     "creation-process": "processo de criação",

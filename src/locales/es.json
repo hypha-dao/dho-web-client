@@ -716,7 +716,8 @@
       "proposals": "Propuestas",
       "members": "miembros",
       "organization": "Organización",
-      "explore": "Explorar"
+      "explore": "Explorar",
+      "election": "Elección"
     },
     "navigation-header": {
       "home": "Hogar",
@@ -1261,6 +1262,19 @@
         "assignments": "Tareas",
         "exportToCsv": "Exportar a csv"
       },
+      "election": {
+        "participants": "Participantes",
+        "rounds": "Rondas",
+        "seeResults": "Ver resultados",
+        "howCommunityElectionsWork": "Cómo funcionan las elecciones comunitarias",
+        "loremIpsumDolor": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor",
+        "voteForYourself": "vota por ti mismo",
+        "reachConsensus": "Llegar a un consenso",
+        "thereAreThreeRounds": "Hay tres rondas y cada participante tiene un voto. ",
+        "thereAreThreeVoting": "Hay tres rondas de votación y cada una tiene una duración de 50 minutos. ",
+        "ifYouNeedMore": "Si necesita más información, consulte las pautas y el material informativo de Eden Community.",
+        "visitEdenCommunity": "Visita la comunidad del Edén"
+      },
       "home": {
         "days": "días",
         "day": "día",
@@ -1631,11 +1645,46 @@
       }
     },
     "upvote-election": {
+      "thisElectionProcessWillHelp": "Este proceso de elección ayudará a la comunidad a elegir a los mejores líderes para facilitar un mejor proceso de toma de decisiones.",
+      "thereAreThreeRounds": "Hay tres rondas y cada participante tiene un voto. ",
+      "thereAreThreeVoting": "Hay tres rondas de votación y cada una tiene una duración de 50 minutos. ",
+      "ifYouNeedMoreInformation": "Si necesita más información, consulte las pautas y el material informativo de Eden Community.",
       "applications": "Aplicaciones",
-      "youCanViewTheMembersWho": "Puede ver los miembros que se han registrado para la elección a continuación.",
+      "youCanViewTheMembersWho": "Puede ver los miembros que se han inscrito para la elección a continuación.",
       "participants": "Participantes",
       "treasury": "Tesorería",
       "eachRound": "cada ronda",
+      "votingRound": "Ronda de votación",
+      "areYouReadyToBegin": "¿Estás listo para participar en el proceso de elección y conocer a los demás participantes? ",
+      "groups": "Grupos",
+      "l1DelegateBadges": "Insignias de delegado L1",
+      "l2DelegateBadges": "Insignias de delegado L2",
+      "memberSince": "Miembro desde {fecha}",
+      "group": "Grupo",
+      "finalVotingRound": "Ronda de votación final",
+      "youAreInTheFinalRound": "¡Estás en la ronda final! ",
+      "chiefDelegateBadges": "Insignias de Jefe de Delegado",
+      "headChiefDelegateBadge": "Insignia de jefe de delegación",
+      "headChiefDelegate": "Jefe delegado jefe",
+      "chiefDelegate": "Jefe delegado",
+      "results": "Resultados",
+      "seeAll": "Ver todo",
+      "levDelegateBadges": "Lev. ",
+      "loremIpsumDolor": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed",
+      "delegatel1": "Delegado Lev. ",
+      "delegatel2": "Delegado Lev. ",
+      "howCommunityElectionsWork": "Cómo funcionan las elecciones comunitarias",
+      "voting": "Votación",
+      "timing": "Momento",
+      "rules": "Normas",
+      "groupcard": {
+        "noRecordingsYet": "Aún no hay grabaciones",
+        "uploadRecording": "Subir grabación",
+        "slots": "Tragamonedas",
+        "consensus": "Consenso",
+        "votes": "Votos",
+        "vote": "Votar"
+      },
       "upvoteelection": {
         "timeLeft": "Tiempo restante:",
         "days": "días",
@@ -1643,43 +1692,48 @@
         "hours": "horas",
         "hour": "hora",
         "mins": "minutos",
-        "min": "min",
+        "min": "mín.",
         "secs": "segundos",
         "sec": "segundo",
         "castYourVote": "Emitir su voto",
         "loremIpsumDolor": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed",
-        "electionProcess": "Proceso de elección",
+        "electionProcess": "Proceso electoral",
         "signUp": "Inscribirse",
-        "signUpForThisElection": "Regístrese para esta elección",
-        "telegramHandle": "identificador de telegrama",
+        "signUpForThisElection": "Regístrate para esta elección",
+        "telegramHandle": "Mango de telegrama",
         "thanksForRegistering": "Gracias por registrarse para las elecciones.",
         "theElectionIsAboutToStart": "Las elecciones están a punto de comenzar. ",
         "learnMore": "Aprende más",
         "left": "izquierda",
-        "youCanVote": "Puede votar por un solo miembro en cada ronda. ",
-        "toNextRound": "a la próxima ronda",
+        "youCanVote": "Puedes votar por un solo miembro en cada ronda. ",
+        "toNextRound": "a la siguiente ronda",
         "wellDone": "¡Bien hecho! ",
         "displacements": "Desplazamientos",
-        "goToMyBadges": "Ir a mis insignias"
+        "goToMyBadges": "Ir a mis insignias",
+        "headChiefDelegate": "Jefe delegado jefe",
+        "chiefDelegate": "Jefe delegado",
+        "delegatel2": "Delegado Lev. ",
+        "delegatel1": "Delegado Lev. ",
+        "unsubscribe": "Darse de baja"
       },
       "steps": {
         "stepround1": {
-          "voterBadge": "Credencial de votante",
+          "voterBadge": "Insignia de votante",
           "assigned": "Asignado:",
-          "delegates": "delegados",
+          "delegates": "Delegados",
           "applicants": "Solicitantes:",
           "totalVoters": "Total de votantes:",
-          "delegatesApplicants": "Delegados Solicitantes"
+          "delegatesApplicants": "Delegados Postulantes"
         },
         "stepheaddelegate": {
-          "voterBadge": "Credencial de votante",
+          "voterBadge": "Insignia de votante",
           "assigned": "Asignado:",
           "memberInThisRound": "Miembro en esta ronda",
           "totalVoters": "Total de votantes:",
           "eligibleForChief": "Elegible para la insignia de Jefe de Delegado"
         },
         "stepchiefdelegates": {
-          "voterBadge": "Credencial de votante",
+          "voterBadge": "Insignia de votante",
           "assigned": "Asignado:",
           "memberInThisRound": "Miembro en esta ronda",
           "totalVoters": "Total de votantes:",
@@ -1687,13 +1741,13 @@
         },
         "stepresult": {
           "totalVoters": "Total de votantes:",
-          "totalDelegatesApplicants": "Total de delegados solicitantes:",
+          "totalDelegatesApplicants": "Total de delegados aspirantes:",
           "round1Voters": "Votantes de la Ronda 1:",
           "chiefDVoters": "Jefe D. Votantes:",
-          "headDVoters": "Jefe D. Votantes:",
+          "headDVoters": "Jefe D. Electores:",
           "headDelegate": "Jefe delegado",
-          "HEADDELEGATE": "JEFE DELEGADO",
-          "chiefDelegates": "Jefes delegados"
+          "HEADDELEGATE": "JEFE DE DELEGADO",
+          "chiefDelegates": "Jefes de delegación"
         }
       }
     },
@@ -1826,7 +1880,8 @@
     "configurationSettings": "Ajustes de configuración",
     "ecosystemDashboard": "Panel de control del ecosistema",
     "checkout": "Verificar",
-    "upvoteElection": "Elección de voto a favor"
+    "upvoteElection": "Elección de voto a favor",
+    "election": "Elección"
   },
   "proposal-creation": {
     "creation-process": "Proceso de creación",

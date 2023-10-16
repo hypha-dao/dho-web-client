@@ -13,7 +13,9 @@ export default {
     votes: Array,
     electionStatus: String,
     roundId: String,
-    groupId: String
+    groupId: String,
+    winner: String,
+    roundNumber: Number
   },
 
   data () {
@@ -22,22 +24,7 @@ export default {
     }
   },
 
-  apollo: {
-    member: {
-      query: require('~/query/profile/profile-basic-info.gql'),
-      update: data => {
-        return data.getMember
-      },
-      variables () {
-        return {
-          username: this.account
-        }
-      },
-      skip () {
-        return !this.account
-      }
-    }
-  },
+  apollo: {},
 
   computed: {
     ...mapGetters('accounts', ['account'])
@@ -72,14 +59,18 @@ export default {
           div(v-if="!users.find(user => user.details_member_n === account && electionStatus !== 'finished')") {{ $t('pages.upvote-election.groupcard.noRecordingsYet') }}
           .text-secondary.cursor-pointer.text-underline(v-else) {{ $t('pages.upvote-election.groupcard.uploadRecording') }}
         template(v-for="user in users")
-          profile-picture.q-mr-xxs(:username="user.details_member_n" size="24px" :key="applicant")
+          div(:style="'position: relative;'")
+            profile-picture.q-mr-xxs(:username="user.details_member_n" size="24px" :key="user.details_member_n")
+            img.absolute(v-if="user.details_member_n === winner && roundNumber === 1" width="18px" height="18px" :style="'top: 14px; left: 12px;'" src="~/assets/icons/delegate-l1.svg")
+            img.absolute(v-if="user.details_member_n === winner && roundNumber === 2" width="18px" height="18px" :style="'top: 14px; left: 12px;'" src="~/assets/icons/delegate-l2.svg")
+            img.absolute(v-if="user.details_member_n === winner && roundNumber === 3" width="18px" height="18px" :style="'top: 14px; left: 12px;'" src="~/assets/icons/chief-delegate.svg")
       q-btn(@click="showUsers = !showUsers" flat rounded :icon="showUsers ? 'fas fa-chevron-up' : 'fas fa-chevron-down'")
     q-slide-transition
       div.q-mt-xl.q-pt-xl(v-show="showUsers" :style="{ 'border-top': '1px solid #CBCDD1'}")
         template(v-for="user in users")
           .row.flex.items-center.q-mb-md
             .col-1.q-mr-xs.flex.items-center
-              profile-picture(:username="user.details_member_n" size="24px" :key="applicant")
+              profile-picture(:username="user.details_member_n" size="24px" :key="user.details_member_n")
             .col
               .row.text-bold.text-black {{ user.details_member_n }}
               .row(:style="{ 'font-size': '10px' }") {{ user.telegram }}

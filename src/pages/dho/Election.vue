@@ -23,6 +23,9 @@ getDao(docId: $daoId) {
         ueRdMemberAggregate {
           count
         }
+        ueRdMember {
+          details_member_n
+        }
       }
     }
   }
@@ -53,7 +56,8 @@ export default {
 
   components: {
     BaseBanner: () => import('~/components/common/base-banner.vue'),
-    Widget: () => import('~/components/common/widget.vue')
+    Widget: () => import('~/components/common/widget.vue'),
+    LoadingSpinner: () => import('~/components/common/loading-spinner.vue')
   },
 
   apollo: {
@@ -64,7 +68,7 @@ export default {
           delegatesList: data.getDao.delegate,
           endDate: election.details_endDate_t,
           rounds: election.ueRound.length,
-          participants: election.ueStartrnd[0].ueGroupLnk.reduce((sum, group) => sum + group.ueRdMemberAggregate.count, 0),
+          participants: election.ueStartrnd.reduce((count, group) => count + group.ueGroupLnk.reduce((count, link) => count + link.ueRdMember.filter(member => member.details_member_n).length, 0), 0),
           id: election.docId
         }
       }),
@@ -110,9 +114,7 @@ export default {
       dateToStringShort,
       timeRemaining: {},
       counterdown: undefined,
-      treasury: 1200000,
       isUpVoteElectionBannerVisible: true,
-      endDate: '2023-08-23',
       slide: '1',
       titles: [
         this.$t('pages.dho.election.howCommunityElectionsWork'),
@@ -197,7 +199,7 @@ export default {
       // if (!this.upvoteElection) return 0
 
       // const end = this.upvoteElection?.upcomingElection?.length ? new Date(this.upvoteElection?.startTime) : new Date(this.upvoteElection?.endTime)
-      const end = new Date(this.endDate)
+      const end = new Date(this.upcomingElection?.details_startDate_t)
       const now = Date.now()
       const t = end - now
       // if (t < 0) {
@@ -215,8 +217,8 @@ export default {
 </script>
 <template lang="pug">
 q-page.page-election
-  base-banner.q-mb-md(v-bind="upvoteElectionBanner" @onClose="hideUpvoteBanner" upvoteBanner :background="require('~/assets/images/election-banner-bg.jpeg')" v-if="isUpVoteElectionBannerVisible && !ongoingElection?.length")
-    template(v-if="!hasNextElection" v-slot:right)
+  base-banner.q-mb-md(v-bind="upvoteElectionBanner" @onClose="hideUpvoteBanner" upvoteBanner :background="require('~/assets/images/election-banner-bg.jpeg')" v-if="isUpVoteElectionBannerVisible && upcomingElection")
+    template(v-if="hasNextElection" v-slot:right)
       .flex.full-width.full-height.items-center.justify-center
         q-card.q-pa-xl(:style="{ 'width': '350px', 'opacity': '.7', 'border-radius': '15px' }")
           .col
@@ -249,13 +251,12 @@ q-page.page-election
               //- .col.flex.justify-center
                 .h-h6 $ {{ formatNumber(treasury) }}
                 .full-width.flex.justify-center.text-secondary {{ $t('pages.dho.home.treasury') }}
-    template(v-if="!hasNextElection" v-slot:buttons)
+    template(v-if="hasNextElection" v-slot:buttons)
       .row.justify-start
         .flex(:class=" { 'q-mt-md': $q.screen.lt.md, 'justify-end': $q.screen.gt.sm }")
-        router-link(:to="{ name: 'upvote-election' }")
-          q-btn.q-px-lg.h-btn1(:disable="!ongoingElection.length" :class="{ 'q-mt-sm': $q.screen.lt.xs || $q.screen.xs }" no-caps rounded unelevated :label="$t('pages.dho.home.signup')" color="secondary" text-color="white")
-          q-btn.q-px-lg.h-btn1.q-ml-sm(color="white" flat :label="$t('pages.dho.home.learnMore')" no-caps rounded)
-    template(v-else="hasNextElection" v-slot:buttons)
+        q-btn.q-px-lg.h-btn1(@click="$router.push({ path: `/${selectedDao.name}/election/${upcomingElection.docId}` })" :disable="!upcomingElection" :class="{ 'q-mt-sm': $q.screen.lt.xs || $q.screen.xs }" no-caps rounded unelevated :label="$t('pages.dho.home.signup')" color="secondary" text-color="white")
+        q-btn.q-px-lg.h-btn1.q-ml-sm(color="white" flat :label="$t('pages.dho.home.learnMore')" no-caps rounded)
+    template(v-else="!hasNextElection" v-slot:buttons)
       .row.justify-start
         q-btn.q-px-lg.h-btn1(disable :class="{ 'q-mt-sm': $q.screen.lt.xs || $q.screen.xs }" no-caps rounded unelevated :label="$t('pages.dho.home.nextElection', { date: dateToStringShort(nextElectionStartDate) })" color="white" text-color="primary")
   .row
@@ -268,15 +269,15 @@ q-page.page-election
             .col.flex.justify-center.text-black(:style="{ 'font-size': '17px' }")
               div {{ election.rounds }} {{ $t('pages.dho.election.rounds') }}
             .col.flex.justify-center.text-black(:style="{ 'font-size': '17px' }")
-              div {{ election.delegatesList.length }} {{ $t('pages.dho.election.participants') }}
+              div {{ election.participants }} {{ $t('pages.dho.election.participants') }}
             .col.flex.justify-end
               q-btn.q-px-lg.h-btn1(@click="$router.push({ path: `/${selectedDao.name}/election/${election.id}` })" :class="{ 'q-mt-sm': $q.screen.lt.xs || $q.screen.xs }" no-caps rounded unelevated :label="$t('pages.dho.election.seeResults')" color="primary" text-color="white")
     .col
       widget(:title="widgetTitle")
         q-carousel.b2.q-mt-md(v-model="slide" swipeable="swipeable" animated="animated" navigation="navigation" :padding="false" height="240px" control-color="primary" ref="carousel")
           q-carousel-slide.no-padding(name="1")
-            .h-b2 {{ $t('pages.dho.election.loremIpsumDolor') }}
-            .col.text-black.text-bold.q-my-md(:style="{ 'font-weight': '600' }")
+            .h-b2 {{ $t('pages.dho.election.thereAreThreeRounds') }}
+            .col.text-black.text-bold.q-my-xxs(:style="{ 'font-weight': '600' }")
               .row.q-mb-md.flex.justify-between.items-center
                 div {{ $t('pages.dho.election.voteForYourself') }}
                 q-icon(name="fas fa-check" color="positive" size="20px")
@@ -284,9 +285,11 @@ q-page.page-election
                 div {{ $t('pages.dho.election.reachConsensus') }}
                 q-icon(name="fas fa-check" color="positive" size="20px")
           q-carousel-slide.no-padding(name="2")
-            .h-b2 {{ $t('pages.dho.election.loremIpsumDolor') }}
+            .h-b2 {{ $t('pages.dho.election.thereAreThreeVoting') }}
           q-carousel-slide.no-padding(name="3")
-            .h-b2 {{ $t('pages.dho.election.loremIpsumDolor') }}
+            .h-b2 {{ $t('pages.dho.election.ifYouNeedMore') }}
+            .row.flex.justify-end.q-mt-lg
+              q-btn.h-btn1.q-px-sm(:color="'secondary'" no-caps rounded unelevated) {{ $t('pages.dho.election.visitEdenCommunity') }}
           template(v-slot:control)
             q-carousel-control(position="bottom-right")
               q-btn.q-mt-md.round-circle(flat unelevated padding="13px" icon="fas fa-chevron-right" size="xxs" color="primary" @click="$refs.carousel.next()")

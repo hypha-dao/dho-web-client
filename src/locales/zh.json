@@ -716,7 +716,8 @@
       "proposals": "提案",
       "members": "会员",
       "organization": "组织",
-      "explore": "探索"
+      "explore": "探索",
+      "election": "选举"
     },
     "navigation-header": {
       "home": "家",
@@ -1261,6 +1262,19 @@
         "assignments": "作业",
         "exportToCsv": "导出为 csv"
       },
+      "election": {
+        "participants": "参加者",
+        "rounds": "回合",
+        "seeResults": "查看结果",
+        "howCommunityElectionsWork": "社区选举如何运作",
+        "loremIpsumDolor": "Lorem ipsum dolor sat amet、consectetur adipiscing elit、sed do eiusmod tempor",
+        "voteForYourself": "为自己投票",
+        "reachConsensus": "达成共识",
+        "thereAreThreeRounds": "共有三轮，每位参赛者有一票。",
+        "thereAreThreeVoting": "投票分为三轮，每轮持续 50 分钟。",
+        "ifYouNeedMore": "如果您需要更多信息，请查看 Eden 社区指南和信息材料",
+        "visitEdenCommunity": "参观伊甸园社区"
+      },
       "home": {
         "days": "天",
         "day": "天",
@@ -1631,11 +1645,46 @@
       }
     },
     "upvote-election": {
+      "thisElectionProcessWillHelp": "这一选举过程将帮助社区选出最好的领导者，以促进更好的决策过程。",
+      "thereAreThreeRounds": "共有三轮，每位参赛者有一票。",
+      "thereAreThreeVoting": "投票分为三轮，每轮持续 50 分钟。",
+      "ifYouNeedMoreInformation": "如果您需要更多信息，请查看 Eden 社区指南和信息材料",
       "applications": "应用领域",
       "youCanViewTheMembersWho": "您可以在下面查看已报名参加选举的会员。",
       "participants": "参加者",
       "treasury": "财政部",
       "eachRound": "每轮",
+      "votingRound": "投票轮",
+      "areYouReadyToBegin": "您准备好参加选举并结识其他参与者了吗？",
+      "groups": "团体",
+      "l1DelegateBadges": "L1 代表徽章",
+      "l2DelegateBadges": "L2 代表徽章",
+      "memberSince": "自 {date} 起成为会员",
+      "group": "团体",
+      "finalVotingRound": "最后一轮投票",
+      "youAreInTheFinalRound": "你已经进入最后一轮了！",
+      "chiefDelegateBadges": "首席代表徽章",
+      "headChiefDelegateBadge": "首席代表徽章",
+      "headChiefDelegate": "首席代表",
+      "chiefDelegate": "首席代表",
+      "results": "结果",
+      "seeAll": "查看全部",
+      "levDelegateBadges": "列弗。 ",
+      "loremIpsumDolor": "Lorem ipsum dolor sat amet、consectetur adipiscing elit、sed",
+      "delegatel1": "代表列夫。 ",
+      "delegatel2": "代表列夫。 ",
+      "howCommunityElectionsWork": "社区选举如何运作",
+      "voting": "表决",
+      "timing": "定时",
+      "rules": "规则",
+      "groupcard": {
+        "noRecordingsYet": "还没有录音",
+        "uploadRecording": "上传录音",
+        "slots": "老虎机",
+        "consensus": "共识",
+        "votes": "投票数",
+        "vote": "投票"
+      },
       "upvoteelection": {
         "timeLeft": "剩余时间：",
         "days": "天",
@@ -1660,7 +1709,12 @@
         "toNextRound": "到下一轮",
         "wellDone": "做得好！",
         "displacements": "位移",
-        "goToMyBadges": "转到我的徽章"
+        "goToMyBadges": "转到我的徽章",
+        "headChiefDelegate": "首席代表",
+        "chiefDelegate": "首席代表",
+        "delegatel2": "代表列夫。 ",
+        "delegatel1": "代表列夫。 ",
+        "unsubscribe": "退订"
       },
       "steps": {
         "stepround1": {
@@ -1826,7 +1880,8 @@
     "configurationSettings": "配置设置",
     "ecosystemDashboard": "生态系统仪表板",
     "checkout": "查看",
-    "upvoteElection": "投票支持选举"
+    "upvoteElection": "投票支持选举",
+    "election": "选举"
   },
   "proposal-creation": {
     "creation-process": "创作过程",

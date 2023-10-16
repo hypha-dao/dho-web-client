@@ -716,7 +716,8 @@
       "proposals": "제안",
       "members": "회원",
       "organization": "조직",
-      "explore": "탐구하다"
+      "explore": "탐구하다",
+      "election": "선거"
     },
     "navigation-header": {
       "home": "집",
@@ -1261,6 +1262,19 @@
         "assignments": "과제",
         "exportToCsv": "CSV로 내보내기"
       },
+      "election": {
+        "participants": "참가자들",
+        "rounds": "라운드",
+        "seeResults": "결과 보기",
+        "howCommunityElectionsWork": "커뮤니티 선거 진행 방식",
+        "loremIpsumDolor": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor",
+        "voteForYourself": "스스로 투표하세요",
+        "reachConsensus": "합의에 도달",
+        "thereAreThreeRounds": "총 3개의 라운드가 진행되며 모든 참가자는 1개의 투표권을 가집니다. ",
+        "thereAreThreeVoting": "세 번의 투표가 있으며 각 라운드는 50분 동안 진행됩니다. ",
+        "ifYouNeedMore": "더 많은 정보가 필요하시면 Eden 커뮤니티 가이드라인과 정보자료를 확인해주세요",
+        "visitEdenCommunity": "에덴 커뮤니티를 방문해보세요"
+      },
       "home": {
         "days": "날",
         "day": "낮",
@@ -1631,11 +1645,46 @@
       }
     },
     "upvote-election": {
-      "applications": "애플리케이션",
-      "youCanViewTheMembersWho": "아래에서 선거에 등록한 구성원을 볼 수 있습니다.",
+      "thisElectionProcessWillHelp": "이 선거 과정은 커뮤니티가 더 나은 의사 결정 과정을 촉진하기 위해 최고의 지도자를 선택하는 데 도움이 될 것입니다.",
+      "thereAreThreeRounds": "총 3개의 라운드가 진행되며 모든 참가자는 1개의 투표권을 가집니다. ",
+      "thereAreThreeVoting": "세 번의 투표가 있으며 각 라운드는 50분 동안 진행됩니다. ",
+      "ifYouNeedMoreInformation": "더 많은 정보가 필요하시면 Eden 커뮤니티 가이드라인과 정보자료를 확인해주세요",
+      "applications": "응용",
+      "youCanViewTheMembersWho": "아래에서 선거에 응모한 회원을 확인하실 수 있습니다.",
       "participants": "참가자들",
       "treasury": "국고",
       "eachRound": "각 라운드",
+      "votingRound": "투표 라운드",
+      "areYouReadyToBegin": "선거 과정에 참여하고 다른 참가자들을 알아갈 준비가 되셨나요? ",
+      "groups": "여러 떼",
+      "l1DelegateBadges": "L1 대표 배지",
+      "l2DelegateBadges": "L2 대표 배지",
+      "memberSince": "{날짜} 이후 회원",
+      "group": "그룹",
+      "finalVotingRound": "최종 투표 라운드",
+      "youAreInTheFinalRound": "당신은 마지막 라운드에 있습니다! ",
+      "chiefDelegateBadges": "최고 대표 배지",
+      "headChiefDelegateBadge": "수석 대표단 배지",
+      "headChiefDelegate": "수석대표",
+      "chiefDelegate": "수석대표",
+      "results": "결과",
+      "seeAll": "모두 보기",
+      "levDelegateBadges": "레프. ",
+      "loremIpsumDolor": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed",
+      "delegatel1": "레프 대표. ",
+      "delegatel2": "레프 대표. ",
+      "howCommunityElectionsWork": "커뮤니티 선거 진행 방식",
+      "voting": "투표",
+      "timing": "타이밍",
+      "rules": "규칙",
+      "groupcard": {
+        "noRecordingsYet": "아직 녹음된 내용이 없습니다.",
+        "uploadRecording": "녹음 업로드",
+        "slots": "슬롯",
+        "consensus": "의견 일치",
+        "votes": "투표",
+        "vote": "투표"
+      },
       "upvoteelection": {
         "timeLeft": "남은 시간:",
         "days": "날",
@@ -1651,49 +1700,54 @@
         "electionProcess": "선거 과정",
         "signUp": "가입하기",
         "signUpForThisElection": "이번 선거에 등록하세요",
-        "telegramHandle": "전보 핸들",
-        "thanksForRegistering": "선거에 등록해 주셔서 감사합니다.",
+        "telegramHandle": "텔레그램 핸들",
+        "thanksForRegistering": "선거에 등록해주셔서 감사합니다",
         "theElectionIsAboutToStart": "선거가 곧 시작됩니다. ",
         "learnMore": "더 알아보기",
         "left": "왼쪽",
-        "youCanVote": "각 라운드에서 한 명의 회원에게만 투표할 수 있습니다. ",
+        "youCanVote": "각 라운드마다 한 명의 회원에게만 투표할 수 있습니다. ",
         "toNextRound": "다음 라운드로",
         "wellDone": "잘하셨어요! ",
         "displacements": "변위",
-        "goToMyBadges": "내 배지로 이동"
+        "goToMyBadges": "내 배지로 이동",
+        "headChiefDelegate": "수석대표",
+        "chiefDelegate": "수석대표",
+        "delegatel2": "레프 대표. ",
+        "delegatel1": "레프 대표. ",
+        "unsubscribe": "구독 취소"
       },
       "steps": {
         "stepround1": {
           "voterBadge": "유권자 배지",
           "assigned": "할당된:",
-          "delegates": "대의원",
+          "delegates": "대표자",
           "applicants": "지원자:",
           "totalVoters": "총 유권자 수:",
-          "delegatesApplicants": "대의원 지원자"
+          "delegatesApplicants": "대리 지원자"
         },
         "stepheaddelegate": {
           "voterBadge": "유권자 배지",
           "assigned": "할당된:",
-          "memberInThisRound": "이번 라운드의 멤버",
+          "memberInThisRound": "이번 라운드의 회원",
           "totalVoters": "총 유권자 수:",
-          "eligibleForChief": "수석대표 배지 획득 가능"
+          "eligibleForChief": "수석 대표 배지 획득 가능"
         },
         "stepchiefdelegates": {
           "voterBadge": "유권자 배지",
           "assigned": "할당된:",
-          "memberInThisRound": "이번 라운드의 멤버",
+          "memberInThisRound": "이번 라운드의 회원",
           "totalVoters": "총 유권자 수:",
-          "eligibleForChief": "수석대표 배지 획득 가능"
+          "eligibleForChief": "수석 대표 배지 획득 가능"
         },
         "stepresult": {
           "totalVoters": "총 유권자 수:",
-          "totalDelegatesApplicants": "총 대의원 지원자:",
-          "round1Voters": "1라운드 유권자:",
-          "chiefDVoters": "D. 유권자:",
-          "headDVoters": "헤드 D. 유권자:",
-          "headDelegate": "수석대표",
-          "HEADDELEGATE": "대표단",
-          "chiefDelegates": "수석대표"
+          "totalDelegatesApplicants": "총 대표자 지원자 수:",
+          "round1Voters": "1차 투표자:",
+          "chiefDVoters": "D. 수석 유권자:",
+          "headDVoters": "D. 유권자:",
+          "headDelegate": "수석 대표",
+          "HEADDELEGATE": "수석대표",
+          "chiefDelegates": "최고대표"
         }
       }
     },
@@ -1826,7 +1880,8 @@
     "configurationSettings": "구성 설정",
     "ecosystemDashboard": "생태계 대시보드",
     "checkout": "점검",
-    "upvoteElection": "찬성 선거"
+    "upvoteElection": "찬성 선거",
+    "election": "선거"
   },
   "proposal-creation": {
     "creation-process": "생성 과정",
