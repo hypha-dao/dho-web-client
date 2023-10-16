@@ -44,6 +44,7 @@ getDao(docId: $daoId) {
       docId
       ueGroupLnk {
         docId
+        details_videolink_s
         ueVote {
           details_votedId_i
           details_voterId_i
@@ -191,7 +192,8 @@ export default {
                   id: group.docId,
                   members: group.ueRdMember,
                   votes: group.ueVote,
-                  winner: group.ueGroupWin?.[0]?.details_member_n
+                  winner: group.ueGroupWin?.[0]?.details_member_n,
+                  videoLink: group.details_videolink_s
                 }
               })
             }

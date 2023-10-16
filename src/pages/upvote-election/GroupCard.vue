@@ -15,12 +15,15 @@ export default {
     roundId: String,
     groupId: String,
     winner: String,
-    roundNumber: Number
+    roundNumber: Number,
+    videoLink: String
   },
 
   data () {
     return {
-      showUsers: false
+      showUsers: false,
+      showUploadLinkModal: false,
+      link: ''
     }
   },
 
@@ -43,6 +46,22 @@ export default {
         }
       }]
       return await this.$store.$api.signTransaction(actions)
+    },
+    async upload () {
+      const actions = [{
+        account: this.$config.contracts.dao,
+        name: 'upvotevideo',
+        data: {
+          group_id: this.groupId,
+          account: this.account,
+          link: this.link
+        }
+      }]
+      await this.$store.$api.signTransaction(actions)
+      this.showUploadLinkModal = false
+    },
+    openLink () {
+      window.open(this.videoLink, '_blank')
     }
   }
 }
@@ -50,14 +69,19 @@ export default {
 
 <template lang="pug">
 .group-card
+  q-dialog(:value="showUploadLinkModal" @hide="showUploadLinkModal = false")
+    q-card.q-pa-xl.rounded(:style="{ 'width': '640px' }" flat)
+      .col
+        .h-h4.row.full-width.flex.justify-center {{ $t('pages.upvote-election.uploadLink') }}
+        q-input.rounded-border.q-mt-md(:debounce="200" bg-color="white" dense lazy-rules maxlength="50" outlined ref="textColor" rounded v-model="link")
+        .row.full-width.justify-end.q-mt-md
+          q-btn.h-btn1.q-px-sm(@click="upload()" :disable="!link" :color="'secondary'" no-caps rounded unelevated) {{ $t('pages.dho.election.upload') }}
   q-card.rounded-card.q-pa-lg.applications-metric
     .dot(v-if="users.find(user => user.details_member_n === account && electionStatus !== 'finished')" :style="{ 'position': 'absolute', 'top': '0', 'right': '0', 'width': '10px', 'height': '10px', 'border-radius': '50%', 'background': '#1542EA'}")
     .row.flex.justify-between
-      .row
+      .row.flex.items-center
         .col.q-mr-xs
           .h-h5.q-mr-md.flex.items-center(:style="{ 'font-weight': '600' }") {{ $t('pages.upvote-election.group') }} {{ groupNumber }}
-          div(v-if="!users.find(user => user.details_member_n === account && electionStatus !== 'finished')") {{ $t('pages.upvote-election.groupcard.noRecordingsYet') }}
-          .text-secondary.cursor-pointer.text-underline(v-else) {{ $t('pages.upvote-election.groupcard.uploadRecording') }}
         template(v-for="user in users")
           div(:style="'position: relative;'")
             profile-picture.q-mr-xxs(:username="user.details_member_n" size="24px" :key="user.details_member_n")
@@ -65,6 +89,9 @@ export default {
             img.absolute(v-if="user.details_member_n === winner && roundNumber === 2" width="18px" height="18px" :style="'top: 14px; left: 12px;'" src="~/assets/icons/delegate-l2.svg")
             img.absolute(v-if="user.details_member_n === winner && roundNumber === 3" width="18px" height="18px" :style="'top: 14px; left: 12px;'" src="~/assets/icons/chief-delegate.svg")
       q-btn(@click="showUsers = !showUsers" flat rounded :icon="showUsers ? 'fas fa-chevron-up' : 'fas fa-chevron-down'")
+    div(v-if="!users.find(user => user.details_member_n === account && electionStatus !== 'finished') && !videoLink") {{ $t('pages.upvote-election.groupcard.noRecordingsYet') }}
+    .text-secondary.cursor-pointer.text-underline(v-else-if="videoLink" @click="openLink()") {{ videoLink }}
+    .text-secondary.cursor-pointer.text-underline(v-else @click="showUploadLinkModal = true") {{ $t('pages.upvote-election.groupcard.uploadRecording') }}
     q-slide-transition
       div.q-mt-xl.q-pt-xl(v-show="showUsers" :style="{ 'border-top': '1px solid #CBCDD1'}")
         template(v-for="user in users")
@@ -106,4 +133,6 @@ export default {
   background: #CAC8D0
 .slot
   background: #F2F1F3
+.rounded
+  border-radius: 26px
 </style>

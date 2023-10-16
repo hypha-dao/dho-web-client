@@ -1272,6 +1272,7 @@
         "exportToCsv": "Export to csv"
       },
       "election": {
+        "upload": "Upload",
         "participants": "Participants",
         "rounds": "Rounds",
         "seeResults": "See results",
@@ -1657,6 +1658,7 @@
       }
     },
     "upvote-election": {
+      "uploadLink": "Upload link",
       "thisElectionProcessWillHelp": "This election process will help the community pick the best leaders to facilitate a better decision making process.",
       "thereAreThreeRounds": "There are three rounds and every participant has one vote. They can vote for themselves, as well. Votes can only be cast during the round and not after it ends.",
       "thereAreThreeVoting": "There are three voting rounds and each one lasts 50 minutes. The entire process takes under 5 hours, making it quick and efficient.",

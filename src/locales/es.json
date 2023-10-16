@@ -1263,6 +1263,7 @@
         "exportToCsv": "Exportar a csv"
       },
       "election": {
+        "upload": "Subir",
         "participants": "Participantes",
         "rounds": "Rondas",
         "seeResults": "Ver resultados",
@@ -1645,6 +1646,7 @@
       }
     },
     "upvote-election": {
+      "uploadLink": "Enlace de carga",
       "thisElectionProcessWillHelp": "Este proceso de elección ayudará a la comunidad a elegir a los mejores líderes para facilitar un mejor proceso de toma de decisiones.",
       "thereAreThreeRounds": "Hay tres rondas y cada participante tiene un voto. ",
       "thereAreThreeVoting": "Hay tres rondas de votación y cada una tiene una duración de 50 minutos. ",

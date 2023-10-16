@@ -1263,6 +1263,7 @@
         "exportToCsv": "CSV로 내보내기"
       },
       "election": {
+        "upload": "업로드",
         "participants": "참가자들",
         "rounds": "라운드",
         "seeResults": "결과 보기",
@@ -1645,6 +1646,7 @@
       }
     },
     "upvote-election": {
+      "uploadLink": "업로드 링크",
       "thisElectionProcessWillHelp": "이 선거 과정은 커뮤니티가 더 나은 의사 결정 과정을 촉진하기 위해 최고의 지도자를 선택하는 데 도움이 될 것입니다.",
       "thereAreThreeRounds": "총 3개의 라운드가 진행되며 모든 참가자는 1개의 투표권을 가집니다. ",
       "thereAreThreeVoting": "세 번의 투표가 있으며 각 라운드는 50분 동안 진행됩니다. ",

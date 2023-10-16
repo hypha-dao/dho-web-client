@@ -1263,6 +1263,7 @@
         "exportToCsv": "导出为 csv"
       },
       "election": {
+        "upload": "上傳",
         "participants": "参加者",
         "rounds": "回合",
         "seeResults": "查看结果",
@@ -1645,6 +1646,7 @@
       }
     },
     "upvote-election": {
+      "uploadLink": "上傳連結",
       "thisElectionProcessWillHelp": "这一选举过程将帮助社区选出最好的领导者，以促进更好的决策过程。",
       "thereAreThreeRounds": "共有三轮，每位参赛者有一票。",
       "thereAreThreeVoting": "投票分为三轮，每轮持续 50 分钟。",
