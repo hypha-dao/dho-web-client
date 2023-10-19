@@ -78,6 +78,7 @@ export default {
             $priceId: String!
             $redirectDomain: String!
             $successUrl: String!
+            $cancelUrl: String!
           ) {
             createCheckoutSession(
               daoId: $daoId
@@ -87,6 +88,7 @@ export default {
               priceId: $priceId
               redirectDomain: $redirectDomain
               successUrl: $successUrl
+              cancelUrl: $cancelUrl
             ) {
               id
               url
@@ -100,7 +102,8 @@ export default {
           daoUrl: this.daoSettings.url,
           priceId: id,
           redirectDomain: ORIGIN,
-          successUrl: `/${this.daoSettings.url}/configuration?tab=PLANS_AND_BILLING`
+          successUrl: `/${this.daoSettings.url}/configuration?tab=PLANS_AND_BILLING`,
+          cancelUrl: `/${this.daoSettings.url}/configuration?tab=PLANS_AND_BILLING`
         }
       })
 
