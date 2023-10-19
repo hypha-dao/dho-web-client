@@ -194,17 +194,9 @@ export default {
     },
 
     votingTimeLeft () {
-      // TODO: waiting API
-
-      // if (!this.upvoteElection) return 0
-
-      // const end = this.upvoteElection?.upcomingElection?.length ? new Date(this.upvoteElection?.startTime) : new Date(this.upvoteElection?.endTime)
       const end = new Date(this.upcomingElection?.details_startDate_t)
       const now = Date.now()
       const t = end - now
-      // if (t < 0) {
-      //   this.$apollo.queries.upvoteElection.refetch()
-      // }
       return t
     },
 
@@ -245,6 +237,7 @@ q-page.page-election
               .row
                 .text-secondary {{ $t('pages.dho.home.timeLeftForSigningUp') }}
             .row.q-pt-md
+              //- Temporarily hidden
               //- .col.flex.justify-center(:style="{ 'border-right': '1px solid #242f5d' }")
                 //- .h-h6 {{ participants }}
                 .full-width.flex.justify-center.text-secondary {{ $t('pages.dho.home.participants') }}

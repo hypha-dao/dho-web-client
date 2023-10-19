@@ -77,6 +77,7 @@ export default {
                 .row
                   .h-h4 {{ groups.length }}
                 .row {{ $t('pages.upvote-election.groups') }}
+        //- Temporarily hidden
         //- .col
           q-card.rounded-card.q-pa-lg.applications-metric
             .row.flex.items-center
