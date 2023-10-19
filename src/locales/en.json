@@ -911,7 +911,8 @@
         "proposals":"Proposals",
         "members":"Members",
         "organization":"Organization",
-        "explore":"Explore"
+        "explore":"Explore",
+        "election": "Election"
      },
      "navigation-header":{
         "home":"Home",
@@ -1458,6 +1459,20 @@
            "assignments":"Assignments",
            "exportToCsv":"Export to csv"
         },
+        "election": {
+          "upload": "Upload",
+          "participants": "Participants",
+          "rounds": "Rounds",
+          "seeResults": "See results",
+          "howCommunityElectionsWork": "How Community elections work",
+          "loremIpsumDolor":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor",
+          "voteForYourself": "Vote for yourself",
+          "reachConsensus": "Reach consensus",
+          "thereAreThreeRounds": "There are three rounds and every participant has one vote. They can vote for themselves, as well. Votes can only be cast during the round and not after it ends.",
+          "thereAreThreeVoting": "There are three voting rounds and each one lasts 50 minutes. The entire process takes under 5 hours, making it quick and efficient.",
+          "ifYouNeedMore": "If you need more information please check Eden Community guidelines and informative material",
+          "visitEdenCommunity": "Visit Eden Community"
+        },
         "home":{
            "days":"days",
            "day":"day",
@@ -1821,56 +1836,114 @@
            "thereAreNo1":"There are no holders yet"
         }
      },
-     "upvote-election":{
-        "upvoteelection":{
-           "timeLeft":"Time left:",
-           "days":"days",
-           "day":"day",
-           "hours":"hours",
-           "hour":"hour",
-           "mins":"mins",
-           "min":"min",
-           "secs":"secs",
-           "sec":"sec",
-           "castYourVote":"Cast your vote",
-           "loremIpsumDolor":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed",
-           "electionProcess":"Election process"
+     "upvote-election": {
+      "uploadLink": "Upload link",
+      "thisElectionProcessWillHelp": "This election process will help the community pick the best leaders to facilitate a better decision making process.",
+      "thereAreThreeRounds": "There are three rounds and every participant has one vote. They can vote for themselves, as well. Votes can only be cast during the round and not after it ends.",
+      "thereAreThreeVoting": "There are three voting rounds and each one lasts 50 minutes. The entire process takes under 5 hours, making it quick and efficient.",
+      "ifYouNeedMoreInformation": "If you need more information please check Eden Community guidelines and informative material",
+      "applications": "Applications",
+      "youCanViewTheMembersWho": "You can view the members who have signed up for the election below.",
+      "participants": "Participants",
+      "treasury": "Treasury",
+      "eachRound": "Each round",
+      "votingRound": "Voting Round",
+      "areYouReadyToBegin": "Are you ready to being the election process and get to know the other participants? Vote wisely so the best candidate can advance.",
+      "groups": "Groups",
+      "l1DelegateBadges": "L1 Delegate Badges",
+      "l2DelegateBadges": "L2 Delegate Badges",
+      "memberSince": "Member since {date}",
+      "group": "Group",
+      "finalVotingRound": "Final Voting Round",
+      "youAreInTheFinalRound": "You're in the final round! Following the same election process as before, you can vote for the best candidate. The winner of the round will then be chosen.",
+      "chiefDelegateBadges": "Chief Delegate badges",
+      "headChiefDelegateBadge": "Head Chief Delegate badge",
+      "headChiefDelegate": "Head Chief Delegate",
+      "chiefDelegate": "Chief Delegate",
+      "results": "Results",
+      "seeAll": "See all",
+      "levDelegateBadges": "Lev. {level} Delegate Badges",
+      "loremIpsumDolor": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed",
+      "delegatel1": "Delegate Lev. 1",
+      "delegatel2": "Delegate Lev. 2",
+      "howCommunityElectionsWork": "How Community elections work",
+      "voting": "Voting",
+      "timing": "Timing",
+      "rules": "Rules",
+      "groupcard": {
+        "noRecordingsYet": "No recordings yet",
+        "uploadRecording": "Upload recording",
+        "slots": "Slots",
+        "consensus": "Consensus",
+        "votes": "Votes",
+        "vote": "Vote"
+      },
+      "upvoteelection": {
+        "timeLeft": "Time left:",
+        "days": "days",
+        "day": "day",
+        "hours": "hours",
+        "hour": "hour",
+        "mins": "mins",
+        "min": "min",
+        "secs": "secs",
+        "sec": "sec",
+        "castYourVote": "Cast your vote",
+        "loremIpsumDolor": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed",
+        "electionProcess": "Election process",
+        "signUp": "Sign up",
+        "signUpForThisElection": "Sign up for this election",
+        "telegramHandle": "Telegram handle",
+        "thanksForRegistering": "Thanks for registering for the election",
+        "theElectionIsAboutToStart": "The election is about to start. Please check your Telegram and join your group.",
+        "learnMore": "Learn more",
+        "left": "left",
+        "youCanVote": "You can vote for just one member in each round. Your vote can be changed until the timer runs out.",
+        "toNextRound": "to next round",
+        "wellDone": "Well done! You've won enough votes to continue to the next round!",
+        "displacements": "Displacements",
+        "goToMyBadges": "Go to my badges",
+        "headChiefDelegate": "Head Chief Delegate",
+        "chiefDelegate": "Chief Delegate",
+        "delegatel2": "Delegate Lev. 2",
+        "delegatel1": "Delegate Lev. 1",
+        "unsubscribe": "Unsubscribe"
+      },
+      "steps": {
+        "stepround1": {
+          "voterBadge": "Voter Badge",
+          "assigned": "Assigned:",
+          "delegates": "Delegates",
+          "applicants": "Applicants:",
+          "totalVoters": "Total voters:",
+          "delegatesApplicants": "Delegates Applicants"
         },
-        "steps":{
-           "stepround1":{
-              "voterBadge":"Voter Badge",
-              "assigned":"Assigned:",
-              "delegates":"Delegates",
-              "applicants":"Applicants:",
-              "totalVoters":"Total voters:",
-              "delegatesApplicants":"Delegates Applicants"
-           },
-           "stepheaddelegate":{
-              "voterBadge":"Voter Badge",
-              "assigned":"Assigned:",
-              "memberInThisRound":"Member in this round",
-              "totalVoters":"Total voters:",
-              "eligibleForChief":"Eligible for Chief Delegate badge"
-           },
-           "stepchiefdelegates":{
-              "voterBadge":"Voter Badge",
-              "assigned":"Assigned:",
-              "memberInThisRound":"Member in this round",
-              "totalVoters":"Total voters:",
-              "eligibleForChief":"Eligible for Chief Delegate badge"
-           },
-           "stepresult":{
-              "totalVoters":"Total voters:",
-              "totalDelegatesApplicants":"Total delegates applicants:",
-              "round1Voters":"Round 1 Voters:",
-              "chiefDVoters":"Chief D. Voters:",
-              "headDVoters":"Head D. Voters:",
-              "headDelegate":"Head Delegate",
-              "HEADDELEGATE":"HEAD DELEGATE",
-              "chiefDelegates":"Chief Delegates"
-           }
+        "stepheaddelegate": {
+          "voterBadge": "Voter Badge",
+          "assigned": "Assigned:",
+          "memberInThisRound": "Member in this round",
+          "totalVoters": "Total voters:",
+          "eligibleForChief": "Eligible for Chief Delegate badge"
+        },
+        "stepchiefdelegates": {
+          "voterBadge": "Voter Badge",
+          "assigned": "Assigned:",
+          "memberInThisRound": "Member in this round",
+          "totalVoters": "Total voters:",
+          "eligibleForChief": "Eligible for Chief Delegate badge"
+        },
+        "stepresult": {
+          "totalVoters": "Total voters:",
+          "totalDelegatesApplicants": "Total delegates applicants:",
+          "round1Voters": "Round 1 Voters:",
+          "chiefDVoters": "Chief D. Voters:",
+          "headDVoters": "Head D. Voters:",
+          "headDelegate": "Head Delegate",
+          "HEADDELEGATE": "HEAD DELEGATE",
+          "chiefDelegates": "Chief Delegates"
         }
-     },
+      }
+    },
      "support":{
         "support":{
            "transactions":"Transactions",
@@ -2005,7 +2078,8 @@
      "ecosystemDashboard":"Ecosystem Dashboard",
      "checkout":"Checkout",
      "upvoteElection":"Upvote Election",
-     "createYourDao":"Create Your DAO"
+     "createYourDao":"Create Your DAO",
+     "election": "Election"
   },
   "proposal-creation":{
      "creation-process":"Creation process",
