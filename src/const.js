@@ -101,7 +101,8 @@ export const ELECTION_STATE = Object.freeze({
 export const ELECTION_BADGES = Object.freeze({
   DELEGATE: 'Delegate',
   CHIEF_DELEGATE: 'Chief Delegate',
-  HEAD_DELEGATE: 'Head Delegate'
+  HEAD_DELEGATE: 'Head Delegate',
+  VOTER: 'Voter'
 })
 export const DEFAULT_TIER = 'Custom Reward'
 
