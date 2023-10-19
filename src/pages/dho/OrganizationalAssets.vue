@@ -16,28 +16,6 @@ export default {
     LoadingSpinner: () => import('~/components/common/loading-spinner.vue')
   },
   apollo: {
-    upvoteElectionQuery: {
-      query: require('~/query/upvote-election-data.gql'),
-      update: data => {
-        return {
-          currentRound: data.getDao.ongoingelct[0]?.currentround[0].details_type_s,
-          nextRound: data.getDao.ongoingelct[0]?.currentround[0].nextround,
-          upcomingElection: data.getDao.upcomingelct
-        }
-      },
-      variables () {
-        return {
-          daoName: this.selectedDao.name
-        }
-      },
-      result (data) {
-        this.upvoteElectionData = {
-          currentRound: data.data.getDao.ongoingelct[0]?.currentround[0].details_type_s,
-          nextRound: data.data.getDao.ongoingelct[0]?.currentround[0].nextround,
-          upcomingElection: data.data.getDao.upcomingelct
-        }
-      }
-    },
     memberBadges: {
       query: require('~/query/badges/member-badges.gql'),
       update: data => {
@@ -232,27 +210,6 @@ export default {
         default:
           return undefined
       }
-    },
-    currentElectionIndex () {
-      let stepIndex = null
-      if (this.upvoteElectionData.upcomingElection?.length) {
-        stepIndex = 0
-      } else if (!this.upvoteElectionData.nextRound?.length && this.upvoteElectionData?.currentRound !== 'head') {
-        stepIndex = 4
-      } else {
-        switch (this.upvoteElectionData?.currentRound) {
-          case ('delegate'):
-            stepIndex = 1
-            break
-          case ('chief'):
-            stepIndex = 2
-            break
-          case ('head'):
-            stepIndex = 3
-            break
-        }
-      }
-      return stepIndex
     }
   },
 
@@ -312,7 +269,7 @@ export default {
       .row.justify-center.q-my-md(v-if="!(list && list.length)")
         loading-spinner(color="primary" size="72px")
       base-placeholder(v-if="(list && !list.length)" :title="$t('pages.dho.organizationalassets.noBadges')" :subtitle="$t('pages.dho.organizationalassets.yourOrganizationDoesnt')" icon="fas fa-id-badge" :actionButtons="[{label: $t('pages.dho.organizationalassets.createANewBadge'), color: 'primary', onClick: () => routeTo('proposals/create')}]")
-      asset-list(:assetList="list" @loadMore="onLoadMore" ref="scroll" ownerStyles :memberBadges="memberBadges" :currentElectionIndex="currentElectionIndex")
+      asset-list(:assetList="list" @loadMore="onLoadMore" ref="scroll" ownerStyles :memberBadges="memberBadges")
     .col-3.q-py-md.q-pl-md
       filter-widget.sticky(:sort.sync="sort" :textFilter.sync="textFilter" :optionArray.sync="optionArray" :showCircle="false" :showViewSelector="false" :showToggle="false" :filterTitle="type === 'badge' ? $t('pages.dho.organizationalassets.searchBadges') : $t('pages.dho.organizationalassets.filterByName') ")
   .row.full-width(v-else)
