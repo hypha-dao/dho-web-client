@@ -906,7 +906,8 @@
       "proposals": "Предлози",
       "members": "Чланови",
       "organization": "Организација",
-      "explore": "Истражите"
+      "explore": "Истражите",
+      "election": "Избори"
     },
     "navigation-header": {
       "home": "Кућа",
@@ -1453,6 +1454,20 @@
         "assignments": "Задаци",
         "exportToCsv": "Извези у цсв"
       },
+      "election": {
+        "upload": "Отпремити",
+        "participants": "Учесници",
+        "rounds": "Роундс",
+        "seeResults": "Погледајте резултате",
+        "howCommunityElectionsWork": "Како функционишу избори у заједници",
+        "loremIpsumDolor": "Лорем ипсум долор сит амет, цонсецтетур адиписцинг елит, сед до еиусмод темпор",
+        "voteForYourself": "Гласајте за себе",
+        "reachConsensus": "Постигните консензус",
+        "thereAreThreeRounds": "Постоје три круга и сваки учесник има један глас. ",
+        "thereAreThreeVoting": "Постоје три круга гласања и сваки траје 50 минута. ",
+        "ifYouNeedMore": "Ако вам треба више информација, погледајте Еден смернице заједнице и информативни материјал",
+        "visitEdenCommunity": "Посетите Еден заједницу"
+      },
       "home": {
         "days": "дана",
         "day": "дан",
@@ -1460,6 +1475,10 @@
         "hour": "сат",
         "mins": "мин",
         "min": "мин",
+        "sec": "сец",
+        "participants": "Учесници",
+        "treasury": "Треасури",
+        "timeLeftForSigningUp": "Остало је време за пријаву",
         "moreInformationAbout": "Више информација о изборима за УпВоте",
         "here": "овде",
         "signup": "Пријави се",
@@ -1817,6 +1836,47 @@
       }
     },
     "upvote-election": {
+      "uploadLink": "Уплоад линк",
+      "thisElectionProcessWillHelp": "Овај изборни процес ће помоћи заједници да изабере најбоље лидере како би олакшали бољи процес доношења одлука.",
+      "thereAreThreeRounds": "Постоје три круга и сваки учесник има један глас. ",
+      "thereAreThreeVoting": "Постоје три круга гласања и сваки траје 50 минута. ",
+      "ifYouNeedMoreInformation": "Ако вам треба више информација, погледајте Еден смернице заједнице и информативни материјал",
+      "applications": "Апликације",
+      "youCanViewTheMembersWho": "У наставку можете погледати чланове који су се пријавили за изборе.",
+      "participants": "Учесници",
+      "treasury": "Треасури",
+      "eachRound": "Сваки круг",
+      "votingRound": "Вотинг Роунд",
+      "areYouReadyToBegin": "Да ли сте спремни да будете у изборном процесу и да упознате остале учеснике? ",
+      "groups": "Групе",
+      "l1DelegateBadges": "Значке делегата Л1",
+      "l2DelegateBadges": "Значке делегата Л2",
+      "memberSince": "Члан од {дате}",
+      "group": "Група",
+      "finalVotingRound": "Финални круг гласања",
+      "youAreInTheFinalRound": "Ти си у последњој рунди! ",
+      "chiefDelegateBadges": "Значке главног делегата",
+      "headChiefDelegateBadge": "Значка главног главног делегата",
+      "headChiefDelegate": "Главни главни делегат",
+      "chiefDelegate": "Главни делегат",
+      "results": "Резултати",
+      "seeAll": "Видети све",
+      "levDelegateBadges": "Лев. ",
+      "loremIpsumDolor": "Лорем ипсум долор сит амет, цонсецтетур адиписцинг елит, сед",
+      "delegatel1": "Делегат Лев. ",
+      "delegatel2": "Делегат Лев. ",
+      "howCommunityElectionsWork": "Како функционишу избори у заједници",
+      "voting": "Гласање",
+      "timing": "Тајминг",
+      "rules": "Правила",
+      "groupcard": {
+        "noRecordingsYet": "Још нема снимака",
+        "uploadRecording": "Отпремите снимак",
+        "slots": "Слотс",
+        "consensus": "Консензус",
+        "votes": "Гласови",
+        "vote": "Гласајте"
+      },
       "upvoteelection": {
         "timeLeft": "Преостало време:",
         "days": "дана",
@@ -1829,7 +1889,24 @@
         "sec": "сец",
         "castYourVote": "Дајте свој глас",
         "loremIpsumDolor": "Лорем ипсум долор сит амет, цонсецтетур адиписцинг елит, сед",
-        "electionProcess": "Изборни процес"
+        "electionProcess": "Изборни процес",
+        "signUp": "Пријави се",
+        "signUpForThisElection": "Пријавите се за ове изборе",
+        "telegramHandle": "Телеграм ручка",
+        "thanksForRegistering": "Хвала што сте се пријавили за изборе",
+        "theElectionIsAboutToStart": "Избори ускоро почињу. ",
+        "learnMore": "Сазнајте више",
+        "left": "лево",
+        "youCanVote": "Можете гласати за само једног члана у сваком кругу. ",
+        "toNextRound": "у следећу рунду",
+        "wellDone": "Добро урађено! ",
+        "displacements": "Дисплацементс",
+        "goToMyBadges": "Иди на моје значке",
+        "headChiefDelegate": "Главни главни делегат",
+        "chiefDelegate": "Главни делегат",
+        "delegatel2": "Делегат Лев. ",
+        "delegatel1": "Делегат Лев. ",
+        "unsubscribe": "Откажи претплату"
       },
       "steps": {
         "stepround1": {
@@ -1996,7 +2073,8 @@
     "ecosystemDashboard": "Контролна табла екосистема",
     "checkout": "Провери",
     "upvoteElection": "Избори за гласање",
-    "createYourDao": "Креирајте свој ДАО"
+    "createYourDao": "Креирајте свој ДАО",
+    "election": "Избори"
   },
   "proposal-creation": {
     "creation-process": "Процес стварања",

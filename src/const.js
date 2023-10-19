@@ -89,6 +89,21 @@ export const PERIOD_NUMBERS = Object.freeze({
   CYCLE_DURATION_SEC: 2629800
 })
 
+export const ELECTION_STATE = Object.freeze({
+  LOADING: 'loading',
+  SIGNUP: 'signup',
+  FINISH: 'finish',
+  VOTING: 'voting',
+  WAITING: 'waiting',
+  ACTIVE: 'active'
+})
+
+export const ELECTION_BADGES = Object.freeze({
+  DELEGATE: 'Delegate',
+  CHIEF_DELEGATE: 'Chief Delegate',
+  HEAD_DELEGATE: 'Head Delegate',
+  VOTER: 'Voter'
+})
 export const DEFAULT_TIER = 'Custom Reward'
 
 export const TOKEN_TYPES = Object.freeze({
@@ -128,3 +143,12 @@ export const PLAN_STATUS = Object.freeze({
 })
 
 export const NUMBER_OF_SYSTEM_PROPOSALS = 2
+
+export const LEFT_NAVIGATION_TABS = Object.freeze({
+  DASHBOARD: 'dashboard',
+  PROPOSALS: 'proposals',
+  MEMBERS: 'members',
+  ELECTION: 'election',
+  ORGANIZATION: 'organization',
+  EXPLORE: 'explore'
+})

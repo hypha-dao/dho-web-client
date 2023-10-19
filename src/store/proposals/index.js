@@ -1,11 +1,8 @@
 import Storage from '~/localStorage/storage'
-import { PROPOSAL_TYPE, PERIOD_NUMBERS, DEFAULT_TIER } from '~/const'
+import { PROPOSAL_TYPE, PERIOD_NUMBERS, DEFAULT_TIER, ELECTION_BADGES } from '~/const'
 /**
  * This vuex data store contains the data needed in the proposal creation wizard.
  */
-
-const VOTER_BADGE_TITLE = 'Voter'
-const DELEGATE_BADGE_TITLE = 'Delegate'
 
 export default {
   namespaced: true,
@@ -469,8 +466,8 @@ export default {
             { label: 'ballot_description', value: ['string', draft.description] }
           ]
         } else {
-          if (draft?.badge?.details_title_s === VOTER_BADGE_TITLE ||
-              draft?.badge?.details_title_s === DELEGATE_BADGE_TITLE
+          if (draft?.badge?.details_title_s === ELECTION_BADGES.VOTER ||
+              draft?.badge?.details_title_s === ELECTION_BADGES.DELEGATE
           ) {
             publishToStaging = false
           } else {
@@ -675,7 +672,7 @@ export default {
       }
     },
 
-    async applyForBadge ({ state, rootState }, type) {
+    async applyForBadge ({ state, rootState }, params) {
       const actions = [{
         account: this.$config.contracts.dao,
         name: 'propose',
@@ -686,9 +683,9 @@ export default {
           content_groups: [[
             { label: 'content_group_label', value: ['string', 'details'] },
             { label: 'assignee', value: ['name', rootState.accounts.account] },
-            { label: 'title', value: ['string', type === 'Voter' ? 'Voter' : 'Delegate'] },
-            { label: 'description', value: ['string', type === 'Voter' ? 'Voter' : 'Delegate'] },
-            { label: 'badge', value: ['int64', state.draft.badge.docId] }
+            { label: 'title', value: ['string', params.type === ELECTION_BADGES.VOTER ? ELECTION_BADGES.VOTER : ELECTION_BADGES.DELEGATE] },
+            { label: 'description', value: ['string', params.type === ELECTION_BADGES.VOTER ? ELECTION_BADGES.VOTER : ELECTION_BADGES.DELEGATE] },
+            { label: 'badge', value: ['int64', state.draft.badge?.docId || params.docId] }
           ]],
           publish: true
         }

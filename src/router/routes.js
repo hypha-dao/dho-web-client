@@ -339,6 +339,22 @@ const routes = [
       },
 
       {
+        path: 'election/:id',
+        name: 'election-details',
+        meta: {
+          title: I18n.t('routes.upvoteElection')
+        },
+        component: () => import('pages/upvote-election/UpvoteElection.vue')
+      },
+      {
+        path: 'election',
+        name: 'election',
+        meta: {
+          title: I18n.t('routes.election')
+        },
+        component: () => import('pages/dho/Election.vue')
+      },
+      {
         path: 'upvote-election',
         name: 'upvote-election',
         meta: {

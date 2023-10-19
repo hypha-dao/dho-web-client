@@ -906,7 +906,8 @@
       "proposals": "Propostas",
       "members": "Membros",
       "organization": "Organização",
-      "explore": "Explorar"
+      "explore": "Explorar",
+      "election": "Eleição"
     },
     "navigation-header": {
       "home": "Lar",
@@ -1453,6 +1454,20 @@
         "assignments": "atribuições",
         "exportToCsv": "Exportar para csv"
       },
+      "election": {
+        "upload": "Carregar",
+        "participants": "Participantes",
+        "rounds": "Rodadas",
+        "seeResults": "Ver resultados",
+        "howCommunityElectionsWork": "Como funcionam as eleições comunitárias",
+        "loremIpsumDolor": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor",
+        "voteForYourself": "Vote em você mesmo",
+        "reachConsensus": "Alcançar consenso",
+        "thereAreThreeRounds": "São três rodadas e cada participante tem um voto. ",
+        "thereAreThreeVoting": "São três rodadas de votação e cada uma dura 50 minutos. ",
+        "ifYouNeedMore": "Se precisar de mais informações, consulte as diretrizes da Comunidade Eden e o material informativo",
+        "visitEdenCommunity": "Visite a Comunidade Éden"
+      },
       "home": {
         "days": "dias",
         "day": "dia",
@@ -1460,6 +1475,10 @@
         "hour": "hora",
         "mins": "minutos",
         "min": "min",
+        "sec": "segundo",
+        "participants": "Participantes",
+        "treasury": "Tesouraria",
+        "timeLeftForSigningUp": "Tempo restante para inscrição",
         "moreInformationAbout": "Mais informações sobre a eleição UpVote",
         "here": "aqui",
         "signup": "Inscrever-se",
@@ -1817,6 +1836,47 @@
       }
     },
     "upvote-election": {
+      "uploadLink": "Link de upload",
+      "thisElectionProcessWillHelp": "Este processo eleitoral ajudará a comunidade a escolher os melhores líderes para facilitar um melhor processo de tomada de decisão.",
+      "thereAreThreeRounds": "São três rodadas e cada participante tem um voto. ",
+      "thereAreThreeVoting": "São três rodadas de votação e cada uma dura 50 minutos. ",
+      "ifYouNeedMoreInformation": "Se precisar de mais informações, consulte as diretrizes da Comunidade Eden e o material informativo",
+      "applications": "Formulários",
+      "youCanViewTheMembersWho": "Você pode ver os membros que se inscreveram para a eleição abaixo.",
+      "participants": "Participantes",
+      "treasury": "Tesouraria",
+      "eachRound": "Cada rodada",
+      "votingRound": "Rodada de votação",
+      "areYouReadyToBegin": "Você está pronto para iniciar o processo eleitoral e conhecer os demais participantes? ",
+      "groups": "Grupos",
+      "l1DelegateBadges": "Crachás de Delegado L1",
+      "l2DelegateBadges": "Crachás de Delegado L2",
+      "memberSince": "Membro desde {date}",
+      "group": "Grupo",
+      "finalVotingRound": "Rodada de votação final",
+      "youAreInTheFinalRound": "Você está na rodada final! ",
+      "chiefDelegateBadges": "Crachás de Delegado Chefe",
+      "headChiefDelegateBadge": "Distintivo de Delegado Chefe Chefe",
+      "headChiefDelegate": "Delegado Chefe Chefe",
+      "chiefDelegate": "Delegado Chefe",
+      "results": "Resultados",
+      "seeAll": "Ver tudo",
+      "levDelegateBadges": "Lev. ",
+      "loremIpsumDolor": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed",
+      "delegatel1": "Delegado Lev. ",
+      "delegatel2": "Delegado Lev. ",
+      "howCommunityElectionsWork": "Como funcionam as eleições comunitárias",
+      "voting": "Votação",
+      "timing": "Tempo",
+      "rules": "Regras",
+      "groupcard": {
+        "noRecordingsYet": "Ainda não há gravações",
+        "uploadRecording": "Carregar gravação",
+        "slots": "Caça-níqueis",
+        "consensus": "Consenso",
+        "votes": "Votos",
+        "vote": "Voto"
+      },
       "upvoteelection": {
         "timeLeft": "Tempo restante:",
         "days": "dias",
@@ -1996,7 +2056,8 @@
     "ecosystemDashboard": "Painel do ecossistema",
     "checkout": "Confira",
     "upvoteElection": "Eleição de voto positivo",
-    "createYourDao": "Crie seu DAO"
+    "createYourDao": "Crie seu DAO",
+    "election": "Eleição"
   },
   "proposal-creation": {
     "creation-process": "Processo de criação",
