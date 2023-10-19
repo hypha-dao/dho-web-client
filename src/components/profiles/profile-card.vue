@@ -305,7 +305,7 @@ widget-editable.q-pa-md(:class="{ 'full-width': list, 'cursor-pointer': !editBut
           q-icon.q-py-xs(color="grey-7" name="fas fa-vote-yea")
           .text-grey-7.h-b2.q-px-xs {{ voiceTokenPercentage }}
             | %
-          .text-grey-7.h-b2 {{ $t('profiles.profile-card.voice', { '1': voiceToken.token }) }}
+          .text-grey-7.h-b2 {{ voiceToken.token }}
     .col-auto(:class="{ 'col-12': card, 'col-7': isEnroller, 'q-px-xs': card }" v-if="isApplicant")
       .row.items-center.justify-end.full-height
         .col-4(:class="{ 'text-center': card , 'col-12': card, 'q-mt-md': card, 'justify-end flex': $q.screen.gt.md }" v-if="isEnroller")

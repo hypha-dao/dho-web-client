@@ -1,13 +1,10 @@
 <script>
-// import clsx from 'clsx'
 import { mapGetters } from 'vuex'
 import { date } from 'quasar'
-import I18n from '~/utils/i18n'
 
 import ipfsy from '~/utils/ipfsy'
 
 const ordersMap = [{ asc: 'createdDate' }, { desc: 'createdDate' }, { asc: 'details_title_s' }]
-const UPVOTE_DOC_URL = 'https://help.hypha.earth/hc/2431449449/93/community-voting-method?category_id=42'
 
 export default {
   name: 'dashboard',
@@ -117,108 +114,25 @@ export default {
       },
       skip () { return !this.selectedDao || !this.selectedDao.docId },
       variables () { return { daoId: this.selectedDao.docId, first: 4 } }
-    },
-
-    upvoteElection: {
-      query: require('~/query/upvote-election-data.gql'),
-      update: data => {
-        const election = data?.getDao
-        const previousElection = election?.previouselct[0]
-        const ongoingElection = election?.ongoingelct[0]
-        const upcomingElection = election?.upcomingelct[0]
-        const currentRound = ongoingElection?.currentround[0]
-
-        return {
-          isActive: previousElection?.length > 1 || ongoingElection?.length > 1 || upcomingElection?.length > 1,
-          currentRound: currentRound?.details_type_s,
-          nextRound: currentRound?.nextround,
-          startTime: upcomingElection?.details_startDate_t,
-          endTime: currentRound?.details_endDate_t,
-          upcomingElection
-        }
-      },
-      skip () { return !this.selectedDao || !this.selectedDao?.name },
-      variables () { return { daoName: this.selectedDao?.name } }
     }
   },
 
   data () {
     return {
-      I18n,
       pagination: {
         first: 6,
         offset: 0,
         fetchMore: true
       },
       textFilter: null,
-      order: ordersMap[0],
-      currentUpvoteStep: null,
-      UPVOTE_DOC_URL
+      order: ordersMap[0]
     }
   },
 
   computed: {
     ...mapGetters('dao', ['daoSettings', 'selectedDao', 'selectedDaoPlan']),
 
-    currentStepIndex () {
-      let stepIndex = null
-      if (this.upvoteElection?.upcomingElection?.length) {
-        stepIndex = 0
-      } else if (!this.upvoteElection?.nextRound?.length && this.upvoteElection?.currentRound !== 'head') {
-        stepIndex = 4
-      } else {
-        switch (this.upvoteElection?.currentRound) {
-          case ('delegate'):
-            stepIndex = 1
-            break
-          case ('chief'):
-            stepIndex = 2
-            break
-          case ('head'):
-            stepIndex = 3
-            break
-        }
-      }
-      return stepIndex
-    },
-
-    // isUpVoteElectionBannerVisible () {
-    //   // TODO: waiting API
-    //   // return this.upvoteElection?.isActive
-    //   return true
-    // },
-
     isWelcomeBannerVisible () { return true },
-
-    // TODO: waiting API
-    // upvoteElectionBanner () {
-    //   // TODO: Refactor i18n. $t('title', this.currentStepIndex === 0)
-    //   return {
-    //     title: clsx({
-    //       'Sign up for the election!': this.currentStepIndex === 0,
-    //       'The election is on progress': this.currentStepIndex > 0 && this.currentStepIndex < 4,
-    //       'The election in completed!': this.currentStepIndex === 4
-    //     }),
-    //     description: clsx({
-    //       'Hello Community members! We are soon running our Upvote Election! It will allow everyone in the AwesomeDAO community to actively participate to decision making and building our cool project together! How does it work? In a nutshell: we will run community proposals that can be voted by delegates badge holders. If you feel like being a delegate, apply now for a badge! If want to just vote your favourite delegates, apply for a voter bade!': this.currentStepIndex === 0,
-    //       'Hello Community members! Our Upvote election is up and running! If you signed up for a Voter Badge, click the button below to go express your vote and select the best delegates to represent your ideas in our lorem ipsum dolor sit amet': this.currentStepIndex > 0 && this.currentStepIndex < 4,
-    //       'Hurrey! We have our chief delegates and head delegates! go check the results by clicking the link at the bottom!': this.currentStepIndex === 4
-    //     }),
-    //     header: clsx({
-    //       'Upvote Election starting in': this.currentStepIndex === 0,
-    //       'Upvote Election started!': this.currentStepIndex > 0 && this.currentStepIndex < 3,
-    //       'Upvote Election': this.currentStepIndex > 3
-    //     }),
-    //     round: clsx({
-    //       'Round - 1': this.currentStepIndex === 1,
-    //       'Chief Delegate Round': this.currentStepIndex === 2,
-    //       'Head Delegate Round': this.currentStepIndex === 3,
-    //       'Completed!': this.currentStepIndex !== 0
-    //     }),
-    //     color: this.daoSettings?.secondaryColor,
-    //     gradient: false
-    //   }
-    // },
 
     welcomeBanner () {
       return {
@@ -232,11 +146,6 @@ export default {
       }
     }
 
-  },
-
-  created () {
-    // TODO: waiting API
-    // this.$apollo.queries.upvoteElection.refetch()
   },
 
   methods: {}
