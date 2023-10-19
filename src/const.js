@@ -142,3 +142,12 @@ export const PLAN_STATUS = Object.freeze({
 })
 
 export const NUMBER_OF_SYSTEM_PROPOSALS = 2
+
+export const LEFT_NAVIGATION_TABS = Object.freeze({
+  DASHBOARD: 'dashboard',
+  PROPOSALS: 'proposals',
+  MEMBERS: 'members',
+  ELECTION: 'election',
+  ORGANIZATION: 'organization',
+  EXPLORE: 'explore'
+})
