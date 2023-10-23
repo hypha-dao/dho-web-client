@@ -86,6 +86,9 @@ export default {
         return true
       }
       return false
+    },
+    hasElections () {
+      return this.elections.length
     }
   },
 
@@ -128,7 +131,7 @@ export default {
             q-tooltip(anchor="center right" self="center left" :content-style="{ 'font-size': '1em' }") {{ $t('navigation.left-navigation.proposals') }}
           q-btn.q-ma-md(:class="{'active': activeTab=== LEFT_NAVIGATION_TABS.MEMBERS}" :flat="activeTab !== LEFT_NAVIGATION_TABS.MEMBERS" unelevated rounded padding="12px" icon="fas fa-users" size="sm" :color="activeTab === LEFT_NAVIGATION_TABS.MEMBERS ? 'primary' : 'disabled'" :to="{ name: LEFT_NAVIGATION_TABS.MEMBERS }")
             q-tooltip(anchor="center right" self="center left" :content-style="{ 'font-size': '1em' }") {{ $t('navigation.left-navigation.members') }}
-          q-btn.q-ma-md(v-if="elections.length" :class="{'active': activeTab=== LEFT_NAVIGATION_TABS.ELECTION}" :flat="activeTab !== LEFT_NAVIGATION_TABS.ELECTION" unelevated rounded padding="12px" size="sm" :color="activeTab === LEFT_NAVIGATION_TABS.ELECTION ? 'primary' : 'disabled'" :to="{ name: LEFT_NAVIGATION_TABS.ELECTION }")
+          q-btn.q-ma-md(v-if="hasElections" :class="{'active': activeTab=== LEFT_NAVIGATION_TABS.ELECTION}" :flat="activeTab !== LEFT_NAVIGATION_TABS.ELECTION" unelevated rounded padding="12px" size="sm" :color="activeTab === LEFT_NAVIGATION_TABS.ELECTION ? 'primary' : 'disabled'" :to="{ name: LEFT_NAVIGATION_TABS.ELECTION }")
             img.no-active(:class="{ 'active-btn': activeTab=== LEFT_NAVIGATION_TABS.ELECTION }" :src="activeTab=== LEFT_NAVIGATION_TABS.ELECTION ? IconVotingWhite : IconVoting")
             q-tooltip(anchor="center right" self="center left" :content-style="{ 'font-size': '1em' }") {{ $t('navigation.left-navigation.election') }}
           q-btn.q-ma-md(:class="{'active': activeTab=== LEFT_NAVIGATION_TABS.ORGANIZATION}" :flat="activeTab !== LEFT_NAVIGATION_TABS.ORGANIZATION" unelevated rounded padding="12px" icon="fas fa-building" size="sm" :color="activeTab === LEFT_NAVIGATION_TABS.ORGANIZATION ? 'primary' : 'disabled'" :to="{ name: LEFT_NAVIGATION_TABS.ORGANIZATION }")
