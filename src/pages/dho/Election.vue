@@ -270,13 +270,6 @@ q-page.page-election
         q-carousel.b2.q-mt-md(v-model="slide" swipeable="swipeable" animated="animated" navigation="navigation" :padding="false" height="240px" control-color="primary" ref="carousel")
           q-carousel-slide.no-padding(name="1")
             .h-b2 {{ $t('pages.dho.election.thereAreThreeRounds') }}
-            .col.text-black.text-bold.q-my-xxs(:style="{ 'font-weight': '600' }")
-              .row.q-mb-md.flex.justify-between.items-center
-                div {{ $t('pages.dho.election.voteForYourself') }}
-                q-icon(name="fas fa-check" color="positive" size="20px")
-              .row.flex.justify-between.items-center
-                div {{ $t('pages.dho.election.reachConsensus') }}
-                q-icon(name="fas fa-check" color="positive" size="20px")
           q-carousel-slide.no-padding(name="2")
             .h-b2 {{ $t('pages.dho.election.thereAreThreeVoting') }}
           q-carousel-slide.no-padding(name="3")
