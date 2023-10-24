@@ -1500,8 +1500,8 @@
            "learnMore": "Learn more",
            "communityElectionsAreAbout": "Community elections are about to begin",
            "weUseAFairAndInclusive": "We use a fair and inclusive voting mechanism to ensure diverse viewpoints. The voting process is quick and efficient. You are welcome to sign up to nominate yourself as a candidate.",
-           "start": "Start",
-           "startNewElections": "Start election now",
+           "start": "Schedule",
+           "startNewElections": "Schedule election now",
            "joinAsADelegate": "Join as a delegate and contribute to the growth of the DAO"
          },
         "members":{
