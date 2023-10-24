@@ -1084,3 +1084,30 @@ export const createTokens = async function ({ state, rootState }, data) {
   ]
   await this.$api.signTransaction(actions)
 }
+
+export const createElection = async function (context, data) {
+  const actions = [{
+    account: this.$config.contracts.dao,
+    name: 'createupvelc',
+    authorization: [{
+      actor: context.rootState.accounts.account,
+      permission: 'active'
+    }],
+    data: {
+      dao_id: data.daoId,
+      election_config: [[
+        {
+          label: 'content_group_label',
+          value: [
+            'string',
+            'details'
+          ]
+        },
+        { label: 'upvote_start_date_time', value: ['time_point', data.startDate.replace('Z', '')] },
+        { label: 'upvote_duration', value: ['int64', data.upvoteDuration] },
+        { label: 'duration', value: ['int64', data.duration] }
+      ]]
+    }
+  }]
+  await this.$api.signTransaction(actions)
+}

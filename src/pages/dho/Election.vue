@@ -2,7 +2,7 @@
 import formatNumber from '~/utils/formatNumber'
 import I18n from '~/utils/i18n'
 import { dateToStringShort } from '~/utils/TimeUtils.js'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import gql from 'graphql-tag'
 
 const ELECTIONS_DATA = `
@@ -51,6 +51,9 @@ getDao(docId: $daoId) {
 }
 `
 
+const ROUND_DURATION = 3600
+const UPVOTE_DURATION = 7862400
+
 export default {
   name: 'election',
 
@@ -71,7 +74,7 @@ export default {
           participants: election.ueStartrnd.reduce((count, group) => count + group.ueGroupLnk.reduce((count, link) => count + link.ueRdMember.filter(member => member.details_member_n).length, 0), 0),
           id: election.docId
         }
-      }),
+      }).reverse(),
       variables () {
         return {
           daoId: this.selectedDao.docId
@@ -126,10 +129,15 @@ export default {
 
   computed: {
     ...mapGetters('dao', ['selectedDao']),
+    ...mapGetters('accounts', ['account', 'isAdmin']),
+    canStartElection () {
+      return (!this.upcomingElection || !this.ongoingElection) && this.isAdmin
+    },
+
     upvoteElectionBanner () {
       return {
-        title: this.hasNextElection ? this.I18n.t('pages.dho.home.joinAsADelegate') : this.I18n.t('pages.dho.home.communityElectionsAreAbout'),
-        description: this.I18n.t('pages.dho.home.weUseAFairAndInclusive')
+        title: this.hasNextElection ? this.I18n.t('pages.dho.home.joinAsADelegate') : this.canStartElection ? this.I18n.t('pages.dho.home.startNewElections') : this.I18n.t('pages.dho.home.communityElectionsAreAbout'),
+        description: this.canStartElection ? '' : this.I18n.t('pages.dho.home.weUseAFairAndInclusive')
       }
     },
 
@@ -163,6 +171,7 @@ export default {
   },
 
   methods: {
+    ...mapActions('dao', ['createElection']),
     formatTimeLeft () {
       const MS_PER_DAY = 1000 * 60 * 60 * 24
       const MS_PER_HOUR = 1000 * 60 * 60
@@ -203,16 +212,49 @@ export default {
     hideUpvoteBanner () {
       localStorage.setItem('showUpvoteBanner', false)
       this.isUpVoteElectionBannerVisible = false
+    },
+
+    getSaturdayTimestamp () {
+      const now = new Date()
+      now.setDate(now.getDate() + (6 - now.getDay() + 7) % 7)
+      now.setUTCHours(17)
+      now.setUTCMinutes(0)
+      now.setUTCSeconds(0)
+      now.setUTCMilliseconds(0)
+      const startDate = new Date(now).toISOString()
+      return startDate
+    },
+
+    getLastElectionEndDate () {
+      const dateString = this.elections[0].endDate
+      const date = new Date(dateString)
+      const timestamp = date.getTime()
+      const seconds = timestamp + UPVOTE_DURATION * 1000
+      if (seconds > new Date().getTime()) {
+        return new Date(seconds).toISOString()
+      } else {
+        return this.getSaturdayTimestamp()
+      }
+    },
+
+    async _createElection () {
+      const startDate = !this.elections.length ? this.getSaturdayTimestamp() : this.getLastElectionEndDate()
+      await this.createElection({
+        startDate: startDate,
+        upvoteDuration: UPVOTE_DURATION,
+        duration: ROUND_DURATION,
+        daoId: this.selectedDao.docId
+      })
     }
   }
 }
 </script>
 <template lang="pug">
 q-page.page-election
-  base-banner.q-mb-md(v-bind="upvoteElectionBanner" @onClose="hideUpvoteBanner" upvoteBanner :background="require('~/assets/images/election-banner-bg.jpeg')" v-if="isUpVoteElectionBannerVisible && upcomingElection")
+  base-banner.q-mb-md(v-bind="upvoteElectionBanner" @onClose="hideUpvoteBanner" upvoteBanner :background="require('~/assets/images/election-banner-bg.jpeg')" v-if="isUpVoteElectionBannerVisible && (upcomingElection || canStartElection)")
     template(v-if="hasNextElection" v-slot:right)
       .flex.full-width.full-height.items-center.justify-center
-        q-card.q-pa-xl(:style="{ 'width': '350px', 'opacity': '.7', 'border-radius': '15px' }")
+        q-card.q-pa-xl(v-if="!canStartElection" :style="{ 'width': '350px', 'opacity': '.7', 'border-radius': '15px' }")
           .col
             .row.full-width.justify-center.q-pb-md(:style="{ 'border-bottom': '1px solid #242f5d'}")
               .row
@@ -244,12 +286,13 @@ q-page.page-election
               //- .col.flex.justify-center
                 .h-h6 $ {{ formatNumber(treasury) }}
                 .full-width.flex.justify-center.text-secondary {{ $t('pages.dho.home.treasury') }}
-    template(v-if="hasNextElection" v-slot:buttons)
+    template(v-slot:buttons)
       .row.justify-start
         .flex(:class=" { 'q-mt-md': $q.screen.lt.md, 'justify-end': $q.screen.gt.sm }")
-        q-btn.q-px-lg.h-btn1(@click="$router.push({ path: `/${selectedDao.name}/election/${upcomingElection.docId}` })" :disable="!upcomingElection" :class="{ 'q-mt-sm': $q.screen.lt.xs || $q.screen.xs }" no-caps rounded unelevated :label="$t('pages.dho.home.signup')" color="secondary" text-color="white")
+        q-btn.q-px-lg.h-btn1(v-if="canStartElection" @click="_createElection" :class="{ 'q-mt-sm': $q.screen.lt.xs || $q.screen.xs }" no-caps rounded unelevated :label="$t('pages.dho.home.start')" color="secondary" text-color="white")
+        q-btn.q-px-lg.h-btn1(v-else @click="$router.push({ path: `/${$store.state.dao.settings.settings_daoUrl_s}/election/${upcomingElection.docId}` })" :disable="!upcomingElection" :class="{ 'q-mt-sm': $q.screen.lt.xs || $q.screen.xs }" no-caps rounded unelevated :label="$t('pages.dho.home.signup')" color="secondary" text-color="white")
         q-btn.q-px-lg.h-btn1.q-ml-sm(color="white" flat :label="$t('pages.dho.home.learnMore')" no-caps rounded)
-    template(v-else="!hasNextElection" v-slot:buttons)
+    //- template(v-slot:buttons)
       .row.justify-start
         q-btn.q-px-lg.h-btn1(disable :class="{ 'q-mt-sm': $q.screen.lt.xs || $q.screen.xs }" no-caps rounded unelevated :label="$t('pages.dho.home.nextElection', { date: dateToStringShort(nextElectionStartDate) })" color="white" text-color="primary")
   .row
@@ -264,7 +307,7 @@ q-page.page-election
             .col.flex.justify-center.text-black(:style="{ 'font-size': '17px' }")
               div {{ election.participants }} {{ $t('pages.dho.election.participants') }}
             .col.flex.justify-end
-              q-btn.q-px-lg.h-btn1(@click="$router.push({ path: `/${selectedDao.name}/election/${election.id}` })" :class="{ 'q-mt-sm': $q.screen.lt.xs || $q.screen.xs }" no-caps rounded unelevated :label="$t('pages.dho.election.seeResults')" color="primary" text-color="white")
+              q-btn.q-px-lg.h-btn1(@click="$router.push({ path: `/${$store.state.dao.settings.settings_daoUrl_s}/election/${election.id}` })" :class="{ 'q-mt-sm': $q.screen.lt.xs || $q.screen.xs }" no-caps rounded unelevated :label="$t('pages.dho.election.seeResults')" color="primary" text-color="white")
     .col
       widget(:title="widgetTitle")
         q-carousel.b2.q-mt-md(v-model="slide" swipeable="swipeable" animated="animated" navigation="navigation" :padding="false" height="240px" control-color="primary" ref="carousel")

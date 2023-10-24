@@ -1491,7 +1491,13 @@
         "members": "会员",
         "proposals": "提案",
         "welcomeToHyphaEvolution": "欢迎来到菌丝进化",
-        "atHyphaWere": "在 Hypha，我们正在共同创建解决方案来建立有影响力的组织。"
+        "atHyphaWere": "在 Hypha，我們正在共同創建解決方案來建立有影響力的組織。 我們已經發展了激進的系統來構建下一代去中心化組織。 讓我們指導您重塑團隊協調、激發動力、管理財務和促進有效溝通以實現共同願景的方式。 與 Hypha 一起將您的夢想變成現實",
+        "learnMore": "了解更多",
+        "communityElectionsAreAbout": "社區選舉即將開始",
+        "weUseAFairAndInclusive": "我們使用公平和包容的投票機制來確保觀點的多樣性。 投票過程快速高效。 歡迎您註冊並提名自己為候選人。",
+        "start": "开始",
+        "startNewElections": "立即開始選舉",
+        "joinAsADelegate": "加入並為 DAO 的發展做出貢獻"
       },
       "members": {
         "becomeAMember": "成为会员",
