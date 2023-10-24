@@ -1491,7 +1491,13 @@
         "members": "Membros",
         "proposals": "Propostas",
         "welcomeToHyphaEvolution": "Bem-vindo à evolução Hypha",
-        "atHyphaWere": "Na Hypha, estamos co-criando soluções para construir organizações impactantes. "
+        "atHyphaWere": "Na Hypha, estamos co-criando soluções para construir organizações impactantes. ",
+        "learnMore": "Saber mais",
+        "communityElectionsAreAbout": "As eleições comunitárias estão prestes a começar",
+        "weUseAFairAndInclusive": "Usamos um mecanismo de votação justo e inclusivo para garantir pontos de vista diversos. O processo de votação é rápido e eficiente. Você está convidado a se inscrever para se nomear como candidato.",
+        "start": "Começar",
+        "startNewElections": "Iniciar eleição agora",
+        "joinAsADelegate": "Junte-se como delegado e contribua para o crescimento do DAO"
       },
       "members": {
         "becomeAMember": "Torne-se um membro",
@@ -1889,7 +1895,24 @@
         "sec": "segundo",
         "castYourVote": "Dê seu voto",
         "loremIpsumDolor": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed",
-        "electionProcess": "Processo eleitoral"
+        "electionProcess": "Processo eleitoral",
+        "signUp": "Inscrever-se",
+        "signUpForThisElection": "Inscreva-se nesta eleição",
+        "telegramHandle": "Identificador de telegrama",
+        "thanksForRegistering": "Obrigado por se registrar para a eleição",
+        "theElectionIsAboutToStart": "A eleição está prestes a começar. ",
+        "learnMore": "Saber mais",
+        "left": "esquerda",
+        "youCanVote": "Você pode votar em apenas um membro em cada rodada. ",
+        "toNextRound": "para a próxima rodada",
+        "wellDone": "Bom trabalho! ",
+        "displacements": "Deslocamentos",
+        "goToMyBadges": "Ir para meus emblemas",
+        "headChiefDelegate": "Delegado Chefe Chefe",
+        "chiefDelegate": "Delegado Chefe",
+        "delegatel2": "Delegado Lev. ",
+        "delegatel1": "Delegado Lev. ",
+        "unsubscribe": "Cancelar subscrição"
       },
       "steps": {
         "stepround1": {

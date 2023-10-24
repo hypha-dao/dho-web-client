@@ -1491,7 +1491,13 @@
         "members": "회원",
         "proposals": "제안",
         "welcomeToHyphaEvolution": "Hypha 진화에 오신 것을 환영합니다",
-        "atHyphaWere": "Hypha에서는 영향력 있는 조직을 구축하기 위한 솔루션을 공동 개발하고 있습니다. "
+        "atHyphaWere": "Hypha에서는 영향력 있는 조직을 구축하기 위한 솔루션을 공동 개발하고 있습니다. ",
+        "learnMore": "더 알아보기",
+        "communityElectionsAreAbout": "지역사회 선거가 곧 시작됩니다",
+        "weUseAFairAndInclusive": "우리는 다양한 관점을 보장하기 위해 공정하고 포용적인 투표 메커니즘을 사용합니다. 투표 절차는 빠르고 효율적입니다. 자신을 후보자로 지명하기 위해 등록하는 것을 환영합니다.",
+        "start": "시작",
+        "startNewElections": "지금 선거 시작",
+        "joinAsADelegate": "대표로 참여하여 DAO의 성장에 기여하세요."
       },
       "members": {
         "becomeAMember": "멤버가되다",
