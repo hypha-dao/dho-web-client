@@ -1464,7 +1464,7 @@
         "voteForYourself": "스스로 투표하세요",
         "reachConsensus": "합의에 도달",
         "thereAreThreeRounds": "총 3개의 라운드가 진행되며 모든 참가자는 1개의 투표권을 가집니다. ",
-        "thereAreThreeVoting": "세 번의 투표가 있으며 각 라운드는 50분 동안 진행됩니다. ",
+        "thereAreThreeVoting": "투표 횟수는 거의 없으며 각 라운드는 60분 동안 지속됩니다. 전체 프로세스는 5시간 미만이 소요되므로 빠르고 효율적입니다.",
         "ifYouNeedMore": "더 많은 정보가 필요하시면 Eden 커뮤니티 가이드라인과 정보자료를 확인해주세요",
         "visitEdenCommunity": "에덴 커뮤니티를 방문해보세요"
       },

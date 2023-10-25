@@ -99,6 +99,9 @@ export default {
     },
     buttonText () {
       return this.stylesForOwner ? this.$t('organization-asset.asset-card.applied') : this.$t('organization-asset.asset-card.apply')
+    },
+    isNotDelegate () {
+      return !this.asset.title.toLowerCase().includes('delegate')
     }
   },
 
@@ -182,7 +185,7 @@ widget.item.full-width(:class="{'mobile-item': isMobile, 'desktop-item': !isMobi
         q-avatar(size="30px" v-else-if="iconDetails && iconDetails.type === 'img'")
           img.icon-img(:src="iconDetails.name")
         ipfs-image-viewer(size="30px" :ipfsCid="iconDetails.cid" v-else-if="iconDetails && iconDetails.type === 'ipfs'")
-        .h-b2.text-underline(v-if="isBadge && stylesForOwner" @click="revokeBadge") {{ $t('organization-asset.asset-card.revoke') }}
+        .h-b2.text-underline(v-if="isBadge && stylesForOwner && isNotDelegate" @click="revokeBadge") {{ $t('organization-asset.asset-card.revoke') }}
       .row.q-my-xs
         .h-h5.text-weight-bold {{asset.title}}
       .row.q-my-xs
@@ -199,7 +202,7 @@ widget.item.full-width(:class="{'mobile-item': isMobile, 'desktop-item': !isMobi
         .profile-counter.bg-internal-bg(v-if="badgeHolders.length > 3") +
           | {{ badgeHolders.length - 3 }}
         .profile-counter.bg-internal-bg(v-else-if="!badgeHolders.length") {{ $t('organization-asset.asset-card.na') }}
-    q-btn.q-mt-md.text-white(v-if="isBadge" noCaps unelevated rounded color="primary" @click="onApply" :class="{ 'owner-button': stylesForOwner }") {{ buttonText }}
+    q-btn.q-mt-md.text-white(v-if="isBadge && isNotDelegate" noCaps unelevated rounded color="primary" @click="onApply" :class="{ 'owner-button': stylesForOwner }") {{ buttonText }}
 
 </template>
 

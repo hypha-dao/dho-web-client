@@ -53,6 +53,7 @@ getDao(docId: $daoId) {
 
 const ROUND_DURATION = 3600
 const UPVOTE_DURATION = 7862400
+const EDEN_COMMUNITY_LINK = 'https://eoscommunity.notion.site/Technical-Documentation-For-Running-Elections-7750b500724f43269130744b5c9d0c38'
 
 export default {
   name: 'election',
@@ -245,6 +246,10 @@ export default {
         duration: ROUND_DURATION,
         daoId: this.selectedDao.docId
       })
+    },
+
+    visitToEden () {
+      window.open(EDEN_COMMUNITY_LINK, '_blank')
     }
   }
 }
@@ -318,7 +323,7 @@ q-page.page-election
           q-carousel-slide.no-padding(name="3")
             .h-b2 {{ $t('pages.dho.election.ifYouNeedMore') }}
             .row.flex.justify-end.q-mt-lg
-              q-btn.h-btn1.q-px-sm(:color="'secondary'" no-caps rounded unelevated) {{ $t('pages.dho.election.visitEdenCommunity') }}
+              q-btn.h-btn1.q-px-sm(@click="visitToEden()" :color="'secondary'" no-caps rounded unelevated) {{ $t('pages.dho.election.visitEdenCommunity') }}
           template(v-slot:control)
             q-carousel-control(position="bottom-right")
               q-btn.q-mt-md.round-circle(flat unelevated padding="13px" icon="fas fa-chevron-right" size="xxs" color="primary" @click="$refs.carousel.next()")
