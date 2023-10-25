@@ -16,7 +16,8 @@ export default {
     groupId: String,
     winner: String,
     roundNumber: Number,
-    videoLink: String
+    videoLink: String,
+    groups: Array
   },
 
   data () {
@@ -62,6 +63,13 @@ export default {
     },
     openLink () {
       window.open(this.videoLink, '_blank')
+    },
+    getRoundGroupWinnerIcon() {
+      if (this.groups.length < 12) {
+        return require('~/assets/icons/delegate-l1.svg')
+      } else {
+        return require('~/assets/icons/delegate-l2.svg')
+      }
     }
   }
 }
@@ -85,9 +93,8 @@ export default {
         template(v-for="user in users")
           div(:style="'position: relative;'")
             profile-picture.q-mr-xxs(:username="user.details_member_n" size="24px" :key="user.details_member_n")
-            img.absolute(v-if="user.details_member_n === winner && roundNumber === 1" width="18px" height="18px" :style="'top: 14px; left: 12px;'" src="~/assets/icons/delegate-l1.svg")
-            img.absolute(v-if="user.details_member_n === winner && roundNumber === 2" width="18px" height="18px" :style="'top: 14px; left: 12px;'" src="~/assets/icons/delegate-l2.svg")
-            img.absolute(v-if="user.details_member_n === winner && roundNumber === 3" width="18px" height="18px" :style="'top: 14px; left: 12px;'" src="~/assets/icons/chief-delegate.svg")
+            img.absolute(v-if="user.details_member_n === winner" width="18px" height="18px" :style="'top: 14px; left: 12px;'" :src="getRoundGroupWinnerIcon()")
+            img.absolute(v-if="user.details_member_n === winner && roundNumber >= 3" width="18px" height="18px" :style="'top: 14px; left: 12px;'" src="~/assets/icons/chief-delegate.svg")
       q-btn(@click="showUsers = !showUsers" flat rounded :icon="showUsers ? 'fas fa-chevron-up' : 'fas fa-chevron-down'")
     div(v-if="!users.find(user => user.details_member_n === account && electionStatus !== 'finished') && !videoLink") {{ $t('pages.upvote-election.groupcard.noRecordingsYet') }}
     .text-secondary.cursor-pointer.text-underline(v-else-if="videoLink" @click="openLink()") {{ videoLink }}
