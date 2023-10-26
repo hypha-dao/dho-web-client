@@ -1232,7 +1232,8 @@
       "voting": "ГЛАСАЊЕ",
       "active": "АКТИВНО",
       "archived": "АРХИВИРАНО",
-      "suspended": "СУСПЕНДЕД"
+      "suspended": "СУСПЕНДЕД",
+      "application": "Апликација"
     },
     "proposal-view": {
       "s": " 1 ? ",
@@ -1265,7 +1266,10 @@
       "compensationForOneCycle": "Награда за један циклус",
       "compensationForOnePeriod": "Награда за један период",
       "1MoonCycle": "1 месечев циклус траје око 30 дана",
-      "1MoonPeriod": "Период 1 месеца траје око 7 дана"
+      "1MoonPeriod": "Период 1 месеца траје око 7 дана",
+      "badgeName": "Назив Значке",
+      "applicantMessage": "Порука подносиоца захтева",
+      "badgeDescription": "Опис значке"
     },
     "quest-progression": {
       "questProgression": "Прогресија задатака"

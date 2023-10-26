@@ -1232,7 +1232,8 @@
       "voting": "VOTAÇÃO",
       "active": "ATIVO",
       "archived": "ARQUIVADO",
-      "suspended": "SUSPENSO"
+      "suspended": "SUSPENSO",
+      "application": "Aplicativa"
     },
     "proposal-view": {
       "s": " 1? ",
@@ -1265,7 +1266,10 @@
       "compensationForOneCycle": "Recompensa por um ciclo",
       "compensationForOnePeriod": "Recompensa por um período",
       "1MoonCycle": "O ciclo de 1 lua dura cerca de 30 dias",
-      "1MoonPeriod": "O período de 1 lua dura cerca de 7 dias"
+      "1MoonPeriod": "O período de 1 lua dura cerca de 7 dias",
+      "badgeName": "Nome no crachá",
+      "applicantMessage": "Mensagem do Candidato",
+      "badgeDescription": "Descrição do selo"
     },
     "quest-progression": {
       "questProgression": "Progressão da missão"

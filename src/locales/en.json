@@ -1237,7 +1237,8 @@
         "voting":"VOTING",
         "active":"ACTIVE",
         "archived":"ARCHIVED",
-        "suspended":"SUSPENDED"
+        "suspended":"SUSPENDED",
+        "application": "Application"
      },
      "proposal-view":{
         "s":" 1 ? 's' : ''}` }}",
@@ -1270,7 +1271,10 @@
         "compensationForOneCycle":"Reward for one cycle",
         "compensationForOnePeriod":"Reward for one period",
         "1MoonCycle":"1 moon cycle is around 30 days",
-        "1MoonPeriod":"1 moon period is around 7 days"
+        "1MoonPeriod":"1 moon period is around 7 days",
+        "badgeName": "Badge Name",
+        "applicantMessage": "Applicant Message",
+        "badgeDescription": "Badge Description"
      },
      "quest-progression":{
         "questProgression":"Quest Progression"
