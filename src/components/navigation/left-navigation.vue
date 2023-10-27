@@ -1,13 +1,43 @@
 <script>
 import { LEFT_NAVIGATION_TABS } from '~/const'
+import { mapGetters } from 'vuex'
+import gql from 'graphql-tag'
 
 const IconVotingWhite = require('~/assets/icons/voting-icon-white.svg')
 const IconVoting = require('~/assets/icons/voting-icon.svg')
+
+const ELECTIONS = `
+getDao(docId: $daoId) {
+  docId
+  ueElection {
+    docId
+  }
+}
+`
 
 export default {
   name: 'left-navigation',
   components: {
     DhoBtn: () => import('./dho-btn.vue')
+  },
+
+  apollo: {
+    elections: {
+      query: gql`query electionsQuery ($daoId: String!) { ${ELECTIONS} }`,
+      update: data => data.getDao.ueElection.map(election => {
+        return {
+          id: election.docId
+        }
+      }),
+      variables () {
+        return {
+          daoId: this.selectedDao.docId
+        }
+      },
+      fetchPolicy: 'no-cache',
+      pollInterval: 1000,
+      skip () { return !this.selectedDao || !this.selectedDao.docId }
+    }
   },
 
   props: {
@@ -41,13 +71,15 @@ export default {
   },
 
   computed: {
+    ...mapGetters('dao', ['selectedDao']),
+    ...mapGetters('accounts', ['account', 'isAdmin']),
     activeTab () {
       if (this.$route.name === LEFT_NAVIGATION_TABS.DASHBOARD) return LEFT_NAVIGATION_TABS.DASHBOARD
       if (this.$route.path.includes(LEFT_NAVIGATION_TABS.PROPOSALS)) return LEFT_NAVIGATION_TABS.PROPOSALS
       if (this.$route.path.includes(LEFT_NAVIGATION_TABS.MEMBERS)) return LEFT_NAVIGATION_TABS.MEMBERS
-      if (this.$route.path.includes(LEFT_NAVIGATION_TABS.ELECTION)) return LEFT_NAVIGATION_TABS.ELECTION
       if (this.$route.path.includes(LEFT_NAVIGATION_TABS.ORGANIZATION)) return LEFT_NAVIGATION_TABS.ORGANIZATION
       if (this.$route.path.includes(LEFT_NAVIGATION_TABS.EXPLORE)) return LEFT_NAVIGATION_TABS.EXPLORE
+      if (this.$route.path.includes(LEFT_NAVIGATION_TABS.ELECTION)) return LEFT_NAVIGATION_TABS.ELECTION
       return null
     },
     disabledSelector () {
@@ -55,6 +87,9 @@ export default {
         return true
       }
       return false
+    },
+    hasElections () {
+      return this.elections?.length
     }
   },
 
@@ -97,7 +132,7 @@ export default {
             q-tooltip(anchor="center right" self="center left" :content-style="{ 'font-size': '1em' }") {{ $t('navigation.left-navigation.proposals') }}
           q-btn.q-ma-md(:class="{'active': activeTab=== LEFT_NAVIGATION_TABS.MEMBERS}" :flat="activeTab !== LEFT_NAVIGATION_TABS.MEMBERS" unelevated rounded padding="12px" icon="fas fa-users" size="sm" :color="activeTab === LEFT_NAVIGATION_TABS.MEMBERS ? 'primary' : 'disabled'" :to="{ name: LEFT_NAVIGATION_TABS.MEMBERS }")
             q-tooltip(anchor="center right" self="center left" :content-style="{ 'font-size': '1em' }") {{ $t('navigation.left-navigation.members') }}
-          q-btn.q-ma-md(:class="{'active': activeTab=== LEFT_NAVIGATION_TABS.ELECTION}" :flat="activeTab !== LEFT_NAVIGATION_TABS.ELECTION" unelevated rounded padding="12px" size="sm" :color="activeTab === LEFT_NAVIGATION_TABS.ELECTION ? 'primary' : 'disabled'" :to="{ name: LEFT_NAVIGATION_TABS.ELECTION }")
+          q-btn.q-ma-md(v-if="hasElections || isAdmin" :class="{'active': activeTab=== LEFT_NAVIGATION_TABS.ELECTION}" :flat="activeTab !== LEFT_NAVIGATION_TABS.ELECTION" unelevated rounded padding="12px" size="sm" :color="activeTab === LEFT_NAVIGATION_TABS.ELECTION ? 'primary' : 'disabled'" :to="{ name: LEFT_NAVIGATION_TABS.ELECTION }")
             img.no-active(:class="{ 'active-btn': activeTab=== LEFT_NAVIGATION_TABS.ELECTION }" :src="activeTab=== LEFT_NAVIGATION_TABS.ELECTION ? IconVotingWhite : IconVoting")
             q-tooltip(anchor="center right" self="center left" :content-style="{ 'font-size': '1em' }") {{ $t('navigation.left-navigation.election') }}
           q-btn.q-ma-md(:class="{'active': activeTab=== LEFT_NAVIGATION_TABS.ORGANIZATION}" :flat="activeTab !== LEFT_NAVIGATION_TABS.ORGANIZATION" unelevated rounded padding="12px" icon="fas fa-building" size="sm" :color="activeTab === LEFT_NAVIGATION_TABS.ORGANIZATION ? 'primary' : 'disabled'" :to="{ name: LEFT_NAVIGATION_TABS.ORGANIZATION }")

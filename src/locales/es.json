@@ -1464,7 +1464,7 @@
         "voteForYourself": "vota por ti mismo",
         "reachConsensus": "Llegar a un consenso",
         "thereAreThreeRounds": "Hay tres rondas y cada participante tiene un voto. ",
-        "thereAreThreeVoting": "Hay tres rondas de votación y cada una tiene una duración de 50 minutos. ",
+        "thereAreThreeVoting": "Hay tres rondas de votación y cada una tiene una duración de 60 minutos. Todo el proceso dura menos de 5 horas, lo que lo hace rápido y eficiente.",
         "ifYouNeedMore": "Si necesita más información, consulte las pautas y el material informativo de Eden Community.",
         "visitEdenCommunity": "Visita la comunidad del Edén"
       },
@@ -1475,6 +1475,10 @@
         "hour": "hora",
         "mins": "minutos",
         "min": "mín.",
+        "sec": "segundo",
+        "participants": "Participantes",
+        "treasury": "Tesorería",
+        "timeLeftForSigningUp": "Tiempo restante para registrarse",
         "moreInformationAbout": "Más información sobre la elección UpVote",
         "here": "aquí",
         "signup": "Inscribirse",
@@ -1487,7 +1491,13 @@
         "members": "Miembros",
         "proposals": "Propuestas",
         "welcomeToHyphaEvolution": "Bienvenidos a la evolución Hypha",
-        "atHyphaWere": "En Hypha, estamos co-creando soluciones para construir organizaciones impactantes. "
+        "atHyphaWere": "En Hypha, estamos co-creando soluciones para construir organizaciones impactantes. ",
+        "learnMore": "Aprende más",
+        "communityElectionsAreAbout": "Las elecciones comunitarias están a punto de comenzar",
+        "weUseAFairAndInclusive": "Utilizamos un mecanismo de votación justo e inclusivo para asegurar la diversidad de puntos de vista. El proceso de votación es rápido y eficiente. Le invitamos a inscribirse para nominarse a sí mismo como candidato.",
+        "start": "Comenzar",
+        "startNewElections": "Iniciar la elección ahora",
+        "joinAsADelegate": "Únete como delegado y contribuye al crecimiento de la DAO"
       },
       "members": {
         "becomeAMember": "Hazte miembro",
@@ -1885,7 +1895,24 @@
         "sec": "segundo",
         "castYourVote": "Emitir su voto",
         "loremIpsumDolor": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed",
-        "electionProcess": "Proceso electoral"
+        "electionProcess": "Proceso electoral",
+        "signUp": "Inscribirse",
+        "signUpForThisElection": "Regístrate para esta elección",
+        "telegramHandle": "Mango de telegrama",
+        "thanksForRegistering": "Gracias por registrarse para las elecciones.",
+        "theElectionIsAboutToStart": "Las elecciones están a punto de comenzar. ",
+        "learnMore": "Aprende más",
+        "left": "izquierda",
+        "youCanVote": "Puedes votar por un solo miembro en cada ronda. ",
+        "toNextRound": "a la siguiente ronda",
+        "wellDone": "¡Bien hecho! ",
+        "displacements": "Desplazamientos",
+        "goToMyBadges": "Ir a mis insignias",
+        "headChiefDelegate": "Jefe delegado jefe",
+        "chiefDelegate": "Jefe delegado",
+        "delegatel2": "Delegado Lev. ",
+        "delegatel1": "Delegado Lev. ",
+        "unsubscribe": "Darse de baja"
       },
       "steps": {
         "stepround1": {

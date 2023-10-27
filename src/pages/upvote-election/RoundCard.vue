@@ -94,7 +94,7 @@ export default {
       div.q-my-xl.q-pt-xl(v-show="showGroups" :style="{ 'border-top': '1px solid #CBCDD1'}")
         .row.q-gutter-col-md
           template(v-for="group, index in groups")
-            group-card.col-6.q-pa-xxs(:videoLink="group.videoLink" :roundNumber="roundNumber" :winner="group.winner" :groupId="group.id" :roundId="id" :electionStatus="electionStatus" :users="group.members" :groupNumber="index + 1" :votes="group.votes")
+            group-card.col-6.q-pa-xxs(:groups="groups" :videoLink="group.videoLink" :roundNumber="roundNumber" :winner="group.winner" :groupId="group.id" :roundId="id" :electionStatus="electionStatus" :users="group.members" :groupNumber="index + 1" :votes="group.votes")
 </template>
 
 <style lang="stylus" scoped>
