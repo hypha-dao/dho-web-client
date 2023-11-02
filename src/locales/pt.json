@@ -861,7 +861,11 @@
       "goAheadAndAddYour": "Vá em frente e adicione o nome do seu DAO e carregue um logotipo. ",
       "publishYourDao": "Publique seu DAO",
       "needHelp": "Preciso de ajuda?",
-      "downloadWallet": "Baixar carteira"
+      "downloadWallet": "Baixar carteira",
+      "next": "Próximo",
+      "daoIndentity": "Identidade DAO",
+      "toBeThere": "Para estar ao seu lado à medida que seu DAO cresce, adoraríamos manter contato. ",
+      "connectWithUs": "Conecte-se conosco, etapa opcional:"
     },
     "welcome-view": {
       "youNeedAn": "Você precisa de uma conta Hypha para interagir com o ecossistema Hypha e criar um DAO.",
@@ -1976,6 +1980,7 @@
       "name": "Nome DAO",
       "logoIcon": "DAO Logo",
       "purpose": "Objetivo DAO",
+      "email": "E-mail",
       "theDisplayNameOfYourDao": "O nome de exibição do seu DAO (máx. 50 caracteres)",
       "uploadAnImage": "Carregar logotipo",
       "brieflyExplainWhatYourDao": "Explique resumidamente do que se trata o seu DAO (máx. 300 caracteres)",

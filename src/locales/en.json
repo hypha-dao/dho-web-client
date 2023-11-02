@@ -866,7 +866,11 @@
         "goAheadAndAddYour":"Start by uploading your logo and entering your DAO’s name. After that, go ahead and create a short and meaningful purpose statement for your DAO.",
         "publishYourDao":"Publish your DAO",
         "needHelp":"Need help?",
-        "downloadWallet": "Download Hypha Wallet app"
+        "downloadWallet": "Download Hypha Wallet app",
+        "next": "Next",
+        "daoIndentity": "DAO Identity",
+        "toBeThere": "To be there for you as your DAO grows, we'd love to stay in touch. Rest assured, we'll only use your email for DAO-related communication and won't share it with anyone else. Your privacy to important to us!",
+        "connectWithUs": "Connect with us, Optional Step:"
      },
      "welcome-view":{
         "youNeedAn":"Log in with your Hypha account",
@@ -1981,6 +1985,7 @@
         "name":"DAO Name",
         "logoIcon":"DAO Logo",
         "purpose":"DAO Purpose",
+        "email": "Email",
         "theDisplayNameOfYourDao":"The display name of your DAO (max. 50 character)",
         "uploadAnImage":"Upload logo",
         "brieflyExplainWhatYourDao":"Briefly explain what your DAO is all about (max. 300 characters)",
