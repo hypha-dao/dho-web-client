@@ -146,11 +146,9 @@ export default {
       return this.$store.state.dao.settings.pegToken && this.$store.state.dao.settings.rewardToken
     },
     isBadgeAssignment () {
-      console.log(this.proposal)
       return this.type === PROPOSAL_TYPE.ASSIGNBADGE
     },
     getBadgeAssignmentIcon () {
-      console.log(this.proposal)
       return this.proposal?.badge?.[0]?.details_icon_s
     }
   },
