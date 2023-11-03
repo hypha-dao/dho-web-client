@@ -45,7 +45,11 @@ export default {
       },
       create: {
         name: 'create-your-dao',
-        index: 4
+        index: 4,
+        insideSteps: {
+          identity: true,
+          publish: false
+        }
       },
       loading: {
         name: 'loading',
@@ -105,7 +109,9 @@ export default {
         logo: '',
         primaryColor: '#242f5d',
         secondaryColor: '#3f64ee',
-        textColor: '#ffffff'
+        textColor: '#ffffff',
+        email: '',
+        affiliate: ''
       },
       showLoadingModal: false,
       progress: 0,
@@ -125,6 +131,12 @@ export default {
     isImageSelected: {
       cache: false,
       get () { return this.$refs.ipfsInput?.imageURI }
+    },
+    canNextStep() {
+      return this.form.title && this.form.description && this.form.logo
+    },
+    canPublish() {
+      return this.canNextStep && this.form.email && this.form.affiliate
     }
   },
   watch: {
@@ -274,6 +286,14 @@ export default {
     },
     enterDao() {
       this.$router.push({ name: 'dashboard' })
+    },
+    nextCreateStep() {
+      this.steps.create.insideSteps.identity = false
+      this.steps.create.insideSteps.publish = true
+    },
+    backCreateStep() {
+      this.steps.create.insideSteps.identity = true
+      this.steps.create.insideSteps.publish = false
     }
   }
 }
@@ -337,31 +357,55 @@ export default {
                 .row.flex.justify-center.items-center.q-mt-xl
                 .text-primary.text-bold.cursor-pointer.text-underline(@click="goToDocumentation()") {{ $t('login.register-user-with-captcha-view.needHelp') }}
         #form4.flex.column.justify-between.no-wrap.full-height(v-show="step === this.steps.create.name")
-          div.full-height.column.justify-end
-            .font-lato.text-heading.text-bold(:class="{ 'desktop-line-height desktop-font-size': $q.screen.gt.md }" :style="{ 'font-size': '38px' }") {{ $t('login.register-user-with-captcha-view.createYourDao') }}
-            .q-mt-md {{ $t('login.register-user-with-captcha-view.goAheadAndAddYour') }}
-          div
-            div.full-width.justify-between(:class="{ 'col': !$q.screen.gt.md, 'row': $q.screen.gt.md, 'q-mt-xl': $q.screen.gt.md, 'q-mt-xs': !$q.screen.gt.md }")
-              .col(:class="{ 'full-width q-pt-md': !$q.screen.gt.md }")
-                .row.justify-center.items-end
-                  .col-auto.q-mb-xxxs
-                    loading-spinner.q-mb-xxs(v-if="$refs.ipfsInput?.isUploading" color="primary" size="2em")
-                    q-avatar.flex.justify-center.items-center(v-else size="40px" color="primary" text-color="white")
-                      q-btn(v-if="!isImageSelected" @click="$refs.ipfsInput.chooseFile()" icon="fa fa-image" color="white" flat round size="12px" unelevated)
-                      img(v-if="isImageSelected" :src="$refs.ipfsInput.imageURI")
-                  .col.q-ml-md
-                    label.h-label {{ $t('pages.onboarding.logoIcon') }}
-                    q-btn.full-width.rounded-border.text-bold.q-mt-xs(:class="{ 'q-px-xl': $q.screen.gt.md }" @click="$refs.ipfsInput.chooseFile()" color="primary" :label="$t('pages.onboarding.uploadAnImage')" no-caps outline rounded unelevated)
-                    input-file-ipfs(@uploadedFile="form.logo = arguments[0] " image="image" ref="ipfsInput" v-show="false")
-              .col.q-ml-md(:class="{ 'full-width q-mt-md': !$q.screen.gt.md, 'q-pr-md': $q.screen.gt.md }")
-                label.h-label {{ $t('pages.onboarding.name') }}
-                q-input.q-mt-xs.rounded-border(:rules="[rules.required, rules.min(3)]" dense lazy-rules="ondemand" maxlength="50" outlined :placeholder="$t('pages.onboarding.theDisplayNameOfYourDao')" ref="title" v-model="form.title")
-            .row.full-width.justify-between(:class="{ 'bottom-padding': !$q.screen.gt.md }")
-              .col-12(:class="{ 'full-width': !$q.screen.gt.md, 'q-mt-md': $q.screen.gt.md }")
-                label.h-label {{ $t('pages.onboarding.purpose') }}
-                q-input.q-mt-xs.rounded-border(:input-style="{ 'resize': 'none' }" :rules="[rules.required]" dense lazy-rules="ondemand" maxlength="300" outlined :placeholder="$t('pages.onboarding.brieflyExplainWhatYourDao')" ref="description" rows="4" type="textarea" v-model="form.description")
-            nav.row.justify-end.q-mt-xl.q-gutter-xs
-              q-btn.q-px-xl(v-if="$q.screen.gt.md" @click="onSubmit" color="primary" :label="$t('login.register-user-with-captcha-view.publishYourDao')" no-caps rounded unelevated)
+          template(v-if="this.steps.create.insideSteps.identity")
+            div.full-height.column.justify-end
+              .font-lato.text-heading.text-bold(:class="{ 'desktop-line-height desktop-font-size': $q.screen.gt.md }" :style="{ 'font-size': '38px' }") {{ $t('login.register-user-with-captcha-view.daoIndentity') }}
+              .q-mt-md {{ $t('login.register-user-with-captcha-view.goAheadAndAddYour') }}
+            div
+              div.full-width.justify-between(:class="{ 'col': !$q.screen.gt.md, 'row': $q.screen.gt.md, 'q-mt-xl': $q.screen.gt.md, 'q-mt-xs': !$q.screen.gt.md }")
+                .col(:class="{ 'full-width q-pt-md': !$q.screen.gt.md }")
+                  .row.justify-center.items-end
+                    .col-auto.q-mb-xxxs
+                      loading-spinner.q-mb-xxs(v-if="$refs.ipfsInput?.isUploading" color="primary" size="2em")
+                      q-avatar.flex.justify-center.items-center(v-else size="40px" color="primary" text-color="white")
+                        q-btn(v-if="!isImageSelected" @click="$refs.ipfsInput.chooseFile()" icon="fa fa-image" color="white" flat round size="12px" unelevated)
+                        img(v-if="isImageSelected" :src="$refs.ipfsInput.imageURI")
+                    .col.q-ml-md
+                      label.h-label {{ $t('pages.onboarding.logoIcon') }}
+                      q-btn.full-width.rounded-border.text-bold.q-mt-xs(:class="{ 'q-px-xl': $q.screen.gt.md }" @click="$refs.ipfsInput.chooseFile()" color="primary" :label="$t('pages.onboarding.uploadAnImage')" no-caps outline rounded unelevated)
+                      input-file-ipfs(@uploadedFile="form.logo = arguments[0] " image="image" ref="ipfsInput" v-show="false")
+                .col.q-ml-md(:class="{ 'full-width q-mt-md': !$q.screen.gt.md, 'q-pr-md': $q.screen.gt.md }")
+                  label.h-label {{ $t('pages.onboarding.name') }}
+                  q-input.q-mt-xs.rounded-border(:rules="[rules.required, rules.min(3)]" dense lazy-rules="ondemand" maxlength="50" outlined :placeholder="$t('pages.onboarding.theDisplayNameOfYourDao')" ref="title" v-model="form.title")
+              .row.full-width.justify-between(:class="{ 'bottom-padding': !$q.screen.gt.md }")
+                .col-12(:class="{ 'full-width': !$q.screen.gt.md, 'q-mt-md': $q.screen.gt.md }")
+                  label.h-label {{ $t('pages.onboarding.purpose') }}
+                  q-input.q-mt-xs.rounded-border(:input-style="{ 'resize': 'none' }" :rules="[rules.required]" dense lazy-rules="ondemand" maxlength="300" outlined :placeholder="$t('pages.onboarding.brieflyExplainWhatYourDao')" ref="description" rows="4" type="textarea" v-model="form.description")
+              nav.row.justify-end.q-mt-xl.q-gutter-xs
+                q-btn.q-px-xl(v-if="$q.screen.gt.md" :disable="!canNextStep" @click="nextCreateStep()" color="primary" :label="$t('login.register-user-with-captcha-view.next')" no-caps rounded unelevated)
+          template(v-else-if="this.steps.create.insideSteps.publish")
+            div.full-height.column.justify-end
+              .row.flex.items-center.cursor-pointer(@click="backCreateStep()")
+                q-icon.q-mr-xxs(name="fas fa-chevron-left" color="primary" size="14px")
+                .text-bold.text-primary {{ $t('login.login-view.back') }}
+              .font-lato.text-heading.text-bold(:class="{ 'desktop-line-height desktop-font-size': $q.screen.gt.md }" :style="{ 'font-size': '38px' }") {{ $t('login.register-user-with-captcha-view.publishYourDao') }}
+              .h-h5.q-mt-md {{ $t('login.register-user-with-captcha-view.connectWithUs') }}
+              .q-mt-md {{ $t('login.register-user-with-captcha-view.toBeThere') }}
+            div
+              div.full-width.justify-between(:class="{ 'col': !$q.screen.gt.md, 'row': $q.screen.gt.md, 'q-mt-xl': $q.screen.gt.md, 'q-mt-xs': !$q.screen.gt.md }")
+                .col.q-mr-sm(:class="{ 'full-width q-mt-md': !$q.screen.gt.md }")
+                  label.h-label {{ $t('pages.onboarding.email') }}
+                  q-input.q-mt-xs.rounded-border(:rules="[rules.required, rules.min(3)]" dense lazy-rules="ondemand" outlined :placeholder="$t('pages.onboarding.email')" ref="email" v-model="form.email")
+                .col(:class="{ 'full-width q-mt-md': !$q.screen.gt.md }")
+                  label.h-label {{ $t('pages.onboarding.affiliate') }}
+                  q-input.q-mt-xs.rounded-border(:rules="[rules.required, rules.min(3)]" dense lazy-rules="ondemand" outlined :placeholder="$t('pages.onboarding.affiliate')" ref="affiliate" v-model="form.affiliate")
+              .row.full-width.justify-between(:class="{ 'bottom-padding': !$q.screen.gt.md }")
+                .col.q-mr-sm
+                  q-input.rounded-border.bg-internal-bg(dense disable outlined v-model="account")
+                .col
+                  q-input.rounded-border.bg-internal-bg(dense disable outlined v-model="form.title")
+              nav.row.justify-end.q-mt-xl.q-gutter-xs
+                q-btn.q-px-xl(:disable="canPublish" v-if="$q.screen.gt.md" @click="onSubmit" color="primary" :label="$t('login.register-user-with-captcha-view.publishYourDao')" no-caps rounded unelevated)
         #form5.flex.items-center.justify-center.no-wrap(v-show="step === this.steps.loading.name")
           q-dialog(v-if="$q.screen.gt.md" :value="showLoadingModal" persistent)
             widget.bg-white.q-pa-xxxl.width-auto.col-auto.full-width(:style="'border-radius: 25px; box-shadow: 0px 0px 26px 0px rgba(0, 0, 41, 0.2); max-width: 1180px;'")
