@@ -1,9 +1,7 @@
 import { Api, JsonRpc } from 'eosjs'
 import { JsSignatureProvider } from 'eosjs/dist/eosjs-jssig'
 import { MEMBER_TYPE } from '~/const'
-import { Screen } from 'quasar'
 import gql from 'graphql-tag'
-import I18n from '~/utils/i18n'
 
 export const lightWalletLogin = async function ({ commit, dispatch }, { returnUrl }) {
   try {
@@ -31,21 +29,7 @@ export const loginWallet = async function ({ commit, dispatch }, { idx, returnUr
   let users = null
   try {
     if (authenticator.ualName === 'hypha') {
-      let options = {}
-      if (Screen.gt.md) {
-        options = {
-          title: I18n.t('hypha-wallet-pop-up.signTransaction.desktop.login'),
-          text: I18n.t('hypha-wallet-pop-up.signTransaction.desktop.text'),
-          actionText: I18n.t('hypha-wallet-pop-up.signTransaction.desktop.actionText')
-        }
-      } else {
-        options = {
-          title: I18n.t('hypha-wallet-pop-up.signTransaction.mobile.login'),
-          text: I18n.t('hypha-wallet-pop-up.signTransaction.mobile.text'),
-          actionText: I18n.t('hypha-wallet-pop-up.signTransaction.mobile.actionText')
-        }
-      }
-      users = await authenticator.login(options)
+      users = await authenticator.login()
     } else {
       users = await authenticator.login()
     }
