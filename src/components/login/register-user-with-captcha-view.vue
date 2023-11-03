@@ -110,7 +110,8 @@ export default {
         primaryColor: '#242f5d',
         secondaryColor: '#3f64ee',
         textColor: '#ffffff',
-        email: ''
+        email: '',
+        affiliate: ''
       },
       showLoadingModal: false,
       progress: 0,
@@ -133,6 +134,9 @@ export default {
     },
     canNextStep() {
       return this.form.title && this.form.description && this.form.logo
+    },
+    canPublish() {
+      return this.canNextStep && this.form.email && this.form.affiliate
     }
   },
   watch: {
@@ -389,16 +393,19 @@ export default {
               .q-mt-md {{ $t('login.register-user-with-captcha-view.toBeThere') }}
             div
               div.full-width.justify-between(:class="{ 'col': !$q.screen.gt.md, 'row': $q.screen.gt.md, 'q-mt-xl': $q.screen.gt.md, 'q-mt-xs': !$q.screen.gt.md }")
-                .col(:class="{ 'full-width q-mt-md': !$q.screen.gt.md }")
+                .col.q-mr-sm(:class="{ 'full-width q-mt-md': !$q.screen.gt.md }")
                   label.h-label {{ $t('pages.onboarding.email') }}
                   q-input.q-mt-xs.rounded-border(:rules="[rules.required, rules.min(3)]" dense lazy-rules="ondemand" outlined :placeholder="$t('pages.onboarding.email')" ref="email" v-model="form.email")
+                .col(:class="{ 'full-width q-mt-md': !$q.screen.gt.md }")
+                  label.h-label {{ $t('pages.onboarding.affiliate') }}
+                  q-input.q-mt-xs.rounded-border(:rules="[rules.required, rules.min(3)]" dense lazy-rules="ondemand" outlined :placeholder="$t('pages.onboarding.affiliate')" ref="affiliate" v-model="form.affiliate")
               .row.full-width.justify-between(:class="{ 'bottom-padding': !$q.screen.gt.md }")
                 .col.q-mr-sm
                   q-input.rounded-border.bg-internal-bg(dense disable outlined v-model="account")
                 .col
                   q-input.rounded-border.bg-internal-bg(dense disable outlined v-model="form.title")
               nav.row.justify-end.q-mt-xl.q-gutter-xs
-                q-btn.q-px-xl(v-if="$q.screen.gt.md" @click="onSubmit" color="primary" :label="$t('login.register-user-with-captcha-view.publishYourDao')" no-caps rounded unelevated)
+                q-btn.q-px-xl(:disable="canPublish" v-if="$q.screen.gt.md" @click="onSubmit" color="primary" :label="$t('login.register-user-with-captcha-view.publishYourDao')" no-caps rounded unelevated)
         #form5.flex.items-center.justify-center.no-wrap(v-show="step === this.steps.loading.name")
           q-dialog(v-if="$q.screen.gt.md" :value="showLoadingModal" persistent)
             widget.bg-white.q-pa-xxxl.width-auto.col-auto.full-width(:style="'border-radius: 25px; box-shadow: 0px 0px 26px 0px rgba(0, 0, 41, 0.2); max-width: 1180px;'")

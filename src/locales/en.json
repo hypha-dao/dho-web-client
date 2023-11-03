@@ -2010,7 +2010,8 @@
         "publishingTheDao": "Publishing the DAO can take a moment.",
         "pleaseBearWithUs": "Please bear with us and don’t leave this page in the meantime. We're making sure the DAO is up and running.",
         "allDone": "All done...",
-        "creatingSlotsFor": "Creating { title }"
+        "creatingSlotsFor": "Creating { title }",
+        "affiliate": "Affiliate"
      }
   },
   "notifications":{
