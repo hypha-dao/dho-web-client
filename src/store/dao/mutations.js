@@ -121,6 +121,7 @@ export const setDAO = (state, dao) => {
   const settings = dao.settings[0]
 
   state.settings = {
+    id: dao.docId,
     ...settingsMapper(settings)
   }
 }

@@ -866,7 +866,11 @@
         "goAheadAndAddYour":"Start by uploading your logo and entering your DAO’s name. After that, go ahead and create a short and meaningful purpose statement for your DAO.",
         "publishYourDao":"Publish your DAO",
         "needHelp":"Need help?",
-        "downloadWallet": "Download Hypha Wallet app"
+        "downloadWallet": "Download Hypha Wallet app",
+        "next": "Next",
+        "daoIndentity": "DAO Identity",
+        "toBeThere": "To be there for you as your DAO grows, we'd love to stay in touch. Rest assured, we'll only use your email for DAO-related communication and won't share it with anyone else. Your privacy to important to us!",
+        "connectWithUs": "Connect with us, Optional Step:"
      },
      "welcome-view":{
         "youNeedAn":"Log in with your Hypha account",
@@ -1237,7 +1241,8 @@
         "voting":"VOTING",
         "active":"ACTIVE",
         "archived":"ARCHIVED",
-        "suspended":"SUSPENDED"
+        "suspended":"SUSPENDED",
+        "application": "Application"
      },
      "proposal-view":{
         "s":" 1 ? 's' : ''}` }}",
@@ -1270,7 +1275,10 @@
         "compensationForOneCycle":"Reward for one cycle",
         "compensationForOnePeriod":"Reward for one period",
         "1MoonCycle":"1 moon cycle is around 30 days",
-        "1MoonPeriod":"1 moon period is around 7 days"
+        "1MoonPeriod":"1 moon period is around 7 days",
+        "badgeName": "Badge Name",
+        "applicantMessage": "Applicant Message",
+        "badgeDescription": "Badge Description"
      },
      "quest-progression":{
         "questProgression":"Quest Progression"
@@ -1981,6 +1989,7 @@
         "name":"DAO Name",
         "logoIcon":"DAO Logo",
         "purpose":"DAO Purpose",
+        "email": "Email",
         "theDisplayNameOfYourDao":"The display name of your DAO (max. 50 character)",
         "uploadAnImage":"Upload logo",
         "brieflyExplainWhatYourDao":"Briefly explain what your DAO is all about (max. 300 characters)",
@@ -2005,7 +2014,8 @@
         "publishingTheDao": "Publishing the DAO can take a moment.",
         "pleaseBearWithUs": "Please bear with us and don’t leave this page in the meantime. We're making sure the DAO is up and running.",
         "allDone": "All done...",
-        "creatingSlotsFor": "Creating { title }"
+        "creatingSlotsFor": "Creating { title }",
+        "affiliate": "Affiliate"
      }
   },
   "notifications":{

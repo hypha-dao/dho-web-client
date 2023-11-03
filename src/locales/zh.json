@@ -861,7 +861,11 @@
       "goAheadAndAddYour": "继续添加您的 DAO 名称并上传徽标。",
       "publishYourDao": "发布您的 DAO",
       "needHelp": "需要帮忙？",
-      "downloadWallet": "下载钱包"
+      "downloadWallet": "下载钱包",
+      "next": "下一个",
+      "daoIndentity": "DAO身份",
+      "toBeThere": "随着您的 DAO 不断发展，我们很乐意与您保持联系。",
+      "connectWithUs": "与我们联系，可选步骤："
     },
     "welcome-view": {
       "youNeedAn": "您需要一个 Hypha 帐户才能与 Hypha 生态系统交互并创建 DAO。",
@@ -1232,7 +1236,8 @@
       "voting": "表决",
       "active": "积极的",
       "archived": "存档",
-      "suspended": "暂停"
+      "suspended": "暂停",
+      "application": "應用"
     },
     "proposal-view": {
       "s": " 1 ? ",
@@ -1265,7 +1270,10 @@
       "compensationForOneCycle": "一周期奖励",
       "compensationForOnePeriod": "一期奖励",
       "1MoonCycle": "1个月亮周期约为30天",
-      "1MoonPeriod": "1个月亮周期大约是7天"
+      "1MoonPeriod": "1个月亮周期大约是7天",
+      "badgeName": "徽章名稱",
+      "applicantMessage": "申请人消息",
+      "badgeDescription": "徽章说明"
     },
     "quest-progression": {
       "questProgression": "任务进展"
@@ -1976,6 +1984,7 @@
       "name": "道名称",
       "logoIcon": "DAO标志",
       "purpose": "DAO 目的",
+      "email": "电子邮件",
       "theDisplayNameOfYourDao": "您的 DAO 的显示名称（最多 50 个字符）",
       "uploadAnImage": "上传徽标",
       "brieflyExplainWhatYourDao": "简要解释您的 DAO 的全部内容（最多 300 个字符）",

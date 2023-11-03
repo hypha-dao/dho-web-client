@@ -72,12 +72,18 @@ q-page.page-support
                   q-btn(dense flat size="8px" color="primary" icon="fas fa-external-link-alt" @click="openUrl(`/transaction/${notification.transactionId}`)" target="_blank")
                   q-tooltip {{ $t('pages.support.support.displayOnBlockExplorer') }}
     .relative-position.q-my-md(:class="{'col-3': $q.screen.gt.md, 'q-pl-sm': $q.screen.gt.md,'col-12': !$q.screen.gt.md}")
+
       widget(:title="$t('pages.support.support.doYouHaveQuestions')")
         .text-body2.q-mt-sm.text-weight-thin.text-grey-7.q-my-md {{ $t('pages.support.support.findOurFull') }}
         q-btn.q-px-xl.q-mt-xl(rounded no-caps color="primary" type="a" :href="daoSettings.documentationURL" target="_blank") {{ $t('pages.support.support.openWiki') }}
+
       widget.q-mt-md(:title="$t('pages.support.support.version')")
         .text-body2.q-mt-sm.text-weight-thin.text-grey-7.q-my-md {{ appVersion  }}
 
+      widget.q-mt-md(title="DAO")
+        .text-body2.q-mt-sm.text-weight-thin.text-grey-7.q-my-md id: {{ daoSettings.id  }}
+        .text-body2.q-mt-sm.text-weight-thin.text-grey-7.q-my-md name: {{ daoSettings.title  }}
+        .text-body2.q-mt-sm.text-weight-thin.text-grey-7.q-my-md uid: {{ daoSettings.name  }}
 </template>
 
 <style lang="stylus" scoped>

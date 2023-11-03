@@ -861,7 +861,11 @@
       "goAheadAndAddYour": "계속해서 DAO의 이름을 추가하고 로고를 업로드하세요. ",
       "publishYourDao": "DAO 게시",
       "needHelp": "도움이 필요하다?",
-      "downloadWallet": "지갑 다운로드"
+      "downloadWallet": "지갑 다운로드",
+      "next": "다음",
+      "daoIndentity": "DAO 아이덴티티",
+      "toBeThere": "귀하의 DAO가 성장함에 따라 귀하와 함께 할 수 있도록 우리는 계속 연락하고 싶습니다. ",
+      "connectWithUs": "우리에게 연락하세요. 선택 단계:"
     },
     "welcome-view": {
       "youNeedAn": "Hypha 생태계와 상호작용하고 DAO를 생성하려면 Hypha 계정이 필요합니다.",
@@ -1232,7 +1236,8 @@
       "voting": "투표",
       "active": "활동적인",
       "archived": "보관됨",
-      "suspended": "정지된"
+      "suspended": "정지된",
+      "application": "애플리케이션"
     },
     "proposal-view": {
       "s": " 1 ? ",
@@ -1265,7 +1270,10 @@
       "compensationForOneCycle": "한 사이클에 대한 보상",
       "compensationForOnePeriod": "한 기간 동안 보상",
       "1MoonCycle": "달의 1주기는 약 30일이다.",
-      "1MoonPeriod": "1월의 주기는 약 7일이다."
+      "1MoonPeriod": "1월의 주기는 약 7일이다.",
+      "badgeName": "배지 이름",
+      "applicantMessage": "지원자 메시지",
+      "badgeDescription": "배지 설명"
     },
     "quest-progression": {
       "questProgression": "퀘스트 진행"
@@ -1976,6 +1984,7 @@
       "name": "다오 이름",
       "logoIcon": "다오 로고",
       "purpose": "DAO 목적",
+      "email": "이메일",
       "theDisplayNameOfYourDao": "DAO의 표시 이름(최대 50자)",
       "uploadAnImage": "로고 업로드",
       "brieflyExplainWhatYourDao": "귀하의 DAO가 무엇인지 간략하게 설명하세요(최대 300자).",

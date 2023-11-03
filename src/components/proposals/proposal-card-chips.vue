@@ -111,9 +111,8 @@ export default {
               break
             case 'Assignbadge' || 'Assignment Badge':
               result.push(...[
-                { color: 'primary', label: this.$t('proposals.proposal-card-chips.ability') },
-                { color: 'primary', outline: true, label: this.$t('proposals.proposal-card-chips.assignment') }
-              ])
+                { color: 'primary', label: this.$t('proposals.proposal-card-chips.badge') },
+                { color: 'primary', outline: true, label: this.$t('proposals.proposal-card-chips.application') }])
               break
             case 'Role':
               result.push(...[
@@ -130,7 +129,8 @@ export default {
       }
       if (this.type === PROPOSAL_TYPE.ABILITY || this.type === PROPOSAL_TYPE.ASSIGNBADGE) {
         result.push(...[
-          { color: 'primary', label: this.$t('proposals.proposal-card-chips.ability') }
+          { color: 'primary', label: this.$t('proposals.proposal-card-chips.badge') },
+          { color: 'primary', outline: true, label: this.$t('proposals.proposal-card-chips.application') }
         ])
       }
 
