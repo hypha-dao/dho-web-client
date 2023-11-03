@@ -1236,7 +1236,8 @@
       "voting": "表决",
       "active": "积极的",
       "archived": "存档",
-      "suspended": "暂停"
+      "suspended": "暂停",
+      "application": "應用"
     },
     "proposal-view": {
       "s": " 1 ? ",
@@ -1269,7 +1270,10 @@
       "compensationForOneCycle": "一周期奖励",
       "compensationForOnePeriod": "一期奖励",
       "1MoonCycle": "1个月亮周期约为30天",
-      "1MoonPeriod": "1个月亮周期大约是7天"
+      "1MoonPeriod": "1个月亮周期大约是7天",
+      "badgeName": "徽章名稱",
+      "applicantMessage": "申请人消息",
+      "badgeDescription": "徽章说明"
     },
     "quest-progression": {
       "questProgression": "任务进展"

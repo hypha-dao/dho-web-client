@@ -1236,7 +1236,8 @@
       "voting": "투표",
       "active": "활동적인",
       "archived": "보관됨",
-      "suspended": "정지된"
+      "suspended": "정지된",
+      "application": "애플리케이션"
     },
     "proposal-view": {
       "s": " 1 ? ",
@@ -1269,7 +1270,10 @@
       "compensationForOneCycle": "한 사이클에 대한 보상",
       "compensationForOnePeriod": "한 기간 동안 보상",
       "1MoonCycle": "달의 1주기는 약 30일이다.",
-      "1MoonPeriod": "1월의 주기는 약 7일이다."
+      "1MoonPeriod": "1월의 주기는 약 7일이다.",
+      "badgeName": "배지 이름",
+      "applicantMessage": "지원자 메시지",
+      "badgeDescription": "배지 설명"
     },
     "quest-progression": {
       "questProgression": "퀘스트 진행"

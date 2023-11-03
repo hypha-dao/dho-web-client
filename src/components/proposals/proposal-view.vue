@@ -144,6 +144,12 @@ export default {
     },
     showDefferedValue () {
       return this.$store.state.dao.settings.pegToken && this.$store.state.dao.settings.rewardToken
+    },
+    isBadgeAssignment () {
+      return this.type === PROPOSAL_TYPE.ASSIGNBADGE
+    },
+    getBadgeAssignmentIcon () {
+      return this.proposal?.badge?.[0]?.details_icon_s
     }
   },
 
@@ -185,6 +191,9 @@ export default {
       if (await this.adjustDeferred({ docId: this.docId, deferred: value })) {
         this.$emit('change-deferred', value)
       }
+    },
+    goToBadge () {
+      this.$router.push({ name: 'organization/assets/badge', params: { docId: this.proposal?.badge?.[0]?.docId } })
     }
   },
   apollo: {
@@ -212,11 +221,18 @@ widget.proposal-view.q-mb-sm
     .col.justify-end.flex.items-center(v-if="periodCount")
       .text-grey.text-italic(:style="{ 'font-size': '12px' }") {{ `Starting ${start} | Duration: ${periodCount} period${periodCount > 1 ? 's' : ''}` }}
       q-tooltip(anchor="center end") {{ $t('proposals.proposal-view.1MoonPeriod') }}
-  .text-grey.text-italic.q-mt-sm(:style="{ 'font-size': '12px' }") {{ $t('proposals.proposal-view.title') }}
-  .row.q-mb-sm
-    .column
-      .text-h5.text-bold {{ title }}
-      .text-italic.text-body {{ subtitle }}
+    .col.justify-end.flex.items-center(v-if="isBadgeAssignment")
+      .text-grey.text-italic(:style="{ 'font-size': '12px' }") {{ `Badge validity: ${this.proposal.details_periodCount_i} period${this.proposal.details_periodCount_i > 1 ? 's' : ''}` }}
+  .row.q-my-sm
+    .col-1.flex.items-center(v-if="isBadgeAssignment")
+      img.icon-img(:src="getBadgeAssignmentIcon")
+    .col
+      .text-grey.text-italic(v-if="isBadgeAssignment" :style="{ 'font-size': '12px' }") {{ $t('proposals.proposal-view.badgeName') }}
+      .text-grey.text-italic(v-else :style="{ 'font-size': '12px' }") {{ $t('proposals.proposal-view.title') }}
+      .row
+        .column
+          .text-h5.text-bold {{ title }}
+          .text-italic.text-body {{ subtitle }}
   version-history(v-if="type === PROPOSAL_TYPE.POLICY && !hidePolicyHistory" :proposalId="proposal?.docId ? proposal?.docId : docId")
   quest-progression(v-if="type === PROPOSAL_TYPE.QUEST_START && status === PROPOSAL_STATE.APPROVED" :proposalId="proposal?.docId ? proposal?.docId : docId")
   .q-my-sm(:class="{ 'row':$q.screen.gt.md }" v-if="type === PROPOSAL_TYPE.ROLE || type === PROPOSAL_TYPE.EDIT || type === PROPOSAL_TYPE.PAYOUT || type === PROPOSAL_TYPE.ABILITY || type === PROPOSAL_TYPE.BADGE")
@@ -296,15 +312,23 @@ widget.proposal-view.q-mb-sm
   template(v-if="masterPolicy")
     .text-xs.text-grey.text-italic {{ $t('proposals.proposal-view.parentPolicy') }}
     .row.q-mb-lg {{ masterPolicy.label }}
-  .text-grey.text-italic(v-if="descriptionWithoutSpecialCharacters" :style="{ 'font-size': '12px' }" :class="{ 'q-mt-lg': !purpose }") {{ $t('proposals.proposal-view.description') }}
+  .text-grey.text-italic(v-if="isBadgeAssignment" :style="{ 'font-size': '12px' }") {{ $t('proposals.proposal-view.applicantMessage') }}
+  .text-grey.text-italic(v-else-if="descriptionWithoutSpecialCharacters" :style="{ 'font-size': '12px' }") {{ $t('proposals.proposal-view.description') }}
   .row
     q-markdown(:style="'width: -webkit-fill-available;'" :src="descriptionWithoutSpecialCharacters")
+  template(v-if="isBadgeAssignment")
+    .text-grey.text-italic(:style="{ 'font-size': '12px' }") {{ $t('proposals.proposal-view.badgeDescription') }}
+    .row
+      q-markdown(:style="'width: -webkit-fill-available;'" :src="this.proposal.badge?.[0].details_description_s")
   .text-grey.text-italic.q-mb-sm(v-if="url" :style="{ 'font-size': '12px' }") {{ $t('proposals.proposal-view.attachedDocuments') }}
   .row.items-center.q-mb-md.bg-internal-bg.relative(v-if="url" :style="{ 'padding': '7px 10px', 'border-radius': '15px' }")
     q-icon(name="far fa-file" size="xs" color="primary")
     ipfs-file-viewer(v-if="isIpfsFile" size="lg" :ipfsCid="url")
     a.on-right(v-else :href="url") {{ url }}
     q-icon.absolute(name="fas fa-chevron-right" :style="{ 'right': '10px' }")
+  .row.flex.items-center.q-mb-md(v-if="isBadgeAssignment")
+    .text-primary.text-underline.cursor-pointer(@click="goToBadge()" :style="'font-size: 12px; font-weight: 600;'") See Badge Details
+    q-icon(size="10px" name="fas fa-chevron-right")
   template(v-if="!preview && !isBadge")
     .text-grey.text-italic.top-border.q-pt-sm(:style="{ 'font-size': '12px' }") {{ $t('proposals.proposal-view.createdBy') }}
     .row.q-pt-md.justify-between

@@ -98,7 +98,6 @@ export default {
     this.votingMethod = this.memberType
     if (this.$store.state.proposals.draft.type === PROPOSAL_TYPE.ABILITY) {
       this.title = this.$store.state.proposals?.draft?.badge?.details_title_s
-      this.description = this.$store.state.proposals?.draft?.badge?.details_description_s ? this.$store.state.proposals?.draft?.badge?.details_description_s : this.$store.state.proposals?.draft?.badge?.details_title_s
     }
   },
 
@@ -154,7 +153,6 @@ widget
     .col.q-mt-sm(v-if="fields.description")
       label.h-label {{ fields.description.label }}
       q-field.q-mt-xs.rounded-border(
-        :disable="isProposalType(PROPOSAL_TYPE.ABILITY) || isProposalType(PROPOSAL_TYPE.ASSIGNBADGE)"
         :rules="[rules.required, val => this.$sanitize(val, { allowedTags: [] }).length < DESCRIPTION_MAX_LENGTH || $t('pages.proposals.create.stepdetails.theDescriptionMustContainLess', { DESCRIPTION_MAX_LENGTH: DESCRIPTION_MAX_LENGTH, length: this.$sanitize(description, { allowedTags: [] }).length })]"
         dense
         maxlength="4000"

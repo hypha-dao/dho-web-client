@@ -1236,7 +1236,8 @@
       "voting": "VOTACIÓN",
       "active": "ACTIVO",
       "archived": "ARCHIVADO",
-      "suspended": "SUSPENDIDO"
+      "suspended": "SUSPENDIDO",
+      "application": "Solicitud"
     },
     "proposal-view": {
       "s": " 1 ? ",
@@ -1269,7 +1270,10 @@
       "compensationForOneCycle": "Recompensa por un ciclo",
       "compensationForOnePeriod": "Recompensa por un período",
       "1MoonCycle": "1 ciclo lunar dura alrededor de 30 días.",
-      "1MoonPeriod": "1 período lunar dura alrededor de 7 días."
+      "1MoonPeriod": "1 período lunar dura alrededor de 7 días.",
+      "badgeName": "Placa de identificación",
+      "applicantMessage": "Mensaje del solicitante",
+      "badgeDescription": "Descripción de la insignia"
     },
     "quest-progression": {
       "questProgression": "Progresión de misiones"
