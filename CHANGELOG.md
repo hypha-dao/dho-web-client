@@ -1,5 +1,15 @@
 # Changelog
 
+## [2.36.1](https://github.com/hypha-dao/dho-web-client/compare/v2.36.0...v2.36.1) (2023-11-06)
+
+
+### Bug Fixes
+
+* fix the release please and the app version ([0ff6f6b](https://github.com/hypha-dao/dho-web-client/commit/0ff6f6b5daf2b5b7d15ae24062c93244a6eaa681))
+* **onboarding:** integrated with api email and affiliate fields ([#2529](https://github.com/hypha-dao/dho-web-client/issues/2529)) ([286dbf9](https://github.com/hypha-dao/dho-web-client/commit/286dbf9c0766180a31cabd9157e6643877699623))
+* **search:** showing active assignments (#DEV-999) ([#2531](https://github.com/hypha-dao/dho-web-client/issues/2531)) ([abbfb33](https://github.com/hypha-dao/dho-web-client/commit/abbfb33d014e79d6a3815584d08ce7900984d067))
+* **wallet:** showing dhypha tokens (#DEV-908) ([#2530](https://github.com/hypha-dao/dho-web-client/issues/2530)) ([bfd0af9](https://github.com/hypha-dao/dho-web-client/commit/bfd0af972036da778775c9c89087f812735c0047))
+
 ## [2.33.0](https://github.com/hypha-dao/dho-web-client/compare/v2.32.1...v2.33.0) (2023-09-28)
 
 
