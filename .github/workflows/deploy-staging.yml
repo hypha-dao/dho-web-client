@@ -69,6 +69,8 @@ jobs:
 
           DOWNLOAD_WALLET_LINK_IOS: ${{vars.DOWNLOAD_WALLET_LINK_IOS}}
           DOWNLOAD_WALLET_LINK_ANDROID: ${{vars.DOWNLOAD_WALLET_LINK_ANDROID}}
+          
+          DEFFERED_HYPHA_CONTRACT: ${{vars.DEFFERED_HYPHA_CONTRACT}}
 
       - name: S3 sync
         uses: jakejarvis/s3-sync-action@master

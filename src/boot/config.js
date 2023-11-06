@@ -10,9 +10,9 @@ export default async ({ Vue, store }) => {
       kv: process.env.KV_CONTRACT,
       seedsEscrow: process.env.SEEDS_ESCROW_CONTRACT,
       seedsToken: process.env.SEEDS_TOKEN_CONTRACT,
-      tlostoSeeds: process.env.TLOSTO_SEEDS
+      tlostoSeeds: process.env.TLOSTO_SEEDS,
+      deferredHyphaToken: process.env.DEFFERED_HYPHA_CONTRACT
     }
-
     Vue.prototype.$config = {
       contracts,
       rootDaoSlug: process.env.ROOT_DAO_SLUG || 'hypha'
