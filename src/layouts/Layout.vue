@@ -236,8 +236,9 @@ export default {
           default:
             break
         }
-
-        this.$router.replace({ query: {} })
+        if (this.$router.currentRoute.name !== 'search') {
+          this.$router.replace({ query: {} })
+        }
       },
       deep: true,
       immediate: true

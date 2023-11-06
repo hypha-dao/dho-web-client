@@ -149,6 +149,7 @@ export default {
   methods: {
     ...mapActions('dao', ['createDAO']),
     ...mapActions('accounts', ['loginWallet', 'loginInApp']),
+    ...mapActions('profiles', ['updateProfile']),
     ipfsy,
     slugify,
     getRandomEOSName () {
@@ -222,15 +223,14 @@ export default {
         await this.createDAO({
           data: {
             ...this.form,
-
             daoUrl,
             onboarder_account: this.account,
             parentId: this.$route.query.parentId,
             skipTokens: true
-
           },
           isDraft
         })
+        await this.updateProfile({ data: { email: this.form.email, affiliate: this.form.affiliate } })
         this.$emit('stepChanged', this.steps.loading.name)
         this.showLoadingModal = true
         await this.updateProgressBar()
