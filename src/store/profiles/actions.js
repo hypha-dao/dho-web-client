@@ -275,18 +275,20 @@ export const updateProfile = async function ({ commit, state, dispatch, rootStat
 
   const current = await this.$ppp.profileApi().getProfile('BASE_AND_APP') || {}
 
-  const { email: emailAddress, phoneNumber: smsNumber, contactMethod: commPref, ...rest } = data
-
+  const { affiliate: affiliateUser, email: emailAddress, phoneNumber: smsNumber, contactMethod: commPref, rest } = data
+  const restParams = rest ? { ...rest } : undefined
+  const bio = rest ? toMarkdown(rest.bio) : undefined
   const combinedData = {
     ...current,
-    emailAddress,
-    smsNumber,
-    commPref,
+    emailAddress: emailAddress || emailAddress,
+    smsNumber: smsNumber || undefined,
+    commPref: commPref || undefined,
     publicData: {
       ...current.publicData,
-      ...rest,
-      bio: toMarkdown(rest.bio),
-      s3Identity
+      restParams,
+      bio,
+      s3Identity,
+      affiliate: affiliateUser || undefined
     }
   }
 
