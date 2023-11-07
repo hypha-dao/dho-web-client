@@ -6,7 +6,7 @@
   "author": "Max <max@digitalscarcity.io>",
   "license": "Apache-2.0",
   "scripts": {
-    "dev": "quasar dev -m spa",
+    "dev": "export NODE_OPTIONS=--openssl-legacy-provider && quasar dev -m spa",
     "dev:eos": "env-cmd -f ./config/eos-testnet.env quasar dev -m spa",
     "prod:telos": "env-cmd -f ./config/telos-mainnet.env quasar dev -m spa",
     "prod:eos": "env-cmd -f ./config/eos-mainnet.env quasar dev -m spa",
