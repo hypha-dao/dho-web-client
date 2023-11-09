@@ -1161,8 +1161,14 @@
       "noWalletFound": "Nenhuma carteira encontrada",
       "pendingRedemptions": "Resgates pendentes",
       "details": "Detalhes",
-      "queueHusdRedemption": "Fila de resgate de {tokenName} para pagamento de tesouro para carteira configurada",
-      "redeem": "Resgatar"
+      "queueHusdRedemption": "Fila de resgate de {tokenName} para pagamento de tesouraria para carteira configurada",
+      "redeem": "Resgatar",
+      "send": "Enviar",
+      "sendTo": "Enviar para",
+      "to": "Para",
+      "sendToPlaceholder": "Insira o endereço público",
+      "transactionSuccessful": "Transação bem-sucedida!",
+      "close": "Fechar"
     },
     "wallet-hypha": {
       "availableBalance": "Saldo disponível",

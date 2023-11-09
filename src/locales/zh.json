@@ -1147,7 +1147,7 @@
       "redemptionPending": "等待赎回",
       "requestor": "请求者",
       "amount": "数量",
-      "redeemHusd1": "兑换{tokenName}",
+      "redeemHusd1": "兑换 {tokenName}",
       "husdAvailable": "{tokenName} 可用",
       "amountToRedeem": "兑换金额",
       "typeAmount": "类型 金额",
@@ -1161,8 +1161,14 @@
       "noWalletFound": "没有找到钱包",
       "pendingRedemptions": "待赎回",
       "details": "细节",
-      "queueHusdRedemption": "排队 {tokenName} 赎回以将国债支付至配置的钱包",
-      "redeem": "赎回"
+      "queueHusdRedemption": "队列 {tokenName} 赎回金库支出至配置的钱包",
+      "redeem": "赎回",
+      "send": "发送",
+      "sendTo": "发给",
+      "to": "到",
+      "sendToPlaceholder": "输入公共地址",
+      "transactionSuccessful": "交易成功！",
+      "close": "关闭"
     },
     "wallet-hypha": {
       "availableBalance": "可用余额",

@@ -377,7 +377,7 @@ widget.wallet-base(:more="more" :no-title="noTitle" morePosition="top" :title="$
         .row.q-my-xl.text-grey.text-italic.h-b2 {{ $t('profiles.wallet-base.asSoonAs') }}
       .row.full-width.q-mt-xl.no-wrap
         .col.q-mr-sm
-          q-btn.h-btn1.full-width(color="primary" outline no-caps unelevated rounded :label="'Close'" :loading="submitting" @click="state = STATE.WAITING")
+          q-btn.h-btn1.full-width(color="primary" outline no-caps unelevated rounded :label="$t('profiles.wallet-base.close')" :loading="submitting" @click="state = STATE.WAITING")
         .col
           q-btn.h-btn1.full-width(v-if="state === state.SENT" :disable="!formSend.amount" color="primary" no-caps unelevated rounded :label="$t('profiles.wallet-base.makeAnotherRedemption')" :loading="submitting" @click="successRedeem = false, resetForm()")
           q-btn.h-btn1.full-width(
