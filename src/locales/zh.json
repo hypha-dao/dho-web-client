@@ -865,7 +865,8 @@
       "next": "下一个",
       "daoIndentity": "DAO身份",
       "toBeThere": "随着您的 DAO 不断发展，我们很乐意与您保持联系。",
-      "connectWithUs": "与我们联系，可选步骤："
+      "connectWithUs": "与我们联系，可选步骤：",
+      "skipForNow": "暫時跳過"
     },
     "welcome-view": {
       "youNeedAn": "您需要一个 Hypha 帐户才能与 Hypha 生态系统交互并创建 DAO。",
