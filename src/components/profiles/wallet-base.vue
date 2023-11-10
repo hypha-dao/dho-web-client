@@ -3,13 +3,19 @@ import { mapActions, mapGetters, mapMutations } from 'vuex'
 import { validation } from '~/mixins/validation'
 import { format } from '~/mixins/format'
 import { dateToStringShort } from '~/utils/TimeUtils'
-
+import ipfsy from '~/utils/ipfsy'
 /**
  * Wallet base component that is responsible for rendering wallet items, triggering redemption actions
  * This is a pure component whose state is entirely determined by props and does not query the backend
  */
 
 const DEFAULT_REDEEM_TOKEN = 'HUSD'
+
+const STATE = Object.freeze({
+  WAITING: 'WAITING',
+  SENDING: 'SENDING',
+  SENT: 'SENT'
+})
 
 export default {
   name: 'wallet-base',
@@ -47,6 +53,10 @@ export default {
       form: {
         amount: null
       },
+      formSend: {
+        to: null,
+        amount: null
+      },
       walletForm: {
         eosAccount: null,
         eosMemo: null
@@ -65,7 +75,10 @@ export default {
         defaultAddress: null
       },
       currentDetailsObject: {},
-      showDetailsModal: false
+      showDetailsModal: false,
+
+      STATE,
+      state: STATE.WAITING
     }
   },
 
@@ -97,18 +110,17 @@ export default {
     ...mapGetters('dao', ['daoSettings']),
     ...mapGetters('accounts', ['account']),
     ...mapGetters('dao', ['selectedDao']),
-    icon () {
-      return this.redeem ? 'fas fa-minus-circle' : 'fas fa-plus-circle'
-    },
-    isOwner () {
-      return this.username === this.account
-    },
+    icon () { return this.redeem ? 'fas fa-minus-circle' : 'fas fa-plus-circle' },
+    isOwner () { return this.username === this.account },
+    isSendModalOpen () { return [STATE.SENDING, STATE.SENT].includes(this.state) },
     tokenName () {
       return this.$store.state.dao.settings.settings_pegTokenName_s ? this.$store.state.dao.settings.settings_pegTokenName_s : DEFAULT_REDEEM_TOKEN
     },
     tokenSymbol () {
       return this.$store.state.dao.settings.settings_pegToken_a ? this.$store.state.dao.settings.settings_pegToken_a.split(' ')[1] : DEFAULT_REDEEM_TOKEN
-    }
+    },
+
+    utilityToken () { return this.wallet.find(_ => _.type === 'utility') }
   },
 
   watch: {
@@ -126,7 +138,7 @@ export default {
 
   methods: {
     dateToStringShort,
-    ...mapActions('payments', ['redeemToken', 'buySeeds', 'buyHypha']),
+    ...mapActions('payments', ['sendToken', 'redeemToken', 'buySeeds', 'buyHypha']),
     ...mapActions('profiles', ['getProfile', 'getPublicProfile', 'getWalletAdresses', 'saveAddresses']),
     ...mapMutations('profiles', ['setView']),
 
@@ -140,6 +152,25 @@ export default {
       this.form.amount = 0
       this.resetValidation(this.form)
       this.submitting = false
+    },
+
+    async onSend () {
+      try {
+        await this.sendToken(
+          {
+            to: this.formSend.to,
+            quantity: `${parseFloat(this.formSend.amount).toFixed(2)} ${this.utilityToken.label}`,
+            memo: ''
+          }
+        )
+        this.state = STATE.SENT
+      } catch (e) {
+        const message = e.message || e.cause.message
+        this.showNotification({
+          message,
+          color: 'red'
+        })
+      }
     },
 
     async onRedeemHusd () {
@@ -248,7 +279,7 @@ export default {
 
     async loadPublicProfile () {
       await this.getPublicProfile(this.username)
-    }
+    },
     // TODO: Find a way to get the last transaction
     // openTrx (trxDetails) {
     //   const { network } = trxDetails
@@ -257,6 +288,7 @@ export default {
     //   if (!network || !trxDetails) return
     //   window.open(url + trxDetails.trx_id, '_blank')
     // },
+    ipfsy
   }
 }
 </script>
@@ -285,6 +317,80 @@ widget.wallet-base(:more="more" :no-title="noTitle" morePosition="top" :title="$
         .col
         .col.q-mr-sm
           q-btn.h-btn1.full-width(color="primary" outline no-caps unelevated rounded :label="'Close'" :loading="submitting" @click="showDetailsModal = false")
+
+  q-dialog(:value="isSendModalOpen" @hide="state = STATE.WAITING")
+    widget.full-width.q-pa-md(:title="$t('profiles.wallet-base.send', { tokenName: tokenName })")
+      template(v-if="state === STATE.SENDING")
+        .col-12.q-mt-md
+          .col-6
+            label.h-label {{ $t('profiles.wallet-base.husdAvailable', { tokenName: utilityToken.label })}}
+            .row.no-wrap.items-center.q-my-xs
+              q-avatar.q-mr-sm(size="40px")
+                img(:style="{ 'width': '40px', 'height': '40px' }" :src="ipfsy(daoLogo)")
+              .flex.items-center.full-width(:style="{ 'background': '#F1F1F3', 'border-radius': '15px', 'padding': '12px 15px' }")
+                div {{ formatCurrency(utilityToken?.value) }}
+        .col-12.q-mt-md
+          label.h-label  {{ $t('profiles.wallet-base.sendTo') }}
+          q-input.q-my-xs.full-width(
+            :placeholder="$t('profiles.wallet-base.sendToPlaceholder')"
+            :rules="[rules.required, !rules.isAccountAvailable]"
+            dense
+            outlined
+            rounded
+            v-model="formSend.to"
+          )
+
+        .col-12
+          label.h-label  {{ $t('profiles.wallet-base.amount') }}
+          q-input.q-my-xs.full-width(
+            :rules="[rules.greaterThan(0), rules.lessOrEqualThan(utilityToken?.value)]"
+            dense
+            outlined
+            placeholder="0.00"
+            rounded
+            type="number"
+            v-model.number="formSend.amount"
+          )
+
+          //- .row.justify-end.full-width
+          //-   .h-b2.text-primary.text-bold.text-underline.cursor-pointer(@click="form.amount = 500.00") {{ $t('profiles.wallet-base.485') }}
+          //-   .h-b2.text-primary.text-bold.text-underline.q-ml-sm.cursor-pointer(@click="form.amount = 1000.00") {{ $t('profiles.wallet-base.4842') }}
+          //-   .h-b2.text-primary.text-bold.text-underline.q-ml-sm.cursor-pointer(@click="form.amount = pegToken.amount") {{ $t('profiles.wallet-base.maxAvailable') }}
+
+      template(v-if="state === STATE.SENT")
+        .row.q-mt-sm
+          .h-b2.text-bold.text-black.q-mb-sm {{ $t('profiles.wallet-base.transactionSuccessful') }}
+          .col-9.q-pr-sm
+            .flex.full-width(:style="{ 'background': '#F1F1F3', 'border-radius': '15px', 'padding': '12px 15px' }")
+              .row.justify-between.h-b2.text-bold.text-black.q-mb-sm.full-width
+                div {{ $t('profiles.wallet-base.to') }}
+                div {{ formSend.to }}
+              //- .row.justify-between.h-b2.text-bold.text-black.q-mb-sm.full-width
+              //-   div {{ $t('profiles.wallet-base.requestor1') }}
+              //-   div {{ account }}
+              .row.justify-between.h-b2.text-bold.text-black.full-width
+                div {{ $t('profiles.wallet-base.amount1') }}
+                div {{ `${formatCurrency(formSend.amount)} ${utilityToken.label}` }}
+          .col-3
+            .flex.items-center.justify-center(:style="{ 'width': '112px', 'height': '112px', 'border-radius': '20px', 'background': '#1CB59B' }")
+              q-icon(name="fas fa-check" color="white" size="60px")
+        .row.q-my-xl.text-grey.text-italic.h-b2 {{ $t('profiles.wallet-base.asSoonAs') }}
+      .row.full-width.q-mt-xl.no-wrap
+        .col.q-mr-sm
+          q-btn.h-btn1.full-width(color="primary" outline no-caps unelevated rounded :label="$t('profiles.wallet-base.close')" :loading="submitting" @click="state = STATE.WAITING")
+        .col
+          q-btn.h-btn1.full-width(v-if="state === state.SENT" :disable="!formSend.amount" color="primary" no-caps unelevated rounded :label="$t('profiles.wallet-base.makeAnotherRedemption')" :loading="submitting" @click="successRedeem = false, resetForm()")
+          q-btn.h-btn1.full-width(
+          v-else
+          :disable="!formSend.amount || formSend.amount <= 0 || formSend.amount > utilityToken?.value"
+          color="primary"
+          no-caps
+          unelevated
+          rounded
+          :label="$t('profiles.wallet-base.send', { tokenName: tokenName })"
+          @click="onSend()"
+        )
+
   q-dialog(:value="showPayoutModal" @hide="showPayoutModal = false, resetForm()")
     widget.full-width.q-pa-md(:title="$t('profiles.wallet-base.redeemHusd1', { tokenName: tokenName })")
       .row.q-mt-md
@@ -331,9 +437,11 @@ widget.wallet-base(:more="more" :no-title="noTitle" morePosition="top" :title="$
         .col
           q-btn.h-btn1.full-width(v-if="successRedeem" :disable="!form.amount" color="primary" no-caps unelevated rounded :label="$t('profiles.wallet-base.makeAnotherRedemption')" :loading="submitting" @click="successRedeem = false, resetForm()")
           q-btn.h-btn1.full-width(v-else :disable="!form.amount || form.amount <= 0 || form.amount > pegToken.amount" color="primary" no-caps unelevated rounded :label="$t('profiles.wallet-base.redeemHusd1', { tokenName: tokenName })" :loading="submitting" @click="onRedeemHusd()")
+
   .row.justify-center.q-mb-md(v-if="!wallet || wallet?.length === 0")
     loading-spinner(v-if="loading" color="primary" size="40px")
     .h-b2(v-else) {{ $t('profiles.wallet-base.noWalletFound') }}
+
   q-list.q-mt-md(v-else dense)
     template(v-for="(item, index) in wallet")
       q-item.wallet-item(v-if="item && item.value && !(item?.label === 'dSEEDS' || item?.label === 'SEEDS')" :key="item?.label" :class="index !== wallet?.length - 1 ? 'q-mb-sm' : ''")
@@ -368,10 +476,21 @@ widget.wallet-base(:more="more" :no-title="noTitle" morePosition="top" :title="$
       .row.full-width.q-mt-xs.justify-between.cursor-pointer.items-center
         .h-b2 {{ dateToStringShort(redemption.date) }}
         .h-b2.text-primary.text-bold.text-underline(@click="showDetailsModal = true, currentDetailsObject = redemption") {{ $t('profiles.wallet-base.details') }}
-  .row.q-pt-xxs.q-mt-md(v-if="canRedeem && isOwner")
-    q-btn.h-btn1.full-width(color="primary" no-caps unelevated rounded :label="$t('profiles.wallet-base.redeem')" @click="showPayoutModal = true")
+
+  .row.q-pt-xxs.q-mt-md(v-if="isOwner")
+    q-btn.h-btn1.full-width(
+      v-if="canRedeem"
+      color="primary"
+      no-caps
+      unelevated
+      rounded
+      :label="$t('profiles.wallet-base.send')"
+      @click="state = STATE.SENDING"
+    )
       q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle") {{ $t('profiles.wallet-base.queueHusdRedemption', { tokenName: tokenName }) }}
 
+    q-btn.h-btn1.full-width.q-mt-sm(v-if="canRedeem" color="primary" no-caps unelevated rounded :label="$t('profiles.wallet-base.redeem')" @click="showPayoutModal = true")
+      q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle") {{ $t('profiles.wallet-base.queueHusdRedemption', { tokenName: tokenName }) }}
 </template>
 
 <style lang="stylus" scoped>

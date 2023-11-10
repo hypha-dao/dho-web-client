@@ -1143,7 +1143,7 @@
         "walletAdresses":"Wallet Adresses",
         "onlyVisibleToYou":"only visible to you"
      },
-     "wallet-base":{
+     "wallet-base": {
         "485":"500.00",
         "4842":"1000.00",
         "wallet":"Wallet",
@@ -1167,7 +1167,14 @@
         "pendingRedemptions":"Pending redemptions",
         "details":"Details",
         "queueHusdRedemption":"Queue {tokenName} Redemption for Treasury Payout to Configured Wallet",
-        "redeem":"Redeem"
+        "redeem":"Redeem",
+
+        "send":"Send",
+        "sendTo":"Send to",
+        "to":"To",
+        "sendToPlaceholder":"Enter public address",
+        "transactionSuccessful":"Transaction successful!",
+        "close": "Close"
      },
      "wallet-hypha":{
         "availableBalance":"Available Balance",

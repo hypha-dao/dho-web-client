@@ -91,6 +91,23 @@ export const fetchRedemptions = async function ({ commit, state }, { account }) 
   commit('addOpenRedemptions', result)
 }
 
+export const sendToken = async function ({ rootState }, { to, quantity, memo }) {
+  const actions = [
+    {
+      account: this.$config.contracts.hypha,
+      name: 'transfer',
+      data: {
+        from: rootState.accounts.account,
+        to,
+        quantity,
+        memo
+      }
+    }
+  ]
+
+  return this.$api.signTransaction(actions)
+}
+
 export const redeemToken = async function ({ rootState }, { quantity, memo }) {
   const selectedDao = this.getters['dao/selectedDao']
   if (!selectedDao.docId) return
