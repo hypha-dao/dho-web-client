@@ -1,5 +1,18 @@
 # Changelog
 
+## [2.37.0](https://github.com/hypha-dao/dho-web-client/compare/v2.36.1...v2.37.0) (2023-11-10)
+
+
+### Features
+
+* **wallet:** add send function ([#2527](https://github.com/hypha-dao/dho-web-client/issues/2527)) ([0616a8b](https://github.com/hypha-dao/dho-web-client/commit/0616a8b0ed7e900576d06a164f122bc1c5e1bb20))
+
+
+### Bug Fixes
+
+* **onboarding:** requirements for email and affiliate fields (#DEV-1009) ([#2533](https://github.com/hypha-dao/dho-web-client/issues/2533)) ([dba24f5](https://github.com/hypha-dao/dho-web-client/commit/dba24f5d738ef671c033baa60bfee7a1601bcc1e))
+* **proposal:** editing policy proposal (#DEV-1011) ([#2534](https://github.com/hypha-dao/dho-web-client/issues/2534)) ([71ce489](https://github.com/hypha-dao/dho-web-client/commit/71ce4898bcec0f291da3b82fa773bfa0c1d5ef81))
+
 ## [2.36.1](https://github.com/hypha-dao/dho-web-client/compare/v2.36.0...v2.36.1) (2023-11-06)
 
 
