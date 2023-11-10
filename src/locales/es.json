@@ -1162,8 +1162,14 @@
       "noWalletFound": "No se encontró ninguna billetera",
       "pendingRedemptions": "Reembolsos pendientes",
       "details": "Detalles",
-      "queueHusdRedemption": "Haga cola para el canje de {tokenName} para el pago del Tesoro a la billetera configurada",
-      "redeem": "Canjear"
+      "queueHusdRedemption": "Cola de canje de {tokenName} para pagos de tesorería en una billetera configurada",
+      "redeem": "Canjear",
+      "send": "Enviar",
+      "sendTo": "Enviar a",
+      "to": "A",
+      "sendToPlaceholder": "Ingrese la dirección pública",
+      "transactionSuccessful": "¡Transacción exitosa!",
+      "close": "Cerca"
     },
     "wallet-hypha": {
       "availableBalance": "Saldo disponible",
