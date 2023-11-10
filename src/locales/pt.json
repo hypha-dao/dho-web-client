@@ -865,7 +865,8 @@
       "next": "Próximo",
       "daoIndentity": "Identidade DAO",
       "toBeThere": "Para estar ao seu lado à medida que seu DAO cresce, adoraríamos manter contato. ",
-      "connectWithUs": "Conecte-se conosco, etapa opcional:"
+      "connectWithUs": "Conecte-se conosco, etapa opcional:",
+      "skipForNow": "Pular por enquanto"
     },
     "welcome-view": {
       "youNeedAn": "Você precisa de uma conta Hypha para interagir com o ecossistema Hypha e criar um DAO.",

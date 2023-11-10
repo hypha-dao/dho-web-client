@@ -870,7 +870,8 @@
         "next": "Next",
         "daoIndentity": "DAO Identity",
         "toBeThere": "To be there for you as your DAO grows, we'd love to stay in touch. Rest assured, we'll only use your email for DAO-related communication and won't share it with anyone else. Your privacy to important to us!",
-        "connectWithUs": "Connect with us, Optional Step:"
+        "connectWithUs": "Connect with us, Optional Step:",
+        "skipForNow": "Skip for now"
      },
      "welcome-view":{
         "youNeedAn":"Log in with your Hypha account",

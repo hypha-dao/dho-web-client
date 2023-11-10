@@ -588,7 +588,6 @@ export default {
                 { label: 'description', value: ['string', draft.description] },
                 { label: 'url', value: ['string', draft.url] },
                 { label: 'name', value: ['string', ''] },
-                ...(draft.circle ? [{ label: 'parent_circle', value: ['int64', draft.circle.value] }] : []),
                 ...(draft.masterPolicy ? [{ label: 'master_policy', value: ['int64', draft.masterPolicy.value] }] : [])
               ]
               proposalType = 'policy'
@@ -847,7 +846,6 @@ export default {
               { label: 'description', value: ['string', draft.description] },
               { label: 'url', value: ['string', draft.url] },
               { label: 'name', value: ['string', ''] },
-              ...(draft.circle ? [{ label: 'parent_circle', value: ['int64', draft.circle.value] }] : []),
               ...(draft.masterPolicy ? [{ label: 'master_policy', value: ['int64', draft.masterPolicy.value] }] : [])
             ]
             break

@@ -865,7 +865,8 @@
       "next": "다음",
       "daoIndentity": "DAO 아이덴티티",
       "toBeThere": "귀하의 DAO가 성장함에 따라 귀하와 함께 할 수 있도록 우리는 계속 연락하고 싶습니다. ",
-      "connectWithUs": "우리에게 연락하세요. 선택 단계:"
+      "connectWithUs": "우리에게 연락하세요. 선택 단계:",
+      "skipForNow": "일단은 스킵"
     },
     "welcome-view": {
       "youNeedAn": "Hypha 생태계와 상호작용하고 DAO를 생성하려면 Hypha 계정이 필요합니다.",
