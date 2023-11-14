@@ -3,6 +3,7 @@ import { mapGetters } from 'vuex'
 import { EXPLORE_BY } from '~/const'
 import ipfsy from '~/utils/ipfsy'
 import { dateToString } from '~/utils/TimeUtils'
+import lodash from 'lodash'
 
 export default {
   name: 'page-explore',
@@ -19,6 +20,7 @@ export default {
 
   data () {
     return {
+      lodash,
       dateToString,
       EXPLORE_BY,
       mobileFilterOpen: false,
@@ -249,7 +251,7 @@ q-page.page-explore(:style="'overflow-x: hidden'")
     .col-sm-12.col-md-12.col-lg-9(ref="scrollContainer" v-if="exploreBy === EXPLORE_BY.DAOS")
       q-infinite-scroll(@load="onLoad" :offset="250" :scroll-target="$refs.scrollContainer" ref="scroll")
         .row
-          .col-4.q-mb-md(v-for="(dho,index) in dhos" :key="dho.name" :class="{'col-6': $q.screen.lt.lg, 'q-pr-md': $q.screen.lt.sm ? false : $q.screen.gt.md ? true : index % 2 === 0, 'full-width':  view === 'list' || $q.screen.lt.sm}")
+          .col-4.q-mb-md(v-for="(dho,index) in lodash.uniqBy(dhos, 'name')" :key="dho.name" :class="{'col-6': $q.screen.lt.lg, 'q-pr-md': $q.screen.lt.sm ? false : $q.screen.gt.md ? true : index % 2 === 0, 'full-width':  view === 'list' || $q.screen.lt.sm}")
             dho-card.full-width(v-bind="dho" :view="view" useIpfsy ellipsis)
               template(v-slot:footer)
                 footer.full-width.row.items-center
