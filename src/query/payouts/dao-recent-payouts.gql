@@ -1,10 +1,9 @@
-query recentPayouts ($daoId: String!, $filter: PayoutFilter) {
-  getDao (docId: $daoId) {
-    docId
-    payoutAggregate (
-    filter: $filter
-    ) {
-      count
+query recentPayouts ($daoId: String!) {
+  queryDao (filter: { docId: { eq: $daoId } }) {
+    treasury {
+      redemptionAggregate {
+        count
+      }
     }
   }
 }
