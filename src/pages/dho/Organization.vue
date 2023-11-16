@@ -193,7 +193,7 @@ export default {
     recentPayouts: {
       query: require('~/query/payouts/dao-recent-payouts.gql'),
       update: data => {
-        const { count } = data.queryDao[0].treasury[0].redemptionAggregate
+        const { count } = data.queryDao?.[0].treasury?.[0].redemptionAggregate
         return count.toString()
       },
       skip () {
