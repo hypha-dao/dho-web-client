@@ -137,7 +137,7 @@ export default {
       return this.form.title && this.form.description && this.form.logo
     },
     canPublish() {
-      return (this.canNextStep && (this.form.email && this.form.affiliate)) || (this.skipEmailStep && this.canNextStep)
+      return (this.canNextStep && (this.form.email)) || (this.skipEmailStep && this.canNextStep)
     }
   },
   watch: {
