@@ -42,7 +42,7 @@ const signTransaction = async function (actions, options = {}) {
       transactionId = await this.$lightWallet.sendTransaction(actions)
     }
   } catch (e) {
-    error = this.$type === 'inApp' ? e.message : e.cause.message
+    error = this.$type === 'inApp' ? e?.message : e?.cause.message
     console.error(e) // eslint-disable-line no-console
     console.error(error) // eslint-disable-line no-console
     console.error(actions) // eslint-disable-line no-console

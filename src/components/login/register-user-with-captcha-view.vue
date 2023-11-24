@@ -137,7 +137,7 @@ export default {
       return this.form.title && this.form.description && this.form.logo
     },
     canPublish() {
-      return this.canNextStep
+      return (this.canNextStep && (this.form.email)) || (this.skipEmailStep && this.canNextStep)
     }
   },
   watch: {
@@ -231,7 +231,9 @@ export default {
           },
           isDraft
         })
-        await this.updateProfile({ data: { email: this.form.email, affiliate: this.form.affiliate } })
+        if (this.form.affiliate && this.form.email) {
+          await this.updateProfile({ data: { email: this.form.email, affiliate: this.form.affiliate } })
+        }
         this.$emit('stepChanged', this.steps.loading.name)
         this.showLoadingModal = true
         await this.updateProgressBar()
@@ -410,8 +412,8 @@ export default {
                 .col
                   q-input.rounded-border.bg-internal-bg(dense disable outlined v-model="form.title")
               nav.row.justify-end.q-mt-xl.q-gutter-xs
-                q-btn.q-px-xl(:disable="!!form.email || !!form.affiliate" @click="skipEmailStep = true, clearEmailFields()" v-if="$q.screen.gt.md && !skipEmailStep" color="primary" :label="$t('login.register-user-with-captcha-view.skipForNow')" no-caps rounded unelevated outline)
-                q-btn.q-px-xl(:disable="canPublish && !skipEmailStep" v-if="$q.screen.gt.md" @click="onSubmit" color="primary" :label="$t('login.register-user-with-captcha-view.publishYourDao')" no-caps rounded unelevated)
+                q-btn.q-px-xl(@click="skipEmailStep = true, clearEmailFields()" v-if="$q.screen.gt.md && !skipEmailStep" color="primary" :label="$t('login.register-user-with-captcha-view.skipForNow')" no-caps rounded unelevated outline)
+                q-btn.q-px-xl(:disable="!canPublish" v-if="$q.screen.gt.md" @click="onSubmit" color="primary" :label="$t('login.register-user-with-captcha-view.publishYourDao')" no-caps rounded unelevated)
         #form5.flex.items-center.justify-center.no-wrap(v-show="step === this.steps.loading.name")
           q-dialog(v-if="$q.screen.gt.md" :value="showLoadingModal" persistent)
             widget.bg-white.q-pa-xxxl.width-auto.col-auto.full-width(:style="'border-radius: 25px; box-shadow: 0px 0px 26px 0px rgba(0, 0, 41, 0.2); max-width: 1180px;'")
