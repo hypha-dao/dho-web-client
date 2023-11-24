@@ -412,7 +412,7 @@ export default {
                 .col
                   q-input.rounded-border.bg-internal-bg(dense disable outlined v-model="form.title")
               nav.row.justify-end.q-mt-xl.q-gutter-xs
-                q-btn.q-px-xl(:disable="!!form.email || !!form.affiliate" @click="skipEmailStep = true, clearEmailFields()" v-if="$q.screen.gt.md && !skipEmailStep" color="primary" :label="$t('login.register-user-with-captcha-view.skipForNow')" no-caps rounded unelevated outline)
+                q-btn.q-px-xl(@click="skipEmailStep = true, clearEmailFields()" v-if="$q.screen.gt.md && !skipEmailStep" color="primary" :label="$t('login.register-user-with-captcha-view.skipForNow')" no-caps rounded unelevated outline)
                 q-btn.q-px-xl(:disable="!canPublish" v-if="$q.screen.gt.md" @click="onSubmit" color="primary" :label="$t('login.register-user-with-captcha-view.publishYourDao')" no-caps rounded unelevated)
         #form5.flex.items-center.justify-center.no-wrap(v-show="step === this.steps.loading.name")
           q-dialog(v-if="$q.screen.gt.md" :value="showLoadingModal" persistent)
