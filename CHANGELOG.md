@@ -1,5 +1,18 @@
 # Changelog
 
+## [2.37.1](https://github.com/hypha-dao/dho-web-client/compare/v2.37.0...v2.37.1) (2023-11-24)
+
+
+### Bug Fixes
+
+* **api:** sign transaction error message ([#2544](https://github.com/hypha-dao/dho-web-client/issues/2544)) ([ba7a372](https://github.com/hypha-dao/dho-web-client/commit/ba7a3727d3372d226d7868e0c33f7a8d4882bfa6))
+* **onboarding:** create dao flow ([#2541](https://github.com/hypha-dao/dho-web-client/issues/2541)) ([4bc5656](https://github.com/hypha-dao/dho-web-client/commit/4bc5656639e97946529a78671f48e3abc8d0144c))
+* **onboarding:** remove download icon from login button ([#2538](https://github.com/hypha-dao/dho-web-client/issues/2538)) ([4fea35a](https://github.com/hypha-dao/dho-web-client/commit/4fea35a6e9e7362056042cce663c58cb54c0a6c3))
+* **onboarding:** required affiliate field (#DEV-1238) ([#2543](https://github.com/hypha-dao/dho-web-client/issues/2543)) ([941e95a](https://github.com/hypha-dao/dho-web-client/commit/941e95aabd47882d9dbd6450ccbe1e654cc93ef7))
+* **onboarding:** skip for now button disable state (#DEV-1237) ([#2542](https://github.com/hypha-dao/dho-web-client/issues/2542)) ([72f24c7](https://github.com/hypha-dao/dho-web-client/commit/72f24c791ed303d3b99392157dc10c769d76fd42))
+* **organization:** duplicate daos in organization page (#DEV-1234) ([#2540](https://github.com/hypha-dao/dho-web-client/issues/2540)) ([793a34e](https://github.com/hypha-dao/dho-web-client/commit/793a34ee87f084b9ef4a11a0a94803021bdd4329))
+* **organization:** recent payouts query (#DEV-1235) ([#2539](https://github.com/hypha-dao/dho-web-client/issues/2539)) ([f7cd2ea](https://github.com/hypha-dao/dho-web-client/commit/f7cd2ea863db19af310354bc3791da1a93c9a37f))
+
 ## [2.37.0](https://github.com/hypha-dao/dho-web-client/compare/v2.36.1...v2.37.0) (2023-11-10)
 
 
