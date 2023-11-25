@@ -30,6 +30,7 @@ export const savePayoutProposal = async function ({ rootState }, draft) {
   return this.$api.signTransaction(actions)
 }
 
+// TODO: Remove this, used by legacy dgraph queries
 export const loadPayouts = async function ({ commit }, { first, offset }) {
   const query = `
   query payouts($first:int, $offset: int) {
@@ -79,6 +80,7 @@ export const loadPayouts = async function ({ commit }, { first, offset }) {
   return result.data.payouts.length === 0
 }
 
+// TOdO: Remove this, used by legacy dgraph queries
 export const loadUserPayouts = async function ({ commit }, { first, offset, user }) {
   const query = `
   query payouts($first:int, $offset: int, $user: string) {

@@ -1048,7 +1048,7 @@ export default {
     docId: String
   },
 
-  data () {
+  data() {
     return {
       optimisticProposal: undefined,
       proposalParsing: proposalParsing,
@@ -1076,15 +1076,15 @@ export default {
     proposal: {
       query: gql`query proposalDetail($docId: String!) { ${PROPOSAL_QUERY} }`,
       update: data => data.getDocument,
-      skip () { return !this.docId },
-      variables () { return { docId: this.docId } },
+      skip() { return !this.docId },
+      variables() { return { docId: this.docId } },
       fetchPolicy: 'no-cache',
 
-      // pollInterval: 1000, // TODO: Swap with subscribe once dgraph is ready
+      pollInterval: 1000, // TODO: Swap with subscribe once dgraph is ready
       subscribeToMore: {
         document: gql`subscription proposalDetail($docId: String!) { ${PROPOSAL_QUERY} }`,
-        skip () { return !this.docId },
-        variables () { return { docId: this.docId } },
+        skip() { return !this.docId },
+        variables() { return { docId: this.docId } },
         updateQuery: (previousResult, { subscriptionData }) => {
           if (!subscriptionData.data) {
             return previousResult
@@ -1098,7 +1098,7 @@ export default {
 
       },
 
-      result (data) {
+      result(data) {
         if ((data?.data?.getDocument?.dao[0]?.details_daoName_n !== this?.selectedDao?.name) && !this.isBadge) {
           this.$router.push({ name: '404-not-found' })
         }
@@ -1109,8 +1109,8 @@ export default {
     claimPayments: {
       query: require('~/query/quests/dao-quest-complete-info.gql'),
       update: data => data.queryQuestcomplet,
-      skip () { return !this.proposal?.docId },
-      variables () { return { id: this.proposal?.docId } }
+      skip() { return !this.proposal?.docId },
+      variables() { return { id: this.proposal?.docId } }
     },
 
     tiers: {
@@ -1119,12 +1119,12 @@ export default {
         label: level?.name,
         value: { ...level }
       })),
-      skip () { return !this.selectedDao?.docId },
-      variables () { return { daoId: this.selectedDao.docId } },
+      skip() { return !this.selectedDao?.docId },
+      variables() { return { daoId: this.selectedDao.docId } },
       subscribeToMore: {
         document: gql`subscription TIERS($daoId: Int64!) { ${TIERS_QUERY} }`,
-        skip () { return !this.selectedDao?.docId },
-        variables () { return { daoId: this.selectedDao.docId } },
+        skip() { return !this.selectedDao?.docId },
+        variables() { return { daoId: this.selectedDao.docId } },
         updateQuery: (previousResult, { subscriptionData }) => {
           if (!subscriptionData.data) {
             return previousResult
@@ -1144,12 +1144,12 @@ export default {
         label: archetype?.name,
         value: { ...archetype }
       })),
-      skip () { return !this.selectedDao?.docId },
-      variables () { return { daoId: this.selectedDao.docId } },
+      skip() { return !this.selectedDao?.docId },
+      variables() { return { daoId: this.selectedDao.docId } },
       subscribeToMore: {
         document: gql`subscription ROLES($daoId: Int64!) { ${ROLES_QUERY} }`,
-        skip () { return !this.selectedDao?.docId },
-        variables () { return { daoId: this.selectedDao.docId } },
+        skip() { return !this.selectedDao?.docId },
+        variables() { return { daoId: this.selectedDao.docId } },
         updateQuery: (previousResult, { subscriptionData }) => {
           if (!subscriptionData.data) {
             return previousResult
@@ -1171,7 +1171,7 @@ export default {
     ...mapGetters('accounts', ['account', 'isMember']),
     ...mapGetters('dao', ['daoSettings', 'selectedDao', 'votingPercentages']),
 
-    comments () {
+    comments() {
       const mapComment = comment => ({
         ...comment,
         reactions: {
@@ -1191,72 +1191,72 @@ export default {
       return comments.filter(comment => comment.deletedStatus !== 1)
     },
 
-    commentSectionId () { return this?.proposal?.cmntsect[0].docId },
+    commentSectionId() { return this?.proposal?.cmntsect[0].docId },
 
-    ownAssignment () {
+    ownAssignment() {
       return (this?.proposal?.__typename === PROPOSAL_TYPE.ROLE || this?.proposal?.__typename === PROPOSAL_TYPE.ABILITY) &&
         this.proposal.details_assignee_n === this.account &&
         proposalParsing.status(this.proposal) !== PROPOSAL_STATE.PROPOSED &&
         proposalParsing.status(this.proposal) !== PROPOSAL_STATE.REJECTED &&
         proposalParsing.status(this.proposal) !== PROPOSAL_STATE.DRAFTED
     },
-    isCreator () {
+    isCreator() {
       return this.account === proposalParsing.creator(this.proposal)
     },
-    voteSize () {
+    voteSize() {
       if (this.proposal && this.proposal.voteAggregate) {
         return this.proposal.voteAggregate.count || 0
       }
       return 0
     },
 
-    expired () { return this.timeLeft < 0 },
+    expired() { return this.timeLeft < 0 },
 
-    timeLeft () {
+    timeLeft() {
       const end = new Date(`${this.proposal.ballot_expiration_t}`).getTime()
       const now = Date.now()
       const t = end - now
       return t
     },
 
-    periodsOnCycle () {
+    periodsOnCycle() {
       return (this.cycleDurationSec / this.daoSettings.periodDurationSec).toFixed(2)
     },
 
-    isDefaultBadgeMultiplier () {
+    isDefaultBadgeMultiplier() {
       return true
     },
 
-    loading () { return this.$apollo.queries.proposal.loading },
+    loading() { return this.$apollo.queries.proposal.loading },
 
-    isBadge () { return this.proposal?.__typename === PROPOSAL_TYPE.BADGE },
+    isBadge() { return this.proposal?.__typename === PROPOSAL_TYPE.BADGE },
 
-    badgeHolders () {
+    badgeHolders() {
       const uniqueHolders = lodash.uniqBy(this.proposal.assignment, 'details_assignee_n')
       return uniqueHolders.filter(holder => holder.dao[0].details_daoName_n === this.selectedDao.name)
     },
 
-    hideVoting () {
+    hideVoting() {
       return this.isBadge && proposalParsing.status(this.proposal) === PROPOSAL_STATE.APPROVED
     },
 
-    pages () {
+    pages() {
       return Math.ceil(this.badgeHolders?.length / 3)
     },
 
-    paginatedHolders () {
+    paginatedHolders() {
       return this.badgeHolders.slice((this.page - 1) * 3, this.page * 3)
     },
-    getPaginationText () {
+    getPaginationText() {
       if (this.pages === 0) return ''
       return `${this.page} of ${this.pages}`
     },
-    isLastPage () {
+    isLastPage() {
       if (this.pages === 0) return true
       return this.page === this.pages
     },
 
-    QUEST_STATE () {
+    QUEST_STATE() {
       const isApproved = this.proposal.details_state_s === PROPOSAL_STATE.APPROVED
       if (isApproved && this.proposal?.lockedby?.length > 0) { return 'PAYOUT_VOTING' }
       if (isApproved && this.proposal?.completedby?.length > 0) { return 'COMPLETED' }
@@ -1265,7 +1265,7 @@ export default {
   },
 
   watch: {
-    proposal () {
+    proposal() {
       this.proposal.cmntsect[0]?.comment.forEach(comment => {
         this.$set(this.commentByIds, comment.id, comment)
         if (this.rootCommentIds.includes(comment.id)) return
@@ -1292,10 +1292,10 @@ export default {
       'withdrawProposal'
     ]),
 
-    onVoting () {
+    onVoting() {
     },
 
-    onApply (proposal) {
+    onApply(proposal) {
       if (proposal?.__typename === PROPOSAL_TYPE.BADGE) {
         proposal.type = PROPOSAL_TYPE.BADGE
         // this.$store.commit('proposals/setNext', true)
@@ -1344,7 +1344,7 @@ export default {
         this.$router.push({ name: 'proposal-create', params: { draftId } })
       }
     },
-    async onSuspend (proposal) {
+    async onSuspend(proposal) {
       try {
         await this.suspendProposal(proposal.docId)
         this.$router.push({ name: 'proposals' })
@@ -1356,7 +1356,7 @@ export default {
         })
       }
     },
-    async onActive (proposal) {
+    async onActive(proposal) {
       try {
         await this.activeProposal(proposal.docId)
       } catch (e) {
@@ -1367,7 +1367,7 @@ export default {
         })
       }
     },
-    async onWithDraw (proposal) {
+    async onWithDraw(proposal) {
       try {
         await this.withdrawProposal(proposal.docId)
       } catch (e) {
@@ -1379,7 +1379,7 @@ export default {
       }
     },
 
-    async onPublish (proposal) {
+    async onPublish(proposal) {
       try {
         await this.publishProposal(proposal.docId)
         this.state = 'PUBLISHING'
@@ -1391,7 +1391,7 @@ export default {
       }
     },
 
-    async onEdit () {
+    async onEdit() {
       const category = {
         Payout: { key: 'contribution', title: 'Generic Contribution' },
 
@@ -1504,7 +1504,7 @@ export default {
       this.$router.push({ name: 'proposal-create', params: { draftId } })
     },
 
-    async onDelete (proposal) {
+    async onDelete(proposal) {
       try {
         this.state = 'DELETING'
         await this.deleteProposal(proposal.docId)
@@ -1516,7 +1516,7 @@ export default {
       }
     },
 
-    async onQuestPayout () {
+    async onQuestPayout() {
       try {
         await this.createQuestPayout({
           title: `${this.proposal.details_title_s} [COMPLETION]`,
@@ -1542,15 +1542,15 @@ export default {
       }
     },
 
-    async modifyData (changeToSuspension) {
+    async modifyData(changeToSuspension) {
       this.proposal.toSuspend = changeToSuspension
       await this.$forceUpdate()
     },
-    toggle (proposal) {
+    toggle(proposal) {
       return proposal?.__typename === PROPOSAL_TYPE.ROLE || proposal?.__typename === PROPOSAL_TYPE.ARCHETYPE || (proposal?.__typename === PROPOSAL_TYPE.EDIT && proposal.original?.[0].role)
     },
 
-    async fetchComment (commentId) {
+    async fetchComment(commentId) {
       try {
         const { data: { getComment: comment } } = await this.$apollo.query({
           query: require('~/query/proposals/dao-proposal-comment.gql'),
@@ -1561,10 +1561,10 @@ export default {
           this.$set(this.commentByIds, comment.id, comment)
         })
         this.commentByIds[commentId] = { ...comment }
-      } catch (e) {}
+      } catch (e) { }
     },
 
-    async createComment ({ parentId, content }) {
+    async createComment({ parentId, content }) {
       try {
         await this.createProposalComment({
           parentId: parentId || this.commentSectionId,
@@ -1575,7 +1575,7 @@ export default {
         this.showNotification({ message, color: 'red' })
       }
     },
-    async updateComment ({ commentId, content }) {
+    async updateComment({ commentId, content }) {
       try {
         await this.updateProposalComment({ commentId, content })
       } catch (e) {
@@ -1583,7 +1583,7 @@ export default {
         this.showNotification({ message, color: 'red' })
       }
     },
-    async deleteComment (commentId) {
+    async deleteComment(commentId) {
       try {
         await this.deleteProposalComment(commentId)
       } catch (e) {
@@ -1592,7 +1592,7 @@ export default {
       }
     },
 
-    async likeComment (commentId) {
+    async likeComment(commentId) {
       try {
         await this.reactProposalComment({ commentId, reaction: 'liked' })
       } catch (e) {
@@ -1600,7 +1600,7 @@ export default {
         this.showNotification({ message, color: 'red' })
       }
     },
-    async unlikeComment (commentId) {
+    async unlikeComment(commentId) {
       try {
         await this.unreactProposalComment({ commentId })
       } catch (e) {
@@ -1608,16 +1608,16 @@ export default {
         this.showNotification({ message, color: 'red' })
       }
     },
-    onPrev () {
+    onPrev() {
       this.page--
     },
-    onNext () {
+    onNext() {
       this.page++
     },
-    onCommitUpdate (val) {
+    onCommitUpdate(val) {
       this.optimisticProposal = { ...this.optimisticProposal, ...{ lastimeshare: [{ details_timeShareX100_i: val }] } }
     },
-    onDeferredUpdate (val) {
+    onDeferredUpdate(val) {
       this.optimisticProposal = { ...this.optimisticProposal, details_deferredPercX100_i: val }
     }
   }

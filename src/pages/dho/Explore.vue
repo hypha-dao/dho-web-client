@@ -17,7 +17,7 @@ export default {
     EcosystemCard: () => import('~/components/ecosystem/ecosystem-card.vue')
   },
 
-  data () {
+  data() {
     return {
       dateToString,
       EXPLORE_BY,
@@ -51,7 +51,7 @@ export default {
 
   apollo: {
     dhos: {
-      query () { return require('~/query/dao/dao-list.gql') },
+      query() { return require('~/query/dao/dao-list.gql') },
 
       update: data => {
         return data?.queryDao?.map(dao => {
@@ -70,7 +70,7 @@ export default {
         })
       },
 
-      variables () {
+      variables() {
         return {
           order: this.order,
           filter: this.textFilter ? { details_daoName_n: { regexp: `/.*${this.textFilter}.*/i` } } : null,
@@ -84,7 +84,7 @@ export default {
     },
 
     ecosystemsList: {
-      query () {
+      query() {
         return require('~/query/ecosystem/ecosystems-list.gql')
       },
       update: data => {
@@ -101,7 +101,7 @@ export default {
           }
         })
       },
-      variables () {
+      variables() {
         return {
           order: this.order,
           filter: this.textFilter ? { details_daoName_n: { regexp: `/.*${this.textFilter}.*/i` } } : { and: { details_daoType_s: { regexp: '/anchor/' }, details_isWaitingEcosystem_i: { eq: 0 } } },
@@ -115,7 +115,7 @@ export default {
   computed: {
     ...mapGetters('dao', ['daoSettings', 'isHypha']),
 
-    banner () {
+    banner() {
       return {
         title: this.daoSettings.exploreTitle || this.$t('pages.dho.explore.discoverTheHyphaDAONetwork'),
         description: this.daoSettings.exploreParagraph || this.$t('pages.dho.explore.welcomeToTheGlobalDAO'),
@@ -127,7 +127,7 @@ export default {
       }
     },
 
-    order () {
+    order() {
       if (this.optionArray[1] === this.sort) return { desc: 'createdDate' }
       if (this.optionArray[2] === this.sort) return { asc: 'createdDate' }
       if (this.optionArray[3] === this.sort) return { asc: 'details_daoName_n' }
@@ -135,7 +135,7 @@ export default {
       return null
     },
 
-    filterPlacehoder () {
+    filterPlacehoder() {
       if (this.exploreBy === EXPLORE_BY.DAOS) {
         return this.$t('pages.dho.explore.searchDHOs')
       } else if (this.exploreBy === EXPLORE_BY.ECOSYSTEMS) {
@@ -145,19 +145,19 @@ export default {
     }
   },
 
-  async mounted () {
+  async mounted() {
     if (localStorage.getItem('showExploreBanner') === 'false') {
       this.isExploreBannerVisible = false
     }
   },
 
   methods: {
-    hideExploreBanner () {
+    hideExploreBanner() {
       localStorage.setItem('showExploreBanner', false)
       this.isExploreBannerVisible = false
     },
 
-    async onLoad (index, done) {
+    async onLoad(index, done) {
       if (this.more) {
         // if (this.offset === 0) {
         //   this.offset += 1
@@ -197,7 +197,7 @@ export default {
 
     ipfsy,
 
-    async resetPagination () {
+    async resetPagination() {
       this.restart = true
       this.offset = 0
       this.more = true
@@ -210,7 +210,7 @@ export default {
       this.$refs.scroll.trigger()
     },
 
-    yearFromDate (date) {
+    yearFromDate(date) {
       return this.dateToString(date).split(',')[1]
     }
   },

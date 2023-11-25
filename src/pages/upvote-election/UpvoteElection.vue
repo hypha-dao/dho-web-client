@@ -85,7 +85,7 @@ export default {
     ProfilePicture: () => import('~/components/profiles/profile-picture.vue'),
     RoundCard: () => import('./RoundCard.vue')
   },
-  data () {
+  data() {
     return {
       ELECTION_STATE,
       ELECTION_BADGES,
@@ -119,10 +119,10 @@ export default {
           }
         })
       },
-      skip () {
+      skip() {
         return !this.selectedDao || !this.selectedDao.docId
       },
-      variables () {
+      variables() {
         return {
           daoId: this.selectedDao.docId
         }
@@ -141,18 +141,18 @@ export default {
           }
         })
       },
-      variables () {
+      variables() {
         return {
           daoId: this.selectedDao.docId,
           username: this.account
         }
       },
-      skip () {
+      skip() {
         return !this.account || !this.selectedDao || !this.selectedDao.docId
       },
       pollInterval: 1000,
       fetchPolicy: 'no-cache',
-      result (res) {
+      result(res) {
         if (res.data.getDao?.badge?.find(badge => badge.details_title_s === ELECTION_BADGES.DELEGATE)) {
           this.isRegistered = true
         }
@@ -200,7 +200,7 @@ export default {
           })
         }
       },
-      variables () {
+      variables() {
         return {
           daoId: this.selectedDao.docId,
           filter: {
@@ -212,8 +212,8 @@ export default {
       },
       fetchPolicy: 'no-cache',
       pollInterval: 1000, // THIS IS JUST TEMPORARY UNTIL GRAPHQL SUBSCRIPTION IS READY
-      skip () { return !this.selectedDao || !this.selectedDao.docId },
-      result (res) {
+      skip() { return !this.selectedDao || !this.selectedDao.docId },
+      result(res) {
         this.statusSetUp()
         this.$forceUpdate()
       }
@@ -224,7 +224,7 @@ export default {
     ...mapGetters('dao', ['selectedDao']),
     ...mapGetters('accounts', ['account']),
 
-    isLoading () {
+    isLoading() {
       return this.upvoteWidgetState === ELECTION_STATE.LOADING || this.currentState === ELECTION_STATE.LOADING
     },
 
@@ -250,16 +250,16 @@ export default {
       return ''
     },
 
-    paginatedApplications () {
+    paginatedApplications() {
       return this.electionDetails?.delegatesList.slice((this.page - 1) * 5, this.page * 5)
     },
 
-    isLastPage () {
+    isLastPage() {
       if (this.pages === 0) return true
       return this.page === this.pages
     },
 
-    pages () {
+    pages() {
       return Math.ceil(this.electionDetails?.delegatesList?.length / 5)
     }
   },
@@ -285,22 +285,22 @@ export default {
         this.$forceUpdate()
       }
     },
-    onPrev () {
+    onPrev() {
       this.page--
     },
 
-    onNext () {
+    onNext() {
       this.page++
     },
 
-    votingTimeLeft () {
+    votingTimeLeft() {
       const end = new Date(this.electionDetails?.currentRound?.endDate ? this.electionDetails?.currentRound?.endDate : this.electionDetails?.startDate)
       const now = Date.now()
       const t = end - now
       return t
     },
 
-    formatTimeLeft () {
+    formatTimeLeft() {
       const MS_PER_DAY = 1000 * 60 * 60 * 24
       const MS_PER_HOUR = 1000 * 60 * 60
       const MS_PER_MIN = 1000 * 60
@@ -335,7 +335,7 @@ export default {
       }
       return 0
     },
-    async voteTransact (votedId, groupId) {
+    async voteTransact(votedId, groupId) {
       const actions = [{
         account: this.$config.contracts.dao,
         name: 'castupvote',
@@ -350,25 +350,25 @@ export default {
     }
 
   },
-  async mounted () {
+  async mounted() {
     this.counterdown = setInterval(() => {
       this.formatTimeLeft()
       this.$forceUpdate()
     }, 1000)
   },
-  created () {
+  created() {
     this.counterdown = setInterval(() => {
       this.formatTimeLeft()
       this.$forceUpdate()
     }, 1000)
   },
-  async activated () {
+  async activated() {
     this.counterdown = setInterval(() => {
       this.formatTimeLeft()
       this.$forceUpdate()
     }, 1000)
   },
-  deactivated () {
+  deactivated() {
     clearInterval(this.counterdown)
   }
 }

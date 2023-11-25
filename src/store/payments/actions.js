@@ -40,6 +40,7 @@ export const countPayments = async function ({ rootState }) {
   return result.data.payments[0].total
 }
 
+// TODO: Remove this, used by legacy dgraph queries
 export const loadPayments = async function ({ rootState }, { page, rowsPerPage }) {
   // TODO: Get rid of 'has(payment)' call, in lieu of typed get?
   const query = `

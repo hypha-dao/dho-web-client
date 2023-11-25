@@ -387,8 +387,8 @@ export default {
     dao: {
       query: () => require('../../query/proposals/dao-proposals-active-vote.gql'),
       update: data => data.queryDao,
-      skip () { return !this.selectedDao?.docId },
-      variables () {
+      skip() { return !this.selectedDao?.docId },
+      variables() {
         // Date restriction implementation can be seen in proposals-active.gql
         // Only get proposals that are active or recently expired
         // const date = new Date(Date.now() - 2 * (this.$config.contracts.voteDurationSeconds * 1000))
@@ -402,10 +402,10 @@ export default {
         }
       },
       fetchPolicy: 'no-cache',
-      // pollInterval: 1000 // TODO: Swap with subscribe once dgraph is ready
+      pollInterval: 1000, // TODO: Swap with subscribe once dgraph is ready
       subscribeToMore: {
         document: require('~/query/proposals/dao-proposals-active-vote-subs.gql'),
-        variables () {
+        variables() {
           return {
             docId: this.selectedDao.docId,
             // first: this.pagination.first,
@@ -413,7 +413,7 @@ export default {
             user: this.account
           }
         },
-        skip () { return !this.selectedDao?.docId },
+        skip() { return !this.selectedDao?.docId },
         updateQuery: (previousResult, { subscriptionData }) => {
           if (!subscriptionData?.data) {
             return previousResult
@@ -432,8 +432,8 @@ export default {
     stagedProposals: {
       query: gql`query stageProposals($docId: String!, $first: Int!, $offset: Int!) { ${STAGED_PROPOSALS_QUERY} }`,
       update: data => data?.queryDao[0]?.stagingprop,
-      skip () { return !this.selectedDao?.docId },
-      variables () {
+      skip() { return !this.selectedDao?.docId },
+      variables() {
         return {
           docId: this.selectedDao.docId,
           first: this.pagination.first,
@@ -442,11 +442,11 @@ export default {
         }
       },
       fetchPolicy: 'no-cache',
-      // pollInterval: 1000 // TODO: Swap with subscribe once dgraph is ready
+      pollInterval: 1000, // TODO: Swap with subscribe once dgraph is ready
       subscribeToMore: {
         document: gql`subscription stageProposals($docId: String!, $first: Int, $offset: Int) { ${STAGED_PROPOSALS_QUERY} }`,
-        skip () { return !this.selectedDao?.docId },
-        variables () {
+        skip() { return !this.selectedDao?.docId },
+        variables() {
           return {
             docId: this.selectedDao.docId,
             user: this.account
@@ -477,13 +477,13 @@ export default {
           archived: (data.queryDao[0].passedpropsAggregate.count + data.queryDao[0].failedpropsAggregate.count) - NUMBER_OF_SYSTEM_PROPOSALS
         }
       },
-      variables () { return { docId: this.selectedDao.docId } },
-      skip () { return !this.selectedDao?.docId },
+      variables() { return { docId: this.selectedDao.docId } },
+      skip() { return !this.selectedDao?.docId },
       fetchPolicy: 'no-cache'
     }
   },
 
-  data () {
+  data() {
     return {
       mobileFilterOpen: false,
       isShowingProposalBanner: true,
@@ -518,7 +518,7 @@ export default {
     ...mapGetters('ballots', ['supply']),
     ...mapGetters('dao', ['daoSettings', 'selectedDao', 'votingPercentages']),
 
-    banner () {
+    banner() {
       return {
         title: this.daoSettings.proposalsTitle || this.$t('pages.proposals.proposallist.yourVoteIsTheVoice'),
         description: this.daoSettings.proposalsParagraph || this.$t('pages.proposals.proposallist.atHyphaTheFuture'),
@@ -530,7 +530,7 @@ export default {
       }
     },
 
-    proposals () {
+    proposals() {
       const daos = this.dao
       if (!(daos && daos?.length && Array.isArray(daos[0].proposal))) return []
 
@@ -549,7 +549,7 @@ export default {
       return daos[0].proposal.filter(proposal => new Date(proposal.ballot_expiration_t) > new Date(Date.now()))
     },
 
-    filteredProposals () {
+    filteredProposals() {
       const proposalOrder = this.proposals
 
       if (proposalOrder?.length === 0) return proposalOrder
@@ -560,7 +560,7 @@ export default {
         this.filters.forEach((filter) => {
           if (!found && filter.enabled && filter.filter(proposal)) {
             if (!this.textFilter || this.textFilter?.length === 0 ||
-                proposal?.details_title_s?.toLocaleLowerCase().includes(this.textFilter.toLocaleLowerCase())) {
+              proposal?.details_title_s?.toLocaleLowerCase().includes(this.textFilter.toLocaleLowerCase())) {
               proposals.push(proposal)
             }
             found = true
@@ -570,7 +570,7 @@ export default {
 
       return proposals
     },
-    filteredStagedProposals () {
+    filteredStagedProposals() {
       if (!this.stagedProposals) return []
 
       const proposals = [
@@ -581,7 +581,7 @@ export default {
         this.filters.forEach((filter) => {
           if (!found && filter.enabled && filter.filter(proposal)) {
             if (!this.textFilter || this.textFilter?.length === 0 ||
-                proposal?.details_title_s?.toLocaleLowerCase().includes(this.textFilter.toLocaleLowerCase())) {
+              proposal?.details_title_s?.toLocaleLowerCase().includes(this.textFilter.toLocaleLowerCase())) {
               proposals.push(proposal)
             }
             found = true
@@ -591,41 +591,41 @@ export default {
 
       return proposals
     },
-    countForFetching () {
+    countForFetching() {
       return Math.ceil(this.proposalsCount?.active / this.pagination.first) || 0
     },
-    quorumTitle () {
+    quorumTitle() {
       const { quorum } = this.votingPercentages
       return `${quorum}% min`
     },
-    unityTitle () {
+    unityTitle() {
       const { unity } = this.votingPercentages
       return `${unity}% min`
     },
-    hasProposals () {
+    hasProposals() {
       return this.proposals?.length || this.stagedProposals?.length
     },
-    proposalTitleWithCount () {
+    proposalTitleWithCount() {
       const count = this.proposalsCount
       return `Proposal History (${count})`
     }
   },
   watch: {
-    selectedDao () {
+    selectedDao() {
       this.$apollo.queries.dao.stop()
       if (this.dao) {
         this.resetPaginationValues()
       }
       this.$apollo.queries.dao.start()
     },
-    sort () {
+    sort() {
       if (this.dao) {
         this.resetPaginationValues()
       }
     },
     filters: {
       deep: true,
-      handler () {
+      handler() {
         if (!this.filtersToEvaluate) {
           const someFilterIsTrue = this.filters.some(filter => filter.enabled && (filter.label !== this.filters[0].label))
           this.filters[0].enabled = !someFilterIsTrue
@@ -649,22 +649,22 @@ export default {
     }
   },
 
-  activated () {
+  activated() {
     this.$apollo.queries.stagedProposals.refetch()
   },
-  mounted () {
+  mounted() {
     if (localStorage.getItem('showProposalBanner') === 'false') {
       this.isShowingProposalBanner = false
     }
   },
   methods: {
 
-    hideProposalBanner () {
+    hideProposalBanner() {
       localStorage.setItem('showProposalBanner', false)
       this.isShowingProposalBanner = false
     },
 
-    async onLoad (index, done) {
+    async onLoad(index, done) {
       if (this.$apollo.queries.dao.loading) {
         return
       }
@@ -697,19 +697,19 @@ export default {
           })
 
           done(!this.pagination.more)
-        } catch (e) {}
+        } catch (e) { }
       } else {
         done(true)
       }
     },
 
-    resetPaginationValues () {
+    resetPaginationValues() {
       this.$refs.scroll.resume()
       this.pagination.offset = 0
       this.pagination.more = true
       this.$apollo.queries.archivedProposals.refetch()
     },
-    handleCreateNewProposal () {
+    handleCreateNewProposal() {
       this.$router.push(`/${this.daoSettings.url}/proposals/create`)
     }
   }

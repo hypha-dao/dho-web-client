@@ -16,7 +16,7 @@ export default {
     LoadingSpinner: () => import('~/components/common/loading-spinner.vue'),
     ProfilePicture: () => import('~/components/profiles/profile-picture.vue')
   },
-  data () {
+  data() {
     return {
       MULTISIG_TABS,
       totalRedemptions: 0,
@@ -104,27 +104,27 @@ export default {
     treasuryId: {
       query: require('~/query/treasury/dao-treasury-id.gql'),
       update: data => data?.queryDao?.[0].treasury?.[0].id,
-      variables () {
+      variables() {
         return {
           daoId: this.selectedDao.docId
         }
       },
-      skip () { return !this.selectedDao?.docId }
+      skip() { return !this.selectedDao?.docId }
     },
     treasuryAccount: {
       query: require('~/query/treasury/dao-treasury-account.gql'),
       update: data => data?.queryDao?.[0].settings?.[0].treasuryAccount,
-      variables () {
+      variables() {
         return {
           daoId: this.selectedDao.docId
         }
       },
-      result (res) {
+      result(res) {
         if (!res.data?.queryDao?.[0].settings?.[0].treasuryAccount) {
           this.tab = MULTISIG_TABS.PAYOUT
         }
       },
-      skip () { return !this.selectedDao?.docId }
+      skip() { return !this.selectedDao?.docId }
     },
     redemptions: {
       query: require('~/query/treasury/dao-redemptions.gql'),
@@ -168,10 +168,11 @@ export default {
         this.treasurers = uniqueTreasurers
         return formattedRedemptions
       },
-      skip () {
+      skip() {
         return !this.selectedDao || !this.selectedDao.docId
       },
-      variables () {
+      pollInterval: 1000, // THIS IS JUST TEMPORARY UNTIL GRAPHQL SUBSCRIPTION IS READY
+      variables() {
         const rowsPerPage = this.pagination.rowsPerPage || 10
         return {
           daoId: this.selectedDao.docId,
@@ -181,8 +182,7 @@ export default {
           },
           filter: this.tab === MULTISIG_TABS.PAYOUT ? { not: { has: 'paidby' } } : {}
         }
-      },
-      pollInterval: 1000 // THIS IS JUST TEMPORARY UNTIL GRAPHQL SUBSCRIPTION IS READY
+      }
     },
     daoMultisigSignRequestsQuery: {
       query: require('~/query/treasury/dao-multisig-sign-requests.gql'),
@@ -203,13 +203,13 @@ export default {
         }).filter(redemption => redemption?.approvedby?.length === 0 && redemption.approvedby?.length === 0)
         return formattedRedemptions
       },
-      variables () {
+      variables() {
         return {
           daoId: this.selectedDao.docId
         }
       },
-      skip () { return !this.selectedDao?.docId },
-      pollInterval: 1000 // THIS IS JUST TEMPORARY UNTIL GRAPHQL SUBSCRIPTION IS READY
+      pollInterval: 1000, // THIS IS JUST TEMPORARY UNTIL GRAPHQL SUBSCRIPTION IS READY
+      skip() { return !this.selectedDao?.docId }
     },
     daoMultisigReadyExecRequestsQuery: {
       query: require('~/query/treasury/dao-multisig-sign-requests.gql'),
@@ -231,19 +231,19 @@ export default {
         }).filter(redemption => redemption?.signers?.length > 1 && redemption.state !== 'executed' && redemption?.approvedby?.length !== 0)
         return formattedRedemptions
       },
-      variables () {
+      variables() {
         return {
           daoId: this.selectedDao.docId
         }
       },
-      skip () { return !this.selectedDao?.docId },
+      skip() { return !this.selectedDao?.docId },
+      pollInterval: 1000, // THIS IS JUST TEMPORARY UNTIL GRAPHQL SUBSCRIPTION IS READY
       result: async function () {
         await this.formatExecReuqests()
-      },
-      pollInterval: 1000 // THIS IS JUST TEMPORARY UNTIL GRAPHQL SUBSCRIPTION IS READY
+      }
     }
   },
-  async beforeMount () {
+  async beforeMount() {
     await this.getTokens()
     await this.loadTreasurerProfiles()
   },
@@ -253,9 +253,9 @@ export default {
     ...mapActions('dao', ['createMultisigPay', 'approveMultisigPay', 'getTreasuryOptions', 'executeMultisigPay']),
     ...mapMutations('layout', ['setBreadcrumbs']),
 
-    formatDate (date) { return dateToString(date) },
-    getAmount (val) { return val && Number.parseFloat(this.formatCurrency(val)) },
-    formatCurrency (value) {
+    formatDate(date) { return dateToString(date) },
+    getAmount(val) { return val && Number.parseFloat(this.formatCurrency(val)) },
+    formatCurrency(value) {
       if (typeof value === 'string') {
         return Number(value.split(' ')[0]).toFixed(3)
       } else {
@@ -263,23 +263,23 @@ export default {
       }
     },
 
-    isToken (value, name) { return value && value.includes(name) },
+    isToken(value, name) { return value && value.includes(name) },
 
-    openTrx (trxDetails) {
+    openTrx(trxDetails) {
       const { network } = trxDetails
 
       const url = process.env.BLOCKCHAIN_EXPLORER_EOS // Hard code to EOS
       if (!network || !trxDetails) return
       window.open(url + trxDetails.trx_id, '_blank')
     },
-    async getProfileCached (account) {
+    async getProfileCached(account) {
       if (this.profiles && this.profiles[account]) return this.profiles[account]
       const profile = await this.getPublicProfile(account)
 
       this.profiles[account] = profile?.publicData
       return profile?.publicData || {}
     },
-    async onShowNewTrx (redemption) {
+    async onShowNewTrx(redemption) {
       this.resetNewTrxForm()
       const user = await this.getPublicProfile(redemption.requestor)
 
@@ -291,11 +291,11 @@ export default {
       this.newTrxForm.id = redemption.redemption_id
       this.showNewTrx = true
     },
-    onCancelNewTrx () {
+    onCancelNewTrx() {
       this.resetNewTrxForm()
       this.showNewTrx = false
     },
-    resetNewTrxForm () {
+    resetNewTrxForm() {
       this.newTrxForm.id = null
       this.newTrxForm.amount = null
       this.newTrxForm.network = null
@@ -303,7 +303,7 @@ export default {
       this.newTrxForm.comment = ''
       this.paymentRequestor = null
     },
-    async loadTreasurerProfiles () {
+    async loadTreasurerProfiles() {
       if (this.treasurers?.length > 0) {
         const { getProfileCached } = this
         const profiles = await Promise.all(this.treasurers?.map(async function (treasurer) {
@@ -316,7 +316,7 @@ export default {
         this.profiles = profilesMap
       }
     },
-    async onNewTrx () {
+    async onNewTrx() {
       await this.resetValidation(this.newTrxForm)
       if (!(await this.validate(this.newTrxForm))) return
       this.submittingNewTrx = true
@@ -325,21 +325,21 @@ export default {
       this.showNewTrx = false
       this.resetNewTrxForm()
     },
-    hasEndorsed (payment) {
+    hasEndorsed(payment) {
       if (!payment || !payment.paidBy) return false
       return payment.paidBy.details_creator_n === this.account
     },
-    onShowEndorse (payment) {
+    onShowEndorse(payment) {
       this.showEndorse = true
       this.endorseForm.redemptionId = payment.redemption_id
       this.endorseForm.paymentId = payment.payment_id
       this.endorseForm.amount = payment.amount_paid
     },
-    onCancelEndorse () {
+    onCancelEndorse() {
       this.resetEndorseForm()
       this.showEndorse = false
     },
-    async onEndorse () {
+    async onEndorse() {
       await this.resetValidation(this.endorseForm)
       if (!(await this.validate(this.endorseForm))) return
       this.submittingEndorse = true
@@ -348,13 +348,13 @@ export default {
       this.showEndorse = false
       this.resetEndorseForm()
     },
-    resetEndorseForm () {
+    resetEndorseForm() {
       this.endorseForm.redemptionId = null
       this.endorseForm.paymentId = null
       this.endorseForm.amount = null
       this.endorseForm.comment = ''
     },
-    filterRedemptions () {
+    filterRedemptions() {
       if (this.filter === true) {
         this.redemptions = [...this.redemptions].reverse()
       } else if (this.filter === false) {
@@ -364,7 +364,7 @@ export default {
         this.redemptions = [...this.redemptions.filter(r => r.requestor.includes(this.search))]
       }
     },
-    async getTokens () {
+    async getTokens() {
       let lang
       if (navigator.languages !== undefined) { lang = navigator.languages[0] } else { lang = navigator.language }
       const tokens = await this.getSupply()
@@ -408,17 +408,17 @@ export default {
         })
       }
     },
-    onPrev () {
+    onPrev() {
       this.pagination.page--
     },
-    onNext () {
+    onNext() {
       this.pagination.page++
     },
-    onRequest (props) {
+    onRequest(props) {
       const { pagination } = props
       this.pagination = pagination
     },
-    async createMultisig () {
+    async createMultisig() {
       try {
         await this.createMultisigPay({ treasuryId: this.treasuryId, payments: this.selected, treasuryAccount: this.treasuryAccount })
         this.successfullMultisigTransaction = true
@@ -430,7 +430,7 @@ export default {
         this.successfullMultisigTransaction = false
       }
     },
-    async approveMultisig () {
+    async approveMultisig() {
       await this.approveMultisigPay({ data: this.selected })
       this.selected = []
       await this.$apollo.queries.redemptions.refetch()
@@ -438,14 +438,14 @@ export default {
       this.tab = MULTISIG_TABS.READY
     },
 
-    async executeMultisig () {
+    async executeMultisig() {
       await this.executeMultisigPay({ data: this.selected })
       await this.$apollo.queries.redemptions.refetch()
       await this.$apollo.queries.daoMultisigSignRequestsQuery.refetch()
       this.tab = MULTISIG_TABS.HISTORY
     },
 
-    async formatExecReuqests () {
+    async formatExecReuqests() {
       const treasuryOptions = await this.getTreasuryOptions({ treasuryAccount: this.treasuryAccount })
       let treshold = 0
       this.daoMultisigReadyExecRequestsQuery.forEach((request) => {
@@ -463,7 +463,7 @@ export default {
       })
     },
 
-    getTokenIconPath () {
+    getTokenIconPath() {
       if (this.chainName) {
         return this.chainName === 'EOS' ? require('~/assets/icons/eos.png') : require('~/assets/icons/tlos.png')
       } else {
@@ -475,48 +475,48 @@ export default {
   computed: {
     ...mapGetters('accounts', ['account']),
     ...mapGetters('dao', ['selectedDao']),
-    isTreasurer () {
+    isTreasurer() {
       if (!this.account) return false
       const isTreasurer = this.treasurers.some(t => t === this.account)
 
       return isTreasurer
     },
-    pages () {
+    pages() {
       return Math.ceil(this.pagination.rowsNumber / this.pagination.rowsPerPage)
     },
-    getPaginationText () {
+    getPaginationText() {
       if (this.pages === 0) return ''
       return `${this.pagination.page} of ${this.pages}`
     },
-    isLastPage () {
+    isLastPage() {
       if (this.pages === 0) return true
       return this.pagination.page === this.pages
     },
-    chainName () {
+    chainName() {
       return process.env.CHAIN_NAME
     }
   },
   watch: {
-    treasurers () {
+    treasurers() {
       this.loadTreasurerProfiles()
     },
-    filter (val) {
+    filter(val) {
       localStorage.setItem('treasury-filter', val)
       this.filterRedemptions()
     },
-    search () {
+    search() {
       this.filterRedemptions()
     },
     dho: {
-      async handler () {
+      async handler() {
         await this.getTokens()
       },
       deep: true
     },
-    async selectedDao () {
+    async selectedDao() {
       await this.getTokens()
     },
-    tab (val) {
+    tab(val) {
       this.selected = []
     }
   }
