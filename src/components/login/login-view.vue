@@ -110,11 +110,6 @@ export default {
             q-item-section.cursor-pointer(avatar @click="onLoginWallet(idx)")
               img(:src="wallet.getStyle().icon" width="20")
             q-item-section.cursor-pointer.text-center(@click="onLoginWallet(idx)") {{ $t('login.login-view.login1', { '1': wallet.getStyle().text, '2': wallet.getStyle().text === 'Seeds' ? '(beta)' : '' }) }}
-            q-item-section(avatar)
-              .flex
-                loading-spinner(v-if="loading === wallet.getStyle().text" :color="wallet.getStyle().textColor" size="2em")
-                q-btn(v-else :color="wallet.getStyle().textColor" icon="fas fa-cloud-download-alt" @click="openUrl(wallet.getOnboardingLink())" target="_blank" dense flat size="10px")
-                  q-tooltip {{ $t('login.login-view.getApp') }}
         .row.flex.items-center
           .col-7.q-mr-sm
             q-select.q-mt-md(:options="authenticators" dense dropdown-icon="fas fa-chevron-down" hide-bottom-space options-dense outlined rounded v-model="selectedAuthenticator")
