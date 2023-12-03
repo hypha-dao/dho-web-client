@@ -4,7 +4,6 @@ on:
   push:
     branches: 
       - master
-      - feat/add-support-for-dgraph-cloud-with-namespaces
 
 jobs:
   build:
