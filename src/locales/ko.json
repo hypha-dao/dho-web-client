@@ -279,8 +279,8 @@
         },
         "showcase": {
           "1": {
-            "title": "HVOICE",
-            "description": "모든 회원은 HVOICE 거버넌스 토큰을 투표 지분으로 사용할 수 있습니다."
+            "title": "Voice",
+            "description": "모든 회원은 Voice 거버넌스 토큰을 투표 지분으로 사용할 수 있습니다."
           },
           "2": {
             "title": "다중 투표",
