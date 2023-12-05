@@ -501,6 +501,11 @@ export default {
           label: '中國人',
           value: 'zh',
           image: require('assets/images/locales/zh.png')
+        },
+        {
+          label: 'French',
+          value: 'fr',
+          image: require('assets/images/locales/fr.png')
         }
       ]
     }
