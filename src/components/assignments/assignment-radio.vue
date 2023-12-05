@@ -44,7 +44,7 @@ export default {
     },
 
     subtitle (assignment) {
-      return assignment.role[0].details_title_s
+      return assignment.role?.[0].details_title_s
     }
   }
 }

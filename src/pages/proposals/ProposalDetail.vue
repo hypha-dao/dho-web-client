@@ -651,7 +651,6 @@ const PROPOSAL_QUERY = `
           abstain_votePower_a
         }
       }
-
       role {
         id: docId
         name: details_title_s
@@ -1448,7 +1447,7 @@ export default {
           ? this?.proposal?.details_annualUsdSalary_a
           : tier.value.annualAmount).split(' ')[0]
 
-        this.$store.commit('proposals/setRole', { value: this.proposal?.role[0] })
+        this.$store.commit('proposals/setRole', { value: this.proposal?.role?.[0] })
         this.$store.commit('proposals/setTier', tier)
 
         this.$store.commit('proposals/setAnnualUsdSalary', annualUsdSalary)
@@ -1460,7 +1459,7 @@ export default {
         this.$store.commit('proposals/setStartPeriod', this.proposal?.start[0])
         // this.$store.commit('proposals/setStartDate', this.proposal?.start[0]?.details_startTime_t)
         this.$store.commit('proposals/setPeriodCount', this.proposal?.details_periodCount_i)
-        // this.$store.commit('proposals/setMinDeferred', this.proposal?.role[0]?.details_minDeferredX100_i)
+        // this.$store.commit('proposals/setMinDeferred', this.proposal?.role?.[0]?.details_minDeferredX100_i)
       }
 
       if (this.proposal?.__typename === PROPOSAL_TYPE.ABILITY || this.proposal?.__typename === PROPOSAL_TYPE.ASSIGNBADGE) { // Badge Assignment

@@ -84,12 +84,12 @@ export default {
       update: data => {
         return data.getDao.role?.map(role => {
           return {
-            title: role.details_title_s,
-            description: role.details_description_s,
-            icon: role.details_icon_s,
-            docId: role.docId,
-            assignmentAggregate: role.assignmentAggregate,
-            assignment: role.assignment.map((ownedby) => {
+            title: role?.details_title_s,
+            description: role?.details_description_s,
+            icon: role?.details_icon_s,
+            docId: role?.docId,
+            assignmentAggregate: role?.assignmentAggregate,
+            assignment: role?.assignment.map((ownedby) => {
               return {
                 username: ownedby.details_assignee_n,
                 daoName: ownedby.dao?.[0].details_daoName_n
