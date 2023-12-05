@@ -524,7 +524,7 @@ export default {
                 { label: 'time_share_x100', value: ['int64', draft.commitment] },
                 { label: 'deferred_perc_x100', value: ['int64', draft.deferred] },
 
-                { label: 'role', value: ['int64', draft.role.value ? draft.role.value.id : draft.role.id] },
+                { label: 'role', value: ['int64', draft.role?.value ? draft.role?.value.id : draft.role?.id] },
                 { label: 'start_period', value: ['int64', draft.startPeriod.docId] },
                 { label: 'period_count', value: ['int64', draft.periodCount] }
 
@@ -745,7 +745,7 @@ export default {
               { label: 'time_share_x100', value: ['int64', draft.commitment] },
               { label: 'deferred_perc_x100', value: ['int64', draft.deferred] },
 
-              { label: 'role', value: ['int64', draft.role.value ? draft.role.value.id : draft.role.id] },
+              { label: 'role', value: ['int64', draft.role?.value ? draft.role?.value.id : draft.role?.id] },
               { label: 'start_period', value: ['int64', draft.startPeriod.docId] },
               { label: 'period_count', value: ['int64', draft.periodCount] }
 

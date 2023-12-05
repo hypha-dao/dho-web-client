@@ -401,7 +401,7 @@ subscription proposalsSubs ($docId: String!, $user: String, $first: Int) {
           }
         ) {
           ... on Vote {
-           	vote_date_t
+            vote_date_t
             vote_voter_n
             vote_vote_s
             vote_votePower_a
