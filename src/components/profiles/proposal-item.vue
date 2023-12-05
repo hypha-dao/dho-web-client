@@ -261,7 +261,7 @@ export default {
     },
     async _extendAssignment () {
       if (this.proposal.salaryband.length !== 0) {
-        const roleProposal = this.proposal.role[0]
+        const roleProposal = this.proposal?.role?.[0]
         roleProposal.type = 'Role'
         this.$store.commit('proposals/setType', CONFIG.types.core.options.assignment.type)
         this.$store.commit('proposals/setCategory', { key: CONFIG.types.core.options.assignment.key, title: CONFIG.types.core.options.assignment.title })

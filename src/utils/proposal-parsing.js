@@ -190,12 +190,12 @@ export function subtitle (proposal) {
   if (proposal) {
     if (proposal.__typename === PROPOSAL_TYPE.SUSPEND && proposal.suspend) proposal = proposal.suspend[0]
     if (proposal.__typename === PROPOSAL_TYPE.ROLE) {
-      return proposal.role[0].details_title_s
+      return proposal.role?.[0].details_title_s
     } if (proposal.__typename === PROPOSAL_TYPE.ABILITY) {
       return proposal.badge[0].details_title_s
     } else if (proposal.__typename === PROPOSAL_TYPE.EDIT) {
       if (proposal.original && proposal.original[0].role) {
-        return proposal.original[0].role[0].details_title_s
+        return proposal.original[0].role?.[0].details_title_s
       }
       if (proposal.original && proposal.original[0].badge) {
         return proposal.original[0].badge[0].details_title_s
@@ -402,11 +402,11 @@ export function salary (proposal) {
       }
     }
     if (proposal.__typename === PROPOSAL_TYPE.ROLE) {
-      return proposal?.role[0]?.details_annualUsdSalary_a ? proposal?.role[0]?.details_annualUsdSalary_a : proposal?.salaryband?.[0]?.details_annualUsdSalary_a
+      return proposal?.role?.[0]?.details_annualUsdSalary_a ? proposal?.role?.[0]?.details_annualUsdSalary_a : proposal?.salaryband?.[0]?.details_annualUsdSalary_a
     }
     if (proposal.__typename === PROPOSAL_TYPE.EDIT) {
       if (proposal.original[0].__typename === PROPOSAL_TYPE.ROLE) {
-        return proposal?.original[0]?.role[0]?.details_annualUsdSalary_a
+        return proposal?.original[0]?.role?.[0]?.details_annualUsdSalary_a
       }
     }
   }
@@ -456,7 +456,7 @@ export function deferred (proposal) {
     if (proposal.__typename === PROPOSAL_TYPE.EDIT) {
       return {
         value: proposal.details_deferredPercX100_i,
-        min: proposal.original[0].role[0].details_minDeferredX100_i,
+        min: proposal.original[0].role?.[0].details_minDeferredX100_i,
         max: 100
       }
     }

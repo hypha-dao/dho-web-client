@@ -124,7 +124,7 @@ export default {
 
     isFounderRole: {
       get () {
-        return this.$store.state.proposals.draft.role.label === 'Founders' &&
+        return this.$store.state.proposals.draft.role?.label === 'Founders' &&
           this.$store.state.proposals.draft.tier.label === 'Founders'
       }
     },

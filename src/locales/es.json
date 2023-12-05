@@ -279,8 +279,8 @@
         },
         "showcase": {
           "1": {
-            "title": "HVOZ",
-            "description": "Cada miembro puede utilizar sus tokens de gobernanza HVOICE como porcentaje de votos."
+            "title": "Voice",
+            "description": "Cada miembro puede utilizar sus tokens de gobernanza Voice como porcentaje de votos."
           },
           "2": {
             "title": "Votos múltiples",
