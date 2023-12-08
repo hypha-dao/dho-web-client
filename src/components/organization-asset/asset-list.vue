@@ -37,6 +37,9 @@ export default {
     },
     trigger () {
       this.$refs.scroll.trigger()
+    },
+    delegateFilter(list) {
+      return list.filter(asset => !asset.title.toLowerCase().includes('delegate'))
     }
   },
   async mounted () {
@@ -50,7 +53,7 @@ export default {
 .list(ref="scrollContainer")
   q-infinite-scroll.full-width(@load="onLoad" :offset="250" :scroll-target="$refs.scrollContainer" ref="scroll")
     .row.q-col-gutter-md.q-mr-md
-      .template.col-4.flex.justify-center(v-for="(asset,index) in assetList" :class="{ 'col-6': $q.screen.md, 'full-width': $q.screen.sm }")
+      .template.col-4.flex.justify-center(v-for="(asset,index) in delegateFilter(assetList)" :class="{ 'col-6': $q.screen.md, 'full-width': $q.screen.sm }")
         asset-card(:key="asset.docId" :asset="asset" :isMobile="isMobile" :ownerStyles="ownerStyles" :bordered="bordered" :memberBadges="memberBadges")
       .col-4(:class="{ 'col-6': $q.screen.md, 'full-width': $q.screen.sm }")
         create-badge-widget(v-if="assetList && this.$route.params.type === 'badge'")
