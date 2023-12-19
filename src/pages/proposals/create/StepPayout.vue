@@ -102,7 +102,6 @@ export default {
         proposalType === 'assignment' &&
         (
           !this.annualUsdSalary ||
-          this.deferred < 1 ||
           this.commitment < 1 ||
           !this.isValidCommitment(this.commitment) ||
           !this.isValidDeferred(this.deferred))) {
