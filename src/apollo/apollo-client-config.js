@@ -1,4 +1,7 @@
-import { IntrospectionFragmentMatcher, defaultDataIdFromObject } from 'apollo-cache-inmemory'
+import {
+  IntrospectionFragmentMatcher,
+  defaultDataIdFromObject
+} from 'apollo-cache-inmemory'
 import schema from './schema.json'
 
 export default async function (/* { app, router, store, ssrContext, urlPath, redirect } */) {
@@ -20,7 +23,7 @@ export default async function (/* { app, router, store, ssrContext, urlPath, red
         fragmentMatcher: new IntrospectionFragmentMatcher({
           introspectionQueryResultData: schema
         }),
-        dataIdFromObject: r => {
+        dataIdFromObject: (r) => {
           if (r.docId && r.__typename) {
             return `${r.__typename}:${r.docId}`
           }

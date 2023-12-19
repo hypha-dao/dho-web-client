@@ -16,7 +16,7 @@ export default {
     Widget: () => import('~/components/common/widget.vue')
   },
 
-  data () {
+  data() {
     return {
       mobileFilterOpen: false,
 
@@ -85,7 +85,7 @@ export default {
 
   apollo: {
     ecosystem: {
-      query () { return require('~/query/ecosystem/ecosystem-info.gql') },
+      query() { return require('~/query/ecosystem/ecosystem-info.gql') },
       update: data => {
         const settings = data.queryDao[0].settings[0]
 
@@ -96,12 +96,12 @@ export default {
           purpose: settings?.ecosystem_purpose_s
         }
       },
-      variables () { return { daoId: this.selectedDao.docId } },
-      skip () { return !this.selectedDao?.docId }
+      variables() { return { daoId: this.selectedDao.docId } },
+      skip() { return !this.selectedDao?.docId }
     },
 
     dhos: {
-      query () { return require('~/query/ecosystem/ecosystem-child-list.gql') },
+      query() { return require('~/query/ecosystem/ecosystem-child-list.gql') },
       update: data => {
         if (!data.getDao) return []
 
@@ -129,9 +129,9 @@ export default {
           }
         })
       },
-      variables () { return { daoId: this.selectedDao.docId } },
-      skip () { return !this.selectedDao?.docId },
-      pollInterval: 1000 // THIS IS JUST TEMPORARY UNTIL GRAPHQL SUBSCRIPTION IS READY
+      variables() { return { daoId: this.selectedDao.docId } },
+      pollInterval: 1000, // THIS IS JUST TEMPORARY UNTIL GRAPHQL SUBSCRIPTION IS READY
+      skip() { return !this.selectedDao?.docId }
     }
   },
 
@@ -139,19 +139,19 @@ export default {
     ...mapGetters('accounts', ['account', 'isAdmin']),
     ...mapGetters('dao', ['daoSettings', 'selectedDao', 'selectedDaoPlan', 'isHypha']),
 
-    activeChildrenCount () {
+    activeChildrenCount() {
       const anchor = this.selectedDaoPlan.isEcosystemActivated ? 1 : 0
       const children = this.dhos ? this.dhos.filter(_ => _.status === 'ACTIVE').length : 0
       return anchor + children
     },
 
-    inactiveChildrenCount () {
+    inactiveChildrenCount() {
       const anchor = this.selectedDaoPlan.isEcosystemActivated ? 0 : 1
       const children = this.dhos ? this.dhos.filter(_ => _.status === 'INACTIVE').length : 0
       return anchor + children
     },
 
-    order () {
+    order() {
       if (this.optionArray[1] === this.sort) return { asc: 'createdDate' }
       if (this.optionArray[2] === this.sort) return { desc: 'createdDate' }
       if (this.optionArray[3] === this.sort) return { asc: 'details_daoName_n' }
@@ -159,13 +159,13 @@ export default {
       return null
     },
 
-    isBasicInfoAdded () { return this.ecosystem ? this.ecosystem.name : false }
+    isBasicInfoAdded() { return this.ecosystem ? this.ecosystem.name : false }
   },
 
   methods: {
     ...mapActions('dao', ['updateEcosystemSettings']),
 
-    async _updateEcosystemSettings (data) {
+    async _updateEcosystemSettings(data) {
       try {
         await this.updateEcosystemSettings({ docId: this.selectedDao.docId, data })
 
@@ -180,16 +180,16 @@ export default {
             clearInterval(ecosystemRefetchInterval)
           }
         }, 300)
-      } catch (error) {}
+      } catch (error) { }
     },
 
     ipfsy,
 
-    onCreateDAO () {
+    onCreateDAO() {
       this.$router.push({ name: 'dao-launcher', query: { parentId: this.selectedDao.docId } })
     },
 
-    async onLoad (index, done) {
+    async onLoad(index, done) {
       // if (this.more) {
       //   // if (this.offset === 0) {
       //   //   this.offset += 1
@@ -227,7 +227,7 @@ export default {
       // }
     },
 
-    async resetPagination () {
+    async resetPagination() {
       await this.$nextTick()
       this.$refs.scroll.stop()
       await this.$nextTick()

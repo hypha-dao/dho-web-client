@@ -2,7 +2,8 @@ name: EOS - Build and Deploy to Staging - MainNet
 
 on:
   push:
-    branches: [ master ]
+    branches: 
+      - master
 
 jobs:
   build:
@@ -21,7 +22,7 @@ jobs:
       - name: Use Node.js
         uses: actions/setup-node@v1
         with:
-          node-version: '16.x'
+          node-version: '18.x'
       - run: yarn global add @vue/cli@latest
       - run: yarn install
       - run: mv public/chain-manifests-prod.json public/chain-manifests.json
@@ -36,6 +37,8 @@ jobs:
           MULTISIG_CONTRACT: 'msig.hypha'
           KV_CONTRACT: 'kv.hypha'
           PPP_ENV: ${{ vars.PPP_ENV }}
+          ENV: 'prod'
+          HYPHA_AUTH_URL: ${{ vars.HYPHA_AUTH_URL }}
           PPP_APP_ID: ${{ vars.PPP_APP_ID }}
           ACCOUNT_API_URL: ${{ vars.ACCOUNT_API_URL }}
           ACCOUNT_API_KEY: ${{ secrets.ACCOUNT_API_KEY }}
@@ -44,14 +47,14 @@ jobs:
           BLOCKCHAIN_EXPLORER_BTC: 'https://www.blockchain.com/btc/tx/'
           BLOCKCHAIN_EXPLORER_ETH: 'https://etherscan.io/tx/'
           BLOCKCHAIN_EXPLORER_EOS: 'https://bloks.io/transaction/'
-
+          CHAIN_NAME: 'eos'
           SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
           DOCUMENTATION: ${{ vars.DOCUMENTATION }}
 
-          DGRAPH_URL: ${{ vars.DGRAPH_URL }}
+          DGRAPH_URL: https://hypha.us-east-1.aws.cloud.dgraph.io
           DGRAPH_ROOT_HASH: ${{ vars.DGRAPH_ROOT_HASH }}
           DGRAPH_AUTH_KEY: ${{ secrets.DGRAPH_AUTH_KEY }}
-          GRAPHQL_URI: ${{vars.GRAPHQL_URI}}
+          GRAPHQL_URI: https://hypha.us-east-1.aws.cloud.dgraph.io/graphql
           ROOT_DAO_ID: ${{vars.ROOT_DAO_ID}}
           ROOT_DAO_SLUG: ${{vars.ROOT_DAO_SLUG}}
           HEALTH_ENDPOINT: ${{ vars.HEALTH_ENDPOINT }}

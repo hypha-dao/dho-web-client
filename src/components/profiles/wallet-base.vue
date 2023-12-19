@@ -47,7 +47,7 @@ export default {
     }
   },
 
-  data () {
+  data() {
     return {
       DEFAULT_REDEEM_TOKEN,
       form: {
@@ -95,14 +95,14 @@ export default {
           }
         })
       },
-      variables () {
+      variables() {
         return {
           daoId: this.selectedDao.docId,
           username: this.account
         }
       },
-      skip () { return !this.selectedDao?.docId },
-      pollInterval: 1000
+      pollInterval: 1000,
+      skip() { return !this.selectedDao?.docId }
     }
   },
 
@@ -110,17 +110,17 @@ export default {
     ...mapGetters('dao', ['daoSettings']),
     ...mapGetters('accounts', ['account']),
     ...mapGetters('dao', ['selectedDao']),
-    icon () { return this.redeem ? 'fas fa-minus-circle' : 'fas fa-plus-circle' },
-    isOwner () { return this.username === this.account },
-    isSendModalOpen () { return [STATE.SENDING, STATE.SENT].includes(this.state) },
-    tokenName () {
+    icon() { return this.redeem ? 'fas fa-minus-circle' : 'fas fa-plus-circle' },
+    isOwner() { return this.username === this.account },
+    isSendModalOpen() { return [STATE.SENDING, STATE.SENT].includes(this.state) },
+    tokenName() {
       return this.$store.state.dao.settings.settings_pegTokenName_s ? this.$store.state.dao.settings.settings_pegTokenName_s : DEFAULT_REDEEM_TOKEN
     },
-    tokenSymbol () {
+    tokenSymbol() {
       return this.$store.state.dao.settings.settings_pegToken_a ? this.$store.state.dao.settings.settings_pegToken_a.split(' ')[1] : DEFAULT_REDEEM_TOKEN
     },
 
-    utilityToken () { return this.wallet.find(_ => _.type === 'utility') }
+    utilityToken() { return this.wallet.find(_ => _.type === 'utility') }
   },
 
   watch: {
@@ -129,7 +129,7 @@ export default {
 
     account: {
       immediate: true,
-      async handler (account) {
+      async handler(account) {
         if (!account) return
         this.init()
       }
@@ -142,19 +142,19 @@ export default {
     ...mapActions('profiles', ['getProfile', 'getPublicProfile', 'getWalletAdresses', 'saveAddresses']),
     ...mapMutations('profiles', ['setView']),
 
-    async validateForm () {
+    async validateForm() {
       await this.resetValidation(this.form)
       return await this.validate(this.form)
     },
 
-    resetForm () {
+    resetForm() {
       this.redeem = false
       this.form.amount = 0
       this.resetValidation(this.form)
       this.submitting = false
     },
 
-    async onSend () {
+    async onSend() {
       try {
         await this.sendToken(
           {
@@ -173,7 +173,7 @@ export default {
       }
     },
 
-    async onRedeemHusd () {
+    async onRedeemHusd() {
       if (await this.validateForm()) {
         this.submitting = true
         try {
@@ -197,7 +197,7 @@ export default {
       }
     },
 
-    async onBuySeeds () {
+    async onBuySeeds() {
       if (await this.validateForm()) {
         this.submitting = true
         try {
@@ -215,7 +215,7 @@ export default {
       }
     },
 
-    async onBuyHypha () {
+    async onBuyHypha() {
       if (await this.validateForm()) {
         this.submitting = true
         try {
@@ -233,7 +233,7 @@ export default {
       }
     },
 
-    onSetRedemptionAddr () {
+    onSetRedemptionAddr() {
       this.resetForm()
       this.$emit('set-redeem')
     },
@@ -242,7 +242,7 @@ export default {
       return new Intl.NumberFormat('en-US').format(parseInt(amount), { style: 'currency' })
     },
 
-    async saveWalletAddresses (data, success, fail) {
+    async saveWalletAddresses(data, success, fail) {
       try {
         await this.saveAddresses({ newData: data, oldData: this.walletAddressForm })
         this.walletAddressForm = data
@@ -251,11 +251,11 @@ export default {
       }
     },
 
-    async init () {
+    async init() {
       this.fetchProfile()
     },
 
-    async fetchProfile () {
+    async fetchProfile() {
       if (this.username) {
         if (this.isOwner) {
           await this.loadProfile()
@@ -265,7 +265,7 @@ export default {
       }
     },
 
-    async loadProfile () {
+    async loadProfile() {
       const profile = await this.getProfile(this.account)
       this.setView(null)
       if (profile) {
@@ -277,7 +277,7 @@ export default {
       this.walletAddressForm = await this.getWalletAdresses(this.account)
     },
 
-    async loadPublicProfile () {
+    async loadPublicProfile() {
       await this.getPublicProfile(this.username)
     },
     // TODO: Find a way to get the last transaction

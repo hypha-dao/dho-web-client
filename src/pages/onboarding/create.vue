@@ -6,7 +6,7 @@ import pick from '~/utils/pick.js'
 import ipfsy from '~/utils/ipfsy'
 
 const duration = {
-  data () {
+  data() {
     return {
       durationOptions: [
         { label: '12h', value: 43200 },
@@ -20,18 +20,18 @@ const duration = {
   },
 
   methods: {
-    isCustomDuration (duration) { return !this.durationOptions.map((_) => _.value).includes(duration) }
+    isCustomDuration(duration) { return !this.durationOptions.map((_) => _.value).includes(duration) }
   },
 
   computed: {
-    isCustomPeriodDuration () { return this.isCustomDuration(this.form.periodDurationSec) },
-    isCustomVotingDuration () { return this.isCustomDuration(this.form.votingDurationSec) }
+    isCustomPeriodDuration() { return this.isCustomDuration(this.form.periodDurationSec) },
+    isCustomVotingDuration() { return this.isCustomDuration(this.form.votingDurationSec) }
   }
 }
 
 const options = {
   computed: {
-    DESIGN_TEMPLATES () {
+    DESIGN_TEMPLATES() {
       return [
         {
           key: 'ORGANIC',
@@ -72,7 +72,7 @@ const options = {
       ]
     },
 
-    ORGANISATION_TEMPLATES () {
+    ORGANISATION_TEMPLATES() {
       return [
         {
           key: 1, // daoId
@@ -107,7 +107,7 @@ const options = {
       ]
     },
 
-    numberOfDigits () {
+    numberOfDigits() {
       return [
         { value: 1, label: '1,0' },
         { value: 2, label: '1,00' },
@@ -118,8 +118,8 @@ const options = {
   }
 }
 
-function getRandomEOSName () {
-  function choices (population, k) {
+function getRandomEOSName() {
+  function choices(population, k) {
     const out = []
     for (let i = 0; i < k; i++) {
       out.push(population[Math.floor(population.length * Math.random())])
@@ -142,7 +142,7 @@ export default {
 
   },
 
-  data () {
+  data() {
     return {
       activeStepIndex: 0,
       steps: [
@@ -211,18 +211,18 @@ export default {
   computed: {
     ...mapGetters('accounts', ['account']),
 
-    activeStep () { return this.steps[this.activeStepIndex].key },
-    isLastStep () { return this.activeStepIndex === this.steps.length - 1 },
+    activeStep() { return this.steps[this.activeStepIndex].key },
+    isLastStep() { return this.activeStepIndex === this.steps.length - 1 },
     isImageSelected: {
       cache: false,
-      get () { return this.$refs.ipfsInput?.imageURI }
+      get() { return this.$refs.ipfsInput?.imageURI }
     }
   },
 
   watch: {
     'form.title': {
       deep: true,
-      handler (value) {
+      handler(value) {
         // compute treasury symbol
         // if (value.length >= 3) {
         //   const _tokenName = `${value[0]}${value[1]}${value[value.length - 1]}`.toUpperCase()
@@ -238,11 +238,11 @@ export default {
     ...mapActions('dao', ['createDAO', 'addAdmins']),
     ...mapActions('profiles', ['getPublicProfile']),
 
-    isState (states) { return states.includes(this.state) },
+    isState(states) { return states.includes(this.state) },
 
     ipfsy,
 
-    async isCurrentStepValid () {
+    async isCurrentStepValid() {
       const dataForStep = {
         0: { ...pick(this.form, ['title', 'description']) },
         1: { ...pick(this.form, ['utilityName', 'utilitySymbol', 'utilityDigits', 'utilityAmount', 'utilityValue', 'voiceSymbol', 'voiceDigits', 'treasuryName', 'treasurySymbol', 'treasuryDigits']) },
@@ -255,7 +255,7 @@ export default {
       )
     },
 
-    async onPreviousStep () {
+    async onPreviousStep() {
       this.error = null
 
       if (this.activeStepIndex >= 0) {
@@ -264,14 +264,14 @@ export default {
       this.scrollToNextStep(this.steps[this.activeStepIndex].name)
     },
 
-    scrollToNextStep (nextStep) {
+    scrollToNextStep(nextStep) {
       if (!this.pastSteps.includes(nextStep)) {
         this.pastSteps.push(nextStep)
       }
       setTimeout(() => { document.getElementById(nextStep).scrollIntoView({ behavior: 'smooth', block: 'center' }) }, 400)
     },
 
-    async onNextStep (activeStepIndex) {
+    async onNextStep(activeStepIndex) {
       this.error = null
 
       if (!(await this.isCurrentStepValid())) {
@@ -288,11 +288,11 @@ export default {
       }
     },
 
-    onGoToDashboard () {
+    onGoToDashboard() {
       this.$router.push({ name: 'dashboard', params: { dhoname: this.dao.details_daoName_n } })
     },
 
-    async onSubmit () {
+    async onSubmit() {
       this.state = 'CREATING'
       const isDraft = !!this.$route.query.parentId
 
@@ -308,8 +308,8 @@ export default {
 
         const query = await this.$apollo.watchQuery({
           query: isDraft ? require('~/query/dao-draft-created.gql') : require('~/query/dao-created.gql'),
+          pollInterval: 100,
           variables: isDraft ? { daoName: this.form.name } : { regexp: '/^' + this.form.name + '$/i' },
-          pollInterval: 100
         })
 
         query.subscribe(({ data, loading }) => {
@@ -348,7 +348,7 @@ export default {
 
     //
 
-    async onAddAdmin () {
+    async onAddAdmin() {
       try {
         await this.addAdmins({ daoId: this.dao.docId, users: [...this.form.members.map(_ => _.username)] })
         this.state = 'FINISHED'
@@ -368,7 +368,7 @@ export default {
       }
     },
 
-    async copyToClipboard () {
+    async copyToClipboard() {
       try {
         await copyToClipboard(`${window.location.host}/${this.form.name}/login`)
 
@@ -391,7 +391,7 @@ export default {
       }
     },
 
-    async addTeamMember () {
+    async addTeamMember() {
       if (this.form.members.find(obj => obj.username === this.form.member)) return
       const formCopy = { ...this.form, members: [] }
       if (!(await this.validate(formCopy))) return
@@ -400,11 +400,11 @@ export default {
       this.form.member = ''
     },
 
-    async removeTeamMember (username) {
+    async removeTeamMember(username) {
       this.form.members = this.form.members.filter((obj) => obj.username !== username)
     },
 
-    goToStep ({ index }) {
+    goToStep({ index }) {
       this.activeStepIndex = index
       if (this.$q.screen.gt.md) {
         this.scrollToNextStep(this.steps[this.activeStepIndex].name)
@@ -412,11 +412,11 @@ export default {
     }
   },
 
-  mounted () {
+  mounted() {
     this.$EventBus.$on('global:nav:back', this.onPreviousStep)
   },
 
-  beforeDestroy () {
+  beforeDestroy() {
     this.$EventBus.$off('global:nav:back')
   }
 
