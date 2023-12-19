@@ -1,5 +1,19 @@
 # Changelog
 
+## [2.38.0](https://github.com/hypha-dao/dho-web-client/compare/v2.37.1...v2.38.0) (2023-12-05)
+
+
+### Features
+
+* **locales:** added support for French language (#DEV-1242) ([#2548](https://github.com/hypha-dao/dho-web-client/issues/2548)) ([2805af8](https://github.com/hypha-dao/dho-web-client/commit/2805af88db2642855508f24550a928bdcc28812f))
+
+
+### Bug Fixes
+
+* **locales:** typo fix (#DEV-1250) ([#2551](https://github.com/hypha-dao/dho-web-client/issues/2551)) ([3a86465](https://github.com/hypha-dao/dho-web-client/commit/3a8646520a17c432715bde9c4eab793e5270c6a0))
+* **query:** added role field validation (#DEV-1240) ([#2549](https://github.com/hypha-dao/dho-web-client/issues/2549)) ([626422b](https://github.com/hypha-dao/dho-web-client/commit/626422b45608f178d556b0876026bb1cb494986c))
+* **query:** role type not filtered (#DEV-1054) ([#2550](https://github.com/hypha-dao/dho-web-client/issues/2550)) ([18bc92b](https://github.com/hypha-dao/dho-web-client/commit/18bc92b5fafa23054096d90da3c6cc30a1356745))
+
 ## [2.37.1](https://github.com/hypha-dao/dho-web-client/compare/v2.37.0...v2.37.1) (2023-11-24)
 
 
