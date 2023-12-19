@@ -137,7 +137,7 @@ export default {
     welcomeBanner () {
       return {
         title: this.daoSettings?.dashboardTitle || this.$t('pages.dho.home.welcomeToHyphaEvolution'),
-        description: this.daoSettings?.dashboardParagraph || this.$t('pages.dho.home.atHyphaWere'),
+        description: this.daoSettings?.settings_daoDescription_s || this.$t('pages.dho.home.atHyphaWere'),
         background: ipfsy(this.daoSettings?.dashboardBackgroundImage),
         color: this.daoSettings?.primaryColor,
         pattern: this.daoSettings?.pattern,
