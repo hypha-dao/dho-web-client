@@ -1,5 +1,19 @@
 # Changelog
 
+## [2.39.0](https://github.com/hypha-dao/dho-web-client/compare/v2.38.0...v2.39.0) (2023-12-19)
+
+
+### Features
+
+* pull refresh token from hypha auth service ([#2547](https://github.com/hypha-dao/dho-web-client/issues/2547)) ([47eae8f](https://github.com/hypha-dao/dho-web-client/commit/47eae8f521ef6b1486d33ffd64cc84d87fc0428c))
+
+
+### Bug Fixes
+
+* **asset-card:** hide asset card for delegate badges (#DEV-1253) ([#2554](https://github.com/hypha-dao/dho-web-client/issues/2554)) ([88f243d](https://github.com/hypha-dao/dho-web-client/commit/88f243df2405d87ef8ca9501642e9abd24b4a14e))
+* **base-banner:** home banner description (#DEV-1255) ([#2556](https://github.com/hypha-dao/dho-web-client/issues/2556)) ([ee47308](https://github.com/hypha-dao/dho-web-client/commit/ee473082ec1ff2091971885e00a48b43841b49a8))
+* **proposal-creation:** dead end bug (#DEV-1251) ([#2555](https://github.com/hypha-dao/dho-web-client/issues/2555)) ([a3d9de8](https://github.com/hypha-dao/dho-web-client/commit/a3d9de80046223f2f9d04589aa3f0895a3c68e77))
+
 ## [2.38.0](https://github.com/hypha-dao/dho-web-client/compare/v2.37.1...v2.38.0) (2023-12-05)
 
 
