@@ -1098,7 +1098,7 @@ export default {
       },
 
       result (data) {
-        if ((data?.data?.getDocument?.dao[0]?.details_daoName_n !== this?.selectedDao?.name) && !this.isBadge) {
+        if ((data?.data?.getDocument?.dao?.[0]?.details_daoName_n !== this?.selectedDao?.name) && !this.isBadge) {
           this.$router.push({ name: '404-not-found' })
         }
       }
@@ -1174,8 +1174,8 @@ export default {
       const mapComment = comment => ({
         ...comment,
         reactions: {
-          count: comment.reactions[0]?.reactionlnkrAggregate?.count,
-          users: comment.reactions[0]?.reactionlnkr?.map(_ => _.author)
+          count: comment.reactions?.[0]?.reactionlnkrAggregate?.count,
+          users: comment.reactions?.[0]?.reactionlnkr?.map(_ => _.author)
         }
       })
 
@@ -1190,7 +1190,7 @@ export default {
       return comments.filter(comment => comment.deletedStatus !== 1)
     },
 
-    commentSectionId () { return this?.proposal?.cmntsect[0].docId },
+    commentSectionId () { return this?.proposal?.cmntsect?.[0].docId },
 
     ownAssignment () {
       return (this?.proposal?.__typename === PROPOSAL_TYPE.ROLE || this?.proposal?.__typename === PROPOSAL_TYPE.ABILITY) &&
@@ -1232,7 +1232,7 @@ export default {
 
     badgeHolders () {
       const uniqueHolders = lodash.uniqBy(this.proposal.assignment, 'details_assignee_n')
-      return uniqueHolders.filter(holder => holder.dao[0].details_daoName_n === this.selectedDao.name)
+      return uniqueHolders.filter(holder => holder.dao?.[0].details_daoName_n === this.selectedDao.name)
     },
 
     hideVoting () {
@@ -1265,7 +1265,7 @@ export default {
 
   watch: {
     proposal () {
-      this.proposal.cmntsect[0]?.comment.forEach(comment => {
+      this.proposal.cmntsect?.[0]?.comment.forEach(comment => {
         this.$set(this.commentByIds, comment.id, comment)
         if (this.rootCommentIds.includes(comment.id)) return
         this.rootCommentIds.push(comment.id)
@@ -1426,15 +1426,15 @@ export default {
 
       if (this.proposal?.__typename === PROPOSAL_TYPE.CIRCLE) {
         this.$store.commit('proposals/setCircle', {
-          label: this.proposal?.parentcircle[0]?.name,
-          value: this.proposal?.parentcircle[0]?.id
+          label: this.proposal?.parentcircle?.[0]?.name,
+          value: this.proposal?.parentcircle?.[0]?.id
         })
       }
 
       if (this.proposal?.__typename === PROPOSAL_TYPE.POLICY) {
         this.$store.commit('proposals/setCircle', {
-          label: this.proposal?.parentcircle[0]?.name,
-          value: this.proposal?.parentcircle[0]?.id
+          label: this.proposal?.parentcircle?.[0]?.name,
+          value: this.proposal?.parentcircle?.[0]?.id
         })
       }
 
@@ -1445,7 +1445,7 @@ export default {
 
         const annualUsdSalary = (tier.label === DEFAULT_TIER
           ? this?.proposal?.details_annualUsdSalary_a
-          : tier.value.annualAmount).split(' ')[0]
+          : tier.value.annualAmount).split(' ')?.[0]
 
         this.$store.commit('proposals/setRole', { value: this.proposal?.role?.[0] })
         this.$store.commit('proposals/setTier', tier)
@@ -1456,7 +1456,7 @@ export default {
 
         this.$store.commit('proposals/setCommitment', this.proposal?.details_timeShareX100_i)
         this.$store.commit('proposals/setDeferred', parseFloat(this.proposal?.details_deferredPercX100_i))
-        this.$store.commit('proposals/setStartPeriod', this.proposal?.start[0])
+        this.$store.commit('proposals/setStartPeriod', this.proposal?.start?.[0])
         // this.$store.commit('proposals/setStartDate', this.proposal?.start[0]?.details_startTime_t)
         this.$store.commit('proposals/setPeriodCount', this.proposal?.details_periodCount_i)
         // this.$store.commit('proposals/setMinDeferred', this.proposal?.role?.[0]?.details_minDeferredX100_i)
@@ -1464,7 +1464,7 @@ export default {
 
       if (this.proposal?.__typename === PROPOSAL_TYPE.ABILITY || this.proposal?.__typename === PROPOSAL_TYPE.ASSIGNBADGE) { // Badge Assignment
         this.$store.commit('proposals/setBadge', this?.proposal.badge?.[0])
-        this.$store.commit('proposals/setStartPeriod', this.proposal?.start[0])
+        this.$store.commit('proposals/setStartPeriod', this.proposal?.start?.[0])
         this.$store.commit('proposals/setPeriodCount', this.proposal?.details_periodCount_i)
       }
 
@@ -1490,10 +1490,10 @@ export default {
         this.$store.commit('proposals/setUrl', this.proposal?.details_url_s)
         this.$store.commit('proposals/setStartPeriod', this.proposal?.start?.[0])
         this.$store.commit('proposals/setPeriodCount', this.proposal?.details_periodCount_i)
-        this.$store.commit('proposals/setPeg', this.proposal?.details_pegAmount_a?.split(' ')[0])
-        this.$store.commit('proposals/setReward', this.proposal?.details_rewardAmount_a?.split(' ')[0])
-        this.$store.commit('proposals/setVoice', this.proposal?.details_voiceAmount_a?.split(' ')[0])
-        this.$store.commit('proposals/setStartPeriod', this.proposal?.start[0])
+        this.$store.commit('proposals/setPeg', this.proposal?.details_pegAmount_a?.split(' ')?.[0])
+        this.$store.commit('proposals/setReward', this.proposal?.details_rewardAmount_a?.split(' ')?.[0])
+        this.$store.commit('proposals/setVoice', this.proposal?.details_voiceAmount_a?.split(' ')?.[0])
+        this.$store.commit('proposals/setStartPeriod', this.proposal?.start?.[0])
         this.$store.commit('proposals/setPeriodCount', this.proposal?.details_periodCount_i)
       }
 
