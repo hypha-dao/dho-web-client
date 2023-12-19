@@ -3,6 +3,9 @@ name: EOS - Build and Deploy to Production - MainNet
 on:
   release:
     types: [published]
+  push:
+    branches: 
+      - feat/add-support-for-dgraph-cloud-with-namespaces
       
 jobs:
   build:
