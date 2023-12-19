@@ -102,7 +102,6 @@ export default {
         proposalType === 'assignment' &&
         (
           !this.annualUsdSalary ||
-          this.deferred < 1 ||
           this.commitment < 1 ||
           !this.isValidCommitment(this.commitment) ||
           !this.isValidDeferred(this.deferred))) {
@@ -124,7 +123,7 @@ export default {
 
     isFounderRole: {
       get () {
-        return this.$store.state.proposals.draft.role.label === 'Founders' &&
+        return this.$store.state.proposals.draft.role?.label === 'Founders' &&
           this.$store.state.proposals.draft.tier.label === 'Founders'
       }
     },

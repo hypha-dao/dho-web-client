@@ -190,7 +190,6 @@ const STAGED_PROPOSALS_QUERY = `
 
         details_timeShareX100_i
         details_deferredPercX100_i
-
         details_state_s
         role {
           ... on Role {

@@ -136,7 +136,7 @@ export default {
     daoArchetypes: {
       query: require('~/query/archetypes/dao-archetypes.gql'),
       update: data => {
-        return data.getDao.role.map(role => {
+        return data.getDao.role?.map(role => {
           return {
             title: role.details_title_s,
             description: role.details_description_s,
