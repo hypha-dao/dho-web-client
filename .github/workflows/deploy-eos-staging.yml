@@ -77,9 +77,6 @@ jobs:
           JOIN_CONTRACT: ${{ vars.JOIN_CONTRACT }}
           JOIN_URI: 'https://join.hypha.earth/'
 
-          DOWNLOAD_WALLET_LINK_IOS: ${{vars.DOWNLOAD_WALLET_LINK_IOS}} || http://itunes.apple.com/lb/app/id1659926348
-          DOWNLOAD_WALLET_LINK_ANDROID: ${{vars.DOWNLOAD_WALLET_LINK_ANDROID}} || http://play.google.com/store/apps/details?id=earth.hypha.wallet.hypha_wallet
-
       - name: Deploy to S3 bucket
         run: aws s3 sync ./dist/spa s3://${{ vars.AWS_S3_BUCKET_STAGING}} --delete
       - name: Invalidate CloudFront

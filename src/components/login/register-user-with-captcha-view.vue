@@ -275,17 +275,10 @@ export default {
       )
     },
     downloadWallet() {
-      if (navigator.userAgent.toLowerCase().indexOf('iphone') > -1) {
-        window.open(
-          process.env.DOWNLOAD_WALLET_LINK_IOS,
-          '_blank'
-        )
-      } else if (navigator.userAgent.toLowerCase().indexOf('android') > -1) {
-        window.open(
-          process.env.DOWNLOAD_WALLET_LINK_ANDROID,
-          '_blank'
-        )
-      }
+      window.open(
+        this.inviteLink,
+        '_blank'
+      )
     },
     enterDao() {
       this.$router.push({ name: 'dashboard' })
