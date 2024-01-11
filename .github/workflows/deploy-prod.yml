@@ -67,9 +67,6 @@ jobs:
           JOIN_CONTRACT: ${{ vars.JOIN_CONTRACT }}
           JOIN_URI: 'https://join.hypha.earth/'
 
-          DOWNLOAD_WALLET_LINK_IOS: ${{vars.DOWNLOAD_WALLET_LINK_IOS}}
-          DOWNLOAD_WALLET_LINK_ANDROID: ${{vars.DOWNLOAD_WALLET_LINK_ANDROID}}
-
           DEFFERED_HYPHA_CONTRACT: ${{vars.DEFFERED_HYPHA_CONTRACT}}
 
       - name: S3 sync
