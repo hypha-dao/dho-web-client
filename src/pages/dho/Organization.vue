@@ -289,7 +289,7 @@ q-page.page-organization
         .col
           metric-link(:amount="activeAssignments" :title="$t('pages.dho.organization.activeAssignments')" icon="fas fa-coins" :link="{ link: 'search', query: { q: '', filter: 'Active', type: '4' } }")
         .col
-          metric-link(:amount="recentPayouts" :title="$t('pages.dho.organization.payouts')" icon="fas fa-coins" :link="daoSettings.isHypha ? 'treasury': null")
+          metric-link(:amount="recentPayouts" :title="$t('pages.dho.organization.payouts')" icon="fas fa-coins" link="treasury")
         .col
           metric-link(:amount="activeBadges" :title="$t('pages.dho.organization.activeBadges')" icon="fas fa-coins" :link="{ link: 'organization/assets', params: { type: 'badge' } }")
       .row.q-my-md
@@ -319,7 +319,7 @@ q-page.page-organization
       base-placeholder.full-width(v-if="!(daoBadges && daoBadges.length)" :title="$t('pages.dho.organization.badges1')" subtitle="Your organization has no badges yet. You can create one by clicking on the button below." icon="fas fa-id-badge" :actionButtons="[{label: 'Create a new badge', color: 'primary', onClick: () => routeTo('proposals/create'), disable: !this.isMember, disableTooltip: 'You must be a member'}]")
     .col-6.q-gutter-y-md.q-pl-xs.q-pt-md
       metric-link.full-width(:amount="activeAssignments" :title="$t('pages.dho.organization.activeAssignments1')" icon="fas fa-coins" :link="{ link: 'search', query: { q: '', filter: 'Active', type: '4' } }")
-      metric-link.full-width(:amount="recentPayouts" :title="$t('pages.dho.organization.payouts1')" icon="fas fa-coins" :link="daoSettings.isHypha ? 'treasury': null")
+      metric-link.full-width(:amount="recentPayouts" :title="$t('pages.dho.organization.payouts1')" icon="fas fa-coins" link="treasury")
       metric-link.full-width(:amount="activeBadges" :title="$t('pages.dho.organization.activeBadges1')" icon="fas fa-coins" :link="{ link: 'organization/assets', params: { type: 'badge' } }")
       role-assignments-widget(:assignments="daoRoleAssignments" compact isMobile="isMobile")
         template(v-slot:empty)
@@ -333,7 +333,7 @@ q-page.page-organization
         .col.q-mx-xs
           metric-link(:amount="activeAssignments" :title="$t('pages.dho.organization.activeAssignments2')" icon="fas fa-coins" :link="{ link: 'search', query: { q: 'Assignment', filter: 'Active', type: '6' } }")
         .col.q-mx-xs
-          metric-link(:amount="recentPayouts" :title="$t('pages.dho.organization.payouts2')" icon="fas fa-coins" :link="daoSettings.isHypha ? 'treasury': null")
+          metric-link(:amount="recentPayouts" :title="$t('pages.dho.organization.payouts2')" icon="fas fa-coins" link="treasury")
         .col.q-mx-xs
           metric-link(:amount="activeBadges" :title="$t('pages.dho.organization.activeBadges2')" icon="fas fa-coins" :link="{ link: 'organization/assets', params: { type: 'badge' } }")
     .row.q-my-md
