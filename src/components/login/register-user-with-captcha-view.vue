@@ -247,7 +247,6 @@ export default {
 
         query.subscribe(({ data, loading }) => {
           const value = data.queryDao
-
           // TODO: return after eos fix && value[0]?.admin?.length > 0
           if (value.length > 0) {
             this.$router.push({ path: `/${daoUrl}/` })
@@ -259,7 +258,7 @@ export default {
         Notify.create({
           color: 'negative',
           icon: 'fas fa-exclamation-circle',
-          message: error.message,
+          message: error?.message,
           position: 'bottom',
           timeout: 4000,
           actions: [
