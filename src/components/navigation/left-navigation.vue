@@ -29,14 +29,14 @@ export default {
           id: election.docId
         }
       }),
-      variables () {
+      variables() {
         return {
           daoId: this.selectedDao.docId
         }
       },
       fetchPolicy: 'no-cache',
       pollInterval: 1000,
-      skip () { return !this.selectedDao || !this.selectedDao.docId }
+      skip() { return !this.selectedDao || !this.selectedDao.docId }
     }
   },
 
@@ -61,7 +61,7 @@ export default {
     }
   },
 
-  data () {
+  data() {
     return {
       LEFT_NAVIGATION_TABS,
       expanded: false,
@@ -73,7 +73,7 @@ export default {
   computed: {
     ...mapGetters('dao', ['selectedDao']),
     ...mapGetters('accounts', ['account', 'isAdmin']),
-    activeTab () {
+    activeTab() {
       if (this.$route.name === LEFT_NAVIGATION_TABS.DASHBOARD) return LEFT_NAVIGATION_TABS.DASHBOARD
       if (this.$route.path.includes(LEFT_NAVIGATION_TABS.PROPOSALS)) return LEFT_NAVIGATION_TABS.PROPOSALS
       if (this.$route.path.includes(LEFT_NAVIGATION_TABS.MEMBERS)) return LEFT_NAVIGATION_TABS.MEMBERS
@@ -82,29 +82,29 @@ export default {
       if (this.$route.path.includes(LEFT_NAVIGATION_TABS.ELECTION)) return LEFT_NAVIGATION_TABS.ELECTION
       return null
     },
-    disabledSelector () {
+    disabledSelector() {
       if (!this.dhos) {
         return true
       }
       return false
     },
-    hasElections () {
+    hasElections() {
       return this.elections?.length
     }
   },
 
   methods: {
-    icon (dho) {
+    icon(dho) {
       if (dho.isHypha) return 'hypha-logo.svg'
       return dho.icon
     },
 
-    switchDao (url) {
+    switchDao(url) {
       this.expanded = false
       this.$router.push({ name: this.activeTab || LEFT_NAVIGATION_TABS.DASHBOARD, params: { dhoname: url } })
     },
 
-    expandSwitcher () {
+    expandSwitcher() {
       this.expanded = this.dhos.length > 1 ? !this.expanded : this.expanded
     }
   }

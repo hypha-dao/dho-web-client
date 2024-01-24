@@ -76,42 +76,42 @@ export default {
           id: election.docId
         }
       }).reverse(),
-      variables () {
+      variables() {
         return {
           daoId: this.selectedDao.docId
         }
       },
       fetchPolicy: 'no-cache',
       pollInterval: 1000, // THIS IS JUST TEMPORARY UNTIL GRAPHQL SUBSCRIPTION IS READY
-      skip () { return !this.selectedDao || !this.selectedDao.docId }
+      skip() { return !this.selectedDao || !this.selectedDao.docId }
     },
     ongoingElection: {
       query: gql`query electionsQuery ($daoId: String!) { ${ONGOING_ELECTIONS_DATA} }`,
       update: data => data.getDao.ueOngoing,
-      variables () {
+      variables() {
         return {
           daoId: this.selectedDao.docId
         }
       },
       fetchPolicy: 'no-cache',
       pollInterval: 1000, // THIS IS JUST TEMPORARY UNTIL GRAPHQL SUBSCRIPTION IS READY
-      skip () { return !this.selectedDao || !this.selectedDao.docId }
+      skip() { return !this.selectedDao || !this.selectedDao.docId }
     },
     upcomingElection: {
       query: gql`query electionsQuery ($daoId: String!) { ${UPCOMING_ELECTIONS_DATA} }`,
       update: data => data.getDao.ueUpcoming?.[0],
-      variables () {
+      variables() {
         return {
           daoId: this.selectedDao.docId
         }
       },
       fetchPolicy: 'no-cache',
       pollInterval: 1000, // THIS IS JUST TEMPORARY UNTIL GRAPHQL SUBSCRIPTION IS READY
-      skip () { return !this.selectedDao || !this.selectedDao.docId }
+      skip() { return !this.selectedDao || !this.selectedDao.docId }
     }
   },
 
-  data () {
+  data() {
     return {
       I18n,
       formatNumber,
@@ -131,11 +131,11 @@ export default {
   computed: {
     ...mapGetters('dao', ['selectedDao']),
     ...mapGetters('accounts', ['account', 'isAdmin']),
-    canStartElection () {
+    canStartElection() {
       return (!this.upcomingElection || !this.ongoingElection) && this.isAdmin
     },
 
-    upvoteElectionBanner () {
+    upvoteElectionBanner() {
       return {
         title: this.hasNextElection ? this.I18n.t('pages.dho.home.joinAsADelegate') : this.canStartElection ? this.I18n.t('pages.dho.home.startNewElections') : this.I18n.t('pages.dho.home.communityElectionsAreAbout'),
         description: this.canStartElection ? '' : this.I18n.t('pages.dho.home.weUseAFairAndInclusive')
@@ -143,12 +143,12 @@ export default {
     },
 
     hasNextElection: {
-      get () {
+      get() {
         return new Date() < new Date(this.upcomingElection?.details_startDate_t)
       }
     },
 
-    widgetTitle () {
+    widgetTitle() {
       return this.titles[Number.parseInt(this.slide) - 1]
     }
   },
@@ -163,17 +163,17 @@ export default {
     }, 1000)
   },
 
-  async activated () {
+  async activated() {
     await this.$apollo.queries.elections.refetch()
   },
 
-  beforeDestroy () {
+  beforeDestroy() {
     clearInterval(this.counterdown)
   },
 
   methods: {
     ...mapActions('dao', ['createElection']),
-    formatTimeLeft () {
+    formatTimeLeft() {
       const MS_PER_DAY = 1000 * 60 * 60 * 24
       const MS_PER_HOUR = 1000 * 60 * 60
       const MS_PER_MIN = 1000 * 60
@@ -203,19 +203,19 @@ export default {
       return 0
     },
 
-    votingTimeLeft () {
+    votingTimeLeft() {
       const end = new Date(this.upcomingElection?.details_startDate_t)
       const now = Date.now()
       const t = end - now
       return t
     },
 
-    hideUpvoteBanner () {
+    hideUpvoteBanner() {
       localStorage.setItem('showUpvoteBanner', false)
       this.isUpVoteElectionBannerVisible = false
     },
 
-    getSaturdayTimestamp () {
+    getSaturdayTimestamp() {
       const now = new Date()
       now.setDate(now.getDate() + (6 - now.getDay() + 7) % 7)
       now.setUTCHours(17)
@@ -226,7 +226,7 @@ export default {
       return startDate
     },
 
-    getLastElectionEndDate () {
+    getLastElectionEndDate() {
       const dateString = this.elections[0].endDate
       const date = new Date(dateString)
       const timestamp = date.getTime()
@@ -238,7 +238,7 @@ export default {
       }
     },
 
-    async _createElection () {
+    async _createElection() {
       const startDate = !this.elections.length ? this.getSaturdayTimestamp() : this.getLastElectionEndDate()
       await this.createElection({
         startDate: startDate,
@@ -248,7 +248,7 @@ export default {
       })
     },
 
-    visitToEden () {
+    visitToEden() {
       window.open(EDEN_COMMUNITY_LINK, '_blank')
     }
   }
@@ -286,8 +286,8 @@ q-page.page-election
             .row.q-pt-md
               //- Temporarily hidden
               //- .col.flex.justify-center(:style="{ 'border-right': '1px solid #242f5d' }")
-                //- .h-h6 {{ participants }}
-                .full-width.flex.justify-center.text-secondary {{ $t('pages.dho.home.participants') }}
+              //- .h-h6 {{ participants }}
+              .full-width.flex.justify-center.text-secondary {{ $t('pages.dho.home.participants') }}
               //- .col.flex.justify-center
                 .h-h6 $ {{ formatNumber(treasury) }}
                 .full-width.flex.justify-center.text-secondary {{ $t('pages.dho.home.treasury') }}

@@ -36,7 +36,7 @@ export default {
     voteCount: Number
   },
 
-  data () {
+  data() {
     return {
       page: 0,
       size: 5,
@@ -49,17 +49,17 @@ export default {
     votes: {
       query: gql`query proposalVotes($docId: String!, $first: Int!, $offset: Int!) { ${PROPOSAL_VOTES_QUERY} }`,
       update: data => data.queryVote,
-      skip () { return !this.proposalId },
-      variables () {
+      skip() { return !this.proposalId },
+      pollInterval: 1000,
+      variables() {
         return {
           docId: this.proposalId,
           first: this.size,
           offset: this.page * this.size
         }
-      },
+      }
 
       // fetchPolicy: 'no-cache',
-      pollInterval: 1000
       // subscribeToMore: {
       //   document: gql`subscription proposalVotes($docId: String!, $first: Int, $offset: Int) { ${PROPOSAL_VOTES_QUERY} }`,
       //   skip () { return !this.proposalId },
@@ -81,12 +81,12 @@ export default {
   },
 
   computed: {
-    isFirstPage () { return this.pageCount === 0 ? true : this.page + 1 === 1 },
-    isLastPage () { return this.pageCount === 0 ? true : this.page + 1 === this.pageCount },
-    isLoading () { return this.$apollo.queries.votes.loading },
-    pageCount () { return Math.ceil(this.voteCount / 5) },
+    isFirstPage() { return this.pageCount === 0 ? true : this.page + 1 === 1 },
+    isLastPage() { return this.pageCount === 0 ? true : this.page + 1 === this.pageCount },
+    isLoading() { return this.$apollo.queries.votes.loading },
+    pageCount() { return Math.ceil(this.voteCount / 5) },
 
-    votesPaginated () {
+    votesPaginated() {
       return (!this.votes || this.isLoading) ? [] : paginate(this.votes, this.page, this.size)
     }
   },
@@ -95,7 +95,7 @@ export default {
     ...mapActions('profiles', ['getVoiceToken']),
     ...mapActions('treasury', { getTreasurySupply: 'getSupply' }),
 
-    tag (vote) {
+    tag(vote) {
       if (vote.vote === 'pass') {
         return {
           label: 'Yes',
@@ -117,7 +117,7 @@ export default {
       return { label: '', color: '' }
     },
 
-    async loadVoiceTokenPercentage ({ username, strength }) {
+    async loadVoiceTokenPercentage({ username, strength }) {
       // TODO: Check if this is edge case or bad code from past
       //   if (this.proposal && this.proposal.details_ballotSupply_a) {
       //       const [supplyAmount, token] = this.proposal.details_ballotSupply_a.split(' ')
@@ -150,7 +150,7 @@ export default {
     votes: {
       immediate: true,
       deep: true,
-      async handler (votes) {
+      async handler(votes) {
         if (votes) {
           const loadedVoters = Object.keys(this.voices)
           const notLoadedVoters = votes.filter(_ => !loadedVoters.includes(_.username))

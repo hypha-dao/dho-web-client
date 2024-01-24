@@ -103,7 +103,11 @@ module.exports = function (ctx) {
         HYPHA_TOKEN_SALES_RPC_URL: process.env.HYPHA_TOKEN_SALES_RPC_URL,
         PACKAGE_VERSION: JSON.parse(packageJson).version || 0,
         HEALTH_ENDPOINT: process.env.HEALTH_ENDPOINT,
-        CHAIN_NAME: process.env.CHAIN_NAME,
+        CHAIN_NAME: process.env.CHAIN_NAME || 'telos',
+        IS_TESTNET: process.env.IS_TESTNET,
+        HYPHA_AUTH_URL:
+          process.env.HYPHA_AUTH_URL ||
+          'https://y3b2ihsdv7.execute-api.us-east-1.amazonaws.com',
         CAPTCHA_PUBLIC_KEY: process.env.CAPTCHA_PUBLIC_KEY,
         CAPTCHA_HOST: process.env.CAPTCHA_HOST,
         CAPTCHA_NETWORK: process.env.CAPTCHA_NETWORK || 'telosTestnet',
@@ -111,6 +115,12 @@ module.exports = function (ctx) {
         JOIN_CONTRACT: process.env.JOIN_CONTRACT,
         JOIN_URI: process.env.JOIN_URI,
         DEFFERED_HYPHA_CONTRACT: process.env.DEFFERED_HYPHA_CONTRACT || 'costak.hypha',
+        DOWNLOAD_WALLET_LINK_IOS:
+          process.env.DOWNLOAD_WALLET_LINK_IOS ||
+          'http://itunes.apple.com/lb/app/1659926348',
+        DOWNLOAD_WALLET_LINK_ANDROID:
+          process.env.DOWNLOAD_WALLET_LINK_ANDROID ||
+          'http://play.google.com/store/apps/details?id=earth.hypha.wallet.hypha_wallet'
       },
 
       scopeHoisting: true,

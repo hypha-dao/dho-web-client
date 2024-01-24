@@ -1,5 +1,59 @@
 # Changelog
 
+## [2.39.0](https://github.com/hypha-dao/dho-web-client/compare/v2.38.0...v2.39.0) (2023-12-19)
+
+
+### Features
+
+* pull refresh token from hypha auth service ([#2547](https://github.com/hypha-dao/dho-web-client/issues/2547)) ([47eae8f](https://github.com/hypha-dao/dho-web-client/commit/47eae8f521ef6b1486d33ffd64cc84d87fc0428c))
+
+
+### Bug Fixes
+
+* **asset-card:** hide asset card for delegate badges (#DEV-1253) ([#2554](https://github.com/hypha-dao/dho-web-client/issues/2554)) ([88f243d](https://github.com/hypha-dao/dho-web-client/commit/88f243df2405d87ef8ca9501642e9abd24b4a14e))
+* **base-banner:** home banner description (#DEV-1255) ([#2556](https://github.com/hypha-dao/dho-web-client/issues/2556)) ([ee47308](https://github.com/hypha-dao/dho-web-client/commit/ee473082ec1ff2091971885e00a48b43841b49a8))
+* **proposal-creation:** dead end bug (#DEV-1251) ([#2555](https://github.com/hypha-dao/dho-web-client/issues/2555)) ([a3d9de8](https://github.com/hypha-dao/dho-web-client/commit/a3d9de80046223f2f9d04589aa3f0895a3c68e77))
+
+## [2.38.0](https://github.com/hypha-dao/dho-web-client/compare/v2.37.1...v2.38.0) (2023-12-05)
+
+
+### Features
+
+* **locales:** added support for French language (#DEV-1242) ([#2548](https://github.com/hypha-dao/dho-web-client/issues/2548)) ([2805af8](https://github.com/hypha-dao/dho-web-client/commit/2805af88db2642855508f24550a928bdcc28812f))
+
+
+### Bug Fixes
+
+* **locales:** typo fix (#DEV-1250) ([#2551](https://github.com/hypha-dao/dho-web-client/issues/2551)) ([3a86465](https://github.com/hypha-dao/dho-web-client/commit/3a8646520a17c432715bde9c4eab793e5270c6a0))
+* **query:** added role field validation (#DEV-1240) ([#2549](https://github.com/hypha-dao/dho-web-client/issues/2549)) ([626422b](https://github.com/hypha-dao/dho-web-client/commit/626422b45608f178d556b0876026bb1cb494986c))
+* **query:** role type not filtered (#DEV-1054) ([#2550](https://github.com/hypha-dao/dho-web-client/issues/2550)) ([18bc92b](https://github.com/hypha-dao/dho-web-client/commit/18bc92b5fafa23054096d90da3c6cc30a1356745))
+
+## [2.37.1](https://github.com/hypha-dao/dho-web-client/compare/v2.37.0...v2.37.1) (2023-11-24)
+
+
+### Bug Fixes
+
+* **api:** sign transaction error message ([#2544](https://github.com/hypha-dao/dho-web-client/issues/2544)) ([ba7a372](https://github.com/hypha-dao/dho-web-client/commit/ba7a3727d3372d226d7868e0c33f7a8d4882bfa6))
+* **onboarding:** create dao flow ([#2541](https://github.com/hypha-dao/dho-web-client/issues/2541)) ([4bc5656](https://github.com/hypha-dao/dho-web-client/commit/4bc5656639e97946529a78671f48e3abc8d0144c))
+* **onboarding:** remove download icon from login button ([#2538](https://github.com/hypha-dao/dho-web-client/issues/2538)) ([4fea35a](https://github.com/hypha-dao/dho-web-client/commit/4fea35a6e9e7362056042cce663c58cb54c0a6c3))
+* **onboarding:** required affiliate field (#DEV-1238) ([#2543](https://github.com/hypha-dao/dho-web-client/issues/2543)) ([941e95a](https://github.com/hypha-dao/dho-web-client/commit/941e95aabd47882d9dbd6450ccbe1e654cc93ef7))
+* **onboarding:** skip for now button disable state (#DEV-1237) ([#2542](https://github.com/hypha-dao/dho-web-client/issues/2542)) ([72f24c7](https://github.com/hypha-dao/dho-web-client/commit/72f24c791ed303d3b99392157dc10c769d76fd42))
+* **organization:** duplicate daos in organization page (#DEV-1234) ([#2540](https://github.com/hypha-dao/dho-web-client/issues/2540)) ([793a34e](https://github.com/hypha-dao/dho-web-client/commit/793a34ee87f084b9ef4a11a0a94803021bdd4329))
+* **organization:** recent payouts query (#DEV-1235) ([#2539](https://github.com/hypha-dao/dho-web-client/issues/2539)) ([f7cd2ea](https://github.com/hypha-dao/dho-web-client/commit/f7cd2ea863db19af310354bc3791da1a93c9a37f))
+
+## [2.37.0](https://github.com/hypha-dao/dho-web-client/compare/v2.36.1...v2.37.0) (2023-11-10)
+
+
+### Features
+
+* **wallet:** add send function ([#2527](https://github.com/hypha-dao/dho-web-client/issues/2527)) ([0616a8b](https://github.com/hypha-dao/dho-web-client/commit/0616a8b0ed7e900576d06a164f122bc1c5e1bb20))
+
+
+### Bug Fixes
+
+* **onboarding:** requirements for email and affiliate fields (#DEV-1009) ([#2533](https://github.com/hypha-dao/dho-web-client/issues/2533)) ([dba24f5](https://github.com/hypha-dao/dho-web-client/commit/dba24f5d738ef671c033baa60bfee7a1601bcc1e))
+* **proposal:** editing policy proposal (#DEV-1011) ([#2534](https://github.com/hypha-dao/dho-web-client/issues/2534)) ([71ce489](https://github.com/hypha-dao/dho-web-client/commit/71ce4898bcec0f291da3b82fa773bfa0c1d5ef81))
+
 ## [2.36.1](https://github.com/hypha-dao/dho-web-client/compare/v2.36.0...v2.36.1) (2023-11-06)
 
 
