@@ -114,8 +114,7 @@ module.exports = function (ctx) {
         LOGIN_CONTRACT: process.env.LOGIN_CONTRACT,
         JOIN_CONTRACT: process.env.JOIN_CONTRACT,
         JOIN_URI: process.env.JOIN_URI,
-        DEFFERED_HYPHA_CONTRACT:
-          process.env.DEFFERED_HYPHA_CONTRACT || 'costak.hypha',
+        DEFFERED_HYPHA_CONTRACT: process.env.DEFFERED_HYPHA_CONTRACT || 'costak.hypha',
         DOWNLOAD_WALLET_LINK_IOS:
           process.env.DOWNLOAD_WALLET_LINK_IOS ||
           'http://itunes.apple.com/lb/app/1659926348',
