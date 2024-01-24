@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.39.1](https://github.com/hypha-dao/dho-web-client/compare/v2.39.0...v2.39.1) (2024-01-24)
+
+
+### Bug Fixes
+
+* **metric-link:** link button in payout metric-link (#DEV-1257) ([#2560](https://github.com/hypha-dao/dho-web-client/issues/2560)) ([d5da5c9](https://github.com/hypha-dao/dho-web-client/commit/d5da5c9f4444b3e1ddd6c9610989ada697812f70))
+* **onboarding:** download wallet link (#DEV-1246) ([#2559](https://github.com/hypha-dao/dho-web-client/issues/2559)) ([e580b3a](https://github.com/hypha-dao/dho-web-client/commit/e580b3acb371cf4fd68d5707f7fca2e9ac649b03))
+
 ## [2.39.0](https://github.com/hypha-dao/dho-web-client/compare/v2.38.0...v2.39.0) (2023-12-19)
 
 
