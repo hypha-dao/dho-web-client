@@ -135,6 +135,9 @@
            "text-color":{
               "label":"Text color"
            },
+           "documentation-url":{
+              "label": "Documentation URL"
+           },
            "sample-text":"This text must be visible in both colors"
         },
         "nav":{

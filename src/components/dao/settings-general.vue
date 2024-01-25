@@ -99,6 +99,23 @@ export default {
               v-model='form.url'
             )
             q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") {{ $t('common.onlyDaoAdmins') }}
+      .col-12.col-md-4(:class="{'q-mt-sm': !$q.screen.gt.md}")
+        label.h-label {{ $t('configuration.settings-general.form.documentation-url.label') }}
+        .row.items-center
+          q-input.q-my-sm.col(
+            :debounce="200"
+            :disable="!isAdmin"
+            bg-color="white"
+            color="accent"
+            dense
+            lazy-rules
+            outlined
+            placeholder="Documentation URL"
+            ref="name"
+            rounded
+            v-model='form.documentationUrl'
+          )
+          q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") {{ $t('common.onlyDaoAdmins') }}
 
       .full-width.q-mt-sm
         label.h-label {{ $t('configuration.settings-general.form.purpose.label') }}
