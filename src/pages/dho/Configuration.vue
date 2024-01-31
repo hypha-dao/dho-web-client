@@ -11,6 +11,7 @@ const settingsMapper = (data) => {
     ...(exist(name) ? { daoTitle: name } : {}),
     ...(exist(purpose) ? { daoDescription: purpose } : {}),
     ...(exist(url) ? { daoUrl: url } : {}),
+    ...(exist(form.documentationUrl) ? { documentationUrl: form.documentationUrl } : {}),
 
     ...(exist(form.proposalsCreationEnabled) ? { proposalsCreationEnabled: form.proposalsCreationEnabled ? 1 : 0 } : {}),
 
@@ -39,6 +40,7 @@ const defaultSettings = {
   title: '',
   description: '',
   url: '',
+  documentationUrl: '',
   primaryColor: '#242f5d',
   secondaryColor: '#3F64EE',
   textColor: '#ffffff',
@@ -126,6 +128,7 @@ export default {
         name: this.daoSettings?.title ? this.daoSettings?.title : defaultSettings.title,
         url: this.daoSettings?.url ? this.daoSettings?.url : defaultSettings.url,
         purpose: this.daoSettings?.description ? this.daoSettings?.description : defaultSettings.description,
+        documentationUrl: this.daoSettings?.settings_documentationURL_s ? this.daoSettings?.settings_documentationURL_s : defaultSettings.documentationUrl,
 
         primaryColor: this.daoSettings?.primaryColor ? this.daoSettings?.primaryColor : defaultSettings.primaryColor,
         secondaryColor: this.daoSettings?.secondaryColor ? this.daoSettings?.secondaryColor : defaultSettings.secondaryColor,
