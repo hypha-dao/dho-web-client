@@ -2,6 +2,536 @@
 import { mapGetters } from 'vuex'
 import { getProposalChipFilters } from '../../utils/proposal-filter'
 import { PROPOSAL_STATE } from '~/const'
+import gql from 'graphql-tag'
+
+const ARCHIVED_PROPOSALS_QUERY = `
+queryDao(filter: { docId: { eq: $docId } }) {
+  details_daoName_n
+  docId
+  votable(first: $first, offset: $offset, order: { desc: createdDate }) {
+    docId
+    type
+
+    ... on Poll {
+      ballot_expiration_t
+      details_title_s
+      details_description_s
+      details_state_s
+      creator
+      createdDate
+      details_ballotQuorum_i
+      details_ballotSupply_a
+      details_ballotAlignment_i
+      vote {
+        vote_voter_n
+        vote_vote_s
+      }
+      votetally {
+        ... on VoteTally {
+          pass_votePower_a
+          fail_votePower_a
+          abstain_votePower_a
+          creator
+          createdDate
+        }
+      }
+
+      cmntsect {
+        docId
+        comment {
+          id: docId
+          deletedStatus: comment_deleted_i
+        }
+      }
+    }
+
+    ... on Budget {
+      details_title_s
+      details_description_s
+      details_state_s
+      circle {
+        docId
+      }
+      details_ballotQuorum_i
+      details_ballotSupply_a
+      details_ballotAlignment_i
+      details_pegAmount_a
+      details_voiceAmount_a
+      details_rewardAmount_a
+      creator
+      createdDate
+      vote {
+        vote_voter_n
+        vote_vote_s
+      }
+      votetally {
+        ... on VoteTally {
+          pass_votePower_a
+          fail_votePower_a
+          abstain_votePower_a
+          creator
+          createdDate
+        }
+      }
+
+      cmntsect {
+        docId
+        comment {
+          id: docId
+          deletedStatus: comment_deleted_i
+        }
+      }
+    }
+
+    ... on Questcomplet {
+      ballot_expiration_t
+
+      creator
+      createdDate
+
+      details_title_s
+      details_description_s
+      details_state_s
+      details_ballotQuorum_i
+      details_ballotSupply_a
+      details_ballotAlignment_i
+      vote {
+        vote_voter_n
+        vote_vote_s
+      }
+      votetally {
+        ... on VoteTally {
+          pass_votePower_a
+          fail_votePower_a
+          abstain_votePower_a
+          creator
+          createdDate
+        }
+      }
+
+      cmntsect {
+        docId
+        comment {
+          id: docId
+          deletedStatus: comment_deleted_i
+        }
+      }
+    }
+
+    ... on Queststart {
+      ballot_expiration_t
+
+      creator
+      createdDate
+
+      details_title_s
+      details_description_s
+      details_state_s
+      details_ballotQuorum_i
+      details_ballotSupply_a
+      details_ballotAlignment_i
+      vote {
+        vote_voter_n
+        vote_vote_s
+      }
+      votetally {
+        ... on VoteTally {
+          pass_votePower_a
+          fail_votePower_a
+          abstain_votePower_a
+          creator
+          createdDate
+        }
+      }
+
+      cmntsect {
+        docId
+        comment {
+          id: docId
+          deletedStatus: comment_deleted_i
+        }
+      }
+    }
+
+    ... on Policy {
+      ballot_expiration_t
+
+      creator
+      createdDate
+
+      details_title_s
+      details_description_s
+      details_state_s
+      details_ballotQuorum_i
+      details_ballotSupply_a
+      details_ballotAlignment_i
+      vote {
+        vote_voter_n
+        vote_vote_s
+      }
+      votetally {
+        ... on VoteTally {
+          pass_votePower_a
+          fail_votePower_a
+          abstain_votePower_a
+          creator
+          createdDate
+        }
+      }
+
+      cmntsect {
+        docId
+        comment {
+          id: docId
+          deletedStatus: comment_deleted_i
+        }
+      }
+    }
+
+    ... on Circle {
+      details_dao_i
+      details_state_s
+      
+      details_autoApprove_i
+
+      details_title_s
+      details_description_s
+
+      ballot_expiration_t
+      creator
+      createdDate
+      details_ballotQuorum_i
+      details_ballotSupply_a
+      details_ballotAlignment_i
+      vote {
+        vote_voter_n
+        vote_vote_s
+      }
+      votetally {
+        ... on VoteTally {
+          pass_votePower_a
+          fail_votePower_a
+          abstain_votePower_a
+          creator
+          createdDate
+        }
+      }
+
+      cmntsect {
+        docId
+        comment {
+          id: docId
+          deletedStatus: comment_deleted_i
+        }
+      }
+    }
+
+    ... on Payout {
+      details_dao_i
+      details_state_s
+
+      details_title_s
+      details_description_s
+      details_url_s
+
+      details_usdAmount_a
+      details_deferredPercX100_i
+
+      details_pegAmount_a
+      details_rewardAmount_a
+      details_voiceAmount_a
+      details_ballotQuorum_i
+      details_ballotSupply_a
+      details_ballotAlignment_i
+      vote {
+        vote_voter_n
+        vote_vote_s
+      }
+      votetally {
+        ... on VoteTally {
+          pass_votePower_a
+          fail_votePower_a
+          abstain_votePower_a
+          creator
+          createdDate
+        }
+      }
+
+      ballot_expiration_t
+      creator
+      createdDate
+      details_owner_n
+      cmntsect {
+        docId
+        comment {
+          id: docId
+          deletedStatus: comment_deleted_i
+        }
+      }
+    }
+
+    ... on Assignment {
+      creator
+      createdDate
+
+      ballot_expiration_t
+
+      details_title_s
+      details_description_s
+
+      details_assignee_n
+      details_periodCount_i
+      details_ballotQuorum_i
+      details_ballotSupply_a
+      details_ballotAlignment_i
+      vote {
+        vote_voter_n
+        vote_vote_s
+      }
+      votetally {
+        ... on VoteTally {
+          pass_votePower_a
+          fail_votePower_a
+          abstain_votePower_a
+          creator
+          createdDate
+        }
+      }
+
+      salaryband {
+        details_annualUsdSalary_a
+      }
+
+      start {
+        details_startTime_t
+      }
+      claimed {
+        docId
+      }
+
+      details_pegSalaryPerPeriod_a
+      details_rewardSalaryPerPeriod_a
+      details_voiceSalaryPerPeriod_a
+
+      details_timeShareX100_i
+      details_deferredPercX100_i
+
+      details_state_s
+      role {
+        ... on Role {
+          type
+          docId
+          details_state_s
+          details_title_s
+          details_description_s
+          details_annualUsdSalary_a
+          details_minDeferredX100_i
+          details_minTimeShareX100_i
+        }
+      }
+      details_assignee_n
+      cmntsect {
+        docId
+        comment {
+          id: docId
+          deletedStatus: comment_deleted_i
+        }
+      }
+    }
+
+    ... on Assignbadge {
+      details_description_s
+      details_title_s
+      ballot_expiration_t
+      details_state_s
+      details_periodCount_i
+      details_ballotQuorum_i
+      details_ballotSupply_a
+      details_ballotAlignment_i
+      details_autoApprove_i
+      vote {
+        vote_voter_n
+        vote_vote_s
+      }
+      votetally {
+        ... on VoteTally {
+          pass_votePower_a
+          fail_votePower_a
+          abstain_votePower_a
+          creator
+          createdDate
+        }
+      }
+      badge {
+        details_icon_s
+        details_pegCoefficientX10000_i
+        details_voiceCoefficientX10000_i
+        details_rewardCoefficientX10000_i
+      }
+      details_startPeriod_i
+      details_assignee_n
+      createdDate
+      creator
+      cmntsect {
+        docId
+        comment {
+          id: docId
+          deletedStatus: comment_deleted_i
+        }
+      }
+    }
+
+    ... on Role {
+      details_autoApprove_i
+      ballot_expiration_t
+      details_title_s
+      details_description_s
+      details_annualUsdSalary_a
+      details_minDeferredX100_i
+      details_state_s
+      details_ballotQuorum_i
+      details_ballotSupply_a
+      details_ballotAlignment_i
+      details_minTimeShareX100_i
+      vote {
+        vote_voter_n
+        vote_vote_s
+      }
+      votetally {
+        ... on VoteTally {
+          pass_votePower_a
+          fail_votePower_a
+          abstain_votePower_a
+          creator
+          createdDate
+        }
+      }
+      details_owner_n
+      createdDate
+      creator
+      cmntsect {
+        docId
+        comment {
+          id: docId
+          deletedStatus: comment_deleted_i
+        }
+      }
+    }
+
+    ... on Badge {
+      creator
+      createdDate
+
+      ballot_expiration_t
+      details_title_s
+      details_description_s
+      details_pegCoefficientX10000_i
+      details_voiceCoefficientX10000_i
+      details_rewardCoefficientX10000_i
+      details_icon_s
+      details_state_s
+      details_maxCycles_i
+      details_ballotQuorum_i
+      details_ballotSupply_a
+      details_ballotAlignment_i
+      vote {
+        vote_voter_n
+        vote_vote_s
+      }
+      votetally {
+        ... on VoteTally {
+          pass_votePower_a
+          fail_votePower_a
+          abstain_votePower_a
+          creator
+          createdDate
+        }
+      }
+      system_proposer_n
+      cmntsect {
+        docId
+        comment {
+          id: docId
+          deletedStatus: comment_deleted_i
+        }
+      }
+    }
+
+    ... on Edit {
+      details_dao_i
+      details_state_s
+
+      creator
+      details_ballotTitle_s
+      details_ballotDescription_s
+      ballot_expiration_t
+      details_assignee_n
+      details_periodCount_i
+      details_ballotQuorum_i
+      details_ballotSupply_a
+      details_ballotAlignment_i
+      details_timeShareX100_i
+      details_deferredPercX100_i
+      details_state_s
+      createdDate
+      vote {
+        vote_voter_n
+        vote_vote_s
+      }
+      votetally {
+        ... on VoteTally {
+          pass_votePower_a
+          fail_votePower_a
+          abstain_votePower_a
+          creator
+          createdDate
+        }
+      }
+      original {
+        __typename
+        ... on Assignbadge {
+          details_title_s
+          details_description_s
+          start {
+            details_startTime_t
+          }
+          badge {
+            details_title_s
+          }
+        }
+        ... on Assignment {
+          details_title_s
+          details_description_s
+          claimed {
+            docId
+          }
+          start {
+            details_startTime_t
+          }
+          details_pegSalaryPerPeriod_a
+          details_rewardSalaryPerPeriod_a
+          details_voiceSalaryPerPeriod_a
+          role {
+            ... on Role {
+              details_title_s
+              details_annualUsdSalary_a
+              details_minDeferredX100_i
+            }
+          }
+        }
+      }
+
+      cmntsect {
+        docId
+        comment {
+          id: docId
+          deletedStatus: comment_deleted_i
+        }
+      }
+    }
+  }
+}
+`
 
 export default {
   name: 'proposal-history',
@@ -19,8 +549,8 @@ export default {
 
   apollo: {
     archivedProposals: {
-      skip: true,
-      query: () => require('../../query/proposals/dao-proposals-history.gql'),
+      skip: false,
+      query: gql`query historyProposals($docId: String!, $first: Int!, $offset: Int!) {${ARCHIVED_PROPOSALS_QUERY}}`,
       update: data => data?.queryDao[0]?.votable,
       variables () {
         return {
@@ -65,14 +595,12 @@ export default {
 
     filteredProposals () {
       if (!this.archivedProposals) return []
-
       const enabledFilters = this.filters.filter(filter => filter.enabled)
       return this.archivedProposals.filter((proposal) => {
         return enabledFilters.some((filter) => {
           return filter.filter(proposal) &&
             proposal.details_state_s !== PROPOSAL_STATE.DRAFTED &&
             proposal.details_state_s !== PROPOSAL_STATE.PROPOSED &&
-            !proposal.details_autoApprove_i &&
             proposal.creator !== 'dao.hypha' &&
             (!this.textFilter || this.textFilter.length === 0 ||
             (proposal.details_title_s?.toLocaleLowerCase() || '').includes(this.textFilter.toLocaleLowerCase()))

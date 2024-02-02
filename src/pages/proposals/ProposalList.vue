@@ -3,7 +3,6 @@ import { mapGetters } from 'vuex'
 import ipfsy from '~/utils/ipfsy'
 import { getProposalChipFilters } from '../../utils/proposal-filter'
 import gql from 'graphql-tag'
-import { NUMBER_OF_SYSTEM_PROPOSALS } from '~/const'
 
 const STAGED_PROPOSALS_QUERY = `
   queryDao(filter: { docId: { eq: $docId } }) {
@@ -473,10 +472,10 @@ export default {
         return {
           active: data.queryDao[0].proposalAggregate.count,
           staging: data.queryDao[0].stagingpropAggregate.count,
-          archived: (data.queryDao[0].passedpropsAggregate.count + data.queryDao[0].failedpropsAggregate.count) - NUMBER_OF_SYSTEM_PROPOSALS
+          archived: (data.queryDao[0].passedpropsAggregate.count + data.queryDao[0].failedpropsAggregate.count)
         }
       },
-      variables() { return { docId: this.selectedDao.docId } },
+      variables() { return { docId: this.selectedDao.docId, systemAccount: 'dao.hypha' } },
       skip() { return !this.selectedDao?.docId },
       fetchPolicy: 'no-cache'
     }
