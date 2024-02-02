@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.39.2](https://github.com/hypha-dao/dho-web-client/compare/v2.39.1...v2.39.2) (2024-02-02)
+
+
+### Bug Fixes
+
+* **proposals-history:** proposals count and proposals displaying in history page (#DEV-1245) ([#2567](https://github.com/hypha-dao/dho-web-client/issues/2567)) ([7099e8e](https://github.com/hypha-dao/dho-web-client/commit/7099e8ee75e42e7896a74e0b482969d2a29fc884))
+* **settings:** returned old parameter documentation url (#DEV-1258) ([#2565](https://github.com/hypha-dao/dho-web-client/issues/2565)) ([5f4370a](https://github.com/hypha-dao/dho-web-client/commit/5f4370a49d082f6369515bf5155200a7cfc7d11d))
+
 ## [2.39.1](https://github.com/hypha-dao/dho-web-client/compare/v2.39.0...v2.39.1) (2024-01-24)
 
 
