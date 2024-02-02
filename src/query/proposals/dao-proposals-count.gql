@@ -1,4 +1,4 @@
-query proposalsCount ($docId: String!) {
+query proposalsCount ($docId: String!, $systemAccount: String!) {
   queryDao (filter: { docId: { eq: $docId }}) {
     docId
     proposalAggregate {
@@ -10,10 +10,10 @@ query proposalsCount ($docId: String!) {
     stagingpropAggregate {
       count
     }
-    passedpropsAggregate {
+    passedpropsAggregate(filter: {not: {creator: {eq: $systemAccount}}}) {
       count
     }
-    failedpropsAggregate {
+    failedpropsAggregate(filter: {not: {creator: {eq: $systemAccount}}}) {
       count
     }
   }
