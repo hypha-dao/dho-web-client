@@ -135,6 +135,9 @@
         "text-color": {
           "label": "文字颜色"
         },
+        "documentation-url":{
+          "label": "文档 URL"
+        },
         "sample-text": "此文本必须以两种颜色显示"
       },
       "nav": {

@@ -135,6 +135,9 @@
         "text-color": {
           "label": "텍스트 색상"
         },
+        "documentation-url":{
+          "label": "문서 URL"
+        },
         "sample-text": "이 텍스트는 두 가지 색상으로 모두 표시되어야 합니다."
       },
       "nav": {
