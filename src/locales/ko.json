@@ -1,6 +1,7 @@
 {
   "actions": {
-    "delete": "삭제"
+    "delete": "삭제",
+    "remove":"제거하다"
   },
   "messages": {
     "linkCopied": "링크가 복사되었습니다"

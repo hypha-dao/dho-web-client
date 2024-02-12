@@ -1,6 +1,7 @@
 {
   "actions": {
-    "delete": "Избриши"
+    "delete": "Избриши",
+    "remove":"Уклони"
   },
   "messages": {
     "linkCopied": "Веза је копирана"

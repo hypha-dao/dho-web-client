@@ -64,7 +64,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters('accounts', ['isEnroller']),
+    ...mapGetters('accounts', ['isAdmin', 'isEnroller']),
 
     card () { return this.view === 'card' },
     list () { return this.view === 'list' },
@@ -266,10 +266,27 @@ export default {
 </script>
 
 <template lang="pug">
-widget-editable.q-pa-md(:class="{ 'full-width': list, 'cursor-pointer': !editButton && clickable }" :editable="editButton" :savable="savable" @click.native="(!editButton && clickable) ? onClick() : null" @onCancel="cancel" @onEdit="onEdit" @onFail="resetForm" @onSave="save" no-padding="no-padding")
+widget-editable.relative-position.q-pa-md(:class="{ 'full-width': list, 'cursor-pointer': !editButton && clickable }" :editable="editButton" :savable="savable" @click.native="(!editButton && clickable) ? onClick() : null" @onCancel="cancel" @onEdit="onEdit" @onFail="resetForm" @onSave="save" no-padding="no-padding")
   .flex.justify-center.q-mb-sm(v-if="isCommunityMember || isCoreMember")
     chips(:tags="[{ outline: false, color: 'secondary', label: $t('profiles.profile-card.community') }]" v-if="isCommunityMember" chipSize="sm")
     chips(:tags="[{ outline: false, color: 'primary', label: $t('profiles.profile-card.coreTeam') }]" v-if="isCoreMember" chipSize="sm")
+
+  .absolute.z-topq-pa-sm(v-if="!isApplicant" :style="{ 'top': '0px', 'right': '0px' }")
+    q-btn.q-pa-xs(
+      @click="e => e.stopPropagation()"
+      color="primary"
+      dense
+      flat
+      icon="fas fa-ellipsis-v"
+      round
+      size="sm"
+      v-if="isAdmin"
+    )
+      q-menu
+        q-list(dense)
+          q-item(@click="$emit('remove', username)" clickable v-close-popup)
+            q-item-section {{ $t('actions.remove') }}
+
   .row.items-arround.flex(v-if="!editable" :style="{ 'height': isElection ? '230px' : card ? '324px' : '80px' }")
     .col-auto(:class="{ 'col-12': card, 'q-pr-xl': list}")
       .column.relative(:class="{ 'items-center': card }")
@@ -306,11 +323,19 @@ widget-editable.q-pa-md(:class="{ 'full-width': list, 'cursor-pointer': !editBut
           .text-grey-7.h-b2.q-px-xs {{ voiceTokenPercentage }}
             | %
           .text-grey-7.h-b2 {{ voiceToken.token }}
+
     .col-auto(:class="{ 'col-12': card, 'col-7': isEnroller, 'q-px-xs': card }" v-if="isApplicant")
       .row.items-center.justify-end.full-height
         .col-4(:class="{ 'text-center': card , 'col-12': card, 'q-mt-md': card, 'justify-end flex': $q.screen.gt.md }" v-if="isEnroller")
           q-btn(:style="{ 'border-radius': '50%' }" :disable="!canEnroll" :loading="submittingEnroll" :icon="'fas fa-times'" @click="onRemoveApplicant" color="negative" no-caps rounded unelevated)
           q-btn.q-ml-xs(:style="{ 'border-radius': '50%' }" :disable="!canEnroll" :loading="submittingEnroll" :icon="'fas fa-check'" @click="onEnroll" color="positive" no-caps rounded unelevated)
+
+    //- .col-auto(:class="{ 'col-12': card, 'col-7': isEnroller, 'q-px-xs': card }" v-if="isAdmin")
+    //-   .row.items-center.justify-end.full-height
+    //-     .col-4(:class="{ 'text-center': card , 'col-12': card, 'q-mt-md': card, 'justify-end flex': $q.screen.gt.md }" v-if="isEnroller")
+    //-       q-btn(:style="{ 'border-radius': '50%' }" :disable="!canEnroll" :loading="submittingEnroll" :icon="'fas fa-times'" @click="onRemoveApplicant" color="negative" no-caps rounded unelevated)
+    //-       q-btn.q-ml-xs(:style="{ 'border-radius': '50%' }" :disable="!canEnroll" :loading="submittingEnroll" :icon="'fas fa-check'" @click="onEnroll" color="positive" no-caps rounded unelevated)
+
   .row.items-center(v-else :style="{ 'height': card ? '358px' : '113px' }")
     .col-2.q-pt-md.q-mb-xs.justify-center.flex(:class="{ 'col-12': card }")
       croppa.image-selector.q-mb-lg(v-model="image" :show-remove-button="false" :replace-drop="true" :canvas-color="'#3E3B46CC'" :placeholder="'UPLOAD A NEW PROFILE PIC'" :placeholder-font-size="8" :placeholder-color="'#FFFFFF'" :accept="'image/*'" :file-size-limit="4e6" :width="140" :height="140" :quality="1" prevent-white-space="prevent-white-space")
