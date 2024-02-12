@@ -1,5 +1,21 @@
 # Changelog
 
+## [2.39.2](https://github.com/hypha-dao/dho-web-client/compare/v2.39.1...v2.39.2) (2024-02-02)
+
+
+### Bug Fixes
+
+* **proposals-history:** proposals count and proposals displaying in history page (#DEV-1245) ([#2567](https://github.com/hypha-dao/dho-web-client/issues/2567)) ([7099e8e](https://github.com/hypha-dao/dho-web-client/commit/7099e8ee75e42e7896a74e0b482969d2a29fc884))
+* **settings:** returned old parameter documentation url (#DEV-1258) ([#2565](https://github.com/hypha-dao/dho-web-client/issues/2565)) ([5f4370a](https://github.com/hypha-dao/dho-web-client/commit/5f4370a49d082f6369515bf5155200a7cfc7d11d))
+
+## [2.39.1](https://github.com/hypha-dao/dho-web-client/compare/v2.39.0...v2.39.1) (2024-01-24)
+
+
+### Bug Fixes
+
+* **metric-link:** link button in payout metric-link (#DEV-1257) ([#2560](https://github.com/hypha-dao/dho-web-client/issues/2560)) ([d5da5c9](https://github.com/hypha-dao/dho-web-client/commit/d5da5c9f4444b3e1ddd6c9610989ada697812f70))
+* **onboarding:** download wallet link (#DEV-1246) ([#2559](https://github.com/hypha-dao/dho-web-client/issues/2559)) ([e580b3a](https://github.com/hypha-dao/dho-web-client/commit/e580b3acb371cf4fd68d5707f7fca2e9ac649b03))
+
 ## [2.39.0](https://github.com/hypha-dao/dho-web-client/compare/v2.38.0...v2.39.0) (2023-12-19)
 
 
