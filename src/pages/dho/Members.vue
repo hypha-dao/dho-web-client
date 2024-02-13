@@ -57,7 +57,9 @@ const DAO_CORE_MEMBERS_QUERY = `
 const STATES = Object.freeze({
   WAITING: 'WAITING',
   CREATING_LINK: 'CREATING_LINK',
-  CREATED_LINK: 'CREATED_LINK'
+  CREATED_LINK: 'CREATED_LINK',
+  REMOVING_MEMBER: 'REMOVING_MEMBER',
+  REMOVED_MEMBER: 'REMOVED_MEMBER'
 })
 
 export default {
@@ -326,7 +328,7 @@ export default {
   },
 
   methods: {
-    ...mapActions('accounts', ['applyMember']),
+    ...mapActions('accounts', ['applyMember', 'removeMembers']),
     ...mapActions('dao', ['createInviteLink']),
 
     async _applyMember () {
@@ -334,6 +336,17 @@ export default {
         this.state = STATES.CREATING_LINK
         await this.applyMember({ content: 'DAO Applicant' })
         this.state = STATES.CREATED_LINK
+      } catch (e) {
+        const message = e.message || e.cause.message
+        this.showNotification({ message, color: 'red' })
+      }
+    },
+
+    async _removeMember (account) {
+      try {
+        this.state = STATES.REMOVING_MEMBER
+        await this.removeMembers({ daoId: this.selectedDao.docId, members: [account] })
+        this.state = STATES.REMOVED_MEMBER
       } catch (e) {
         const message = e.message || e.cause.message
         this.showNotification({ message, color: 'red' })
@@ -532,6 +545,7 @@ q-page.page-members
           :loading="isLoadingDaoCoreMembers"
           :members="members"
           @loadMore="loadMoreDaoCoreMembers"
+          @removeMember="_removeMember"
           v-bind="{ canEnroll }"
         )
 

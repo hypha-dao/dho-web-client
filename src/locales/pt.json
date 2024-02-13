@@ -1,6 +1,7 @@
 {
   "actions": {
-    "delete": "Excluir"
+    "delete": "Excluir",
+    "remove":"Remover"
   },
   "messages": {
     "linkCopied": "O link foi copiado"

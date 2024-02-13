@@ -1,6 +1,7 @@
 {
   "actions": {
-    "delete": "删除"
+    "delete": "删除",
+    "remove":"消除"
   },
   "messages": {
     "linkCopied": "链接已复制"

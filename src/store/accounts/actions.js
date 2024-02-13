@@ -132,7 +132,7 @@ export const isAccountAvailable = async function (context, accountName) {
   try {
     await this.$api.getAccount(accountName)
     return false
-  } catch {}
+  } catch { }
   return true
 }
 
@@ -143,7 +143,7 @@ export const getHyphaOwners = async function ({ commit, state }) {
     const hypha = await this.$api.getAccount(process.env.DAO_CONTRACT)
     const owners = hypha.permissions.find(_ => _.perm_name === 'active').required_auth.accounts.map(_ => _.permission.actor)
     commit('setIsHyphaOwner', owners.includes(account))
-  } catch {}
+  } catch { }
   return true
 }
 
@@ -229,6 +229,23 @@ export const applyMember = async function ({ state, rootState, commit }, { conte
   if (result) {
     commit('accounts/setApplicant', true, { root: true })
   }
+  return result
+}
+
+export const removeMembers = async function ({ state, rootState, commit }, { daoId, members }) {
+  const actions = [
+    {
+      account: this.$config.contracts.dao,
+      name: 'remmember',
+      data: {
+        dao_id: daoId,
+        member_names: [...members]
+      }
+    }
+  ]
+
+  const result = await this.$api.signTransaction(actions)
+
   return result
 }
 
