@@ -1,7 +1,7 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import { copyToClipboard } from 'quasar'
-import { MEMBER_TYPE, ORIGIN } from '~/const'
+import { MEMBER_TYPE } from '~/const'
 import { documents } from '~/mixins/documents'
 import ipfsy from '~/utils/ipfsy'
 import gql from 'graphql-tag'
@@ -357,17 +357,17 @@ export default {
       try {
         this.state = STATES.CREATING_LINK
         // TODO: Remove when wallet is ready
-        const { dhoname } = this.$router.history.current.params
-        this.inviteURL = `${ORIGIN}/${dhoname}/login`
+        // const { dhoname } = this.$router.history.current.params
+        // this.inviteURL = `${ORIGIN}/${dhoname}/login`
 
-        // const invite = await this.createInviteLink()
-        // const url = new URL(process.env.JOIN_URI)
+        const invite = await this.createInviteLink()
+        const url = new URL('https://join.hypha.earth/')
 
-        // Object.keys(invite).forEach(key => {
-        //   url.searchParams.set(key, invite[key])
-        // })
+        Object.keys(invite).forEach(key => {
+          url.searchParams.set(key, invite[key])
+        })
 
-        // this.inviteURL = url.toString()
+        this.inviteURL = url.toString()
         this.state = STATES.CREATED_LINK
       } catch (e) {
         const message = e.message || e.cause.message
