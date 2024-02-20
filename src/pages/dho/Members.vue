@@ -356,12 +356,9 @@ export default {
     async _createInviteLink () {
       try {
         this.state = STATES.CREATING_LINK
-        // TODO: Remove when wallet is ready
-        // const { dhoname } = this.$router.history.current.params
-        // this.inviteURL = `${ORIGIN}/${dhoname}/login`
 
         const invite = await this.createInviteLink()
-        const url = new URL('https://join.hypha.earth/')
+        const url = new URL(process.env.JOIN_URI)
 
         Object.keys(invite).forEach(key => {
           url.searchParams.set(key, invite[key])
