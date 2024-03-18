@@ -439,8 +439,9 @@ export default {
           user: this.account
         }
       },
+      errorPolicy: 'all',
       fetchPolicy: 'no-cache',
-      pollInterval: 1000, // TODO: Swap with subscribe once dgraph is ready
+      // pollInterval: 1000, // TODO: Swap with subscribe once dgraph is ready
       subscribeToMore: {
         document: gql`subscription stageProposals($docId: String!, $first: Int, $offset: Int) { ${STAGED_PROPOSALS_QUERY} }`,
         skip() { return !this.selectedDao?.docId },
