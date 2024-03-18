@@ -77,7 +77,6 @@ const defaultSettings = {
 
 const TABS = Object.freeze({
   GENERAL: 'GENERAL',
-  PLANS_AND_BILLING: 'PLANS_AND_BILLING',
   STRUCTURE: 'STRUCTURE',
   TOKENS: 'TOKENS',
   VOTING: 'VOTING'
@@ -90,7 +89,6 @@ export default {
     MultisigModal: () => import('~/components/dao/multisig-modal.vue'),
 
     SettingsGeneral: () => import('~/components/dao/settings-general.vue'),
-    SettingsPlansBilling: () => import('~/components/dao/settings-plans-billing.vue'),
     SettingsStructure: () => import('~/components/dao/settings-structure.vue'),
     SettingsTokens: () => import('~/components/dao/settings-tokens.vue'),
     SettingsVoting: () => import('~/components/dao/settings-voting.vue')
@@ -404,13 +402,11 @@ q-page.page-configuration
     v-model="tab"
   )
     q-tab(:name="TABS.GENERAL" :label="$t('configuration.tabs.general')" :ripple="false")
-    q-tab(:name="TABS.PLANS_AND_BILLING" :label="$t('configuration.tabs.plans_and_billing')" :ripple="false")
     q-tab(:name="TABS.STRUCTURE" :label="$t('configuration.tabs.structure')" :ripple="false")
     q-tab(:name="TABS.TOKENS" :label="$t('configuration.tabs.tokens')" :ripple="false")
     q-tab(:name="TABS.VOTING" :label="$t('configuration.tabs.voting')" :ripple="false")
 
   settings-general(v-show="tab === TABS.GENERAL" v-bind="{ form, isAdmin, isHypha }" @change="onChange").q-mt-xl
-  settings-plans-billing(v-show="tab === TABS.PLANS_AND_BILLING" v-bind="{ form, isAdmin, isHypha }" @change="onChange").q-mt-xl
   settings-structure(v-show="tab === TABS.STRUCTURE" v-bind="{ form, isAdmin, isHypha }" @change="onChange").q-mt-xl
   settings-tokens(v-show="tab === TABS.TOKENS" v-bind="{ form, isAdmin, isHypha }" @change="onChange").q-mt-xl
   settings-voting(v-show="tab === TABS.VOTING" v-bind="{ form, isAdmin, isHypha }" @change="onChange").q-mt-xl
