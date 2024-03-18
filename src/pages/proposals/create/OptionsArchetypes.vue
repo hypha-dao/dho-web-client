@@ -166,7 +166,7 @@ export default {
             q-select.q-mt-xs(:options="tiers" dense dropdown-icon="fas fa-chevron-down" hide-bottom-space options-dense outlined rounded v-model="tier")
     .row.justify-center(v-else)
       .q-py-sm.q-mt-sm.text-center.full-width {{ $t('pages.proposals.create.optionsarchetypes.noArchetypesExistYet') }}
-      q-btn.text-xs.q-pa-none.q-ma-none.text-weight-900.text-secondary.text-underline(flat padding="0px" no-caps @click="$emit('changeOption','archetype')") {{ $t('pages.proposals.create.optionsarchetypes.pleaseCreateThemHere') }}
+      q-btn.text-xs.q-pa-none.q-ma-none.text-weight-900.text-secondary.text-underline(flat padding="0px" no-caps @click="$router.push({ name: 'configuration' })") {{ $t('pages.proposals.create.optionsarchetypes.pleaseCreateThemHere') }}
 
 </template>
 

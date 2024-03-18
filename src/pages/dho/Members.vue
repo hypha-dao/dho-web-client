@@ -1,7 +1,7 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import { copyToClipboard } from 'quasar'
-import { MEMBER_TYPE, ORIGIN } from '~/const'
+import { MEMBER_TYPE } from '~/const'
 import { documents } from '~/mixins/documents'
 import ipfsy from '~/utils/ipfsy'
 import gql from 'graphql-tag'
@@ -57,7 +57,9 @@ const DAO_CORE_MEMBERS_QUERY = `
 const STATES = Object.freeze({
   WAITING: 'WAITING',
   CREATING_LINK: 'CREATING_LINK',
-  CREATED_LINK: 'CREATED_LINK'
+  CREATED_LINK: 'CREATED_LINK',
+  REMOVING_MEMBER: 'REMOVING_MEMBER',
+  REMOVED_MEMBER: 'REMOVED_MEMBER'
 })
 
 export default {
@@ -326,7 +328,7 @@ export default {
   },
 
   methods: {
-    ...mapActions('accounts', ['applyMember']),
+    ...mapActions('accounts', ['applyMember', 'removeMembers']),
     ...mapActions('dao', ['createInviteLink']),
 
     async _applyMember () {
@@ -340,21 +342,29 @@ export default {
       }
     },
 
+    async _removeMember (account) {
+      try {
+        this.state = STATES.REMOVING_MEMBER
+        await this.removeMembers({ daoId: this.selectedDao.docId, members: [account] })
+        this.state = STATES.REMOVED_MEMBER
+      } catch (e) {
+        const message = e.message || e.cause.message
+        this.showNotification({ message, color: 'red' })
+      }
+    },
+
     async _createInviteLink () {
       try {
         this.state = STATES.CREATING_LINK
-        // TODO: Remove when wallet is ready
-        const { dhoname } = this.$router.history.current.params
-        this.inviteURL = `${ORIGIN}/${dhoname}/login`
 
-        // const invite = await this.createInviteLink()
-        // const url = new URL(process.env.JOIN_URI)
+        const invite = await this.createInviteLink()
+        const url = new URL(process.env.JOIN_URI)
 
-        // Object.keys(invite).forEach(key => {
-        //   url.searchParams.set(key, invite[key])
-        // })
+        Object.keys(invite).forEach(key => {
+          url.searchParams.set(key, invite[key])
+        })
 
-        // this.inviteURL = url.toString()
+        this.inviteURL = url.toString()
         this.state = STATES.CREATED_LINK
       } catch (e) {
         const message = e.message || e.cause.message
@@ -532,6 +542,7 @@ q-page.page-members
           :loading="isLoadingDaoCoreMembers"
           :members="members"
           @loadMore="loadMoreDaoCoreMembers"
+          @removeMember="_removeMember"
           v-bind="{ canEnroll }"
         )
 

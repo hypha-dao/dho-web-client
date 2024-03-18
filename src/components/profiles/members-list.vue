@@ -50,6 +50,7 @@ export default {
           :style="{width: '100%'}"
           :view="view"
           v-bind="member"
+          @remove="member => $emit('removeMember', member)"
         )
 
 </template>
