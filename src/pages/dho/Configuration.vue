@@ -56,6 +56,9 @@ const defaultSettings = {
   votingAlignmentPercent: '',
   votingQuorumPercent: '',
 
+  voiceTokenDecayPeriod: 604800,
+  voiceTokenDecayPerPeriod: 1,
+
   communityVotingEnabled: false,
   communityVotingDurationSec: 604800,
   communityVotingAlignmentPercent: 20,
@@ -140,6 +143,11 @@ export default {
         periodDurationSec: this.daoSettings?.periodDurationSec ? this.daoSettings?.periodDurationSec : defaultSettings.periodDurationSec,
         votingAlignmentPercent: this.daoSettings?.votingAlignmentPercent ? this.daoSettings?.votingAlignmentPercent : defaultSettings.votingAlignmentPercent,
         votingQuorumPercent: this.daoSettings?.votingQuorumPercent ? this.daoSettings?.votingQuorumPercent : defaultSettings.votingQuorumPercent,
+
+        voiceTokenDecayPeriod: this.daoSettings?.voiceTokenDecayPeriod ? this.daoSettings?.voiceTokenDecayPeriod : defaultSettings.voiceTokenDecayPeriod,
+        voiceTokenDecayPerPeriod: this.daoSettings?.voiceTokenDecayPerPeriod ? this.daoSettings?.voiceTokenDecayPerPeriod : defaultSettings.voiceTokenDecayPerPeriod,
+        // voiceDecayPeriod: this.daoSettings?.votingQuorumPercent ? this.daoSettings?.votingQuorumPercent : defaultSettings.votingQuorumPercent,
+        // voiceDecayPercent: map(this.daoSettings.settings_voiceTokenDecayPerPeriodX10M_i, MIN_DECAY, MAX_DECAY, 0, 100)
 
         communityVotingEnabled: this.daoSettings?.communityVotingEnabled ? this.daoSettings?.communityVotingEnabled : defaultSettings.communityVotingEnabled,
         communityVotingDurationSec: this.daoSettings?.communityVotingDurationSec ? this.daoSettings?.communityVotingDurationSec : defaultSettings.communityVotingDurationSec,
@@ -404,13 +412,11 @@ q-page.page-configuration
     v-model="tab"
   )
     q-tab(:name="TABS.GENERAL" :label="$t('configuration.tabs.general')" :ripple="false")
-    q-tab(:name="TABS.PLANS_AND_BILLING" :label="$t('configuration.tabs.plans_and_billing')" :ripple="false")
     q-tab(:name="TABS.STRUCTURE" :label="$t('configuration.tabs.structure')" :ripple="false")
     q-tab(:name="TABS.TOKENS" :label="$t('configuration.tabs.tokens')" :ripple="false")
     q-tab(:name="TABS.VOTING" :label="$t('configuration.tabs.voting')" :ripple="false")
 
   settings-general(v-show="tab === TABS.GENERAL" v-bind="{ form, isAdmin, isHypha }" @change="onChange").q-mt-xl
-  settings-plans-billing(v-show="tab === TABS.PLANS_AND_BILLING" v-bind="{ form, isAdmin, isHypha }" @change="onChange").q-mt-xl
   settings-structure(v-show="tab === TABS.STRUCTURE" v-bind="{ form, isAdmin, isHypha }" @change="onChange").q-mt-xl
   settings-tokens(v-show="tab === TABS.TOKENS" v-bind="{ form, isAdmin, isHypha }" @change="onChange").q-mt-xl
   settings-voting(v-show="tab === TABS.VOTING" v-bind="{ form, isAdmin, isHypha }" @change="onChange").q-mt-xl

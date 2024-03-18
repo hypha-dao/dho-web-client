@@ -34,7 +34,7 @@ export const createDAO = async function (context, { data, isDraft }) {
           { label: 'voting_quorum_x100', value: ['int64', data?.votingQuorumPercent] },
 
           { label: 'voice_token_decay_period', value: ['int64', 604800] },
-          { label: 'voice_token_decay_per_period_x10M', value: ['int64', 100000] },
+          // { label: 'voice_token_decay_per_period_x10M', value: ['int64', 100000] },
 
           { label: 'utility_token_multiplier', value: ['int64', data?.utilityTokenMultiplier] },
           { label: 'voice_token_multiplier', value: ['int64', data?.voiceTokenMultiplier] },
@@ -136,26 +136,36 @@ export const updateDAOSettings = async function ({ state, rootState }, { data, a
       name: 'setdaosetting',
       data: {
         dao_id: rootState.dao.docId,
-        kvs: Object.keys(data).map(key => {
-          const valueTypes = {
-            // _s for string
-            // _i for int64
-            // _n for name
-            // _t for time_point
-            // _a for asset
+        // kvs: [[
+        //   { label: 'voice_token_decay_period', value: ['int64', 1] },
+        //   { label: 'voice_token_decay_per_period_x10M', value: ['int64', 1] }
+        // ]]
 
-            number: 'int64',
-            string: 'string'
-          }
+        kvs: [
+          { key: 'voice_token_decay_period', value: ['int64', 1] },
+          { key: 'voice_token_decay_per_period_x10M', value: ['int64', 1] }
+        ]
 
-          const value = data[key]
-          const type = valueTypes[typeof value]
+        // kvs: Object.keys(data).map(key => {
+        //   const valueTypes = {
+        //     // _s for string
+        //     // _i for int64
+        //     // _n for name
+        //     // _t for time_point
+        //     // _a for asset
 
-          return {
-            key: camelToSnakeCase(key),
-            value: [type, value]
-          }
-        })
+        //     number: 'int64',
+        //     string: 'string'
+        //   }
+
+        //   const value = data[key]
+        //   const type = valueTypes[typeof value]
+
+        //   return {
+        //     key: camelToSnakeCase(key),
+        //     value: [type, value]
+        //   }
+        // })
       }
     }
     // ...(alerts.created.length > 0
@@ -1075,7 +1085,7 @@ export const createTokens = async function ({ state, rootState }, data) {
           [
             { label: 'content_group_label', value: ['string', 'voice_details'] },
             { label: 'voice_token_decay_period', value: ['int64', data?.voiceDecayPeriod] },
-            { label: 'voice_token_decay_per_period_x10M', value: ['int64', data?.voiceDecayPercent] },
+            { label: 'voice_token_decay_per_period', value: ['int64', data?.voiceDecayPercent] },
             { label: 'voice_token_multiplier', value: ['int64', data?.voiceTokenMultiplier * 100] }
           ]
         ]
