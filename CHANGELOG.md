@@ -1,5 +1,21 @@
 # Changelog
 
+## [2.40.0](https://github.com/hypha-dao/dho-web-client/compare/v2.39.2...v2.40.0) (2024-03-18)
+
+
+### Features
+
+* **members:** add magic wallet link ([c572958](https://github.com/hypha-dao/dho-web-client/commit/c572958c56c3270dfd1d28b95915b1b9b0bdb1bc))
+* **members:** add magic wallet link [#2574](https://github.com/hypha-dao/dho-web-client/issues/2574) ([faa6527](https://github.com/hypha-dao/dho-web-client/commit/faa6527ec9f5248868c461f76393795c17875819))
+* **members:** add magic wallet link [#2574](https://github.com/hypha-dao/dho-web-client/issues/2574) ([faa6527](https://github.com/hypha-dao/dho-web-client/commit/faa6527ec9f5248868c461f76393795c17875819))
+* **members:** add remove members ([#2570](https://github.com/hypha-dao/dho-web-client/issues/2570)) ([31a9e56](https://github.com/hypha-dao/dho-web-client/commit/31a9e56ff544da2ed38210be5c744815c339a547))
+
+
+### Bug Fixes
+
+* **proposal:** creation role bug ([#2573](https://github.com/hypha-dao/dho-web-client/issues/2573)) ([bd1fc78](https://github.com/hypha-dao/dho-web-client/commit/bd1fc783042b104f62eb59a185495543ac45946d))
+* **proposals:** add error policy all ([6461871](https://github.com/hypha-dao/dho-web-client/commit/6461871e1991d5230bd7d5e7a07acaf258109843))
+
 ## [2.39.2](https://github.com/hypha-dao/dho-web-client/compare/v2.39.1...v2.39.2) (2024-02-02)
 
 
