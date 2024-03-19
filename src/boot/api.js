@@ -15,7 +15,6 @@ const signTransaction = async function (actions, options = {}) {
   let transactionId = null
   let error = null
 
-  console.log(JSON.stringify(actions))
   try {
     if (this.$type === 'ual') {
       const result = await this.$ualUser.signTransaction(
