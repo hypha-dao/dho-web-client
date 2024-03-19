@@ -80,7 +80,6 @@ const defaultSettings = {
 
 const TABS = Object.freeze({
   GENERAL: 'GENERAL',
-  PLANS_AND_BILLING: 'PLANS_AND_BILLING',
   STRUCTURE: 'STRUCTURE',
   TOKENS: 'TOKENS',
   VOTING: 'VOTING'
@@ -93,7 +92,6 @@ export default {
     MultisigModal: () => import('~/components/dao/multisig-modal.vue'),
 
     SettingsGeneral: () => import('~/components/dao/settings-general.vue'),
-    SettingsPlansBilling: () => import('~/components/dao/settings-plans-billing.vue'),
     SettingsStructure: () => import('~/components/dao/settings-structure.vue'),
     SettingsTokens: () => import('~/components/dao/settings-tokens.vue'),
     SettingsVoting: () => import('~/components/dao/settings-voting.vue')

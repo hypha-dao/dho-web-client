@@ -40,11 +40,11 @@ jobs:
           PPP_ENV: 'prod'
           SENTRY_DSN: ${{ vars.SENTRY_DSN }}
           DOCUMENTATION: 'https://notepad.hypha.earth/5dC66nNXRVGpb1aTHaRJXw'
-          DGRAPH_URL: 'https://alpha.tekit.io'
+          DGRAPH_URL: 'https://hypha.us-east-1.aws.cloud.dgraph.io'          
           BLOCKCHAIN_ENDPOINTS: 'https://mainnet.telos.net'
           TLOSTO_SEEDS: 'tlosto.seeds'
           SUPPLY_CONTRACT: 'voice.hypha'
-          GRAPHQL_URI: 'https://alpha-dhomn.tekit.io/graphql'
+          GRAPHQL_URI: 'https://hypha.us-east-1.aws.cloud.dgraph.io/graphql'
           ELASTIC_SEARCH_URL: 'https://hypha.es.eu-west-1.aws.found.io:9243/dho-mainnet-documents/_search'
           ELASTIC_SEARCH_API_KEY: ${{ secrets.PROD_ELASTIC_SEARCH_API_KEY }}
           IPFS_URL: 'ipfs.infura.io'
@@ -68,6 +68,8 @@ jobs:
           JOIN_URI: 'https://join.hypha.earth/'
 
           DEFFERED_HYPHA_CONTRACT: ${{vars.DEFFERED_HYPHA_CONTRACT}}
+          CHAIN_NAME: 'telos'
+          ENV: 'prod'
 
       - name: S3 sync
         uses: jakejarvis/s3-sync-action@master
