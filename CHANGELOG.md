@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.41.0](https://github.com/hypha-dao/dho-web-client/compare/v2.40.0...v2.41.0) (2024-03-19)
+
+
+### Features
+
+* **configuration:** add voice decay ([#2581](https://github.com/hypha-dao/dho-web-client/issues/2581)) ([1b6c6f0](https://github.com/hypha-dao/dho-web-client/commit/1b6c6f093898e66e546aab692d960f79de0da5fb))
+
 ## [2.40.0](https://github.com/hypha-dao/dho-web-client/compare/v2.39.2...v2.40.0) (2024-03-18)
 
 
