@@ -114,6 +114,8 @@ export const TOKEN_TYPES = Object.freeze({
 
 export const MIN_TOKEN_MULTIPLIER = 0
 export const MAX_TOKEN_MULTIPLIER = 1
+export const MIN_DECAY = 0
+export const MAX_DECAY = 10000000
 
 export const ROUTE_NAMES = Object.freeze({
   CREATE_YOUR_DAO: 'create-your-dao',

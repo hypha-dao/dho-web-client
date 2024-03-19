@@ -37,7 +37,9 @@ const settingsMapper = (settings) => {
     periodDurationSec: settings?.settings_periodDurationSec_i,
     votingAlignmentPercent: settings?.settings_votingAlignmentX100_i,
     votingQuorumPercent: settings?.settings_votingQuorumX100_i,
+
     voiceTokenDecayPeriod: settings?.settings_voiceTokenDecayPeriod_i,
+    voiceTokenDecayPerPeriod: settings?.settings_voiceTokenDecayPerPeriodX10M_i,
 
     communityVotingEnabled: Boolean(settings?.settings_communityVotingEnabled_i),
     communityVotingDurationSec: settings?.settings_communityVotingDurationSec_i,
