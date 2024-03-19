@@ -1,5 +1,14 @@
 # Changelog
 
+## [2.42.0](https://github.com/hypha-dao/dho-web-client/compare/v2.41.0...v2.42.0) (2024-03-19)
+
+
+### Features
+
+* **deploy-prod:** add env var ([f4473ee](https://github.com/hypha-dao/dho-web-client/commit/f4473eebe81186da78a87292826579ee4326bd70))
+* **deploy-prod:** add env var ([f4473ee](https://github.com/hypha-dao/dho-web-client/commit/f4473eebe81186da78a87292826579ee4326bd70))
+* **deploy-prod:** add env var ([9796e38](https://github.com/hypha-dao/dho-web-client/commit/9796e3810f76b5240e73cbdcbad7a8e1ea25d55d))
+
 ## [2.41.0](https://github.com/hypha-dao/dho-web-client/compare/v2.40.0...v2.41.0) (2024-03-19)
 
 
