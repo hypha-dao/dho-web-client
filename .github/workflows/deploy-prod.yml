@@ -38,6 +38,7 @@ jobs:
           BLOCKCHAIN_EXPLORER_ETH: 'https://etherscan.io/tx/'
           BLOCKCHAIN_EXPLORER_EOS: 'https://bloks.io/transaction/'
           PPP_ENV: 'prod'
+          ENV: 'prod'          
           SENTRY_DSN: ${{ vars.SENTRY_DSN }}
           DOCUMENTATION: 'https://notepad.hypha.earth/5dC66nNXRVGpb1aTHaRJXw'
           DGRAPH_URL: 'https://hypha.us-east-1.aws.cloud.dgraph.io'          
