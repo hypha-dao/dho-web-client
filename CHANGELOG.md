@@ -1,5 +1,14 @@
 # Changelog
 
+## [2.42.1](https://github.com/hypha-dao/dho-web-client/compare/v2.42.0...v2.42.1) (2024-03-19)
+
+
+### Bug Fixes
+
+* **deploy-prod:** remove duplice env ([273aadd](https://github.com/hypha-dao/dho-web-client/commit/273aadd03f537604fe39e6d1fca4d902f40f68e7))
+* **deploy-prod:** remove duplice env ([273aadd](https://github.com/hypha-dao/dho-web-client/commit/273aadd03f537604fe39e6d1fca4d902f40f68e7))
+* **deploy-prod:** remove duplice env ([5324b38](https://github.com/hypha-dao/dho-web-client/commit/5324b38a3ef6d3bf403e8d7ebe49ca2b88513221))
+
 ## [2.42.0](https://github.com/hypha-dao/dho-web-client/compare/v2.41.0...v2.42.0) (2024-03-19)
 
 
