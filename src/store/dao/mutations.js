@@ -1,7 +1,6 @@
 import { PLAN, PLAN_STATUS } from '~/const'
 
 const settingsMapper = (settings) => {
-  console.table(JSON.parse(JSON.stringify(settings)))
   return {
     ...settings,
     name: settings?.settings_daoName_n,
