@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.43.0](https://github.com/hypha-dao/dho-web-client/compare/v2.42.2...v2.43.0) (2024-03-20)
+
+
+### Features
+
+* **members:** hide invite button if not member ([6670cab](https://github.com/hypha-dao/dho-web-client/commit/6670cabc25bd2ee1a35a0d0dc733afa3179ca5bc))
+
+
+### Bug Fixes
+
+* **proposal-parsing:** add check for title ([3a62ae8](https://github.com/hypha-dao/dho-web-client/commit/3a62ae807665fa7a0558a8a57b217ce75e24493e))
+
 ## [2.42.1](https://github.com/hypha-dao/dho-web-client/compare/v2.42.0...v2.42.1) (2024-03-19)
 
 
