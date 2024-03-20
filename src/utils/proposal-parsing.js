@@ -180,9 +180,9 @@ export function suspendType (proposal) {
 export function title (proposal) {
   if (proposal) {
     if (proposal.__typename === PROPOSAL_TYPE.EDIT) {
-      return proposal.original[0].details_title_s
+      return proposal?.original[0]?.details_title_s
     }
-    return proposal.details_title_s
+    return proposal?.details_title_s
   }
   return null
 }
@@ -190,15 +190,15 @@ export function subtitle (proposal) {
   if (proposal) {
     if (proposal.__typename === PROPOSAL_TYPE.SUSPEND && proposal.suspend) proposal = proposal.suspend[0]
     if (proposal.__typename === PROPOSAL_TYPE.ROLE) {
-      return proposal.role?.[0].details_title_s
+      return proposal.role?.[0]?.details_title_s
     } if (proposal.__typename === PROPOSAL_TYPE.ABILITY) {
-      return proposal.badge[0].details_title_s
+      return proposal.badge[0]?.details_title_s
     } else if (proposal.__typename === PROPOSAL_TYPE.EDIT) {
       if (proposal.original && proposal.original[0].role) {
-        return proposal.original[0].role?.[0].details_title_s
+        return proposal.original[0].role?.[0]?.details_title_s
       }
       if (proposal.original && proposal.original[0].badge) {
-        return proposal.original[0].badge[0].details_title_s
+        return proposal.original[0].badge[0]?.details_title_s
       }
     } else {
       return null
