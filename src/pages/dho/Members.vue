@@ -478,7 +478,7 @@ q-page.page-members
         .row.inline.q-pr-md(v-if="!isMember && !isApplicant && account")
           q-btn.q-px-lg.h-btn1(:disable="!daoSettings.registrationEnabled" @click="_applyMember" color="secondary" :label="$t('pages.dho.members.becomeAMember')" no-caps="no-caps" rounded text-color="white" unelevated="unelevated")
           q-tooltip(v-if="!daoSettings.registrationEnabled") {{ $t('pages.dho.members.registrationIsTemporarilyDisabled') }}
-        q-btn.q-px-lg.h-btn1(:flat="!account" @click="_createInviteLink" color="secondary" :label="$t('pages.dho.members.copyInviteLink')" no-caps="no-caps" rounded text-color="white" unelevated="unelevated")
+        q-btn.q-px-lg.h-btn1(v-if="isMember" :flat="!account" @click="_createInviteLink" color="secondary" :label="$t('pages.dho.members.copyInviteLink')" no-caps="no-caps" rounded text-color="white" unelevated="unelevated")
           q-tooltip {{ $t('pages.dho.members.sendALink') }}
 
   q-dialog(:value="isInviteModalOpen")
