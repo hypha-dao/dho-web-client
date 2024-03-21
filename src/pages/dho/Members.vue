@@ -402,11 +402,11 @@ export default {
 
     onChange (name, value) { this.$set(this, name, value) },
 
-    loadMoreDaoApplicants (page, done) {
+    async loadMoreDaoApplicants (page, done) {
+      this.isLoadingDaoApplicants = true
       if (this.daoApplicants?.length === this.applicantsCount) {
         done(true)
       }
-
       this.applicantsPagination.page += 1
 
       this.$apollo.queries.daoApplicants?.fetchMore({
@@ -418,8 +418,6 @@ export default {
           filter: this.filterObject
         },
         updateQuery: (previousResult, { fetchMoreResult }) => {
-          done()
-
           return {
             getDao: {
               __typename: fetchMoreResult.getDao.__typename,
