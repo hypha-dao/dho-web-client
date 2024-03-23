@@ -66,6 +66,7 @@ const wsLink = new WebSocketLink({
     process.env.GRAPHQL_URI.replace('https', 'wss') ||
     'wss://alpha-stts.tekit.io/graphql',
   options: {
+    connectionParams: { 'X-Dgraph-AccessToken': localStorage.getItem(hyphaAccessTokenKey) },
     reconnect: true
   }
 })
