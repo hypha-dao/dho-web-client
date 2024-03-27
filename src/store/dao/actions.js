@@ -25,6 +25,9 @@ export const createDAO = async function (context, { data, isDraft }) {
           { label: 'dao_template', value: ['int64', data?.template] },
 
           //
+          { label: 'voice_token_decay_period', value: ['int64', 604800] },
+          { label: 'voice_token_decay_per_period_x10M', value: ['int64', 100000] },
+
           { label: 'voice_token', value: ['asset', `${parseFloat(1).toFixed(data?.voiceDigits)} ${data?.voiceSymbol}`] },
           { label: 'use_seeds', value: ['int64', data?.use_seeds ? 1 : 0] },
 
@@ -33,8 +36,9 @@ export const createDAO = async function (context, { data, isDraft }) {
           { label: 'voting_alignment_x100', value: ['int64', data?.votingAlignmentPercent] },
           { label: 'voting_quorum_x100', value: ['int64', data?.votingQuorumPercent] },
 
+
           { label: 'voice_token_decay_period', value: ['int64', 604800] },
-          // { label: 'voice_token_decay_per_period_x10M', value: ['int64', 100000] },
+          { label: 'voice_token_decay_per_period_x10M', value: ['int64', 100000] },
 
           { label: 'utility_token_multiplier', value: ['int64', data?.utilityTokenMultiplier] },
           { label: 'voice_token_multiplier', value: ['int64', data?.voiceTokenMultiplier] },
