@@ -1,5 +1,14 @@
 # Changelog
 
+## [2.44.1](https://github.com/hypha-dao/dho-web-client/compare/v2.44.0...v2.44.1) (2024-03-27)
+
+
+### Bug Fixes
+
+* **createdao:** move voice decay ([a3b6087](https://github.com/hypha-dao/dho-web-client/commit/a3b608782c5516124557d667ef6bf0d027d08f7e))
+* **createdao:** move voice decay ([a3b6087](https://github.com/hypha-dao/dho-web-client/commit/a3b608782c5516124557d667ef6bf0d027d08f7e))
+* **createdao:** move voice decay ([f1c796b](https://github.com/hypha-dao/dho-web-client/commit/f1c796b678f7979a42787b7304cc5dae546c9dcb))
+
 ## [2.44.0](https://github.com/hypha-dao/dho-web-client/compare/v2.43.0...v2.44.0) (2024-03-27)
 
 
