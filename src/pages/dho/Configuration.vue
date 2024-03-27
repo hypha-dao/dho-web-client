@@ -56,6 +56,9 @@ const defaultSettings = {
   votingAlignmentPercent: '',
   votingQuorumPercent: '',
 
+  voiceTokenDecayPeriod: 604800,
+  voiceTokenDecayPerPeriod: 1,
+
   communityVotingEnabled: false,
   communityVotingDurationSec: 604800,
   communityVotingAlignmentPercent: 20,
@@ -138,6 +141,11 @@ export default {
         periodDurationSec: this.daoSettings?.periodDurationSec ? this.daoSettings?.periodDurationSec : defaultSettings.periodDurationSec,
         votingAlignmentPercent: this.daoSettings?.votingAlignmentPercent ? this.daoSettings?.votingAlignmentPercent : defaultSettings.votingAlignmentPercent,
         votingQuorumPercent: this.daoSettings?.votingQuorumPercent ? this.daoSettings?.votingQuorumPercent : defaultSettings.votingQuorumPercent,
+
+        voiceTokenDecayPeriod: this.daoSettings?.voiceTokenDecayPeriod ? this.daoSettings?.voiceTokenDecayPeriod : defaultSettings.voiceTokenDecayPeriod,
+        voiceTokenDecayPerPeriod: this.daoSettings?.voiceTokenDecayPerPeriod ? this.daoSettings?.voiceTokenDecayPerPeriod : defaultSettings.voiceTokenDecayPerPeriod,
+        // voiceDecayPeriod: this.daoSettings?.votingQuorumPercent ? this.daoSettings?.votingQuorumPercent : defaultSettings.votingQuorumPercent,
+        // voiceDecayPercent: map(this.daoSettings.settings_voiceTokenDecayPerPeriodX10M_i, MIN_DECAY, MAX_DECAY, 0, 100)
 
         communityVotingEnabled: this.daoSettings?.communityVotingEnabled ? this.daoSettings?.communityVotingEnabled : defaultSettings.communityVotingEnabled,
         communityVotingDurationSec: this.daoSettings?.communityVotingDurationSec ? this.daoSettings?.communityVotingDurationSec : defaultSettings.communityVotingDurationSec,

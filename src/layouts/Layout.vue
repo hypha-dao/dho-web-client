@@ -47,6 +47,7 @@ const ACTIVE_DAO_QUERY = `
 
       settings_voiceToken_a
       settings_voiceTokenDecayPeriod_i
+      
       settings_voiceTokenDecayPerPeriodX10M_i
       settings_voiceTokenMultiplier_i
 

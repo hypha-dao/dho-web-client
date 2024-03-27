@@ -1,5 +1,71 @@
 # Changelog
 
+## [2.44.0](https://github.com/hypha-dao/dho-web-client/compare/v2.43.0...v2.44.0) (2024-03-27)
+
+
+### Features
+
+* **apollo:** add access token to the ws link ([5132950](https://github.com/hypha-dao/dho-web-client/commit/5132950683079877fd0aa4e88bba2a7795e1247b))
+* **apollo:** add access yoken to the ws link ([f487a76](https://github.com/hypha-dao/dho-web-client/commit/f487a76ab51fb7f7cc0ced957600c56b0f565bc8))
+
+
+### Bug Fixes
+
+* **members:** applicants loading ([#2591](https://github.com/hypha-dao/dho-web-client/issues/2591)) ([dd8b977](https://github.com/hypha-dao/dho-web-client/commit/dd8b97728f00a45a6e76ea50bce2ed330e553546))
+
+## [2.43.0](https://github.com/hypha-dao/dho-web-client/compare/v2.42.2...v2.43.0) (2024-03-20)
+
+
+### Features
+
+* **members:** hide invite button if not member ([6670cab](https://github.com/hypha-dao/dho-web-client/commit/6670cabc25bd2ee1a35a0d0dc733afa3179ca5bc))
+
+
+### Bug Fixes
+
+* **proposal-parsing:** add check for title ([3a62ae8](https://github.com/hypha-dao/dho-web-client/commit/3a62ae807665fa7a0558a8a57b217ce75e24493e))
+
+## [2.42.1](https://github.com/hypha-dao/dho-web-client/compare/v2.42.0...v2.42.1) (2024-03-19)
+
+
+### Bug Fixes
+
+* **deploy-prod:** remove duplice env ([273aadd](https://github.com/hypha-dao/dho-web-client/commit/273aadd03f537604fe39e6d1fca4d902f40f68e7))
+* **deploy-prod:** remove duplice env ([273aadd](https://github.com/hypha-dao/dho-web-client/commit/273aadd03f537604fe39e6d1fca4d902f40f68e7))
+* **deploy-prod:** remove duplice env ([5324b38](https://github.com/hypha-dao/dho-web-client/commit/5324b38a3ef6d3bf403e8d7ebe49ca2b88513221))
+
+## [2.42.0](https://github.com/hypha-dao/dho-web-client/compare/v2.41.0...v2.42.0) (2024-03-19)
+
+
+### Features
+
+* **deploy-prod:** add env var ([f4473ee](https://github.com/hypha-dao/dho-web-client/commit/f4473eebe81186da78a87292826579ee4326bd70))
+* **deploy-prod:** add env var ([f4473ee](https://github.com/hypha-dao/dho-web-client/commit/f4473eebe81186da78a87292826579ee4326bd70))
+* **deploy-prod:** add env var ([9796e38](https://github.com/hypha-dao/dho-web-client/commit/9796e3810f76b5240e73cbdcbad7a8e1ea25d55d))
+
+## [2.41.0](https://github.com/hypha-dao/dho-web-client/compare/v2.40.0...v2.41.0) (2024-03-19)
+
+
+### Features
+
+* **configuration:** add voice decay ([#2581](https://github.com/hypha-dao/dho-web-client/issues/2581)) ([1b6c6f0](https://github.com/hypha-dao/dho-web-client/commit/1b6c6f093898e66e546aab692d960f79de0da5fb))
+
+## [2.40.0](https://github.com/hypha-dao/dho-web-client/compare/v2.39.2...v2.40.0) (2024-03-18)
+
+
+### Features
+
+* **members:** add magic wallet link ([c572958](https://github.com/hypha-dao/dho-web-client/commit/c572958c56c3270dfd1d28b95915b1b9b0bdb1bc))
+* **members:** add magic wallet link [#2574](https://github.com/hypha-dao/dho-web-client/issues/2574) ([faa6527](https://github.com/hypha-dao/dho-web-client/commit/faa6527ec9f5248868c461f76393795c17875819))
+* **members:** add magic wallet link [#2574](https://github.com/hypha-dao/dho-web-client/issues/2574) ([faa6527](https://github.com/hypha-dao/dho-web-client/commit/faa6527ec9f5248868c461f76393795c17875819))
+* **members:** add remove members ([#2570](https://github.com/hypha-dao/dho-web-client/issues/2570)) ([31a9e56](https://github.com/hypha-dao/dho-web-client/commit/31a9e56ff544da2ed38210be5c744815c339a547))
+
+
+### Bug Fixes
+
+* **proposal:** creation role bug ([#2573](https://github.com/hypha-dao/dho-web-client/issues/2573)) ([bd1fc78](https://github.com/hypha-dao/dho-web-client/commit/bd1fc783042b104f62eb59a185495543ac45946d))
+* **proposals:** add error policy all ([6461871](https://github.com/hypha-dao/dho-web-client/commit/6461871e1991d5230bd7d5e7a07acaf258109843))
+
 ## [2.39.2](https://github.com/hypha-dao/dho-web-client/compare/v2.39.1...v2.39.2) (2024-02-02)
 
 
