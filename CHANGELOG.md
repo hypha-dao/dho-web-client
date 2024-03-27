@@ -1,5 +1,18 @@
 # Changelog
 
+## [2.44.0](https://github.com/hypha-dao/dho-web-client/compare/v2.43.0...v2.44.0) (2024-03-27)
+
+
+### Features
+
+* **apollo:** add access token to the ws link ([5132950](https://github.com/hypha-dao/dho-web-client/commit/5132950683079877fd0aa4e88bba2a7795e1247b))
+* **apollo:** add access yoken to the ws link ([f487a76](https://github.com/hypha-dao/dho-web-client/commit/f487a76ab51fb7f7cc0ced957600c56b0f565bc8))
+
+
+### Bug Fixes
+
+* **members:** applicants loading ([#2591](https://github.com/hypha-dao/dho-web-client/issues/2591)) ([dd8b977](https://github.com/hypha-dao/dho-web-client/commit/dd8b97728f00a45a6e76ea50bce2ed330e553546))
+
 ## [2.43.0](https://github.com/hypha-dao/dho-web-client/compare/v2.42.2...v2.43.0) (2024-03-20)
 
 
