@@ -36,7 +36,6 @@ export const createDAO = async function (context, { data, isDraft }) {
           { label: 'voting_alignment_x100', value: ['int64', data?.votingAlignmentPercent] },
           { label: 'voting_quorum_x100', value: ['int64', data?.votingQuorumPercent] },
 
-
           { label: 'voice_token_decay_period', value: ['int64', 604800] },
           { label: 'voice_token_decay_per_period_x10M', value: ['int64', 100000] },
 
