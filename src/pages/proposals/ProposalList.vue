@@ -19,6 +19,20 @@ const STAGED_PROPOSALS_QUERY = `
         creator
         createdDate
 
+        vote {
+          vote_voter_n
+          vote_vote_s
+        }
+        votetally {
+          ... on VoteTally {
+            pass_votePower_a
+            fail_votePower_a
+            abstain_votePower_a
+            creator
+            createdDate
+          }
+        }
+
         cmntsect {
           docId
           comment {
@@ -40,6 +54,20 @@ const STAGED_PROPOSALS_QUERY = `
         details_rewardAmount_a
         creator
         createdDate
+
+        vote {
+          vote_voter_n
+          vote_vote_s
+        }
+        votetally {
+          ... on VoteTally {
+            pass_votePower_a
+            fail_votePower_a
+            abstain_votePower_a
+            creator
+            createdDate
+          }
+        }
 
         cmntsect {
           docId
@@ -64,6 +92,20 @@ const STAGED_PROPOSALS_QUERY = `
 
         creator
         createdDate
+
+        vote {
+          vote_voter_n
+          vote_vote_s
+        }
+        votetally {
+          ... on VoteTally {
+            pass_votePower_a
+            fail_votePower_a
+            abstain_votePower_a
+            creator
+            createdDate
+          }
+        }
 
         cmntsect {
           docId
@@ -95,6 +137,20 @@ const STAGED_PROPOSALS_QUERY = `
         creator
         createdDate
 
+        vote {
+          vote_voter_n
+          vote_vote_s
+        }
+        votetally {
+          ... on VoteTally {
+            pass_votePower_a
+            fail_votePower_a
+            abstain_votePower_a
+            creator
+            createdDate
+          }
+        }
+
         cmntsect {
           docId
           comment {
@@ -113,6 +169,20 @@ const STAGED_PROPOSALS_QUERY = `
 
         creator
         createdDate
+
+        vote {
+          vote_voter_n
+          vote_vote_s
+        }
+        votetally {
+          ... on VoteTally {
+            pass_votePower_a
+            fail_votePower_a
+            abstain_votePower_a
+            creator
+            createdDate
+          }
+        }
 
         cmntsect {
           docId
@@ -137,6 +207,20 @@ const STAGED_PROPOSALS_QUERY = `
         details_pegAmount_a
         details_rewardAmount_a
         details_voiceAmount_a
+
+        vote {
+          vote_voter_n
+          vote_vote_s
+        }
+        votetally {
+          ... on VoteTally {
+            pass_votePower_a
+            fail_votePower_a
+            abstain_votePower_a
+            creator
+            createdDate
+          }
+        }
 
         ballot_expiration_t
         creator
@@ -180,6 +264,20 @@ const STAGED_PROPOSALS_QUERY = `
             role {
               system_nodeLabel_s
             }
+          }
+        }
+
+        vote {
+          vote_voter_n
+          vote_vote_s
+        }
+        votetally {
+          ... on VoteTally {
+            pass_votePower_a
+            fail_votePower_a
+            abstain_votePower_a
+            creator
+            createdDate
           }
         }
 
@@ -232,6 +330,19 @@ const STAGED_PROPOSALS_QUERY = `
         details_autoApprove_i
         creator
         createdDate
+        vote {
+          vote_voter_n
+          vote_vote_s
+        }
+        votetally {
+          ... on VoteTally {
+            pass_votePower_a
+            fail_votePower_a
+            abstain_votePower_a
+            creator
+            createdDate
+          }
+        }
         cmntsect {
           docId
           comment {
@@ -255,6 +366,19 @@ const STAGED_PROPOSALS_QUERY = `
         details_owner_n
         createdDate
         creator
+        vote {
+          vote_voter_n
+          vote_vote_s
+        }
+        votetally {
+          ... on VoteTally {
+            pass_votePower_a
+            fail_votePower_a
+            abstain_votePower_a
+            creator
+            createdDate
+          }
+        }
         cmntsect {
           docId
           comment {
