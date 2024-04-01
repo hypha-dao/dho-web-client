@@ -108,37 +108,6 @@ export default {
           custom-period-input.q-py-sm(:disable="!isAdmin" v-model='form.votingDurationSec')
           q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") {{ $t('common.onlyDaoAdmins') }}
 
-        .col-12.col-md-4
-          label.h-label {{ $t('configuration.settings-tokens.voice.form.decayPeriod.label') }}
-          custom-period-input.q-py-sm(:disable="!isAdmin" v-model='form.voiceTokenDecayPeriod')
-          q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") {{ $t('common.onlyDaoAdmins') }}
-
-        .col-12.col-md-4
-          label.h-label {{ $t('configuration.settings-tokens.voice.form.decayPercent.label') }}
-          .row.full-width.items-center
-            .col.row.q-mr-sm
-              q-slider(
-                :disable="!isAdmin"
-                :max="100"
-                :min="0"
-                :step="1"
-                :value="map(form.voiceTokenDecayPerPeriod, MIN_DECAY, MAX_DECAY, 0, 100)"
-                @input='value => $emit("change", "voiceTokenDecayPerPeriod", map(value, 0, 100, MIN_DECAY, MAX_DECAY))'
-                color="primary"
-              )
-            .col-3
-              q-input.rounded-border.q-py-sm(
-                :disable="!isAdmin"
-                :rules="[val => val >= 0 && val <= 100]"
-                :value="map(form.voiceTokenDecayPerPeriod, MIN_DECAY, MAX_DECAY, 0, 100)"
-                @input='value => $emit("change", "voiceTokenDecayPerPeriod", map(value, 0, 100, MIN_DECAY, MAX_DECAY))'
-                dense
-                outlined
-                rounded
-                suffix="%"
-              )
-            q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") {{ $t('common.onlyDaoAdmins') }}
-
       section.row.q-mt-xl.q-col-gutter-x-md.q-mb-xl(v-show="$q.screen.gt.sm")
         template(v-for="item in $t('configuration.settings-voting.core.showcase')")
           .col(:style="{'height': '200px'}")
