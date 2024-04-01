@@ -1043,7 +1043,7 @@ export const createInviteLink = async function ({ state, rootState }, id) {
     coreMemberCount: rootState.dao.meta.memberCount,
     communityMemberCount: 0,
     inviterName: inviter.name,
-    inviterAvatar: inviter.avatar
+    inviterAvatar: '' // TODO: Return once we have url shorten inviter.avatar
   }
 }
 
