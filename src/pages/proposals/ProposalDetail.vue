@@ -1418,9 +1418,16 @@ export default {
       this.$store.commit('proposals/setDescription', this.proposal?.details_description_s)
       // this.$store.commit('proposals/setCircle', this.proposal?.details_description_s)
 
-      this.$store.commit('proposals/setUsdAmount', parseFloat(this?.proposal?.details_usdAmount_a))
-      this.$store.commit('proposals/setCommitment', parseFloat(this?.proposal?.details_timeShareX100_i))
-      this.$store.commit('proposals/setDeferred', parseFloat(this?.proposal?.details_deferredPercX100_i))
+      if (this?.proposal?.details_isCustom_i) {
+        this.$store.commit('proposals/setCustom', Boolean(this?.proposal?.details_isCustom_i))
+        this.$store.commit('proposals/setPeg', parseFloat(this?.proposal?.details_pegAmount_a?.split(' ').shift()))
+        this.$store.commit('proposals/setReward', parseFloat(this?.proposal?.details_rewardAmount_a?.split(' ').shift()))
+        this.$store.commit('proposals/setVoice', parseFloat(this?.proposal?.details_voiceAmount_a?.split(' ').shift()))
+      } else {
+        this.$store.commit('proposals/setUsdAmount', parseFloat(this?.proposal?.details_usdAmount_a))
+        this.$store.commit('proposals/setCommitment', parseFloat(this?.proposal?.details_timeShareX100_i))
+        this.$store.commit('proposals/setDeferred', parseFloat(this?.proposal?.details_deferredPercX100_i))
+      }
 
       this.$store.commit('proposals/setUrl', this.proposal?.details_url_s)
 
