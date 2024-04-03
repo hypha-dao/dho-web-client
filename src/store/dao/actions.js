@@ -139,36 +139,26 @@ export const updateDAOSettings = async function ({ state, rootState }, { data, a
       name: 'setdaosetting',
       data: {
         dao_id: rootState.dao.docId,
-        // kvs: [[
-        //   { label: 'voice_token_decay_period', value: ['int64', 1] },
-        //   { label: 'voice_token_decay_per_period_x10M', value: ['int64', 1] }
-        // ]]
+        kvs: Object.keys(data).map(key => {
+          const valueTypes = {
+            // _s for string
+            // _i for int64
+            // _n for name
+            // _t for time_point
+            // _a for asset
 
-        kvs: [
-          { key: 'voice_token_decay_period', value: ['int64', 1] },
-          { key: 'voice_token_decay_per_period_x10M', value: ['int64', 1] }
-        ]
+            number: 'int64',
+            string: 'string'
+          }
 
-        // kvs: Object.keys(data).map(key => {
-        //   const valueTypes = {
-        //     // _s for string
-        //     // _i for int64
-        //     // _n for name
-        //     // _t for time_point
-        //     // _a for asset
+          const value = data[key]
+          const type = valueTypes[typeof value]
 
-        //     number: 'int64',
-        //     string: 'string'
-        //   }
-
-        //   const value = data[key]
-        //   const type = valueTypes[typeof value]
-
-        //   return {
-        //     key: camelToSnakeCase(key),
-        //     value: [type, value]
-        //   }
-        // })
+          return {
+            key: camelToSnakeCase(key),
+            value: [type, value]
+          }
+        })
       }
     }
     // ...(alerts.created.length > 0
@@ -1053,7 +1043,7 @@ export const createInviteLink = async function ({ state, rootState }, id) {
     coreMemberCount: rootState.dao.meta.memberCount,
     communityMemberCount: 0,
     inviterName: inviter.name,
-    inviterAvatar: inviter.avatar
+    inviterAvatar: '' // TODO: Return once we have url shorten inviter.avatar
   }
 }
 
