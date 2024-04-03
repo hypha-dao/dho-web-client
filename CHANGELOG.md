@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.44.4](https://github.com/hypha-dao/dho-web-client/compare/v2.44.3...v2.44.4) (2024-04-03)
+
+
+### Bug Fixes
+
+* **api:** set transaction expiry to 5 minutes ([#2606](https://github.com/hypha-dao/dho-web-client/issues/2606)) ([5f06e99](https://github.com/hypha-dao/dho-web-client/commit/5f06e99be918557eeb6a18446635c7c95a746314))
+
 ## [2.44.3](https://github.com/hypha-dao/dho-web-client/compare/v2.44.2...v2.44.3) (2024-04-03)
 
 
