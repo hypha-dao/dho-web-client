@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.44.3](https://github.com/hypha-dao/dho-web-client/compare/v2.44.2...v2.44.3) (2024-04-03)
+
+
+### Bug Fixes
+
+* **language:** replace USD with cash ([#2603](https://github.com/hypha-dao/dho-web-client/issues/2603)) ([df31f97](https://github.com/hypha-dao/dho-web-client/commit/df31f978709a19d402164557a9d20915c990f4fa))
+
 ## [2.44.2](https://github.com/hypha-dao/dho-web-client/compare/v2.44.1...v2.44.2) (2024-03-27)
 
 
