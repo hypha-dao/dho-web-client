@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.44.6](https://github.com/hypha-dao/dho-web-client/compare/v2.44.5...v2.44.6) (2024-04-04)
+
+
+### Bug Fixes
+
+* remove console.log ([24e2320](https://github.com/hypha-dao/dho-web-client/commit/24e2320199858fdc1686efa7b58f396836b14215))
+
 ## [2.44.5](https://github.com/hypha-dao/dho-web-client/compare/v2.44.4...v2.44.5) (2024-04-04)
 
 
