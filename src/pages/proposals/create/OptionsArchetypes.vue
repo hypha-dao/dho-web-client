@@ -87,7 +87,6 @@ export default {
   },
 
   updated () {
-    console.log(JSON.stringify(this.archetypes))
     if (this.archetype.value && this.tier.value) {
       this.$emit('select', null)
     }
