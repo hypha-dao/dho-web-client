@@ -174,7 +174,7 @@ export default {
       },
 
       set (value) {
-        this.$store.commit('proposals/setPeg', parseFloat(value))
+        this.$store.commit('proposals/setPeg', parseFloat(value || 0))
       }
     },
 
@@ -184,7 +184,7 @@ export default {
       },
 
       set (value) {
-        this.$store.commit('proposals/setReward', parseFloat(value))
+        this.$store.commit('proposals/setReward', parseFloat(value || 0))
       }
     },
 
@@ -194,7 +194,7 @@ export default {
       },
 
       set (value) {
-        this.$store.commit('proposals/setVoice', parseFloat(value))
+        this.$store.commit('proposals/setVoice', parseFloat(value || 0))
       }
     },
 
