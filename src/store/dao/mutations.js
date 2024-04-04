@@ -1,6 +1,7 @@
 import { PLAN, PLAN_STATUS } from '~/const'
 
 const settingsMapper = (settings) => {
+  console.log(JSON.parse(JSON.stringify(settings?.settings_documentationUrl_s)))
   return {
     ...settings,
     name: settings?.settings_daoName_n,
@@ -19,7 +20,7 @@ const settingsMapper = (settings) => {
     voiceToken: settings?.settings_voiceToken_a?.split(' ')[1],
     voiceTokenDecimals: settings?.settings_voiceToken_a?.split(' ')[0]?.split('.')[1].length,
 
-    documentationURL: settings?.settings_documentationURL_s,
+    documentationUrl: settings?.settings_documentationUrl_s,
     documentationButtonText: settings?.settings_documentationButtonText_s,
 
     socialChat: settings?.settings_socialChat_s,

@@ -129,7 +129,7 @@ export default {
         name: this.daoSettings?.title ? this.daoSettings?.title : defaultSettings.title,
         url: this.daoSettings?.url ? this.daoSettings?.url : defaultSettings.url,
         purpose: this.daoSettings?.description ? this.daoSettings?.description : defaultSettings.description,
-        documentationUrl: this.daoSettings?.settings_documentationURL_s ? this.daoSettings?.settings_documentationURL_s : defaultSettings.documentationUrl,
+        documentationUrl: this.daoSettings?.documentationUrl ? this.daoSettings?.documentationUrl : defaultSettings.documentationUrl,
 
         primaryColor: this.daoSettings?.primaryColor ? this.daoSettings?.primaryColor : defaultSettings.primaryColor,
         secondaryColor: this.daoSettings?.secondaryColor ? this.daoSettings?.secondaryColor : defaultSettings.secondaryColor,
