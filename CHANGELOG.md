@@ -1,5 +1,14 @@
 # Changelog
 
+## [2.44.5](https://github.com/hypha-dao/dho-web-client/compare/v2.44.4...v2.44.5) (2024-04-04)
+
+
+### Bug Fixes
+
+* **configuration:** add correct url param ([#2611](https://github.com/hypha-dao/dho-web-client/issues/2611)) ([cde3c19](https://github.com/hypha-dao/dho-web-client/commit/cde3c194342dd14335c8d3eb79830bee8c18eb11))
+* **options-archetypes:** change query ([#2608](https://github.com/hypha-dao/dho-web-client/issues/2608)) ([4fb2d11](https://github.com/hypha-dao/dho-web-client/commit/4fb2d1106720ebbf0cd3476e838568504dedb394))
+* **step-payout:** set tokens to zero if null ([#2610](https://github.com/hypha-dao/dho-web-client/issues/2610)) ([2a2aeb3](https://github.com/hypha-dao/dho-web-client/commit/2a2aeb3405a2f4e292762c98c7dc7515f30a6069))
+
 ## [2.44.4](https://github.com/hypha-dao/dho-web-client/compare/v2.44.3...v2.44.4) (2024-04-03)
 
 
