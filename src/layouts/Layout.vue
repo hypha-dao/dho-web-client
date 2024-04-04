@@ -113,8 +113,8 @@ const ACTIVE_DAO_QUERY = `
       settings_exploreBackgroundImage_s
       settings_exploreTitle_s
       settings_exploreParagraph_s
-
-      settings_documentationURL_s
+      
+      settings_documentationUrl_s
     }
 
     memberAggregate {
