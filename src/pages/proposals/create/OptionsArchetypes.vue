@@ -2,28 +2,20 @@
 import { mapGetters } from 'vuex'
 import gql from 'graphql-tag'
 
-const TIERS_QUERY = `
-  querySalaryband(
-    filter: {
-      details_dao_i: { in: [0, $daoId] },
+const ASSIGMENT_OPTIONS = `
+  getDao(docId: $daoId) {
+    docId
+    role(filter: {details_autoApprove_i: {eq: 1}}) {
+      id: docId
+      name: details_title_s
     }
-  ) {
-    id: docId
-    name: details_name_s
-    annualAmount: details_annualUsdSalary_a
-    minDeferred: details_minDeferredX100_i
-  }
-`
-
-const ROLES_QUERY = `
-  queryRole(
-    filter: { 
-      details_dao_i: { eq: $daoId }, 
-      details_autoApprove_i: { eq: 1 } 
+    salaryband(filter: {system_defaultAsset_i: {eq: 1}}) {
+      id: docId
+      name: details_name_s
+      annualAmount: details_annualUsdSalary_a
+      minDeferred: details_minDeferredX100_i
+      system_defaultAsset_i
     }
-  ) {
-    id: docId
-    name: details_title_s
   }
 `
 
@@ -35,76 +27,31 @@ export default {
 
   apollo: {
 
-    tiers: {
-      query: gql`query TIERS($daoId: Int64!) { ${TIERS_QUERY} }`,
-      update: data => {
-        if (data?.querySalaryband.length > 1) {
-          const filteredTiers = data?.querySalaryband?.filter(tier => tier.name !== 'Founders')
-          return filteredTiers.map(level => ({
-            label: level?.name,
-            value: { ...level }
-          }))
-        } else {
-          return data?.querySalaryband?.map(level => ({
-            label: level?.name,
-            value: { ...level }
-          }))
-        }
-      },
+    data: {
+      query: gql`query ASSIGMENT_OPTIONS($daoId: String!) { ${ASSIGMENT_OPTIONS} }`,
+      update: data => data?.getDao,
       skip () { return !this.selectedDao?.docId },
       variables () { return { daoId: this.selectedDao.docId } },
-      subscribeToMore: {
-        document: gql`subscription TIERS($daoId: Int64!) { ${TIERS_QUERY} }`,
-        skip () { return !this.selectedDao?.docId },
-        variables () { return { daoId: this.selectedDao.docId } },
-        updateQuery: (previousResult, { subscriptionData }) => {
-          if (!subscriptionData.data) {
-            return previousResult
-          }
-          if (!previousResult) {
-            return undefined
-          }
+      result ({ data }) {
+        this.archetypes = data?.getDao?.role?.map(archetype => ({
+          label: archetype?.name,
+          value: { ...archetype }
+        }))
 
-          return subscriptionData.data
-        }
-      }
-    },
-
-    archetypes: {
-      query: gql`query ROLES($daoId: Int64!) { ${ROLES_QUERY} }`,
-      update: data => {
-        if (data?.queryRole.length > 1) {
-          const filteredArchetypes = data?.queryRole?.filter(archetype => archetype.name !== 'Founders')
-          return filteredArchetypes.map(archetype => ({
-            label: archetype?.name,
-            value: { ...archetype }
-          }))
-        } else {
-          return data?.queryRole?.map(archetype => ({
-            label: archetype?.name,
-            value: { ...archetype }
-          }))
-        }
-      },
-      skip () { return !this.selectedDao?.docId },
-      variables () { return { daoId: this.selectedDao.docId } },
-      subscribeToMore: {
-        document: gql`subscription ROLES($daoId: Int64!) { ${ROLES_QUERY} }`,
-        skip () { return !this.selectedDao?.docId },
-        variables () { return { daoId: this.selectedDao.docId } },
-        updateQuery: (previousResult, { subscriptionData }) => {
-          if (!subscriptionData.data) {
-            return previousResult
-          }
-          if (!previousResult) {
-            return undefined
-          }
-
-          return subscriptionData.data
-        }
+        this.tiers = data?.getDao?.salaryband?.map(level => ({
+          label: level?.name,
+          value: { ...level }
+        }))
       }
     }
 
+  },
+
+  data () {
+    return {
+      archetypes: [],
+      tiers: []
+    }
   },
 
   computed: {
@@ -136,10 +83,11 @@ export default {
 
     hasArchetypes () { return this.archetypes && this?.archetypes.length > 0 },
     hasTiers () { return this.tiers && this?.tiers.length > 0 },
-    isLoading () { return this.$apollo.queries.archetypes.loading && this.$apollo.queries.tiers.loading }
+    isLoading () { return this.$apollo.queries.data.loading }
   },
 
   updated () {
+    console.log(JSON.stringify(this.archetypes))
     if (this.archetype.value && this.tier.value) {
       this.$emit('select', null)
     }
