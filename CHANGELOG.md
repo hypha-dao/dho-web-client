@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.45.1](https://github.com/hypha-dao/dho-web-client/compare/v2.45.0...v2.45.1) (2024-04-23)
+
+
+### Bug Fixes
+
+* **es:** remove coma ([fbe9058](https://github.com/hypha-dao/dho-web-client/commit/fbe9058641b4f436788162e472879e3994c063ff))
+
 ## [2.45.0](https://github.com/hypha-dao/dho-web-client/compare/v2.44.6...v2.45.0) (2024-04-23)
 
 
