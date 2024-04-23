@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.45.0](https://github.com/hypha-dao/dho-web-client/compare/v2.44.6...v2.45.0) (2024-04-23)
+
+
+### Features
+
+* **proposal-list:** hide drafts after a month ([407f3c3](https://github.com/hypha-dao/dho-web-client/commit/407f3c338c3171de66faa4c0f93b5cd759142d16))
+
 ## [2.44.6](https://github.com/hypha-dao/dho-web-client/compare/v2.44.5...v2.44.6) (2024-04-04)
 
 
