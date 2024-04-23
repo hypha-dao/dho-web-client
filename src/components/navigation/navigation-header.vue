@@ -9,8 +9,8 @@ export default {
   q-toolbar.full-width
     q-tabs.full-width(align="justify")
       q-route-tab.q-ml-md(:to="{ name: 'dashboard' }") {{ $t('navigation.navigation-header.home') }}
-      q-route-tab(:to="{ name: 'proposals' }") {{ $t('navigation.navigation-header.proposals') }}
-      q-route-tab(:to="{ name: 'members' }") {{ $t('navigation.navigation-header.members') }}
+      q-route-tab(:to="{ name: 'agreements' }") {{ $t('navigation.navigation-header.proposals') }}
+      q-route-tab(:to="{ name: 'people' }") {{ $t('navigation.navigation-header.members') }}
       q-route-tab.q-mr-md(:to="{ name: 'organization' }")
         .row.items-center.justify-center
           .on-left {{ $t('navigation.navigation-header.organization') }}

@@ -1346,7 +1346,7 @@ export default {
     async onSuspend(proposal) {
       try {
         await this.suspendProposal(proposal.docId)
-        this.$router.push({ name: 'proposals' })
+        this.$router.push({ name: 'agreements' })
       } catch (e) {
         const message = e.message || e.cause.message
         this.showNotification({
@@ -1514,7 +1514,7 @@ export default {
       try {
         this.state = 'DELETING'
         await this.deleteProposal(proposal.docId)
-        this.$router.push({ name: 'proposals', params: { data: proposal, isDeleting: true }, query: { refetch: true } })
+        this.$router.push({ name: 'agreements', params: { data: proposal, isDeleting: true }, query: { refetch: true } })
       } catch (e) {
         this.state = 'WAITING'
         const message = e.message || e.cause.message
@@ -1537,7 +1537,7 @@ export default {
         }
         this.$store.commit('proposals/reset')
 
-        this.$router.push({ name: 'proposals', params: { data }, query: { refetch: true } })
+        this.$router.push({ name: 'agreements', params: { data }, query: { refetch: true } })
       } catch (e) {
         const message = e.message || e.cause.message
         // this.saveDraft()
@@ -1635,7 +1635,7 @@ export default {
 .full-height.full-width.fixed-full.bg-internal-bg(:style="'padding: 15px; overflow-y: scroll; z-index: 7777;'" v-if="$q.screen.lt.md || $q.screen.md")
   .flex.row.justify-between
     .h-h6.text-bold.flex.items-center(:style="'margin: 0 auto;'") {{ $t('pages.proposals.proposaldetail.proposalDetails') }}
-    q-btn(unelevated rounded padding="12px" icon="fas fa-times" size="sm" :color="'white'" text-color="'primary'" :to="{ name: 'proposals'}")
+    q-btn(unelevated rounded padding="12px" icon="fas fa-times" size="sm" :color="'white'" text-color="'primary'" :to="{ name: 'agreements'}")
     q-card.main-card(:style="'border-radius: 25px; box-shadow: none; margin-top: 15px; width: 100%; margin-bottom: 300px;'")
       .row.justify-center.q-my-md(v-if="loading")
         loading-spinner(color="primary" size="72px")

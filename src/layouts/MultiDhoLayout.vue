@@ -701,7 +701,7 @@ export default {
         this.isActivated = true
         localStorage?.setItem('isActivated', true)
 
-        this.$router.push({ name: 'proposals' })
+        this.$router.push({ name: 'agreements' })
       } catch (error) {
 
       }

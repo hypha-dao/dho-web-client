@@ -156,13 +156,13 @@ export default {
 q-page.page-dashboard
   base-banner(:compact="!$q.screen.gt.sm" :split="$q.screen.gt.md" v-bind="welcomeBanner" v-if="isWelcomeBannerVisible")
     template(v-slot:buttons)
-      router-link(:to="{ name: 'organization' }")
+      router-link(:to="{ name: 'treasury' }")
         q-btn.q-px-lg.h-btn1(color="secondary" :label="$t('pages.dho.home.discoverMore')" no-caps rounded unelevated)
   section.q-mt-md.grid
     metric-link(:amount="activeAssignmentsCount || '...'" :link="{ link: 'search', query: { q: '', filter: 'Active', type: '4' } }" :style="{'grid-area': 'assignments'}" :title="$t('pages.dho.home.assignments')")
     metric-link(:amount="activeBadgesCount || '...'" :link="{ link: 'organization/assets', params: { type: 'badge' } }" :style="{'grid-area': 'badges'}" :title="$t('pages.dho.home.badges')")
-    metric-link(:amount="activeMembersCount || '...'" :link="{ link: 'members', params: { } }" :style="{'grid-area': 'members'}" :title="$t('pages.dho.home.members')")
-    metric-link(:amount="activeProposalsCount || '...'" :link="{ link: 'proposals', params: { } }" :style="{'grid-area': 'proposals'}" :title="$t('pages.dho.home.proposals')")
+    metric-link(:amount="activeMembersCount || '...'" :link="{ link: 'people', params: { } }" :style="{'grid-area': 'members'}" :title="$t('pages.dho.home.members')")
+    metric-link(:amount="activeProposalsCount || '...'" :link="{ link: 'agreements', params: { } }" :style="{'grid-area': 'proposals'}" :title="$t('pages.dho.home.proposals')")
     members(:title="$t('pages.dho.home.members')" :members="daoMembers || []" :style="{'grid-area': 'new'}")
     support-widget(:documentationButtonText="daoSettings.documentationButtonText" :documentationURL="daoSettings.documentationURL" :socialChat="daoSettings.socialChat" :style="{'grid-area': 'support'}")
     how-it-works(:style="{'grid-area': 'how'}")

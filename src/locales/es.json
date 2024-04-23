@@ -911,11 +911,11 @@
       "help": "Ayuda"
     },
     "left-navigation": {
-      "proposals": "Propuestas",
-      "members": "Miembros",
-      "organization": "Organización",
-      "explore": "Explorar",
-      "election": "Elección"
+      "agreements":"Elección",
+      "election": "Election",
+      "explore":"Explorar",
+      "people":"Gente",        
+      "treasury":"tesorería"
     },
     "navigation-header": {
       "home": "Hogar",
@@ -1803,12 +1803,10 @@
         "quorum": "Quórum",
         "noProposals": "Sin propuestas",
         "oopsNothingCould": "Ups, no se pudo encontrar nada aquí.",
-        "stagingProposals": "Propuestas de puesta en escena",
         "activeProposals": "Propuestas activas",
         "noProposals1": "Sin propuestas",
-        "stagingProposals1": "Propuestas de puesta en escena",
-        "activeProposals1": "Propuestas activas",
-        "proposalHistory": "Historial de propuestas",
+        "drafts": "Borradores",
+        "proposalHistory": "Historia",
         "lookingToMonitor": "¿Quiere controlar la antigüedad de las propuestas? ",
         "seeHistory": "Ver historia >",
         "isTheMinimumRequiredPercentageOfMembers": "Porcentaje de acuerdo requerido para que se apruebe una propuesta.",
@@ -1817,7 +1815,7 @@
         "proposalTypes": "Tipos de propuestas",
         "sortByLastAdded": "Ordenar por: Último agregado",
         "yourVoteIsTheVoice": "Su voto es la voz del cambio",
-        "atHyphaTheFuture": "En Hypha, el futuro se basa en una toma de decisiones descentralizada, justa, equitativa y abierta. "
+        "atHyphaTheFuture": "En Hypha, el futuro se basa en una toma de decisiones descentralizada, justa, equitativa y abierta. ",
       },
       "proposalhistory": {
         "noProposals": "Sin propuestas",
@@ -2076,10 +2074,11 @@
     "explore": "Explorar",
     "createANewDao": "Crear un nuevo DHO",
     "login": "Acceso",
-    "members": "Miembros",
+    "people":"Hente",
+    "agreements": "Acuerdos",
     "proposals": "Propuestas",
     "createProposal": "Crear propuesta",
-    "proposalHistory": "Historial de propuestas",
+    "proposalHistory":"Historia",
     "proposalDetails": "Detalles de la propuesta",
     "organization": "Organización",
     "organizationAssets": "Activos de la organización",
