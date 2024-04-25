@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.45.2](https://github.com/hypha-dao/dho-web-client/compare/v2.45.1...v2.45.2) (2024-04-25)
+
+
+### Bug Fixes
+
+* **members:** add regular invite ([2ed99e7](https://github.com/hypha-dao/dho-web-client/commit/2ed99e7564fa43d32d077e6d114fc83a27e25a42))
+
 ## [2.45.1](https://github.com/hypha-dao/dho-web-client/compare/v2.45.0...v2.45.1) (2024-04-23)
 
 
