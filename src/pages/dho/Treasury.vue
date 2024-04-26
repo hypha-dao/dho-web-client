@@ -269,7 +269,6 @@ export default {
             type: ['utility', 'cash', 'voice'][i]
           }
         })
-        console.log(JSON.stringify(this.treasuryTokens))
       } catch (e) {}
     },
 
