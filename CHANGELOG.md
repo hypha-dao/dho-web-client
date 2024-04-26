@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.46.0](https://github.com/hypha-dao/dho-web-client/compare/v2.45.2...v2.46.0) (2024-04-26)
+
+
+### Features
+
+* **locales:** add north macedonian ([ff27615](https://github.com/hypha-dao/dho-web-client/commit/ff27615e5842e6e59827a76226e09fdfbdae6f5c))
+* **tresury:** add tokens widget ([cf79ade](https://github.com/hypha-dao/dho-web-client/commit/cf79ade14651619611242b51482e8f219271a3ab))
+
 ## [2.45.2](https://github.com/hypha-dao/dho-web-client/compare/v2.45.1...v2.45.2) (2024-04-25)
 
 
