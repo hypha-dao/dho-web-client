@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.46.2](https://github.com/hypha-dao/dho-web-client/compare/v2.46.1...v2.46.2) (2024-04-26)
+
+
+### Bug Fixes
+
+* **home:** remove links from metric ([20a212f](https://github.com/hypha-dao/dho-web-client/commit/20a212f76c950b19612a9da6971f47eec962664b))
+
 ## [2.46.1](https://github.com/hypha-dao/dho-web-client/compare/v2.46.0...v2.46.1) (2024-04-26)
 
 
