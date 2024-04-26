@@ -493,6 +493,11 @@ export default {
           image: require('assets/images/locales/sr.svg')
         },
         {
+          label: 'Македонски',
+          value: 'mk',
+          image: require('assets/images/locales/mk.png')
+        },
+        {
           label: '한국인',
           value: 'ko',
           image: require('assets/images/locales/ko.png')
