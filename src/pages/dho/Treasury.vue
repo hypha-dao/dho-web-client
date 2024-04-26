@@ -9,12 +9,13 @@ export default {
   mixins: [validation],
 
   components: {
+    FilterOpenButton: () => import('~/components/filters/filter-open-button.vue'),
     FilterWidget: () => import('~/components/filters/filter-widget.vue'),
     FilterWidgetMobile: () => import('~/components/filters/filter-widget-mobile.vue'),
-    FilterOpenButton: () => import('~/components/filters/filter-open-button.vue'),
-    Widget: () => import('~/components/common/widget.vue'),
     LoadingSpinner: () => import('~/components/common/loading-spinner.vue'),
-    ProfilePicture: () => import('~/components/profiles/profile-picture.vue')
+    ProfilePicture: () => import('~/components/profiles/profile-picture.vue'),
+    Tokens: () => import('~/components/organization/tokens.vue'),
+    Widget: () => import('~/components/common/widget.vue')
   },
   data() {
     return {
@@ -97,7 +98,8 @@ export default {
       selected: [],
       transactionReviewOpen: false,
       successfullMultisigTransaction: null,
-      formattedExecRequests: []
+      formattedExecRequests: [],
+      treasuryTokens: []
     }
   },
   apollo: {
@@ -244,14 +246,32 @@ export default {
     }
   },
   async beforeMount() {
-    await this.getTokens()
+    // await this.getTokens()
     await this.loadTreasurerProfiles()
+  },
+  async mounted () {
+    this.getTreasuryTokens()
   },
   methods: {
     ...mapActions('profiles', ['getPublicProfile']),
     ...mapActions('treasury', ['getSupply', 'sendNewPayment', 'endorsePayment']),
     ...mapActions('dao', ['createMultisigPay', 'approveMultisigPay', 'getTreasuryOptions', 'executeMultisigPay']),
     ...mapMutations('layout', ['setBreadcrumbs']),
+
+    async getTreasuryTokens () {
+      try {
+        const tokens = await this.getSupply()
+        delete tokens.SEEDS
+        this.treasuryTokens = Object.entries(tokens).map((token, i) => {
+          return {
+            tokenName: token[0],
+            amount: token[1],
+            type: ['utility', 'cash', 'voice'][i]
+          }
+        })
+        console.log(JSON.stringify(this.treasuryTokens))
+      } catch (e) {}
+    },
 
     formatDate(date) { return dateToString(date) },
     getAmount(val) { return val && Number.parseFloat(this.formatCurrency(val)) },
@@ -364,50 +384,7 @@ export default {
         this.redemptions = [...this.redemptions.filter(r => r.requestor.includes(this.search))]
       }
     },
-    async getTokens() {
-      let lang
-      if (navigator.languages !== undefined) { lang = navigator.languages[0] } else { lang = navigator.language }
-      const tokens = await this.getSupply()
-      delete tokens.SEEDS
-      for (const key in tokens) {
-        let amount = 0
-        if (tokens[key] > 1000000) {
-          amount = (new Intl.NumberFormat(lang, { notation: 'compact', compactDisplay: 'short' }).format(tokens[key]))
-        } else {
-          amount = (new Intl.NumberFormat(lang, { style: 'currency', currency: 'USD' }).format(tokens[key] || 0)).slice(4)
-        }
-        let icon
-        switch (key.toLowerCase()) {
-          case 'husd':
-            icon = require('~/assets/icons/usd.svg')
-            break
-          case 'seeds':
-            icon = require('~/assets/icons/seeds.png')
-            break
-          case 'hypha':
-            icon = require('~/assets/icons/hypha.svg')
-            break
-          case 'hvoice':
-            icon = require('~/assets/icons/hvoice.svg')
-            break
-          case 'dseeds':
-            icon = require('~/assets/icons/dSeeds.png')
-            break
-          case 'voice':
-            icon = require('~/assets/icons/voice.png')
-            break
-          default:
-            icon = require('~/assets/icons/usd.png')
-            break
-        }
 
-        this.tokens.push({
-          name: key.toLowerCase(),
-          amount,
-          icon
-        })
-      }
-    },
     onPrev() {
       this.pagination.page--
     },
@@ -474,7 +451,8 @@ export default {
 
   computed: {
     ...mapGetters('accounts', ['account']),
-    ...mapGetters('dao', ['selectedDao']),
+    ...mapGetters('dao', ['daoSettings', 'selectedDao']),
+
     isTreasurer() {
       if (!this.account) return false
       const isTreasurer = this.treasurers.some(t => t === this.account)
@@ -507,14 +485,9 @@ export default {
     search() {
       this.filterRedemptions()
     },
-    dho: {
-      async handler() {
-        await this.getTokens()
-      },
-      deep: true
-    },
-    async selectedDao() {
-      await this.getTokens()
+
+    selectedDao () {
+      this.getTreasuryTokens()
     },
     tab(val) {
       this.selected = []
@@ -526,7 +499,8 @@ export default {
 <template lang="pug">
 q-page.page-treasury
   q-dialog(:value="transactionReviewOpen" :full-width="successfullMultisigTransaction === null" @hide="transactionReviewOpen = false, successfullMultisigTransaction = null")
-    widget.full-width(:title="$t('pages.dho.treasury.transactionReview')")
+
+    widget.q-mt-md.full-width(:title="$t('pages.dho.treasury.transactionReview')")
       div(v-if="successfullMultisigTransaction === true")
         .row.q-mt-xxl
           .col.h-h3 {{ $t('pages.dho.treasury.wellDoneMultisigTransaction') }}
@@ -566,9 +540,11 @@ q-page.page-treasury
                 p.q-py-md.q-ma-none.text-italic {{ formatDate(props.row.requestedDate) }}
         .row.justify-end
           q-btn.col-3.q-px-lg.h-btn1.q-mt-md(color="primary" :label="$t('pages.dho.treasury.allGoodCreateMultisig')" no-caps rounded unelevated @click="createMultisig")
+
   .row.full-width(v-if="$q.screen.gt.md")
     .col-9.q-pr-md
-      widget.q-px-xl(no-padding="no-padding")
+      tokens(v-if="!$q.screen.md" :daoLogo="daoSettings.logo" :tokens="treasuryTokens" :vertical="!$q.screen.gt.sm")
+      widget.q-mt-md.q-px-xl(no-padding="no-padding")
         q-tabs(active-color="primary" indicator-color="primary" no-caps v-model="tab")
           q-tab(:name="MULTISIG_TABS.PAYOUT" label="Payout Requests" :ripple="false")
           q-tab(v-if="treasuryAccount" :name="MULTISIG_TABS.MULTISIG" label="Multisig Sign Request" :ripple="false")
