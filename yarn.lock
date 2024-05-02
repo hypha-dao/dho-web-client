@@ -3106,10 +3106,10 @@
   resolved "https://registry.yarnpkg.com/@hypha-dao/ppp-common/-/ppp-common-1.0.0.tgz#73268c7972934d8dd72d30ebe6bfcb4c0b401004"
   integrity sha512-evhqU5+L5RWMCJcU/8ATqOet147T2pI5P0IMMN6DiKmMcI13lzKPqzwq2e4OyfAdq84Foe55ItbvOYs9uJ713g==
 
-"@hypha-dao/ual-hypha@^1.0.13":
-  version "1.0.13"
-  resolved "https://registry.yarnpkg.com/@hypha-dao/ual-hypha/-/ual-hypha-1.0.13.tgz#111933a512a50d1e0361d4e8a619c2eda4e80f22"
-  integrity "sha1-ERkzpRKlDR4DYdTophnC7aToDyI= sha512-aTir7tS4xeg6/RfTiLjjRgn/msnLP/3JZMODz/D5BngNoZUYHYllT10wZAUlXqr709eVHXkzXIsHF9RGiE5ZFQ=="
+"@hypha-dao/ual-hypha@^1.0.14":
+  version "1.0.14"
+  resolved "https://registry.yarnpkg.com/@hypha-dao/ual-hypha/-/ual-hypha-1.0.14.tgz#68879ab449092a8d2bad1ac0816977c834689353"
+  integrity sha512-3FV2qwqu/f+S2mKb7Fz1mNLzTl1hm1DyJvA84Gbq7gT0WSXPdL2vU+bc3N6eNVsbItoHBVQX5qZy79X7xD8pIw==
   dependencies:
     "@babel/core" "^7.21.4"
     "@babel/plugin-proposal-class-properties" "^7.16.7"
@@ -9453,9 +9453,9 @@ ee-first@1.1.1:
   integrity sha512-WMwm9LhRUo+WUaRN+vRuETqG89IgZphVSNkdFgeb6sS/E4OrDIN7t48CAewSHXc6C8lefD8KKfr5vY61brQlow==
 
 ejs@^3.1.7:
-  version "3.1.9"
-  resolved "https://registry.yarnpkg.com/ejs/-/ejs-3.1.9.tgz#03c9e8777fe12686a9effcef22303ca3d8eeb361"
-  integrity sha512-rC+QVNMJWv+MtPgkt0y+0rVEIdbtxVADApW9JXrUVlzHetgcyczP/E7DJmWJ4fJCZF2cPcBk0laWO9ZHMG3DmQ==
+  version "3.1.10"
+  resolved "https://registry.yarnpkg.com/ejs/-/ejs-3.1.10.tgz#69ab8358b14e896f80cc39e62087b88500c3ac3b"
+  integrity sha512-UeJmFfOrAQS8OJWPZ4qtgHyWExa088/MtK5UEyoJGFH67cDEXkZSviOiKRCZ4Xij0zxI3JECgYs3oKx+AizQBA==
   dependencies:
     jake "^10.8.5"
 
