@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.48.0](https://github.com/hypha-dao/dho-web-client/compare/v2.47.0...v2.48.0) (2024-05-16)
+
+
+### Features
+
+* **home:** add circles widget ([a236a65](https://github.com/hypha-dao/dho-web-client/commit/a236a6563d4cf862c1e9b6f3f91d3ba6bb52276e))
+
 ## [2.47.0](https://github.com/hypha-dao/dho-web-client/compare/v2.46.2...v2.47.0) (2024-05-16)
 
 
