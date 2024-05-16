@@ -13,7 +13,8 @@ export default {
     HowItWorks: () => import('~/components/dashboard/how-it-works.vue'),
     Members: () => import('~/components/organization/members.vue'),
     MetricLink: () => import('~/components/dashboard/metric-link.vue'),
-    SupportWidget: () => import('~/components/dashboard/support-widget.vue')
+    SupportWidget: () => import('~/components/dashboard/support-widget.vue'),
+    CirclesWidget: () => import('~/components/organization/circles-widget.vue')
   },
 
   apollo: {
@@ -114,6 +115,19 @@ export default {
       },
       skip () { return !this.selectedDao || !this.selectedDao.docId },
       variables () { return { daoId: this.selectedDao.docId, first: 4 } }
+    },
+
+    circles: {
+      query: require('~/query/circles/dao-circles.gql'),
+      update: data => {
+        return data.getDao.circle.map(circle => {
+          return {
+            ...circle
+          }
+        })
+      },
+      skip () { return !this.selectedDao || !this.selectedDao.docId },
+      variables () { return { daoId: this.selectedDao.docId } }
     }
   },
 
@@ -159,14 +173,15 @@ q-page.page-dashboard
       router-link(:to="{ name: 'treasury' }")
         q-btn.q-px-lg.h-btn1(color="secondary" :label="$t('pages.dho.home.discoverMore')" no-caps rounded unelevated)
   section.q-mt-md.grid
-    metric-link(:amount="activeAssignmentsCount || '...'"  :style="{'grid-area': 'assignments'}" :title="$t('pages.dho.home.assignments')")
-    metric-link(:amount="activeBadgesCount || '...'"  :style="{'grid-area': 'badges'}" :title="$t('pages.dho.home.badges')")
-    metric-link(:amount="activeMembersCount || '...'"  :style="{'grid-area': 'members'}" :title="$t('pages.dho.home.members')")
-    metric-link(:amount="activeProposalsCount || '...'"  :style="{'grid-area': 'proposals'}" :title="$t('pages.dho.home.proposals')")
+    metric-link(:link="{ link: 'agreements', params: { type: 'badge' } }" :amount="activeAssignmentsCount || '...'"  :style="{'grid-area': 'assignments'}" :title="$t('pages.dho.home.assignments')")
+    metric-link(:link="{ link: 'organization/assets', params: { type: 'badge' } }" :amount="activeBadgesCount || '...'"  :style="{'grid-area': 'badges'}" :title="$t('pages.dho.home.badges')")
+    metric-link(:link="{ link: 'people', params: { type: 'badge' } }" :amount="activeMembersCount || '...'"  :style="{'grid-area': 'members'}" :title="$t('pages.dho.home.members')")
+    metric-link(:link="{ link: 'agreements', params: { type: 'badge' } }" :amount="activeProposalsCount || '...'"  :style="{'grid-area': 'proposals'}" :title="$t('pages.dho.home.proposals')")
     members(:title="$t('pages.dho.home.members')" :members="daoMembers || []" :style="{'grid-area': 'new'}")
     support-widget(:documentationButtonText="daoSettings.documentationButtonText" :documentationURL="daoSettings.documentationURL" :socialChat="daoSettings.socialChat" :style="{'grid-area': 'support'}")
     how-it-works(:style="{'grid-area': 'how'}")
-
+  section.q-mt-md
+    circles-widget(:circles="circles" :title="$t('pages.dho.organization.daoCircles1')")
 </template>
 
 <style lang="stylus" scoped>
