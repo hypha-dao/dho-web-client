@@ -2298,5 +2298,17 @@
         "actionText": "하이파 지갑에서 개설"
       }
     }
+  },
+  "utils": {
+    "time": {
+      "second": "{count} 초",
+      "second_plural": "{count} 초",
+      "minute": "{count} 분",
+      "minute_plural": "{count} 분",
+      "hour": "{count} 시간",
+      "hour_plural": "{count} 시간",
+      "day": "{count} 일",
+      "day_plural": "{count} 일"
+    }
   }
 }

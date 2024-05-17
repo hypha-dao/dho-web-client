@@ -2297,5 +2297,17 @@
         "actionText": "In Hypha Wallet öffnen"
       }
     }
+  },
+  "utils": {
+    "time": {
+      "second": "{count} segundo",
+      "second_plural": "{count} segundos",
+      "minute": "{count} minuto",
+      "minute_plural": "{count} minutos",
+      "hour": "{count} hora",
+      "hour_plural": "{count} horas",
+      "day": "{count} día",
+      "day_plural": "{count} días"
+    }
   }
 }

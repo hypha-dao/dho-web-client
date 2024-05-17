@@ -2299,5 +2299,21 @@
         "actionText": "Отворите у Хипха новчанику"
       }
     }
+  },
+  "utils": {
+    "time": {
+      "second": "{count} секунда",
+      "second_plural": "{count} секунди",
+      "second_2": "{count} секунде",
+      "minute": "{count} минут",
+      "minute_plural": "{count} минута",
+      "minute_2": "{count} минута",
+      "hour": "{count} сат",
+      "hour_plural": "{count} сати",
+      "hour_2": "{count} сата",
+      "day": "{count} дан",
+      "day_plural": "{count} дана",
+      "day_2": "{count} дани"
+    }
   }
 }
