@@ -4,6 +4,7 @@ import ipfsy from '~/utils/ipfsy'
 import { getProposalChipFilters } from '../../utils/proposal-filter'
 import gql from 'graphql-tag'
 import { date } from 'quasar'
+import { formatDuration } from '~/utils/TimeUtils'
 
 const STAGED_PROPOSALS_QUERY = `
   queryDao(filter: { docId: { eq: $docId } }) {
@@ -646,7 +647,7 @@ export default {
     banner() {
       return {
         title: this.daoSettings.proposalsTitle || this.$t('pages.proposals.proposallist.yourVoteIsTheVoice'),
-        description: this.daoSettings.proposalsParagraph || this.$t('pages.proposals.proposallist.atHyphaTheFuture'),
+        description: this.daoSettings.proposalsParagraph || this.$t('pages.proposals.proposallist.atHyphaTheFuture', { unity: this.daoSettings.settings_votingAlignmentX100_i, quorum: this.daoSettings.settings_votingQuorumX100_i, time: formatDuration(1800) }),
         background: ipfsy(this.daoSettings.proposalsBackgroundImage),
         color: this.daoSettings.primaryColor,
         pattern: this.daoSettings.pattern,

@@ -2298,5 +2298,17 @@
         "actionText": "在 Hypha 钱包中打开"
       }
     }
+  },
+  "utils": {
+    "time": {
+      "second": "{count} 秒",
+      "second_plural": "{count} 秒",
+      "minute": "{count} 分钟",
+      "minute_plural": "{count} 分钟",
+      "hour": "{count} 小时",
+      "hour_plural": "{count} 小时",
+      "day": "{count} 天",
+      "day_plural": "{count} 天"
+    }
   }
 }

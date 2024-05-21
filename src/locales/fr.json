@@ -2308,5 +2308,17 @@
         "actionText": "Ouvrir dans le portefeuille Hypha"
       }
     }
+  },
+  "utils": {
+    "time": {
+      "second": "{count} seconde",
+      "second_plural": "{count} secondes",
+      "minute": "{count} minute",
+      "minute_plural": "{count} minutes",
+      "hour": "{count} heure",
+      "hour_plural": "{count} heures",
+      "day": "{count} jour",
+      "day_plural": "{count} jours"
+    }
   }
 }
