@@ -1,5 +1,15 @@
 # Changelog
 
+## [2.48.1](https://github.com/hypha-dao/dho-web-client/compare/v2.48.0...v2.48.1) (2024-05-21)
+
+
+### Bug Fixes
+
+* **options-archetypes:** remove console.log ([b337e9f](https://github.com/hypha-dao/dho-web-client/commit/b337e9f1f82c1ff3aca14af25e15b87e8b8f6e71))
+* **proposal-list:** make voting description dynamically ([#2624](https://github.com/hypha-dao/dho-web-client/issues/2624)) ([95a02a9](https://github.com/hypha-dao/dho-web-client/commit/95a02a93ee3ea3fabd29a47df6ca8da693e96fdd))
+* **proposals:** proposals links inside profile page ([#1311](https://github.com/hypha-dao/dho-web-client/issues/1311)) ([#2625](https://github.com/hypha-dao/dho-web-client/issues/2625)) ([d499cd3](https://github.com/hypha-dao/dho-web-client/commit/d499cd3e8eadc540a09896d582e4272ab7682f6f))
+* tiers loading ([#1293](https://github.com/hypha-dao/dho-web-client/issues/1293)) ([#2626](https://github.com/hypha-dao/dho-web-client/issues/2626)) ([d485a85](https://github.com/hypha-dao/dho-web-client/commit/d485a85f058d340c1b4222587a9d84acdca0e856))
+
 ## [2.48.0](https://github.com/hypha-dao/dho-web-client/compare/v2.47.0...v2.48.0) (2024-05-16)
 
 
