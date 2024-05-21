@@ -9,7 +9,7 @@ const ASSIGMENT_OPTIONS = `
       id: docId
       name: details_title_s
     }
-    salaryband(filter: {system_defaultAsset_i: {eq: 1}}) {
+    salaryband {
       id: docId
       name: details_name_s
       annualAmount: details_annualUsdSalary_a
@@ -37,7 +37,7 @@ export default {
           label: archetype?.name,
           value: { ...archetype }
         }))
-
+        console.log(data.getDao)
         this.tiers = data?.getDao?.salaryband?.map(level => ({
           label: level?.name,
           value: { ...level }
