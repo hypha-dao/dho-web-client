@@ -37,7 +37,6 @@ export default {
           label: archetype?.name,
           value: { ...archetype }
         }))
-        console.log(data.getDao)
         this.tiers = data?.getDao?.salaryband?.map(level => ({
           label: level?.name,
           value: { ...level }
