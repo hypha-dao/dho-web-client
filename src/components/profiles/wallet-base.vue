@@ -180,7 +180,7 @@ export default {
           await this.redeemToken(
             {
               quantity: `${parseFloat(this.form.amount).toFixed(2)} ${this.$store.state.dao.settings.settings_pegToken_a.split(' ')[1]}`,
-              memo: 'redeem'
+              memo: `redeem,${this.$store.state.dao.docId}`
             }
           )
           this.successRedeem = true
