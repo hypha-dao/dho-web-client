@@ -1,5 +1,14 @@
 # Changelog
 
+## [2.49.0](https://github.com/hypha-dao/dho-web-client/compare/v2.48.1...v2.49.0) (2024-05-29)
+
+
+### Features
+
+* redeem with dao doc id ([ea8d1cb](https://github.com/hypha-dao/dho-web-client/commit/ea8d1cb8d66dffa71ab5b5f9d40287935f02f387))
+* redeem with dao doc id ([ea8d1cb](https://github.com/hypha-dao/dho-web-client/commit/ea8d1cb8d66dffa71ab5b5f9d40287935f02f387))
+* redeem with dao doc id ([6b3db58](https://github.com/hypha-dao/dho-web-client/commit/6b3db581be3fcd5eba6c34751b0c7f4d76aa88b9))
+
 ## [2.48.1](https://github.com/hypha-dao/dho-web-client/compare/v2.48.0...v2.48.1) (2024-05-21)
 
 
