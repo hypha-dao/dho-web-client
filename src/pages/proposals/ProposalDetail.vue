@@ -329,6 +329,10 @@ const PROPOSAL_QUERY = `
 
       details_url_s
 
+      voteAggregate {
+        count
+      }
+
       votetally {
         docId
         ... on VoteTally {
@@ -1204,7 +1208,7 @@ export default {
     },
     voteSize() {
       if (this.proposal && this.proposal.voteAggregate) {
-        return this.proposal.voteAggregate.count || 0
+        return this.proposal.voteAggregate?.count || 0
       }
       return 0
     },
@@ -1670,7 +1674,7 @@ export default {
               @on-withdraw="onWithDraw(proposal)"
               :activeButtons="isMember"
             )
-            voter-list.q-my-md(:proposalId="docId" :voteCount="proposal.voteAggregate.count")
+            voter-list.q-my-md(:proposalId="docId" :voteCount="proposal.voteAggregate?.count")
         widget.full-width(:style="{ 'margin-top': '-40px'}" v-if="isBadge && proposalParsing.status(proposal) !== PROPOSAL_STATE.DRAFTED" :title="$t('pages.proposals.proposaldetail.badgeHolders')")
           template(v-if="paginatedHolders?.length")
             template(v-for="holderName in paginatedHolders")
@@ -1734,7 +1738,7 @@ export default {
           @voting="onVoting"
           v-if="$q.screen.gt.sm"
         )
-        voter-list.q-my-md(:proposalId="docId" :voteCount="proposal.voteAggregate.count")
+        voter-list.q-my-md(:proposalId="docId" :voteCount="proposal.voteAggregate?.count")
       widget(v-if="isBadge && proposalParsing.status(proposal) !== PROPOSAL_STATE.DRAFTED" :title="$t('pages.proposals.proposaldetail.badgeHolders1')")
         template(v-if="paginatedHolders?.length")
           template(v-for="holder in paginatedHolders")
