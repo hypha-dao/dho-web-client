@@ -31,6 +31,6 @@ widget.full-width(:title="$t('organization.role-assignments-widget.activeRoleAss
       empty-widget-label(:sectionTitle="$t('organization.role-assignments-widget.activeRoleAssignments')")
   .row(v-else v-for="assignment in assignments")
     .col-12
-      role-assignment-card(v-bind="assignment" :compact="compact" @click.native="$router.push({ path: `/${$route.params.dhoname}/proposals/${assignment.docId}` })")
+      role-assignment-card(v-bind="assignment" :compact="compact" @click.native="$router.push({ path: `/${$route.params.dhoname}/agreements/${assignment.docId}` })")
 
 </template>

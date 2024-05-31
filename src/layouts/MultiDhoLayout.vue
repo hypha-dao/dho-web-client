@@ -758,7 +758,7 @@ export default {
     goToProposal (notification) {
       const proposal = JSON.parse(notification.content).proposalId
       if (proposal) {
-        this.$router.push({ path: `/${this.selectedDao?.name}/proposals/${proposal}` })
+        this.$router.push({ path: `/${this.selectedDao?.name}/agreements/${proposal}` })
       }
     }
   }

@@ -30,5 +30,5 @@ widget.full-width(:title="$t('organization.badge-assignments-widget.badgeAssignm
       empty-widget-label(sectionTitle="Badge assignments")
   .row(v-else v-for="assignment in assignments")
     .col-12
-      badge-assignment-card(v-bind="assignment" :compact="compact" @click.native="$router.push({ path: `/${$route.params.dhoname}/proposals/${assignment.docId}` })")
+      badge-assignment-card(v-bind="assignment" :compact="compact" @click.native="$router.push({ path: `/${$route.params.dhoname}/agreements/${assignment.docId}` })")
 </template>

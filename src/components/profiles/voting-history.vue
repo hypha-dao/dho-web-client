@@ -41,7 +41,7 @@ export default {
     },
 
     onVoteClick (vote) {
-      this.$router.push(`/${vote.daoName}/proposals/${vote.proposalId}`)
+      this.$router.push(`/${vote.daoName}/agreements/${vote.proposalId}`)
     }
   }
 }

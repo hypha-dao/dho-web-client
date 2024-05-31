@@ -836,7 +836,7 @@ export default {
       this.$apollo.queries.archivedProposals?.refetch()
     },
     handleCreateNewProposal() {
-      this.$router.push(`/${this.daoSettings.url}/proposals/create`)
+      this.$router.push(`/${this.daoSettings.url}/agreements/create`)
     }
   }
 }
@@ -857,7 +857,7 @@ q-page.page-proposals
           button-radio.full-height(icon="fas fa-users" :title="$t('pages.proposals.proposallist.quorum')" :subtitle="quorumTitle" :description="$t('pages.proposals.proposallist.isTheMinimumRequiredPercentageOfTotal')" opacity="opacity" primary="primary")
   .row.q-py-md(v-if="$q.screen.gt.md")
     .col-12.col-lg-9
-      base-placeholder.q-mr-sm(:compact="!$q.screen.gt.md" v-if="!filteredStagedProposals?.length && !filteredProposals?.length && !hasProposals" :title="$t('pages.proposals.proposallist.noProposals')" subtitle="Your organization has not created any proposals yet. You can create a new proposal by clicking the button below." icon="fas fa-file-medical" :actionButtons="[{label: 'Create a new Proposal', color: 'primary', onClick: () => $router.push(`/${this.daoSettings.url}/proposals/create`), disable: !isMember, disableTooltip: 'You must be a member'}]")
+      base-placeholder.q-mr-sm(:compact="!$q.screen.gt.md" v-if="!filteredStagedProposals?.length && !filteredProposals?.length && !hasProposals" :title="$t('pages.proposals.proposallist.noProposals')" subtitle="Your organization has not created any proposals yet. You can create a new proposal by clicking the button below." icon="fas fa-file-medical" :actionButtons="[{label: 'Create a new Proposal', color: 'primary', onClick: () => $router.push(`/${this.daoSettings.url}/agreements/create`), disable: !isMember, disableTooltip: 'You must be a member'}]")
       base-placeholder.q-mr-sm(:compact="!$q.screen.gt.md" v-if="!filteredProposals?.length && !filteredStagedProposals?.length && hasProposals" :title="$t('pages.proposals.proposallist.oopsNothingCould')" subtitle="Try a different filter or another keyword" icon="far fa-check-square" :actionButtons="[{label: 'Reset filter(s)', color: 'primary', onClick: () => this.$refs.filter.resetFilters() }]")
       .row.justify-center.q-my-md(v-if="$apollo.loading")
         loading-spinner(color="primary" size="72px")
