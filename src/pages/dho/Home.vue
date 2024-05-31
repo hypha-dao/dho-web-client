@@ -1,6 +1,6 @@
 <script>
 import { mapGetters } from 'vuex'
-import { date } from 'quasar'
+import { date, openURL } from 'quasar'
 
 import ipfsy from '~/utils/ipfsy'
 
@@ -133,6 +133,7 @@ export default {
 
   data () {
     return {
+      openURL,
       pagination: {
         first: 6,
         offset: 0,
@@ -162,7 +163,8 @@ export default {
 
   },
 
-  methods: {}
+  methods: {
+  }
 }
 </script>
 
@@ -170,15 +172,14 @@ export default {
 q-page.page-dashboard
   base-banner(:compact="!$q.screen.gt.sm" :split="$q.screen.gt.md" v-bind="welcomeBanner" v-if="isWelcomeBannerVisible")
     template(v-slot:buttons)
-      router-link(:to="{ name: 'treasury' }")
-        q-btn.q-px-lg.h-btn1(color="secondary" :label="$t('pages.dho.home.discoverMore')" no-caps rounded unelevated)
+      q-btn.q-px-lg.h-btn1(color="secondary" :label="$t('pages.dho.home.discoverMore')" no-caps rounded unelevated @click="openURL(daoSettings.settings_documentationUrl_s || 'https://help.hypha.earth/hc/2431449449')")
   section.q-mt-md.grid
     metric-link(:link="{ link: 'agreements', params: { type: 'badge' } }" :amount="activeAssignmentsCount || '...'"  :style="{'grid-area': 'assignments'}" :title="$t('pages.dho.home.assignments')")
     metric-link(:link="{ link: 'organization/assets', params: { type: 'badge' } }" :amount="activeBadgesCount || '...'"  :style="{'grid-area': 'badges'}" :title="$t('pages.dho.home.badges')")
     metric-link(:link="{ link: 'people', params: { type: 'badge' } }" :amount="activeMembersCount || '...'"  :style="{'grid-area': 'members'}" :title="$t('pages.dho.home.members')")
     metric-link(:link="{ link: 'agreements', params: { type: 'badge' } }" :amount="activeProposalsCount || '...'"  :style="{'grid-area': 'proposals'}" :title="$t('pages.dho.home.proposals')")
     members(:title="$t('pages.dho.home.members')" :members="daoMembers || []" :style="{'grid-area': 'new'}")
-    support-widget(:documentationButtonText="daoSettings.documentationButtonText" :documentationURL="daoSettings.documentationURL" :socialChat="daoSettings.socialChat" :style="{'grid-area': 'support'}")
+    support-widget(:documentationButtonText="daoSettings.documentationButtonText" :documentationURL="daoSettings.settings_documentationUrl_s || 'https://help.hypha.earth/hc/2431449449'" :socialChat="daoSettings.socialChat" :style="{'grid-area': 'support'}")
     how-it-works(:style="{'grid-area': 'how'}")
   section.q-mt-md
     circles-widget(:circles="circles" :title="$t('pages.dho.organization.daoCircles1')")

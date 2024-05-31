@@ -847,7 +847,7 @@ q-page.page-proposals
   base-banner(:compact="!$q.screen.gt.md" @onClose="hideProposalBanner" split="split" v-bind="banner" v-if="isShowingProposalBanner")
     template(v-slot:buttons)
       q-btn.q-px-lg.h-btn1(:to="{ name: 'proposal-create', params: { dhoname: daoSettings.url } }" color="secondary" :label="$t('pages.proposals.proposallist.createProposal')" no-caps rounded unelevated v-if="isMember")
-      a(:href="daoSettings.documentationURL" target="_blank")
+      a(:href="daoSettings.settings_documentationUrl_s || 'https://help.hypha.earth/hc/2431449449'" target="_blank")
         q-btn.q-px-lg.h-btn1(:class="{'bg-secondary': !isMember}" color="white" flat :label="$t('pages.proposals.proposallist.learnMore')" no-caps rounded)
     template(v-slot:right)
       .row
