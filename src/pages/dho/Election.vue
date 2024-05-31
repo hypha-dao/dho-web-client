@@ -72,7 +72,7 @@ export default {
           delegatesList: data.getDao.delegate,
           endDate: election.details_endDate_t,
           rounds: election.ueRound.length,
-          participants: election.ueStartrnd.reduce((count, group) => count + group.ueGroupLnk.reduce((count, link) => count + link.ueRdMember.filter(member => member.details_member_n).length, 0), 0),
+          participants: election.ueStartrnd?.ueGroupLnk?.length ? election.ueStartrnd.reduce((count, group) => count + group.ueGroupLnk.reduce((count, link) => count + link.ueRdMember.filter(member => member.details_member_n).length, 0), 0) : data.getDao.delegate?.length,
           id: election.docId
         }
       }).reverse(),
@@ -310,8 +310,7 @@ q-page.page-election
             .col.flex.justify-center.text-black(:style="{ 'font-size': '17px' }")
               div {{ election.rounds }} {{ $t('pages.dho.election.rounds') }}
             .col.flex.justify-center.text-black(:style="{ 'font-size': '17px' }")
-              div(v-if="hasNextElection") {{ election.delegatesList.length }} {{ $t('pages.dho.election.participants') }}
-              div(v-else) {{ election.participants }} {{ $t('pages.dho.election.participants') }}
+              div {{ election.participants }} {{ $t('pages.dho.election.participants') }}
             .col.flex.justify-end
               q-btn.q-px-lg.h-btn1(@click="$router.push({ path: `/${$store.state.dao.settings.settings_daoUrl_s}/election/${election.id}` })" :class="{ 'q-mt-sm': $q.screen.lt.xs || $q.screen.xs }" no-caps rounded unelevated :label="$t('pages.dho.election.seeResults')" color="primary" text-color="white")
     .col
