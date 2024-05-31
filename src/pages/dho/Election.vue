@@ -129,7 +129,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters('dao', ['selectedDao']),
+    ...mapGetters('dao', ['selectedDao', 'daoSettings']),
     ...mapGetters('accounts', ['account', 'isAdmin']),
     canStartElection() {
       return (!this.upcomingElection || !this.ongoingElection) && this.isAdmin
@@ -296,7 +296,8 @@ q-page.page-election
         .flex(:class=" { 'q-mt-md': $q.screen.lt.md, 'justify-end': $q.screen.gt.sm }")
         q-btn.q-px-lg.h-btn1(v-if="canStartElection" @click="_createElection" :class="{ 'q-mt-sm': $q.screen.lt.xs || $q.screen.xs }" no-caps rounded unelevated :label="$t('pages.dho.home.start')" color="secondary" text-color="white")
         q-btn.q-px-lg.h-btn1(v-else @click="$router.push({ path: `/${$store.state.dao.settings.settings_daoUrl_s}/election/${upcomingElection.docId}` })" :disable="!upcomingElection" :class="{ 'q-mt-sm': $q.screen.lt.xs || $q.screen.xs }" no-caps rounded unelevated :label="$t('pages.dho.home.signup')" color="secondary" text-color="white")
-        q-btn.q-px-lg.h-btn1.q-ml-sm(color="white" flat :label="$t('pages.dho.home.learnMore')" no-caps rounded)
+        a(:href="daoSettings.settings_documentationUrl_s || 'https://help.hypha.earth/hc/2431449449'" target="_blank")
+          q-btn.q-px-lg.h-btn1.q-ml-sm(color="white" flat :label="$t('pages.dho.home.learnMore')" no-caps rounded)
     //- template(v-slot:buttons)
       .row.justify-start
         q-btn.q-px-lg.h-btn1(disable :class="{ 'q-mt-sm': $q.screen.lt.xs || $q.screen.xs }" no-caps rounded unelevated :label="$t('pages.dho.home.nextElection', { date: dateToStringShort(nextElectionStartDate) })" color="white" text-color="primary")
