@@ -58,7 +58,7 @@ build_prod:
     NETWORK_CHAIN_ID: '4667b205c6838ef70ff7988f6e8257e8be0e1284a2f59699054a018f743b1d11'
     DAO_CONTRACT: 'dao.hypha'
     ACCOUNT_API_URL: 'https://tb3nnn0qa9.execute-api.us-east-1.amazonaws.com/prod'
-    BLOCKCHAIN_EXPLORER: 'https://telos.bloks.io'
+    BLOCKCHAIN_EXPLORER: 'https://explorer.telos.net'
     PPP_ENV: 'prod'
     SENTRY_DSN: 'https://6fa219bfb2ed453fb5032d6ce1b83fc9@sentry.io/1884471'
   cache:
@@ -103,7 +103,7 @@ build_dho:
     NETWORK_CHAIN_ID: '4667b205c6838ef70ff7988f6e8257e8be0e1284a2f59699054a018f743b1d11'
     DAO_CONTRACT: 'dao.hypha'
     ACCOUNT_API_URL: 'https://tb3nnn0qa9.execute-api.us-east-1.amazonaws.com/prod'
-    BLOCKCHAIN_EXPLORER: 'https://telos.bloks.io'
+    BLOCKCHAIN_EXPLORER: 'https://explorer.telos.net'
     PPP_ENV: 'prod'
     SENTRY_DSN: 'https://6fa219bfb2ed453fb5032d6ce1b83fc9@sentry.io/1884471'
     : 'https://notepad.diglife.coop/6w_69K_8QLSbzNaYcDWtHw?view '
