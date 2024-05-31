@@ -776,7 +776,7 @@ export default {
   },
 
   activated() {
-    this.$apollo.queries.stagedProposals.refetch()
+    this.$apollo.queries.stagedProposals?.refetch()
   },
   mounted() {
     if (localStorage.getItem('showProposalBanner') === 'false') {
@@ -833,7 +833,7 @@ export default {
       this.$refs.scroll.resume()
       this.pagination.offset = 0
       this.pagination.more = true
-      this.$apollo.queries.archivedProposals.refetch()
+      this.$apollo.queries.archivedProposals?.refetch()
     },
     handleCreateNewProposal() {
       this.$router.push(`/${this.daoSettings.url}/proposals/create`)
