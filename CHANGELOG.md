@@ -1,5 +1,15 @@
 # Changelog
 
+## [2.49.1](https://github.com/hypha-dao/dho-web-client/compare/v2.49.0...v2.49.1) (2024-05-31)
+
+
+### Bug Fixes
+
+* **links:** documentation links ([#1301](https://github.com/hypha-dao/dho-web-client/issues/1301)) ([#2634](https://github.com/hypha-dao/dho-web-client/issues/2634)) ([843abf0](https://github.com/hypha-dao/dho-web-client/commit/843abf04c102158c8880140f79e52b0fb05e5a3c))
+* **localization:** incorrect translations ([#1303](https://github.com/hypha-dao/dho-web-client/issues/1303)) ([#2633](https://github.com/hypha-dao/dho-web-client/issues/2633)) ([0840d79](https://github.com/hypha-dao/dho-web-client/commit/0840d79e3118612fd5302fec258f48481d185f82))
+* **policy:** proposal voting widget ([#1315](https://github.com/hypha-dao/dho-web-client/issues/1315)) ([#2632](https://github.com/hypha-dao/dho-web-client/issues/2632)) ([5781de5](https://github.com/hypha-dao/dho-web-client/commit/5781de5aeb9bb2b3637a06e440fe061dfc2d9e97))
+* upvote election issues ([#2631](https://github.com/hypha-dao/dho-web-client/issues/2631)) ([32bf56c](https://github.com/hypha-dao/dho-web-client/commit/32bf56c52d4da4f52421d48a31a3660fa0740f23))
+
 ## [2.49.0](https://github.com/hypha-dao/dho-web-client/compare/v2.48.1...v2.49.0) (2024-05-29)
 
 
