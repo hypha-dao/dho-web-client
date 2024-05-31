@@ -310,7 +310,8 @@ q-page.page-election
             .col.flex.justify-center.text-black(:style="{ 'font-size': '17px' }")
               div {{ election.rounds }} {{ $t('pages.dho.election.rounds') }}
             .col.flex.justify-center.text-black(:style="{ 'font-size': '17px' }")
-              div {{ election.participants }} {{ $t('pages.dho.election.participants') }}
+              div(v-if="hasNextElection") {{ election.delegatesList.length }} {{ $t('pages.dho.election.participants') }}
+              div(v-else) {{ election.participants }} {{ $t('pages.dho.election.participants') }}
             .col.flex.justify-end
               q-btn.q-px-lg.h-btn1(@click="$router.push({ path: `/${$store.state.dao.settings.settings_daoUrl_s}/election/${election.id}` })" :class="{ 'q-mt-sm': $q.screen.lt.xs || $q.screen.xs }" no-caps rounded unelevated :label="$t('pages.dho.election.seeResults')" color="primary" text-color="white")
     .col
