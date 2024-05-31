@@ -72,7 +72,7 @@ export default {
           delegatesList: data.getDao.delegate,
           endDate: election.details_endDate_t,
           rounds: election.ueRound.length,
-          participants: election.ueStartrnd.reduce((count, group) => count + group.ueGroupLnk.reduce((count, link) => count + link.ueRdMember.filter(member => member.details_member_n).length, 0), 0),
+          participants: election.ueStartrnd?.ueGroupLnk?.length ? election.ueStartrnd.reduce((count, group) => count + group.ueGroupLnk.reduce((count, link) => count + link.ueRdMember.filter(member => member.details_member_n).length, 0), 0) : data.getDao.delegate?.length,
           id: election.docId
         }
       }).reverse(),
