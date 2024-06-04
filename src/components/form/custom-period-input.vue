@@ -60,7 +60,6 @@ export default {
           if (this.period === 'weeks') { value = value * 7 * 24 * 60 * 60 }
           if (this.period === 'months') { value = value * 2628000 }
         }
-
         this.$emit('input', value)
       }
 
@@ -72,11 +71,22 @@ export default {
   watch: {
     value: {
       handler: function (value) {
-        if (value && !this.period) {
+        if (value) {
           this.period = secondsToInterval(this.value).period
         }
       },
       immediate: true
+    },
+    period: {
+      handler: function (value) {
+        let time = ''
+        if (this.period === 'minutes') { time = (this.valueFormated * 60) }
+        if (this.period === 'hours') { time = (this.valueFormated * 60) * 60 }
+        if (this.period === 'days') { time = this.valueFormated * 24 * 60 * 60 }
+        if (this.period === 'weeks') { time = this.valueFormated * 7 * 24 * 60 * 60 }
+        if (this.period === 'months') { time = this.valueFormated * 2628000 }
+        this.$emit('input', time)
+      }
     }
   }
 
@@ -102,7 +112,7 @@ div.custom-period-input
             q-item-section
               q-item-label {{ $t('periods.minutes') }}
 
-          q-item(clickable v-close-popup @click="period = 'minutes'")
+          q-item(clickable v-close-popup @click="period = 'hours'")
             q-item-section
               q-item-label {{ $t('periods.hours') }}
 
