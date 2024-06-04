@@ -329,10 +329,6 @@ const PROPOSAL_QUERY = `
 
       details_url_s
 
-      voteAggregate {
-        count
-      }
-
       votetally {
         docId
         ... on VoteTally {
@@ -1006,6 +1002,9 @@ const PROPOSAL_QUERY = `
           fail_votePower_a
           abstain_votePower_a
         }
+      }
+      voteAggregate {
+        count
       }
       pass: voteAggregate(filter: { vote_vote_s: { regexp: "/.*pass*./" } }) {
         count
