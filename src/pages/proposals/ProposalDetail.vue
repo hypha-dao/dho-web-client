@@ -329,10 +329,6 @@ const PROPOSAL_QUERY = `
 
       details_url_s
 
-      voteAggregate {
-        count
-      }
-
       votetally {
         docId
         ... on VoteTally {
