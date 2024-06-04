@@ -1007,9 +1007,6 @@ const PROPOSAL_QUERY = `
           abstain_votePower_a
         }
       }
-      voteAggregate {
-        count
-      }
       pass: voteAggregate(filter: { vote_vote_s: { regexp: "/.*pass*./" } }) {
         count
       }
