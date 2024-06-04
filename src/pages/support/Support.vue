@@ -75,7 +75,7 @@ q-page.page-support
 
       widget(:title="$t('pages.support.support.doYouHaveQuestions')")
         .text-body2.q-mt-sm.text-weight-thin.text-grey-7.q-my-md {{ $t('pages.support.support.findOurFull') }}
-        q-btn.q-px-xl.q-mt-xl(rounded no-caps color="primary" type="a" :href="daoSettings.documentationURL" target="_blank") {{ $t('pages.support.support.openWiki') }}
+        q-btn.q-px-xl.q-mt-xl(rounded no-caps color="primary" type="a" :href="daoSettings.settings_documentationUrl_s || 'https://help.hypha.earth/hc/2431449449'" target="_blank") {{ $t('pages.support.support.openWiki') }}
 
       widget.q-mt-md(:title="$t('pages.support.support.version')")
         .text-body2.q-mt-sm.text-weight-thin.text-grey-7.q-my-md {{ appVersion  }}

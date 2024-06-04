@@ -33,7 +33,7 @@ jobs:
           HVOICE_TOKEN_CONTRACT: 'voice.hypha'
           ACCOUNT_API_URL: 'https://tb3nnn0qa9.execute-api.us-east-1.amazonaws.com/prod'
           ACCOUNT_API_KEY: ${{ secrets.PROD_ACCOUNT_API_KEY }}
-          BLOCKCHAIN_EXPLORER: 'https://telos.bloks.io'
+          BLOCKCHAIN_EXPLORER: 'https://explorer.telos.net'
           BLOCKCHAIN_EXPLORER_BTC: 'https://www.blockchain.com/btc/tx/'
           BLOCKCHAIN_EXPLORER_ETH: 'https://etherscan.io/tx/'
           BLOCKCHAIN_EXPLORER_EOS: 'https://bloks.io/transaction/'
