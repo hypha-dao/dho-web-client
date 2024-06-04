@@ -1,5 +1,16 @@
 # Changelog
 
+## [2.49.2](https://github.com/hypha-dao/dho-web-client/compare/v2.49.1...v2.49.2) (2024-06-04)
+
+
+### Bug Fixes
+
+* **links:** broken links ([#1306](https://github.com/hypha-dao/dho-web-client/issues/1306)) ([#2637](https://github.com/hypha-dao/dho-web-client/issues/2637)) ([24edf12](https://github.com/hypha-dao/dho-web-client/commit/24edf1252884d2a9da6b859c6da06daf03860b75))
+* **proposal-list:** proposal not loading (#DEV-1322) ([#2640](https://github.com/hypha-dao/dho-web-client/issues/2640)) ([285b2aa](https://github.com/hypha-dao/dho-web-client/commit/285b2aa61bcde135ae84fe584c9820175d8067dc))
+* **settings:** settings vote duration period ([#1307](https://github.com/hypha-dao/dho-web-client/issues/1307)) ([#2636](https://github.com/hypha-dao/dho-web-client/issues/2636)) ([3ac44b5](https://github.com/hypha-dao/dho-web-client/commit/3ac44b52397b6705548bd4ec7489ada894a89e8a))
+* **settings:** utility token supply ([#1291](https://github.com/hypha-dao/dho-web-client/issues/1291)) ([#2638](https://github.com/hypha-dao/dho-web-client/issues/2638)) ([9ad205b](https://github.com/hypha-dao/dho-web-client/commit/9ad205bbac5d8476e6dc72fb37c82aa9e428303b))
+* **support:** links issues ([#1317](https://github.com/hypha-dao/dho-web-client/issues/1317)) ([#2639](https://github.com/hypha-dao/dho-web-client/issues/2639)) ([2ce40f8](https://github.com/hypha-dao/dho-web-client/commit/2ce40f87f6527f404a88b0b5bdaa52bba1ae61db))
+
 ## [2.49.1](https://github.com/hypha-dao/dho-web-client/compare/v2.49.0...v2.49.1) (2024-05-31)
 
 
