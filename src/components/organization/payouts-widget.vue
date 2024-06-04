@@ -31,6 +31,6 @@ widget.full-width(:title="$t('organization.payouts-widget.passedGenericContribut
       empty-widget-label(sectionTitle="Passed Generic Contributions")
   .row(v-else v-for="payout in payouts")
     .col-12
-      Payout-card(v-bind="payout" :compact="compact" @click.native="$router.push({ path: `/${$route.params.dhoname}/proposals/${payout.docId}` })")
+      Payout-card(v-bind="payout" :compact="compact" @click.native="$router.push({ path: `/${$route.params.dhoname}/agreements/${payout.docId}` })")
 
 </template>

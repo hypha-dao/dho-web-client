@@ -39,9 +39,9 @@ export default {
         .h-b2 {{ $t('navigation.sidebar-news.niceToSee') }}
       .row.items-center.q-my-md
         .h-b2 {{ $t('navigation.sidebar-news.youCanVoteFor') }}
-          router-link(:to="`/${daoName}/proposals`") {{ $t('navigation.sidebar-news.proposals') }}
+          router-link(:to="`/${daoName}/agreements`") {{ $t('navigation.sidebar-news.proposals') }}
           | {{ $t('navigation.sidebar-news.searchFor') }}
-          router-link(:to="`/${daoName}/members`") {{ $t('navigation.sidebar-news.members') }}
+          router-link(:to="`/${daoName}/people`") {{ $t('navigation.sidebar-news.members') }}
           | {{ $t('navigation.sidebar-news.andFindOut') }}
           router-link(:to="`/${daoName}/organization`") {{ $t('navigation.sidebar-news.organization') }}
           | {{ $t('navigation.sidebar-news.tick') }}

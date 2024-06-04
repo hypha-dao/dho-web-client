@@ -8,7 +8,7 @@ export const daoRouting = {
       this.$router.push(`/${this.daoSettings.url}/${route}`)
     },
     routeToProposal (proposalId) {
-      this.$router.push(`/${this.daoSettings.url}/proposals/${proposalId}`)
+      this.$router.push(`/${this.daoSettings.url}/agreements/${proposalId}`)
     }
   }
 }
