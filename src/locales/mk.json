@@ -1174,7 +1174,9 @@
       "to": "на",
       "sendToPlaceholder": "Внеси ја јавната адреса",
       "transactionSuccessful": "Успешна трансакција!",
-      "close": "Затвори"
+      "close": "Затвори",
+      "sendUtilityTokens": "Испратете токени за комунални услуги во друг паричник",
+      "addPayoutTokens": "Додадете токени за исплата на редот за откуп на трезорот"
     },
     "wallet-hypha": {
       "availableBalance": "Достапен баланс",

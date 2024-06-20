@@ -1172,6 +1172,8 @@
         "details":"Details",
         "queueHusdRedemption":"Queue {tokenName} Redemption for Treasury Payout to Configured Wallet",
         "redeem":"Redeem",
+        "sendUtilityTokens": "Send Utility Tokens to Another Wallet",
+        "addPayoutTokens": "Add Payout tokens to the Treasury Redemption Queue",
 
         "send":"Send",
         "sendTo":"Send to",

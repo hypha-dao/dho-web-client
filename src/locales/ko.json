@@ -1172,7 +1172,9 @@
       "to": "에게",
       "sendToPlaceholder": "공개 주소를 입력하세요.",
       "transactionSuccessful": "거래 성공!",
-      "close": "닫다"
+      "close": "닫다",
+      "sendUtilityTokens": "유틸리티 토큰을 다른 지갑으로 보내기",
+      "addPayoutTokens": "재무 상환 대기열에 지급 토큰 추가"
     },
     "wallet-hypha": {
       "availableBalance": "사용 가능한 잔액",

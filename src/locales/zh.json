@@ -1172,7 +1172,9 @@
       "to": "到",
       "sendToPlaceholder": "输入公共地址",
       "transactionSuccessful": "交易成功！",
-      "close": "关闭"
+      "close": "关闭",
+      "sendUtilityTokens": "将实用代币发送到另一个钱包",
+      "addPayoutTokens": "将支付代币添加到国库赎回队列"
     },
     "wallet-hypha": {
       "availableBalance": "可用余额",

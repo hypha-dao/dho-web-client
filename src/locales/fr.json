@@ -1177,7 +1177,9 @@
       "to": "À",
       "sendToPlaceholder": "Entrez l'adresse publique",
       "transactionSuccessful": "Transaction réussie !",
-      "close": "Fermer"
+      "close": "Fermer",
+      "sendUtilityTokens": "Envoyer des jetons utilitaires vers un autre portefeuille",
+      "addPayoutTokens": "Ajouter des jetons de paiement à la file d'attente de rachat du Trésor"
     },
     "wallet-hypha": {
       "availableBalance": "Solde disponible",

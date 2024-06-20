@@ -1172,7 +1172,9 @@
       "to": "A",
       "sendToPlaceholder": "Ingrese la dirección pública",
       "transactionSuccessful": "¡Transacción exitosa!",
-      "close": "Cerca"
+      "close": "Cerca",
+      "sendUtilityTokens": "Enviar tokens de utilidad a otra billetera",
+      "addPayoutTokens": "Agregue tokens de pago a la cola de canje del Tesoro"
     },
     "wallet-hypha": {
       "availableBalance": "Saldo disponible",
