@@ -1,5 +1,23 @@
 # Changelog
 
+## [2.49.3](https://github.com/hypha-dao/dho-web-client/compare/v2.49.2...v2.49.3) (2024-06-20)
+
+
+### Bug Fixes
+
+* **action:** add correct value for reward_token_max_supply ([0ddc2e6](https://github.com/hypha-dao/dho-web-client/commit/0ddc2e6f268518ac9119a3e6fa64e824dd1247fa))
+* **action:** add correct value for reward_token_max_supply ([0ddc2e6](https://github.com/hypha-dao/dho-web-client/commit/0ddc2e6f268518ac9119a3e6fa64e824dd1247fa))
+* **action:** add correct value for reward_token_max_supply ([d54dad1](https://github.com/hypha-dao/dho-web-client/commit/d54dad1a51d1f0e4b79e42bdc63bd7cb8ef44404))
+* **circle-card:** go-to-circle button link ([#1314](https://github.com/hypha-dao/dho-web-client/issues/1314)) ([90a8a21](https://github.com/hypha-dao/dho-web-client/commit/90a8a215872c517d5990d11b70ae2646fe527186))
+* **circle-card:** go-to-circle button link ([#1314](https://github.com/hypha-dao/dho-web-client/issues/1314)) ([90a8a21](https://github.com/hypha-dao/dho-web-client/commit/90a8a215872c517d5990d11b70ae2646fe527186))
+* **circle-card:** go-to-circle button link ([#1314](https://github.com/hypha-dao/dho-web-client/issues/1314)) ([78c6e3b](https://github.com/hypha-dao/dho-web-client/commit/78c6e3b5dc079f8b335302247da4a202bb2d84a4))
+* **proposal-view:** see profile link ([#1313](https://github.com/hypha-dao/dho-web-client/issues/1313)) ([bdf113e](https://github.com/hypha-dao/dho-web-client/commit/bdf113e07bbf748d238c291c24b876446a7481b4))
+* **proposal-view:** see profile link ([#1313](https://github.com/hypha-dao/dho-web-client/issues/1313)) ([bdf113e](https://github.com/hypha-dao/dho-web-client/commit/bdf113e07bbf748d238c291c24b876446a7481b4))
+* **proposal-view:** see profile link ([#1313](https://github.com/hypha-dao/dho-web-client/issues/1313)) ([dc87083](https://github.com/hypha-dao/dho-web-client/commit/dc87083fdaa48b15cbda0bc4273dc355181a842a))
+* **wallet-base:** hint texts ([#1312](https://github.com/hypha-dao/dho-web-client/issues/1312)) ([bded955](https://github.com/hypha-dao/dho-web-client/commit/bded955c07b28ae58665052858880faa36860215))
+* **wallet-base:** hint texts ([#1312](https://github.com/hypha-dao/dho-web-client/issues/1312)) ([bded955](https://github.com/hypha-dao/dho-web-client/commit/bded955c07b28ae58665052858880faa36860215))
+* **wallet-base:** hit texts ([#1312](https://github.com/hypha-dao/dho-web-client/issues/1312)) ([ade652b](https://github.com/hypha-dao/dho-web-client/commit/ade652b1d457ad4e5b67ec38701f860ac74f206a))
+
 ## [2.49.2](https://github.com/hypha-dao/dho-web-client/compare/v2.49.1...v2.49.2) (2024-06-04)
 
 
