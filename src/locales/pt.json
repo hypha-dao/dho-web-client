@@ -1172,7 +1172,9 @@
       "to": "Para",
       "sendToPlaceholder": "Insira o endereço público",
       "transactionSuccessful": "Transação bem-sucedida!",
-      "close": "Fechar"
+      "close": "Fechar",
+      "sendUtilityTokens": "Envie tokens utilitários para outra carteira",
+      "addPayoutTokens": "Adicionar tokens de pagamento à fila de resgate do Tesouro"
     },
     "wallet-hypha": {
       "availableBalance": "Saldo disponível",

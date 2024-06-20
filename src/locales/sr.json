@@ -1173,7 +1173,9 @@
       "to": "До",
       "sendToPlaceholder": "Унесите јавну адресу",
       "transactionSuccessful": "Трансакција успела!",
-      "close": "Близу"
+      "close": "Близу",
+      "sendUtilityTokens": "Пошаљите услужне токене у други новчаник",
+      "addPayoutTokens": "Додајте токене за исплату у ред за откуп трезора"
     },
     "wallet-hypha": {
       "availableBalance": "Доступно Стање",
