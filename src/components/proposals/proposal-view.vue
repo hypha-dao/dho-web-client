@@ -114,7 +114,7 @@ export default {
       return this.getSalaryBucket(this.salary)
     },
     profile () {
-      return `/${this.$store.getters['dao/selectedDao'].name}/@${this.creator}`
+      return `/${this.daoSettings.settings_daoUrl_s}/@${this.creator}`
     },
     descriptionWithoutSpecialCharacters () {
       const regex = /&nbsp;/gi
