@@ -138,7 +138,7 @@ export default {
     state () {
       switch (this.$router.currentRoute.name) {
         case 'proposal-create':
-          return 'CREATING'
+          return 'creating'
       }
       return ''
     },
@@ -266,7 +266,7 @@ widget.proposal-view.q-mb-sm
             .text-grey-7.text-body2 {{ deferred?.value + '%' }}
               .dynamic-popup(v-if="showDefferredPopup")
                 proposal-dynamic-popup.q-pa-xxl.absolute(:title="$t('proposals.proposal-view.adjustDeferred')" :description="$t('proposals.proposal-view.thePercentDeferralWillBe')" :step="1" :min="deferred.min" :max="deferred.max" :initialValue="deferred?.value" @close="showDefferredPopup = false" @save="onDeferredEdit")
-              q-btn.q-ml-xxxl(flat round size="sm" icon="fas fa-pen" color="primary" v-if="(state !== 'CREATING') && (ownAssignment) && (status === PROPOSAL_STATE.APPROVED || status === PROPOSAL_TYPE.ARCHIVED)" @click="showDefferredPopup = true; showCommitPopup = false")
+              q-btn.q-ml-xxxl(flat round size="sm" icon="fas fa-pen" color="primary" v-if="(state !== PROPOSAL_STATE.CREATING) && (ownAssignment) && (status === PROPOSAL_STATE.APPROVED || status === PROPOSAL_TYPE.ARCHIVED)" @click="showDefferredPopup = true; showCommitPopup = false")
                 q-tooltip {{ $t('proposals.proposal-view.edit1') }}
   .q-my-sm(:class="{ 'row':$q.screen.gt.md }" v-if="type === PROPOSAL_TYPE.ARCHETYPE")
     .col-6
