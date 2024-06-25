@@ -1,6 +1,25 @@
 <script>
+import { mapGetters } from 'vuex'
 import { PROPOSAL_TYPE } from '~/const'
 import { format } from '~/mixins/format'
+import gql from 'graphql-tag'
+
+const TIERS_QUERY = `
+  querySalaryband(
+    filter: {
+      details_dao_i: { eq: $daoId },
+    }
+  ) {
+    id: docId
+    name: details_name_s
+    annualAmount: details_annualUsdSalary_a
+    minDeferred: details_minDeferredX100_i
+
+    assignmentAggregate {
+      count
+    }
+  }
+`
 
 /**
  * A component to display proposal chips
@@ -23,7 +42,32 @@ export default {
     proposal: Object
   },
 
+  apollo: {
+    tiers: {
+      query: gql`query TIERS($daoId: Int64!) { ${TIERS_QUERY} }`,
+      update: data => data.querySalaryband,
+      skip () { return !this.selectedDao?.docId },
+      variables () { return { daoId: this.selectedDao.docId } },
+      // pollInterval: 1000, // TODO: Just for demo remove after
+      subscribeToMore: {
+        document: gql`subscription TIERS($daoId: Int64!) { ${TIERS_QUERY} }`,
+        skip () { return !this.selectedDao?.docId },
+        variables () { return { daoId: this.selectedDao.docId } },
+        updateQuery: (previousResult, { subscriptionData }) => {
+          if (!subscriptionData.data) {
+            return previousResult
+          }
+          if (!previousResult) {
+            return undefined
+          }
+          return subscriptionData.data
+        }
+      }
+    }
+  },
+
   computed: {
+    ...mapGetters('dao', ['selectedDao']),
     originalType () {
       return this.proposal.original[0] ? this.proposal.original[0].__typename : null
     },
@@ -222,13 +266,23 @@ export default {
       if (this.salary) {
         const amount = Number.parseFloat(this.salary.split(' ')[0])
         const band = this.getSalaryBucket(amount)
-        result.push(
-          {
-            color: 'secondary',
-            outline: false,
-            label: `${band}`
-          }
-        )
+        if (this.proposal?.salaryband?.[0]?.details_name_s || this.proposal?.salaryband?.[0]?.name) {
+          result.push(
+            {
+              color: 'secondary',
+              outline: false,
+              label: `${this.proposal?.salaryband?.[0]?.details_name_s || this.proposal?.salaryband?.[0]?.name}`
+            }
+          )
+        } else {
+          result.push(
+            {
+              color: 'secondary',
+              outline: false,
+              label: `${band}`
+            }
+          )
+        }
       }
 
       if (this.commit) {
