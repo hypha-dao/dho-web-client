@@ -99,6 +99,7 @@ export default defineComponent({
             span.text-bold.q-mx-sm(:class="coefficientPercentage && coefficientPercentage >= 0 ? 'text-positive' : 'text-negative'" v-else-if="coefficient && (coefficientPercentage !== undefined || coefficientPercentage !== null)") x
               | {{coefficientPercentage}}
             q-tooltip(:content-style="{'font-size': '1em'}" anchor="top right" self="top right" v-if="tooltip") {{tooltip}}
+            div {{ detail }}
           .text-caption.text-left.inline-block.q-ml-sm.text-italic(v-if="detail") {{'(' + detail + ')'}}
 </template>
 <style scoped lang="stylus">
