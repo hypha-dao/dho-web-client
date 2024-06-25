@@ -18,8 +18,8 @@ const settingsMapper = (data) => {
     ...(exist(form.votingAlignmentPercent) ? { votingAlignmentX100: form.votingAlignmentPercent } : {}),
     ...(exist(form.votingQuorumPercent) ? { votingQuorumX100: form.votingQuorumPercent } : {}),
 
-    ...(exist(form.communityVotingEnabled) ? { communityVotingEnabled: form.communityVotingEnabled ? 1 : 0 } : {})
-
+    ...(exist(form.communityVotingEnabled) ? { communityVotingEnabled: form.communityVotingEnabled ? 1 : 0 } : {}),
+    ...(exist(form.showUpvoteElection) ? { showUpvoteElection: form.showUpvoteElection ? 1 : 0 } : {})
   }
 }
 
@@ -62,7 +62,7 @@ const defaultSettings = {
   communityVotingEnabled: false,
   communityVotingDurationSec: 604800,
   communityVotingAlignmentPercent: 20,
-  communityVotingQuorumPercent: 50
+  communityVotingQuorumPercent: 50,
 
   // TODO:
   // communityVotingMethod: 'CLASSIC',
@@ -76,6 +76,7 @@ const defaultSettings = {
   // upvoteHeadDelegateRound: false,
   // upvoteHeadDelegateDuration: 10800,
 
+  showUpvoteElection: false
 }
 
 const TABS = Object.freeze({
@@ -150,7 +151,7 @@ export default {
         communityVotingEnabled: this.daoSettings?.communityVotingEnabled ? this.daoSettings?.communityVotingEnabled : defaultSettings.communityVotingEnabled,
         communityVotingDurationSec: this.daoSettings?.communityVotingDurationSec ? this.daoSettings?.communityVotingDurationSec : defaultSettings.communityVotingDurationSec,
         communityVotingAlignmentPercent: this.daoSettings?.communityVotingAlignmentPercent ? this.daoSettings?.communityVotingAlignmentPercent : defaultSettings.communityVotingAlignmentPercent,
-        communityVotingQuorumPercent: this.daoSettings?.communityVotingQuorumPercent ? this.daoSettings?.communityVotingQuorumPercent : defaultSettings.communityVotingQuorumPercent
+        communityVotingQuorumPercent: this.daoSettings?.communityVotingQuorumPercent ? this.daoSettings?.communityVotingQuorumPercent : defaultSettings.communityVotingQuorumPercent,
 
         // TODO
         // communityVotingMethod: this.daoSettings?.communityVotingMethod ? this.daoSettings?.communityVotingMethod : defaultSettings.communityVotingMethod,
@@ -163,7 +164,7 @@ export default {
         // upvoteCheifDelegateDuration: this.daoSettings?.upvoteCheifDelegateDuration ? this.daoSettings?.upvoteCheifDelegateDuration : defaultSettings.upvoteCheifDelegateDuration,
         // upvoteHeadDelegateRound: this.daoSettings?.upvoteHeadDelegateRound ? this.daoSettings?.upvoteHeadDelegateRound : defaultSettings.upvoteHeadDelegateRound,
         // upvoteHeadDelegateDuration: this.daoSettings?.upvoteHeadDelegateDuration ? this.daoSettings?.upvoteHeadDelegateDuration : defaultSettings.upvoteHeadDelegateDuration,
-
+        showUpvoteElection: this.daoSettings.showUpvoteElection ? this.daoSettings.showUpvoteElection : defaultSettings.showUpvoteElection
       }
 
       this.resetForm()
@@ -239,7 +240,6 @@ export default {
     async updateSettings () {
       try {
         this.state = CONFIGURATION_STATE.SAVING
-
         await this.updateDAOSettings({ data: { ...this.dataForSave } })
 
         const url = this.dataForSave.daoUrl

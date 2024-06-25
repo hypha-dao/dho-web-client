@@ -116,7 +116,11 @@ export default {
             v-model='form.documentationUrl'
           )
           q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") {{ $t('common.onlyDaoAdmins') }}
-
+      .col-12.col-md-4(:class="{'q-mt-sm': !$q.screen.gt.md}")
+        label.h-label {{ $t('configuration.settings-general.form.showUpvoteElection.label') }}
+        .row
+          q-toggle(:disable="!isAdmin" color="primary" v-model="form.showUpvoteElection")
+      .col-12.col-md-4(:class="{'q-mt-sm': !$q.screen.gt.md}")
       .full-width.q-mt-sm
         label.h-label {{ $t('configuration.settings-general.form.purpose.label') }}
         q-input.q-my-sm(

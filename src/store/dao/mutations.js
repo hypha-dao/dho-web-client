@@ -61,6 +61,8 @@ const settingsMapper = (settings) => {
     upvoteHeadDelegateRound: settings?.settings_upvoteHeadDelegateRound_i,
     upvoteHeadDelegateDuration: settings?.settings_upvoteHeadDelegateDuration_i,
 
+    showUpvoteElection: Boolean(settings?.settings_showUpvoteElection_i),
+
     usesSeeds: Boolean(settings?.settings_usesSeeds_i),
     isHypha: Boolean(settings?.settings_isHypha_i),
 

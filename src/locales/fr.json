@@ -138,7 +138,10 @@
         "documentation-url":{
           "label": "URL de la documentation"
         },
-        "sample-text": "Ce texte doit être visible dans les deux couleurs"
+        "sample-text": "Ce texte doit être visible dans les deux couleurs",
+        "showUpvoteElection": {
+          "label": "Afficher l'élection de vote positif"
+        }
       },
       "nav": {
         "show-more": "Afficher plus d'options",
