@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.50.0](https://github.com/hypha-dao/dho-web-client/compare/v2.49.4...v2.50.0) (2024-06-26)
+
+
+### Features
+
+* **configuration:** added showUpvoteElection param (#DEV-1316) ([#2650](https://github.com/hypha-dao/dho-web-client/issues/2650)) ([2632db0](https://github.com/hypha-dao/dho-web-client/commit/2632db0edba0cfce515ded264377131f4e6e84fa))
+
 ## [2.49.4](https://github.com/hypha-dao/dho-web-client/compare/v2.49.3...v2.49.4) (2024-06-26)
 
 
