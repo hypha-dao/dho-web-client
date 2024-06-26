@@ -164,7 +164,7 @@ export default {
         // upvoteCheifDelegateDuration: this.daoSettings?.upvoteCheifDelegateDuration ? this.daoSettings?.upvoteCheifDelegateDuration : defaultSettings.upvoteCheifDelegateDuration,
         // upvoteHeadDelegateRound: this.daoSettings?.upvoteHeadDelegateRound ? this.daoSettings?.upvoteHeadDelegateRound : defaultSettings.upvoteHeadDelegateRound,
         // upvoteHeadDelegateDuration: this.daoSettings?.upvoteHeadDelegateDuration ? this.daoSettings?.upvoteHeadDelegateDuration : defaultSettings.upvoteHeadDelegateDuration,
-        showUpvoteElection: this.daoSettings.showUpvoteElection ? this.daoSettings.showUpvoteElection : defaultSettings.showUpvoteElection
+        showUpvoteElection: this?.daoSettings?.showUpvoteElection != null ? this.daoSettings.showUpvoteElection : defaultSettings.showUpvoteElection
       }
 
       this.resetForm()
