@@ -1,5 +1,15 @@
 # Changelog
 
+## [2.49.4](https://github.com/hypha-dao/dho-web-client/compare/v2.49.3...v2.49.4) (2024-06-26)
+
+
+### Bug Fixes
+
+* **home:** add dao title as title param ([a3f312b](https://github.com/hypha-dao/dho-web-client/commit/a3f312b125daa1a0875794fc8056972a5bc774a4))
+* **home:** add dao title as title param (#DEV-1326) ([94cac98](https://github.com/hypha-dao/dho-web-client/commit/94cac98069e1a01baef7e6f99bae1c3d1ee18cb3))
+* **home:** add dao title as title param (#DEV-1326) ([94cac98](https://github.com/hypha-dao/dho-web-client/commit/94cac98069e1a01baef7e6f99bae1c3d1ee18cb3))
+* **proposal-view:** token mix percentage edit button ([#1319](https://github.com/hypha-dao/dho-web-client/issues/1319)) ([#2647](https://github.com/hypha-dao/dho-web-client/issues/2647)) ([09bf979](https://github.com/hypha-dao/dho-web-client/commit/09bf979fa8196c4c4bd650e1f2df297b65d8a80f))
+
 ## [2.49.3](https://github.com/hypha-dao/dho-web-client/compare/v2.49.2...v2.49.3) (2024-06-20)
 
 
