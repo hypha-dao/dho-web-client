@@ -300,6 +300,7 @@ queryDao(filter: { docId: { eq: $docId } }) {
 
       salaryband {
         details_annualUsdSalary_a
+        details_name_s
       }
 
       start {

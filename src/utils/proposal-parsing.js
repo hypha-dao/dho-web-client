@@ -402,7 +402,7 @@ export function salary (proposal) {
       }
     }
     if (proposal.__typename === PROPOSAL_TYPE.ROLE) {
-      return proposal?.role?.[0]?.details_annualUsdSalary_a ? proposal?.role?.[0]?.details_annualUsdSalary_a : proposal?.salaryband?.[0]?.details_annualUsdSalary_a
+      return proposal?.role?.[0]?.details_annualUsdSalary_a ? proposal?.role?.[0]?.details_annualUsdSalary_a : proposal?.salaryband?.[0]?.details_annualUsdSalary_a ? proposal?.salaryband?.[0]?.details_annualUsdSalary_a : proposal?.salaryband?.[0]?.annualAmount
     }
     if (proposal.__typename === PROPOSAL_TYPE.EDIT) {
       if (proposal.original[0].__typename === PROPOSAL_TYPE.ROLE) {
@@ -418,9 +418,8 @@ export function compensation (proposal, daoSettings) {
   const [peg, pegToken] = proposal.details_pegAmount_a.split(' ')
   const [voice, voiceToken] = proposal.details_voiceAmount_a.split(' ')
 
-  const parseReward = daoSettings.rewardToPegRatio * parseFloat(reward)
+  const parseReward = daoSettings.rewardToPegRatio ? daoSettings.rewardToPegRatio * parseFloat(reward) : parseFloat(reward)
   const tooltip = `${parseFloat(reward).toFixed(0)} ${rewardToken} - ${parseFloat(peg).toFixed(0)} ${pegToken} - ${parseFloat(voice).toFixed(0)} ${voiceToken}`
-
   const compensation = parseReward + parseFloat(peg)
   return {
     amount: compensation.toString(),

@@ -207,6 +207,7 @@ query proposalsActiveVote($docId: String!, $user: String, $first: Int!, $offset:
         details_periodCount_i
         salaryband {
           details_annualUsdSalary_a
+          details_name_s
         }
         start {
           details_startTime_t

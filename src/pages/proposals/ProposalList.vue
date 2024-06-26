@@ -830,7 +830,7 @@ export default {
     },
 
     resetPaginationValues() {
-      this.$refs.scroll.resume()
+      this.$refs?.scroll?.resume()
       this.pagination.offset = 0
       this.pagination.more = true
       this.$apollo.queries.archivedProposals?.refetch()

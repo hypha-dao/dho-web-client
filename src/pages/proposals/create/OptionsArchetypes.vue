@@ -15,6 +15,7 @@ const ASSIGMENT_OPTIONS = `
       annualAmount: details_annualUsdSalary_a
       minDeferred: details_minDeferredX100_i
       system_defaultAsset_i
+      details_name_s
     }
   }
 `

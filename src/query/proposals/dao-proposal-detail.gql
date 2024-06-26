@@ -513,6 +513,7 @@ query proposalDetail($docId: String!, $first: Int!, $offset: Int!) {
       }
       salaryband {
         details_annualUsdSalary_a
+        details_name_s
       }
       details_pegSalaryPerPeriod_a
       details_rewardSalaryPerPeriod_a

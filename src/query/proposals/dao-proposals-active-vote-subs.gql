@@ -200,6 +200,10 @@ subscription proposalsSubs ($docId: String!, $user: String, $first: Int) {
         start {
           details_startTime_t
         }
+        salaryband {
+          details_annualUsdSalary_a
+          details_name_s
+        }
         details_pegSalaryPerPeriod_a
         details_rewardSalaryPerPeriod_a
         details_voiceSalaryPerPeriod_a
