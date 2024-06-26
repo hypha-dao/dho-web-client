@@ -138,7 +138,7 @@ export default {
     state () {
       switch (this.$router.currentRoute.name) {
         case 'proposal-create':
-          return 'creating'
+          return PROPOSAL_STATE.CREATING
       }
       return ''
     },
