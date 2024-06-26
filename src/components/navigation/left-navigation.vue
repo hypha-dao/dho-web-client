@@ -71,7 +71,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters('dao', ['selectedDao']),
+    ...mapGetters('dao', ['selectedDao', 'daoSettings']),
     ...mapGetters('accounts', ['account', 'isAdmin']),
     activeTab() {
       if (this.$route.name === NAVIGATION.DASHBOARD) return NAVIGATION.DASHBOARD
@@ -132,7 +132,7 @@ export default {
             q-tooltip(anchor="center right" self="center left" :content-style="{ 'font-size': '1em' }") {{ $t('navigation.left-navigation.agreements') }}
           q-btn.q-ma-md(:class="{'active': activeTab=== NAVIGATION.PEOPLE}" :flat="activeTab !== NAVIGATION.PEOPLE" unelevated rounded padding="12px" icon="fas fa-users" size="sm" :color="activeTab === NAVIGATION.PEOPLE ? 'primary' : 'disabled'" :to="{ name: NAVIGATION.PEOPLE }")
             q-tooltip(anchor="center right" self="center left" :content-style="{ 'font-size': '1em' }") {{ $t('navigation.left-navigation.people') }}
-          q-btn.q-ma-md(v-if="hasElections || isAdmin" :class="{'active': activeTab=== NAVIGATION.ELECTION}" :flat="activeTab !== NAVIGATION.ELECTION" unelevated rounded padding="12px" size="sm" :color="activeTab === NAVIGATION.ELECTION ? 'primary' : 'disabled'" :to="{ name: NAVIGATION.ELECTION }")
+          q-btn.q-ma-md(v-if="(hasElections || isAdmin) && daoSettings.showUpvoteElection" :class="{'active': activeTab=== NAVIGATION.ELECTION}" :flat="activeTab !== NAVIGATION.ELECTION" unelevated rounded padding="12px" size="sm" :color="activeTab === NAVIGATION.ELECTION ? 'primary' : 'disabled'" :to="{ name: NAVIGATION.ELECTION }")
             img.no-active(:class="{ 'active-btn': activeTab=== NAVIGATION.ELECTION }" :src="activeTab=== NAVIGATION.ELECTION ? IconVotingWhite : IconVoting")
             q-tooltip(anchor="center right" self="center left" :content-style="{ 'font-size': '1em' }") {{ $t('navigation.left-navigation.election') }}
           q-btn.q-ma-md(:class="{'active': activeTab=== NAVIGATION.TREASURY}" :flat="activeTab !== NAVIGATION.TREASURY" unelevated rounded padding="12px" icon="fas fa-building" size="sm" :color="activeTab === NAVIGATION.TREASURY ? 'primary' : 'disabled'" :to="{ name: NAVIGATION.TREASURY }")

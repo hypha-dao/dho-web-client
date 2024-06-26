@@ -78,6 +78,7 @@ const ACTIVE_DAO_QUERY = `
       settings_communityVotingDurationSec_i
       settings_communityVotingAlignmentPercent_i
       settings_communityVotingQuorumPercent_i
+      settings_showUpvoteElection_i
 
       settings_usesSeeds_i
       settings_isHypha_i

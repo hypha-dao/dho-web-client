@@ -138,7 +138,10 @@
         "documentation-url":{
           "label": "文档 URL"
         },
-        "sample-text": "此文本必须以两种颜色显示"
+        "sample-text": "此文本必须以两种颜色显示",
+        "showUpvoteElection": {
+          "label": "显示支持选举"
+        }
       },
       "nav": {
         "show-more": "显示更多选项",
