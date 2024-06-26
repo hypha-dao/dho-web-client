@@ -215,7 +215,7 @@ export default {
                 )
                 q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!selectedDao.hasCustomToken") {{ $t('common.onlyDaoAdmins') }}
 
-            .col-12(:class="{ 'invisible': selectedDao.hasCustomToken }")
+            .col-12
               label.h-label {{ $t('configuration.settings-tokens.tresury.form.currency.label') }}
               q-select.q-my-xs(
                 :disable="!isAdmin"
@@ -228,7 +228,7 @@ export default {
                 options-dense
                 outlined
                 rounded
-                v-model="tokens.treasuryCurrency"
+                v-model="form.treasuryCurrency"
               )
               q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!selectedDao.hasCustomToken") {{ $t('common.onlyDaoAdmins') }}
 
