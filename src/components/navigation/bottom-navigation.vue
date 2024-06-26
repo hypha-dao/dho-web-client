@@ -29,12 +29,12 @@ export default {
   apollo: {
     elections: {
       query: gql`query electionsQuery ($daoId: String!) { ${ELECTIONS} }`,
-      update: data => data?.getDao?.ueElection 
+      update: data => data?.getDao?.ueElection
         ? data.getDao.ueElection.map(election => {
-            return {
-              id: election.docId
-            }
-          })
+          return {
+            id: election.docId
+          }
+        })
         : [],
       variables() {
         return {
