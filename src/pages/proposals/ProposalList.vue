@@ -885,7 +885,7 @@ q-page.page-proposals
       .row.justify-center.q-my-md(v-if="!filteredProposals?.length && !filteredStagedProposals?.length")
         loading-spinner(color="primary" size="72px")
       .row.q-mb-md(v-if="filteredStagedProposals?.length")
-        .h-h4 {{ $t('pages.proposals.proposallist.drafts1') }}
+        .h-h4 {{ $t('pages.proposals.proposallist.drafts') }}
         .h-h4-regular.q-ml-xs (
           | {{ filteredStagedProposals.length }}
           | )
