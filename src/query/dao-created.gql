@@ -71,6 +71,7 @@ query activeDaoCreated($regexp: String!, $username: String!) {
       settings_exploreParagraph_s
 
       settings_documentationURL_s
+      settings_showUpvoteElection_i
     }
 
     memberAggregate {

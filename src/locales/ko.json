@@ -138,7 +138,10 @@
         "documentation-url":{
           "label": "문서 URL"
         },
-        "sample-text": "이 텍스트는 두 가지 색상으로 모두 표시되어야 합니다."
+        "sample-text": "이 텍스트는 두 가지 색상으로 모두 표시되어야 합니다.",
+        "showUpvoteElection": {
+          "label": "찬성 투표 표시"
+        }
       },
       "nav": {
         "show-more": "더 많은 옵션 보기",

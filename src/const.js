@@ -57,7 +57,8 @@ export const PROPOSAL_STATE = Object.freeze({
   PENDING: 'pending',
   ARCHIVED: 'archived',
   SUSPENDED: 'suspended',
-  WITHDRAWED: 'withdrawed'
+  WITHDRAWED: 'withdrawed',
+  CREATING: 'creating'
 })
 
 export const COLOR_TYPE = Object.freeze({

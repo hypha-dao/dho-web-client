@@ -138,7 +138,10 @@
            "documentation-url":{
               "label": "Documentation URL"
            },
-           "sample-text":"This text must be visible in both colors"
+           "sample-text":"This text must be visible in both colors",
+           "showUpvoteElection": {
+               "label": "Show Upvote Election"
+           }
         },
         "nav":{
            "show-more":"Show more options",
