@@ -49,6 +49,11 @@ subscription stageProposalsSubs($docId: String!, $first: Int) {
         details_ballotSupply_a
         details_ballotAlignment_i
 
+        salaryband {
+          details_annualUsdSalary_a
+          details_name_s
+        }
+
         start {
           details_startTime_t
         }
