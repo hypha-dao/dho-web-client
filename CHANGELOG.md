@@ -1,5 +1,19 @@
 # Changelog
 
+## [2.50.0](https://github.com/hypha-dao/dho-web-client/compare/v2.49.4...v2.50.0) (2024-07-15)
+
+
+### Features
+
+* **configuration:** added showUpvoteElection param (#DEV-1316) ([#2650](https://github.com/hypha-dao/dho-web-client/issues/2650)) ([2632db0](https://github.com/hypha-dao/dho-web-client/commit/2632db0edba0cfce515ded264377131f4e6e84fa))
+
+
+### Bug Fixes
+
+* **chips:** salary proposal labels (#DEV-1333) ([#2651](https://github.com/hypha-dao/dho-web-client/issues/2651)) ([f57a3a5](https://github.com/hypha-dao/dho-web-client/commit/f57a3a58495c36986b4afaa3d66dee651dbf85b3))
+* **localization:** drafts title ([#2654](https://github.com/hypha-dao/dho-web-client/issues/2654)) ([dbfa632](https://github.com/hypha-dao/dho-web-client/commit/dbfa632e42a39e143a0ac4ba4ce81b395218631b))
+* **token-logo:** integrated with dao treasury-currency ([#1332](https://github.com/hypha-dao/dho-web-client/issues/1332)) ([#2652](https://github.com/hypha-dao/dho-web-client/issues/2652)) ([c855626](https://github.com/hypha-dao/dho-web-client/commit/c855626a6b0ebe789c23eee71a0b8e7c7690ad6a))
+
 ## [2.49.4](https://github.com/hypha-dao/dho-web-client/compare/v2.49.3...v2.49.4) (2024-06-26)
 
 
