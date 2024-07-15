@@ -98,7 +98,8 @@ const settingsMapper = (settings) => {
     exploreTitle: settings?.settings_exploreTitle_s,
     exploreParagraph: settings?.settings_exploreParagraph_s,
 
-    onboarderAccount: settings?.settings_onboarderAccount_n
+    onboarderAccount: settings?.settings_onboarderAccount_n,
+    treasuryCurrency: settings?.settings_treasuryCurrency_s
   }
 }
 

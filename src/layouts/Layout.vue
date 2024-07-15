@@ -116,6 +116,7 @@ const ACTIVE_DAO_QUERY = `
       settings_exploreParagraph_s
       
       settings_documentationUrl_s
+      settings_treasuryCurrency_s
     }
 
     memberAggregate {

@@ -67,7 +67,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters('dao', ['selectedDao']),
+    ...mapGetters('dao', ['daoSettings', 'selectedDao']),
     originalType () {
       return this.proposal.original[0] ? this.proposal.original[0].__typename : null
     },
@@ -260,7 +260,7 @@ export default {
       if (this.compensation) {
         const usdAmount = Number.parseFloat(this.compensation.amount.split(' ')[0])
         result.push(
-          { color: 'primary', outline: true, label: `${this.getFormatedTokenAmount(usdAmount, 3, 0)} USDE`, tooltip: this.compensation.tooltip })
+          { color: 'primary', outline: true, label: `${this.getFormatedTokenAmount(usdAmount, 3, 0)} ${this.daoSettings.treasuryCurrency ? this.daoSettings.treasuryCurrency : 'USD'}E`, tooltip: this.compensation.tooltip })
       }
 
       if (this.salary) {
