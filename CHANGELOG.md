@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.50.1](https://github.com/hypha-dao/dho-web-client/compare/v2.50.0...v2.50.1) (2024-09-27)
+
+
+### Bug Fixes
+
+* **apollo:** add dev env as default ([292951c](https://github.com/hypha-dao/dho-web-client/commit/292951c40a3c1f72db584af7283e33dc48b25da0))
+* **configuration:** add proper format ([9c14fe2](https://github.com/hypha-dao/dho-web-client/commit/9c14fe2c7ee99307f89d75ddb0a6a77c2d4e5c99))
+
 ## [2.50.0](https://github.com/hypha-dao/dho-web-client/compare/v2.49.4...v2.50.0) (2024-07-15)
 
 
