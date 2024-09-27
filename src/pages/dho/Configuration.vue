@@ -19,7 +19,7 @@ const settingsMapper = (data) => {
     ...(exist(form.votingQuorumPercent) ? { votingQuorumX100: form.votingQuorumPercent } : {}),
 
     ...(exist(form.communityVotingEnabled) ? { communityVotingEnabled: form.communityVotingEnabled ? 1 : 0 } : {}),
-    ...(exist(form.treasuryCurrency) ? { treasuryCurrency: form.treasuryCurrency.value } : {})
+    ...(exist(form.treasuryCurrency) ? { treasuryCurrency: form.treasuryCurrency.value } : {}),
     ...(exist(form.showUpvoteElection) ? { showUpvoteElection: form.showUpvoteElection ? 1 : 0 } : {})
   }
 }
