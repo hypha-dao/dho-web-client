@@ -24,7 +24,7 @@ const tokenRefreshLink = new TokenRefreshLink({
   fetchAccessToken: () => {
     const HYPHA_AUTH_URL = process.env.HYPHA_AUTH_URL
     const CHAIN_NAME = process.env.CHAIN_NAME
-    const ENV = process.env.ENV || 'prod'
+    const ENV = process.env.ENV || 'dev'
     const network = process.env.IS_TESTNET ? 'testnet' : 'mainnet'
     const url = `${HYPHA_AUTH_URL}?chain=${CHAIN_NAME}&env=${ENV}&network=${network}`
 
