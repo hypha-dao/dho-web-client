@@ -18,8 +18,9 @@ const settingsMapper = (data) => {
     ...(exist(form.votingAlignmentPercent) ? { votingAlignmentX100: form.votingAlignmentPercent } : {}),
     ...(exist(form.votingQuorumPercent) ? { votingQuorumX100: form.votingQuorumPercent } : {}),
 
-    ...(exist(form.communityVotingEnabled) ? { communityVotingEnabled: form.communityVotingEnabled ? 1 : 0 } : {})
-
+    ...(exist(form.communityVotingEnabled) ? { communityVotingEnabled: form.communityVotingEnabled ? 1 : 0 } : {}),
+    ...(exist(form.treasuryCurrency) ? { treasuryCurrency: form.treasuryCurrency.value } : {}),
+    ...(exist(form.showUpvoteElection) ? { showUpvoteElection: form.showUpvoteElection ? 1 : 0 } : {})
   }
 }
 
@@ -62,7 +63,8 @@ const defaultSettings = {
   communityVotingEnabled: false,
   communityVotingDurationSec: 604800,
   communityVotingAlignmentPercent: 20,
-  communityVotingQuorumPercent: 50
+  communityVotingQuorumPercent: 50,
+  treasuryCurrency: 'USD',
 
   // TODO:
   // communityVotingMethod: 'CLASSIC',
@@ -76,6 +78,7 @@ const defaultSettings = {
   // upvoteHeadDelegateRound: false,
   // upvoteHeadDelegateDuration: 10800,
 
+  showUpvoteElection: false
 }
 
 const TABS = Object.freeze({
@@ -129,7 +132,7 @@ export default {
         name: this.daoSettings?.title ? this.daoSettings?.title : defaultSettings.title,
         url: this.daoSettings?.url ? this.daoSettings?.url : defaultSettings.url,
         purpose: this.daoSettings?.description ? this.daoSettings?.description : defaultSettings.description,
-        documentationUrl: this.daoSettings?.settings_documentationURL_s ? this.daoSettings?.settings_documentationURL_s : defaultSettings.documentationUrl,
+        documentationUrl: this.daoSettings?.documentationUrl ? this.daoSettings?.documentationUrl : defaultSettings.documentationUrl,
 
         primaryColor: this.daoSettings?.primaryColor ? this.daoSettings?.primaryColor : defaultSettings.primaryColor,
         secondaryColor: this.daoSettings?.secondaryColor ? this.daoSettings?.secondaryColor : defaultSettings.secondaryColor,
@@ -150,7 +153,7 @@ export default {
         communityVotingEnabled: this.daoSettings?.communityVotingEnabled ? this.daoSettings?.communityVotingEnabled : defaultSettings.communityVotingEnabled,
         communityVotingDurationSec: this.daoSettings?.communityVotingDurationSec ? this.daoSettings?.communityVotingDurationSec : defaultSettings.communityVotingDurationSec,
         communityVotingAlignmentPercent: this.daoSettings?.communityVotingAlignmentPercent ? this.daoSettings?.communityVotingAlignmentPercent : defaultSettings.communityVotingAlignmentPercent,
-        communityVotingQuorumPercent: this.daoSettings?.communityVotingQuorumPercent ? this.daoSettings?.communityVotingQuorumPercent : defaultSettings.communityVotingQuorumPercent
+        communityVotingQuorumPercent: this.daoSettings?.communityVotingQuorumPercent ? this.daoSettings?.communityVotingQuorumPercent : defaultSettings.communityVotingQuorumPercent,
 
         // TODO
         // communityVotingMethod: this.daoSettings?.communityVotingMethod ? this.daoSettings?.communityVotingMethod : defaultSettings.communityVotingMethod,
@@ -163,7 +166,8 @@ export default {
         // upvoteCheifDelegateDuration: this.daoSettings?.upvoteCheifDelegateDuration ? this.daoSettings?.upvoteCheifDelegateDuration : defaultSettings.upvoteCheifDelegateDuration,
         // upvoteHeadDelegateRound: this.daoSettings?.upvoteHeadDelegateRound ? this.daoSettings?.upvoteHeadDelegateRound : defaultSettings.upvoteHeadDelegateRound,
         // upvoteHeadDelegateDuration: this.daoSettings?.upvoteHeadDelegateDuration ? this.daoSettings?.upvoteHeadDelegateDuration : defaultSettings.upvoteHeadDelegateDuration,
-
+        treasuryCurrency: this.daoSettings?.treasuryCurrency ? this.daoSettings?.treasuryCurrency : defaultSettings.treasuryCurrency,
+        showUpvoteElection: this?.daoSettings?.showUpvoteElection != null ? this?.daoSettings?.showUpvoteElection : defaultSettings.showUpvoteElection
       }
 
       this.resetForm()
@@ -239,7 +243,6 @@ export default {
     async updateSettings () {
       try {
         this.state = CONFIGURATION_STATE.SAVING
-
         await this.updateDAOSettings({ data: { ...this.dataForSave } })
 
         const url = this.dataForSave.daoUrl

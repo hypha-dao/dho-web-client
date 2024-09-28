@@ -138,7 +138,10 @@
         "documentation-url":{
           "label": "URL de documentación"
         },
-        "sample-text": "Este texto debe ser visible en ambos colores."
+        "sample-text": "Este texto debe ser visible en ambos colores.",
+        "showUpvoteElection": {
+          "label": "Mostrar elección de voto a favor"
+        }
       },
       "nav": {
         "show-more": "Mostrar más opciones",
@@ -911,11 +914,11 @@
       "help": "Ayuda"
     },
     "left-navigation": {
-      "proposals": "Propuestas",
-      "members": "Miembros",
-      "organization": "Organización",
-      "explore": "Explorar",
-      "election": "Elección"
+      "agreements":"Elección",
+      "election": "Election",
+      "explore":"Explorar",
+      "people":"Gente",        
+      "treasury":"tesorería"
     },
     "navigation-header": {
       "home": "Hogar",
@@ -1172,7 +1175,9 @@
       "to": "A",
       "sendToPlaceholder": "Ingrese la dirección pública",
       "transactionSuccessful": "¡Transacción exitosa!",
-      "close": "Cerca"
+      "close": "Cerca",
+      "sendUtilityTokens": "Enviar tokens de utilidad a otra billetera",
+      "addPayoutTokens": "Agregue tokens de pago a la cola de canje del Tesoro"
     },
     "wallet-hypha": {
       "availableBalance": "Saldo disponible",
@@ -1776,16 +1781,16 @@
         },
         "steppayout": {
           "payout": "Pagar",
-          "pleaseEnterTheUSDEquivalentAnd1": "Ingrese el equivalente en USD y el porcentaje de aplazamiento para esta contribución; cuanto más posponga a una fecha posterior, mayor será el bono (consulte el cálculo del salario real a continuación o use nuestra calculadora). ",
+          "pleaseEnterTheUSDEquivalentAnd1": "Ingrese el equivalente en cash y el porcentaje de aplazamiento para esta contribución; cuanto más posponga a una fecha posterior, mayor será el bono (consulte el cálculo del salario real a continuación o use nuestra calculadora). ",
           "pleaseEnterTheUsd": "Ingrese el monto de HUSD (es decir, el equivalente en USD) para su recompensa. ",
-          "typeTheAmountOfUsd": "Escriba el equivalente en USD",
+          "typeTheAmountOfUsd": "Escriba el equivalente en efectivo",
           "commitmentMustBeGreater": "El compromiso debe ser mayor o igual a la configuración del rol. ",
           "defferedMustBeGreater": "Debido a la configuración del rol, tendrás que elegir un porcentaje mayor para continuar",
           "salaryCompensationForOneYear": "Recompensa por un año (equivalente a ${value})",
           "salaryCompensationForOneYearUsd": "Recompensa por un año (${value}) equivalente en USD",
           "compensation": "Cálculo de recompensa",
           "compensation1": "Premio",
-          "pleaseEnterTheUSD": "Ingrese el equivalente en USD de su recompensa. ",
+          "pleaseEnterTheUSD": "Ingrese el equivalente en cash de su recompensa. ",
           "belowYouCanSeeTheActual": "La calculadora calculará los números de los tokens cuando ajuste los controles deslizantes.",
           "compensationForOnePeriod": "Recompensa por un período",
           "compensationForOneCycle": "Recompensa por un ciclo",
@@ -1803,12 +1808,10 @@
         "quorum": "Quórum",
         "noProposals": "Sin propuestas",
         "oopsNothingCould": "Ups, no se pudo encontrar nada aquí.",
-        "stagingProposals": "Propuestas de puesta en escena",
         "activeProposals": "Propuestas activas",
         "noProposals1": "Sin propuestas",
-        "stagingProposals1": "Propuestas de puesta en escena",
-        "activeProposals1": "Propuestas activas",
-        "proposalHistory": "Historial de propuestas",
+        "drafts": "Borradores",
+        "proposalHistory": "Historia",
         "lookingToMonitor": "¿Quiere controlar la antigüedad de las propuestas? ",
         "seeHistory": "Ver historia >",
         "isTheMinimumRequiredPercentageOfMembers": "Porcentaje de acuerdo requerido para que se apruebe una propuesta.",
@@ -1817,7 +1820,7 @@
         "proposalTypes": "Tipos de propuestas",
         "sortByLastAdded": "Ordenar por: Último agregado",
         "yourVoteIsTheVoice": "Su voto es la voz del cambio",
-        "atHyphaTheFuture": "En Hypha, el futuro se basa en una toma de decisiones descentralizada, justa, equitativa y abierta. "
+        "atHyphaTheFuture": "En Hypha, el futuro se basa en una toma de decisiones descentralizada, justa, equitativa y abierta."
       },
       "proposalhistory": {
         "noProposals": "Sin propuestas",
@@ -2076,10 +2079,11 @@
     "explore": "Explorar",
     "createANewDao": "Crear un nuevo DHO",
     "login": "Acceso",
-    "members": "Miembros",
+    "people":"Hente",
+    "agreements": "Acuerdos",
     "proposals": "Propuestas",
     "createProposal": "Crear propuesta",
-    "proposalHistory": "Historial de propuestas",
+    "proposalHistory":"Historia",
     "proposalDetails": "Detalles de la propuesta",
     "organization": "Organización",
     "organizationAssets": "Activos de la organización",
@@ -2139,13 +2143,13 @@
     "cashCoefficient": "Coeficiente de efectivo",
     "payout": "Pagar",
     "compensation": "Gestiona tu recompensa",
-    "pleaseEnterTheUSDEquivalentAnd": "Ingrese el equivalente en USD (es decir, el monto en HUSD) de su recompensa. ",
+    "pleaseEnterTheUSDEquivalentAnd": "Ingrese el equivalente en cash (es decir, el monto en HUSD) de su recompensa. ",
     "belowYouCanSeeTheActual": "A continuación puede ver el desglose real de la recompensa en HVOICE, HYPHA y HUSD.",
     "typeThePayoutTitle": "Escribe el título del pago",
     "typeThePayoutDescription": "Escribe la descripción del pago",
     "attachments": "Archivos adjuntos",
     "clickToAddFile": "Haga clic para agregar archivo",
-    "totalUSDEquivalent": "Equivalente total en dólares",
+    "totalUSDEquivalent": "Equivalente total en efectivo",
     "chooseTheDeferredAmount": "Elija el porcentaje del token (utilidad versus pago)",
     "customCompensation": "Compensación personalizada",
     "cashToken": "Ficha de pago",
@@ -2297,6 +2301,18 @@
         "text": "Klicken Sie auf diese Schaltfläche, um Hypha Wallet auf Ihrem Mobilgerät zu öffnen und diese Transaktion zu signieren",
         "actionText": "In Hypha Wallet öffnen"
       }
+    }
+  },
+  "utils": {
+    "time": {
+      "second": "{count} segundo",
+      "second_plural": "{count} segundos",
+      "minute": "{count} minuto",
+      "minute_plural": "{count} minutos",
+      "hour": "{count} hora",
+      "hour_plural": "{count} horas",
+      "day": "{count} día",
+      "day_plural": "{count} días"
     }
   }
 }

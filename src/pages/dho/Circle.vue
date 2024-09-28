@@ -111,7 +111,7 @@ q-page
       q-btn.q-px-lg.h-btn1(@click="_apply" color="secondary" :label="$t('pages.dho.circle.joinCircle')" no-caps rounded unelevated)
   .row.q-mt-md.q-col-gutter-md.items-start
     .col-8
-      tokens(v-if="!$q.screen.md" :daoLogo="daoSettings.logo" :tokens="budget" :vertical="!$q.screen.gt.sm" :title="$t('pages.dho.circle.budget')")
+      //- tokens(v-if="!$q.screen.md" :daoLogo="daoSettings.logo" :tokens="budget" :vertical="!$q.screen.gt.sm" :title="$t('pages.dho.circle.budget')")
       circles-widget.q-mt-md(:circles="circle ? circle.subcircles : []" :title="$t('pages.dho.circle.subcircles')")
     .col-4
       members(v-if="circle.applicants" :members="circle ? circle.applicants : []" @enroll="_enrollMember" @reject="_rejectMember" :title="$t('pages.dho.circle.applicants')")

@@ -1,7 +1,7 @@
 <script>
-import { LEFT_NAVIGATION_TABS } from '~/const'
 import { mapGetters } from 'vuex'
 import gql from 'graphql-tag'
+import { NAVIGATION } from '~/const'
 
 const IconVotingWhite = require('~/assets/icons/voting-icon-white.svg')
 const IconVoting = require('~/assets/icons/voting-icon.svg')
@@ -63,7 +63,7 @@ export default {
 
   data() {
     return {
-      LEFT_NAVIGATION_TABS,
+      NAVIGATION,
       expanded: false,
       IconVotingWhite,
       IconVoting
@@ -71,15 +71,15 @@ export default {
   },
 
   computed: {
-    ...mapGetters('dao', ['selectedDao']),
+    ...mapGetters('dao', ['selectedDao', 'daoSettings']),
     ...mapGetters('accounts', ['account', 'isAdmin']),
     activeTab() {
-      if (this.$route.name === LEFT_NAVIGATION_TABS.DASHBOARD) return LEFT_NAVIGATION_TABS.DASHBOARD
-      if (this.$route.path.includes(LEFT_NAVIGATION_TABS.PROPOSALS)) return LEFT_NAVIGATION_TABS.PROPOSALS
-      if (this.$route.path.includes(LEFT_NAVIGATION_TABS.MEMBERS)) return LEFT_NAVIGATION_TABS.MEMBERS
-      if (this.$route.path.includes(LEFT_NAVIGATION_TABS.ORGANIZATION)) return LEFT_NAVIGATION_TABS.ORGANIZATION
-      if (this.$route.path.includes(LEFT_NAVIGATION_TABS.EXPLORE)) return LEFT_NAVIGATION_TABS.EXPLORE
-      if (this.$route.path.includes(LEFT_NAVIGATION_TABS.ELECTION)) return LEFT_NAVIGATION_TABS.ELECTION
+      if (this.$route.name === NAVIGATION.DASHBOARD) return NAVIGATION.DASHBOARD
+      if (this.$route.path.includes(NAVIGATION.AGREEMENTS)) return NAVIGATION.AGREEMENTS
+      if (this.$route.path.includes(NAVIGATION.PEOPLE)) return NAVIGATION.PEOPLE
+      if (this.$route.path.includes(NAVIGATION.TREASURY)) return NAVIGATION.TREASURY
+      if (this.$route.path.includes(NAVIGATION.EXPLORE)) return NAVIGATION.EXPLORE
+      if (this.$route.path.includes(NAVIGATION.ELECTION)) return NAVIGATION.ELECTION
       return null
     },
     disabledSelector() {
@@ -101,7 +101,7 @@ export default {
 
     switchDao(url) {
       this.expanded = false
-      this.$router.push({ name: this.activeTab || LEFT_NAVIGATION_TABS.DASHBOARD, params: { dhoname: url } })
+      this.$router.push({ name: this.activeTab || NAVIGATION.DASHBOARD, params: { dhoname: url } })
     },
 
     expandSwitcher() {
@@ -127,19 +127,19 @@ export default {
     template(v-if="!expanded")
       #nav-buttons.col-4.fixed-center
         .row.justify-center
-          q-btn.q-ma-md(:class="{'active': activeTab=== LEFT_NAVIGATION_TABS.DASHBOARD}" :flat="activeTab !== LEFT_NAVIGATION_TABS.DASHBOARD" unelevated rounded padding="12px" icon="fas fa-home" size="sm" :color="activeTab === LEFT_NAVIGATION_TABS.DASHBOARD ? 'primary' : 'disabled'" :to="{ name: LEFT_NAVIGATION_TABS.DASHBOARD }")
-          q-btn.q-ma-md(:class="{'active': activeTab=== LEFT_NAVIGATION_TABS.PROPOSALS}" :flat="activeTab !== LEFT_NAVIGATION_TABS.PROPOSALS" unelevated rounded padding="12px" icon="far fa-file-alt" size="sm" :color="activeTab === LEFT_NAVIGATION_TABS.PROPOSALS ? 'primary' : 'disabled'" :to="{ name: LEFT_NAVIGATION_TABS.PROPOSALS }")
-            q-tooltip(anchor="center right" self="center left" :content-style="{ 'font-size': '1em' }") {{ $t('navigation.left-navigation.proposals') }}
-          q-btn.q-ma-md(:class="{'active': activeTab=== LEFT_NAVIGATION_TABS.MEMBERS}" :flat="activeTab !== LEFT_NAVIGATION_TABS.MEMBERS" unelevated rounded padding="12px" icon="fas fa-users" size="sm" :color="activeTab === LEFT_NAVIGATION_TABS.MEMBERS ? 'primary' : 'disabled'" :to="{ name: LEFT_NAVIGATION_TABS.MEMBERS }")
-            q-tooltip(anchor="center right" self="center left" :content-style="{ 'font-size': '1em' }") {{ $t('navigation.left-navigation.members') }}
-          q-btn.q-ma-md(v-if="hasElections || isAdmin" :class="{'active': activeTab=== LEFT_NAVIGATION_TABS.ELECTION}" :flat="activeTab !== LEFT_NAVIGATION_TABS.ELECTION" unelevated rounded padding="12px" size="sm" :color="activeTab === LEFT_NAVIGATION_TABS.ELECTION ? 'primary' : 'disabled'" :to="{ name: LEFT_NAVIGATION_TABS.ELECTION }")
-            img.no-active(:class="{ 'active-btn': activeTab=== LEFT_NAVIGATION_TABS.ELECTION }" :src="activeTab=== LEFT_NAVIGATION_TABS.ELECTION ? IconVotingWhite : IconVoting")
+          q-btn.q-ma-md(:class="{'active': activeTab=== NAVIGATION.DASHBOARD}" :flat="activeTab !== NAVIGATION.DASHBOARD" unelevated rounded padding="12px" icon="fas fa-home" size="sm" :color="activeTab === NAVIGATION.DASHBOARD ? 'primary' : 'disabled'" :to="{ name: NAVIGATION.DASHBOARD }")
+          q-btn.q-ma-md(:class="{'active': activeTab=== NAVIGATION.AGREEMENTS}" :flat="activeTab !== NAVIGATION.AGREEMENTS" unelevated rounded padding="12px" icon="far fa-file-alt" size="sm" :color="activeTab === NAVIGATION.AGREEMENTS ? 'primary' : 'disabled'" :to="{ name: NAVIGATION.AGREEMENTS }")
+            q-tooltip(anchor="center right" self="center left" :content-style="{ 'font-size': '1em' }") {{ $t('navigation.left-navigation.agreements') }}
+          q-btn.q-ma-md(:class="{'active': activeTab=== NAVIGATION.PEOPLE}" :flat="activeTab !== NAVIGATION.PEOPLE" unelevated rounded padding="12px" icon="fas fa-users" size="sm" :color="activeTab === NAVIGATION.PEOPLE ? 'primary' : 'disabled'" :to="{ name: NAVIGATION.PEOPLE }")
+            q-tooltip(anchor="center right" self="center left" :content-style="{ 'font-size': '1em' }") {{ $t('navigation.left-navigation.people') }}
+          q-btn.q-ma-md(v-if="(hasElections || isAdmin) && daoSettings.showUpvoteElection" :class="{'active': activeTab=== NAVIGATION.ELECTION}" :flat="activeTab !== NAVIGATION.ELECTION" unelevated rounded padding="12px" size="sm" :color="activeTab === NAVIGATION.ELECTION ? 'primary' : 'disabled'" :to="{ name: NAVIGATION.ELECTION }")
+            img.no-active(:class="{ 'active-btn': activeTab=== NAVIGATION.ELECTION }" :src="activeTab=== NAVIGATION.ELECTION ? IconVotingWhite : IconVoting")
             q-tooltip(anchor="center right" self="center left" :content-style="{ 'font-size': '1em' }") {{ $t('navigation.left-navigation.election') }}
-          q-btn.q-ma-md(:class="{'active': activeTab=== LEFT_NAVIGATION_TABS.ORGANIZATION}" :flat="activeTab !== LEFT_NAVIGATION_TABS.ORGANIZATION" unelevated rounded padding="12px" icon="fas fa-building" size="sm" :color="activeTab === LEFT_NAVIGATION_TABS.ORGANIZATION ? 'primary' : 'disabled'" :to="{ name: LEFT_NAVIGATION_TABS.ORGANIZATION }")
-            q-tooltip(anchor="center right" self="center left" :content-style="{ 'font-size': '1em' }") {{ $t('navigation.left-navigation.organization') }}
+          q-btn.q-ma-md(:class="{'active': activeTab=== NAVIGATION.TREASURY}" :flat="activeTab !== NAVIGATION.TREASURY" unelevated rounded padding="12px" icon="fas fa-building" size="sm" :color="activeTab === NAVIGATION.TREASURY ? 'primary' : 'disabled'" :to="{ name: NAVIGATION.TREASURY }")
+            q-tooltip(anchor="center right" self="center left" :content-style="{ 'font-size': '1em' }") {{ $t('navigation.left-navigation.treasury') }}
       .col.fixed-bottom.flex.items-end
         .row.justify-center.items-end.q-pb-lg
-          q-btn.q-ma-md(:class="{'active': activeTab=== LEFT_NAVIGATION_TABS.EXPLORE}" :flat="activeTab !== LEFT_NAVIGATION_TABS.EXPLORE" unelevated rounded padding="12px" icon="fas fa-globe" size="sm" :color="activeTab === LEFT_NAVIGATION_TABS.EXPLORE ? 'primary' : 'disabled'" :to="{ name: LEFT_NAVIGATION_TABS.EXPLORE }")
+          q-btn.q-ma-md(:class="{'active': activeTab=== NAVIGATION.EXPLORE}" :flat="activeTab !== NAVIGATION.EXPLORE" unelevated rounded padding="12px" icon="fas fa-globe" size="sm" :color="activeTab === NAVIGATION.EXPLORE ? 'primary' : 'disabled'" :to="{ name: NAVIGATION.EXPLORE }")
             q-tooltip(anchor="center right" self="center left" :content-style="{ 'font-size': '1em' }") {{ $t('navigation.left-navigation.explore') }}
 
 </template>

@@ -78,6 +78,7 @@ const ACTIVE_DAO_QUERY = `
       settings_communityVotingDurationSec_i
       settings_communityVotingAlignmentPercent_i
       settings_communityVotingQuorumPercent_i
+      settings_showUpvoteElection_i
 
       settings_usesSeeds_i
       settings_isHypha_i
@@ -113,8 +114,9 @@ const ACTIVE_DAO_QUERY = `
       settings_exploreBackgroundImage_s
       settings_exploreTitle_s
       settings_exploreParagraph_s
-
-      settings_documentationURL_s
+      
+      settings_documentationUrl_s
+      settings_treasuryCurrency_s
     }
 
     memberAggregate {

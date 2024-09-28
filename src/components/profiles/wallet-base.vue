@@ -180,7 +180,7 @@ export default {
           await this.redeemToken(
             {
               quantity: `${parseFloat(this.form.amount).toFixed(2)} ${this.$store.state.dao.settings.settings_pegToken_a.split(' ')[1]}`,
-              memo: 'redeem'
+              memo: `redeem,${this.$store.state.dao.docId}`
             }
           )
           this.successRedeem = true
@@ -487,10 +487,10 @@ widget.wallet-base(:more="more" :no-title="noTitle" morePosition="top" :title="$
       :label="$t('profiles.wallet-base.send')"
       @click="state = STATE.SENDING"
     )
-      q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle") {{ $t('profiles.wallet-base.queueHusdRedemption', { tokenName: tokenName }) }}
+      q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle") {{ $t('profiles.wallet-base.sendUtilityTokens') }}
 
     q-btn.h-btn1.full-width.q-mt-sm(v-if="canRedeem" color="primary" no-caps unelevated rounded :label="$t('profiles.wallet-base.redeem')" @click="showPayoutModal = true")
-      q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle") {{ $t('profiles.wallet-base.queueHusdRedemption', { tokenName: tokenName }) }}
+      q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle") {{ $t('profiles.wallet-base.addPayoutTokens') }}
 </template>
 
 <style lang="stylus" scoped>

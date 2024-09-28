@@ -34,7 +34,7 @@ export default {
     onClick (docId) {
       !this.fromProfile
         ? this.$router.push({ path: `/${this.$route.params.dhoname}/organization/assets/badge/${docId}` })
-        : this.$router.push({ path: `/${this.$route.params.dhoname}/proposals/${docId}` })
+        : this.$router.push({ path: `/${this.$route.params.dhoname}/agreements/${docId}` })
     }
   }
 }

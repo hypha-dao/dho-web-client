@@ -168,6 +168,10 @@ subscription proposal($docId: String!) {
     }
     ... on Assignment {
       details_usdSalaryValuePerPhase_a
+      salaryband {
+        details_annualUsdSalary_a
+        details_name_s
+      }
       cmntsect {
         docId
         comment {

@@ -67,7 +67,7 @@ export default {
   button-radio.q-py-xs.q-px-xs(
     :iconText="salaryBucket(archetype)"
     :title="title(archetype)"
-    :description="`${salary(archetype).toLocaleString()} USD Equivalent / Year, Minimum Deferred ${minDeferred(archetype)}%`"
+    :description="`${salary(archetype).toLocaleString()} cash Equivalent / Year, Minimum Deferred ${minDeferred(archetype)}%`"
     :selected="selected"
     @click="selectArchetype"
   )

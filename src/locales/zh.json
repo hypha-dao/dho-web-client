@@ -138,7 +138,10 @@
         "documentation-url":{
           "label": "文档 URL"
         },
-        "sample-text": "此文本必须以两种颜色显示"
+        "sample-text": "此文本必须以两种颜色显示",
+        "showUpvoteElection": {
+          "label": "显示支持选举"
+        }
       },
       "nav": {
         "show-more": "显示更多选项",
@@ -911,11 +914,11 @@
       "help": "帮助"
     },
     "left-navigation": {
-      "proposals": "提案",
-      "members": "会员",
-      "organization": "组织",
+      "agreements":"协议",
+      "election": "选举",
       "explore": "探索",
-      "election": "选举"
+      "people":"人们",        
+      "treasury":"财政部"
     },
     "navigation-header": {
       "home": "家",
@@ -1172,7 +1175,9 @@
       "to": "到",
       "sendToPlaceholder": "输入公共地址",
       "transactionSuccessful": "交易成功！",
-      "close": "关闭"
+      "close": "关闭",
+      "sendUtilityTokens": "将实用代币发送到另一个钱包",
+      "addPayoutTokens": "将支付代币添加到国库赎回队列"
     },
     "wallet-hypha": {
       "availableBalance": "可用余额",
@@ -1778,7 +1783,7 @@
           "payout": "支出",
           "pleaseEnterTheUSDEquivalentAnd1": "请输入该捐款的等值美元和延迟百分比 - 延迟的日期越多，奖金就越高（请参阅下面的实际工资计算或使用我们的计算器）。",
           "pleaseEnterTheUsd": "请输入奖励的 HUSD 金额（即美元等值）。",
-          "typeTheAmountOfUsd": "输入等值美元",
+          "typeTheAmountOfUsd": "输入现金等价物",
           "commitmentMustBeGreater": "承诺必须大于或等于角色配置。",
           "defferedMustBeGreater": "由于角色设置，您必须选择更大的百分比才能继续",
           "salaryCompensationForOneYear": "一年奖励（${value} 等值）",
@@ -1803,12 +1808,11 @@
         "quorum": "法定人数",
         "noProposals": "没有提案",
         "oopsNothingCould": "哎呀，这里什么也找不到",
-        "stagingProposals": "分期提案",
+        "drafts":"草稿",
         "activeProposals": "积极提案",
         "noProposals1": "没有提案",
-        "stagingProposals1": "分期提案",
         "activeProposals1": "积极提案",
-        "proposalHistory": "提案历史",
+        "proposalHistory":"历史",
         "lookingToMonitor": "希望监控旧提案的进展情况？",
         "seeHistory": "查看历史 >",
         "isTheMinimumRequiredPercentageOfMembers": "提案通过所需同意的百分比。",
@@ -2076,10 +2080,11 @@
     "explore": "探索",
     "createANewDao": "创建一个新的 DHO",
     "login": "登录",
-    "members": "会员",
+    "people":"人们",
+    "agreements":"协议",
     "proposals": "提案",
     "createProposal": "创建提案",
-    "proposalHistory": "提案历史",
+    "proposalHistory":"历史",
     "proposalDetails": "提案详情",
     "organization": "组织",
     "organizationAssets": "组织资产",
@@ -2145,7 +2150,7 @@
     "typeThePayoutDescription": "输入付款说明",
     "attachments": "附件",
     "clickToAddFile": "点击添加文件",
-    "totalUSDEquivalent": "美元等值总额",
+    "totalUSDEquivalent": "现金等值总额",
     "chooseTheDeferredAmount": "选择代币百分比（效用与支出）",
     "customCompensation": "定制补偿",
     "cashToken": "支付代币",
@@ -2297,6 +2302,18 @@
         "text": "单击此按钮可在您的移动设备上打开 Hypha 钱包并签署此交易",
         "actionText": "在 Hypha 钱包中打开"
       }
+    }
+  },
+  "utils": {
+    "time": {
+      "second": "{count} 秒",
+      "second_plural": "{count} 秒",
+      "minute": "{count} 分钟",
+      "minute_plural": "{count} 分钟",
+      "hour": "{count} 小时",
+      "hour_plural": "{count} 小时",
+      "day": "{count} 天",
+      "day_plural": "{count} 天"
     }
   }
 }

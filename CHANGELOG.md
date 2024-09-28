@@ -1,5 +1,190 @@
 # Changelog
 
+## [2.50.0](https://github.com/hypha-dao/dho-web-client/compare/v2.49.4...v2.50.0) (2024-07-15)
+
+
+### Features
+
+* **configuration:** added showUpvoteElection param (#DEV-1316) ([#2650](https://github.com/hypha-dao/dho-web-client/issues/2650)) ([2632db0](https://github.com/hypha-dao/dho-web-client/commit/2632db0edba0cfce515ded264377131f4e6e84fa))
+
+
+### Bug Fixes
+
+* **chips:** salary proposal labels (#DEV-1333) ([#2651](https://github.com/hypha-dao/dho-web-client/issues/2651)) ([f57a3a5](https://github.com/hypha-dao/dho-web-client/commit/f57a3a58495c36986b4afaa3d66dee651dbf85b3))
+* **localization:** drafts title ([#2654](https://github.com/hypha-dao/dho-web-client/issues/2654)) ([dbfa632](https://github.com/hypha-dao/dho-web-client/commit/dbfa632e42a39e143a0ac4ba4ce81b395218631b))
+* **token-logo:** integrated with dao treasury-currency ([#1332](https://github.com/hypha-dao/dho-web-client/issues/1332)) ([#2652](https://github.com/hypha-dao/dho-web-client/issues/2652)) ([c855626](https://github.com/hypha-dao/dho-web-client/commit/c855626a6b0ebe789c23eee71a0b8e7c7690ad6a))
+
+## [2.49.4](https://github.com/hypha-dao/dho-web-client/compare/v2.49.3...v2.49.4) (2024-06-26)
+
+
+### Bug Fixes
+
+* **home:** add dao title as title param ([a3f312b](https://github.com/hypha-dao/dho-web-client/commit/a3f312b125daa1a0875794fc8056972a5bc774a4))
+* **home:** add dao title as title param (#DEV-1326) ([94cac98](https://github.com/hypha-dao/dho-web-client/commit/94cac98069e1a01baef7e6f99bae1c3d1ee18cb3))
+* **home:** add dao title as title param (#DEV-1326) ([94cac98](https://github.com/hypha-dao/dho-web-client/commit/94cac98069e1a01baef7e6f99bae1c3d1ee18cb3))
+* **proposal-view:** token mix percentage edit button ([#1319](https://github.com/hypha-dao/dho-web-client/issues/1319)) ([#2647](https://github.com/hypha-dao/dho-web-client/issues/2647)) ([09bf979](https://github.com/hypha-dao/dho-web-client/commit/09bf979fa8196c4c4bd650e1f2df297b65d8a80f))
+
+## [2.49.3](https://github.com/hypha-dao/dho-web-client/compare/v2.49.2...v2.49.3) (2024-06-20)
+
+
+### Bug Fixes
+
+* **action:** add correct value for reward_token_max_supply ([0ddc2e6](https://github.com/hypha-dao/dho-web-client/commit/0ddc2e6f268518ac9119a3e6fa64e824dd1247fa))
+* **action:** add correct value for reward_token_max_supply ([0ddc2e6](https://github.com/hypha-dao/dho-web-client/commit/0ddc2e6f268518ac9119a3e6fa64e824dd1247fa))
+* **action:** add correct value for reward_token_max_supply ([d54dad1](https://github.com/hypha-dao/dho-web-client/commit/d54dad1a51d1f0e4b79e42bdc63bd7cb8ef44404))
+* **circle-card:** go-to-circle button link ([#1314](https://github.com/hypha-dao/dho-web-client/issues/1314)) ([90a8a21](https://github.com/hypha-dao/dho-web-client/commit/90a8a215872c517d5990d11b70ae2646fe527186))
+* **circle-card:** go-to-circle button link ([#1314](https://github.com/hypha-dao/dho-web-client/issues/1314)) ([90a8a21](https://github.com/hypha-dao/dho-web-client/commit/90a8a215872c517d5990d11b70ae2646fe527186))
+* **circle-card:** go-to-circle button link ([#1314](https://github.com/hypha-dao/dho-web-client/issues/1314)) ([78c6e3b](https://github.com/hypha-dao/dho-web-client/commit/78c6e3b5dc079f8b335302247da4a202bb2d84a4))
+* **proposal-view:** see profile link ([#1313](https://github.com/hypha-dao/dho-web-client/issues/1313)) ([bdf113e](https://github.com/hypha-dao/dho-web-client/commit/bdf113e07bbf748d238c291c24b876446a7481b4))
+* **proposal-view:** see profile link ([#1313](https://github.com/hypha-dao/dho-web-client/issues/1313)) ([bdf113e](https://github.com/hypha-dao/dho-web-client/commit/bdf113e07bbf748d238c291c24b876446a7481b4))
+* **proposal-view:** see profile link ([#1313](https://github.com/hypha-dao/dho-web-client/issues/1313)) ([dc87083](https://github.com/hypha-dao/dho-web-client/commit/dc87083fdaa48b15cbda0bc4273dc355181a842a))
+* **wallet-base:** hint texts ([#1312](https://github.com/hypha-dao/dho-web-client/issues/1312)) ([bded955](https://github.com/hypha-dao/dho-web-client/commit/bded955c07b28ae58665052858880faa36860215))
+* **wallet-base:** hint texts ([#1312](https://github.com/hypha-dao/dho-web-client/issues/1312)) ([bded955](https://github.com/hypha-dao/dho-web-client/commit/bded955c07b28ae58665052858880faa36860215))
+* **wallet-base:** hit texts ([#1312](https://github.com/hypha-dao/dho-web-client/issues/1312)) ([ade652b](https://github.com/hypha-dao/dho-web-client/commit/ade652b1d457ad4e5b67ec38701f860ac74f206a))
+
+## [2.49.2](https://github.com/hypha-dao/dho-web-client/compare/v2.49.1...v2.49.2) (2024-06-04)
+
+
+### Bug Fixes
+
+* **links:** broken links ([#1306](https://github.com/hypha-dao/dho-web-client/issues/1306)) ([#2637](https://github.com/hypha-dao/dho-web-client/issues/2637)) ([24edf12](https://github.com/hypha-dao/dho-web-client/commit/24edf1252884d2a9da6b859c6da06daf03860b75))
+* **proposal-list:** proposal not loading (#DEV-1322) ([#2640](https://github.com/hypha-dao/dho-web-client/issues/2640)) ([285b2aa](https://github.com/hypha-dao/dho-web-client/commit/285b2aa61bcde135ae84fe584c9820175d8067dc))
+* **settings:** settings vote duration period ([#1307](https://github.com/hypha-dao/dho-web-client/issues/1307)) ([#2636](https://github.com/hypha-dao/dho-web-client/issues/2636)) ([3ac44b5](https://github.com/hypha-dao/dho-web-client/commit/3ac44b52397b6705548bd4ec7489ada894a89e8a))
+* **settings:** utility token supply ([#1291](https://github.com/hypha-dao/dho-web-client/issues/1291)) ([#2638](https://github.com/hypha-dao/dho-web-client/issues/2638)) ([9ad205b](https://github.com/hypha-dao/dho-web-client/commit/9ad205bbac5d8476e6dc72fb37c82aa9e428303b))
+* **support:** links issues ([#1317](https://github.com/hypha-dao/dho-web-client/issues/1317)) ([#2639](https://github.com/hypha-dao/dho-web-client/issues/2639)) ([2ce40f8](https://github.com/hypha-dao/dho-web-client/commit/2ce40f87f6527f404a88b0b5bdaa52bba1ae61db))
+
+## [2.49.1](https://github.com/hypha-dao/dho-web-client/compare/v2.49.0...v2.49.1) (2024-05-31)
+
+
+### Bug Fixes
+
+* **links:** documentation links ([#1301](https://github.com/hypha-dao/dho-web-client/issues/1301)) ([#2634](https://github.com/hypha-dao/dho-web-client/issues/2634)) ([843abf0](https://github.com/hypha-dao/dho-web-client/commit/843abf04c102158c8880140f79e52b0fb05e5a3c))
+* **localization:** incorrect translations ([#1303](https://github.com/hypha-dao/dho-web-client/issues/1303)) ([#2633](https://github.com/hypha-dao/dho-web-client/issues/2633)) ([0840d79](https://github.com/hypha-dao/dho-web-client/commit/0840d79e3118612fd5302fec258f48481d185f82))
+* **policy:** proposal voting widget ([#1315](https://github.com/hypha-dao/dho-web-client/issues/1315)) ([#2632](https://github.com/hypha-dao/dho-web-client/issues/2632)) ([5781de5](https://github.com/hypha-dao/dho-web-client/commit/5781de5aeb9bb2b3637a06e440fe061dfc2d9e97))
+* upvote election issues ([#2631](https://github.com/hypha-dao/dho-web-client/issues/2631)) ([32bf56c](https://github.com/hypha-dao/dho-web-client/commit/32bf56c52d4da4f52421d48a31a3660fa0740f23))
+
+## [2.49.0](https://github.com/hypha-dao/dho-web-client/compare/v2.48.1...v2.49.0) (2024-05-29)
+
+
+### Features
+
+* redeem with dao doc id ([ea8d1cb](https://github.com/hypha-dao/dho-web-client/commit/ea8d1cb8d66dffa71ab5b5f9d40287935f02f387))
+* redeem with dao doc id ([ea8d1cb](https://github.com/hypha-dao/dho-web-client/commit/ea8d1cb8d66dffa71ab5b5f9d40287935f02f387))
+* redeem with dao doc id ([6b3db58](https://github.com/hypha-dao/dho-web-client/commit/6b3db581be3fcd5eba6c34751b0c7f4d76aa88b9))
+
+## [2.48.1](https://github.com/hypha-dao/dho-web-client/compare/v2.48.0...v2.48.1) (2024-05-21)
+
+
+### Bug Fixes
+
+* **options-archetypes:** remove console.log ([b337e9f](https://github.com/hypha-dao/dho-web-client/commit/b337e9f1f82c1ff3aca14af25e15b87e8b8f6e71))
+* **proposal-list:** make voting description dynamically ([#2624](https://github.com/hypha-dao/dho-web-client/issues/2624)) ([95a02a9](https://github.com/hypha-dao/dho-web-client/commit/95a02a93ee3ea3fabd29a47df6ca8da693e96fdd))
+* **proposals:** proposals links inside profile page ([#1311](https://github.com/hypha-dao/dho-web-client/issues/1311)) ([#2625](https://github.com/hypha-dao/dho-web-client/issues/2625)) ([d499cd3](https://github.com/hypha-dao/dho-web-client/commit/d499cd3e8eadc540a09896d582e4272ab7682f6f))
+* tiers loading ([#1293](https://github.com/hypha-dao/dho-web-client/issues/1293)) ([#2626](https://github.com/hypha-dao/dho-web-client/issues/2626)) ([d485a85](https://github.com/hypha-dao/dho-web-client/commit/d485a85f058d340c1b4222587a9d84acdca0e856))
+
+## [2.48.0](https://github.com/hypha-dao/dho-web-client/compare/v2.47.0...v2.48.0) (2024-05-16)
+
+
+### Features
+
+* **home:** add circles widget ([a236a65](https://github.com/hypha-dao/dho-web-client/commit/a236a6563d4cf862c1e9b6f3f91d3ba6bb52276e))
+
+## [2.47.0](https://github.com/hypha-dao/dho-web-client/compare/v2.46.2...v2.47.0) (2024-05-16)
+
+
+### Features
+
+* **home:** add circles widget ([b270944](https://github.com/hypha-dao/dho-web-client/commit/b27094470c68082e1bb0fcef6e86da99a20f67c3))
+
+## [2.46.2](https://github.com/hypha-dao/dho-web-client/compare/v2.46.1...v2.46.2) (2024-04-26)
+
+
+### Bug Fixes
+
+* **home:** remove links from metric ([20a212f](https://github.com/hypha-dao/dho-web-client/commit/20a212f76c950b19612a9da6971f47eec962664b))
+
+## [2.46.1](https://github.com/hypha-dao/dho-web-client/compare/v2.46.0...v2.46.1) (2024-04-26)
+
+
+### Bug Fixes
+
+* **tresury:** remove console.log ([de266e0](https://github.com/hypha-dao/dho-web-client/commit/de266e0e0b6a1bcfbf1b1aa1fd9d52614c950b20))
+
+## [2.46.0](https://github.com/hypha-dao/dho-web-client/compare/v2.45.2...v2.46.0) (2024-04-26)
+
+
+### Features
+
+* **locales:** add north macedonian ([ff27615](https://github.com/hypha-dao/dho-web-client/commit/ff27615e5842e6e59827a76226e09fdfbdae6f5c))
+* **tresury:** add tokens widget ([cf79ade](https://github.com/hypha-dao/dho-web-client/commit/cf79ade14651619611242b51482e8f219271a3ab))
+
+## [2.45.2](https://github.com/hypha-dao/dho-web-client/compare/v2.45.1...v2.45.2) (2024-04-25)
+
+
+### Bug Fixes
+
+* **members:** add regular invite ([2ed99e7](https://github.com/hypha-dao/dho-web-client/commit/2ed99e7564fa43d32d077e6d114fc83a27e25a42))
+
+## [2.45.1](https://github.com/hypha-dao/dho-web-client/compare/v2.45.0...v2.45.1) (2024-04-23)
+
+
+### Bug Fixes
+
+* **es:** remove coma ([fbe9058](https://github.com/hypha-dao/dho-web-client/commit/fbe9058641b4f436788162e472879e3994c063ff))
+
+## [2.45.0](https://github.com/hypha-dao/dho-web-client/compare/v2.44.6...v2.45.0) (2024-04-23)
+
+
+### Features
+
+* **proposal-list:** hide drafts after a month ([407f3c3](https://github.com/hypha-dao/dho-web-client/commit/407f3c338c3171de66faa4c0f93b5cd759142d16))
+
+## [2.44.6](https://github.com/hypha-dao/dho-web-client/compare/v2.44.5...v2.44.6) (2024-04-04)
+
+
+### Bug Fixes
+
+* remove console.log ([24e2320](https://github.com/hypha-dao/dho-web-client/commit/24e2320199858fdc1686efa7b58f396836b14215))
+
+## [2.44.5](https://github.com/hypha-dao/dho-web-client/compare/v2.44.4...v2.44.5) (2024-04-04)
+
+
+### Bug Fixes
+
+* **configuration:** add correct url param ([#2611](https://github.com/hypha-dao/dho-web-client/issues/2611)) ([cde3c19](https://github.com/hypha-dao/dho-web-client/commit/cde3c194342dd14335c8d3eb79830bee8c18eb11))
+* **options-archetypes:** change query ([#2608](https://github.com/hypha-dao/dho-web-client/issues/2608)) ([4fb2d11](https://github.com/hypha-dao/dho-web-client/commit/4fb2d1106720ebbf0cd3476e838568504dedb394))
+* **step-payout:** set tokens to zero if null ([#2610](https://github.com/hypha-dao/dho-web-client/issues/2610)) ([2a2aeb3](https://github.com/hypha-dao/dho-web-client/commit/2a2aeb3405a2f4e292762c98c7dc7515f30a6069))
+
+## [2.44.4](https://github.com/hypha-dao/dho-web-client/compare/v2.44.3...v2.44.4) (2024-04-03)
+
+
+### Bug Fixes
+
+* **api:** set transaction expiry to 5 minutes ([#2606](https://github.com/hypha-dao/dho-web-client/issues/2606)) ([5f06e99](https://github.com/hypha-dao/dho-web-client/commit/5f06e99be918557eeb6a18446635c7c95a746314))
+
+## [2.44.3](https://github.com/hypha-dao/dho-web-client/compare/v2.44.2...v2.44.3) (2024-04-03)
+
+
+### Bug Fixes
+
+* **language:** replace USD with cash ([#2603](https://github.com/hypha-dao/dho-web-client/issues/2603)) ([df31f97](https://github.com/hypha-dao/dho-web-client/commit/df31f978709a19d402164557a9d20915c990f4fa))
+
+## [2.44.2](https://github.com/hypha-dao/dho-web-client/compare/v2.44.1...v2.44.2) (2024-03-27)
+
+
+### Bug Fixes
+
+* **actions:** line ([bce6014](https://github.com/hypha-dao/dho-web-client/commit/bce601479acadedd746e87c1049da74c5167d240))
+
+## [2.44.1](https://github.com/hypha-dao/dho-web-client/compare/v2.44.0...v2.44.1) (2024-03-27)
+
+
+### Bug Fixes
+
+* **createdao:** move voice decay ([a3b6087](https://github.com/hypha-dao/dho-web-client/commit/a3b608782c5516124557d667ef6bf0d027d08f7e))
+* **createdao:** move voice decay ([a3b6087](https://github.com/hypha-dao/dho-web-client/commit/a3b608782c5516124557d667ef6bf0d027d08f7e))
+* **createdao:** move voice decay ([f1c796b](https://github.com/hypha-dao/dho-web-client/commit/f1c796b678f7979a42787b7304cc5dae546c9dcb))
+
 ## [2.44.0](https://github.com/hypha-dao/dho-web-client/compare/v2.43.0...v2.44.0) (2024-03-27)
 
 

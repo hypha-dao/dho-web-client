@@ -123,7 +123,7 @@
           "fields": {
             "stepCompensationTitle": {
               "label": "Compensation",
-              "description:":"Please enter the USD equivalent and % deferral for this contribution – the more you defer to a later date, the higher the bonus will be (see actual salary calculation below or use our calculator). The bottom fields compute the actual payout in SEEDS, HVOICE, HYPHA and HUSD."
+              "description:":"Please enter the cash equivalent and % deferral for this contribution – the more you defer to a later date, the higher the bonus will be (see actual salary calculation below or use our calculator). The bottom fields compute the actual payout in SEEDS, HVOICE, HYPHA and HUSD."
             },
             "title": {
               "key": "title",
@@ -145,7 +145,7 @@
             },
             "usdAmount": {
               "key": "usdAmount",
-              "label": "Total USD Equivalent",
+              "label": "Total cash Equivalent",
               "type": "asset"
             },
             "deferred": {
@@ -247,7 +247,7 @@
             },
             "stepCompensationTitle": {
               "label": "Choose your payout",
-              "description:":"Please enter the USD equivalent and % deferral for this contribution – the more you defer to a later date, the higher the bonus will be (see actual salary calculation below or use our calculator). The bottom fields compute the actual payout in SEEDS, HVOICE, HYPHA and HUSD."
+              "description:":"Please enter the cash equivalent and % deferral for this contribution – the more you defer to a later date, the higher the bonus will be (see actual salary calculation below or use our calculator). The bottom fields compute the actual payout in SEEDS, HVOICE, HYPHA and HUSD."
             },
             "url": {
               "key": "url",
@@ -263,7 +263,7 @@
             },
             "usdAmount": {
               "key": "usdAmount",
-              "label": "Total USD Equivalent",
+              "label": "Total cash Equivalent",
               "type": "asset"
             },
             "deferred": {
@@ -340,7 +340,7 @@
             
             "stepCompensationTitle": {
               "label": "Compensation",
-              "description:":"Please enter the USD equivalent and % deferral for this contribution – the more you defer to a later date, the higher the bonus will be (see actual salary calculation below or use our calculator). The bottom fields compute the actual payout in SEEDS, HVOICE, HYPHA and HUSD."
+              "description:":"Please enter the cash equivalent and % deferral for this contribution – the more you defer to a later date, the higher the bonus will be (see actual salary calculation below or use our calculator). The bottom fields compute the actual payout in SEEDS, HVOICE, HYPHA and HUSD."
             },
 
             "questType": {
@@ -355,7 +355,7 @@
             },
             "usdAmount": {
               "key": "usdAmount",
-              "label": "Total USD Equivalent",
+              "label": "Total cash Equivalent",
               "type": "asset"
             },
             "deferred": {
@@ -482,7 +482,7 @@
            
             "stepCompensationTitle": {
               "label": "Manage your salary",
-              "description": "Fields below display the minimum % commitment and % HYPHA tokens vs. HUSD tokens required for this role as well as the role capacity (how many people can be assigned to this role) and USD equivalent."
+              "description": "Fields below display the minimum % commitment and % HYPHA tokens vs. HUSD tokens required for this role as well as the role capacity (how many people can be assigned to this role) and cash equivalent."
             },
 
             "commitment": {
@@ -664,7 +664,7 @@
             },
             "usdAmount": {
               "key": "usdAmount",
-              "label": "Total USD Equivalent",
+              "label": "Total cash Equivalent",
               "type": "asset"
             },
             "deferred": {
@@ -771,7 +771,7 @@
         },
         "stepCompensationTitle": {
           "label": "Choose your payout",
-          "description:":"Please enter the USD equivalent and % deferral for this contribution – the more you defer to a later date, the higher the bonus will be (see actual salary calculation below or use our calculator). The bottom fields compute the actual payout in SEEDS, HVOICE, HYPHA and HUSD."
+          "description:":"Please enter the cash equivalent and % deferral for this contribution – the more you defer to a later date, the higher the bonus will be (see actual salary calculation below or use our calculator). The bottom fields compute the actual payout in SEEDS, HVOICE, HYPHA and HUSD."
         },
         "url": {
           "key": "url",
@@ -787,7 +787,7 @@
         },
         "usdAmount": {
           "key": "usdAmount",
-          "label": "Total USD Equivalent",
+          "label": "Total cash Equivalent",
           "type": "asset"
         },
         "deferred": {
@@ -940,7 +940,7 @@
           "fields": {
             "stepCompensationTitle": {
               "label": "Manage your salary",
-              "description": "Fields below display the minimum % commitment and % HYPHA tokens vs. HUSD tokens required for this role as well as the role capacity (how many people can be assigned to this role) and USD equivalent."
+              "description": "Fields below display the minimum % commitment and % HYPHA tokens vs. HUSD tokens required for this role as well as the role capacity (how many people can be assigned to this role) and cash equivalent."
             },
             "peg": {
               "key": "peg",

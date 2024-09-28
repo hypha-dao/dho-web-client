@@ -138,7 +138,10 @@
         "documentation-url":{
           "label": "УРЛ документације"
         },
-        "sample-text": "Овај текст мора бити видљив у обе боје"
+        "sample-text": "Овај текст мора бити видљив у обе боје",
+        "showUpvoteElection": {
+          "label": "Прикажи изборе за гласање"
+        }
       },
       "nav": {
         "show-more": "Прикажи више опција",
@@ -911,11 +914,12 @@
       "help": "Помоћ"
     },
     "left-navigation": {
-      "proposals": "Предлози",
-      "members": "Чланови",
-      "organization": "Организација",
+      "agreements":"Споразуми",
+      "election": "Избори",
       "explore": "Истражите",
-      "election": "Избори"
+      "organization": "Организација",
+      "people":"Људи",        
+      "treasury":"Трезор"
     },
     "navigation-header": {
       "home": "Кућа",
@@ -1172,7 +1176,9 @@
       "to": "До",
       "sendToPlaceholder": "Унесите јавну адресу",
       "transactionSuccessful": "Трансакција успела!",
-      "close": "Близу"
+      "close": "Близу",
+      "sendUtilityTokens": "Пошаљите услужне токене у други новчаник",
+      "addPayoutTokens": "Додајте токене за исплату у ред за откуп трезора"
     },
     "wallet-hypha": {
       "availableBalance": "Доступно Стање",
@@ -1778,7 +1784,7 @@
           "payout": "Исплата",
           "pleaseEnterTheUSDEquivalentAnd1": "Молимо унесите еквивалент у УСД и % одлагања за овај допринос – што више одложите на каснији датум, већи ће бити бонус (погледајте стварни обрачун плате испод или користите наш калкулатор). ",
           "pleaseEnterTheUsd": "Унесите износ ХУСД (тј. еквивалент у УСД) за своју награду. ",
-          "typeTheAmountOfUsd": "Унесите противвредност у УСД",
+          "typeTheAmountOfUsd": "Укуцајте готовински еквивалент",
           "commitmentMustBeGreater": "Обавеза мора бити већа или једнака конфигурацији улоге. ",
           "defferedMustBeGreater": "Због подешавања улоге, мораћете да изаберете већи проценат да бисте наставили",
           "salaryCompensationForOneYear": "Награда за годину дана (еквивалент ${value})",
@@ -1803,12 +1809,11 @@
         "quorum": "Кворум",
         "noProposals": "Нема предлога",
         "oopsNothingCould": "Упс, овде се ништа није могло пронаћи",
-        "stagingProposals": "Инсценацијски предлози",
+        "drafts":"Нацрти",
         "activeProposals": "Активни предлози",
         "noProposals1": "Нема предлога",
-        "stagingProposals1": "Инсценацијски предлози",
         "activeProposals1": "Активни предлози",
-        "proposalHistory": "Историја предлога",
+        "proposalHistory":"Историја",
         "lookingToMonitor": "Желите да пратите колико су стари предлози прошли? ",
         "seeHistory": "Погледајте историју >",
         "isTheMinimumRequiredPercentageOfMembers": "Проценат потребне сагласности да би предлог прошао.",
@@ -2076,10 +2081,11 @@
     "explore": "Истражите",
     "createANewDao": "Направите нови ДХО",
     "login": "Пријавите се",
-    "members": "Чланови",
+    "people":"Људи",
+    "agreements":"Споразуми",
     "proposals": "Предлози",
     "createProposal": "Цреате Пропосал",
-    "proposalHistory": "Историја предлога",
+    "proposalHistory": "Историја",
     "proposalDetails": "Детаљи предлога",
     "organization": "Организација",
     "organizationAssets": "Средства организације",
@@ -2145,7 +2151,7 @@
     "typeThePayoutDescription": "Унесите опис исплате",
     "attachments": "Прилози",
     "clickToAddFile": "Кликните да додате датотеку",
-    "totalUSDEquivalent": "Укупан УСД еквивалент",
+    "totalUSDEquivalent": "Укупан готовински еквивалент",
     "chooseTheDeferredAmount": "Одаберите проценат токена (корисност у односу на исплату)",
     "customCompensation": "Прилагођена компензација",
     "cashToken": "Токен за исплату",
@@ -2297,6 +2303,22 @@
         "text": "Кликните на ово дугме да бисте отворили Хипха Валлет на свом мобилном уређају и потписали ову трансакцију",
         "actionText": "Отворите у Хипха новчанику"
       }
+    }
+  },
+  "utils": {
+    "time": {
+      "second": "{count} секунда",
+      "second_plural": "{count} секунди",
+      "second_2": "{count} секунде",
+      "minute": "{count} минут",
+      "minute_plural": "{count} минута",
+      "minute_2": "{count} минута",
+      "hour": "{count} сат",
+      "hour_plural": "{count} сати",
+      "hour_2": "{count} сата",
+      "day": "{count} дан",
+      "day_plural": "{count} дана",
+      "day_2": "{count} дани"
     }
   }
 }

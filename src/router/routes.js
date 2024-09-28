@@ -74,17 +74,17 @@ const routes = [
         component: () => import('pages/onboarding/NLogin.vue')
       },
       {
-        path: 'members',
-        name: 'members',
+        path: 'people',
+        name: 'people',
         meta: {
-          title: I18n.t('routes.members')
+          title: I18n.t('routes.people')
         },
         component: () => import('pages/dho/Members.vue')
       },
       {
-        path: 'proposals',
+        path: 'agreements',
         meta: {
-          title: I18n.t('routes.proposals')
+          title: I18n.t('routes.agreements')
         },
         component: () => import('pages/proposals/Proposals.vue'),
         children: [
@@ -112,8 +112,8 @@ const routes = [
               title: I18n.t('routes.proposalHistory'),
               breadcrumbs: {
                 tab: {
-                  name: I18n.t('routes.proposals'),
-                  link: { name: 'proposals' }
+                  name: I18n.t('routes.agreements'),
+                  link: { name: 'agreements' }
                 }
               }
             },
@@ -125,8 +125,8 @@ const routes = [
             meta: {
               breadcrumbs: {
                 tab: {
-                  name: I18n.t('routes.proposals'),
-                  link: { name: 'proposals' }
+                  name: I18n.t('routes.agreements'),
+                  link: { name: 'agreements' }
                 }
               },
               // layout: 'proposal',
@@ -137,14 +137,23 @@ const routes = [
           },
           {
             path: '',
-            name: 'proposals',
+            name: 'agreements',
             meta: {
-              title: I18n.t('routes.proposals')
+              title: I18n.t('routes.agreements')
             },
             component: () => import('pages/proposals/ProposalList.vue')
           }
         ]
       },
+      {
+        path: 'treasury',
+        name: 'treasury',
+        meta: {
+          title: I18n.t('routes.treasury')
+        },
+        component: () => import('pages/dho/Treasury.vue')
+      },
+
       {
         path: 'organization',
         name: 'organization',
@@ -185,6 +194,7 @@ const routes = [
         component: () => import('pages/proposals/ProposalDetail.vue'),
         props: true
       },
+
       {
         path: '@:username',
         name: 'profile',
@@ -264,20 +274,6 @@ const routes = [
           title: I18n.t('routes.support')
         },
         component: () => import('pages/support/Support.vue')
-      },
-      {
-        path: 'treasury',
-        name: 'treasury',
-        meta: {
-          breadcrumbs: {
-            tab: {
-              name: I18n.t('routes.organization'),
-              link: 'organization'
-            }
-          },
-          title: I18n.t('routes.treasury')
-        },
-        component: () => import('pages/dho/Treasury.vue')
       },
       {
         path: 'multi-sig',

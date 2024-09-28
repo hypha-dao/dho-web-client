@@ -1069,7 +1069,7 @@ export const createTokens = async function ({ state, rootState }, data) {
             { label: 'content_group_label', value: ['string', 'reward_details'] },
             { label: 'reward_token_name', value: ['string', data?.utilityName] },
             { label: 'reward_token', value: ['asset', `${parseFloat(1).toFixed(data?.utilityDigits)} ${data?.utilitySymbol}`] },
-            { label: 'reward_token_max_supply', value: ['asset', `${parseFloat(-1).toFixed(data?.utilityDigits)} ${data?.utilitySymbol}`] },
+            { label: 'reward_token_max_supply', value: ['asset', `${parseFloat(data?.utilityAmount ? data?.utilityAmount : -1).toFixed(data?.utilityDigits)} ${data?.utilitySymbol}`] },
             { label: 'reward_to_peg_ratio', value: ['asset', `${parseFloat(1).toFixed(data?.treasuryDigits)} ${data?.treasurySymbol}`] },
             { label: 'utility_token_multiplier', value: ['int64', data?.utilityTokenMultiplier * 100] }
           ],

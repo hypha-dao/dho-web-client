@@ -22,7 +22,7 @@ export default {
   },
   methods: {
     moreClicked () {
-      this.$router.push({ name: 'members', params: { dhoname: this.$route.params.dhoname, applicants: false } })
+      this.$router.push({ name: 'people', params: { dhoname: this.$route.params.dhoname, applicants: false } })
     }
   }
 }

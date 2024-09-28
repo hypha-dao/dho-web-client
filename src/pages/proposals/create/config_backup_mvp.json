@@ -69,7 +69,7 @@
           "fields": {
             "usdAmount": {
               "key": "usdAmount",
-              "label": "Total USD Equivalent",
+              "label": "Total cash Equivalent",
               "type": "asset"
             },
             "deferred": {
@@ -182,7 +182,7 @@
             },
             "usdAmount": {
               "key": "usdAmount",
-              "label": "Total USD Equivalent",
+              "label": "Total cash Equivalent",
               "type": "asset"
             },
             "description": {

@@ -493,6 +493,11 @@ export default {
           image: require('assets/images/locales/sr.svg')
         },
         {
+          label: 'Македонски',
+          value: 'mk',
+          image: require('assets/images/locales/mk.png')
+        },
+        {
           label: '한국인',
           value: 'ko',
           image: require('assets/images/locales/ko.png')
@@ -701,7 +706,7 @@ export default {
         this.isActivated = true
         localStorage?.setItem('isActivated', true)
 
-        this.$router.push({ name: 'proposals' })
+        this.$router.push({ name: 'agreements' })
       } catch (error) {
 
       }
@@ -753,7 +758,7 @@ export default {
     goToProposal (notification) {
       const proposal = JSON.parse(notification.content).proposalId
       if (proposal) {
-        this.$router.push({ path: `/${this.selectedDao?.name}/proposals/${proposal}` })
+        this.$router.push({ path: `/${this.selectedDao?.name}/agreements/${proposal}` })
       }
     }
   }

@@ -378,9 +378,9 @@ export default {
         }
         this.$store.commit('proposals/reset')
 
-        this.$router.push({ name: 'proposals', params: { data }, query: { refetch: true } })
+        this.$router.push({ name: 'agreements', params: { data }, query: { refetch: true } })
 
-        // setTimeout(() => this.$router.push({ name: 'proposals', query: { data, refetch: true } }), 700)
+        // setTimeout(() => this.$router.push({ name: 'agreements', query: { data, refetch: true } }), 700)
       } catch (e) {
         const message = e.message || e.cause.message
         // this.saveDraft()

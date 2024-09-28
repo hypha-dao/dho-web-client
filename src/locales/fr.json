@@ -138,7 +138,10 @@
         "documentation-url":{
           "label": "URL de la documentation"
         },
-        "sample-text": "Ce texte doit être visible dans les deux couleurs"
+        "sample-text": "Ce texte doit être visible dans les deux couleurs",
+        "showUpvoteElection": {
+          "label": "Afficher l'élection de vote positif"
+        }
       },
       "nav": {
         "show-more": "Afficher plus d'options",
@@ -916,11 +919,11 @@
       "help": "Aide"
     },
     "left-navigation": {
-      "proposals": "Les propositions",
-      "members": "Membres",
-      "organization": "Organisation",
+      "agreements":"Accords",
+      "election": "Élection",
       "explore": "Explorer",
-      "election": "Élection"
+      "people":"Personnes",        
+      "treasury":"Trésor"
     },
     "navigation-header": {
       "home": "Maison",
@@ -1177,7 +1180,9 @@
       "to": "À",
       "sendToPlaceholder": "Entrez l'adresse publique",
       "transactionSuccessful": "Transaction réussie !",
-      "close": "Fermer"
+      "close": "Fermer",
+      "sendUtilityTokens": "Envoyer des jetons utilitaires vers un autre portefeuille",
+      "addPayoutTokens": "Ajouter des jetons de paiement à la file d'attente de rachat du Trésor"
     },
     "wallet-hypha": {
       "availableBalance": "Solde disponible",
@@ -1781,16 +1786,16 @@
         },
         "steppayout": {
           "payout": "Paiement",
-          "pleaseEnterTheUSDEquivalentAnd1": "Veuillez saisir l'équivalent en USD et le pourcentage de report pour cette contribution – plus vous reportez à une date ultérieure, plus le bonus sera élevé (voir le calcul du salaire réel ci-dessous ou utilisez notre calculateur). ",
+          "pleaseEnterTheUSDEquivalentAnd1": "Veuillez saisir l'équivalent en cash et le pourcentage de report pour cette contribution – plus vous reportez à une date ultérieure, plus le bonus sera élevé (voir le calcul du salaire réel ci-dessous ou utilisez notre calculateur). ",
           "pleaseEnterTheUsd": "Veuillez saisir le montant en HUSD (c'est-à-dire l'équivalent en USD) de votre récompense. ",
-          "typeTheAmountOfUsd": "Tapez l'équivalent en USD",
+          "typeTheAmountOfUsd": "Tapez l'équivalent en espèces",
           "commitmentMustBeGreater": "L'engagement doit être supérieur ou égal à la configuration du rôle. ",
           "defferedMustBeGreater": "En raison de la configuration du rôle, vous devrez choisir un pourcentage plus élevé pour continuer",
           "salaryCompensationForOneYear": "Récompense pendant un an (équivalent {value} $)",
           "salaryCompensationForOneYearUsd": "Récompense d'un an (${value} ) équivalent en USD",
           "compensation": "Calcul des récompenses",
           "compensation1": "Récompense",
-          "pleaseEnterTheUSD": "Veuillez saisir l'équivalent en USD de votre récompense. ",
+          "pleaseEnterTheUSD": "Veuillez saisir l'équivalent en cash de votre récompense. ",
           "belowYouCanSeeTheActual": "La calculatrice calculera les numéros de jetons lorsque vous ajusterez les curseurs.",
           "compensationForOnePeriod": "Récompense pour une période",
           "compensationForOneCycle": "Récompense pour un cycle",
@@ -1808,12 +1813,11 @@
         "quorum": "Quorum",
         "noProposals": "Aucune proposition",
         "oopsNothingCould": "Oups, rien n'a été trouvé ici",
-        "stagingProposals": "Propositions de mise en scène",
+        "drafts":"Brouillons",
         "activeProposals": "Propositions actives",
         "noProposals1": "Aucune proposition",
-        "stagingProposals1": "Propositions de mise en scène",
         "activeProposals1": "Propositions actives",
-        "proposalHistory": "Historique de la proposition",
+        "proposalHistory":"Histoire",
         "lookingToMonitor": "Vous cherchez à surveiller le déroulement des anciennes propositions ? ",
         "seeHistory": "Voir l'historique >",
         "isTheMinimumRequiredPercentageOfMembers": "Pourcentage d’accord requis pour qu’une proposition soit adoptée.",
@@ -2086,10 +2090,11 @@
     "explore": "Explorer",
     "createANewDao": "Créer un nouveau DHO",
     "login": "Se connecter",
-    "members": "Membres",
+    "people":"Personnes",
+    "agreements":"Accords",
     "proposals": "Les propositions",
     "createProposal": "Créer une proposition",
-    "proposalHistory": "Historique de la proposition",
+    "proposalHistory":"Histoire",
     "proposalDetails": "Détails de la proposition",
     "organization": "Organisation",
     "organizationAssets": "Actifs de l'organisation",
@@ -2149,13 +2154,13 @@
     "cashCoefficient": "Coefficient de trésorerie",
     "payout": "Paiement",
     "compensation": "Gérez votre récompense",
-    "pleaseEnterTheUSDEquivalentAnd": "Veuillez saisir l'équivalent en USD (c'est-à-dire le montant en HUSD) de votre récompense. ",
+    "pleaseEnterTheUSDEquivalentAnd": "Veuillez saisir l'équivalent en cash (c'est-à-dire le montant en HUSD) de votre récompense. ",
     "belowYouCanSeeTheActual": "Ci-dessous, vous pouvez voir la répartition réelle de la récompense en HVOICE, HYPHA et HUSD.",
     "typeThePayoutTitle": "Tapez le titre du paiement",
     "typeThePayoutDescription": "Tapez la description du paiement",
     "attachments": "Pièces jointes",
     "clickToAddFile": "Cliquez pour ajouter un fichier",
-    "totalUSDEquivalent": "Total équivalent en USD",
+    "totalUSDEquivalent": "Total équivalent en espèces",
     "chooseTheDeferredAmount": "Choisissez le pourcentage de jetons (utilitaire ou paiement)",
     "customCompensation": "Rémunération personnalisée",
     "cashToken": "Jeton de paiement",
@@ -2307,6 +2312,18 @@
         "text": "Cliquez sur ce bouton pour ouvrir Hypha Wallet sur votre appareil mobile et signer cette transaction",
         "actionText": "Ouvrir dans le portefeuille Hypha"
       }
+    }
+  },
+  "utils": {
+    "time": {
+      "second": "{count} seconde",
+      "second_plural": "{count} secondes",
+      "minute": "{count} minute",
+      "minute_plural": "{count} minutes",
+      "hour": "{count} heure",
+      "hour_plural": "{count} heures",
+      "day": "{count} jour",
+      "day_plural": "{count} jours"
     }
   }
 }

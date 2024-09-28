@@ -23,7 +23,7 @@ const signTransaction = async function (actions, options = {}) {
         },
         {
           blocksBehind: 3,
-          expireSeconds: 30,
+          expireSeconds: 300,
           ...options
         }
       )
@@ -35,7 +35,7 @@ const signTransaction = async function (actions, options = {}) {
         },
         {
           blocksBehind: 3,
-          expireSeconds: 30
+          expireSeconds: 300
         }
       )
       transactionId = result.transaction_id

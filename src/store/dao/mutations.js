@@ -19,7 +19,7 @@ const settingsMapper = (settings) => {
     voiceToken: settings?.settings_voiceToken_a?.split(' ')[1],
     voiceTokenDecimals: settings?.settings_voiceToken_a?.split(' ')[0]?.split('.')[1].length,
 
-    documentationURL: settings?.settings_documentationURL_s,
+    documentationUrl: settings?.settings_documentationUrl_s,
     documentationButtonText: settings?.settings_documentationButtonText_s,
 
     socialChat: settings?.settings_socialChat_s,
@@ -61,6 +61,8 @@ const settingsMapper = (settings) => {
     upvoteHeadDelegateRound: settings?.settings_upvoteHeadDelegateRound_i,
     upvoteHeadDelegateDuration: settings?.settings_upvoteHeadDelegateDuration_i,
 
+    showUpvoteElection: Boolean(settings?.settings_showUpvoteElection_i),
+
     usesSeeds: Boolean(settings?.settings_usesSeeds_i),
     isHypha: Boolean(settings?.settings_isHypha_i),
 
@@ -96,7 +98,8 @@ const settingsMapper = (settings) => {
     exploreTitle: settings?.settings_exploreTitle_s,
     exploreParagraph: settings?.settings_exploreParagraph_s,
 
-    onboarderAccount: settings?.settings_onboarderAccount_n
+    onboarderAccount: settings?.settings_onboarderAccount_n,
+    treasuryCurrency: settings?.settings_treasuryCurrency_s
   }
 }
 
@@ -141,7 +144,7 @@ export const setPlan = (state, plan = {}) => {
     ...plan,
     name: (plan?.name || PLAN.FOUNDER).toLowerCase(),
     status: plan?.status || PLAN_STATUS.ACTIVE,
-    amountUSD: (plan?.price / 100) / (plan.interval === 'year' && plan.planType === 'SAAS' ? 12 : 1),
+    amountUSD: (plan?.price / 100) / (plan?.interval === 'year' && plan?.planType === 'SAAS' ? 12 : 1),
     coreMembersCount: plan?.coreMembersCount || 5,
     communityMembersCount: plan?.communityMembersCount || 0,
     currentCoreMembersCount: state?.meta?.memberCount || 0

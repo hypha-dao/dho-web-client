@@ -1,6 +1,14 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
+import { mapGetters } from 'vuex'
 import IpfsImageViewer from '~/components/ipfs/ipfs-image-viewer.vue'
+import currency from 'src/data/currency.json'
+
+const mapCurrency = (currency) => (_) => ({
+  label: `${currency[_]?.symbol} - ${currency[_]?.name}`,
+  value: currency[_].code,
+  ...currency[_]
+})
 
 /**
  * Displays a token, icon
@@ -38,7 +46,16 @@ export default defineComponent({
     }
   },
 
-  methods: {}
+  computed: {
+    ...mapGetters('dao', ['daoSettings']),
+    currencies () { return Object.keys(currency).map(mapCurrency(currency)) }
+  },
+
+  methods: {
+    getCurrencySymbol(code) {
+      return this.currencies.find(currency => currency.code === code).symbol
+    }
+  }
 })
 </script>
 
@@ -52,7 +69,7 @@ export default defineComponent({
       ipfs-image-viewer(:color="daoLogo ? 'white' : 'secondary'" :ipfsCid="daoLogo" :size="size" showDefault)
       .div.absolute.text-white.token-overlay(v-if="type === 'voice' || type === 'cash'")
       .div.absolute.text-white.token-text(v-if="type === 'voice'") V
-      .div.absolute.text-white.token-text(v-if="type === 'cash'") $
+      .div.absolute.text-white.token-text(v-if="type === 'cash'") {{ daoSettings.treasuryCurrency ? getCurrencySymbol(daoSettings.treasuryCurrency): '$' }}
 </template>
 <style scoped lang="stylus">
 .token-text

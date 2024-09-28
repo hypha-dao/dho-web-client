@@ -1,6 +1,6 @@
 <script>
 import { mapGetters } from 'vuex'
-import { date } from 'quasar'
+import { date, openURL } from 'quasar'
 
 import ipfsy from '~/utils/ipfsy'
 
@@ -13,7 +13,8 @@ export default {
     HowItWorks: () => import('~/components/dashboard/how-it-works.vue'),
     Members: () => import('~/components/organization/members.vue'),
     MetricLink: () => import('~/components/dashboard/metric-link.vue'),
-    SupportWidget: () => import('~/components/dashboard/support-widget.vue')
+    SupportWidget: () => import('~/components/dashboard/support-widget.vue'),
+    CirclesWidget: () => import('~/components/organization/circles-widget.vue')
   },
 
   apollo: {
@@ -114,11 +115,25 @@ export default {
       },
       skip () { return !this.selectedDao || !this.selectedDao.docId },
       variables () { return { daoId: this.selectedDao.docId, first: 4 } }
+    },
+
+    circles: {
+      query: require('~/query/circles/dao-circles.gql'),
+      update: data => {
+        return data.getDao.circle.map(circle => {
+          return {
+            ...circle
+          }
+        })
+      },
+      skip () { return !this.selectedDao || !this.selectedDao.docId },
+      variables () { return { daoId: this.selectedDao.docId } }
     }
   },
 
   data () {
     return {
+      openURL,
       pagination: {
         first: 6,
         offset: 0,
@@ -136,7 +151,7 @@ export default {
 
     welcomeBanner () {
       return {
-        title: this.daoSettings?.dashboardTitle || this.$t('pages.dho.home.welcomeToHyphaEvolution'),
+        title: this.daoSettings?.settings_daoTitle_s || this.$t('pages.dho.home.welcomeToHyphaEvolution'),
         description: this.daoSettings?.settings_daoDescription_s || this.$t('pages.dho.home.atHyphaWere'),
         background: ipfsy(this.daoSettings?.dashboardBackgroundImage),
         color: this.daoSettings?.primaryColor,
@@ -148,7 +163,8 @@ export default {
 
   },
 
-  methods: {}
+  methods: {
+  }
 }
 </script>
 
@@ -156,17 +172,17 @@ export default {
 q-page.page-dashboard
   base-banner(:compact="!$q.screen.gt.sm" :split="$q.screen.gt.md" v-bind="welcomeBanner" v-if="isWelcomeBannerVisible")
     template(v-slot:buttons)
-      router-link(:to="{ name: 'organization' }")
-        q-btn.q-px-lg.h-btn1(color="secondary" :label="$t('pages.dho.home.discoverMore')" no-caps rounded unelevated)
+      q-btn.q-px-lg.h-btn1(color="secondary" :label="$t('pages.dho.home.discoverMore')" no-caps rounded unelevated @click="openURL(daoSettings.settings_documentationUrl_s || 'https://help.hypha.earth/hc/2431449449')")
   section.q-mt-md.grid
-    metric-link(:amount="activeAssignmentsCount || '...'" :link="{ link: 'search', query: { q: '', filter: 'Active', type: '4' } }" :style="{'grid-area': 'assignments'}" :title="$t('pages.dho.home.assignments')")
-    metric-link(:amount="activeBadgesCount || '...'" :link="{ link: 'organization/assets', params: { type: 'badge' } }" :style="{'grid-area': 'badges'}" :title="$t('pages.dho.home.badges')")
-    metric-link(:amount="activeMembersCount || '...'" :link="{ link: 'members', params: { } }" :style="{'grid-area': 'members'}" :title="$t('pages.dho.home.members')")
-    metric-link(:amount="activeProposalsCount || '...'" :link="{ link: 'proposals', params: { } }" :style="{'grid-area': 'proposals'}" :title="$t('pages.dho.home.proposals')")
+    metric-link(:link="{ link: 'agreements', params: { type: 'badge' } }" :amount="activeAssignmentsCount || '...'"  :style="{'grid-area': 'assignments'}" :title="$t('pages.dho.home.assignments')")
+    metric-link(:link="{ link: 'organization/assets', params: { type: 'badge' } }" :amount="activeBadgesCount || '...'"  :style="{'grid-area': 'badges'}" :title="$t('pages.dho.home.badges')")
+    metric-link(:link="{ link: 'people', params: { type: 'badge' } }" :amount="activeMembersCount || '...'"  :style="{'grid-area': 'members'}" :title="$t('pages.dho.home.members')")
+    metric-link(:link="{ link: 'agreements', params: { type: 'badge' } }" :amount="activeProposalsCount || '...'"  :style="{'grid-area': 'proposals'}" :title="$t('pages.dho.home.proposals')")
     members(:title="$t('pages.dho.home.members')" :members="daoMembers || []" :style="{'grid-area': 'new'}")
-    support-widget(:documentationButtonText="daoSettings.documentationButtonText" :documentationURL="daoSettings.documentationURL" :socialChat="daoSettings.socialChat" :style="{'grid-area': 'support'}")
+    support-widget(:documentationButtonText="daoSettings.documentationButtonText" :documentationURL="daoSettings.settings_documentationUrl_s || 'https://help.hypha.earth/hc/2431449449'" :socialChat="daoSettings.socialChat" :style="{'grid-area': 'support'}")
     how-it-works(:style="{'grid-area': 'how'}")
-
+  section.q-mt-md
+    circles-widget(:circles="circles" :title="$t('pages.dho.organization.daoCircles1')")
 </template>
 
 <style lang="stylus" scoped>

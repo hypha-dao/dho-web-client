@@ -138,7 +138,10 @@
         "documentation-url":{
           "label": "문서 URL"
         },
-        "sample-text": "이 텍스트는 두 가지 색상으로 모두 표시되어야 합니다."
+        "sample-text": "이 텍스트는 두 가지 색상으로 모두 표시되어야 합니다.",
+        "showUpvoteElection": {
+          "label": "찬성 투표 표시"
+        }
       },
       "nav": {
         "show-more": "더 많은 옵션 보기",
@@ -911,11 +914,11 @@
       "help": "돕다"
     },
     "left-navigation": {
-      "proposals": "제안",
-      "members": "회원",
-      "organization": "조직",
+      "agreements":"계약",
+      "election": "선거",
       "explore": "탐구하다",
-      "election": "선거"
+      "people":"사람들",        
+      "treasury":"국고"
     },
     "navigation-header": {
       "home": "집",
@@ -1172,7 +1175,9 @@
       "to": "에게",
       "sendToPlaceholder": "공개 주소를 입력하세요.",
       "transactionSuccessful": "거래 성공!",
-      "close": "닫다"
+      "close": "닫다",
+      "sendUtilityTokens": "유틸리티 토큰을 다른 지갑으로 보내기",
+      "addPayoutTokens": "재무 상환 대기열에 지급 토큰 추가"
     },
     "wallet-hypha": {
       "availableBalance": "사용 가능한 잔액",
@@ -1776,16 +1781,16 @@
         },
         "steppayout": {
           "payout": "지불금",
-          "pleaseEnterTheUSDEquivalentAnd1": "이 기여에 대한 USD 상당 금액과 이연 %를 입력하십시오. 나중에 연기할수록 보너스가 높아집니다(아래 실제 급여 계산을 참조하거나 당사 계산기를 사용하십시오). ",
-          "pleaseEnterTheUsd": "보상을 받을 HUSD 금액(예: USD 상당)을 입력하세요. ",
-          "typeTheAmountOfUsd": "해당 USD를 입력하세요.",
+          "pleaseEnterTheUSDEquivalentAnd1": "이 기여에 대한 cash 상당 금액과 이연 %를 입력하십시오. 나중에 연기할수록 보너스가 높아집니다(아래 실제 급여 계산을 참조하거나 당사 계산기를 사용하십시오). ",
+          "pleaseEnterTheUsd": "보상을 받을 HUSD 금액(예: cash 상당)을 입력하세요. ",
+          "typeTheAmountOfUsd": "현금 등가물을 입력하세요",
           "commitmentMustBeGreater": "약정은 역할 구성보다 크거나 같아야 합니다. ",
           "defferedMustBeGreater": "역할 설정으로 인해 계속하려면 더 높은 비율을 선택해야 합니다.",
           "salaryCompensationForOneYear": "1년 동안의 보상(${value} 상당)",
-          "salaryCompensationForOneYearUsd": "1년 동안의 보상( ${value} ) USD 상당",
+          "salaryCompensationForOneYearUsd": "1년 동안의 보상( ${value} ) cash 상당",
           "compensation": "보상 계산",
           "compensation1": "보상",
-          "pleaseEnterTheUSD": "보상에 해당하는 USD 금액을 입력하세요. ",
+          "pleaseEnterTheUSD": "보상에 해당하는 cash 금액을 입력하세요. ",
           "belowYouCanSeeTheActual": "슬라이더를 조정할 때 계산기는 토큰 번호를 계산합니다.",
           "compensationForOnePeriod": "한 기간 동안 보상",
           "compensationForOneCycle": "한 사이클에 대한 보상",
@@ -1803,12 +1808,11 @@
         "quorum": "정족수",
         "noProposals": "제안 없음",
         "oopsNothingCould": "죄송합니다. 여기서는 아무것도 찾을 수 없습니다.",
-        "stagingProposals": "준비 제안",
+        "drafts":"체커",
         "activeProposals": "활성 제안",
         "noProposals1": "제안 없음",
-        "stagingProposals1": "준비 제안",
         "activeProposals1": "활성 제안",
-        "proposalHistory": "제안 내역",
+        "proposalHistory":"역사",
         "lookingToMonitor": "제안서가 얼마나 오래되었는지 모니터링하고 싶으신가요? ",
         "seeHistory": "역사 보기 >",
         "isTheMinimumRequiredPercentageOfMembers": "제안이 통과되기 위해 필요한 합의 비율입니다.",
@@ -2076,10 +2080,11 @@
     "explore": "탐구하다",
     "createANewDao": "새 DHO 만들기",
     "login": "로그인",
-    "members": "회원",
+    "people":"사람들",
+     "agreements":"계약",
     "proposals": "제안",
     "createProposal": "제안서 작성",
-    "proposalHistory": "제안 내역",
+    "proposalHistory":"역사",
     "proposalDetails": "제안 내용",
     "organization": "조직",
     "organizationAssets": "조직 자산",
@@ -2139,13 +2144,13 @@
     "cashCoefficient": "현금 계수",
     "payout": "지불금",
     "compensation": "보상을 관리하세요",
-    "pleaseEnterTheUSDEquivalentAnd": "보상에 해당하는 USD 금액(예: HUSD 금액)을 입력하세요. ",
+    "pleaseEnterTheUSDEquivalentAnd": "보상에 해당하는 cash 금액(예: HUSD 금액)을 입력하세요. ",
     "belowYouCanSeeTheActual": "아래에서 HVOICE, HYPHA 및 HUSD의 실제 보상 내역을 볼 수 있습니다.",
     "typeThePayoutTitle": "지불금 제목을 입력하세요",
     "typeThePayoutDescription": "지급 설명을 입력하세요.",
     "attachments": "첨부파일",
     "clickToAddFile": "파일을 추가하려면 클릭하세요.",
-    "totalUSDEquivalent": "총 USD 상당",
+    "totalUSDEquivalent": "총 현금 등가물",
     "chooseTheDeferredAmount": "토큰 비율 선택(유틸리티 대 지불금)",
     "customCompensation": "맞춤형 보상",
     "cashToken": "지급 토큰",
@@ -2297,6 +2302,18 @@
         "text": "모바일 장치에서 Hypha 지갑을 열고 이 거래에 서명하려면 이 버튼을 클릭하세요.",
         "actionText": "하이파 지갑에서 개설"
       }
+    }
+  },
+  "utils": {
+    "time": {
+      "second": "{count} 초",
+      "second_plural": "{count} 초",
+      "minute": "{count} 분",
+      "minute_plural": "{count} 분",
+      "hour": "{count} 시간",
+      "hour_plural": "{count} 시간",
+      "day": "{count} 일",
+      "day_plural": "{count} 일"
     }
   }
 }

@@ -55,9 +55,9 @@ export default {
 widget.full-height.full-width(:title="singleCircle ? '' : title" :noPadding="singleCircle")
   template(v-if="!singleCircle")
     .h-h3.text-secondary.absolute(:style="{ 'top': '0', 'right': '0' }") {{ circles.length }}
-    q-tabs(active-color="primary" align="left" indicator-color="primary" no-caps v-model="tab" v-if="circles.length > 0")
-      q-tab(:name="TABS.STRUCTURE" :label="$t('organization.circles-widget.structure')" :ripple="false")
-      q-tab(:name="TABS.DISTRIBUTION" :label="$t('organization.circles-widget.circleBudgetDistribution')" :ripple="false")
+    //- q-tabs(active-color="primary" align="left" indicator-color="primary" no-caps v-model="tab" v-if="circles.length > 0")
+      //- q-tab(:name="TABS.STRUCTURE" :label="$t('organization.circles-widget.structure')" :ripple="false")
+      //- q-tab(:name="TABS.DISTRIBUTION" :label="$t('organization.circles-widget.circleBudgetDistribution')" :ripple="false")
     div(v-if="tab === TABS.STRUCTURE")
       template(v-for="circle in circles")
         circle-card(v-bind="circle")

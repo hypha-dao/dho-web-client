@@ -138,7 +138,10 @@
         "documentation-url":{
           "label": "URL da documentação"
         },
-        "sample-text": "Este texto deve estar visível em ambas as cores"
+        "sample-text": "Este texto deve estar visível em ambas as cores",
+        "showUpvoteElection": {
+          "label": "Mostrar eleição positiva"
+        }
       },
       "nav": {
         "show-more": "Mostrar mais opções",
@@ -911,9 +914,9 @@
       "help": "Ajuda"
     },
     "left-navigation": {
-      "proposals": "Propostas",
-      "members": "Membros",
-      "organization": "Organização",
+      "agreements":"Acordos",
+      "people":"Pessoas",        
+      "treasury":"Tesouraria",
       "explore": "Explorar",
       "election": "Eleição"
     },
@@ -1172,7 +1175,9 @@
       "to": "Para",
       "sendToPlaceholder": "Insira o endereço público",
       "transactionSuccessful": "Transação bem-sucedida!",
-      "close": "Fechar"
+      "close": "Fechar",
+      "sendUtilityTokens": "Envie tokens utilitários para outra carteira",
+      "addPayoutTokens": "Adicionar tokens de pagamento à fila de resgate do Tesouro"
     },
     "wallet-hypha": {
       "availableBalance": "Saldo disponível",
@@ -1778,7 +1783,7 @@
           "payout": "Pagamento",
           "pleaseEnterTheUSDEquivalentAnd1": "Por favor, insira o equivalente em dólares americanos e a % de diferimento para esta contribuição – quanto mais você adiar para uma data posterior, maior será o bônus (veja o cálculo real do salário abaixo ou use nossa calculadora). ",
           "pleaseEnterTheUsd": "Insira o valor em HUSD (ou seja, equivalente em dólares americanos) para sua recompensa. ",
-          "typeTheAmountOfUsd": "Digite o equivalente em USD",
+          "typeTheAmountOfUsd": "Digite o equivalente em dinheiro",
           "commitmentMustBeGreater": "O comprometimento deve ser maior ou igual à configuração da função. ",
           "defferedMustBeGreater": "Devido à configuração da função, você terá que escolher uma porcentagem maior para continuar",
           "salaryCompensationForOneYear": "Recompensa por um ano (equivalente a ${value})",
@@ -1803,12 +1808,11 @@
         "quorum": "Quorum",
         "noProposals": "Sem propostas",
         "oopsNothingCould": "Ops, nada foi encontrado aqui",
-        "stagingProposals": "Propostas de preparação",
+        "drafts":"Rascunhos",
         "activeProposals": "Propostas ativas",
         "noProposals1": "Sem propostas",
-        "stagingProposals1": "Propostas de preparação",
         "activeProposals1": "Propostas ativas",
-        "proposalHistory": "Histórico de propostas",
+        "proposalHistory":"História",
         "lookingToMonitor": "Quer monitorar a antiguidade das propostas? ",
         "seeHistory": "Ver histórico >",
         "isTheMinimumRequiredPercentageOfMembers": "Porcentagem de concordância necessária para que uma proposta seja aprovada.",
@@ -2076,10 +2080,11 @@
     "explore": "Explorar",
     "createANewDao": "Crie um novo DHO",
     "login": "Conecte-se",
-    "members": "Membros",
+    "people":"Pessoas",
+    "agreements":"Acordos",
     "proposals": "Propostas",
     "createProposal": "Criar proposta",
-    "proposalHistory": "Histórico de propostas",
+    "proposalHistory":"História",
     "proposalDetails": "Detalhes da proposta",
     "organization": "Organização",
     "organizationAssets": "Ativos da organização",
@@ -2145,7 +2150,7 @@
     "typeThePayoutDescription": "Digite a descrição do pagamento",
     "attachments": "Anexos",
     "clickToAddFile": "Clique para adicionar arquivo",
-    "totalUSDEquivalent": "Equivalente total em dólares americanos",
+    "totalUSDEquivalent": "Equivalente total em dinheiro",
     "chooseTheDeferredAmount": "Escolha a porcentagem do token (utilidade versus pagamento)",
     "customCompensation": "Compensação personalizada",
     "cashToken": "Token de pagamento",
@@ -2297,6 +2302,18 @@
         "text": "Clique neste botão para abrir a Hypha Wallet no seu dispositivo móvel e assinar esta transação",
         "actionText": "Abrir na carteira Hypha"
       }
+    }
+  },
+  "utils": {
+    "time": {
+      "second": "{count} segundo",
+      "second_plural": "{count} segundos",
+      "minute": "{count} minuto",
+      "minute_plural": "{count} minutos",
+      "hour": "{count} hora",
+      "hour_plural": "{count} horas",
+      "day": "{count} dia",
+      "day_plural": "{count} dias"
     }
   }
 }

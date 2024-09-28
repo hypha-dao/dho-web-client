@@ -3,12 +3,14 @@ import { mapGetters } from 'vuex'
 import ipfsy from '~/utils/ipfsy'
 import { getProposalChipFilters } from '../../utils/proposal-filter'
 import gql from 'graphql-tag'
+import { date } from 'quasar'
+import { formatDuration } from '~/utils/TimeUtils'
 
 const STAGED_PROPOSALS_QUERY = `
   queryDao(filter: { docId: { eq: $docId } }) {
     details_daoName_n
     docId
-    stagingprop(first: $first, offset: $offset, order: { desc: createdDate }) {
+    stagingprop(first: $first, offset: $offset, order: {desc: createdDate}, filter: {createdDate: {gt: $startDate}}) {
       docId
       type
 
@@ -552,7 +554,7 @@ export default {
       // }
     },
     stagedProposals: {
-      query: gql`query stageProposals($docId: String!, $first: Int!, $offset: Int!) { ${STAGED_PROPOSALS_QUERY} }`,
+      query: gql`query stageProposals($docId: String!, $first: Int!, $offset: Int!, $startDate: DateTime!) { ${STAGED_PROPOSALS_QUERY} }`,
       update: data => data?.queryDao[0]?.stagingprop,
       skip() { return !this.selectedDao?.docId },
       variables() {
@@ -560,7 +562,8 @@ export default {
           docId: this.selectedDao.docId,
           first: this.pagination.first,
           offset: 0,
-          user: this.account
+          user: this.account,
+          startDate: date.formatDate(date.subtractFromDate(new Date(), { days: 31 }), 'YYYY-MM-DDTHH:mm:ss.SZ')
         }
       },
       errorPolicy: 'all',
@@ -644,7 +647,7 @@ export default {
     banner() {
       return {
         title: this.daoSettings.proposalsTitle || this.$t('pages.proposals.proposallist.yourVoteIsTheVoice'),
-        description: this.daoSettings.proposalsParagraph || this.$t('pages.proposals.proposallist.atHyphaTheFuture'),
+        description: this.daoSettings.proposalsParagraph || this.$t('pages.proposals.proposallist.atHyphaTheFuture', { unity: this.daoSettings.settings_votingAlignmentX100_i, quorum: this.daoSettings.settings_votingQuorumX100_i, time: formatDuration(1800) }),
         background: ipfsy(this.daoSettings.proposalsBackgroundImage),
         color: this.daoSettings.primaryColor,
         pattern: this.daoSettings.pattern,
@@ -773,7 +776,7 @@ export default {
   },
 
   activated() {
-    this.$apollo.queries.stagedProposals.refetch()
+    this.$apollo.queries.stagedProposals?.refetch()
   },
   mounted() {
     if (localStorage.getItem('showProposalBanner') === 'false') {
@@ -827,13 +830,13 @@ export default {
     },
 
     resetPaginationValues() {
-      this.$refs.scroll.resume()
+      this.$refs?.scroll?.resume()
       this.pagination.offset = 0
       this.pagination.more = true
-      this.$apollo.queries.archivedProposals.refetch()
+      this.$apollo.queries.archivedProposals?.refetch()
     },
     handleCreateNewProposal() {
-      this.$router.push(`/${this.daoSettings.url}/proposals/create`)
+      this.$router.push(`/${this.daoSettings.url}/agreements/create`)
     }
   }
 }
@@ -844,7 +847,7 @@ q-page.page-proposals
   base-banner(:compact="!$q.screen.gt.md" @onClose="hideProposalBanner" split="split" v-bind="banner" v-if="isShowingProposalBanner")
     template(v-slot:buttons)
       q-btn.q-px-lg.h-btn1(:to="{ name: 'proposal-create', params: { dhoname: daoSettings.url } }" color="secondary" :label="$t('pages.proposals.proposallist.createProposal')" no-caps rounded unelevated v-if="isMember")
-      a(:href="daoSettings.documentationURL" target="_blank")
+      a(:href="daoSettings.settings_documentationUrl_s || 'https://help.hypha.earth/hc/2431449449'" target="_blank")
         q-btn.q-px-lg.h-btn1(:class="{'bg-secondary': !isMember}" color="white" flat :label="$t('pages.proposals.proposallist.learnMore')" no-caps rounded)
     template(v-slot:right)
       .row
@@ -854,12 +857,12 @@ q-page.page-proposals
           button-radio.full-height(icon="fas fa-users" :title="$t('pages.proposals.proposallist.quorum')" :subtitle="quorumTitle" :description="$t('pages.proposals.proposallist.isTheMinimumRequiredPercentageOfTotal')" opacity="opacity" primary="primary")
   .row.q-py-md(v-if="$q.screen.gt.md")
     .col-12.col-lg-9
-      base-placeholder.q-mr-sm(:compact="!$q.screen.gt.md" v-if="!filteredStagedProposals?.length && !filteredProposals?.length && !hasProposals" :title="$t('pages.proposals.proposallist.noProposals')" subtitle="Your organization has not created any proposals yet. You can create a new proposal by clicking the button below." icon="fas fa-file-medical" :actionButtons="[{label: 'Create a new Proposal', color: 'primary', onClick: () => $router.push(`/${this.daoSettings.url}/proposals/create`), disable: !isMember, disableTooltip: 'You must be a member'}]")
+      base-placeholder.q-mr-sm(:compact="!$q.screen.gt.md" v-if="!filteredStagedProposals?.length && !filteredProposals?.length && !hasProposals" :title="$t('pages.proposals.proposallist.noProposals')" subtitle="Your organization has not created any proposals yet. You can create a new proposal by clicking the button below." icon="fas fa-file-medical" :actionButtons="[{label: 'Create a new Proposal', color: 'primary', onClick: () => $router.push(`/${this.daoSettings.url}/agreements/create`), disable: !isMember, disableTooltip: 'You must be a member'}]")
       base-placeholder.q-mr-sm(:compact="!$q.screen.gt.md" v-if="!filteredProposals?.length && !filteredStagedProposals?.length && hasProposals" :title="$t('pages.proposals.proposallist.oopsNothingCould')" subtitle="Try a different filter or another keyword" icon="far fa-check-square" :actionButtons="[{label: 'Reset filter(s)', color: 'primary', onClick: () => this.$refs.filter.resetFilters() }]")
       .row.justify-center.q-my-md(v-if="$apollo.loading")
         loading-spinner(color="primary" size="72px")
       .row.q-mb-md(v-if="filteredStagedProposals?.length")
-        .h-h4 {{ $t('pages.proposals.proposallist.stagingProposals') }}
+        .h-h4 {{ $t('pages.proposals.proposallist.drafts') }}
         .h-h4-regular.q-ml-xs (
           | {{ filteredStagedProposals?.length }}
           | )
@@ -873,16 +876,16 @@ q-page.page-proposals
       q-infinite-scroll.scroll(@load="onLoad" :offset="500" ref="scroll" :initial-index="1" v-if="proposalsCount?.active")
         proposal-list(:username="account" :proposals="filteredProposals" :supply="supply" :view="'card'")
     .col-3(v-if="$q.screen.gt.md")
-      filter-widget.sticky(ref="filter" :view.sync="view" :sort.sync="sort" :textFilter.sync="textFilter" :circle.sync="circle" :showCircle="false" :optionArray.sync="optionArray" :circleArray.sync="circleArray" :filters.sync="filters" :toggle.sync="showStagedProposals" :toggleDefault="true" :showToggle="true" :showViewSelector="false" viewSelectorLabel="View" :chipsFiltersLabel="$t('pages.proposals.proposallist.proposalTypes')" :filterTitle="$t('pages.proposals.proposallist.searchProposals')" :toggleLabel="$t('pages.proposals.proposallist.stagingProposals')")
+      filter-widget.sticky(ref="filter" :view.sync="view" :sort.sync="sort" :textFilter.sync="textFilter" :circle.sync="circle" :showCircle="false" :optionArray.sync="optionArray" :circleArray.sync="circleArray" :filters.sync="filters" :toggle.sync="showStagedProposals" :toggleDefault="true" :showToggle="true" :showViewSelector="false" viewSelectorLabel="View" :chipsFiltersLabel="$t('pages.proposals.proposallist.proposalTypes')" :filterTitle="$t('pages.proposals.proposallist.searchProposals')" :toggleLabel="$t('pages.proposals.proposallist.drafts')")
   .row.full-width.q-my-md(v-else)
     filter-open-button(@open="mobileFilterOpen = true")
-    filter-widget-mobile(:view.sync="view" v-show="mobileFilterOpen" @close="mobileFilterOpen = false" :sort.sync="sort" :textFilter.sync="textFilter" :circle.sync="circle" :showCircle="false" :optionArray.sync="optionArray" :circleArray.sync="circleArray" :filters.sync="filters" :toggle.sync="showStagedProposals" :toggleDefault="true" :showToggle="true" :style="mobileFilterStyles" :showViewSelector="false" viewSelectorLabel="View" :chipsFiltersLabel="$t('pages.proposals.proposallist.proposalTypes')" :filterTitle="$t('pages.proposals.proposallist.searchProposals')" :toggleLabel="$t('pages.proposals.proposallist.stagingProposals')")
+    filter-widget-mobile(:view.sync="view" v-show="mobileFilterOpen" @close="mobileFilterOpen = false" :sort.sync="sort" :textFilter.sync="textFilter" :circle.sync="circle" :showCircle="false" :optionArray.sync="optionArray" :circleArray.sync="circleArray" :filters.sync="filters" :toggle.sync="showStagedProposals" :toggleDefault="true" :showToggle="true" :style="mobileFilterStyles" :showViewSelector="false" viewSelectorLabel="View" :chipsFiltersLabel="$t('pages.proposals.proposallist.proposalTypes')" :filterTitle="$t('pages.proposals.proposallist.searchProposals')" :toggleLabel="$t('pages.proposals.proposallist.drafts')")
     .col
       base-placeholder.q-mr-sm(v-if="!filteredProposals?.length && !filteredStagedProposals?.length && !$apollo.loading" :title="$t('pages.proposals.proposallist.noProposals1')" subtitle="Your organization has not created any proposals yet. You can create a new proposal by clicking the button below." icon="fas fa-file-medical" :actionButtons="[{label: 'Create a new Proposal', color: 'primary', onClick: () => this.handleCreateNewProposal, disable: !isMember, disableTooltip: 'You must be a member'}]")
       .row.justify-center.q-my-md(v-if="!filteredProposals?.length && !filteredStagedProposals?.length")
         loading-spinner(color="primary" size="72px")
       .row.q-mb-md(v-if="filteredStagedProposals?.length")
-        .h-h4 {{ $t('pages.proposals.proposallist.stagingProposals1') }}
+        .h-h4 {{ $t('pages.proposals.proposallist.drafts') }}
         .h-h4-regular.q-ml-xs (
           | {{ filteredStagedProposals.length }}
           | )

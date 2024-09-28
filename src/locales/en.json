@@ -138,7 +138,10 @@
            "documentation-url":{
               "label": "Documentation URL"
            },
-           "sample-text":"This text must be visible in both colors"
+           "sample-text":"This text must be visible in both colors",
+           "showUpvoteElection": {
+               "label": "Show Upvote Election"
+           }
         },
         "nav":{
            "show-more":"Show more options",
@@ -916,11 +919,11 @@
         "help":"Help"
      },
      "left-navigation":{
-        "proposals":"Proposals",
-        "members":"Members",
-        "organization":"Organization",
+        "agreements":"Agreements",
+        "election": "Election",
         "explore":"Explore",
-        "election": "Election"
+        "people":"People",        
+        "treasury":"Treasury"
      },
      "navigation-header":{
         "home":"Home",
@@ -1172,6 +1175,8 @@
         "details":"Details",
         "queueHusdRedemption":"Queue {tokenName} Redemption for Treasury Payout to Configured Wallet",
         "redeem":"Redeem",
+        "sendUtilityTokens": "Send Utility Tokens to Another Wallet",
+        "addPayoutTokens": "Add Payout tokens to the Treasury Redemption Queue",
 
         "send":"Send",
         "sendTo":"Send to",
@@ -1782,16 +1787,16 @@
            },
            "steppayout":{
               "payout":"Payout",
-              "pleaseEnterTheUSDEquivalentAnd1":"Please enter the USD equivalent and % deferral for this contribution – the more you defer to a later date, the higher the bonus will be (see actual salary calculation below or use our calculator). The bottom fields compute the actual payout in SEEDS, HVOICE, HYPHA and HUSD.",
-              "pleaseEnterTheUsd":"Please enter the HUSD amount (i.e. USD equivalent) for your reward. You can use the slider to select the reward percentage you will be deferring.",
-              "typeTheAmountOfUsd":"Type the USD equivalent",
+              "pleaseEnterTheUSDEquivalentAnd1":"Please enter the cash equivalent and % deferral for this contribution – the more you defer to a later date, the higher the bonus will be (see actual salary calculation below or use our calculator). The bottom fields compute the actual payout in SEEDS, HVOICE, HYPHA and HUSD.",
+              "pleaseEnterTheUsd":"Please enter the HUSD amount (i.e. cash equivalent) for your reward. You can use the slider to select the reward percentage you will be deferring.",
+              "typeTheAmountOfUsd":"Type the cash equivalent",
               "commitmentMustBeGreater":"Commitment must be greater than or equal to the role configuration. Role value for min commitment is",
               "defferedMustBeGreater":"Due to the role setup you’ll have to choose a greater percentage to continue",
               "salaryCompensationForOneYear":"Reward for one year ( ${value} equivalent)",
-              "salaryCompensationForOneYearUsd":"Reward for one year ( ${value} ) USD equivalent",
+              "salaryCompensationForOneYearUsd":"Reward for one year ( ${value} ) cash equivalent",
               "compensation":"Reward Calculation",
               "compensation1":"Reward",
-              "pleaseEnterTheUSD":"Please enter the USD equivalent for your reward. Moving the second slider will let you select your token percentage (utility vs payout).",
+              "pleaseEnterTheUSD":"Please enter the cash equivalent for your reward. Moving the second slider will let you select your token percentage (utility vs payout).",
               "belowYouCanSeeTheActual":"The calculator will compute the token numbers when you adjust the sliders.",
               "compensationForOnePeriod":"Reward for one period",
               "compensationForOneCycle":"Reward for one cycle",
@@ -1809,12 +1814,11 @@
            "quorum":"Quorum",
            "noProposals":"No Proposals",
            "oopsNothingCould":"Oops, nothing could be found here",
-           "stagingProposals":"Staging proposals",
+           "drafts":"Drafts",
            "activeProposals":"Active proposals",
            "noProposals1":"No Proposals",
-           "stagingProposals1":"Staging proposals",
            "activeProposals1":"Active proposals",
-           "proposalHistory":"Proposal history",
+           "proposalHistory":"History",
            "lookingToMonitor":"Looking to monitor how old proposals went? click here to check all proposal history",
            "seeHistory":"See history >",
            "isTheMinimumRequiredPercentageOfMembers":"Percentage of required agreement for a proposal to pass.",
@@ -1823,7 +1827,7 @@
            "proposalTypes":"Proposal types",
            "sortByLastAdded":"Sort by last added",
            "yourVoteIsTheVoice":"Your Vote Is The Voice of Change",
-           "atHyphaTheFuture":"At Hypha, the future is built on fair, just and open decentralized decision making. In our novel form of governance every vote accumulates voice tokens that add to one’s voting power. We are pioneering a fair and equal voting system with a 80/20 voting method and 7 day voting period. Every voice matters, make yours heard!"
+           "atHyphaTheFuture":"At Hypha, the future is built on fair, just and open decentralized decision making. In our novel form of governance every vote accumulates voice tokens that add to one’s voting power. We are pioneering a fair and equal voting system with a {unity}/{quorum} voting method and {time} voting period. Every voice matters, make yours heard!"
         },
         "proposalhistory":{
            "noProposals":"No Proposals",
@@ -2087,10 +2091,11 @@
      "explore":"Explore",
      "createANewDao":"Create a new DHO",
      "login":"Login",
-     "members":"Members",
+     "people":"People",
+     "agreements":"Agreements",
      "proposals":"Proposals",
      "createProposal":"Create Proposal",
-     "proposalHistory":"Proposal history",
+     "proposalHistory":"History",
      "proposalDetails":"Proposal Details",
      "organization":"Organization",
      "organizationAssets":"Organization Assets",
@@ -2150,13 +2155,13 @@
      "cashCoefficient":"Cash Coefficient",
      "payout":"Payout",
      "compensation":"Manage your reward",
-     "pleaseEnterTheUSDEquivalentAnd":"Please enter the USD equivalent (i.e. HUSD amount) for your reward. Moving the slider will let you select your token percentage (utility vs payout). This way, you can decide the percentage of utility vs payout tokens to receive.",
+     "pleaseEnterTheUSDEquivalentAnd":"Please enter the cash equivalent (i.e. HUSD amount) for your reward. Moving the slider will let you select your token percentage (utility vs payout). This way, you can decide the percentage of utility vs payout tokens to receive.",
      "belowYouCanSeeTheActual":"Below you can see the actual breakdown of the reward in HVOICE, HYPHA and HUSD",
      "typeThePayoutTitle":"Type the payout title",
      "typeThePayoutDescription":"Type the payout description",
      "attachments":"Attachments",
      "clickToAddFile":"Click to add file",
-     "totalUSDEquivalent":"Total USD Equivalent",
+     "totalUSDEquivalent":"Total cash Equivalent",
      "chooseTheDeferredAmount":"Choose token percentage (utility vs payout)",
      "customCompensation":"Custom compensation",
      "cashToken":"Payout Token",
@@ -2309,5 +2314,17 @@
             "actionText": "Open in Hypha Wallet"
          }
       }
-   }
+   },
+   "utils": {
+      "time": {
+         "second": "{count} second",
+         "second_plural": "{count} seconds",
+         "minute": "{count} minute",
+         "minute_plural": "{count} minutes",
+         "hour": "{count} hour",
+         "hour_plural": "{count} hours",
+         "day": "{count} day",
+         "day_plural": "{count} days"
+      }
+  }
 }

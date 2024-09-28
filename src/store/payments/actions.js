@@ -123,7 +123,7 @@ export const redeemToken = async function ({ rootState }, { quantity, memo }) {
         from: rootState.accounts.account,
         to: mainContract,
         quantity,
-        memo: 'redeem'
+        memo: memo
       }
     },
     {
