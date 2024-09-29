@@ -129,7 +129,7 @@ module.exports = function (ctx) {
       // showProgress: true,
       gzip: true,
       // analyze: true,
-      // distDir: 'dist',
+      distDir: 'build',
       // productName: 'pos_host_ui',
       minify: true,
       vueCompiler: false,
