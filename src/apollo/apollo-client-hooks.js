@@ -22,12 +22,23 @@ const tokenRefreshLink = new TokenRefreshLink({
     }
   },
   fetchAccessToken: () => {
-    const HYPHA_AUTH_URL = process.env.HYPHA_AUTH_URL
-    const CHAIN_NAME = process.env.CHAIN_NAME
-    const ENV = process.env.ENV || 'prod'
-    const network = process.env.IS_TESTNET ? 'testnet' : 'mainnet'
-    const url = `${HYPHA_AUTH_URL}?chain=${CHAIN_NAME}&env=${ENV}&network=${network}`
-
+    const hyphaAuthUrl = process.env.HYPHA_AUTH_URL
+    const chainName = process.env.CHAIN_NAME
+    const env = process.env.ENV
+    const network = process.env.IS_TESTNET === 'true' ? 'testnet' : 'mainnet'
+    if (!process.env.HYPHA_AUTH_URL) {
+      throw Error('process.env.HYPHA_AUTH_URL not defined')
+    }
+    if (!process.env.CHAIN_NAME) {
+      throw Error('process.env.CHAIN_NAME not defined (eos, telos, pangea)')
+    }
+    if (!process.env.ENV) {
+      throw Error('process.env.ENV not defined (dev or prod)')
+    }
+    if (!process.env.IS_TESTNET) {
+      throw Error('process.env.IS_TESTNET needs to be set (true or false)')
+    }
+    const url = `${hyphaAuthUrl}?chain=${chainName}&env=${env}&network=${network}`
     return fetch(url, {
       method: 'GET'
     })

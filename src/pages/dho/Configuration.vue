@@ -19,7 +19,7 @@ const settingsMapper = (data) => {
     ...(exist(form.votingQuorumPercent) ? { votingQuorumX100: form.votingQuorumPercent } : {}),
 
     ...(exist(form.communityVotingEnabled) ? { communityVotingEnabled: form.communityVotingEnabled ? 1 : 0 } : {}),
-    ...(exist(form.treasuryCurrency) ? { treasuryCurrency: form.treasuryCurrency.value } : {})
+    ...(exist(form.treasuryCurrency) ? { treasuryCurrency: form.treasuryCurrency.value } : {}),
     ...(exist(form.showUpvoteElection) ? { showUpvoteElection: form.showUpvoteElection ? 1 : 0 } : {})
   }
 }
@@ -100,7 +100,7 @@ export default {
     SettingsVoting: () => import('~/components/dao/settings-voting.vue')
   },
 
-  data () {
+  data() {
     return {
       CONFIGURATION_STATE,
       TABS,
@@ -125,7 +125,7 @@ export default {
       'executeSettingsMultisig'
     ]),
 
-    initForm () {
+    initForm() {
       this.initialForm = {
         // General
         logo: this.daoSettings?.logo ? this.daoSettings?.logo : defaultSettings.logo,
@@ -173,13 +173,13 @@ export default {
       this.resetForm()
     },
 
-    resetForm () {
+    resetForm() {
       this.form = {
         ...this.initialForm
       }
     },
 
-    async createMultisig () {
+    async createMultisig() {
       try {
         this.state = CONFIGURATION_STATE.CREATE_MULTI_SIG
 
@@ -196,7 +196,7 @@ export default {
       }
     },
 
-    async cancelMultisig () {
+    async cancelMultisig() {
       try {
         this.state = CONFIGURATION_STATE.SAVING
         await this.cancelSettingsMultisig({ id: this.activeMultisig.id })
@@ -207,7 +207,7 @@ export default {
       }
     },
 
-    async voteMultisig (approve) {
+    async voteMultisig(approve) {
       try {
         this.state = CONFIGURATION_STATE.SAVING
         await this.voteSettingsMultisig({ id: this.activeMultisig.id, approve })
@@ -218,7 +218,7 @@ export default {
       }
     },
 
-    async executeMultisig () {
+    async executeMultisig() {
       try {
         this.state = CONFIGURATION_STATE.SAVING
         await this.executeSettingsMultisig({ id: this.activeMultisig.id })
@@ -229,7 +229,7 @@ export default {
       }
     },
 
-    async resetMultisig () {
+    async resetMultisig() {
       try {
         this.state = CONFIGURATION_STATE.SAVING
         this.resetForm()
@@ -240,7 +240,7 @@ export default {
       }
     },
 
-    async updateSettings () {
+    async updateSettings() {
       try {
         this.state = CONFIGURATION_STATE.SAVING
         await this.updateDAOSettings({ data: { ...this.dataForSave } })
@@ -263,7 +263,7 @@ export default {
       }
     },
 
-    async importElection () {
+    async importElection() {
       try {
         this.state = CONFIGURATION_STATE.SAVING
         await this.importEdenElection(this.selectedDao.docId)
@@ -274,16 +274,16 @@ export default {
       }
     },
 
-    onChange (name, value) { this.$set(this.form, name, value) },
+    onChange(name, value) { this.$set(this.form, name, value) },
 
-    onLeavePageConfirmed (answer) {
+    onLeavePageConfirmed(answer) {
       this.state = CONFIGURATION_STATE.LEFT
       if (answer) {
         this.next()
       }
     },
 
-    async onSave () {
+    async onSave() {
       if (this.daoSettings.multisigEnabled) {
         this.state = CONFIGURATION_STATE.CREATE_MULTI_SIG
       } else {
@@ -297,10 +297,10 @@ export default {
     ...mapGetters('accounts', ['account', 'isAdmin']),
     ...mapGetters('dao', ['daoAlerts', 'daoAnnouncements', 'daoSettings', 'daoSettingsMultisigs', 'isHypha', 'selectedDao', 'selectedDaoPlan']),
 
-    activeMultisig () { return this.daoSettingsMultisigs ? this.daoSettingsMultisigs[0] : {} },
-    hasActiveMultisig () { return this.daoSettingsMultisigs.length > 0 },
-    hasSignedMultisig () { return this.activeMultisig ? !!this.activeMultisig?.approvedby?.find(_ => _.details_member_n === this.account) : false },
-    isMultisigModalOpen () {
+    activeMultisig() { return this.daoSettingsMultisigs ? this.daoSettingsMultisigs[0] : {} },
+    hasActiveMultisig() { return this.daoSettingsMultisigs.length > 0 },
+    hasSignedMultisig() { return this.activeMultisig ? !!this.activeMultisig?.approvedby?.find(_ => _.details_member_n === this.account) : false },
+    isMultisigModalOpen() {
       return [
         CONFIGURATION_STATE.CREATE_MULTI_SIG,
         CONFIGURATION_STATE.SIGN_MULTI_SIG,
@@ -308,7 +308,7 @@ export default {
       ].includes(this.state)
     },
 
-    multiSigState () {
+    multiSigState() {
       if (this.state === CONFIGURATION_STATE.CREATE_MULTI_SIG) return 'CREATE'
       if (this.state === CONFIGURATION_STATE.SIGN_MULTI_SIG) return 'SIGN'
       if (this.state === CONFIGURATION_STATE.VIEW_MULTI_SIG) return 'VIEW'
@@ -316,11 +316,11 @@ export default {
       return 'VIEW'
     },
 
-    isLeaving () { return this.state === CONFIGURATION_STATE.LEAVING },
+    isLeaving() { return this.state === CONFIGURATION_STATE.LEAVING },
 
-    dataForSave () { return settingsMapper(this.changedFields.reduce((acc, field) => ({ ...acc, [field]: this.form[field] }), {})) },
+    dataForSave() { return settingsMapper(this.changedFields.reduce((acc, field) => ({ ...acc, [field]: this.form[field] }), {})) },
 
-    changedFields () {
+    changedFields() {
       const changed = []
       Object.keys(this.form).forEach(field => {
         const inital = this.initialForm[field]
@@ -351,14 +351,14 @@ export default {
       return changed
     },
 
-    numberOfChanges () { return this.changedFields.length }
+    numberOfChanges() { return this.changedFields.length }
   },
 
-  async mounted () {
+  async mounted() {
     this.initForm()
   },
 
-  async beforeRouteLeave (to, from, next) {
+  async beforeRouteLeave(to, from, next) {
     this.next = next
 
     if (this.numberOfChanges > 0) {

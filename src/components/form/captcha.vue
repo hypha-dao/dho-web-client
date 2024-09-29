@@ -4,7 +4,7 @@ VueReCaptcha(:sitekey="this.sitekey" :loadRecaptchaScript="true" @verify="verify
 
 <script>
 import VueReCaptcha from 'vue-recaptcha'
-import CaptchaService from '../../services/captcha'
+// import CaptchaService from '../../services/captcha'
 
 export default {
   name: 'captcha',
@@ -17,9 +17,9 @@ export default {
   },
   methods: {
     verifyChallenge(response) {
-      CaptchaService.verifyChallenge({ token: response, network: process.env.CAPTCHA_NETWORK }).then((response) => {
-        this.$emit('setCaptchaResponse', response)
-      })
+      // CaptchaService.verifyChallenge({ token: response, network: process.env.CAPTCHA_NETWORK }).then((response) => {
+      //   this.$emit('setCaptchaResponse', response)
+      // })
     }
   }
 }
