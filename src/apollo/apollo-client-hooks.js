@@ -33,7 +33,7 @@ const tokenRefreshLink = new TokenRefreshLink({
       throw Error('process.env.CHAIN_NAME not defined (eos, telos, pangea)')
     }
     if (!process.env.ENV) {
-      throw Error('process.env.ENV not defined (dev or prod)')
+      throw Error('process.env.ENV not defined (dev or prod or stage)')
     }
     if (!process.env.IS_TESTNET) {
       throw Error('process.env.IS_TESTNET needs to be set (true or false)')

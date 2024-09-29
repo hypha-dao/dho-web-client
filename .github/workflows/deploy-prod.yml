@@ -23,6 +23,9 @@ jobs:
       - run: yarn build
         env:
           APP_NAME: 'Hypha DHO'
+          CHAIN_NAME: 'telos'
+          ENV: 'prod'
+          IS_TESTNET: 'false'
           NETWORK_CHAIN_ID: '4667b205c6838ef70ff7988f6e8257e8be0e1284a2f59699054a018f743b1d11'
           DAO_CONTRACT: 'dao.hypha'
           HYPHA_CONTRACT: 'hypha.hypha'

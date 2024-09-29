@@ -32,6 +32,9 @@ jobs:
       - run: yarn build
         env:
           APP_NAME: 'Hypha DHO - EOS'
+          CHAIN_NAME: 'eos'
+          ENV: 'prod'
+          IS_TESTNET: 'false'
           NETWORK_CHAIN_ID: ${{ vars.NETWORK_CHAIN_ID }}
           DAO_CONTRACT: 'dao.hypha'
           HYPHA_CONTRACT: 'hypha.hypha'
@@ -39,7 +42,6 @@ jobs:
           MULTISIG_CONTRACT: 'msig.hypha'
           KV_CONTRACT: 'kv.hypha'
           PPP_ENV: ${{ vars.PPP_ENV }}
-          ENV: 'prod'
           HYPHA_AUTH_URL: ${{ vars.HYPHA_AUTH_URL }}
           PPP_APP_ID: ${{ vars.PPP_APP_ID }}
           ACCOUNT_API_URL: ${{ vars.ACCOUNT_API_URL }}
@@ -49,7 +51,6 @@ jobs:
           BLOCKCHAIN_EXPLORER_BTC: 'https://www.blockchain.com/btc/tx/'
           BLOCKCHAIN_EXPLORER_ETH: 'https://etherscan.io/tx/'
           BLOCKCHAIN_EXPLORER_EOS: 'https://bloks.io/transaction/'
-          CHAIN_NAME: 'eos'
           SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
           DOCUMENTATION: ${{ vars.DOCUMENTATION }}
 
