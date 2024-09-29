@@ -12,14 +12,19 @@ export default {
   data() {
     const sitekey = process.env.CAPTCHA_PUBLIC_KEY
     return {
-      sitekey
+      sitekey,
+      enableCaptcha: process.env.ENABLE_CAPTCHA
     }
   },
   methods: {
     verifyChallenge(response) {
-      CaptchaService.verifyChallenge({ token: response, network: process.env.CAPTCHA_NETWORK }).then((response) => {
-        this.$emit('setCaptchaResponse', response)
-      })
+      if (this.enableCaptcha) {
+        CaptchaService.verifyChallenge({ token: response, network: process.env.CAPTCHA_NETWORK }).then((response) => {
+          this.$emit('setCaptchaResponse', response)
+        })
+      } else {
+        this.$emit('setCaptchaResponse', { success: true })
+      }
     }
   }
 }
