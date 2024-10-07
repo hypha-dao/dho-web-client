@@ -3090,10 +3090,10 @@
   resolved "https://registry.yarnpkg.com/@hypha-dao/hypha-token-sales-util/-/hypha-token-sales-util-1.0.1.tgz#1b36c4a3969cbb2c38d26af2ef0738402896cd8c"
   integrity sha512-I8we7M2vkkYw8I6U8xML3L7MT41GmwtB/JEy/y6OCOWXISzNGeHyLgPx24ouKm7yv7+YsZLZPZHhLGlHyGnYrg==
 
-"@hypha-dao/ppp-client-api@1.0.3":
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/@hypha-dao/ppp-client-api/-/ppp-client-api-1.0.3.tgz#4ed2be88e7f2673a297f6ab7f1ecd74eac0c2be2"
-  integrity sha512-IVs9diXZOEeLw0Bkdj2JP9HsglxknFioLHgB5C623cELkRumcjAWHe9wEs8DZ1dtt7887ru69Ajx18BobFUmtg==
+"@hypha-dao/ppp-client-api@1.0.4":
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/@hypha-dao/ppp-client-api/-/ppp-client-api-1.0.4.tgz#fc5b141ebebec3b551e9b2bb899677f4b528f38b"
+  integrity sha512-cHtNoRkcHCW+4zKWQG7RsMVswlbeTfJl2LUz74Kr/GvObylJJJUQIDtccR+2vpYRcVsLrWuPvIKe+hGdj30tMA==
   dependencies:
     "@babel/runtime" "^7.6.3"
     "@hypha-dao/ppp-common" "^1.0.0"

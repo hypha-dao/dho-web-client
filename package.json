@@ -8,7 +8,7 @@
   "scripts": {
     "dev": "quasar dev -m spa",
     "dev:eos": "env-cmd -f ./config/eos-testnet.env quasar dev -m spa",
-    "dev:pangea": "env-cmd -f ./config/pangea-testnet.env quasar dev -m spa",
+    "dev:pangea": "NODE_OPTIONS=--openssl-legacy-provider env-cmd -f ./config/pangea-testnet.env quasar dev -m spa",
     "prod:telos": "env-cmd -f ./config/telos-mainnet.env quasar dev -m spa",
     "prod:eos": "env-cmd -f ./config/eos-mainnet.env quasar dev -m spa",
     "build": "NODE_OPTIONS=--openssl-legacy-provider quasar build",
@@ -26,7 +26,7 @@
   "dependencies": {
     "@graphql-codegen/typescript-operations": "^3.0.3",
     "@hypha-dao/hypha-token-sales-util": "^1.0.1",
-    "@hypha-dao/ppp-client-api": "1.0.3",
+    "@hypha-dao/ppp-client-api": "1.0.4",
     "@hypha-dao/ual-hypha": "^1.0.14",
     "@quasar/extras": "1.10.4",
     "@sentry/browser": "6.3.1",
