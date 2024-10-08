@@ -43,7 +43,7 @@ export default {
         .h-b2.text-body {{ $t('navigation.profile-sidebar-guest.asAGuest') }}
       .sidebar-buttons.aling-self-center(:class="{ 'sidebar-buttons-margin': !$q.screen.gt.md }")
         div
-          q-btn.full-width.q-mt-xl(:label="$t('navigation.profile-sidebar-guest.registerNewAccount')" color="primary" rounded no-caps :disable="!registrationEnabled" @click="onLogin")
+          q-btn.full-width.q-mt-xl(:label="$t('navigation.profile-sidebar-guest.registerPangeaAccount')" color="primary" rounded no-caps :disable="!registrationEnabled" @click="onLogin")
           q-tooltip(anchor="top middle" v-if="!registrationEnabled") {{ $t('navigation.profile-sidebar-guest.registrationIsTemporarilyDisabled') }}
         q-btn.full-width.q-mt-xs(:label="$t('navigation.profile-sidebar-guest.login')" color="secondary" rounded no-caps @click="onLogin")
 

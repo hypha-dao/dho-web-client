@@ -1,5 +1,5 @@
 <script>
-import { mapGetters } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 export default {
   name: 'Login',
   components: {
@@ -9,6 +9,19 @@ export default {
     RegisterUserView: () => import('~/components/login/register-user-view.vue'),
     RegisterUserWithCaptchaView: () => import('~/components/login/register-user-with-captcha-view.vue'),
     IpfsImageViewer: () => import('~/components/ipfs/ipfs-image-viewer.vue')
+  },
+  methods: {
+    ...mapActions('accounts', ['loginWallet']),
+    redirectToRegister() {
+      window.location.href = `${process.env.PANGEA_REGISTER_URL}`
+    },
+    async onLoginWallet (idx) {
+      if (this.$router.currentRoute.name === 'create-your-dao') {
+        await this.loginWallet({ idx, returnUrl: 'create-your-dao' })
+      } else {
+        await this.loginWallet({ idx, returnUrl: this.isOnboarding ? 'create' : this.$route.query.returnUrl || `/${this.$route.params.dhoname}` })
+      }
+    }
   },
   data () {
     return {
@@ -136,7 +149,7 @@ export default {
         q-card.custom-full-height.card-container.left-card
           header-view(:step="step" :steps="steps" @logoClick="step = steps.welcome" :logo="selectedDao.logo" :daoName="selectedDao.title")
           transition(v-if="step === steps.welcome" enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
-            welcome-view.full-width(@onLoginClick="step = steps.login" @onRegisterClick="step = steps.register" v-bind="{ isOnboarding }")
+            welcome-view.full-width(@onLoginClick="onLoginWallet(0)" @onRegisterClick="redirectToRegister" v-bind="{ isOnboarding }")
           transition(v-else-if="step === steps.login" enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
             login-view(:dhoName="dhoname" :pk="stepPK" @transitionToRegister="step = steps.register" @onLoginWithPK=" v => stepPK = true" @back="step = steps.welcome, inviteLink = null" v-bind="{ isOnboarding }")
           transition(v-else-if="step === steps.register" enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")

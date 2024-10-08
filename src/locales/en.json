@@ -889,6 +889,7 @@
         "clickThe":", click the log-in button, validate the transaction with Anchor Wallet and enter the DAO.",
         "theDhoDecentralized": "If you already have a Hypha account configured in your wallet, click on the “Log in” button. Otherwise, choose “Create Hypha account” or simply “Continue as a Guest”.",
         "createNewHyphaAccount":"Create Hypha account",
+        "createPangeaAccount":"Create Pangea account",
         "registrationIsTemporarilyDisabled":"Registration is temporarily disabled",
         "login":"Log in with Pangea",
         "continueAsAGuest":"Continue as Guest",
@@ -946,6 +947,7 @@
      "profile-sidebar-guest":{
         "asAGuest":"As a guest you have full access to all content of the DAO. However, you cannot participate in any decision making or apply for any role or receive any contribution.",
         "registerNewAccount":"Register new account",
+        "registerPangeaAccount":"Create Pangea account",
         "registrationIsTemporarilyDisabled":"Registration is temporarily disabled",
         "login":"Login",
         "welcomeTo":"Welcome to {daoName}"

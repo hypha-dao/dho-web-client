@@ -122,7 +122,8 @@ module.exports = function (ctx) {
           'http://itunes.apple.com/lb/app/1659926348',
         DOWNLOAD_WALLET_LINK_ANDROID:
           process.env.DOWNLOAD_WALLET_LINK_ANDROID ||
-          'http://play.google.com/store/apps/details?id=earth.hypha.wallet.hypha_wallet'
+          'http://play.google.com/store/apps/details?id=earth.hypha.wallet.hypha_wallet',
+          PANGEA_REGISTER_URL: process.env.PANGEA_REGISTER_URL
       },
 
       scopeHoisting: true,
