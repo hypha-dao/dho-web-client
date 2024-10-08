@@ -94,7 +94,6 @@ export default {
         span(:style="'line-height: 44px'")
           .font-lato.text-heading.text-bold(:class="{ 'desktop-font-size': $q.screen.gt.md }" :style="{ 'font-size': '38px' }") {{ $t('login.login-view.loginTo1') }}
             .text-bold {{ selectedDao?.title?.replace(/^\w/, (c) => c.toUpperCase()) }}
-      .h-b1-signup.text-weight-thin.q-mt-lg.q-mb-lg(v-if="$q.screen.gt.md") {{ $t('login.login-view.youCanEither') }}
       .h-b1-signup.q-mt-lg.q-mb-xxs(v-if="!$q.screen.gt.md") {{ $t('login.login-view.pleaseLoginWith') }}
     div
       .col-12(v-if="pkForm && pk")
@@ -109,22 +108,7 @@ export default {
           q-item.wallet.q-mt-md(v-if="wallet.ualName !== 'seeds'" v-ripple :style="{ background: wallet.getStyle().background, color: wallet.getStyle().textColor }")
             q-item-section.cursor-pointer(avatar @click="onLoginWallet(idx)")
               img(:src="wallet.getStyle().icon" width="20")
-            q-item-section.cursor-pointer.text-center(@click="onLoginWallet(idx)") {{ $t('login.login-view.login1', { '1': wallet.getStyle().text, '2': wallet.getStyle().text === 'Seeds' ? '(beta)' : '' }) }}
-        .row.flex.items-center
-          .col-7.q-mr-sm
-            q-select.q-mt-md(:options="authenticators" dense dropdown-icon="fas fa-chevron-down" hide-bottom-space options-dense outlined rounded v-model="selectedAuthenticator")
-              template(v-if="selectedAuthenticator" v-slot:prepend)
-                img(:src="selectedAuthenticator?.icon" width="20" height="20")
-              template(v-slot:option="scope")
-                q-item.q-pa-xs(v-if="!scope.opt.group && scope.opt.label === 'Seeds Wallet'"
-                  v-bind="scope.itemProps"
-                  v-on="scope.itemEvents"
-                )
-                  .row
-                    img(:src="scope.opt.icon" width="20" height="20")
-                    .q-ml-md {{ scope.opt.label }}
-          .col
-            q-btn.q-mt-md.full-width.text-bold(:disable="!selectedAuthenticator" :style="{ 'height': 'fit-content' }" :label="'Log in'" color="primary" @click="onLoginWallet(selectedAuthenticator.idx)" unelevated rounded outline no-caps)
+            q-item-section.cursor-pointer.text-center(@click="onLoginWallet(idx)") {{ $t('login.register-user-with-captcha-view.loginWithPangea', { '1': wallet.getStyle().text, '2': wallet.getStyle().text === 'Seeds' ? '(beta)' : '' }) }}
 </template>
 
 <style lang="stylus" scoped>
