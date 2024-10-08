@@ -3,20 +3,14 @@ import { mapGetters } from 'vuex'
 export default {
   name: 'Login',
   components: {
-    WelcomeView: () => import('~/components/login/welcome-view.vue'),
-    HeaderView: () => import('~/components/login/header-view.vue'),
     LoginView: () => import('~/components/login/login-view.vue'),
-    RegisterUserView: () => import('~/components/login/register-user-view.vue'),
-    RegisterUserWithCaptchaView: () => import('~/components/login/register-user-with-captcha-view.vue'),
     IpfsImageViewer: () => import('~/components/ipfs/ipfs-image-viewer.vue')
   },
   data () {
     return {
-      step: 'welcome',
+      step: 'login',
       steps: {
-        welcome: 'welcome',
-        login: 'login',
-        register: 'register'
+        login: 'login'
       },
       registerStep: this.isAuthenticated ? 'create' : 'captcha',
       stepPK: undefined,
