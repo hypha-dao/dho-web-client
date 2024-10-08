@@ -39,7 +39,7 @@ export default {
       .h-h4.color-secondary.q-my-xxxl(v-if="$q.screen.gt.md && isOnboarding") {{ $t('login.welcome-view.youNeedAn') }}
       .h-b1-signup.text-h-gray.q-py-xxs.leading-loose(v-if="$q.screen.gt.md && !isOnboarding")
         template(v-if="$router.currentRoute.name === 'create-your-dao'") {{ $t('login.welcome-view.ifYouAlreadyHaveAHyphaAccount') }}
-        template(v-else) {{ $t('login.welcome-view.isonboarding') }}
+        template(v-else) {{ $t('login.welcome-view.isonboardingPangea') }}
       .h-b1-signup.color-secondary.q-mt-lg.q-mb-lg.text-grey.custom-calc-margin(v-if="!$q.screen.gt.md") {{ $t('login.welcome-view.theDhoDecentralized') }}
     div
     q-btn.full-width.q-mt-xl.text-bold(:disable="false" @click="$emit('onRegisterClick')" color="primary" :label="$t('login.welcome-view.createPangeaAccount')" no-caps rounded unelevated)

@@ -883,6 +883,7 @@
      "welcome-view":{
         "youNeedAn":"Log in with your Hypha account",
         "isonboarding":"If you already have a Hypha account configured in your wallet, click on the “Log in” button. Otherwise, choose “Create Hypha account” or simply “Continue as a Guest”.",
+        "isonboardingPangea":"If you already have a Pangea account configured, click on the “Log in” button. Otherwise, choose “Create Pangea account” or simply “Continue as a Guest”.",
         "ifThisIs":"If this is your first time here,",
         "clickCreateNew":" click Create new Hypha account and follow the steps. ",
         "ifYouAlready":"If you already have an Hypha Account and Anchor wallet configured",
