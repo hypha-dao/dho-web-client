@@ -18,9 +18,8 @@ export const lightWalletLogin = async function ({ commit, dispatch }, { returnUr
   }
 }
 
-export const loginWallet = async function ({ commit, dispatch }, { idx, returnUrl }) {
+export const loginWallet = async function ({ commit, dispatch }, { idx, returnUrl, callback = null }) {
   const authenticator = this.$ual.authenticators[idx]
-
   this.$wallet = authenticator.ualName
   commit('setLoadingWallet', authenticator.getStyle().text)
   await authenticator.init()
@@ -47,6 +46,9 @@ export const loginWallet = async function ({ commit, dispatch }, { idx, returnUr
     }
     localStorage.setItem('known-user', true)
     if (returnUrl) {
+      if (callback) {
+        await callback()
+      }
       if (this.$router.currentRoute.path !== returnUrl) {
         await this.$router.push({ path: returnUrl, query: this.$router.currentRoute.query })
       }
