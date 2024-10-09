@@ -898,7 +898,9 @@
         "blockhainAccount":"blockhain account",
         "launchYourFirst":"Create Your DAO",
         "youNeedAHyphaAccount":"You need a Hypha account to create a DAO.",
-        "ifYouAlreadyHaveAHyphaAccount":"If you already have a Hypha Account, click the log in button, sign the transaction with your Wallet and start creating your DAO."
+        "youNeedAHyphaAccountPangea":"You need a Pangea account to create a DAO.",
+        "ifYouAlreadyHaveAHyphaAccount":"If you already have a Hypha Account, click the log in button, sign the transaction with your Wallet and start creating your DAO.",
+        "ifYouAlreadyHaveAHyphaAccountPangea":"If you already have a Pangea Account, click the log in button, sign the transaction with your Wallet and start creating your DAO."
      }
   },
   "navigation":{
