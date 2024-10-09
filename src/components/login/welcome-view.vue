@@ -18,7 +18,7 @@ export default {
   methods: {
     goNext() {
       if (this.$router.currentRoute.name === 'create-your-dao' && localStorage.getItem('autoLogin')) {
-        this.$emit('onRegisterClick')
+        this.$emit('onCreateDaoClick')
       } else {
         this.$emit('onLoginClick')
       }

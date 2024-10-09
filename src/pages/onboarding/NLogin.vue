@@ -149,7 +149,7 @@ export default {
         q-card.custom-full-height.card-container.left-card
           header-view(:step="step" :steps="steps" @logoClick="step = steps.welcome" :logo="selectedDao.logo" :daoName="selectedDao.title")
           transition(v-if="step === steps.welcome" enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
-            welcome-view.full-width(@onLoginClick="onLoginWallet(0)" @onRegisterClick="redirectToRegister" v-bind="{ isOnboarding }")
+            welcome-view.full-width(@onLoginClick="onLoginWallet(0)" @onRegisterClick="redirectToRegister" @onCreateDaoClick="step = steps.register" v-bind="{ isOnboarding }")
           transition(v-else-if="step === steps.login" enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
             login-view(:dhoName="dhoname" :pk="stepPK" @transitionToRegister="step = steps.register" @onLoginWithPK=" v => stepPK = true" @back="step = steps.welcome, inviteLink = null" v-bind="{ isOnboarding }")
           transition(v-else-if="step === steps.register" enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
