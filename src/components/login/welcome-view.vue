@@ -15,6 +15,9 @@ export default {
     ...mapGetters('dao', ['daoSettings', 'selectedDao']),
     isCreateDao() {
       return this.$router.currentRoute.name === 'create-your-dao'
+    },
+    isLoggedIn() {
+      return localStorage.getItem('autoLogin')
     }
   },
 
@@ -45,7 +48,7 @@ export default {
         template(v-else) {{ $t('login.welcome-view.isonboardingPangea') }}
       .h-b1-signup.color-secondary.q-mt-lg.q-mb-lg.text-grey.custom-calc-margin(v-if="!$q.screen.gt.md") {{ $t('login.welcome-view.theDhoDecentralized') }}
     div
-    q-btn.full-width.q-mt-xl.text-bold(:disable="false" @click="$emit('onRegisterClick')" color="primary" no-caps rounded unelevated)
+    q-btn.full-width.q-mt-xl.text-bold(v-if="!isLoggedIn" :disable="false" @click="$emit('onRegisterClick')" color="primary" no-caps rounded unelevated)
       .full-width.flex.justify-between
           q-avatar(size="20px")
             img(src="/chains/pangea.png")
@@ -56,10 +59,11 @@ export default {
       .full-width.flex.justify-between
         q-avatar(size="20px")
           img(src="/chains/pangea.png")
-        div {{$t('login.welcome-view.login')}}
+        div(v-if="isLoggedIn") {{ $t('login.welcome-view.createDao') }}
+        div(v-else) {{ $t('login.welcome-view.login') }}
         div
       </q-avatar>
-    q-btn.full-width.q-mt-sm.text-bold(:to="{ name:'dashboard' }" color="primary" :label="$t('login.welcome-view.continueAsAGuest')" no-caps outline rounded unelevated v-if="!isOnboarding && isCreateDao")
+    q-btn.full-width.q-mt-sm.text-bold(:to="{ name:'dashboard' }" color="primary" :label="$t('login.welcome-view.continueAsAGuest')" no-caps outline rounded unelevated v-if="!isOnboarding && !isCreateDao")
       //- TODO: temporarily commented (what should happen after clicking)
       //- .h-b1-signup.text-h-gray.q-py-xl.row.items-center {{ $t('login.welcome-view.useAnExisting') }}
       //-   q-btn.q-pa-none.text-underline.q-ml-xxs(flat color="primary" no-caps padding="none" @click="onPreviousStep") {{ $t('login.welcome-view.blockhainAccount') }}

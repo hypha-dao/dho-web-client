@@ -893,6 +893,7 @@
         "createPangeaAccount":"Create Pangea account",
         "registrationIsTemporarilyDisabled":"Registration is temporarily disabled",
         "login":"Log in with Pangea",
+        "createDao":"Create DAO",
         "continueAsAGuest":"Continue as Guest",
         "useAnExisting":"Use an existing\n      ",
         "blockhainAccount":"blockhain account",
