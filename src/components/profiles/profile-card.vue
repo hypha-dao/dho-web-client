@@ -271,22 +271,6 @@ widget-editable.relative-position.q-pa-md(:class="{ 'full-width': list, 'cursor-
     chips(:tags="[{ outline: false, color: 'secondary', label: $t('profiles.profile-card.community') }]" v-if="isCommunityMember" chipSize="sm")
     chips(:tags="[{ outline: false, color: 'primary', label: $t('profiles.profile-card.coreTeam') }]" v-if="isCoreMember" chipSize="sm")
 
-  .absolute.z-topq-pa-sm(v-if="!isApplicant" :style="{ 'top': '0px', 'right': '0px' }")
-    q-btn.q-pa-xs(
-      @click="e => e.stopPropagation()"
-      color="primary"
-      dense
-      flat
-      icon="fas fa-ellipsis-v"
-      round
-      size="sm"
-      v-if="isAdmin"
-    )
-      q-menu
-        q-list(dense)
-          q-item(@click="$emit('remove', username)" clickable v-close-popup)
-            q-item-section {{ $t('actions.remove') }}
-
   .row.items-arround.flex(v-if="!editable" :style="{ 'height': isElection ? '230px' : card ? '324px' : '80px' }")
     .col-auto(:class="{ 'col-12': card, 'q-pr-xl': list}")
       .column.relative(:class="{ 'items-center': card }")
