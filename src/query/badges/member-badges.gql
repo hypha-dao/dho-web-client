@@ -10,7 +10,8 @@ query memberBadges ($daoId: String!, $username: String!) {
           docId
         }
         ... on Badge {
-          details_icon_s
+          system_badgeId_i
+          system_nodeLabel_s          details_icon_s
           details_state_s
           details_title_s
           details_description_s

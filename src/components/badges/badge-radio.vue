@@ -25,7 +25,7 @@ export default {
     },
 
     title (badge) {
-      return badge.details_title_s
+      return badge.details_title_s ?? badge.system_nodeLabel_s
     },
     icon (badge) {
       let type = null

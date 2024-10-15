@@ -23,6 +23,8 @@ query daoBadges(
         count
       }
       ... on Badge {
+        system_badgeId_i
+        system_nodeLabel_s
         details_icon_s
         details_state_s
         details_title_s

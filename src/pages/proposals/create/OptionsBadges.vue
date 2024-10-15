@@ -18,7 +18,7 @@ export default {
     badges: {
       query: require('~/query/badges/badges-options.gql'),
       update: data => data?.getDao?.badge?.map(badge => ({
-        label: badge.details_title_s,
+        label: badge.details_title_s ?? badge.system_nodeLabel_s,
         value: { ...badge }
       })),
       variables () {

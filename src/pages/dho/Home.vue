@@ -69,7 +69,7 @@ export default {
       update: data => {
         return data.getDao.badge?.map(badge => {
           return {
-            title: badge.details_title_s,
+            title: badge.details_title_sbadge.details_title_s ?? badge.system_nodeLabel_s,
             description: badge.details_description_s,
             icon: badge.details_icon_s,
             docId: badge.docId,

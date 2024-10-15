@@ -467,7 +467,9 @@ export default {
           ]
         } else {
           if (draft?.badge?.details_title_s === ELECTION_BADGES.VOTER ||
-              draft?.badge?.details_title_s === ELECTION_BADGES.DELEGATE
+              draft?.badge?.details_title_s === ELECTION_BADGES.DELEGATE ||
+              draft?.badge?.system_nodeLabel_s === ELECTION_BADGES.VOTER ||
+              draft?.badge?.system_nodeLabel_s === ELECTION_BADGES.DELEGATE
           ) {
             publishToStaging = false
           } else {

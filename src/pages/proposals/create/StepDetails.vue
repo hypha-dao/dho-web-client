@@ -97,7 +97,7 @@ export default {
   created () {
     this.votingMethod = this.memberType
     if (this.$store.state.proposals.draft.type === PROPOSAL_TYPE.ABILITY) {
-      this.title = this.$store.state.proposals?.draft?.badge?.details_title_s
+      this.title = this.$store.state.proposals?.draft?.badge?.details_title_s ?? this.$store.state.proposals?.draft?.badge?.system_nodeLabel_s
     }
   },
 

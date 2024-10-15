@@ -111,7 +111,7 @@ export default {
       update: data => {
         return data.getDao.badge.map(badge => {
           return {
-            title: badge.details_title_s,
+            title: badge.details_title_s ?? badge.system_nodeLabel_s,
             description: badge.details_description_s,
             icon: badge.details_icon_s,
             assignments: badge.assignment,
@@ -133,7 +133,7 @@ export default {
       update: data => {
         return data.getDao?.badge?.map(badge => {
           return {
-            title: badge.details_title_s,
+            title: badge.details_title_s ?? badge.system_nodeLabel_s,
             description: badge.details_description_s,
             icon: badge.details_icon_s,
             docId: badge.assignment[0]?.docId,
@@ -153,7 +153,7 @@ export default {
       pollInterval: 1000,
       fetchPolicy: 'no-cache',
       result(res) {
-        if (res.data.getDao?.badge?.find(badge => badge.details_title_s === ELECTION_BADGES.DELEGATE)) {
+        if (res.data.getDao?.badge?.find(badge => (badge.details_title_s === ELECTION_BADGES.DELEGATE || badge.system_nodeLabel_s === ELECTION_BADGES.DELEGATE))) {
           this.isRegistered = true
         }
       }
