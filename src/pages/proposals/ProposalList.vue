@@ -322,6 +322,7 @@ const STAGED_PROPOSALS_QUERY = `
         details_ballotSupply_a
         details_ballotAlignment_i
         badge {
+          system_nodeLabel_s
           details_icon_s
           details_pegCoefficientX10000_i
           details_voiceCoefficientX10000_i
@@ -393,7 +394,9 @@ const STAGED_PROPOSALS_QUERY = `
       ... on Badge {
         creator
         createdDate
-
+        system_badgeId_i
+        system_nodeLabel_s
+        system_proposer_n
         ballot_expiration_t
         details_title_s
         details_description_s
@@ -419,7 +422,6 @@ const STAGED_PROPOSALS_QUERY = `
             createdDate
           }
         }
-        system_proposer_n
         cmntsect {
           docId
           comment {
@@ -455,6 +457,7 @@ const STAGED_PROPOSALS_QUERY = `
               details_startTime_t
             }
             badge {
+              system_nodeLabel_s
               details_title_s
             }
           }

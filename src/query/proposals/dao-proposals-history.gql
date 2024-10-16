@@ -358,6 +358,7 @@ query historyProposals($docId: String!, $first: Int!, $offset: Int!) {
           }
         }
         badge {
+          system_nodeLabel_s
           details_icon_s
           details_pegCoefficientX10000_i
           details_voiceCoefficientX10000_i
@@ -416,6 +417,9 @@ query historyProposals($docId: String!, $first: Int!, $offset: Int!) {
       ... on Badge {
         creator
         createdDate
+        system_badgeId_i
+        system_nodeLabel_s
+        system_proposer_n
 
         ballot_expiration_t
         details_title_s
@@ -442,7 +446,6 @@ query historyProposals($docId: String!, $first: Int!, $offset: Int!) {
             createdDate
           }
         }
-        system_proposer_n
         cmntsect {
           docId
           comment {
@@ -491,6 +494,7 @@ query historyProposals($docId: String!, $first: Int!, $offset: Int!) {
               details_startTime_t
             }
             badge {
+              system_nodeLabel_s
               details_title_s
             }
           }

@@ -451,6 +451,7 @@ query proposalDetail($docId: String!, $first: Int!, $offset: Int!) {
             details_startTime_t
           }
           badge {
+            system_nodeLabel_s
             details_title_s
             details_icon_s
             details_pegCoefficientX10000_i
@@ -589,10 +590,10 @@ query proposalDetail($docId: String!, $first: Int!, $offset: Int!) {
         ... on Badge {
           type
           docId
+          system_nodeLabel_s
           details_state_s
           details_title_s
           details_description_s
-
           details_icon_s
           details_pegCoefficientX10000_i
           details_voiceCoefficientX10000_i
@@ -656,6 +657,9 @@ query proposalDetail($docId: String!, $first: Int!, $offset: Int!) {
 
     ... on Badge {
       ballot_expiration_t
+      system_proposer_n
+      system_badgeId_i
+      system_nodeLabel_s
       details_title_s
       details_description_s
       details_pegCoefficientX10000_i
@@ -669,7 +673,6 @@ query proposalDetail($docId: String!, $first: Int!, $offset: Int!) {
       details_ballotSupply_a
       details_ballotAlignment_i
       details_purpose_s
-      system_proposer_n
       assignment {
         details_assignee_n
         dao {
@@ -729,6 +732,8 @@ query proposalDetail($docId: String!, $first: Int!, $offset: Int!) {
           details_state_s
         }
         ... on Badge {
+          system_badgeId_i
+          system_nodeLabel_s
           ballot_expiration_t
           details_title_s
           details_description_s
@@ -749,6 +754,8 @@ query proposalDetail($docId: String!, $first: Int!, $offset: Int!) {
           details_periodCount_i
           creator
           badge {
+            system_badgeId_i
+            system_nodeLabel_s
             details_pegCoefficientX10000_i
             details_voiceCoefficientX10000_i
             details_rewardCoefficientX10000_i

@@ -67,6 +67,7 @@ query queryActivityAssignments($username: String!, $daoId: String!, $first: Int,
         details_ballotAlignment_i
         badge {
           docId
+          system_nodeLabel_s
           details_title_s
           details_description_s
           details_state_s

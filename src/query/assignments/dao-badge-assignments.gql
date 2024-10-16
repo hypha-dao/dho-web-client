@@ -12,6 +12,7 @@ query daoBadgeAssignments($daoName: String!, $first: Int, $offset: Int) {
     }
   )@cascade(fields:["dao"]) {
     badge {
+      system_nodeLabel_s
       details_icon_s
     }
     details_title_s

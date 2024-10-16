@@ -364,6 +364,7 @@ queryDao(filter: { docId: { eq: $docId } }) {
         }
       }
       badge {
+        system_nodeLabel_s
         details_icon_s
         details_pegCoefficientX10000_i
         details_voiceCoefficientX10000_i
@@ -422,7 +423,9 @@ queryDao(filter: { docId: { eq: $docId } }) {
     ... on Badge {
       creator
       createdDate
-
+      system_badgeId_i
+      system_nodeLabel_s
+      system_proposer_n
       ballot_expiration_t
       details_title_s
       details_description_s
@@ -448,7 +451,6 @@ queryDao(filter: { docId: { eq: $docId } }) {
           createdDate
         }
       }
-      system_proposer_n
       cmntsect {
         docId
         comment {
@@ -497,6 +499,7 @@ queryDao(filter: { docId: { eq: $docId } }) {
             details_startTime_t
           }
           badge {
+            system_nodeLabel_s
             details_title_s
           }
         }

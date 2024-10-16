@@ -588,6 +588,7 @@ const PROPOSAL_QUERY = `
             details_startTime_t
           }
           badge {
+            system_nodeLabel_s
             details_title_s
             details_icon_s
             details_pegCoefficientX10000_i
@@ -759,10 +760,10 @@ const PROPOSAL_QUERY = `
         ... on Badge {
           type
           docId
+          system_nodeLabel_s
           details_state_s
           details_title_s
           details_description_s
-
           details_icon_s
           details_pegCoefficientX10000_i
           details_voiceCoefficientX10000_i
@@ -850,7 +851,8 @@ const PROPOSAL_QUERY = `
       details_ballotAlignment_i
       details_purpose_s
       system_proposer_n
-
+      system_badgeId_i
+      system_nodeLabel_s
       votetally {
         docId
         ... on VoteTally {
@@ -931,6 +933,8 @@ const PROPOSAL_QUERY = `
         }
         ... on Badge {
           ballot_expiration_t
+          system_badgeId_i
+          system_nodeLabel_s
           details_title_s
           details_description_s
           details_pegCoefficientX10000_i
@@ -950,6 +954,8 @@ const PROPOSAL_QUERY = `
           details_periodCount_i
           creator
           badge {
+            system_badgeId_i
+            system_nodeLabel_s
             details_pegCoefficientX10000_i
             details_voiceCoefficientX10000_i
             details_rewardCoefficientX10000_i

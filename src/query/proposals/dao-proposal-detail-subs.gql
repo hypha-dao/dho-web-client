@@ -35,6 +35,7 @@ subscription proposal($docId: String!) {
     ... on Badge {
       cmntsect {
         docId
+        system_nodeLabel_s
         comment {
           id: docId
           author: comment_author_n

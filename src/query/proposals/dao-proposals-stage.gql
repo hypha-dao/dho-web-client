@@ -212,6 +212,7 @@ query stageProposals($docId: String!, $first: Int!, $offset: Int!) {
         details_ballotSupply_a
         details_ballotAlignment_i
         badge {
+          system_nodeLabel_s
           details_icon_s
           details_pegCoefficientX10000_i
           details_voiceCoefficientX10000_i
@@ -256,6 +257,10 @@ query stageProposals($docId: String!, $first: Int!, $offset: Int!) {
       ... on Badge {
         creator
         createdDate
+        
+        system_badgeId_i
+        system_nodeLabel_s
+        system_proposer_n
 
         ballot_expiration_t
         details_title_s
@@ -282,7 +287,6 @@ query stageProposals($docId: String!, $first: Int!, $offset: Int!) {
             createdDate
           }
         }
-        system_proposer_n
         cmntsect {
           docId
           comment {
@@ -318,6 +322,7 @@ query stageProposals($docId: String!, $first: Int!, $offset: Int!) {
               details_startTime_t
             }
             badge {
+              system_nodeLabel_s
               details_title_s
             }
           }

@@ -51,6 +51,7 @@ query proposalsActive ($name: String!, $first: Int!, $offset: Int!) {
         }
       }
       ... on Badge {
+        system_nodeLabel_s
         details_description_s
         details_title_s
         ballot_expiration_t

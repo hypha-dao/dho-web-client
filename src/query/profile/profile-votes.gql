@@ -65,6 +65,7 @@ query getMemberVotes($username: String!, $first: Int, $offset: Int) {
           }
         }
         ... on Badge {
+          system_nodeLabel_s
           details_title_s
           dao {
             details_daoName_n
