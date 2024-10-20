@@ -123,7 +123,11 @@ module.exports = function (ctx) {
         DOWNLOAD_WALLET_LINK_ANDROID:
           process.env.DOWNLOAD_WALLET_LINK_ANDROID ||
           'http://play.google.com/store/apps/details?id=earth.hypha.wallet.hypha_wallet',
-          PANGEA_REGISTER_URL: process.env.PANGEA_REGISTER_URL
+        PANGEA_REGISTER_URL: process.env.PANGEA_REGISTER_URL,
+        UAL_HYPHA_POLL_INTERVAL: process.env.UAL_HYPHA_POLL_INTERVAL,
+        UAL_HYPHA_POLL_TIMEOUT: process.env.UAL_HYPHA_POLL_TIMEOUT,
+        UAL_HYPHA_TX_CHECK_INTERVAL: process.env.UAL_HYPHA_TX_CHECK_INTERVAL,
+        UAL_HYPHA_TX_CHECK_TIMEOUT: process.env.UAL_HYPHA_TX_CHECK_TIMEOUT
       },
 
       scopeHoisting: true,

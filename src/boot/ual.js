@@ -35,7 +35,11 @@ export default async ({ Vue, store }) => {
   const hyphaWallet = new HyphaAuthenticator([mainChain], {
     appName: process.env.APP_NAME,
     loginContract: process.env.LOGIN_CONTRACT,
-    translation: UAL_HYPHA_TRANSLATIONS
+    translation: UAL_HYPHA_TRANSLATIONS,
+    pollingInterval: process.env.UAL_HYPHA_POLL_INTERVAL,
+    transactionCheckInterval: process.env.UAL_HYPHA_TX_CHECK_INTERVAL,
+    pollTimeout: process.env.UAL_HYPHA_POLL_TIMEOUT,
+    transactionCheckTimeout: process.env.UAL_HYPHA_TX_CHECK_TIMEOUT
   })
   const lw = new SeedsAuthenticator([mainChain], { appName: process.env.APP_NAME })
   const anchor = new Anchor([mainChain], { appName: process.env.APP_NAME })
