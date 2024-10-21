@@ -1,5 +1,19 @@
 # Changelog
 
+## [2.51.0](https://github.com/hypha-dao/dho-web-client/compare/v2.50.0...v2.51.0) (2024-10-21)
+
+
+### Features
+
+* **step-payout:** remove min deffered ([3c535ff](https://github.com/hypha-dao/dho-web-client/commit/3c535ffd9b3a794056253ab4dd8c4724cdc05cd1))
+
+
+### Bug Fixes
+
+* **apollo:** add dev env as default ([292951c](https://github.com/hypha-dao/dho-web-client/commit/292951c40a3c1f72db584af7283e33dc48b25da0))
+* **configuration:** add proper format ([9c14fe2](https://github.com/hypha-dao/dho-web-client/commit/9c14fe2c7ee99307f89d75ddb0a6a77c2d4e5c99))
+* update ppp-client package for pangea ([cb60ade](https://github.com/hypha-dao/dho-web-client/commit/cb60ade76d3c5bee3925780b5fdc04ac598276e6))
+
 ## [2.50.0](https://github.com/hypha-dao/dho-web-client/compare/v2.49.4...v2.50.0) (2024-07-15)
 
 
