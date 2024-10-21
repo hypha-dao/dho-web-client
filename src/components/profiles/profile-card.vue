@@ -4,12 +4,13 @@ import { timeZones } from '~/mixins/time-zones'
 import { validation } from '~/mixins/validation'
 import { calcVoicePercentage } from '~/utils/eosio'
 import { dateToStringShort } from '~/utils/TimeUtils'
+import helpers from '~/mixins/helpers'
 
 import 'vue-croppa/dist/vue-croppa.css'
 
 export default {
   name: 'profile-card',
-  mixins: [timeZones, validation],
+  mixins: [timeZones, validation, helpers],
   components: {
     Chips: () => import('../common/chips.vue'),
     ProfilePicture: () => import('../profiles/profile-picture.vue'),
@@ -280,7 +281,7 @@ widget-editable.relative-position.q-pa-md(:class="{ 'full-width': list, 'cursor-
       icon="fas fa-ellipsis-v"
       round
       size="sm"
-      v-if="isAdmin"
+      v-if="isAdmin && hasListener('remove')"
     )
       q-menu
         q-list(dense)
