@@ -797,7 +797,7 @@ export default {
               { label: 'content_group_label', value: ['string', 'details'] },
               { label: 'title', value: ['string', draft.title] },
               { label: 'description', value: ['string', draft.description] },
-              { label: 'url', value: ['string', draft.url] },
+              { label: 'url', value: ['string', draft.url || ''] },
               { label: 'icon', value: ['string', draft.icon] },
               { label: 'voice_coefficient_x10000', value: ['int64', parseFloat(draft.voiceCoefficient.value)] },
               { label: 'reward_coefficient_x10000', value: ['int64', parseFloat(draft.rewardCoefficient.value)] },
