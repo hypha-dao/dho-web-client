@@ -44,6 +44,7 @@ export default {
     const split = (this.$store.state.proposals.draft.icon || '').split(':')
     this.selectedIcon = split[1]
     this.type = split[0]
+    this.filteredIcons = [...this.icons]
   },
   watch: {
     iconSearch (search) {
