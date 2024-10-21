@@ -298,10 +298,10 @@ export default {
     },
 
     isValidDeferred (deferred) {
-      const proposalType = this.$store.state.proposals.draft.category.key
-      if (proposalType === 'assignment') {
-        return deferred >= this.minDeferred
-      }
+      // const proposalType = this.$store.state.proposals.draft.category.key
+      // if (proposalType === 'assignment') {
+      //   return deferred >= this.minDeferred
+      // }
 
       return true
     },
