@@ -567,7 +567,7 @@ q-page.full-width.page-profile
       organizations.org(v-if="tab === Tabs.INFO || isTabletOrGreater && organizationsList.length" :organizations="organizationsList" @onSeeMore="loadMoreOrganizations" :hasMore="organizationsPagination.fetchMore" :tablet="$q.screen.md" :style="$q.screen.md? {'grid-area': 'org', 'height': '100px'} : {'grid-area': 'org'}")
       .badges(v-if="tab === Tabs.INFO || isTabletOrGreater" :style="{'grid-area': 'badges'}")
         base-placeholder(
-          :actionButtons="isOwner ? [{label: $t('pages.profiles.profile.apply'), disable: !isMember, color: 'primary', onClick: () => routeTo('proposals/create')}] : []"
+          :actionButtons="isOwner ? [{label: $t('pages.profiles.profile.apply'), disable: !isMember, color: 'primary', onClick: () => routeTo('agreements/create')}] : []"
           :subtitle=" isOwner ? $t('pages.profiles.profile.noBadgesYesApplyFor') : $t('pages.profiles.profile.noBadgesToSeeHere')"
           :title="$t('pages.profiles.profile.badges')"
           compact
@@ -586,7 +586,7 @@ q-page.full-width.page-profile
           q-tab.full-width(:name="Tabs.QUESTS" :label="$t('pages.profiles.profile.quests')" :ripple="false")
         .assignments(v-if="tab === Tabs.ASSIGNMENTS || tab === Tabs.PROJECTS" :style="{'grid-area': 'assignments'}")
           base-placeholder(
-            :actionButtons="isOwner ? [{label: $t('pages.profiles.profile.createAssignment'), color: 'primary', disable: !isMember, onClick: () => routeTo('proposals/create')}] : [] "
+            :actionButtons="isOwner ? [{label: $t('pages.profiles.profile.createAssignment'), color: 'primary', disable: !isMember, onClick: () => routeTo('agreements/create')}] : [] "
             :compact="isMobile"
             :subtitle=" isOwner ? $t('pages.profiles.profile.looksLikeYouDontHaveAnyActiveAssignments') : $t('pages.profiles.profile.noActiveOrArchivedAssignments')"
             :title="isTabletOrGreater ? '' : $t('pages.profiles.profile.assignments')"
@@ -596,7 +596,7 @@ q-page.full-width.page-profile
           active-assignments(v-if="assignments && assignments.length" :assignments="assignments" :owner="isOwner" :hasMore="assignmentsPagination.fetchMore" @claim-all="$refs.wallet.fetchTokens()" @change-deferred="refresh" @onMore="loadMoreAssingments" :daoSettings="daoSettings" :selectedDao="selectedDao" :supply="supply" :votingPercentages="votingPercentages" :compact="isMobile")
         .contributions(v-if="tab === Tabs.CONTRIBUTIONS || tab === Tabs.PROJECTS" :style="{'grid-area': 'contributions'}")
           base-placeholder(
-            :actionButtons="isOwner ? [{label: $t('pages.profiles.profile.createContribution'), color: 'primary', disable: !isMember, onClick: () => routeTo('proposals/create')}] : []"
+            :actionButtons="isOwner ? [{label: $t('pages.profiles.profile.createContribution'), color: 'primary', disable: !isMember, onClick: () => routeTo('agreements/create')}] : []"
             :compact="isMobile"
             :subtitle=" isOwner ? $t('pages.profiles.profile.looksLikeYouDontHaveAnyContributions') : $t('pages.profiles.profile.noContributionsToSeeHere')"
             :title="isTabletOrGreater ? '' : $t('pages.profiles.profile.contributions')"
@@ -606,7 +606,7 @@ q-page.full-width.page-profile
           active-assignments(v-if="contributions && contributions.length" :contributions="contributions" :owner="isOwner" :hasMore="contributionsPagination.fetchMore" @claim-all="$refs.wallet.fetchTokens()" @change-deferred="refresh" @onMore="loadMoreContributions" :daoSettings="daoSettings" :selectedDao="selectedDao" :supply="supply" :votingPercentages="votingPercentages" :compact="isMobile")
         .quests(v-if="tab === Tabs.QUESTS" :style="{'grid-area': 'quests'}")
           base-placeholder(
-            :actionButtons="isOwner ? [{label: $t('pages.profiles.profile.createQuest'), color: 'primary', disable: !isMember, onClick: () => routeTo('proposals/create')}] : []"
+            :actionButtons="isOwner ? [{label: $t('pages.profiles.profile.createQuest'), color: 'primary', disable: !isMember, onClick: () => routeTo('agreements/create')}] : []"
             :compact="isMobile"
             :subtitle=" isOwner ? $t('pages.profiles.profile.looksLikeYouDontHaveAnyQuests') : $t('pages.profiles.profile.noQuestsToSeeHere')"
             :title="isTabletOrGreater ? '' : $t('pages.profiles.profile.quests')"
