@@ -8,7 +8,8 @@
   "scripts": {
     "dev": "quasar dev -m spa",
     "dev:eos": "env-cmd -f ./config/eos-testnet.env quasar dev -m spa",
-    "dev:pangea": "NODE_OPTIONS=--openssl-legacy-provider env-cmd -f ./config/pangea-testnet.env quasar dev -m spa",
+    "dev:pangea": "NODE_OPTIONS=--openssl-legacy-provider env-cmd -f ./config/pangea-testnet-vercel.env quasar dev -m spa",
+    "prod:pangea": "NODE_OPTIONS=--openssl-legacy-provider env-cmd -f ./config/pangea-mainnet-vercel.env quasar dev -m spa",
     "prod:telos": "env-cmd -f ./config/telos-mainnet.env quasar dev -m spa",
     "prod:eos": "env-cmd -f ./config/eos-mainnet.env quasar dev -m spa",
     "build": "NODE_OPTIONS=--openssl-legacy-provider quasar build",
