@@ -116,16 +116,20 @@ export const logout = async function ({ commit }) {
 }
 
 export const autoLogin = async function ({ dispatch }) {
-  if (typeof window.LightWalletChannel === 'object') {
-    return !dispatch('lightWalletLogin')
-  }
-
-  const wallet = localStorage.getItem('autoLogin')
-  const idx = this.$ual.authenticators.findIndex(auth => auth.ualName === wallet)
-  if (idx !== -1) {
-    const authenticator = this.$ual.authenticators[idx]
-    await authenticator.init()
-    return !dispatch('loginWallet', { idx })
+  try {
+    if (typeof window.LightWalletChannel === 'object') {
+      return !dispatch('lightWalletLogin')
+    }
+    const wallet = localStorage.getItem('autoLogin')
+    const idx = this.$ual.authenticators.findIndex(auth => auth.ualName === wallet)
+    if (idx !== -1) {
+      const authenticator = this.$ual.authenticators[idx]
+      await authenticator.init()
+      return !dispatch('loginWallet', { idx })
+    }
+  } catch (err) {
+    console.log('autologin error - logging out.')
+    localStorage.clear()
   }
   return false
 }
