@@ -16,7 +16,7 @@
     "lint": "eslint --ext .js,.vue .",
     "test": "exit 0",
     "storybook": "start-storybook -s ./public -p 6006",
-    "build-storybook": "build-storybook -s ./public",
+    "build-storybook": "NODE_OPTIONS=--openssl-legacy-provider build-storybook -s ./public",
     "graph-schema": "node ./src/apollo/generatePossibleTypes.js",
     "prepare": "husky install",
     "commit": "git-cz",
