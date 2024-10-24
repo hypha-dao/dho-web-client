@@ -128,7 +128,6 @@ export const autoLogin = async function ({ dispatch }) {
       return !dispatch('loginWallet', { idx })
     }
   } catch (err) {
-    console.log('autologin error - logging out.')
     localStorage.clear()
   }
   return false
