@@ -576,7 +576,7 @@ q-page.full-width.page-profile
         )
         badges-widget(:badges="memberBadges" compact v-if="memberBadges" fromProfile)
       wallet.wallet(v-if="isMember && (tab === Tabs.INFO || isTabletOrGreater)" :style="{'grid-area': 'wallet'}" ref="wallet" :more="isOwner" :username="username")
-      wallet-adresses.walletadd(:style="{'grid-area': 'walletadd'}" :walletAdresses="walletAddressForm" @onSave="onSaveWalletAddresses" v-if="isOwner && (tab==='INFO' || isTabletOrGreater)" :isHypha="daoSettings.isHypha")
+      //- wallet-adresses.walletadd(:style="{'grid-area': 'walletadd'}" :walletAdresses="walletAddressForm" @onSave="onSaveWalletAddresses" v-if="isOwner && (tab==='INFO' || isTabletOrGreater)" :isHypha="daoSettings.isHypha")
       multi-sig.msig(v-if="tab==='INFO' || isTabletOrGreater" :style="{'grid-area': 'msig'}" v-show="isHyphaOwner" :numberOfPRToSign="numberOfPRToSign")
     .right.q-gutter-md(:style="$q.screen.gt.md && {'grid-area': 'right'}")
       component.q-gutter-y-md(:is="isTabletOrGreater ? 'widget' : 'div'" :style="{'grid-area': 'projects'}" v-if="tab===Tabs.PROJECTS || isTabletOrGreater" :title="isTabletOrGreater ? $t('pages.profiles.profile.myProjects') : ''")
