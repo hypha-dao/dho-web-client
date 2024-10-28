@@ -199,7 +199,7 @@ q-page.page-wallet
                 q-chip.q-ma-none.text-uppercase(color="positive" text-color="white" size="10px") {{ $t('pages.profiles.wallet.claimed') }}
     .col-12.col-md-3
       wallet(:username="account" no-title v-if="$q.screen.gt.sm")
-      wallet-adresses.q-mt-md(:isHypha="daoSettings.isHypha" :walletAdresses="walletAddressForm" @onSave="saveWalletAddresses" v-if="isOwner")
+      //- //wallet-adresses.q-mt-md(:isHypha="daoSettings.isHypha" :walletAdresses="walletAddressForm" @onSave="saveWalletAddresses" v-if="isOwner")
 </template>
 
 <style lang="stylus" scoped>
