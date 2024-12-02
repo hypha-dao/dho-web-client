@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.51.1](https://github.com/hypha-dao/dho-web-client/compare/v2.51.0...v2.51.1) (2024-12-02)
+
+
+### Bug Fixes
+
+* **ProposalDetail:** do not append [COMPLETION] ([4ed2990](https://github.com/hypha-dao/dho-web-client/commit/4ed299051ec61990bf35995ae0cdfc7b7a7e1529))
+
 ## [2.51.0](https://github.com/hypha-dao/dho-web-client/compare/v2.50.0...v2.51.0) (2024-10-21)
 
 
