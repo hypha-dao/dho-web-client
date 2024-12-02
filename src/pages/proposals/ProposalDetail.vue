@@ -1525,7 +1525,7 @@ export default {
     async onQuestPayout() {
       try {
         await this.createQuestPayout({
-          title: `${this.proposal.details_title_s} [COMPLETION]`,
+          title: this.proposal.details_title_s,
           description: 'test',
           questStartId: this.proposal.docId
         })
