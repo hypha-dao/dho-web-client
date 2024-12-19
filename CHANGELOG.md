@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.51.2](https://github.com/hypha-dao/dho-web-client/compare/v2.51.1...v2.51.2) (2024-12-19)
+
+
+### Bug Fixes
+
+* remove duplicate entry for CHAIN_NAME ([b5c2996](https://github.com/hypha-dao/dho-web-client/commit/b5c29965bddc8bdeb627ebf2a712861e51839b61))
+
 ## [2.51.1](https://github.com/hypha-dao/dho-web-client/compare/v2.51.0...v2.51.1) (2024-12-02)
 
 
