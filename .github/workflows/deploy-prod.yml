@@ -71,7 +71,6 @@ jobs:
           JOIN_URI: 'https://join.hypha.earth/'
 
           DEFFERED_HYPHA_CONTRACT: ${{vars.DEFFERED_HYPHA_CONTRACT}}
-          CHAIN_NAME: 'telos'
           ENV: 'prod'
 
       - name: S3 sync
