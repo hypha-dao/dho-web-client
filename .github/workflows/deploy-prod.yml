@@ -71,7 +71,6 @@ jobs:
           JOIN_URI: 'https://join.hypha.earth/'
 
           DEFFERED_HYPHA_CONTRACT: ${{vars.DEFFERED_HYPHA_CONTRACT}}
-          ENV: 'prod'
 
       - name: S3 sync
         uses: jakejarvis/s3-sync-action@master
