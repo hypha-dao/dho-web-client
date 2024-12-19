@@ -2,7 +2,7 @@ name: Build and Deploy to Staging
 
 on:
   push:
-    branches: 
+    branches:
       - master
       - feat/add-support-for-dgraph-cloud-with-namespaces
 jobs:
@@ -43,7 +43,6 @@ jobs:
           BLOCKCHAIN_EXPLORER_BTC: 'https://www.blockchain.com/btc/tx/'
           BLOCKCHAIN_EXPLORER_ETH: 'https://etherscan.io/tx/'
           BLOCKCHAIN_EXPLORER_EOS: 'https://bloks.io/transaction/'
-          CHAIN_NAME: 'telos'
           PPP_ENV: 'prod'
           SENTRY_DSN: 'https://6fa219bfb2ed453fb5032d6ce1b83fc9@sentry.io/1884471'
           DOCUMENTATION: 'https://notepad.hypha.earth/5dC66nNXRVGpb1aTHaRJXw'
@@ -73,7 +72,7 @@ jobs:
           LOGIN_CONTRACT: ${{ vars.LOGIN_CONTRACT }}
           JOIN_CONTRACT: ${{ vars.JOIN_CONTRACT }}
           JOIN_URI: 'https://join.hypha.earth/'
-          
+
           DEFFERED_HYPHA_CONTRACT: ${{vars.DEFFERED_HYPHA_CONTRACT}}
 
       - name: S3 sync
