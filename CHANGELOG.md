@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.51.3](https://github.com/hypha-dao/dho-web-client/compare/v2.51.2...v2.51.3) (2024-12-19)
+
+
+### Bug Fixes
+
+* remove duplicate ENV variable from workflow ([bf7f0c4](https://github.com/hypha-dao/dho-web-client/commit/bf7f0c432e8964dc4a50a9da0093c04fb7704598))
+
 ## [2.51.2](https://github.com/hypha-dao/dho-web-client/compare/v2.51.1...v2.51.2) (2024-12-19)
 
 
