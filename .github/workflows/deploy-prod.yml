@@ -11,6 +11,13 @@ jobs:
     environment: telosMainNet
     runs-on: ubuntu-latest
     steps:
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.HYPHA_AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.HYPHA_AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
       - name: Checkout code
         uses: actions/checkout@v2
 
