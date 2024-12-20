@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.51.5](https://github.com/hypha-dao/dho-web-client/compare/v2.51.4...v2.51.5) (2024-12-20)
+
+
+### Bug Fixes
+
+* fix s3 region ([3f07cc7](https://github.com/hypha-dao/dho-web-client/commit/3f07cc722d622f168b15ef33cc259151ac8427bd))
+
 ## [2.51.4](https://github.com/hypha-dao/dho-web-client/compare/v2.51.3...v2.51.4) (2024-12-20)
 
 
