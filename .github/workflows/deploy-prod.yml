@@ -3,6 +3,8 @@ name: Build and Deploy to Production
 on:
   release:
     types: [published]
+  push:
+    branches: [ master ]
 jobs:
   build:
     name: build-prod
