@@ -6,7 +6,6 @@ const path = require('path')
 const packageJson = fs.readFileSync('./package.json')
 const extendWebpack = require('./webpack-config.js')
 
-// Read environment variables from .env
 require('dotenv').config()
 
 module.exports = function (ctx) {
