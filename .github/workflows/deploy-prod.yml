@@ -36,8 +36,8 @@ jobs:
           SEEDS_TOKEN_CONTRACT: 'token.seeds'
           SEEDS_ESCROW_CONTRACT: 'escrow.seeds'
           HVOICE_TOKEN_CONTRACT: 'voice.hypha'
-          ACCOUNT_API_URL: 'https://tb3nnn0qa9.execute-api.us-east-1.amazonaws.com/prod'
-          ACCOUNT_API_KEY: ${{ secrets.PROD_ACCOUNT_API_KEY }}
+          ACCOUNT_API_URL: ${{ vars.ACCOUNT_API_URL }}
+          ACCOUNT_API_KEY: ${{ secrets.ACCOUNT_API_KEY }}
           BLOCKCHAIN_EXPLORER: 'https://explorer.telos.net'
           BLOCKCHAIN_EXPLORER_BTC: 'https://www.blockchain.com/btc/tx/'
           BLOCKCHAIN_EXPLORER_ETH: 'https://etherscan.io/tx/'
@@ -82,7 +82,7 @@ jobs:
           AWS_S3_BUCKET: ${{ secrets.PROD_AWS_S3_BUCKET }}
           AWS_ACCESS_KEY_ID: ${{ secrets.HYPHA_AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.HYPHA_AWS_SECRET_ACCESS_KEY }}
-          AWS_REGION: 'us-east-1' # optional: defaults to us-east-1
+          AWS_REGION: 'eu-west-2' # optional: defaults to us-east-1
           SOURCE_DIR: 'dist/spa' # optional: defaults to entire repository
 
       # Invalidate Cloudfront (this action)
