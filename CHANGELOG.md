@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.51.4](https://github.com/hypha-dao/dho-web-client/compare/v2.51.3...v2.51.4) (2024-12-20)
+
+
+### Bug Fixes
+
+* change build dir to expected dist/spa ([d9c9de8](https://github.com/hypha-dao/dho-web-client/commit/d9c9de874d84d6c159d0b37aaeb197db71063892))
+
 ## [2.51.3](https://github.com/hypha-dao/dho-web-client/compare/v2.51.2...v2.51.3) (2024-12-19)
 
 
