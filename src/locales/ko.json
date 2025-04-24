@@ -1467,6 +1467,7 @@
         "sortBy": "정렬 기준",
         "oldestFirst": "오래된 것부터",
         "newestFirst": "최신순",
+        "byMembers": "회원별",
         "alphabetically": "알파벳순"
       },
       "finflow": {

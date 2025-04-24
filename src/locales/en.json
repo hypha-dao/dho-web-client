@@ -1473,6 +1473,7 @@
            "sortBy":"Sort by",
            "oldestFirst":"Oldest first",
            "newestFirst":"Newest first",
+           "byMembers": "By Members",
            "alphabetically":"Alphabetically"
         },
         "finflow":{

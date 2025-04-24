@@ -1467,6 +1467,7 @@
         "sortBy": "排序方式",
         "oldestFirst": "最老的在前",
         "newestFirst": "新的先来",
+        "byMembers": "按成员",
         "alphabetically": "按字母顺序"
       },
       "finflow": {

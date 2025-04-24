@@ -917,7 +917,7 @@
       "agreements":"Elección",
       "election": "Election",
       "explore":"Explorar",
-      "people":"Gente",        
+      "people":"Gente",
       "treasury":"tesorería"
     },
     "navigation-header": {
@@ -1458,9 +1458,10 @@
         "suspension": "Suspensión"
       },
       "explore": {
-        "discoverMore": "Explora ahora",
+        "discoverMore": "Explorar ahora",
         "members": "Miembros",
-        "discoverTheHyphaDAONetwork": "¡Aproveche el poder de una red DAO global!",
+        "byMembers": "Por miembros",
+        "discoverTheHyphaDAONetwork": "¡Aprovecha el poder de una red global de DAO!",
         "welcomeToTheGlobalDAO": "Sumérgete en un ecosistema internacional de organizaciones dinámicas, impulsadas por la pasión de crear valor duradero. ",
         "searchDHOs": "Buscar DAO",
         "searchEcosystems": "Buscar ecosistemas",
