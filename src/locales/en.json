@@ -883,25 +883,25 @@
      "welcome-view":{
         "youNeedAn":"Log in with your Hypha account",
         "isonboarding":"If you already have a Hypha account configured in your wallet, click on the “Log in” button. Otherwise, choose “Create Hypha account” or simply “Continue as a Guest”.",
-        "isonboardingPangea":"If you already have a Pangea account configured, click on the “Log in” button. Otherwise, choose “Create Pangea account” or simply “Continue as a Guest”.",
+        "isonboardingPangea":"If you already have a Tonomy account configured, click on the “Log in” button. Otherwise, choose “Create Pangea account” or simply “Continue as a Guest”.",
         "ifThisIs":"If this is your first time here,",
         "clickCreateNew":" click Create new Hypha account and follow the steps. ",
         "ifYouAlready":"If you already have an Hypha Account and Anchor wallet configured",
         "clickThe":", click the log-in button, validate the transaction with Anchor Wallet and enter the DAO.",
         "theDhoDecentralized": "If you already have a Hypha account configured in your wallet, click on the “Log in” button. Otherwise, choose “Create Hypha account” or simply “Continue as a Guest”.",
         "createNewHyphaAccount":"Create Hypha account",
-        "createPangeaAccount":"Create Pangea account",
+        "createPangeaAccount":"Create Tonomy account",
         "registrationIsTemporarilyDisabled":"Registration is temporarily disabled",
-        "login":"Log in with Pangea",
+        "login":"Log in with Tonomy",
         "createDao":"Create DAO",
         "continueAsAGuest":"Continue as Guest",
         "useAnExisting":"Use an existing\n      ",
         "blockhainAccount":"blockhain account",
         "launchYourFirst":"Create Your DAO",
         "youNeedAHyphaAccount":"You need a Hypha account to create a DAO.",
-        "youNeedAHyphaAccountPangea":"You need a Pangea account to create a DAO.",
+        "youNeedAHyphaAccountPangea":"You need a Tonomy account to create a DAO.",
         "ifYouAlreadyHaveAHyphaAccount":"If you already have a Hypha Account, click the log in button, sign the transaction with your Wallet and start creating your DAO.",
-        "ifYouAlreadyHaveAHyphaAccountPangea":"If you already have a Pangea Account, click the log in button, sign the transaction with your Wallet and start creating your DAO."
+        "ifYouAlreadyHaveAHyphaAccountPangea":"If you already have a Tonomy Account, click the log in button, sign the transaction with your Wallet and start creating your DAO."
      }
   },
   "navigation":{
