@@ -55,7 +55,7 @@ export default {
           div {{$t('login.welcome-view.createPangeaAccount')}}
           div
       q-tooltip(v-if="false" anchor="top middle") {{ $t('login.welcome-view.registrationIsTemporarilyDisabled') }}
-    q-btn.full-width.q-mt-sm.text-bold(@click="goNext()" color="secondary" no-caps rounded unelevated)
+    q-btn.full-width.q-mt-sm.text-bold(@click="goNext()" :style="{'background': '#5833BC', 'color': '#FFFFFF'}" no-caps rounded unelevated)
       .full-width.flex.justify-between
         q-avatar(size="20px")
           img(src="/chains/pangea.png")
