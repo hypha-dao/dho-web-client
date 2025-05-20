@@ -65,6 +65,7 @@ jobs:
           JOIN_CONTRACT: ${{ vars.JOIN_CONTRACT }}
           JOIN_URI: 'https://join.hypha.earth/'
           DEFFERED_HYPHA_CONTRACT: ${{vars.DEFFERED_HYPHA_CONTRACT}}
+          PANGEA_REGISTER_URL: ${{vars.PANGEA_REGISTER_URL}}
 
 
       - name: S3 sync

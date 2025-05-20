@@ -77,6 +77,7 @@ jobs:
           CAPTCHA_HOST: ${{ vars.CAPTCHA_HOST }}
           CAPTCHA_NETWORK: ${{ vars.CAPTCHA_NETWORK }}
           LOGIN_CONTRACT: ${{ vars.LOGIN_CONTRACT }}
+          PANGEA_REGISTER_URL: ${{vars.PANGEA_REGISTER_URL}}
 
           JOIN_CONTRACT: ${{ vars.JOIN_CONTRACT }}
           JOIN_URI: 'https://join.hypha.earth/'
