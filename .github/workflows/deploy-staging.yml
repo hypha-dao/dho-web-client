@@ -73,6 +73,7 @@ jobs:
           LOGIN_CONTRACT: ${{ vars.LOGIN_CONTRACT }}
           JOIN_CONTRACT: ${{ vars.JOIN_CONTRACT }}
           JOIN_URI: 'https://join.hypha.earth/'
+          PANGEA_REGISTER_URL: ${{vars.PANGEA_REGISTER_URL}}
           
           DEFFERED_HYPHA_CONTRACT: ${{vars.DEFFERED_HYPHA_CONTRACT}}
 

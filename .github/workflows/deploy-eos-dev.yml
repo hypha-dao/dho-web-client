@@ -78,7 +78,9 @@ jobs:
           LOGIN_CONTRACT: ${{ vars.LOGIN_CONTRACT }}
 
           JOIN_CONTRACT: ${{ vars.JOIN_CONTRACT }}
+          PANGEA_REGISTER_URL: ${{vars.PANGEA_REGISTER_URL}}
           JOIN_URI: 'https://join.hypha.earth/'
+          
 
       - name: Deploy to S3 bucket
         run: aws s3 sync ./dist/spa s3://${{ vars.AWS_S3_BUCKET}} --delete
